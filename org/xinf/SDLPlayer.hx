@@ -45,7 +45,7 @@ class SDLPlayer {
                     var me = SDL._SDL_Event_button_get(e);
                     handleMouseEvent( me, k );
                 default:
-                //    trace("Event "+k);
+                    trace("Event "+k);
             }
         }
     }
@@ -147,11 +147,8 @@ class SDLPlayer {
     }
 
     private function handleMouseMotionEvent( e, k ) {
-        var x = SDL._SDL_MouseMotionEvent_x_get(e);
-        var y = SDL._SDL_MouseMotionEvent_y_get(e);
-   //     trace("Mouse Motion "+x+","+y );
-        mouseX = x;
-        mouseY = y;
+        mouseX = SDL._SDL_MouseMotionEvent_x_get(e);
+        mouseY = SDL._SDL_MouseMotionEvent_y_get(e);
     }
     
     public function new( _root : Stage ) {
