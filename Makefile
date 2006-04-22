@@ -19,7 +19,7 @@ Test.n : Test.hx
 test : Test.n subdirs
 	neko Test.n
 
-deepclean : 
+cleanall : clean
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done

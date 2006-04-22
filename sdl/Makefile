@@ -6,7 +6,9 @@ NEKO_CFLAGS=${shell pkg-config --cflags neko}
 SDL_LIBS=${shell sdl-config --libs}
 SDL_CFLAGS=${shell sdl-config --cflags}
 
-ALL_FLAGS=$(NEKO_LIBS) $(NEKO_CFLAGS) $(SDL_LIBS) $(SDL_CFLAGS)
+CPTR_LIBS=-L../bin -lcptr 
+
+ALL_FLAGS=$(NEKO_LIBS) $(NEKO_CFLAGS) $(SDL_LIBS) $(SDL_CFLAGS) $(CPTR_LIBS)
 
 MOD=../bin/SDL.ndll
 CC=gcc

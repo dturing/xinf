@@ -39,20 +39,19 @@ class Point {
         return("(x="+x+", y="+y+")");
     }
     
-    static function distance( pt1:Point, pt2:Point ) : Float {
+    static public function distance( pt1:Point, pt2:Point ) : Float {
         var d:Point = pt2;
         d.subtract(pt1);
         return d.length;
     }
     
-    static function interpolate( pt1:Point, pt2:Point, f:Float ) : Point {
+    static public function interpolate( pt1:Point, pt2:Point, f:Float ) : Point {
         var d:Point = new Point( (pt2.x-pt1.x)*f, (pt2.y-pt1.y)*f );
         d.add(pt1);
         return d;
     }
     
-    static function polar( len:Float, angle:Float ) : Point {
-        throw("NYI");
-        return new Point(0,0);
+    static public function polar( len:Float, angle:Float ) : Point {
+        return new Point( len * Math.cos(angle), len * Math.sin(angle) );
     }
 }

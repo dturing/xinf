@@ -75,6 +75,8 @@ class DisplayObjectContainer extends InteractiveObject {
     }
     
     private function _render( r:IRenderer ) {
+        super._render(r);
+        
         r.pushMatrix();
         r.matrix( transform.matrix );
     
@@ -85,8 +87,6 @@ class DisplayObjectContainer extends InteractiveObject {
         }
         
         r.popMatrix();
-        
-        super._render(r);
     }
 
     private function asContainer() : DisplayObjectContainer {

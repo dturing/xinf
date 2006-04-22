@@ -10,11 +10,12 @@ class Square extends Sprite {
     private var speed:Float;
     private var pressed:Bool;
 
-    public function new( _name:String, _x:Float, _y:Float ) {
+    public function new( _name:String, _x:Float, _y:Float, _angle:Float ) {
         super();
         name = _name;
         x = _x;
         y = _y;
+        angle=_angle;
         
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, false );
         addEventListener( MouseEvent.MOUSE_UP, onMouseUp, false, 0, false );
@@ -24,7 +25,6 @@ class Square extends Sprite {
         
         addEventListener( Event.ENTER_FRAME, onEnterFrame, false, 0, false );
         
-        angle=0.0;
         speed=0.0;
         pressed=false;
         
@@ -34,17 +34,17 @@ class Square extends Sprite {
     private function draw( c:Int ) : Void {
         graphics.clear();
         graphics.beginFill( c, 0.5 );
-        graphics.drawRect( -.4, -.4, .8, .8 );
+        graphics.drawRect( -.03, -.03, .06, .06 );
         graphics.endFill();
     }
     
     public function onEnterFrame( e:Event ) {
-        rotation = Math.round(angle+=speed);
+        rotation = (angle+=speed);
         
         if( pressed ) {
             speed += .5;
         } else speed *= 0.93;
-        if( speed > 2 ) speed = 5;
+        if( speed > 5 ) speed = 5;
     }
     
     public function onMouseDown( e:Event ) {
@@ -58,12 +58,10 @@ class Square extends Sprite {
     }
 
     public function onMouseOver( e:Event ) {
-        trace( "MouseOver on "+this );
         draw( 0xff0000 );
     }
 
     public function onMouseOut( e:Event ) {
-        trace( "MouseOut on "+this );
         draw( 0xffffff );
     }
 

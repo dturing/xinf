@@ -35,7 +35,7 @@ class GLRenderer implements IRenderer {
     
     public function startFrame() : Void {
         GL._glPushMatrix();
-    	GL._glViewport( 0, 0, 320, 240 );
+    	GL._glViewport( 0, 0, 640, 480 );
         GL._glMatrixMode( GL.GL_PROJECTION );
         GL._glLoadIdentity();
         GL._glMatrixMode( GL.GL_MODELVIEW );
@@ -45,7 +45,8 @@ class GLRenderer implements IRenderer {
         GL._glEnable( GL.GL_BLEND );
         GL._glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA );
         
-        GL._glShadeModel( GL.GL_FLAT );
+        GL._glShadeModel( GL.GL_SMOOTH );
+        GL._glEnable( GL.GL_POLYGON_SMOOTH );
         
         GL._glClearColor( 0, 0, 0.3, 1 );
         GL._glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );

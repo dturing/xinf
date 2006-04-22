@@ -17,7 +17,10 @@ typedef unsigned int Uint32;
 typedef unsigned int Uint16;
 typedef signed int Sint16;
 typedef unsigned char Uint8;
+
 typedef unsigned int SDLKey;
+typedef unsigned int SDL_GLattr;
+
 #define DECLSPEC
 #define SDLCALL
 

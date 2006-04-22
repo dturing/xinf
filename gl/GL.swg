@@ -3,8 +3,10 @@
 %{
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glext.h>
 
 extern vkind k_cptr_float;
+extern vkind k_cptr_int;
 
 GLuint *_glCreateUintBuffer( int sz ) {   
     GLuint *buf = (GLuint*)malloc( sizeof(GLuint)*sz );
@@ -30,6 +32,7 @@ value _glMakeArrayUint( GLuint *buf, int sz ) {
 
 %include <GL/gl.h>
 %include <GL/glu.h>
+%include <GL/glext.h>
 
 GLuint *_glCreateUintBuffer( int sz );
 GLint *_glCreateIntBuffer( int sz );

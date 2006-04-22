@@ -157,16 +157,16 @@ class SDLPlayer {
     public function new( _root : Stage ) {
         root = _root;
         quit = buttonpress = false;
-        width = 320;
-        height = 240;
+        width = 640;
+        height = 480;
         mouseX = mouseY = -1;
         currentOver = new Array<DisplayObject>();
         
         if( SDL._SDL_Init( SDL.SDL_INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
         }
-        
-        if( SDL._SDL_SetVideoMode( width, height, 32, SDL.SDL_OPENGL ) == 0 ) {
+                
+        if( SDL._SDL_SetVideoMode( width, height, 0, SDL.SDL_OPENGL ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
     }
@@ -175,11 +175,11 @@ class SDLPlayer {
         while( !quit ) {
             ProcessEvents();
                         
-            doOverOut( mouseX, mouseY );
-        
             var e  = new Event( { type: Event.ENTER_FRAME } );
             e.propagate = true;
             root.dispatchEvent( e );            
+
+            doOverOut( mouseX, mouseY );
 
             root.Render();
             
