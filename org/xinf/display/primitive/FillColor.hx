@@ -27,6 +27,7 @@ class FillColor extends Primitive {
     }
     
     public function _render( rend:org.xinf.render.IRenderer ) {
+//        trace("set color "+r+" "+g+" "+b+" "+a );
         rend.setColor( r, g, b, a );
     }
     

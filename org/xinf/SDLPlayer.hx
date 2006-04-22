@@ -16,6 +16,9 @@ class SDLPlayer {
     private var root : Stage;
     private var width : Int;
     private var height : Int;
+    private var mouseX : Int;
+    private var mouseY : Int;
+    private var currentOver : Array<DisplayObject>;
     
     private function ProcessEvents() {
         var e = SDL._NewEvent();
@@ -74,7 +77,7 @@ class SDLPlayer {
             
         dispatchToTargets( e, x, y );
     }
-    
+        
     private function dispatchToTargets( e:Event, x:Int, y:Int ) : Void {
         // find hits
         var targets:Array<DisplayObject> = root.getObjectsUnderPoint( new Point(x,height-y) );
@@ -88,10 +91,67 @@ class SDLPlayer {
             if( target.dispatchEvent( e ) ) return;
         }
     }
+
+    private function doOverOut( x:Float, y:Float ) {
+        var targets:Array<DisplayObject> = root.getObjectsUnderPoint( new Point(x,height-y) );
+        var out:Array<DisplayObject> = new Array<DisplayObject>();
+        var over:Array<DisplayObject> = new Array<DisplayObject>();
+
+        // FIXME: this is a bit inefficient?        
+        for( t in targets ) {
+            var found = false;
+            for( old in currentOver ) {
+                if( old == t ) {
+                    found = true;
+                }
+            }
+            if( !found ) {
+                over.push(t);
+            }
+        }
+        for(  old in currentOver ) {
+            var found = false;
+            for( t in targets ) {
+                if( old == t ) {
+                    found = true;
+                }
+            }
+            if( !found ) {
+                out.push(old);
+            }
+        }
+        
+        // send mouseout events
+        var e:MouseEvent = new MouseEvent( { 
+            type: MouseEvent.MOUSE_OUT,
+            stageX: x,
+            stageY: y
+            } );
+        for( target in out ) {
+            e.target = target;
+            target.dispatchEvent(e);
+        }
+        
+        // send mouseover events
+        var e:MouseEvent = new MouseEvent( { 
+            type: MouseEvent.MOUSE_OVER,
+            stageX: x,
+            stageY: y
+            } );
+        for( target in over ) {
+            e.target = target;
+            target.dispatchEvent(e);
+        }
+        
+        currentOver = targets;
+    }
+
     private function handleMouseMotionEvent( e, k ) {
-        var x = SDL._SDL_MouseMotionEvent_xrel_get(e);
-        var y = SDL._SDL_MouseMotionEvent_yrel_get(e);
+        var x = SDL._SDL_MouseMotionEvent_x_get(e);
+        var y = SDL._SDL_MouseMotionEvent_y_get(e);
    //     trace("Mouse Motion "+x+","+y );
+        mouseX = x;
+        mouseY = y;
     }
     
     public function new( _root : Stage ) {
@@ -99,6 +159,8 @@ class SDLPlayer {
         quit = buttonpress = false;
         width = 320;
         height = 240;
+        mouseX = mouseY = -1;
+        currentOver = new Array<DisplayObject>();
         
         if( SDL._SDL_Init( SDL.SDL_INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
@@ -113,10 +175,12 @@ class SDLPlayer {
         while( !quit ) {
             ProcessEvents();
                         
+            doOverOut( mouseX, mouseY );
+        
             var e  = new Event( { type: Event.ENTER_FRAME } );
             e.propagate = true;
             root.dispatchEvent( e );            
-            
+
             root.Render();
             
             SDL._SDL_GL_SwapBuffers();
