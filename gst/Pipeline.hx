@@ -32,7 +32,7 @@ class Pipeline extends Object {
     
     public function frame() : Dynamic {
         if( handoffBlocker != null ) {
-            return _handoff_block( handoffBlocker );
+            return new Buffer( _handoff_block( handoffBlocker ) );
         }
         return null;
     }

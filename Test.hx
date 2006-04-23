@@ -5,8 +5,6 @@ import org.xinf.demo.Square;
 import org.xinf.geom.Point;
 
 class Test {
-    
-    
     static function main() {
         var renderer = new GLRenderer();
 
@@ -22,7 +20,10 @@ class Test {
         s0.addChild( new Square( "four", 0.0, -.5 ) );
 */    
         var p:Point;
-        /*
+        
+        
+        /* 
+        // circle of squares
         var n:Int = 180;
         for( a in 0...n ) {
             var rad =  (a/(n/2))*Math.PI;
@@ -32,14 +33,28 @@ class Test {
         }
         */
         
+        /* 
+        // square grid
         var n:Int=5;
-        for( x in -n...n ) {
-            for( y in -n...n ) {
-                s0.addChild( new Square( x+"/"+y, x/n, y/n, .0 ) );
+        for( x in -n...n+1 ) {
+            for( y in -n...n+1 ) {
+                s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
-    
+        */
         
-        player.run();
+        s0.addChild( new org.xinf.media.Video() );
+        
+        while( player.iterate() ) {
+                        
+            // check for OpenGL errors
+            var e:Int = gl.GL._glGetError();
+            if( e > 0 ) {
+                throw( "OpenGL error "+gl.GL.__gluErrorString() );
+            }
+        
+            // FIXME: proper timing, neko idle func?
+            neko.Sys.sleep(0.04);
+        }
     }
 }

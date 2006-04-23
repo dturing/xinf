@@ -947,48 +947,48 @@ GLAPI void GLAPIENTRY glBegin( GLenum mode );
 GLAPI void GLAPIENTRY glEnd( void );
 
 
-GLAPI void GLAPIENTRY glVertex2d( GLdouble x, GLdouble y );
+//GLAPI void GLAPIENTRY glVertex2d( GLdouble x, GLdouble y );
 GLAPI void GLAPIENTRY glVertex2f( GLfloat x, GLfloat y );
 GLAPI void GLAPIENTRY glVertex2i( GLint x, GLint y );
-GLAPI void GLAPIENTRY glVertex2s( GLshort x, GLshort y );
+//GLAPI void GLAPIENTRY glVertex2s( GLshort x, GLshort y );
 
-GLAPI void GLAPIENTRY glVertex3d( GLdouble x, GLdouble y, GLdouble z );
+//GLAPI void GLAPIENTRY glVertex3d( GLdouble x, GLdouble y, GLdouble z );
 GLAPI void GLAPIENTRY glVertex3f( GLfloat x, GLfloat y, GLfloat z );
 GLAPI void GLAPIENTRY glVertex3i( GLint x, GLint y, GLint z );
-GLAPI void GLAPIENTRY glVertex3s( GLshort x, GLshort y, GLshort z );
+//GLAPI void GLAPIENTRY glVertex3s( GLshort x, GLshort y, GLshort z );
 
-GLAPI void GLAPIENTRY glVertex4d( GLdouble x, GLdouble y, GLdouble z, GLdouble w );
+//GLAPI void GLAPIENTRY glVertex4d( GLdouble x, GLdouble y, GLdouble z, GLdouble w );
 GLAPI void GLAPIENTRY glVertex4f( GLfloat x, GLfloat y, GLfloat z, GLfloat w );
 GLAPI void GLAPIENTRY glVertex4i( GLint x, GLint y, GLint z, GLint w );
-GLAPI void GLAPIENTRY glVertex4s( GLshort x, GLshort y, GLshort z, GLshort w );
+//GLAPI void GLAPIENTRY glVertex4s( GLshort x, GLshort y, GLshort z, GLshort w );
 
-GLAPI void GLAPIENTRY glVertex2dv( const GLdouble *v );
+//GLAPI void GLAPIENTRY glVertex2dv( const GLdouble *v );
 GLAPI void GLAPIENTRY glVertex2fv( const GLfloat *v );
 GLAPI void GLAPIENTRY glVertex2iv( const GLint *v );
-GLAPI void GLAPIENTRY glVertex2sv( const GLshort *v );
+//GLAPI void GLAPIENTRY glVertex2sv( const GLshort *v );
 
-GLAPI void GLAPIENTRY glVertex3dv( const GLdouble *v );
+//GLAPI void GLAPIENTRY glVertex3dv( const GLdouble *v );
 GLAPI void GLAPIENTRY glVertex3fv( const GLfloat *v );
 GLAPI void GLAPIENTRY glVertex3iv( const GLint *v );
-GLAPI void GLAPIENTRY glVertex3sv( const GLshort *v );
+//GLAPI void GLAPIENTRY glVertex3sv( const GLshort *v );
 
-GLAPI void GLAPIENTRY glVertex4dv( const GLdouble *v );
+//GLAPI void GLAPIENTRY glVertex4dv( const GLdouble *v );
 GLAPI void GLAPIENTRY glVertex4fv( const GLfloat *v );
 GLAPI void GLAPIENTRY glVertex4iv( const GLint *v );
-GLAPI void GLAPIENTRY glVertex4sv( const GLshort *v );
+//GLAPI void GLAPIENTRY glVertex4sv( const GLshort *v );
 
 
-GLAPI void GLAPIENTRY glNormal3b( GLbyte nx, GLbyte ny, GLbyte nz );
-GLAPI void GLAPIENTRY glNormal3d( GLdouble nx, GLdouble ny, GLdouble nz );
+//GLAPI void GLAPIENTRY glNormal3b( GLbyte nx, GLbyte ny, GLbyte nz );
+//GLAPI void GLAPIENTRY glNormal3d( GLdouble nx, GLdouble ny, GLdouble nz );
 GLAPI void GLAPIENTRY glNormal3f( GLfloat nx, GLfloat ny, GLfloat nz );
 GLAPI void GLAPIENTRY glNormal3i( GLint nx, GLint ny, GLint nz );
-GLAPI void GLAPIENTRY glNormal3s( GLshort nx, GLshort ny, GLshort nz );
+//GLAPI void GLAPIENTRY glNormal3s( GLshort nx, GLshort ny, GLshort nz );
 
-GLAPI void GLAPIENTRY glNormal3bv( const GLbyte *v );
-GLAPI void GLAPIENTRY glNormal3dv( const GLdouble *v );
+//GLAPI void GLAPIENTRY glNormal3bv( const GLbyte *v );
+//GLAPI void GLAPIENTRY glNormal3dv( const GLdouble *v );
 GLAPI void GLAPIENTRY glNormal3fv( const GLfloat *v );
 GLAPI void GLAPIENTRY glNormal3iv( const GLint *v );
-GLAPI void GLAPIENTRY glNormal3sv( const GLshort *v );
+//GLAPI void GLAPIENTRY glNormal3sv( const GLshort *v );
 
 
 GLAPI void GLAPIENTRY glIndexd( GLdouble c );
@@ -1965,7 +1965,7 @@ GLAPI void GLAPIENTRY glMultTransposeMatrixd( const GLdouble m[16] );
 GLAPI void GLAPIENTRY glMultTransposeMatrixf( const GLfloat m[16] );
 */
 GLAPI void GLAPIENTRY glSampleCoverage( GLclampf value, GLboolean invert );
-
+/*
 typedef void (APIENTRYP PFNGLACTIVETEXTUREPROC) (GLenum texture);
 typedef void (APIENTRYP PFNGLCLIENTACTIVETEXTUREPROC) (GLenum texture);
 typedef void (APIENTRYP PFNGLMULTITEXCOORD1DPROC) (GLenum target, GLdouble s);
@@ -2012,7 +2012,7 @@ typedef void (APIENTRYP PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC) (GLenum target, GLint 
 typedef void (APIENTRYP PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *data);
 typedef void (APIENTRYP PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC) (GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data);
 typedef void (APIENTRYP PFNGLGETCOMPRESSEDTEXIMAGEPROC) (GLenum target, GLint level, void *img);
-
+*/
 
 /*
  * GL_ARB_multitexture (ARB extension 1 and OpenGL 1.2.1)
@@ -2090,7 +2090,7 @@ GLAPI void GLAPIENTRY glMultiTexCoord4iARB(GLenum target, GLint s, GLint t, GLin
 GLAPI void GLAPIENTRY glMultiTexCoord4ivARB(GLenum target, const GLint *v);
 GLAPI void GLAPIENTRY glMultiTexCoord4sARB(GLenum target, GLshort s, GLshort t, GLshort r, GLshort q);
 GLAPI void GLAPIENTRY glMultiTexCoord4svARB(GLenum target, const GLshort *v);
-
+/*
 typedef void (APIENTRYP PFNGLACTIVETEXTUREARBPROC) (GLenum texture);
 typedef void (APIENTRYP PFNGLCLIENTACTIVETEXTUREARBPROC) (GLenum texture);
 typedef void (APIENTRYP PFNGLMULTITEXCOORD1DARBPROC) (GLenum target, GLdouble s);
@@ -2125,7 +2125,7 @@ typedef void (APIENTRYP PFNGLMULTITEXCOORD4IARBPROC) (GLenum target, GLint s, GL
 typedef void (APIENTRYP PFNGLMULTITEXCOORD4IVARBPROC) (GLenum target, const GLint *v);
 typedef void (APIENTRYP PFNGLMULTITEXCOORD4SARBPROC) (GLenum target, GLshort s, GLshort t, GLshort r, GLshort q);
 typedef void (APIENTRYP PFNGLMULTITEXCOORD4SVARBPROC) (GLenum target, const GLshort *v);
-
+*/
 #endif /* GL_ARB_multitexture */
 
 

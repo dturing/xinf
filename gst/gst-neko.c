@@ -6,6 +6,8 @@
 
 DEFINE_KIND(k_GObject);
 
+extern vkind k_cptr_int;
+extern vkind k_cptr_float;
 
 void raise_exception( const char *msg, const char *file, int line, ... ) {
     buffer b = alloc_buffer("");
@@ -384,6 +386,37 @@ value buffer_timestamp( value obj ) {
 }
 DEFINE_PRIM( buffer_timestamp, 1 );
 
+value analyze_buffer( value obj ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+    
+    if( !GST_IS_BUFFER( o ) ) {
+        error("not a buffer", obj );
+        return val_null;
+    }
+    GstBuffer *buf = GST_BUFFER(o);
+    
+    // FIXME: cache keys
+    value ret = alloc_object(NULL);
+    alloc_field( ret, val_id("timestamp"), alloc_float( 
+            (double)GST_BUFFER_TIMESTAMP( buf )/GST_SECOND ) );
+    alloc_field( ret, val_id("size"), alloc_int( GST_BUFFER_SIZE( buf ) ) );
+    alloc_field( ret, val_id("data"), alloc_abstract( k_cptr_int, GST_BUFFER_DATA( buf ) ) );
+    
+    GstCaps *caps = GST_BUFFER_CAPS(buf);
+    GstStructure *s = gst_caps_get_structure(caps,0);
+
+    alloc_field( ret, val_id("caps"), alloc_string( gst_structure_get_name(s) ) );
+    
+    int v;
+    if( gst_structure_get_int( s, "width", &v ) )
+        alloc_field( ret, val_id("width"), alloc_int( v ) );
+    if( gst_structure_get_int( s, "height", &v ) )
+        alloc_field( ret, val_id("height"), alloc_int( v ) );
+    
+    return ret;
+}
+DEFINE_PRIM( analyze_buffer,1 );
 
 /* init */
 

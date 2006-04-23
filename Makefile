@@ -1,4 +1,4 @@
-SUBDIRS = cptr gl sdl
+SUBDIRS = cptr gl sdl gst
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp .
 
 .PHONY: subdirs $(SUBDIRS)
@@ -10,8 +10,10 @@ $(SUBDIRS):
 
 gl : cptr
 
+sdl : cptr
 
-default : test
+
+default : subdirs test
 
 Test.n : Test.hx
 	haxe $(HAXEFLAGS) -neko Test.hx -main Test Test
