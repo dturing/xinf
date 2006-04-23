@@ -13,77 +13,77 @@ class GLRenderer implements IRenderer {
     }
 
     public function translate( x:Float, y:Float ) : Void {
-        GL._glTranslatef( x, y, 0.0 );
+        glTranslatef( x, y, 0.0 );
     }
 
     public function matrix( m:Matrix ) : Void {
-        GL._glMultMatrixf( m._v._ptr );
+        glMultMatrixf( m._v._ptr );
     }
     
     public function setColor( r:Float, g:Float, b:Float, a:Float ) : Void {
-        GL._glColor4f( r, g, b, a );
+        glColor4f( r, g, b, a );
     }
     
     public function polygon( vertices:Array<Point> ) : Void {
-        GL._glBegin( GL.GL_POLYGON );
+        glBegin( GL_POLYGON );
             for( p in vertices ) {
-                GL._glVertex2f( p.x, p.y );
+                glVertex2f( p.x, p.y );
             }
-        GL._glEnd();
+        glEnd();
     }
     
     
     public function startFrame() : Void {
-        GL._glPushMatrix();
-    	GL._glViewport( 0, 0, 320, 240 );
-        GL._glMatrixMode( GL.GL_PROJECTION );
-        GL._glLoadIdentity();
-        GL._glMatrixMode( GL.GL_MODELVIEW );
-        GL._glLoadIdentity();
+        glPushMatrix();
+    	glViewport( 0, 0, 320, 240 );
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        glMatrixMode( GL_MODELVIEW );
+        glLoadIdentity();
         
-        GL._glEnable( GL.GL_TEXTURE_2D );
-        GL._glPixelStorei( GL.GL_UNPACK_ALIGNMENT, 1 );
-	    GL._glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
-	    GL._glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR );
+        glEnable( GL_TEXTURE_2D );
+        glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-        GL._glEnable( GL.GL_BLEND );
-        GL._glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA );
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         
-        GL._glShadeModel( GL.GL_FLAT );
-//        GL._glEnable( GL.GL_POLYGON_SMOOTH );
+        glShadeModel( GL_FLAT );
+//        glEnable( GL_POLYGON_SMOOTH );
         
-        GL._glClearColor( 0, 0, 0.3, 1 );
-        GL._glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
+        glClearColor( 0, 0, 0.3, 1 );
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         
         
     }
 
     public function endFrame() : Void {
-        GL._glPopMatrix();
+        glPopMatrix();
     }
     
     public function startPick( x:Float, y:Float ) : Void {
         var view = GL.__glCreateIntBuffer(4);
         
-        GL._glSelectBuffer( 64, selectBuffer );
-        GL._glGetIntegerv( GL.GL_VIEWPORT, view );
-        GL._glRenderMode( GL.GL_SELECT );
-        GL._glInitNames();
+        glSelectBuffer( 64, selectBuffer );
+        glGetIntegerv( GL_VIEWPORT, view );
+        glRenderMode( GL_SELECT );
+        glInitNames();
         
-        GL._glMatrixMode( GL.GL_PROJECTION );
-        GL._glPushMatrix();
+        glMatrixMode( GL_PROJECTION );
+        glPushMatrix();
             
-            GL._glLoadIdentity();
-            GL._gluPickMatrix( x, y, 1.0, 1.0, view );
-            GL._glMatrixMode( GL.GL_MODELVIEW );
+            glLoadIdentity();
+            gluPickMatrix( x, y, 1.0, 1.0, view );
+            glMatrixMode( GL_MODELVIEW );
     }
     
     public function endPick() : Array<Array<Int>> {
         
-        GL._glMatrixMode( GL.GL_PROJECTION );
-        GL._glPopMatrix();
+        glMatrixMode( GL_PROJECTION );
+        glPopMatrix();
         
-        var n_hits = GL._glRenderMode( GL.GL_RENDER );
+        var n_hits = glRenderMode( GL_RENDER );
         
         var stacks = new Array<Array<Int>>();
         if( n_hits > 0 ) {
@@ -104,24 +104,24 @@ class GLRenderer implements IRenderer {
             }
         }
         
-        GL._glMatrixMode( GL.GL_MODELVIEW );
+        glMatrixMode( GL_MODELVIEW );
         
         return stacks;
     }
 
     public function pushMatrix() : Void {
-        GL._glPushMatrix();
+        glPushMatrix();
     }
     
     public function popMatrix() : Void {
-        GL._glPopMatrix();
+        glPopMatrix();
     }
      
     public function pushName( name:Int ) : Void {
-        GL._glPushName( name );
+        glPushName( name );
     }
     
     public function popName() : Void {
-        GL._glPopName();
+        glPopName();
     }
 }
