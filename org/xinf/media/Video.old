@@ -1,0 +1,75 @@
+package org.xinf.media;
+
+import org.xinf.display.InteractiveObject;
+import org.xinf.render.IRenderer;
+import org.xinf.geom.Point;
+import gl.GL;
+
+class Video extends InteractiveObject {
+
+    private var textureOffset:Int;
+    private var textures:Int;
+    
+    private var _pipeline:gst.Pipeline;
+    private var _texture:gst.Object;
+
+    public function new() {
+        super();
+        _pipeline = new gst.Pipeline(
+            "   videotestsrc 
+                ! texture name=texer 
+                ! identity name=handoff 
+                ! fakesink
+            ","handoff");
+        if( _pipeline == null ) throw("gst.Pipeline construction failed");
+        _texture = _pipeline.findChild("texer");
+        if( _texture == null ) throw("gst.Pipeline has no texture element");
+    }
+
+    private function _render( r:IRenderer ) : Void {
+        super._render(r);
+        
+        var buf = _pipeline.frame();
+        
+        _renderSub( r, new Point(1,1), new Point(0,0), new Point(1,1) );
+    }
+    
+    private function _renderSub( r:IRenderer, out:Point, inPos:Point, inSize:Point ) {
+        var w:Float = out.x;
+        var h:Float = out.y;
+        var rx:Float = inPos.x;
+        var ry:Float = inPos.y;
+        var rw:Float = inSize.x;
+        var rh:Float = inSize.y;
+        
+        var texDim = new Point( _texture.get("texture-width"), _texture.get("texture-height") );
+        var imgDim = new Point( _texture.get("image-width"), _texture.get("image-height") );
+        var texId = _texture.get("last-texture");
+
+        var he:Float = (rx/texDim.x) * imgDim.x;
+        var ve:Float = (ry/texDim.y) * imgDim.y;
+        var hf:Float = ( (rw+rx) / texDim.x ) * imgDim.x;
+        var vf:Float = ( (rh+ry) / texDim.y ) * imgDim.y;
+        
+        GL._glEnable( GL.GL_TEXTURE_2D );
+        GL._glBindTexture( GL.GL_TEXTURE_2D, texId );
+        trace( "video frame tex#"+texId );
+        
+        GL._glPushMatrix();
+//        GL._glScalef(.5,.5,.0);
+        GL._glColor4f(.0,1.0,.0,.5);
+        GL._glTranslatef(-.5,-.5,.0);
+        GL._glBegin( GL.GL_QUADS );
+            GL._glTexCoord2f( he, vf );
+            GL._glVertex2f  (  0,  0 ); 
+            GL._glTexCoord2f( hf, vf );
+            GL._glVertex2f  (  w,  0 ); 
+            GL._glTexCoord2f( hf, ve );
+            GL._glVertex2f  (  w,  h ); 
+            GL._glTexCoord2f( he, ve );
+            GL._glVertex2f  (  0,  h ); 
+        GL._glEnd();
+        GL._glPopMatrix();
+    }
+    
+}

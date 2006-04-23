@@ -154,8 +154,8 @@ class SDLPlayer {
     public function new( _root : Stage ) {
         root = _root;
         quit = buttonpress = false;
-        width = 640;
-        height = 480;
+        width = 320;
+        height = 240;
         mouseX = mouseY = -1;
         currentOver = new Array<DisplayObject>();
         
@@ -168,24 +168,19 @@ class SDLPlayer {
         }
     }
     
-    public function run() {
-        while( !quit ) {
-            ProcessEvents();
-                        
-            var e  = new Event( { type: Event.ENTER_FRAME } );
-            e.propagate = true;
-            root.dispatchEvent( e );            
+    public function iterate() : Bool {
+        ProcessEvents();
 
-            doOverOut( mouseX, mouseY );
+        var e  = new Event( { type: Event.ENTER_FRAME } );
+        e.propagate = true;
+        root.dispatchEvent( e );            
 
-            root.Render();
-            
-            SDL._SDL_GL_SwapBuffers();
-            
-            // FIXME: proper timing, neko idle func?
-            neko.Sys.sleep(0.04);
-        }
-        
-        SDL._SDL_Quit();
+        doOverOut( mouseX, mouseY );
+
+        root.Render();
+
+        SDL._SDL_GL_SwapBuffers();
+
+        return( !quit );
     }
 }
