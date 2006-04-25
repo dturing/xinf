@@ -36,7 +36,7 @@ default : $(TARGETS)
 %_simple.xml : %_wrap.xml
 	xsltproc $(SWIG_XSL) $< > $@
 
-# generate a nekogen Generator class with a generate() function
+# generate a nekobind Generator class with a generate() function
 %Generator.hx : %_simple.xml $(GENERATOR_XSL)
 	xsltproc --stringparam module $* $(GENERATOR_XSL) $< > $@
 

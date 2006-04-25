@@ -1,4 +1,4 @@
-package nekogen;
+package nekobind;
 
 class HaxeExtern extends Generator {
     public var module:String;
@@ -23,18 +23,19 @@ class HaxeExtern extends Generator {
     }
     
     public function _constant( name:String, type:String, value:String ) : Void {
-        print("\tpublic static var "+stripSymbol(name)+":"+map.map(type)+";\n");
+        print("\tpublic static var "+stripSymbol(name)+":"+map.get(type).hxType()+";\n");
     }
 
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
         print("\tpublic static function "+stripSymbol(name)+"( ");
-        argList( args, argFuncDecl );
-        print("):"+map.map(type)+";\n");
+        print( argList( args, argFuncDecl ) );
+        print("):"+map.get(type).hxType()+";\n");
     }
     
-    public function argFuncDecl( type:String, name:String, last:Bool ) {
-        print( "_"+name+":"+map.map(type) );
-        if( !last ) print(",");
-        print(" ");
+    public function argFuncDecl( type:IType, name:String, last:Bool ):String {
+        var s:String = "_"+name+":"+type.hxType();
+        if( !last ) s += ",";
+        s += " ";
+        return s;
     }
 }

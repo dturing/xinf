@@ -1,4 +1,4 @@
-/* this is a nekogen-generated wrapper. do not modify it direcly. */
+/* this file is generated with nekobind. do not modify it direcly. */
 
 #include <neko.h>
 #include <GL/gl.h>
@@ -9,33 +9,32 @@
 #define VAL_String(v) val_string(v)    // HaXe strings direct?
 #define VAL_Dynamic(v) 0
 
-#define ALLOC_Int(v) alloc_integer(v)
-#define ALLOC_Float(v) alloc_float(v)
-#define ALLOC_String(v) alloc_string(v)
+#define ALLOC_Int(v) (value)alloc_integer(v)
+#define ALLOC_Float(v) (value)alloc_float(v)
+#define ALLOC_String(v) (value)alloc_string(v)
 #define ALLOC_Dynamic(v) val_null
 #define ALLOC_Void(v) val_null
 
-void check_failed( const char *function, const char *file, int line, const char *name, value given ) {
-    buffer b = alloc_buffer("Invalid type for parameter '");
-    buffer_append(b,name);
-    buffer_append(b,"' in ");
+void check_failed( const char *function, const char *file, int line, value given ) {
+    buffer b = alloc_buffer("Invalid type for parameter of ");
     buffer_append(b,function);
-    buffer_append(b," - ");
+    buffer_append(b," - you gave ");
     val_buffer(b,given);
    
     _neko_failure(buffer_to_string(b), file, line );
 }
 
-#define CHECK(v,type,name) if( !val_is_ ## type (v) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,name,v); return NULL; }
-#define CHECK_NUMBER(v,type,name) if( !(val_is_int(v) || val_is_float(v)) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,name,v); return NULL; }
-#define CHECK_Int(v,name) CHECK_NUMBER(v,int,name)
-#define CHECK_Float(v,name) CHECK_NUMBER(v,float,name)
-#define CHECK_String(v,name) CHECK(v,string,name)
-#define CHECK_Dynamic(v,name) check_failed(__FUNCTION__,__FILE__,__LINE__,name,v)
+#define CHECK(v,type) if( !val_is_ ## type (v) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,v); return NULL; }
+#define CHECK_NUMBER(v,type) if( !(val_is_int(v) || val_is_float(v)) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,v); return NULL; }
+#define CHECK_Int(v) CHECK_NUMBER(v,int)
+#define CHECK_Float(v) CHECK_NUMBER(v,float)
+#define CHECK_String(v) CHECK(v,string)
+#define CHECK_Dynamic(v) check_failed(__FUNCTION__,__FILE__,__LINE__,v)
 
 
 /* handle kinds */
-#define CHECK_KIND(v,kind,name) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
-                                    check_failed(__FUNCTION__,__FILE__,__LINE__,name,v); }
+#define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
+                                    check_failed(__FUNCTION__,__FILE__,__LINE__,v); }
 #define VAL_KIND(v,kind) val_data(v)
-#define ALLOC_KIND(kind,v) alloc_abstract(kind,v)
+#define ALLOC_KIND(v,kind) alloc_abstract(kind,v)
+

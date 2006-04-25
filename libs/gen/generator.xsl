@@ -7,10 +7,10 @@
 <xsl:param name="module">FOO</xsl:param>
 
 <xsl:template match="/">
-import nekogen.Generator;
-import nekogen.CWrapper;
-import nekogen.HaxeExtern;
-import nekogen.HaxeImpl;
+import nekobind.Generator;
+import nekobind.CWrapper;
+import nekobind.HaxeExtern;
+import nekobind.HaxeImpl;
 
 class <xsl:value-of select="$module"/>Generator {
     public static function main() {
@@ -44,10 +44,25 @@ class <xsl:value-of select="$module"/>Generator {
 </xsl:template>
 
 <xsl:template match="cdecl[@kind='function']">
+    <!-- somehow, the swig xml output doesnt put a ").p" onto pointer return types,
+         so we do it here -->
+    <xsl:variable name="type">
+        <xsl:choose>
+            <xsl:when test="contains(@decl,').p')">
+                <xsl:text>p.</xsl:text>
+                <xsl:value-of select="@type"/>
+                <xsl:message>using implicit pointer return type "p.<xsl:value-of select="@type"/>" for func <xsl:value-of select="@name"/></xsl:message>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@type"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
     <xsl:text>        gen.func("</xsl:text>
     <xsl:value-of select="@sym_name"/>
     <xsl:text>","</xsl:text>
-    <xsl:value-of select="@type"/>
+    <xsl:value-of select="$type"/>
     <xsl:text>", [</xsl:text>
     <xsl:apply-templates select="parmlist/parm" mode="parm"/>
     <xsl:text> ] );

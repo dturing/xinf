@@ -1,4 +1,4 @@
-package nekogen;
+package nekobind;
 
 class HaxeImpl extends Generator {
     public function new( mod:String ) {
@@ -6,7 +6,7 @@ class HaxeImpl extends Generator {
         
         print("class "+module+"__ extends "+module+" {\n");
     }
-
+    
     public function finish() {
         print("
     public static function __init__() : Void {
@@ -20,7 +20,7 @@ class HaxeImpl extends Generator {
     }
     
     public function _constant( name:String, type:String, value:String ) : Void {
-        print("\tpublic static var "+stripSymbol(name)+":"+map.map(type)+" = "+value+";\n");
+        print("\tpublic static var "+stripSymbol(name)+":"+map.get(type).hxType()+" = "+value+";\n");
     }
 
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
