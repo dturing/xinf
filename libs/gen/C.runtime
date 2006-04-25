@@ -14,7 +14,7 @@
 #define ALLOC_Void(v) val_null
 
 void check_failed( const char *function, const char *file, int line, value given ) {
-    buffer b = alloc_buffer("Invalid type for parameter of ");
+    buffer b = alloc_buffer("Invalid type for a parameter of ");
     buffer_append(b,function);
     buffer_append(b," - you gave ");
     val_buffer(b,given);
