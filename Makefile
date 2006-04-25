@@ -1,5 +1,5 @@
-SUBDIRS = cptr gl sdl gst
-HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp .
+SUBDIRS = cptr sdl gst
+HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ./libs
 
 .PHONY: subdirs $(SUBDIRS)
 

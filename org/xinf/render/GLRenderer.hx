@@ -4,86 +4,86 @@ import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 import org.xinf.util.FloatPointer;
-import gl.GL;
+import GL;
 
 class GLRenderer implements IRenderer {
-    private static var selectBuffer = GL.__glCreateUintBuffer( 64 );
+    private static var selectBuffer = GL.__GL.CreateUintBuffer( 64 );
 
     public function new() {
     }
 
     public function translate( x:Float, y:Float ) : Void {
-        glTranslatef( x, y, 0.0 );
+        GL.Translatef( x, y, 0.0 );
     }
 
     public function matrix( m:Matrix ) : Void {
-        glMultMatrixf( m._v._ptr );
+        GL.MultMatrixf( m._v._ptr );
     }
     
     public function setColor( r:Float, g:Float, b:Float, a:Float ) : Void {
-        glColor4f( r, g, b, a );
+        GL.Color4f( r, g, b, a );
     }
     
     public function polygon( vertices:Array<Point> ) : Void {
-        glBegin( GL_POLYGON );
+        GL.Begin( GL.POLYGON );
             for( p in vertices ) {
-                glVertex2f( p.x, p.y );
+                GL.Vertex2f( p.x, p.y );
             }
-        glEnd();
+        GL.End();
     }
     
     
     public function startFrame() : Void {
-        glPushMatrix();
-    	glViewport( 0, 0, 320, 240 );
-        glMatrixMode( GL_PROJECTION );
-        glLoadIdentity();
-        glMatrixMode( GL_MODELVIEW );
-        glLoadIdentity();
+        GL.PushMatrix();
+    	GL.Viewport( 0, 0, 320, 240 );
+        GL.MatrixMode( GL.PROJECTION );
+        GL.LoadIdentity();
+        GL.MatrixMode( GL.MODELVIEW );
+        GL.LoadIdentity();
         
-        glEnable( GL_TEXTURE_2D );
-        glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        GL.Enable( GL.TEXTURE_2D );
+        GL.PixelStorei( GL.UNPACK_ALIGNMENT, 1 );
+	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
+	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
 
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        GL.Enable( GL.BLEND );
+        GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         
-        glShadeModel( GL_FLAT );
-//        glEnable( GL_POLYGON_SMOOTH );
+        GL.ShadeModel( GL.FLAT );
+//        GL.Enable( GL.POLYGON_SMOOTH );
         
-        glClearColor( 0, 0, 0.3, 1 );
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        GL.ClearColor( 0, 0, 0.3, 1 );
+        GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
         
         
     }
 
     public function endFrame() : Void {
-        glPopMatrix();
+        GL.PopMatrix();
     }
     
     public function startPick( x:Float, y:Float ) : Void {
-        var view = GL.__glCreateIntBuffer(4);
+        var view = GL.__GL.CreateIntBuffer(4);
         
-        glSelectBuffer( 64, selectBuffer );
-        glGetIntegerv( GL_VIEWPORT, view );
-        glRenderMode( GL_SELECT );
-        glInitNames();
+        GL.SelectBuffer( 64, selectBuffer );
+        GL.GetIntegerv( GL.VIEWPORT, view );
+        GL.RenderMode( GL.SELECT );
+        GL.InitNames();
         
-        glMatrixMode( GL_PROJECTION );
-        glPushMatrix();
+        GL.MatrixMode( GL.PROJECTION );
+        GL.PushMatrix();
             
-            glLoadIdentity();
-            gluPickMatrix( x, y, 1.0, 1.0, view );
-            glMatrixMode( GL_MODELVIEW );
+            GL.LoadIdentity();
+            GL.uPickMatrix( x, y, 1.0, 1.0, view );
+            GL.MatrixMode( GL.MODELVIEW );
     }
     
     public function endPick() : Array<Array<Int>> {
         
-        glMatrixMode( GL_PROJECTION );
-        glPopMatrix();
+        GL.MatrixMode( GL.PROJECTION );
+        GL.PopMatrix();
         
-        var n_hits = glRenderMode( GL_RENDER );
+        var n_hits = GL.RenderMode( GL.RENDER );
         
         var stacks = new Array<Array<Int>>();
         if( n_hits > 0 ) {
@@ -104,24 +104,24 @@ class GLRenderer implements IRenderer {
             }
         }
         
-        glMatrixMode( GL_MODELVIEW );
+        GL.MatrixMode( GL.MODELVIEW );
         
         return stacks;
     }
 
     public function pushMatrix() : Void {
-        glPushMatrix();
+        GL.PushMatrix();
     }
     
     public function popMatrix() : Void {
-        glPopMatrix();
+        GL.PopMatrix();
     }
      
     public function pushName( name:Int ) : Void {
-        glPushName( name );
+        GL.PushName( name );
     }
     
     public function popName() : Void {
-        glPopName();
+        GL.PopName();
     }
 }

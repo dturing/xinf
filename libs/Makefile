@@ -1,4 +1,4 @@
-GEN_MODS=GL GLU
+GEN_MODS=GL GLU SDL
 
 GL_LIBS=$(NEKO_LIBS) -lGL
 GL_CFLAGS=$(NEKO_CFLAGS)
@@ -6,8 +6,11 @@ GL_CFLAGS=$(NEKO_CFLAGS)
 GLU_LIBS=$(GL_LIBS) -lGLU
 GLU_CFLAGS=$(GL_CFLAGS)
 
+SDL_LIBS=$(NEKO_LIBS) ${shell sdl-config --libs}
+SDL_CFLAGS=$(NEKO_CFLAGS) ${shell sdl-config --cflags}
+
 # where to find GL/gl.h
-SWIG_INCLUDE=-I/usr/include
+SWIG_INCLUDE=-I/usr/include ${shell sdl-config --cflags}
 
 
 # the rest should stay the same even if you add a module.

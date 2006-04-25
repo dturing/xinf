@@ -1,15 +1,13 @@
 /* this file is generated with nekobind. do not modify it direcly. */
 
 #include <neko.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #define VAL_Int(v) val_number(v)
 #define VAL_Float(v) val_number(v)
 #define VAL_String(v) val_string(v)    // HaXe strings direct?
 #define VAL_Dynamic(v) 0
 
-#define ALLOC_Int(v) (value)alloc_integer(v)
+#define ALLOC_Int(v) (value)alloc_int(v)
 #define ALLOC_Float(v) (value)alloc_float(v)
 #define ALLOC_String(v) (value)alloc_string(v)
 #define ALLOC_Dynamic(v) val_null
@@ -36,5 +34,5 @@ void check_failed( const char *function, const char *file, int line, value given
 #define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
                                     check_failed(__FUNCTION__,__FILE__,__LINE__,v); }
 #define VAL_KIND(v,kind) val_data(v)
-#define ALLOC_KIND(v,kind) alloc_abstract(kind,v)
+#define ALLOC_KIND(v,kind) (alloc_abstract(kind,(void*)v))
 

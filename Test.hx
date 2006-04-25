@@ -48,9 +48,9 @@ class Test {
         while( player.iterate() ) {
                         
             // check for OpenGL errors
-            var e:Int = gl.GL._glGetError();
+            var e:Int = GL.GetError();
             if( e > 0 ) {
-                throw( "OpenGL error "+gl.GL.__gluErrorString() );
+                throw( "OpenGL error "+GLU.ErrorString(e) );
             }
         
             // FIXME: proper timing, neko idle func?
