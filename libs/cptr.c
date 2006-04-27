@@ -91,7 +91,7 @@ CPTR( short, Int );
 CPTR( unsigned_short, Int );
 
 
-#include <stdio.h>
+// FIXME: do this for all types, and the reverse (array to pointer).
 value cptr_unsigned_int_array_n( value p, value _n ) {
     int i;
     CHECK_KIND( p, k_unsigned_int_p ); 
@@ -101,9 +101,23 @@ value cptr_unsigned_int_array_n( value p, value _n ) {
     value result = alloc_array( n );
     value *a = val_array_ptr( result );
     for( i=0; i<n; i++ ) {
-        fflush(stderr);
         a[i] = alloc_int( ptr[i] );
     }
     return( result );
 }
 DEFINE_PRIM(cptr_unsigned_int_array_n,2);
+
+value cptr_void_cast( value p ) {
+    if( !val_is_abstract( p ) ) {
+        failure("will only cast #abstract values to void*.");
+        return NULL;
+    }
+    void *ptr = (void*)val_data(p);
+    return( ALLOC_KIND( ptr, k_void_p ) );
+}
+DEFINE_PRIM(cptr_void_cast,1);
+
+value cptr_void_null() {
+    return( ALLOC_KIND( NULL, k_void_p ) );
+}
+DEFINE_PRIM(cptr_void_null,0);

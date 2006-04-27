@@ -4,6 +4,8 @@ import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 import org.xinf.util.IntPointer;
+import org.xinf.util.VoidPointer;
+import org.xinf.util.DoublePointer;
 import GL;
 import GLU;
 
@@ -27,11 +29,19 @@ class GLRenderer implements IRenderer {
     }
     
     public function polygon( vertices:Array<Point> ) : Void {
-        GL.Begin( GL.POLYGON );
-            for( p in vertices ) {
-                GL.Vertex2f( p.x, p.y );
-            }
-        GL.End();
+        var t = GLU._SimpleTesselator();
+        GLU.TessBeginPolygon( t, VoidPointer.NULL );
+        GLU.TessBeginContour( t );
+        
+        for( vertex in vertices ) {
+            var v = new DoublePointer(3);
+            v.set(0,vertex.x);
+            v.set(1,vertex.y);
+            v.set(2,.0);
+            GLU.TessVertex( t, v._ptr, VoidPointer._cast(v._ptr) );
+        }
+        GLU.TessEndContour( t );
+        GLU.TessEndPolygon( t );      
     }
     
     

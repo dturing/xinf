@@ -1,2 +1,34 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+/* simple GLU tesselator, outputs the tesselation using glVertex */
+
+void simple_tess_begin( GLenum prim ) {
+    glBegin( prim );
+}
+
+void simple_tess_vertex( void *_data ) {
+    GLdouble* data = (GLdouble*)_data;
+    glVertex3dv( data );
+}
+
+void simple_tess_end() {
+    glEnd();
+}
+
+void simple_tess_combine( GLdouble c[3], void *d[4], GLfloat w[4], void **out ) {
+    GLdouble *nv = (GLdouble*)malloc(sizeof(GLdouble)*3);
+    nv[0] = c[0];
+    nv[1] = c[1];
+    nv[2] = c[2];
+    *out = nv;
+}
+
+GLUtesselator *_gluSimpleTesselator( void ) {
+    GLUtesselator *tess = gluNewTess();
+    gluTessCallback( tess, GLU_TESS_BEGIN, (_GLUfuncptr)simple_tess_begin );
+    gluTessCallback( tess, GLU_TESS_VERTEX, (_GLUfuncptr)simple_tess_vertex );
+    gluTessCallback( tess, GLU_TESS_END, (_GLUfuncptr)simple_tess_end );
+    gluTessCallback( tess, GLU_TESS_COMBINE, (_GLUfuncptr)simple_tess_combine );
+    return tess;
+}

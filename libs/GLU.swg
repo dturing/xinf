@@ -18,3 +18,4 @@ typedef double		GLclampd;	/* double precision float in [0,1] */
 
 %include <GL/glu.h>
 
+GLUtesselator *_gluSimpleTesselator( void );
