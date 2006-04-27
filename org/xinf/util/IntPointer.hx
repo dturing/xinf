@@ -1,6 +1,6 @@
 package org.xinf.util;
 
-class IntPointer {
+class IntegerPointer {
     public property _ptr(default,null):Dynamic;
     private var _n : Int;
 
@@ -16,81 +16,93 @@ class IntPointer {
 
     public function get( n:Int ) : Int {
         if( n < 0 || n >= _n ) throw("index out of bounds");
-        return _get( _ptr, n );
-    }
-
-    public function array() : Array<Int> {
-        // do this in C?
-        var a:Array<Int> = new Array<Int>();        
-        for( i in 0..._n ) {
-            a[i] = _get( _ptr, i );
-        }
-        return a;
+    trace("Pointer get "+_ptr+" "+n+" -- "+Reflect.typeof(untyped this._get) );
+        var r:Int = _get( _ptr, n );
+    trace("Pointer get "+_ptr+" "+n+": "+r );
+        return r;
     }
 
     public function array_n( n:Int ) : Array<Int> {
-        // do this in C?
-        var a:Array<Int> = new Array<Int>();        
-        for( i in 0...n ) {
-            var v:Int = _get( _ptr, i );
-            a[i] = v;
-            trace( "intptr ["+i+"]: "+v );
-        }
-        return a;
+        if( n < 0 || n >= _n ) throw("index out of bounds");
+        return _array_n(_ptr,n);
     }
-
-    private static var _alloc = neko.Lib.load("cptr","cptr_int_alloc",1);
-    private static var _set   = neko.Lib.load("cptr","cptr_int_set",3);
-    private static var _get   = neko.Lib.load("cptr","cptr_int_get",2);
+    
+    private function _alloc( n:Int ) : Dynamic {
+    }
+    private function _set( p:Dynamic, n:Int, v:Int ) : Int {
+        return null;
+    }
+    private function _get( p:Dynamic, n:Int ) : Int {
+        return null;
+    }
+    private function _array_n( p:Dynamic, n:Int ) : Array<Int> {
+        return null;
+    }
 }
 
-class UIntPointer {
-    public property _ptr(default,null):Dynamic;
-    private var _n : Int;
-
-    public function new( n:Int ) {
-        _n = n;
-        _ptr = _alloc(_n);
-    }
+class IntPointer extends IntegerPointer {
+    private static var __alloc   = neko.Lib.load("cptr","cptr_int_alloc",1);
+    private static var __set     = neko.Lib.load("cptr","cptr_int_set",3);
+    private static var __get     = neko.Lib.load("cptr","cptr_int_get",2);
+    private static var __array_n = neko.Lib.load("cptr","cptr_int_array_n",2);
     
-    public function set( n:Int, v:Int ) : Int {
-        if( n < 0 || n >= _n ) throw("index out of bounds");
-        return _set( _ptr, n, v );
+    private function _alloc( n:Int ) {
+        return __alloc( n );
     }
 
-    public function get( n:Int ) : Int {
-        if( n < 0 || n >= _n ) throw("index out of bounds");
-        return _get( _ptr, n );
+    private function _set( p:Dynamic, n:Int, v:Int ) : Int {
+        return __set( p, n, v );
     }
 
-    public function array() : Array<Int> {
-        // do this in C?
-        var a:Array<Int> = new Array<Int>();        
-        for( i in 0..._n ) {
-            a[i] = _get( _ptr, i );
-        }
-        return a;
+    private function _get( p:Dynamic, n:Int ) : Int {
+        return __get( p, n );
     }
 
-    public function array_n( n:Int ) : Array<Int> {
-        return _array_n( _ptr, n );
+    private function _array_n( p:Dynamic, n:Int ) : Array<Int> {
+        return __array_n( p, n );
     }
 /*
-    public function array_n( n:Int ) : Array<Int> {
-        // do this in C?
-        var a:Array<Int> = new Array<Int>();        
-        for( i in 0...n ) {
-            var v:Int = _get( _ptr, i );
-            a.push( v );
-//            trace( "intptr ["+i+"]: "+v );
-        }
-        return a;
+    public function set( n:Int, v:Int ) : Int {
+        if( n < 0 || n >= _n ) throw("index out of bounds");
+        return f_set( _ptr, n, v );
     }
-*/
-
-    private static var _alloc   = neko.Lib.load("cptr","cptr_unsigned_int_alloc",1);
-    private static var _set     = neko.Lib.load("cptr","cptr_unsigned_int_set",3);
-    private static var _get     = neko.Lib.load("cptr","cptr_unsigned_int_get",2);
-    private static var _array_n = neko.Lib.load("cptr","cptr_unsigned_int_array_n",2);
+    private function _get( n:Int ) : Int {
+        if( n < 0 || n >= _n ) throw("index out of bounds");
+        return f_get( _ptr, n );
+    }
+    */
+    static function main() {
+        trace("informal IntPointer test");
+        
+        var p = new IntPointer(10);
+        for( i in 0...9 ) {
+            p.set( i, i*10 );
+            trace("set "+i+" "+(i*10) );
+        }
+        for( i in 0...9 ) {
+            var v = p.get( i );
+            trace("["+i+"] "+v+" "+Reflect.typeof(v) );
+        }
+        
+    }
 }
+/*
+class UIntPointer extends Pointer<Int>{
+    private static var f_alloc      = neko.Lib.load("cptr","cptr_unsigned_int_alloc",1);
+    private static var f_set        = neko.Lib.load("cptr","cptr_unsigned_int_set",3);
+    private static var f_get        = neko.Lib.load("cptr","cptr_unsigned_int_get",2);
+    private static var f_array_n    = neko.Lib.load("cptr","cptr_unsigned_int_array_n",2);
+    
+    public function new( n:Int ) {
+        super( n, f_alloc, f_set, f_get, f_array_n );
+    }
 
+    public function get_uint( n:Int ) : Int {
+        if( n < 0 || n >= _n ) throw("index out of bounds");
+    trace("UintPointer get "+_ptr+" "+n );
+        var r:Int = f_get( _ptr, n );
+    trace("/UintPointer get "+_ptr+" "+n );
+        return r;
+    }
+}
+*/
