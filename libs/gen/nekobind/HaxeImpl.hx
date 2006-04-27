@@ -20,7 +20,7 @@ class HaxeImpl extends Generator {
     }
     
     public function _constant( name:String, type:String, value:String ) : Void {
-        print("\tpublic static var "+stripSymbol(name)+":"+map.get(type).hxType()+" = "+value+";\n");
+        print("\tpublic static var "+stripSymbol(name)+":"+map.get(type).hxType()+" = "+stripCode(value)+";\n");
     }
 
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
@@ -30,5 +30,25 @@ class HaxeImpl extends Generator {
         } else {
             print("\t// "+name+" not wrapped because it has > 5 arguments :/\n");
         }
+    }
+    
+
+    public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
+        var p:IType = WrappedType.make(name.split("."),map);
+        map.addType( name, p );
+        
+        var t:IType = new WrappedType(false,p,1);
+        map.addType( name+"_p", t );
+        
+        for( member in members ) {
+            memberAccessors( t, name, member[0], member[1] );
+        }
+    }
+    
+    private function memberAccessors( classType:IType, className:String, name:String, type:String ) {
+        print("\tpublic static var "+stripSymbol(className)+"_"+name+"_set");
+        print(" = neko.Lib.load(\""+module+"\",\"_"+className+"_"+name+"_set\",2);\n");
+        print("\tpublic static var "+stripSymbol(className)+"_"+name+"_get");
+        print(" = neko.Lib.load(\""+module+"\",\"_"+className+"_"+name+"_get\",1);\n");
     }
 }

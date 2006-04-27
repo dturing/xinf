@@ -1,12 +1,15 @@
 GEN_MODS=GL GLU SDL
 
-GL_LIBS=$(NEKO_LIBS) -lGL
+cptr_LIBS=$(NEKO_LIBS)
+cptr_CFLAGS=$(NEKO_CFLAGS)
+
+GL_LIBS=$(NEKO_LIBS) -lGL -L. -lcptr
 GL_CFLAGS=$(NEKO_CFLAGS)
 
-GLU_LIBS=$(GL_LIBS) -lGLU
+GLU_LIBS=$(GL_LIBS) -lGLU -L. -lcptr
 GLU_CFLAGS=$(GL_CFLAGS)
 
-SDL_LIBS=$(NEKO_LIBS) ${shell sdl-config --libs}
+SDL_LIBS=$(NEKO_LIBS) ${shell sdl-config --libs} -L. -lcptr
 SDL_CFLAGS=$(NEKO_CFLAGS) ${shell sdl-config --cflags}
 
 # where to find GL/gl.h
@@ -27,9 +30,21 @@ NEKO_CFLAGS=${shell pkg-config --cflags neko}
 
 TARGET_LIBS=$(foreach MOD,$(GEN_MODS),$(MOD).ndll $(MOD)__.n)
 TARGET_CLASSES=$(foreach MOD,$(GEN_MODS),$(MOD).hx)
-TARGETS=$(TARGET_LIBS) $(TARGET_CLASSES)
+TARGETS=$(TARGET_LIBS) $(TARGET_CLASSES) libcptr.so cptr.ndll
 
 default : $(TARGETS)
+
+# ------------------------------------------------------------
+# building cptr helper lib
+
+lib%.so : %.c
+	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
+
+%.ndll : lib%.so
+	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
+
+# ------------------------------------------------------------
+# building actual modules
 
 # use swig to generate XML description of the library
 %_wrap.xml : %.swg
@@ -52,7 +67,7 @@ default : $(TARGETS)
 	neko $<
     
 # compile C glue library
-%.ndll : %_wrap.c
+%.ndll : %_wrap.c libcptr.so
 	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
         
 # compile neko wrapper module
@@ -60,4 +75,4 @@ default : $(TARGETS)
 	haxe $(HAXE_FLAGS) -neko $*.hx $*
 
 clean :
-	-rm $(wildcard *.xml *_wrap.c *.n *__.hx *.hx *.ndll)
+	-rm $(wildcard *.xml *_wrap.c *.n *__.hx *.hx *.ndll *.so)

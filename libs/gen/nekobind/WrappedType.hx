@@ -43,11 +43,14 @@ class WrappedType extends PrimitiveType {
         } else if( map.knows(c) ) {
             return( new LinkedType( map.get(c) ) );
         }
-        
+//        trace("new wrappedtype "+const+" "+primitive+" - "+cprimitive+" *"+ptr );        
         return( new WrappedType( const, cprimitive, ptr ) );
     }
     
-    public static function _cPrimitive( const:Bool, primitive:IType, ptr:Int ) {
+    public static function cPrimitive( const:Bool, primitive:IType, ptr:Int ) {
+        var p:String = primitive.cPrimitive();
+        for( i in 0...ptr ) p+="*";
+        return( p );
     }
     
     public function new( _const:Bool, _primitive:IType, _ptr:Int ) {
@@ -60,9 +63,8 @@ class WrappedType extends PrimitiveType {
         c+=primitive.cPrimitive();
         for( i in 0...ptr ) c+="*";
         
-        kind = "k_";
-        kind += primitive.cPrimitive().split(" ").join("_");
-        for( i in 0...ptr ) kind+="_p";
+        kind = "k_"+kPrimitive();
+        if( kind == "k_" ) throw("empty kind: "+_const+" "+primitive.kPrimitive()+" "+_ptr+"*" );
 
         super( c, "Dynamic" );
     }
@@ -77,15 +79,42 @@ class WrappedType extends PrimitiveType {
     }
 
     public function defines( kinds:Hash<String> ):String {
+        var def:String = "";
+    
+        // if the kind (or kind_p) is not defined yet, return its DEFINE_KIND.
+    
         var k = kinds.get( kind );
         if( k==null ) {
             kinds.set( kind, "" );
-            return("DEFINE_KIND("+kind+");\n");
+            def += "DEFINE_KIND("+kind+");\n";
         }
-        return("");
+
+        var k = kinds.get( kind+"_p" );
+        if( k==null ) {
+            kinds.set( kind+"_p", "" );
+            def += "DEFINE_KIND("+kind+"_p"+");\n";
+        }
+        
+        return def;
+    }
+
+    public function kPrimitive() : String {
+        var k:String = "";
+        k += primitive.kPrimitive();
+        for( i in 0...ptr ) k+="_p";
+        return( k );
     }
 
     public function toC( name:String ) : String {
         return( "VAL_KIND( "+name+", "+kind+" )" );
+    }
+
+
+    public function setMember( o:String, name:String, val:String ):String {
+        return("\tmemcpy(&("+o+"->"+name+"), "+toC(val)+", "+sizeof()+" );\n" );
+    }
+
+    public function returnMember( o:String, name:String ):String {
+        return("\treturn ALLOC_KIND( &("+( o+"->"+name )+"), "+kind+"_p );\n");
     }
 }

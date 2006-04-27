@@ -4,3 +4,10 @@
 #include <SDL_events.h>
 #include <SDL_timer.h>
 #include <SDL_video.h>
+#include <SDL_version.h>
+#include <SDL_syswm.h>
+
+SDL_Event *_NewEvent() {
+    SDL_Event *event = (SDL_Event*)malloc(sizeof(SDL_Event));
+    return event;
+}

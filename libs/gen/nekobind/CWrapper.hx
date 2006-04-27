@@ -9,7 +9,12 @@ class CWrapper extends Generator {
         
         _defines = neko.File.getContent("gen/C.runtime");
         _defines += neko.File.getContent(module+".runtime");
+        
         kinds = new Hash<String>();
+        // these kinds are defined in the cptr library
+        for( kind in [ "k_float_p", "k_double_p", "k_int_p", "k_unsigned_int_p", "k_short_p", "k_unsigned_short_p", "k_char_p", "k_unsigned_char_p", "k_void_p", "k_void_p_p" ] ) {
+            kinds.set( kind, "" );
+        }
     }
 
     public function _constant( name:String, type:String, value:String ) : Void {
@@ -19,6 +24,7 @@ class CWrapper extends Generator {
         var t:IType = map.get(type);
         
         _defines += t.defines( kinds );
+   //     trace( "CWrapper::_func "+args );
         _defines += argList( args, argDefines );
         
         print( t.cFunc("_"+name) + "( " + argList( args, argFuncDecl ) + ") {\n");
@@ -62,4 +68,47 @@ class CWrapper extends Generator {
     public function defines() : String {
         return(_defines+"\n\n");
     }
+    
+    public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
+        var p:IType = WrappedType.make(name.split("."),map);
+        map.addType( name, p );
+        
+        var t:IType = new WrappedType(false,p,1);
+        map.addType( name+"_p", t );
+        _defines += t.defines( kinds );
+        
+        for( member in members ) {
+            memberAccessors( t, name, member[0], member[1] );
+        }
+    }
+    
+    private function memberAccessors( classType:IType, className:String, name:String, type:String ) {
+        var t:IType = map.get(type);
+        var c:IType = classType;
+
+        _defines += t.defines( kinds );
+ 
+        // setter       
+        print( t.cFunc("_"+className+"_"+name+"_set") + "( " + c.cArg("o") +", "+ t.cArg("v") + " ) {\n");
+            print( c.check("o") );
+            print( c.cLocal("o") );
+            print( t.check("v") );
+            
+            print( t.setMember( "c_o", name, "v_v" ) );
+                        
+            print("\treturn v_v;\n");
+        print( "}\n");
+        print( "DEFINE_PRIM(_"+className+"_"+name+"_set,2)\n\n");
+
+        // getter       
+        print( t.cFunc("_"+className+"_"+name+"_get") + "( " + c.cArg("o") + " ) {\n");
+            print( c.check("o") );
+            print( c.cLocal("o") );
+            
+            print( t.returnMember( "c_o", name ) );
+                        
+        print( "}\n");
+        print( "DEFINE_PRIM(_"+className+"_"+name+"_get,1)\n\n");
+    }
+    
 }

@@ -35,14 +35,30 @@ class LinkedType implements IType {
         return other.check(name);
     }
 
+    public function sizeof() : String {
+        return( other.sizeof() );
+    }
+
     public function cPrimitive() : String {
         return( other.cPrimitive() );
+    }
+
+    public function kPrimitive() : String {
+        return( other.kPrimitive() );
     }
 
     public function defines( kinds:Hash<String> ):String {
         return( other.defines(kinds) );
     }
 
+    public function setMember( o:String, name:String, val:String ):String {
+        return( other.setMember( o, name, val ) );
+    }
+    
+    public function returnMember( o:String, name:String ):String {
+        return( other.returnMember( o, name ) );
+    }
+    
     public function hxType() : String {
         return( other.hxType() );
     }

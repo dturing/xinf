@@ -4,13 +4,13 @@ class TypeMap {
     public var buf:String;
     private var types:Hash<IType>;
     
-    public function new( kindsFile:String ) {
+    public function new() {
         types = new Hash<IType>();
         
         setMaps( "
 float,double : Float
 int,unsigned int,short,unsigned short,char,unsigned char,signed char : Int
-unsigned char*,const unsigned char* : String
+unsigned char*,const unsigned char*,char*,const char* : String
 void : Void
 ");
     }
@@ -30,6 +30,10 @@ void : Void
                 }
             }
         }
+    }
+    
+    public function addType( name:String, t:IType ) : Void {
+        types.set( name, t );
     }
    
     public function addTypedef( t:String, final:String ) : Void {

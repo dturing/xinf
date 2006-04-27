@@ -37,12 +37,28 @@ class PrimitiveType implements IType {
         return("\tCHECK_"+hxtype+"( v_"+name+" );\n");
     }
     
+    public function sizeof() : String {
+        return( "sizeof("+cPrimitive()+")" );
+    }
+
     public function cPrimitive() : String {
         return( ctype );
     }
 
+    public function kPrimitive() : String {
+        return( ctype.split(" ").join("_") );
+    }
+
     public function defines( kinds:Hash<String> ):String {
         return("");
+    }
+
+    public function setMember( o:String, name:String, val:String ):String {
+        return("\t"+o+"->"+name+" = "+toC(val)+";\n" );
+    }
+
+    public function returnMember( o:String, name:String ):String {
+        return("\treturn "+toHx( o+"->"+name )+";\n");
     }
 
     public function hxType() : String {

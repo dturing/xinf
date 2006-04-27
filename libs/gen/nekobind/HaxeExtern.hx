@@ -38,4 +38,27 @@ class HaxeExtern extends Generator {
         s += " ";
         return s;
     }
+    
+    
+    public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
+        var p:IType = WrappedType.make(name.split("."),map);
+        map.addType( name, p );
+        
+        var t:IType = new WrappedType(false,p,1);
+        map.addType( name+"_p", t );
+        
+        for( member in members ) {
+            memberAccessors( t, name, member[0], member[1] );
+        }
+    }
+    
+    private function memberAccessors( classType:IType, className:String, name:String, type:String ) {
+        print("\tpublic static function "+stripSymbol(className)+"_"+name+"_set( ");
+        print("o:Dynamic, _"+name+":"+map.get(type).hxType() );
+        print(" ):"+map.get(type).hxType()+";\n");
+        
+        print("\tpublic static function "+stripSymbol(className)+"_"+name+"_get( ");
+        print("o:Dynamic");
+        print(" ):"+map.get(type).hxType()+";\n");
+    }
 }

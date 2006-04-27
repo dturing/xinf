@@ -43,6 +43,28 @@ class <xsl:value-of select="$module"/>Generator {
 </xsl:text>
 </xsl:template>
 
+<xsl:template match="enum">
+    <xsl:apply-templates match="enumitem"/>
+</xsl:template>
+<xsl:template match="enumitem">
+    <xsl:text>        gen.constant("</xsl:text>
+    <xsl:value-of select="@sym_name"/>
+    <xsl:text>","unsigned int","</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@enumvalue">
+            <xsl:value-of select="@enumvalue"/>
+        </xsl:when>
+        <xsl:when test="@enumvalueex">
+            <xsl:value-of select="@enumvalueex"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>");
+</xsl:text>
+</xsl:template>
+
 <xsl:template match="cdecl[@kind='function']">
     <!-- somehow, the swig xml output doesnt put a ").p" onto pointer return types,
          so we do it here -->
@@ -90,6 +112,28 @@ class <xsl:value-of select="$module"/>Generator {
     <xsl:text>");
 </xsl:text>
 </xsl:template>
+
+<xsl:template match="class">
+    <xsl:text>        gen.classDefinition("</xsl:text>
+    <xsl:value-of select="@sym_name"/>
+    <xsl:text>", [ </xsl:text>
+    
+    <xsl:for-each select="cdecl[@ismember='1']">
+        <xsl:text>[ "</xsl:text>
+            <xsl:value-of select="@sym_name"/>
+            <xsl:text>","</xsl:text>
+            <xsl:value-of select="@decl"/>
+            <xsl:value-of select="@type"/>
+        <xsl:text>" ] </xsl:text>
+        <xsl:if test="following-sibling::cdecl[@ismember='1']">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    
+    <xsl:text>]);
+</xsl:text>
+</xsl:template>
+
 
 <xsl:template match="cdecl" priority="-1">
 <!--
