@@ -1,1 +1,10 @@
 #include <GL/gl.h>
+
+/* ------------------------------------------------------------- */
+/* Curve Evaluator simplification
+/* ------------------------------------------------------------- */
+
+void glMap1d_01( GLenum target, GLint stride, GLint order, const GLdouble *points ) {
+    glMap1d( target, .0, 1., stride, order, points );
+}
+

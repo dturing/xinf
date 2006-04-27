@@ -1,7 +1,9 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+/* ------------------------------------------------------------- */
 /* simple GLU tesselator, outputs the tesselation using glVertex */
+/* ------------------------------------------------------------- */
 
 void simple_tess_begin( GLenum prim ) {
     glBegin( prim );

@@ -30,12 +30,12 @@ class Square extends Sprite {
         speed=0.0;
         pressed=false;
         
-        draw( 0xffffff );
+        draw( 0xffffff, .3 );
     }
 
-    private function draw( c:Int ) : Void {
+    private function draw( c:Int, a:Float ) : Void {
         graphics.clear();
-        graphics.beginFill( c, 0.3 );
+        graphics.beginFill( c, a );
         graphics.drawRect( -size/2, -size/2, size, size );
         graphics.endFill();
     }
@@ -61,11 +61,11 @@ class Square extends Sprite {
     }
 
     public function onMouseOver( e:Event ) {
-        draw( 0xff0000 );
+        draw( 0xffffff, .6 );
     }
 
     public function onMouseOut( e:Event ) {
-        draw( 0xffffff );
+        draw( 0xffffff, .3 );
     }
 
 }

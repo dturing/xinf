@@ -44,6 +44,29 @@ class GLRenderer implements IRenderer {
         GLU.TessEndPolygon( t );      
     }
     
+    public function curve( ctrlpoints:Array<Point> ) : Void {
+        var cps:DoublePointer = new DoublePointer( ctrlpoints.length*3 );
+        var n:Int = 0;
+        for( p in ctrlpoints ) {
+            cps.set( n++, p.x );
+            cps.set( n++, p.y );
+            cps.set( n++, .0 );
+        }
+        
+        GL.Map1d_01( GL.MAP1_VERTEX_3, 3, 4, cps._ptr );
+        GL.Enable( GL.MAP1_VERTEX_3 );
+        
+        GL.LineWidth( 5 );
+        GL.Begin( GL.LINE_STRIP );
+
+        var v:Float = 0.0;
+        var s:Float = 1.0/50.0;
+        for( i in 0...51 ) {
+            GL.EvalCoord1f( v );
+            v+=s;
+        }
+        GL.End();
+    }
     
     public function startFrame() : Void {
         GL.PushMatrix();
@@ -66,8 +89,6 @@ class GLRenderer implements IRenderer {
         
         GL.ClearColor( 0, 0, 0.3, 1 );
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
-        
-        
     }
 
     public function endFrame() : Void {

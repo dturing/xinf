@@ -13,6 +13,7 @@ interface IRenderer {
     
     // paint
     function polygon( vertices:Array<Point> ) : Void;
+    public function curve( ctrlpoints:Array<Point> ) : Void;
     
     // manage
     function startFrame() : Void;

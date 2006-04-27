@@ -1,8 +1,9 @@
 import org.xinf.SDLPlayer;
 import org.xinf.display.Stage;
 import org.xinf.render.GLRenderer;
-import org.xinf.demo.Square;
 import org.xinf.geom.Point;
+import org.xinf.demo.Square;
+import org.xinf.demo.DrawTest;
 
 class Test {
     static function main() {
@@ -14,6 +15,9 @@ class Test {
 
         var s0 = new Square("zero",.0,.0,.0);
         root.addChild( s0 );
+
+        var test = new DrawTest();
+        s0.addChild( test );
     
         var p:Point;
                 
@@ -28,6 +32,7 @@ class Test {
         }
         */
 
+        /*
         // square grid
         
         var n:Int=2;
@@ -36,7 +41,7 @@ class Test {
                 s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
-        
+        */
         
 //        s0.addChild( new org.xinf.media.Video() );
         while( player.iterate() ) {
