@@ -1,6 +1,6 @@
 package org.xinf.geom;
 
-import org.xinf.util.FloatPointer;
+import org.xinf.util.CPtr;
 
 class Matrix {
     private static var _A:Int = 0;
@@ -10,38 +10,38 @@ class Matrix {
     private static var _D:Int = 5;
     private static var _TY:Int = 13;
     
-    public property _v(default,null):FloatPointer;
+    public property _v(default,null):Dynamic;
 
     public property tx( _get_tx, _set_tx ) : Float;
-    private function _get_tx() : Float { return _v.get(_TX); }
-    private function _set_tx( val:Float ) : Float { return _v.set(_TX,val); }
+    private function _get_tx() : Float { return CPtr.float_get(_v,_TX); }
+    private function _set_tx( val:Float ) : Float { return CPtr.float_set(_v,_TX,val); }
 
     public property ty( _get_ty, _set_ty ) : Float;
-    private function _get_ty() : Float { return _v.get(_TY); }
-    private function _set_ty( val:Float ) : Float { return _v.set(_TY,val); }
+    private function _get_ty() : Float { return CPtr.float_get(_v,_TY); }
+    private function _set_ty( val:Float ) : Float { return CPtr.float_set(_v,_TY,val); }
 
     public property a( _get_a, _set_a ) : Float;
-    private function _get_a() : Float { return _v.get(_A); }
-    private function _set_a( val:Float ) : Float { return _v.set(_A,val); }
+    private function _get_a() : Float { return CPtr.float_get(_v,_A); }
+    private function _set_a( val:Float ) : Float { return CPtr.float_set(_v,_A,val); }
 
     public property b( _get_b, _set_b ) : Float;
-    private function _get_b() : Float { return _v.get(_B); }
-    private function _set_b( val:Float ) : Float { return _v.set(_B,val); }
+    private function _get_b() : Float { return CPtr.float_get(_v,_B); }
+    private function _set_b( val:Float ) : Float { return CPtr.float_set(_v,_B,val); }
 
     public property c( _get_c, _set_c ) : Float;
-    private function _get_c() : Float { return _v.get(_C); }
-    private function _set_c( val:Float ) : Float { return _v.set(_C,val); }
+    private function _get_c() : Float { return CPtr.float_get(_v,_C); }
+    private function _set_c( val:Float ) : Float { return CPtr.float_set(_v,_C,val); }
 
     public property d( _get_d, _set_d ) : Float;
-    private function _get_d() : Float { return _v.get(_D); }
-    private function _set_d( val:Float ) : Float { return _v.set(_D,val); }
+    private function _get_d() : Float { return CPtr.float_get(_v,_D); }
+    private function _set_d( val:Float ) : Float { return CPtr.float_set(_v,_D,val); }
 
     public function new() {
-        _v = new FloatPointer(16);
-        _v.set(0,1.0);
-        _v.set(5,1.0);
-        _v.set(10,1.0);
-        _v.set(15,1.0);
+        _v = CPtr.float_alloc(16);
+        CPtr.float_set(_v,0,1.0);
+        CPtr.float_set(_v,5,1.0);
+        CPtr.float_set(_v,10,1.0);
+        CPtr.float_set(_v,15,1.0);
     }
     
     public static function Translation( x:Float, y:Float ) {
@@ -84,29 +84,29 @@ class Matrix {
     public function concat( m:Matrix ) : Void {
         var v1 = _v;
         var v2 = m._v;
-        var v:FloatPointer = new FloatPointer(16);
+        var v = CPtr.float_alloc(16);
         
         // FIXME
         
-        v.set(  0, (v1.get(0)*v2.get( 0)) + (v1.get(4)*v2.get( 1)) + (v1.get(8)*v2.get( 2)) + (v1.get(12)*v2.get( 3)) );
-        v.set(  4, (v1.get(0)*v2.get( 4)) + (v1.get(4)*v2.get( 5)) + (v1.get(8)*v2.get( 6)) + (v1.get(12)*v2.get( 7)) );
-        v.set(  8, (v1.get(0)*v2.get( 8)) + (v1.get(4)*v2.get( 9)) + (v1.get(8)*v2.get(10)) + (v1.get(12)*v2.get(11)) );
-        v.set( 12, (v1.get(0)*v2.get(12)) + (v1.get(4)*v2.get(13)) + (v1.get(8)*v2.get(14)) + (v1.get(12)*v2.get(15)) );
+        CPtr.float_set(v,  0, (CPtr.float_get(v1,0)*CPtr.float_get(v2, 0)) + (CPtr.float_get(v1,4)*CPtr.float_get(v2, 1)) + (CPtr.float_get(v1,8)*CPtr.float_get(v2, 2)) + (CPtr.float_get(v1,12)*CPtr.float_get(v2, 3)) );
+        CPtr.float_set(v,  4, (CPtr.float_get(v1,0)*CPtr.float_get(v2, 4)) + (CPtr.float_get(v1,4)*CPtr.float_get(v2, 5)) + (CPtr.float_get(v1,8)*CPtr.float_get(v2, 6)) + (CPtr.float_get(v1,12)*CPtr.float_get(v2, 7)) );
+        CPtr.float_set(v,  8, (CPtr.float_get(v1,0)*CPtr.float_get(v2, 8)) + (CPtr.float_get(v1,4)*CPtr.float_get(v2, 9)) + (CPtr.float_get(v1,8)*CPtr.float_get(v2,10)) + (CPtr.float_get(v1,12)*CPtr.float_get(v2,11)) );
+        CPtr.float_set(v, 12, (CPtr.float_get(v1,0)*CPtr.float_get(v2,12)) + (CPtr.float_get(v1,4)*CPtr.float_get(v2,13)) + (CPtr.float_get(v1,8)*CPtr.float_get(v2,14)) + (CPtr.float_get(v1,12)*CPtr.float_get(v2,15)) );
 
-        v.set(  1, (v1.get(1)*v2.get( 0)) + (v1.get(5)*v2.get( 1)) + (v1.get(9)*v2.get( 2)) + (v1.get(13)*v2.get( 3)) );
-        v.set(  5, (v1.get(1)*v2.get( 4)) + (v1.get(5)*v2.get( 5)) + (v1.get(9)*v2.get( 6)) + (v1.get(13)*v2.get( 7)) );
-        v.set(  9, (v1.get(1)*v2.get( 8)) + (v1.get(5)*v2.get( 9)) + (v1.get(9)*v2.get(10)) + (v1.get(13)*v2.get(11)) );
-        v.set( 13, (v1.get(1)*v2.get(12)) + (v1.get(5)*v2.get(13)) + (v1.get(9)*v2.get(14)) + (v1.get(13)*v2.get(15)) );
+        CPtr.float_set(v,  1, (CPtr.float_get(v1,1)*CPtr.float_get(v2, 0)) + (CPtr.float_get(v1,5)*CPtr.float_get(v2, 1)) + (CPtr.float_get(v1,9)*CPtr.float_get(v2, 2)) + (CPtr.float_get(v1,13)*CPtr.float_get(v2, 3)) );
+        CPtr.float_set(v,  5, (CPtr.float_get(v1,1)*CPtr.float_get(v2, 4)) + (CPtr.float_get(v1,5)*CPtr.float_get(v2, 5)) + (CPtr.float_get(v1,9)*CPtr.float_get(v2, 6)) + (CPtr.float_get(v1,13)*CPtr.float_get(v2, 7)) );
+        CPtr.float_set(v,  9, (CPtr.float_get(v1,1)*CPtr.float_get(v2, 8)) + (CPtr.float_get(v1,5)*CPtr.float_get(v2, 9)) + (CPtr.float_get(v1,9)*CPtr.float_get(v2,10)) + (CPtr.float_get(v1,13)*CPtr.float_get(v2,11)) );
+        CPtr.float_set(v, 13, (CPtr.float_get(v1,1)*CPtr.float_get(v2,12)) + (CPtr.float_get(v1,5)*CPtr.float_get(v2,13)) + (CPtr.float_get(v1,9)*CPtr.float_get(v2,14)) + (CPtr.float_get(v1,13)*CPtr.float_get(v2,15)) );
 
-        v.set(  2, (v1.get(2)*v2.get( 0)) + (v1.get(6)*v2.get( 1)) + (v1.get(10)*v2.get( 2)) + (v1.get(14)*v2.get( 3)) );
-        v.set(  6, (v1.get(2)*v2.get( 4)) + (v1.get(6)*v2.get( 5)) + (v1.get(10)*v2.get( 6)) + (v1.get(14)*v2.get( 7)) );
-        v.set( 10, (v1.get(2)*v2.get( 8)) + (v1.get(6)*v2.get( 9)) + (v1.get(10)*v2.get(10)) + (v1.get(14)*v2.get(11)) );
-        v.set( 14, (v1.get(2)*v2.get(12)) + (v1.get(6)*v2.get(13)) + (v1.get(10)*v2.get(14)) + (v1.get(14)*v2.get(15)) );
+        CPtr.float_set(v,  2, (CPtr.float_get(v1,2)*CPtr.float_get(v2, 0)) + (CPtr.float_get(v1,6)*CPtr.float_get(v2, 1)) + (CPtr.float_get(v1,10)*CPtr.float_get(v2, 2)) + (CPtr.float_get(v1,14)*CPtr.float_get(v2, 3)) );
+        CPtr.float_set(v,  6, (CPtr.float_get(v1,2)*CPtr.float_get(v2, 4)) + (CPtr.float_get(v1,6)*CPtr.float_get(v2, 5)) + (CPtr.float_get(v1,10)*CPtr.float_get(v2, 6)) + (CPtr.float_get(v1,14)*CPtr.float_get(v2, 7)) );
+        CPtr.float_set(v, 10, (CPtr.float_get(v1,2)*CPtr.float_get(v2, 8)) + (CPtr.float_get(v1,6)*CPtr.float_get(v2, 9)) + (CPtr.float_get(v1,10)*CPtr.float_get(v2,10)) + (CPtr.float_get(v1,14)*CPtr.float_get(v2,11)) );
+        CPtr.float_set(v, 14, (CPtr.float_get(v1,2)*CPtr.float_get(v2,12)) + (CPtr.float_get(v1,6)*CPtr.float_get(v2,13)) + (CPtr.float_get(v1,10)*CPtr.float_get(v2,14)) + (CPtr.float_get(v1,14)*CPtr.float_get(v2,15)) );
 
-        v.set(  3, (v1.get(3)*v2.get( 0)) + (v1.get(7)*v2.get( 1)) + (v1.get(11)*v2.get( 2)) + (v1.get(15)*v2.get( 3)) );
-        v.set(  7, (v1.get(3)*v2.get( 4)) + (v1.get(7)*v2.get( 5)) + (v1.get(11)*v2.get( 6)) + (v1.get(15)*v2.get( 7)) );
-        v.set( 11, (v1.get(3)*v2.get( 8)) + (v1.get(7)*v2.get( 9)) + (v1.get(11)*v2.get(10)) + (v1.get(15)*v2.get(11)) );
-        v.set( 15, (v1.get(3)*v2.get(12)) + (v1.get(7)*v2.get(13)) + (v1.get(11)*v2.get(14)) + (v1.get(15)*v2.get(15)) );
+        CPtr.float_set(v,  3, (CPtr.float_get(v1,3)*CPtr.float_get(v2, 0)) + (CPtr.float_get(v1,7)*CPtr.float_get(v2, 1)) + (CPtr.float_get(v1,11)*CPtr.float_get(v2, 2)) + (CPtr.float_get(v1,15)*CPtr.float_get(v2, 3)) );
+        CPtr.float_set(v,  7, (CPtr.float_get(v1,3)*CPtr.float_get(v2, 4)) + (CPtr.float_get(v1,7)*CPtr.float_get(v2, 5)) + (CPtr.float_get(v1,11)*CPtr.float_get(v2, 6)) + (CPtr.float_get(v1,15)*CPtr.float_get(v2, 7)) );
+        CPtr.float_set(v, 11, (CPtr.float_get(v1,3)*CPtr.float_get(v2, 8)) + (CPtr.float_get(v1,7)*CPtr.float_get(v2, 9)) + (CPtr.float_get(v1,11)*CPtr.float_get(v2,10)) + (CPtr.float_get(v1,15)*CPtr.float_get(v2,11)) );
+        CPtr.float_set(v, 15, (CPtr.float_get(v1,3)*CPtr.float_get(v2,12)) + (CPtr.float_get(v1,7)*CPtr.float_get(v2,13)) + (CPtr.float_get(v1,11)*CPtr.float_get(v2,14)) + (CPtr.float_get(v1,15)*CPtr.float_get(v2,15)) );
         
         _v = v;
     }
@@ -114,7 +114,7 @@ class Matrix {
     public function toString() : String {
         var s:String = "matrix[ \n  ";
         for( i in 0...16 ) {
-            s += _v.get(i) + " ";
+            s += CPtr.float_get(_v,i) + " ";
             if( i % 4 == 3 ) s += "\n  ";
         }
         s += "]";

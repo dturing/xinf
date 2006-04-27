@@ -37,6 +37,7 @@ void kind_check_failed( const char *function, const char *file, int line, value 
 #define CHECK_Int(v) CHECK_NUMBER(v,int)
 #define CHECK_Float(v) CHECK_NUMBER(v,float)
 #define CHECK_String(v) CHECK(v,string)
+#define CHECK_Array(v) CHECK(v,array)
 #define CHECK_Dynamic(v) check_failed(__FUNCTION__,__FILE__,__LINE__,v)
 
 

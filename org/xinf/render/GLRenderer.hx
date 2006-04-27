@@ -3,15 +3,13 @@ package org.xinf.render;
 import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
-import org.xinf.util.IntPointer;
-import org.xinf.util.VoidPointer;
-import org.xinf.util.DoublePointer;
+import org.xinf.util.CPtr;
 import GL;
 import GLU;
 
 class GLRenderer implements IRenderer {
-    private static var selectBuffer = new UIntPointer( 64 );
-    private static var view = new IntPointer(4);
+    private static var selectBuffer = CPtr.uint_alloc(64);
+    private static var view = CPtr.int_alloc(4);
 
     public function new() {
     }
@@ -21,7 +19,7 @@ class GLRenderer implements IRenderer {
     }
 
     public function matrix( m:Matrix ) : Void {
-        GL.MultMatrixf( m._v._ptr );
+        GL.MultMatrixf( m._v );
     }
     
     public function setColor( r:Float, g:Float, b:Float, a:Float ) : Void {
@@ -30,30 +28,30 @@ class GLRenderer implements IRenderer {
     
     public function polygon( vertices:Array<Point> ) : Void {
         var t = GLU._SimpleTesselator();
-        GLU.TessBeginPolygon( t, VoidPointer.NULL );
+        GLU.TessBeginPolygon( t, CPtr.void_null );
         GLU.TessBeginContour( t );
         
         for( vertex in vertices ) {
-            var v = new DoublePointer(3);
-            v.set(0,vertex.x);
-            v.set(1,vertex.y);
-            v.set(2,.0);
-            GLU.TessVertex( t, v._ptr, VoidPointer._cast(v._ptr) );
+            var v = CPtr.double_alloc(3);
+            CPtr.double_set(v,0,vertex.x);
+            CPtr.double_set(v,1,vertex.y);
+            CPtr.double_set(v,2,.0);
+            GLU.TessVertex( t, v, CPtr.void_cast(v) );
         }
         GLU.TessEndContour( t );
         GLU.TessEndPolygon( t );      
     }
     
     public function curve( ctrlpoints:Array<Point> ) : Void {
-        var cps:DoublePointer = new DoublePointer( ctrlpoints.length*3 );
+        var cps = CPtr.double_alloc( ctrlpoints.length*3 );
         var n:Int = 0;
         for( p in ctrlpoints ) {
-            cps.set( n++, p.x );
-            cps.set( n++, p.y );
-            cps.set( n++, .0 );
+            CPtr.double_set( cps, n++, p.x );
+            CPtr.double_set( cps, n++, p.y );
+            CPtr.double_set( cps, n++, .0 );
         }
         
-        GL.Map1d_01( GL.MAP1_VERTEX_3, 3, 4, cps._ptr );
+        GL.Map1d_01( GL.MAP1_VERTEX_3, 3, 4, cps );
         GL.Enable( GL.MAP1_VERTEX_3 );
         
         GL.LineWidth( 5 );
@@ -96,9 +94,9 @@ class GLRenderer implements IRenderer {
     }
     
     public function startPick( x:Float, y:Float ) : Void {
-        GL.SelectBuffer( 64, selectBuffer._ptr );
+        GL.SelectBuffer( 64, selectBuffer );
         
-        GL.GetIntegerv( GL.VIEWPORT, view._ptr );
+        GL.GetIntegerv( GL.VIEWPORT, view );
         GL.RenderMode( GL.SELECT );
         GL.InitNames();
         
@@ -106,7 +104,7 @@ class GLRenderer implements IRenderer {
         GL.PushMatrix();
             
             GL.LoadIdentity();
-            GLU.PickMatrix( x, y, 1.0, 1.0, view._ptr );
+            GLU.PickMatrix( x, y, 1.0, 1.0, view );
             GL.MatrixMode( GL.MODELVIEW );
     }
     
@@ -122,11 +120,11 @@ class GLRenderer implements IRenderer {
             var i=0; 
             var j=0;
             while( i<n_hits && j<64 ) {
-                var n : Int = selectBuffer.get(j);
+                var n : Int = CPtr.uint_get( selectBuffer, j);
                 var objs = new Array<Int>();
                 j+=3; // TODO why?
                 for( k in 0...n ) {
-                    objs.push(selectBuffer.get(j));
+                    objs.push( CPtr.uint_get( selectBuffer, j ));
                     j++;
                 }
                 i++;
