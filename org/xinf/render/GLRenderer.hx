@@ -4,10 +4,13 @@ import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 import org.xinf.util.FloatPointer;
+import org.xinf.util.IntPointer;
 import GL;
+import GLU;
 
 class GLRenderer implements IRenderer {
-    private static var selectBuffer = GL.__GL.CreateUintBuffer( 64 );
+    private static var selectBuffer = new UIntPointer( 64 );
+    private static var view = new IntPointer(4);
 
     public function new() {
     }
@@ -63,10 +66,8 @@ class GLRenderer implements IRenderer {
     }
     
     public function startPick( x:Float, y:Float ) : Void {
-        var view = GL.__GL.CreateIntBuffer(4);
-        
-        GL.SelectBuffer( 64, selectBuffer );
-        GL.GetIntegerv( GL.VIEWPORT, view );
+        GL.SelectBuffer( 64, selectBuffer._ptr );
+        GL.GetIntegerv( GL.VIEWPORT, view._ptr );
         GL.RenderMode( GL.SELECT );
         GL.InitNames();
         
@@ -74,7 +75,7 @@ class GLRenderer implements IRenderer {
         GL.PushMatrix();
             
             GL.LoadIdentity();
-            GL.uPickMatrix( x, y, 1.0, 1.0, view );
+            GLU.PickMatrix( x, y, 1.0, 1.0, view._ptr );
             GL.MatrixMode( GL.MODELVIEW );
     }
     
@@ -87,7 +88,7 @@ class GLRenderer implements IRenderer {
         
         var stacks = new Array<Array<Int>>();
         if( n_hits > 0 ) {
-            var hits = GL.__glMakeArrayUint( selectBuffer, 64 );
+            var hits = selectBuffer.array();
 
             var i=0; 
             var j=0;

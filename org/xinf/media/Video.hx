@@ -53,12 +53,12 @@ class Video extends InteractiveObject {
          
             // FIXME: delete old textures
             for( i in 0..._textures.length ) {
-                GL.CreateTexture( i, twidth, theight );
+// FIXME               GL.CreateTexture( i, twidth, theight );
             }
         }
         
         var id:Int = _textures[0];
-        GL.__glTexSubImage2D( id, new Point(0,0), new Point(d.width,d.height), d.data );
+// FIXME       GL.__glTexSubImage2D( id, new Point(0,0), new Point(d.width,d.height), d.data );
         
         _renderSub( r, id, new Point(twidth, theight), new Point(d.width, d.height) );
     }

@@ -1,6 +1,6 @@
 package org.xinf;
 
-import sdl.SDL;
+import SDL;
 import org.xinf.event.Event;
 import org.xinf.event.MouseEvent;
 import org.xinf.display.Stage;
@@ -22,27 +22,27 @@ class SDLPlayer {
     
     private function ProcessEvents() {
         var e = SDL._NewEvent();
-        while( SDL._SDL_PollEvent( e ) > 0 ) {
-            var k = SDL._SDL_Event_type_get(e);
+        while( SDL.PollEvent( e ) > 0 ) {
+            var k = SDL.Event_type_get(e);
             
             switch( k ) {
-                case SDL.SDL_QUIT:
+                case SDL.QUIT:
                     trace("Quit");
                     quit = true;
-                case SDL.SDL_KEYDOWN:
-                    var ke = SDL._SDL_Event_key_get(e);
+                case SDL.KEYDOWN:
+                    var ke = SDL.Event_key_get(e);
                     handleKeyboardEvent( ke, k );
-                case SDL.SDL_KEYUP:
-                    var ke = SDL._SDL_Event_key_get(e);
+                case SDL.KEYUP:
+                    var ke = SDL.Event_key_get(e);
                     handleKeyboardEvent( ke, k );
-                case SDL.SDL_MOUSEMOTION:
-                    var me = SDL._SDL_Event_motion_get(e);
+                case SDL.MOUSEMOTION:
+                    var me = SDL.Event_motion_get(e);
                     handleMouseMotionEvent( me, k );
-                case SDL.SDL_MOUSEBUTTONDOWN:
-                    var me = SDL._SDL_Event_button_get(e);
+                case SDL.MOUSEBUTTONDOWN:
+                    var me = SDL.Event_button_get(e);
                     handleMouseEvent( me, k );
-                case SDL.SDL_MOUSEBUTTONUP:
-                    var me = SDL._SDL_Event_button_get(e);
+                case SDL.MOUSEBUTTONUP:
+                    var me = SDL.Event_button_get(e);
                     handleMouseEvent( me, k );
                 default:
                     trace("Event "+k);
@@ -51,23 +51,23 @@ class SDLPlayer {
     }
     
     private function handleKeyboardEvent( ke, k ) {
-        var sym = SDL._SDL_KeyboardEvent_keysym_get(ke);
-        var code = SDL._SDL_keysym_scancode_get(sym);
-        var s = SDL._SDL_keysym_sym_get(sym);
-        var name = SDL._SDL_GetKeyName(s);
+        var sym = SDL.KeyboardEvent_keysym_get(ke);
+        var code = SDL.keysym_scancode_get(sym);
+        var s = SDL.keysym_sym_get(sym);
+        var name = SDL.GetKeyName(s);
         
         var up = "down";
-        if( k==SDL.SDL_KEYUP ) up = "up";
+        if( k==SDL.KEYUP ) up = "up";
         trace("Key "+name+" "+up );
     }
 
     private function handleMouseEvent( e, k ) {
-        buttonpress = k == SDL.SDL_MOUSEBUTTONDOWN;
-        var x = SDL._SDL_MouseButtonEvent_x_get(e);
-        var y = SDL._SDL_MouseButtonEvent_y_get(e);
+        buttonpress = k == SDL.MOUSEBUTTONDOWN;
+        var x = SDL.MouseButtonEvent_x_get(e);
+        var y = SDL.MouseButtonEvent_y_get(e);
 
         var type:String = MouseEvent.MOUSE_UP;
-        if( k == SDL.SDL_MOUSEBUTTONDOWN ) type = MouseEvent.MOUSE_DOWN;
+        if( k == SDL.MOUSEBUTTONDOWN ) type = MouseEvent.MOUSE_DOWN;
         
         var e:MouseEvent = new MouseEvent( { 
             type: type,
@@ -147,8 +147,8 @@ class SDLPlayer {
     }
 
     private function handleMouseMotionEvent( e, k ) {
-        mouseX = SDL._SDL_MouseMotionEvent_x_get(e);
-        mouseY = SDL._SDL_MouseMotionEvent_y_get(e);
+        mouseX = SDL.MouseMotionEvent_x_get(e);
+        mouseY = SDL.MouseMotionEvent_y_get(e);
     }
     
     public function new( _root : Stage ) {
@@ -158,12 +158,11 @@ class SDLPlayer {
         height = 240;
         mouseX = mouseY = -1;
         currentOver = new Array<DisplayObject>();
-        
-        if( SDL._SDL_Init( SDL.SDL_INIT_VIDEO ) < 0 ) {
+        if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
         }
                 
-        if( SDL._SDL_SetVideoMode( width, height, 0, SDL.SDL_OPENGL ) == 0 ) {
+        if( SDL.SetVideoMode( width, height, 0, SDL.OPENGL ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
     }
@@ -179,7 +178,7 @@ class SDLPlayer {
 
         root.Render();
 
-        SDL._SDL_GL_SwapBuffers();
+        SDL.GL_SwapBuffers();
 
         return( !quit );
     }

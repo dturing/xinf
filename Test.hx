@@ -6,6 +6,7 @@ import org.xinf.geom.Point;
 
 class Test {
     static function main() {
+        
         var renderer = new GLRenderer();
 
         var root = new Stage(renderer);
@@ -20,8 +21,7 @@ class Test {
         s0.addChild( new Square( "four", 0.0, -.5 ) );
 */    
         var p:Point;
-        
-        
+                
         /* 
         // circle of squares
         var n:Int = 180;
@@ -32,8 +32,7 @@ class Test {
             s0.addChild( new Square( angle+"°", p.x, p.y, -angle ) );
         }
         */
-        
-        /* 
+
         // square grid
         var n:Int=5;
         for( x in -n...n+1 ) {
@@ -41,20 +40,18 @@ class Test {
                 s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
-        */
         
-        s0.addChild( new org.xinf.media.Video() );
-        
+//        s0.addChild( new org.xinf.media.Video() );
         while( player.iterate() ) {
-                        
             // check for OpenGL errors
             var e:Int = GL.GetError();
             if( e > 0 ) {
                 throw( "OpenGL error "+GLU.ErrorString(e) );
             }
-        
+            
             // FIXME: proper timing, neko idle func?
             neko.Sys.sleep(0.04);
+            
         }
     }
 }

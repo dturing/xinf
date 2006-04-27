@@ -1,4 +1,4 @@
-SUBDIRS = cptr sdl gst
+SUBDIRS = gst libs
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ./libs
 
 .PHONY: subdirs $(SUBDIRS)
