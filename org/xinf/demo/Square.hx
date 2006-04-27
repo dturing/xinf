@@ -35,7 +35,7 @@ class Square extends Sprite {
 
     private function draw( c:Int ) : Void {
         graphics.clear();
-        graphics.beginFill( c, 0.5 );
+        graphics.beginFill( c, 0.3 );
         graphics.drawRect( -size/2, -size/2, size, size );
         graphics.endFill();
     }

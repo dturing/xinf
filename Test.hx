@@ -14,9 +14,6 @@ class Test {
 
         var s0 = new Square("zero",.0,.0,.0);
         root.addChild( s0 );
-
-        var s1 = new Square("one",.5,.0,.0);
-        root.addChild( s1 );
     
         var p:Point;
                 
@@ -32,14 +29,14 @@ class Test {
         */
 
         // square grid
-        /*
-        var n:Int=1;
+        
+        var n:Int=2;
         for( x in -n...n+1 ) {
             for( y in -n...n+1 ) {
                 s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
-        */
+        
         
 //        s0.addChild( new org.xinf.media.Video() );
         while( player.iterate() ) {
