@@ -63,7 +63,7 @@ class DisplayObject extends EventDispatcher {
     }
     
     public function toString() {
-        return( "[" + getSimpleClassname() + " " + name + "]" );
+        return( "<" + getSimpleClassname() + " " + name + ">" );
     }
 }
 

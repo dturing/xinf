@@ -6,6 +6,7 @@ import org.xinf.event.MouseEvent;
 
 class Square extends Sprite {
 
+    private var size:Float;
     private var angle:Float;
     private var speed:Float;
     private var pressed:Bool;
@@ -16,6 +17,7 @@ class Square extends Sprite {
         x = _x;
         y = _y;
         angle=_angle;
+        size=.8;
         
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, false );
         addEventListener( MouseEvent.MOUSE_UP, onMouseUp, false, 0, false );
@@ -34,17 +36,18 @@ class Square extends Sprite {
     private function draw( c:Int ) : Void {
         graphics.clear();
         graphics.beginFill( c, 0.5 );
-        graphics.drawRect( -.03, -.03, .06, .06 );
+        graphics.drawRect( -size/2, -size/2, size, size );
         graphics.endFill();
     }
     
     public function onEnterFrame( e:Event ) {
         rotation = (angle+=speed);
-        
+
         if( pressed ) {
             speed += .5;
         } else speed *= 0.93;
         if( speed > 5 ) speed = 5;
+        if( speed < 0.1 ) speed = 0.1;
     }
     
     public function onMouseDown( e:Event ) {

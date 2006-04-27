@@ -3,7 +3,6 @@ package org.xinf.render;
 import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
-import org.xinf.util.FloatPointer;
 import org.xinf.util.IntPointer;
 import GL;
 import GLU;
@@ -67,6 +66,7 @@ class GLRenderer implements IRenderer {
     
     public function startPick( x:Float, y:Float ) : Void {
         GL.SelectBuffer( 64, selectBuffer._ptr );
+        
         GL.GetIntegerv( GL.VIEWPORT, view._ptr );
         GL.RenderMode( GL.SELECT );
         GL.InitNames();
@@ -88,16 +88,14 @@ class GLRenderer implements IRenderer {
         
         var stacks = new Array<Array<Int>>();
         if( n_hits > 0 ) {
-            var hits = selectBuffer.array();
-
             var i=0; 
             var j=0;
             while( i<n_hits && j<64 ) {
-                var n : Int = hits[j];
+                var n : Int = selectBuffer.get(j);
                 var objs = new Array<Int>();
-                j+=3;
+                j+=3; // TODO why?
                 for( k in 0...n ) {
-                    objs.push(hits[j]);
+                    objs.push(selectBuffer.get(j));
                     j++;
                 }
                 i++;

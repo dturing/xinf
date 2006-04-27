@@ -29,10 +29,10 @@ void cptr_finalize( value v ) {
 #define ALLOC(ctype,hxtype) \
 value cptr_## ctype ##_alloc( value n ) { \
     CHECK_Int( n ); \
-    ctype *ptr = ( ctype *)malloc( sizeof( ctype ) * (int)val_number(n) ); \
+    int sz = (int)val_number(n); \
+    ctype *ptr = ( ctype *)malloc( sizeof( ctype ) * sz ); \
     value r = ALLOC_KIND( ptr, k_## ctype ##_p ); \
     val_gc( r, cptr_finalize ); \
-    printf("alloc " #ctype " of size %i\n", (int)val_number(n) ); \
     return r; \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
@@ -89,3 +89,21 @@ CPTR( char, Int );
 CPTR( unsigned_char, Int );
 CPTR( short, Int );
 CPTR( unsigned_short, Int );
+
+
+#include <stdio.h>
+value cptr_unsigned_int_array_n( value p, value _n ) {
+    int i;
+    CHECK_KIND( p, k_unsigned_int_p ); 
+    CHECK_Int( _n );
+    int n = (int)val_number(_n);
+    unsigned int *ptr = (unsigned int *)val_data(p);
+    value result = alloc_array( n );
+    value *a = val_array_ptr( result );
+    for( i=0; i<n; i++ ) {
+        fflush(stderr);
+        a[i] = alloc_int( ptr[i] );
+    }
+    return( result );
+}
+DEFINE_PRIM(cptr_unsigned_int_array_n,2);

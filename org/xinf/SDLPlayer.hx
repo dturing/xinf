@@ -74,7 +74,7 @@ class SDLPlayer {
             stageX: x,
             stageY: y
             } ); 
-            
+
         dispatchToTargets( e, x, y );
     }
         
@@ -84,7 +84,7 @@ class SDLPlayer {
         
         // root will handle by default
         if( 0==targets.length ) targets.push(root);
-        
+
         // dispatch until a handler returns true 
         for( target in targets ) {
             e.target = target;

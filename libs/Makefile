@@ -1,5 +1,8 @@
 GEN_MODS=GL GLU SDL
 
+NEKO_LIBS=${shell pkg-config --libs neko}
+NEKO_CFLAGS=${shell pkg-config --cflags neko} -g -fPIC
+
 cptr_LIBS=$(NEKO_LIBS)
 cptr_CFLAGS=$(NEKO_CFLAGS)
 
@@ -25,12 +28,9 @@ GENERATOR_XSL=$(GEN_PATH)/generator.xsl
 
 HAXE_FLAGS=-cp ~/.haxe/lib/std -cp $(GEN_PATH)
 
-NEKO_LIBS=${shell pkg-config --libs neko}
-NEKO_CFLAGS=${shell pkg-config --cflags neko}
-
 TARGET_LIBS=$(foreach MOD,$(GEN_MODS),$(MOD).ndll $(MOD)__.n)
 TARGET_CLASSES=$(foreach MOD,$(GEN_MODS),$(MOD).hx)
-TARGETS=$(TARGET_LIBS) $(TARGET_CLASSES) libcptr.so cptr.ndll
+TARGETS=libcptr.so cptr.ndll $(TARGET_LIBS) $(TARGET_CLASSES)
 
 default : $(TARGETS)
 
@@ -38,10 +38,10 @@ default : $(TARGETS)
 # building cptr helper lib
 
 lib%.so : %.c
-	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
+	gcc -shared -o $@ $($*_CFLAGS) $($*_LIBS) $< 
 
 %.ndll : lib%.so
-	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
+	gcc -shared -o $@ $($*_CFLAGS) $($*_LIBS) $< 
 
 # ------------------------------------------------------------
 # building actual modules
@@ -63,12 +63,12 @@ lib%.so : %.c
 	haxe $(HAXE_FLAGS) -neko $< -main $*Generator $*Generator
         
 # generate C wrapper, and haxe "extern" and "impl" classes
-%.hx %__.hx %_wrap.c : %Generator.n
+%.hx %__.hx %_wrap.c : %Generator.n %.runtime
 	neko $<
     
 # compile C glue library
-%.ndll : %_wrap.c libcptr.so
-	gcc -shared -fPIC -o $@ $($*_CFLAGS) $($*_LIBS) $< 
+%.ndll : %_wrap.c
+	gcc -shared -o $@ $($*_CFLAGS) $($*_LIBS) $< 
         
 # compile neko wrapper module
 %.n : %.hx

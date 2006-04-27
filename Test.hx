@@ -14,12 +14,10 @@ class Test {
 
         var s0 = new Square("zero",.0,.0,.0);
         root.addChild( s0 );
-/*
-        s0.addChild( new Square( "one", -.5, 0.0 ) );
-        s0.addChild( new Square( "two", 0.0, .5 ) );
-        s0.addChild( new Square( "three", .5, 0.0 ) );
-        s0.addChild( new Square( "four", 0.0, -.5 ) );
-*/    
+
+        var s1 = new Square("one",.5,.0,.0);
+        root.addChild( s1 );
+    
         var p:Point;
                 
         /* 
@@ -34,12 +32,14 @@ class Test {
         */
 
         // square grid
-        var n:Int=5;
+        /*
+        var n:Int=1;
         for( x in -n...n+1 ) {
             for( y in -n...n+1 ) {
                 s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
+        */
         
 //        s0.addChild( new org.xinf.media.Video() );
         while( player.iterate() ) {
