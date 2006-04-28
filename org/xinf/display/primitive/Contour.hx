@@ -61,7 +61,6 @@ class Contour extends Primitive {
     private var current:Point;
     
     public property length( get_length, null ):Float;
-    
     public function get_length() : Float {
         return parts.length;
     }
@@ -94,15 +93,15 @@ class Contour extends Primitive {
     }
 
     public function _render( r:org.xinf.render.IRenderer ) {
+        r.tessBeginContour();
         r.pushMatrix();
         r.translate( offset.x, offset.y );
-        r.tessBeginPolygon();
-        r.tessBeginContour();
+        
         for( p in parts ) {
             p._render( r );
         }
-        r.tessEndContour();
-        r.tessEndPolygon();
+
         r.popMatrix();
+        r.tessEndContour();
     }
 }

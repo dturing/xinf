@@ -5,20 +5,25 @@ import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 
 import org.xinf.display.primitive.Primitive;
+import org.xinf.display.primitive.Polygon;
 import org.xinf.display.primitive.Contour;
 import org.xinf.display.primitive.FillColor;
 
 class Graphics {
     private var cmds:Array<Primitive>;
     private var contour:Contour;
+    private var polygon:Polygon;
 
     public function new() {
         cmds = new Array<Primitive>();
+        polygon = null;
         contour = null;
     }
     
     public function clear() {
+        // TODO: changed
         cmds = new Array<Primitive>();
+        polygon = null;
         contour = null;
     }
     
@@ -27,12 +32,15 @@ class Graphics {
         c.setFromInt( color, alpha );
         _add( c );
         
+        polygon = new Polygon();
         contour = new Contour(0,0);
     }
     
     public function endFill() : Void {
-        if( contour.length > 0 ) _add( contour );
+        if( contour.length > 0 ) polygon.addContour( contour );
         contour = null;
+        if( polygon.length > 0 ) _add(polygon);
+        polygon = null;
     }
     
     public function lineTo( x:Float, y:Float ) : Void {
@@ -41,7 +49,8 @@ class Graphics {
     
     public function moveTo( x:Float, y:Float ) : Void {
         if( contour != null ) {
-            endFill();
+            if( contour.length > 0 ) polygon.addContour( contour );
+            contour = null;
         }
         contour = new Contour(x,y);
     }
@@ -62,10 +71,10 @@ class Graphics {
         lineTo( 0, 0 );
     }
     
-    private function _add( p:Primitive ) {
-        cmds.push(p);
+    private function _add( c:Primitive ) {
+        // TODO: changed
+        cmds.push(c);
     }
-
     public function _render( r:IRenderer ) {
         for( p in cmds ) {
             p._render(r);

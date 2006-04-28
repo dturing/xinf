@@ -20,7 +20,7 @@ default : subdirs test
 Test.n : Test.hx $(HAXE_SRCS)
 	haxe $(HAXEFLAGS) -neko Test.hx -main Test Test
 
-test : Test.n subdirs
+test : subdirs Test.n
 	neko Test.n
 
 cleanall : clean

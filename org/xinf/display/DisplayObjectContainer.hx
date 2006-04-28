@@ -80,7 +80,7 @@ class DisplayObjectContainer extends InteractiveObject {
         r.pushMatrix();
         r.matrix( transform.matrix );
     
-        for( i in children.indexes() ) {
+        for( i in 0...children.length ) {
             r.pushName(i);
             children[i]._render(r);
             r.popName();

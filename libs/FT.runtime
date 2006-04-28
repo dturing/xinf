@@ -69,10 +69,56 @@ value ftLoadFont( const char *filename, const char *include_glyphs, int width, i
     return font;
 }
 
-value ftIterateGlyphs( value font, value callback ) {
-    if( !val_is_function(callback) ) {
-        ft_failure_v("not a callback function: ", callback );
+void importGlyphPoints( FT_Vector *points, int n, value callbacks, field lineTo, field curveTo, bool cubic ) {
+    value arg[4];
+    int i;
+	if( n==0 ) {
+        val_ocall2( callbacks, lineTo, 
+                    alloc_int( points[0].x ), alloc_int( points[0].y ) );
+	} else if( n==1 ) {
+        arg[0] = alloc_int( points[0].x );
+        arg[1] = alloc_int( points[0].y );
+        arg[2] = alloc_int( points[1].x );
+        arg[3] = alloc_int( points[1].y );
+        val_ocallN( callbacks, curveTo, arg, 4 );
+	} else if( n>=2	) {
+		if( cubic ) {
+			fprintf(stderr,"ERROR: cubic beziers in fonts are not yet implemented.\n");
+		} else {
+			int x1, y1, x2, y2, midx, midy;
+			for( i=0; i<n-1; i++ ) { 
+				x1 = points[i].x;
+				y1 = points[i].y;
+				x2 = points[i+1].x;
+				y2 = points[i+1].y;
+				midx = x1 + ((x2-x1)/2);
+				midy = y1 + ((y2-y1)/2);
+                
+                arg[0] = alloc_int( x1 );
+                arg[1] = alloc_int( y1 );
+                arg[2] = alloc_int( midx );
+                arg[3] = alloc_int( midy );
+                val_ocallN( callbacks, curveTo, arg, 4 );
+			}
+            arg[0] = alloc_int( x2 );
+            arg[1] = alloc_int( y2 );
+            arg[2] = alloc_int( points[n].x );
+            arg[3] = alloc_int( points[n].y );
+            val_ocallN( callbacks, curveTo, arg, 4 );
+		}
+	} else {
+	}
+}
+
+value ftIterateGlyphs( value font, value callbacks ) {
+    if( !val_is_object(callbacks) ) {
+        ft_failure_v("not a callback function object: ", callbacks );
     }
+    field endGlyph = val_id("endGlyph");
+    field startContour = val_id("startContour");
+    field endContour = val_id("endContour");
+    field lineTo = val_id("lineTo");
+    field curveTo = val_id("curveTo");
     
     if( !val_is_object(font) ) {
         ft_failure_v("not a freetype font face: ", font );
@@ -88,7 +134,7 @@ value ftIterateGlyphs( value font, value callback ) {
 	FT_Outline *outline;
 
     field f_character = val_id("character");
-    field f_outline = val_id("outline");
+    field f_advance = val_id("advance");
     
     character = FT_Get_First_Char( *face, &glyph_index );
     while( (character = FT_Get_Next_Char( *face, character, &glyph_index )) != 0 ) {
@@ -97,15 +143,52 @@ value ftIterateGlyphs( value font, value callback ) {
         } else if( (*face)->glyph->format != FT_GLYPH_FORMAT_OUTLINE ) {
             // ignore (TODO)
         } else {
-            value glyph = alloc_object(NULL);
-            alloc_field( glyph, f_character, alloc_int( character ) );
+            outline = &((*face)->glyph->outline);
+		    int start = 0, end, contour, p;
+		    char control, cubic;
+		    int n,i;
+		    for( contour = 0; contour < outline->n_contours; contour++ ) {
+			    end = outline->contours[contour];
+			    n=0;
 
-            int n_points = 100;
-            double *data = (double*)malloc(sizeof(double)*n_points);
-            value v_data = alloc_abstract( k_double_p, data );
-            val_gc( v_data, _font_finalize );
+    
+			    for( p = start; p<=end; p++ ) {
+				    control = !(outline->tags[p] & 0x01);
+				    cubic = outline->tags[p] & 0x02;
 
-            val_call2( callback, alloc_int( character ), v_data );
+				    if( p==start ) {
+                        val_ocall2( callbacks, startContour, 
+                                    alloc_int( outline->points[p-n].x ),
+                                    alloc_int( outline->points[p-n].y ) );
+				    }
+
+				    if( !control && n > 0 ) {
+					    importGlyphPoints( &(outline->points[(p-n)+1]), n-1, callbacks, lineTo, curveTo, cubic );
+					    n=1;
+				    } else {
+					    n++;
+				    }
+			    }
+
+			    if( n ) {
+				    // special case: repeat first point
+				    FT_Vector points[n+1];
+				    int s=(end-n)+2;
+				    for( i=0; i<n-1; i++ ) {
+					    points[i].x = outline->points[s+i].x;
+					    points[i].y = outline->points[s+i].y;
+				    }
+				    points[n-1].x = outline->points[start].x;
+				    points[n-1].y = outline->points[start].y;
+
+				    importGlyphPoints( points, n-1, callbacks, lineTo, curveTo, false );
+			    }
+
+			    start = end+1;
+                val_ocall0( callbacks, endContour );
+		    }
+
+            val_ocall2( callbacks, endGlyph, alloc_int( character ), alloc_int( (*face)->glyph->advance.x ) );
         }
     }
     
