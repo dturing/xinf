@@ -1,0 +1,113 @@
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include "cptr.h"
+
+FT_Library ft_library;
+int __ft_init = 0;
+
+void ft_failure_2s( const char *one, const char *two ) {
+    buffer b = alloc_buffer(one);
+    buffer_append(b,two);
+    val_throw(buffer_to_string(b));
+}
+
+void ft_failure_v( const char *one, value v ) {
+    buffer b = alloc_buffer(one);
+    val_buffer(b,v);
+    val_throw(buffer_to_string(b));
+}
+
+DEFINE_KIND(k_ft_face);
+void _font_finalize( value v ) {
+    free( val_data(v) );
+}
+
+
+void ft_init() {
+    if( !__ft_init ) {
+        if( FT_Init_FreeType( &ft_library ) ) {
+            failure("Could not initialize FreeType");
+        }
+        __ft_init = 1;
+    }
+}
+ 
+value ftLoadFont( const char *filename, const char *include_glyphs, int width, int height ) {
+    ft_init();
+
+    value font = alloc_object(NULL);
+    
+    FT_Face *face = (FT_Face*)malloc( sizeof(FT_Face) );
+    
+    if( !face || FT_New_Face( ft_library, filename, 0, face ) ) {
+        ft_failure_2s("FreeType does not like ",filename);
+    }
+    
+    FT_Set_Char_Size( *face, width, height, 72, 72 );
+    
+    int n_glyphs = (*face)->num_glyphs;
+    
+    // set some global metrics/info
+    alloc_field( font, val_id("file_name"), alloc_string(filename) );
+    alloc_field( font, val_id("family_name"), alloc_string((*face)->family_name) );
+    alloc_field( font, val_id("style_name"), alloc_string((*face)->style_name) );
+    
+    alloc_field( font, val_id("ascender"), alloc_int((*face)->ascender) );
+    alloc_field( font, val_id("descender"), alloc_int((*face)->descender) );
+    alloc_field( font, val_id("units_per_EM"), alloc_int((*face)->units_per_EM) );
+    alloc_field( font, val_id("height"), alloc_int((*face)->height) );
+    alloc_field( font, val_id("max_advance_width"), alloc_int((*face)->max_advance_width) );
+    alloc_field( font, val_id("max_advance_height"), alloc_int((*face)->max_advance_height) );
+    alloc_field( font, val_id("underline_position"), alloc_int((*face)->underline_position) );
+    alloc_field( font, val_id("underline_thickness"), alloc_int((*face)->underline_thickness) );
+
+    value __f = alloc_abstract( k_ft_face, face );
+    val_gc( __f, _font_finalize );
+    alloc_field( font, val_id("__f"), __f );
+
+    return font;
+}
+
+value ftIterateGlyphs( value font, value callback ) {
+    if( !val_is_function(callback) ) {
+        ft_failure_v("not a callback function: ", callback );
+    }
+    
+    if( !val_is_object(font) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    value __f = val_field( font, val_id("__f") );
+    if( __f == NULL || !val_is_abstract( __f ) || !val_is_kind( __f, k_ft_face ) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    FT_Face *face = val_data( __f );
+
+	FT_UInt glyph_index;
+	FT_ULong character;
+	FT_Outline *outline;
+
+    field f_character = val_id("character");
+    field f_outline = val_id("outline");
+    
+    character = FT_Get_First_Char( *face, &glyph_index );
+    while( (character = FT_Get_Next_Char( *face, character, &glyph_index )) != 0 ) {
+        if( FT_Load_Glyph( *face, glyph_index, FT_LOAD_NO_BITMAP ) ) {
+            // ignore (TODO report?)
+        } else if( (*face)->glyph->format != FT_GLYPH_FORMAT_OUTLINE ) {
+            // ignore (TODO)
+        } else {
+            value glyph = alloc_object(NULL);
+            alloc_field( glyph, f_character, alloc_int( character ) );
+
+            int n_points = 100;
+            double *data = (double*)malloc(sizeof(double)*n_points);
+            value v_data = alloc_abstract( k_double_p, data );
+            val_gc( v_data, _font_finalize );
+
+            val_call2( callback, alloc_int( character ), v_data );
+        }
+    }
+    
+    return val_true;
+}

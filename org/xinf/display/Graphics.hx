@@ -5,21 +5,21 @@ import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 
 import org.xinf.display.primitive.Primitive;
-import org.xinf.display.primitive.Polygon;
+import org.xinf.display.primitive.Contour;
 import org.xinf.display.primitive.FillColor;
 
 class Graphics {
     private var cmds:Array<Primitive>;
-    private var polygon:Polygon;
+    private var contour:Contour;
 
     public function new() {
         cmds = new Array<Primitive>();
-        polygon = null;
+        contour = null;
     }
     
     public function clear() {
         cmds = new Array<Primitive>();
-        polygon = null;
+        contour = null;
     }
     
     public function beginFill( color:Int, alpha:Float ) : Void {
@@ -27,24 +27,31 @@ class Graphics {
         c.setFromInt( color, alpha );
         _add( c );
         
-        polygon = new Polygon(0,0);
+        contour = new Contour(0,0);
     }
     
     public function endFill() : Void {
-        if( polygon.length > 0 ) _add( polygon );
-        polygon = null;
+        if( contour.length > 0 ) _add( contour );
+        contour = null;
     }
     
     public function lineTo( x:Float, y:Float ) : Void {
-        _assert_poly();
-        polygon.addCoordinates( x, y );
+        contour.addCoordinates( x, y );
     }
     
     public function moveTo( x:Float, y:Float ) : Void {
-        if( polygon != null ) {
+        if( contour != null ) {
             endFill();
         }
-        polygon = new Polygon(x,y);
+        contour = new Contour(x,y);
+    }
+
+    public function cubicTo( c1:Point, c2:Point, p1:Point ) : Void {
+        contour.addCubic( c1, c2, p1 );
+    }
+
+    public function quadraticTo( c:Point, p1:Point ) : Void {
+        contour.addQuadratic( c, p1 );
     }
     
     public function drawRect( x:Float, y:Float, width:Float, height:Float ) : Void {
@@ -57,10 +64,6 @@ class Graphics {
     
     private function _add( p:Primitive ) {
         cmds.push(p);
-    }
-
-    private function _assert_poly() {
-        if( polygon == null ) throw("invalid render command (no beginFill?)");
     }
 
     public function _render( r:IRenderer ) {

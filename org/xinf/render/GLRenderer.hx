@@ -10,8 +10,11 @@ import GLU;
 class GLRenderer implements IRenderer {
     private static var selectBuffer = CPtr.uint_alloc(64);
     private static var view = CPtr.int_alloc(4);
+    
+    private var tess:Dynamic;
 
     public function new() {
+        tess = null;
     }
 
     public function translate( x:Float, y:Float ) : Void {
@@ -26,44 +29,40 @@ class GLRenderer implements IRenderer {
         GL.Color4f( r, g, b, a );
     }
     
-    public function polygon( vertices:Array<Point> ) : Void {
-        var t = GLU._SimpleTesselator();
-        GLU.TessBeginPolygon( t, CPtr.void_null );
-        GLU.TessBeginContour( t );
-        
-        for( vertex in vertices ) {
-            var v = CPtr.double_alloc(3);
-            CPtr.double_set(v,0,vertex.x);
-            CPtr.double_set(v,1,vertex.y);
-            CPtr.double_set(v,2,.0);
-            GLU.TessVertex( t, v, CPtr.void_cast(v) );
-        }
-        GLU.TessEndContour( t );
-        GLU.TessEndPolygon( t );      
+    
+    public function tessBeginPolygon() : Void {
+        tess = GLU._SimpleTesselator();
+        GL.LineWidth( 2 );
+        GLU.TessBeginPolygon( tess, CPtr.void_null );
     }
     
-    public function curve( ctrlpoints:Array<Point> ) : Void {
-        var cps = CPtr.double_alloc( ctrlpoints.length*3 );
-        var n:Int = 0;
-        for( p in ctrlpoints ) {
-            CPtr.double_set( cps, n++, p.x );
-            CPtr.double_set( cps, n++, p.y );
-            CPtr.double_set( cps, n++, .0 );
-        }
-        
-        GL.Map1d_01( GL.MAP1_VERTEX_3, 3, 4, cps );
-        GL.Enable( GL.MAP1_VERTEX_3 );
-        
-        GL.LineWidth( 5 );
-        GL.Begin( GL.LINE_STRIP );
+    public function tessBeginContour() : Void{
+        GLU.TessBeginContour( tess );
+    }
 
-        var v:Float = 0.0;
-        var s:Float = 1.0/50.0;
-        for( i in 0...51 ) {
-            GL.EvalCoord1f( v );
-            v+=s;
-        }
-        GL.End();
+    public function tessVertex( x:Float, y:Float ) : Void {
+        var _vertex = CPtr.double_alloc(3);
+        CPtr.double_set(_vertex,0,x);
+        CPtr.double_set(_vertex,1,y);
+        CPtr.double_set(_vertex,2,.0);
+        GLU.TessVertex( tess, _vertex, CPtr.void_cast(_vertex) );
+    }
+    
+    public function tessCubicCurve( ctrl:Array<Float>, data:Dynamic, n:Int ) : Void {
+        GLU._TessCubicCurve( tess, untyped ctrl.__a, data, n );
+    }
+
+    public function tessQuadraticCurve( ctrl:Array<Float>, data:Dynamic, n:Int ) : Void {
+        GLU._TessQuadraticCurve( tess, untyped ctrl.__a, data, n );
+    }
+    
+    public function tessEndContour() : Void {
+        GLU.TessEndContour( tess );
+    }
+    
+    public function tessEndPolygon() : Void {
+        GLU.TessEndPolygon( tess );
+        tess = null;
     }
     
     public function startFrame() : Void {

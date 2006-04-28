@@ -13,11 +13,12 @@ class Test {
         var root = new Stage(renderer);
         var player = new SDLPlayer(root);
 
+/*
         var s0 = new Square("zero",.0,.0,.0);
         root.addChild( s0 );
-
+*/
         var test = new DrawTest();
-        s0.addChild( test );
+        root.addChild( test );
     
         var p:Point;
                 

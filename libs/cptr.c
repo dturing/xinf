@@ -115,9 +115,6 @@ typedef unsigned int unsigned_int;
 typedef unsigned char unsigned_char;
 typedef unsigned short unsigned_short;
 
-DEFINE_KIND(k_void_p)
-DEFINE_KIND(k_void_p_p)
-    
 CPTR( float, Float );
 CPTR( double, Float );
 CPTR( int, Int );
@@ -128,8 +125,9 @@ CPTR( short, Int );
 CPTR( unsigned_short, Int );
 
 
-// FIXME: do this for all types, and the reverse (array to pointer).
-
+// FIXME: do cast/null for other types also (maybe)
+DEFINE_KIND(k_void_p)
+DEFINE_KIND(k_void_p_p)
 value cptr_void_cast( value p ) {
     if( !val_is_abstract( p ) ) {
         failure("will only cast #abstract values to void*.");

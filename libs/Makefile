@@ -1,4 +1,4 @@
-GEN_MODS=GL GLU SDL
+GEN_MODS=GL GLU SDL FT
 
 NEKO_LIBS=${shell pkg-config --libs neko}
 NEKO_CFLAGS=${shell pkg-config --cflags neko} -g -fPIC
@@ -14,6 +14,9 @@ GLU_CFLAGS=$(GL_CFLAGS)
 
 SDL_LIBS=$(NEKO_LIBS) ${shell sdl-config --libs} -L. -lcptr
 SDL_CFLAGS=$(NEKO_CFLAGS) ${shell sdl-config --cflags}
+
+FT_LIBS=$(NEKO_LIBS) ${shell freetype-config --libs} -L. -lcptr
+FT_CFLAGS=$(NEKO_CFLAGS) ${shell freetype-config --cflags}
 
 # where to find GL/gl.h
 SWIG_INCLUDE=-I/usr/include ${shell sdl-config --cflags}

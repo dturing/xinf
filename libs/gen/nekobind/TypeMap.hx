@@ -13,6 +13,7 @@ int,unsigned int,short,unsigned short,char,unsigned char,signed char : Int
 unsigned char*,const unsigned char*,char*,const char* : String
 void : Void
 ");
+        addType( "value", new NativeType("value") );
     }
     
 

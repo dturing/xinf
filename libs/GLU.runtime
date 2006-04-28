@@ -34,3 +34,91 @@ GLUtesselator *_gluSimpleTesselator( void ) {
     gluTessCallback( tess, GLU_TESS_COMBINE, (_GLUfuncptr)simple_tess_combine );
     return tess;
 }
+
+
+void _gluTessCubicCurve( GLUtesselator *tess, value _ctrl, double *v, int _n ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	float controlPoints[4][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) },
+            { val_number( ctrl[6] ), val_number( ctrl[7] ) }
+		};
+
+    float bezierValues[3][2];
+    float stepsize = 1.0/n;
+
+	for( i = 0; i <= n; i++) {
+        float t = ((float)i) * stepsize;
+        float t1 = (1.0f - t);
+
+        double *_v = &v[(i*3)];
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[2][0] = t1 * controlPoints[2][0] + t * controlPoints[3][0];
+        bezierValues[2][1] = t1 * controlPoints[2][1] + t * controlPoints[3][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+        bezierValues[1][0] = t1 * bezierValues[1][0] + t * bezierValues[2][0];
+        bezierValues[1][1] = t1 * bezierValues[1][1] + t * bezierValues[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+        _v[0] = bezierValues[0][0];
+        _v[1] = bezierValues[0][1];
+        _v[2] = .0;
+        
+        gluTessVertex( tess, _v, (void*)_v );
+    }	
+}
+
+void _gluTessQuadraticCurve( GLUtesselator *tess, value _ctrl, double *v, int _n ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	float controlPoints[3][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) }
+		};
+
+    float bezierValues[2][2];
+    float stepsize = 1.0/n;
+
+	for( i = 0; i <= n; i++) {
+        float t = ((float)i) * stepsize;
+        float t1 = (1.0f - t);
+
+        double *_v = &v[(i*3)];
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+        _v[0] = bezierValues[0][0];
+        _v[1] = bezierValues[0][1];
+        _v[2] = .0;
+        
+        gluTessVertex( tess, _v, (void*)_v );
+    }	
+}

@@ -11,10 +11,15 @@ interface IRenderer {
     // pen/fill
     function setColor( r:Float, g:Float, b:Float, a:Float ) : Void;
     
-    // paint
-    function polygon( vertices:Array<Point> ) : Void;
-    public function curve( ctrlpoints:Array<Point> ) : Void;
-    
+    // tesselation
+    public function tessBeginPolygon() : Void;
+    public function tessBeginContour() : Void;
+    public function tessVertex( x:Float, y:Float ) : Void;
+    public function tessCubicCurve( ctrl:Array<Float>, data:Dynamic, n:Int ) : Void;
+    public function tessQuadraticCurve( ctrl:Array<Float>, data:Dynamic, n:Int ) : Void;
+    public function tessEndContour() : Void;
+    public function tessEndPolygon() : Void;
+     
     // manage
     function startFrame() : Void;
     function endFrame() : Void;
