@@ -30,7 +30,7 @@ class Square extends Sprite {
         speed=0.0;
         pressed=false;
         
-        draw( 0xffffff, .3 );
+        draw( 0xffffff, .6 );
     }
 
     private function draw( c:Int, a:Float ) : Void {
@@ -47,7 +47,7 @@ class Square extends Sprite {
             speed += .5;
         } else speed *= 0.93;
         if( speed > 5 ) speed = 5;
-        if( speed < 0.1 ) speed = 0.1;
+        if( speed < 0 ) speed = 0;
     }
     
     public function onMouseDown( e:Event ) {
@@ -61,11 +61,11 @@ class Square extends Sprite {
     }
 
     public function onMouseOver( e:Event ) {
-        draw( 0xffffff, .6 );
+        draw( 0xffffff, .9 );
     }
 
     public function onMouseOut( e:Event ) {
-        draw( 0xffffff, .3 );
+        draw( 0xffffff, .6 );
     }
 
 }

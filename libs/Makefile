@@ -1,7 +1,7 @@
 GEN_MODS=GL GLU SDL FT
 
 NEKO_LIBS=${shell pkg-config --libs neko}
-NEKO_CFLAGS=${shell pkg-config --cflags neko} -g -fPIC
+NEKO_CFLAGS=${shell pkg-config --cflags neko} -fPIC
 
 cptr_LIBS=$(NEKO_LIBS)
 cptr_CFLAGS=$(NEKO_CFLAGS)

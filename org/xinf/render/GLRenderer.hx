@@ -12,9 +12,24 @@ class GLRenderer implements IRenderer {
     private static var view = CPtr.int_alloc(4);
     
     private var tess:Dynamic;
+    private var highestID:Int;
 
     public function new() {
         tess = null;
+        highestID = 0;
+    }
+    
+    public function genList() :Int {
+        return GL.GenLists(1);
+    }
+    public function newList( id:Int ) :Void {
+        GL.NewList( id, GL.COMPILE );
+    }
+    public function endList() :Void {
+        GL.EndList();
+    }
+    public function callList( id:Int ) :Void {
+        GL.CallList( id );
     }
 
     public function translate( x:Float, y:Float ) : Void {
@@ -67,7 +82,7 @@ class GLRenderer implements IRenderer {
     
     public function startFrame() : Void {
         GL.PushMatrix();
-    	GL.Viewport( 0, 0, 320, 240 );
+    	GL.Viewport( 0, 0, 300, 300 );
         GL.MatrixMode( GL.PROJECTION );
         GL.LoadIdentity();
         GL.MatrixMode( GL.MODELVIEW );

@@ -1,10 +1,29 @@
 #include <GL/gl.h>
 
 /* ------------------------------------------------------------- */
-/* Curve Evaluator simplification
+/* simplifications for functions with >5 arguments
 /* ------------------------------------------------------------- */
 
 void glMap1d_01( GLenum target, GLint stride, GLint order, const GLdouble *points ) {
     glMap1d( target, .0, 1., stride, order, points );
 }
 
+int _glCreateTexture( unsigned int tex, int width, int height ) {
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL );
+    return tex;
+}
+
+void _glTexSubImage2D_BGRA_BYTE( unsigned int tex, value pos, value size, unsigned char *data ) {
+    field f_x = val_id("x");
+    field f_y = val_id("y");
+    
+    int x = val_number( val_field( pos, f_x ) );
+    int y = val_number( val_field( pos, f_y ) );
+    int w = val_number( val_field( size, f_x ) );
+    int h = val_number( val_field( size, f_y ) );
+   
+//    printf("Fill texture #%i, %i %i - %i %i, %p\n", tex, x, y, w, h, data );
+    
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}

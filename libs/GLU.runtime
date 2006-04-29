@@ -12,6 +12,7 @@ void simple_tess_begin( GLenum prim ) {
 void simple_tess_vertex( void *_data ) {
     GLdouble* data = (GLdouble*)_data;
     glVertex3dv( data );
+    glTexCoord3dv( data );
 }
 
 void simple_tess_end() {

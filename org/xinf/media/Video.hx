@@ -3,18 +3,19 @@ package org.xinf.media;
 import org.xinf.display.InteractiveObject;
 import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
-import GL;
+import org.xinf.util.CPtr;
+import gst.Pipeline;
 
 class Video extends InteractiveObject {
-    private static var highestTextureID:Int=0;
+    
     private static function genTextures( n:Int ) {
-        var a = new Array<Int>();
-        var t0 = highestTextureID;
-        highestTextureID += n;
+        var t = CPtr.uint_alloc( n );
+        GL.GenTextures( n, t );
         
-        for( i in t0...highestTextureID ) {
-            a.push(i);
-        }
+        var r = CPtr.uint_to_array(t,0,n);
+        var a = new Array();
+        untyped a.__a = r;
+        untyped a.length = n;
         return a;
     }
 
@@ -26,24 +27,28 @@ class Video extends InteractiveObject {
     private var _pipeline:gst.Pipeline;
     private var _textures:Array<Int>;
 
+
     public function new() {
         super();
+        _textures = genTextures(1);
+        twidth=theight=0;
+    }
+    
+    public function start() {
         _pipeline = new gst.Pipeline(
 //            "   filesrc location=/beta/video/foreign/success_v2.mpg  ! decodebin 
             "   videotestsrc 
-                ! video/x-raw-rgb, depth=24, bpp=32
+                ! video/x-raw-rgb, depth=24, bpp=32, width=160, height=120
                 ! fixedalpha alpha=255
                 ! identity name=handoff 
                 ! fakesink
             ","handoff");
             
         if( _pipeline == null ) throw("gst.Pipeline construction failed");
-        _textures = genTextures(1);
-        
-        twidth=theight=0;
     }
-
+    
     private function _render( r:IRenderer ) : Void {
+        if( _pipeline == null ) return;
         var buf:gst.Buffer = _pipeline.frame();
         var d:Dynamic = buf.analyze();
         
@@ -51,16 +56,21 @@ class Video extends InteractiveObject {
             twidth = 64; while( twidth<d.width ) twidth<<=1;
             theight = 64; while( theight<d.height ) theight<<=1;
          
-            // FIXME: delete old textures
+            trace("Generating textures: "+_textures.length );
+            // FIXME: delete old textures!
             for( i in 0..._textures.length ) {
-// FIXME               GL.CreateTexture( i, twidth, theight );
+               GL.BindTexture( GL.TEXTURE_2D, _textures[i] );
+               GL._CreateTexture( _textures[i], twidth, theight );
             }
         }
         
         var id:Int = _textures[0];
-// FIXME       GL.__glTexSubImage2D( id, new Point(0,0), new Point(d.width,d.height), d.data );
+        GL.Enable( GL.TEXTURE_2D );
+        GL.BindTexture( GL.TEXTURE_2D, id );
+        GL._TexSubImage2D_BGRA_BYTE( id, new Point(0,0), new Point(d.width,d.height), d.data );
         
         _renderSub( r, id, new Point(twidth, theight), new Point(d.width, d.height) );
+        GL.Disable( GL.TEXTURE_2D );
     }
     
     private function _renderSub( r:IRenderer, texId:Int, texDim:Point, imgDim:Point ) {
@@ -76,11 +86,10 @@ class Video extends InteractiveObject {
         var hf:Float = ( (rw+rx) / texDim.x ) * imgDim.x;
         var vf:Float = ( (rh+ry) / texDim.y ) * imgDim.y;
         
-        GL.Enable( GL.TEXTURE_2D );
-        GL.BindTexture( GL.TEXTURE_2D, _textures[0] );
-//        trace( "video frame tex#"+texId+" "+he+","+ve+" "+hf+","+vf+" "+texDim+" "+imgDim );
+//        trace( "video frame tex#"+_textures[0]+" "+he+","+ve+" "+hf+","+vf+" "+texDim+" "+imgDim );
         
         GL.PushMatrix();
+        
         GL.Color4f(1.,1.,1.,1.);
         GL.Translatef(-.5,-.5,.0);
         
@@ -95,9 +104,6 @@ class Video extends InteractiveObject {
             GL.Vertex2f  (  0,  h ); 
         GL.End();
         
-        GL.Disable( GL.TEXTURE_2D );
-        
         GL.PopMatrix();
     }
-    
 }

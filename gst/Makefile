@@ -1,16 +1,17 @@
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp .
 
 NEKO_LIBS=${shell pkg-config --libs neko}
-NEKO_CFLAGS=${shell pkg-config --cflags neko}
+NEKO_CFLAGS=${shell pkg-config --cflags neko} -fPIC
 
 GST_LIBS=${shell pkg-config --libs gstreamer-0.10}
 GST_CFLAGS=${shell pkg-config --cflags gstreamer-0.10}
 
-CPTR_LIBS=-L../bin -lcptr 
+CPTR_LIBS=-L../libs -lcptr 
+CPTR_FLAGS=-I../libs
 
-ALL_FLAGS=$(NEKO_LIBS) $(NEKO_CFLAGS) $(GST_LIBS) $(GST_CFLAGS) $(CPTR_LIBS)
+ALL_FLAGS=$(NEKO_LIBS) $(NEKO_CFLAGS) $(GST_LIBS) $(GST_CFLAGS) $(CPTR_FLAGS) $(CPTR_LIBS)
 
-MOD=../bin/GST.ndll
+MOD=GST.ndll
 CC=gcc
 
 default : $(MOD)

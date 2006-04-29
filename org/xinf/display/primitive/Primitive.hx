@@ -5,6 +5,6 @@ class Primitive {
     }
 
     public function _render( r:org.xinf.render.IRenderer ) {
-        throw("org.xinf.display.primitive.Primitive is an abstract base class, its _render must be overwritten.");
+        throw("org.xinf.display.primitive.Primitive is an abstract base class, it's _render function must be overwritten.");
     }
 }

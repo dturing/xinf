@@ -154,8 +154,8 @@ class SDLPlayer {
     public function new( _root : Stage ) {
         root = _root;
         quit = buttonpress = false;
-        width = 320;
-        height = 240;
+        width = 300;
+        height = 300;
         mouseX = mouseY = -1;
         currentOver = new Array<DisplayObject>();
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {

@@ -20,6 +20,10 @@ class LineTo extends CountourPart {
     public function _render( r:org.xinf.render.IRenderer ) {
         r.tessVertex( x, y );
     }
+
+    public function toString() {
+        return( "LineTo("+x+","+y+")" );
+    }
 }
 
 class CubicTo extends CountourPart {
@@ -29,12 +33,16 @@ class CubicTo extends CountourPart {
     
     public function new( p0:Point, c1:Point, c2:Point, p1:Point ) {
         ctrl = [ p0.x, p0.y, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y ];
-        n = 50; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
+        n = 10; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
         v = CPtr.double_alloc(n*3);
     }
     
     public function _render( r:org.xinf.render.IRenderer ) {
         r.tessCubicCurve( ctrl, v, n );
+    }
+
+    public function toString() {
+        return( "CubicTo("+ctrl+")" );
     }
 }
 
@@ -45,12 +53,16 @@ class QuadraticTo extends CountourPart {
     
     public function new( p0:Point, c:Point, p1:Point ) {
         ctrl = [ p0.x, p0.y, c.x, c.y, p1.x, p1.y ];
-        n = 50; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
+        n = 3; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
         v = CPtr.double_alloc(n*3);
     }
     
     public function _render( r:org.xinf.render.IRenderer ) {
         r.tessQuadraticCurve( ctrl, v, n );
+    }
+    
+    public function toString() {
+        return( "QuadraticTo("+ctrl+")" );
     }
 }
 
@@ -69,7 +81,7 @@ class Contour extends Primitive {
         super();
         offset = new Point(x,y);
         parts = new Array<CountourPart>();
-        current = new Point(0,0);
+        current = new Point(offset.x,offset.y);
     }
     
     public function addPoint( p:Point ) {

@@ -1,7 +1,6 @@
 package gst;
 
 class Buffer extends Object{
-
 	private static var _ts = neko.Lib.load("GST","buffer_timestamp",1);
 	private static var _analyze = neko.Lib.load("GST","analyze_buffer",1);
 

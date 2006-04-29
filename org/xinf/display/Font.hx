@@ -7,15 +7,24 @@ import org.xinf.geom.Point;
 class Glyph {
     private var polygon:Polygon;
     private var advance:Float;
+    private var list:Int;
     
     public function new( p:Polygon, adv:Float ) {
         polygon = p;
         advance = adv;
+        list = 0;
     }
     
+    public function _cache( r:org.xinf.render.IRenderer ) {
+        list = r.genList();
+        r.newList( list );
+            polygon._render( r );
+            r.translate( advance, .0 );
+        r.endList();
+    }
+
     public function _render( r:org.xinf.render.IRenderer ) {
-        polygon._render( r );
-        r.translate( advance, .0 );
+        r.callList( list );
     }
 }
 
@@ -43,10 +52,10 @@ class FontReader {
     public function new( name:String ) {
         font = new Font();
         polygon = new Polygon();
-        scale = 1.0/64000;
+        scale = .0000025;
         
         var _f = FT.LoadFont( untyped name.__s, untyped "abcdefghijklmnopqrstuvwxyz".__s, 1024<<6, 1024<<6 );
-        
+       
         for( field in Reflect.fields(_f) ) {
             trace("font->"+field + ": " + untyped __dollar__objget( _f, __dollar__hash(field.__s) ) );
         }

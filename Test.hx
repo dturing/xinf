@@ -4,6 +4,7 @@ import org.xinf.render.GLRenderer;
 import org.xinf.geom.Point;
 import org.xinf.demo.Square;
 import org.xinf.demo.DrawTest;
+import org.xinf.media.Video;
 
 class Test {
     static function main() {
@@ -13,10 +14,13 @@ class Test {
         var root = new Stage(renderer);
         var player = new SDLPlayer(root);
 
-/*
-        var s0 = new Square("zero",.0,.0,.0);
+
+        var s0 = new Square("zero",.4,.4,.0);
         root.addChild( s0 );
-*/
+        
+        var vid = new Video();
+        root.addChild( vid );
+
         var test = new DrawTest();
         root.addChild( test );
     
@@ -44,7 +48,10 @@ class Test {
         }
         */
         
-//        s0.addChild( new org.xinf.media.Video() );
+        gst.Object._init();
+                
+        vid.start();
+                
         while( player.iterate() ) {
             // check for OpenGL errors
             var e:Int = GL.GetError();

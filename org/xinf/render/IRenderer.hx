@@ -4,6 +4,12 @@ import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 
 interface IRenderer {
+    // display list caching
+    public function genList():Int;
+    public function newList( id:Int ):Void;
+    public function endList():Void;
+    public function callList( id:Int ):Void;
+
     // transform
     function translate( x:Float, y:Float ) : Void;
     function matrix( m:Matrix ) : Void;

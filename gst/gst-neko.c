@@ -1,13 +1,11 @@
 #include <neko.h>
 #include <gst/gst.h>
+#include <cptr.h> 
  
 #define error(msg,...) \
     raise_exception( msg, __FILE__, __LINE__, __VA_ARGS__ );
 
 DEFINE_KIND(k_GObject);
-
-extern vkind k_cptr_int;
-extern vkind k_cptr_float;
 
 void raise_exception( const char *msg, const char *file, int line, ... ) {
     buffer b = alloc_buffer("");
@@ -401,7 +399,7 @@ value analyze_buffer( value obj ) {
     alloc_field( ret, val_id("timestamp"), alloc_float( 
             (double)GST_BUFFER_TIMESTAMP( buf )/GST_SECOND ) );
     alloc_field( ret, val_id("size"), alloc_int( GST_BUFFER_SIZE( buf ) ) );
-    alloc_field( ret, val_id("data"), alloc_abstract( k_cptr_int, GST_BUFFER_DATA( buf ) ) );
+    alloc_field( ret, val_id("data"), alloc_abstract( k_unsigned_int_p, GST_BUFFER_DATA( buf ) ) );
     
     GstCaps *caps = GST_BUFFER_CAPS(buf);
     GstStructure *s = gst_caps_get_structure(caps,0);
@@ -420,9 +418,9 @@ DEFINE_PRIM( analyze_buffer,1 );
 
 /* init */
 
-value init() {
+value _gst_init() {
     g_thread_init(NULL);
-	gst_init(NULL,NULL);
+	gst_init(NULL, NULL);
     return val_true;
 }
-DEFINE_PRIM(init,0);
+DEFINE_PRIM(_gst_init,0);
