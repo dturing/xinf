@@ -15,14 +15,17 @@ class Test {
         var player = new SDLPlayer(root);
 
 
+        
         var s0 = new Square("zero",.4,.4,.0);
         root.addChild( s0 );
-        
+
         var vid = new Video();
         root.addChild( vid );
-
+        
         var test = new DrawTest();
         root.addChild( test );
+
+
     
         var p:Point;
                 

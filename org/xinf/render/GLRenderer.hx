@@ -88,7 +88,6 @@ class GLRenderer implements IRenderer {
         GL.MatrixMode( GL.MODELVIEW );
         GL.LoadIdentity();
         
-        GL.Enable( GL.TEXTURE_2D );
         GL.PixelStorei( GL.UNPACK_ALIGNMENT, 1 );
 	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
 	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
@@ -97,7 +96,6 @@ class GLRenderer implements IRenderer {
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         
         GL.ShadeModel( GL.FLAT );
-//        GL.Enable( GL.POLYGON_SMOOTH );
         
         GL.ClearColor( 0, 0, 0.3, 1 );
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
@@ -136,7 +134,7 @@ class GLRenderer implements IRenderer {
             while( i<n_hits && j<64 ) {
                 var n : Int = CPtr.uint_get( selectBuffer, j);
                 var objs = new Array<Int>();
-                j+=3; // TODO why?
+                j+=3;
                 for( k in 0...n ) {
                     objs.push( CPtr.uint_get( selectBuffer, j ));
                     j++;
@@ -148,7 +146,7 @@ class GLRenderer implements IRenderer {
         
         GL.MatrixMode( GL.MODELVIEW );
         
-        return stacks;
+        return stacks.reverse();
     }
 
     public function pushMatrix() : Void {
