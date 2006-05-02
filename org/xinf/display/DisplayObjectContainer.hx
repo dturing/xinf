@@ -23,6 +23,9 @@ class DisplayObjectContainer extends InteractiveObject {
         child.root = this.root;
         child.parent = this;
         child.stage = this.stage;
+        
+        // implicit changed()
+        this.stage._objectChanged( child );
         return child;
     }
     
@@ -108,7 +111,8 @@ class DisplayObjectContainer extends InteractiveObject {
         var r:IRenderer = stage.renderer;
         
         r.startPick( pt.x, pt.y );
-        this._render( r );
+        r.callList( _displayList );
+       // render( r );
         var hits:Array<Array<Int>> = r.endPick();
         
         var a:Array<DisplayObject> = new Array<DisplayObject>();

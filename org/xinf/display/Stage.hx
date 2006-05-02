@@ -18,6 +18,7 @@ class Stage extends DisplayObjectContainer {
         scaleMode = StageScaleMode.NO_SCALE;
         width=w;
         height=h;
+        r._objectChanged(this);
     }
         
     public function _resize( w:Int, h:Int ) {
@@ -38,11 +39,13 @@ class Stage extends DisplayObjectContainer {
             trace("unknown StageScaleMode '"+scaleMode+"'");
         }
         
-        
-        
         transform.matrix.setIdentity();
         transform.matrix.translate( -1, 1 );
         transform.matrix.scale( (2.0/w)*x, (-2.0/h)*y );
-        _changed = true;
+        changed(); // TODO: Graphics / Transform should do that?
+    }
+    
+    public function _objectChanged( obj:DisplayObject ) :Void {
+        renderer._objectChanged( obj );
     }
 }

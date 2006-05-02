@@ -50,13 +50,15 @@ class DisplayObject extends EventDispatcher {
         transform = new Transform();
         id = highestID++;
         _displayList = null;
-        _changed = true;
         name = "["+getSimpleClassname()+id+"]";
+        changed();
     }
-    
-    private function getSimpleClassname() {
-        var n = Reflect.getClass(this).__name__;
-        return( n[n.length-1] );
+        
+    private function changed() {
+        _changed = true;
+        if( this.stage != null ) {
+            this.stage._objectChanged(this);
+        }
     }
     
     public function _render_cache( r:IRenderer ) {
@@ -78,8 +80,12 @@ class DisplayObject extends EventDispatcher {
         return null;
     }
     
+    private function getSimpleClassname() {
+        var n = Reflect.getClass(this).__name__;
+        return( n[n.length-1] );
+    }
     public function toString() {
-        return( "<" + getSimpleClassname() + " " + name + ">" );
+        return( "<" + getSimpleClassname() + ">" );
     }
 }
 

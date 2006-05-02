@@ -14,8 +14,8 @@ class Test {
         var s0 = new Square("zero",160,120,10,10,.0,0xffee33);
         root.addChild( s0 );
 
-   //     var vid = new Video();
-   //     root.addChild( vid );
+//        var vid = new Video();
+//        root.addChild( vid );
 
         
         var test = new DrawTest();

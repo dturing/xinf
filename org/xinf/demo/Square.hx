@@ -38,11 +38,11 @@ class Square extends Sprite {
     }
 
     private function draw( c:Int, a:Float ) : Void {
-        _changed = true;
         graphics.clear();
         graphics.beginFill( c, a );
         graphics.drawRect( -width/2, -height/2, width, height );
         graphics.endFill();
+        changed();
     }
     
     public function onEnterFrame( e:Event ) {
@@ -52,9 +52,9 @@ class Square extends Sprite {
             speed += .5;
         } else speed *= 0.93;
         if( speed > 5 ) speed = 5;
-        if( speed < 0 ) speed = 0;
+        if( speed < 0.001 ) speed = 0;
 
-        if( speed > 0 ) _changed = true; 
+        if( speed > 0 ) changed(); 
     }
     
     public function onMouseDown( e:Event ) {

@@ -194,21 +194,19 @@ class SDLPlayer {
         e.propagate = true;
         root.dispatchEvent( e );            
 
-
-        renderer.startFrame();
-
-        root._render_cache(renderer);
-
+        renderer.cacheChangedObjects();
         doOverOut( mouseX, mouseY );
 
-        root._render_cache(renderer);
+        renderer.startFrame();
+       
+        /* rerender changed objects (bit paranoid) */
+        renderer.cacheChangedObjects();
 
-        root.render( renderer );
+            root.render( renderer );
 
         renderer.endFrame();
 
         SDL.GL_SwapBuffers();
-        
 
         // check for OpenGL errors
         var e:Int = GL.GetError();

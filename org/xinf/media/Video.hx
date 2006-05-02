@@ -69,7 +69,7 @@ class Video extends InteractiveObject {
                GL._CreateTexture( _textures[i], twidth, theight );
             }
             
-            _changed = true;
+            changed();
         }
         
         var id:Int = _textures[0];

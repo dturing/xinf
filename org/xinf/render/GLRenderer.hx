@@ -3,6 +3,7 @@ package org.xinf.render;
 import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
+import org.xinf.display.DisplayObject;
 import org.xinf.util.CPtr;
 import GL;
 import GLU;
@@ -16,11 +17,14 @@ class GLRenderer implements IRenderer {
     
     private var tess:Dynamic;
     private var highestID:Int;
+    
+    private var changedObjects:Array<DisplayObject>;
 
     public function new() {
         tess = null;
         highestID = 0;
         width = height = 1;
+        changedObjects = new Array<DisplayObject>();
     }
     
     public function resize( w:Int, h:Int ) :Void {
@@ -39,6 +43,16 @@ class GLRenderer implements IRenderer {
     }
     public function callList( id:Int ) :Void {
         GL.CallList( id );
+    }
+    
+    public function _objectChanged( obj:DisplayObject ) :Void {
+        changedObjects.push( obj );
+    }
+    public function cacheChangedObjects() :Void {
+        var o:DisplayObject;
+        while( (o = changedObjects.shift()) != null ) {
+            o._render_cache(this);
+        }
     }
 
     public function translate( x:Float, y:Float ) : Void {
@@ -127,6 +141,8 @@ class GLRenderer implements IRenderer {
             GL.LoadIdentity();
             GLU.PickMatrix( x, y, 1.0, 1.0, view );
             GL.MatrixMode( GL.MODELVIEW );
+            
+        GL.Disable( GL.BLEND );
     }
     
     public function endPick() : Array<Array<Int>> {

@@ -2,6 +2,7 @@ package org.xinf.render;
 
 import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
+import org.xinf.display.DisplayObject;
 
 interface IRenderer {
     public function resize( w:Int, h:Int ):Void;
@@ -11,6 +12,8 @@ interface IRenderer {
     public function newList( id:Int ):Void;
     public function endList():Void;
     public function callList( id:Int ):Void;
+    public function _objectChanged( obj:DisplayObject ) :Void;
+    public function cacheChangedObjects() :Void;
 
     // transform
     function translate( x:Float, y:Float ) : Void;
