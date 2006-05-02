@@ -74,6 +74,14 @@ class DisplayObjectContainer extends InteractiveObject {
         addChildAt( child, index );
     }
     
+    public function _render_cache( r:IRenderer ) {
+        for( i in 0...children.length ) {
+            children[i]._render_cache(r);
+        }
+        
+        super._render_cache(r);
+    }
+    
     private function _render( r:IRenderer ) {
         super._render(r);
         
@@ -82,7 +90,7 @@ class DisplayObjectContainer extends InteractiveObject {
     
         for( i in 0...children.length ) {
             r.pushName(i);
-            children[i]._render(r);
+            children[i].render(r);
             r.popName();
         }
         

@@ -52,7 +52,7 @@ class FontReader {
     public function new( name:String ) {
         font = new Font();
         polygon = new Polygon();
-        scale = .0000025;
+        scale = .0005;
         
         var _f = FT.LoadFont( untyped name.__s, untyped "abcdefghijklmnopqrstuvwxyz".__s, 1024<<6, 1024<<6 );
        
@@ -84,7 +84,7 @@ class FontReader {
     }
 
     private function startContour( x:Int, y:Int ) {
-        contour = new Contour(scale*x,scale*y);
+        contour = new Contour(scale*x,-scale*y);
     }
 
     private function endContour() {
@@ -93,10 +93,10 @@ class FontReader {
     }
 
     private function lineTo( x:Int, y:Int ) {
-        contour.addCoordinates( scale*x, scale*y );
+        contour.addCoordinates( scale*x, -scale*y );
     }
 
     private function curveTo( cx:Int, cy:Int, x:Int, y:Int ) {
-        contour.addQuadratic( new Point(scale*cx,scale*cy), new Point(scale*x,scale*y) );
+        contour.addQuadratic( new Point(scale*cx,-scale*cy), new Point(scale*x,-scale*y) );
     }
 }

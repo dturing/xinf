@@ -4,6 +4,7 @@ import org.xinf.display.InteractiveObject;
 import org.xinf.render.IRenderer;
 import org.xinf.geom.Point;
 import org.xinf.util.CPtr;
+import org.xinf.event.Event;
 import gst.Pipeline;
 
 class Video extends InteractiveObject {
@@ -26,20 +27,22 @@ class Video extends InteractiveObject {
 
     private var _pipeline:gst.Pipeline;
     private var _textures:Array<Int>;
-
+    private var d:Dynamic;
 
     public function new() {
         super();
         _textures = genTextures(1);
         twidth=theight=0;
+        
+        addEventListener( Event.ENTER_FRAME, onEnterFrame, false, 0, false );
     }
     
     public function start() {
         _pipeline = new gst.Pipeline(
 //            "   filesrc location=/beta/video/foreign/success_v2.mpg  ! decodebin 
             "   videotestsrc 
-                ! video/x-raw-rgb, depth=24, bpp=32, width=160, height=120
-                ! fixedalpha alpha=255
+                ! video/x-raw-rgb, depth=24, bpp=32, width=320, height=240
+                ! fixedalpha alpha=150
                 ! identity name=handoff 
                 ! fakesink
             ","handoff");
@@ -47,10 +50,13 @@ class Video extends InteractiveObject {
         if( _pipeline == null ) throw("gst.Pipeline construction failed");
     }
     
-    private function _render( r:IRenderer ) : Void {
-        if( _pipeline == null ) return;
+    private function onEnterFrame(e:Event) : Void {
+        if( _pipeline == null ) {
+            start();
+        }
+        
         var buf:gst.Buffer = _pipeline.frame();
-        var d:Dynamic = buf.analyze();
+        d = buf.analyze();
         
         if( d.width > twidth || d.height > theight ) {
             twidth = 64; while( twidth<d.width ) twidth<<=1;
@@ -62,24 +68,31 @@ class Video extends InteractiveObject {
                GL.BindTexture( GL.TEXTURE_2D, _textures[i] );
                GL._CreateTexture( _textures[i], twidth, theight );
             }
+            
+            _changed = true;
         }
         
         var id:Int = _textures[0];
-        GL.Enable( GL.TEXTURE_2D );
+//        GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, id );
         GL._TexSubImage2D_BGRA_BYTE( id, new Point(0,0), new Point(d.width,d.height), d.data );
-        
+//        GL.Disable( GL.TEXTURE_2D );
+    }
+            
+    private function _render( r:IRenderer ) : Void {
+        GL.Enable( GL.TEXTURE_2D );
+//        if( d==null ) onEnterFrame(null);
         _renderSub( r, id, new Point(twidth, theight), new Point(d.width, d.height) );
         GL.Disable( GL.TEXTURE_2D );
     }
     
     private function _renderSub( r:IRenderer, texId:Int, texDim:Point, imgDim:Point ) {
-        var w:Float = 1;
-        var h:Float = 1;
+        var w:Float = 320;
+        var h:Float = 240;
         var rx:Float = 0;
         var ry:Float = 0;
         var rw:Float = 1;
-        var rh:Float = 1;
+        var rh:Float = -1;
 
         var he:Float = (rx/texDim.x) * imgDim.x;
         var ve:Float = (ry/texDim.y) * imgDim.y;

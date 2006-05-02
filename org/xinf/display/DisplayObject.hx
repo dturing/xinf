@@ -8,6 +8,8 @@ import org.xinf.render.IRenderer;
 class DisplayObject extends EventDispatcher {
     private static var highestID:Int = 0;
     private var id:Int;
+    private var _displayList:Int;
+    private var _changed:Bool;
 
     public property name(default,default):String;
     
@@ -47,6 +49,8 @@ class DisplayObject extends EventDispatcher {
         super(null);
         transform = new Transform();
         id = highestID++;
+        _displayList = null;
+        _changed = true;
         name = "["+getSimpleClassname()+id+"]";
     }
     
@@ -55,9 +59,21 @@ class DisplayObject extends EventDispatcher {
         return( n[n.length-1] );
     }
     
+    public function _render_cache( r:IRenderer ) {
+        if( _changed ) {
+            if( _displayList == null ) _displayList = r.genList();
+            r.newList( _displayList );
+            _render(r);
+            r.endList();
+            _changed = false;
+        }
+    }
+    public function render( r:IRenderer ) {
+        r.callList( _displayList );
+    }
     private function _render( r:IRenderer ) {
     }
-    
+        
     private function asContainer() : DisplayObjectContainer {
         return null;
     }

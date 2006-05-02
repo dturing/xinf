@@ -10,7 +10,7 @@ class DrawTest extends Square {
     public var cached:Bool;
 
     public function new() {
-        super( "DrawTest", .0, .0, .0 );
+        super( "DrawTest", .0, .0, 320, 240, .0, 0xffffff );
         var fr = new FontReader("/home/dan/.fonts/textra.ttf");
         font = fr.getFont();
         cached = false;
@@ -37,31 +37,32 @@ class DrawTest extends Square {
         graphics.endFill();
     }
 
+    public function _render_cache( r:IRenderer ) {
+        if( !cached ) {
+            for( i in 62...128 ) {
+                var g:Glyph = font.getGlyph(i);
+                if( g != null ) {
+                    g._cache(r);
+                }
+                cached = true;
+            }
+        }
+        super._render_cache(r);
+    }
+    
     private function _render( r:IRenderer ) {
         super._render(r);
         
         r.pushMatrix();
         r.matrix( transform.matrix );
         
-        r.translate(-.9,0);
+        r.translate(15,200);
         
         //graphics._render(r);
-        var g:Glyph = font.getGlyph(97);
-        if( g == null ) throw("glyph not found" );
-        
-        if( !cached ) {
-            for( i in 62...128 ) {
-                g = font.getGlyph(i);
-                if( g != null ) {
-                    g._cache(r);
-                }
-            }
-            cached=true;
-        }
         
         r.pushMatrix();
         for( i in 65...91 ) {
-            g = font.getGlyph(i);
+            var g = font.getGlyph(i);
             if( g != null ) {
                 g._render(r);
             }
@@ -69,9 +70,9 @@ class DrawTest extends Square {
         r.popMatrix();
 
         r.pushMatrix();
-        r.translate( 0, -.15 );
+        r.translate( 0,30 );
         for( i in 97...123 ) {
-            g = font.getGlyph(i);
+            var g = font.getGlyph(i);
             if( g != null ) {
                 g._render(r);
             }

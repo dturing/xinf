@@ -6,18 +6,22 @@ import org.xinf.event.MouseEvent;
 
 class Square extends Sprite {
 
-    private var size:Float;
+    private var width:Float;
+    private var height:Float;
     private var angle:Float;
     private var speed:Float;
     private var pressed:Bool;
+    private var color:Int;
 
-    public function new( _name:String, _x:Float, _y:Float, _angle:Float ) {
+    public function new( _name:String, _x:Float, _y:Float, _w:Float, _h:Float, _angle:Float, _color:Int ) {
         super();
         name = _name;
         x = _x;
         y = _y;
         angle=_angle;
-        size=.8;
+        width=_w;
+        height=_h;
+        color=_color;
         
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, false );
         addEventListener( MouseEvent.MOUSE_UP, onMouseUp, false, 0, false );
@@ -30,13 +34,14 @@ class Square extends Sprite {
         speed=0.0;
         pressed=false;
         
-        draw( 0xffffff, .6 );
+        draw( color, .4 );
     }
 
     private function draw( c:Int, a:Float ) : Void {
+        _changed = true;
         graphics.clear();
         graphics.beginFill( c, a );
-        graphics.drawRect( -size/2, -size/2, size, size );
+        graphics.drawRect( -width/2, -height/2, width, height );
         graphics.endFill();
     }
     
@@ -48,6 +53,8 @@ class Square extends Sprite {
         } else speed *= 0.93;
         if( speed > 5 ) speed = 5;
         if( speed < 0 ) speed = 0;
+
+        if( speed > 0 ) _changed = true; 
     }
     
     public function onMouseDown( e:Event ) {
@@ -61,11 +68,11 @@ class Square extends Sprite {
     }
 
     public function onMouseOver( e:Event ) {
-        draw( 0xffffff, .9 );
+        draw( color, .8 );
     }
 
     public function onMouseOut( e:Event ) {
-        draw( 0xffffff, .6 );
+        draw( color, .4 );
     }
 
 }

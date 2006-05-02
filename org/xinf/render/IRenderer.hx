@@ -4,6 +4,8 @@ import org.xinf.geom.Point;
 import org.xinf.geom.Matrix;
 
 interface IRenderer {
+    public function resize( w:Int, h:Int ):Void;
+
     // display list caching
     public function genList():Int;
     public function newList( id:Int ):Void;

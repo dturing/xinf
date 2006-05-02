@@ -1,6 +1,5 @@
 import org.xinf.SDLPlayer;
 import org.xinf.display.Stage;
-import org.xinf.render.GLRenderer;
 import org.xinf.geom.Point;
 import org.xinf.demo.Square;
 import org.xinf.demo.DrawTest;
@@ -9,23 +8,18 @@ import org.xinf.media.Video;
 class Test {
     static function main() {
         
-        var renderer = new GLRenderer();
-
-        var root = new Stage(renderer);
-        var player = new SDLPlayer(root);
-
-
+        var player = new SDLPlayer(320,240);
+        var root = player.root;
         
-        var s0 = new Square("zero",.4,.4,.0);
+        var s0 = new Square("zero",160,120,10,10,.0,0xffee33);
         root.addChild( s0 );
 
-        var vid = new Video();
-        root.addChild( vid );
+   //     var vid = new Video();
+   //     root.addChild( vid );
+
         
         var test = new DrawTest();
         root.addChild( test );
-
-
     
         var p:Point;
                 
@@ -40,20 +34,21 @@ class Test {
         }
         */
 
-        /*
+        
         // square grid
         
-        var n:Int=2;
-        for( x in -n...n+1 ) {
-            for( y in -n...n+1 ) {
-                s0.addChild( new Square( x+"/"+y, x/n, y/n, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
+        var n:Int=10;
+        for( x in -n...n ) {
+            for( y in -n...n ) {
+                s0.addChild( new Square( x+"/"+y, (x/n)*320, (y/n)*240, 31, 23, 0, 0x888888 ) );
+                //, (Math.sin(x/n)*Math.cos(y/n))*360 ) );
             }
         }
-        */
+        
         
         gst.Object._init();
                 
-        vid.start();
+//        vid.start();
                 
         while( player.iterate() ) {
             // check for OpenGL errors
@@ -63,7 +58,7 @@ class Test {
             }
             
             // FIXME: proper timing, neko idle func?
-            neko.Sys.sleep(0.04);
+            neko.Sys.sleep(0.02);
             
         }
     }

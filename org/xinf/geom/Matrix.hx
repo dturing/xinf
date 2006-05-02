@@ -38,10 +38,7 @@ class Matrix {
 
     public function new() {
         _v = CPtr.float_alloc(16);
-        CPtr.float_set(_v,0,1.0);
-        CPtr.float_set(_v,5,1.0);
-        CPtr.float_set(_v,10,1.0);
-        CPtr.float_set(_v,15,1.0);
+        setIdentity();
     }
     
     public static function Translation( x:Float, y:Float ) {
@@ -69,6 +66,17 @@ class Matrix {
         c=-b;
     }
     
+    public function setIdentity() {
+        for( i in 0...16 ) {
+            // TODO: cptr function to set to 0?
+            CPtr.float_set(_v,i,0.0);
+        }
+        CPtr.float_set(_v,0,1.0);
+        CPtr.float_set(_v,5,1.0);
+        CPtr.float_set(_v,10,1.0);
+        CPtr.float_set(_v,15,1.0);
+    }
+
     public function translate( x:Float, y:Float ) {
         concat( Translation(x,y) );
     }

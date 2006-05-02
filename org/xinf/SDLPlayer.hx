@@ -13,7 +13,9 @@ class SDLPlayer {
     public var quit : Bool;
     public var buttonpress : Bool;
 
-    private var root : Stage;
+    private var renderer : IRenderer;
+    public var root : Stage;
+    
     private var width : Int;
     private var height : Int;
     private var mouseX : Int;
@@ -44,6 +46,16 @@ class SDLPlayer {
                 case SDL.MOUSEBUTTONUP:
                     var me = SDL.Event_button_get(e);
                     handleMouseEvent( me, k );
+                    
+                case SDL.VIDEORESIZE:
+                    var re = SDL.Event_resize_get(e);
+                    resize( SDL.ResizeEvent_w_get(re), SDL.ResizeEvent_h_get(re) );
+                    
+                case SDL.ACTIVEEVENT:
+                //    trace("active event");
+                    // todo: mouseout on any overe'd item
+                case SDL.VIDEOEXPOSE:
+               //     trace("expose event");
                 default:
                     trace("Event "+k);
             }
@@ -151,20 +163,28 @@ class SDLPlayer {
         mouseY = SDL.MouseMotionEvent_y_get(e);
     }
     
-    public function new( _root : Stage ) {
-        root = _root;
+    
+    public function new( w:Int, h:Int ) {
+        renderer = new GLRenderer();
+        root = new Stage(renderer, w, h );
         quit = buttonpress = false;
-        width = 300;
-        height = 300;
         mouseX = mouseY = -1;
         currentOver = new Array<DisplayObject>();
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
         }
                 
-        if( SDL.SetVideoMode( width, height, 0, SDL.OPENGL ) == 0 ) {
+        resize( w, h );
+    }
+    
+    public function resize( w:Int, h:Int ) : Void {
+        width = w;
+        height = h;
+        if( SDL.SetVideoMode( width, height, 32, SDL.OPENGL | SDL.RESIZABLE ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
+        renderer.resize( w, h );
+        root._resize( w, h );
     }
     
     public function iterate() : Bool {
@@ -174,11 +194,27 @@ class SDLPlayer {
         e.propagate = true;
         root.dispatchEvent( e );            
 
+
+        renderer.startFrame();
+
+        root._render_cache(renderer);
+
         doOverOut( mouseX, mouseY );
 
-        root.Render();
+        root._render_cache(renderer);
+
+        root.render( renderer );
+
+        renderer.endFrame();
 
         SDL.GL_SwapBuffers();
+        
+
+        // check for OpenGL errors
+        var e:Int = GL.GetError();
+        if( e > 0 ) {
+            throw( "OpenGL error "+GLU.ErrorString(e) );
+        }
 
         return( !quit );
     }

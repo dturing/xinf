@@ -11,12 +11,21 @@ class GLRenderer implements IRenderer {
     private static var selectBuffer = CPtr.uint_alloc(64);
     private static var view = CPtr.int_alloc(4);
     
+    private var width:Int;
+    private var height:Int;
+    
     private var tess:Dynamic;
     private var highestID:Int;
 
     public function new() {
         tess = null;
         highestID = 0;
+        width = height = 1;
+    }
+    
+    public function resize( w:Int, h:Int ) :Void {
+        width = w;
+        height = h;
     }
     
     public function genList() :Int {
@@ -82,7 +91,7 @@ class GLRenderer implements IRenderer {
     
     public function startFrame() : Void {
         GL.PushMatrix();
-    	GL.Viewport( 0, 0, 300, 300 );
+    	GL.Viewport( 0, 0, width, height );
         GL.MatrixMode( GL.PROJECTION );
         GL.LoadIdentity();
         GL.MatrixMode( GL.MODELVIEW );
