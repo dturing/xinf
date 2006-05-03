@@ -180,7 +180,7 @@ class SDLPlayer {
     public function resize( w:Int, h:Int ) : Void {
         width = w;
         height = h;
-        if( SDL.SetVideoMode( width, height, 32, SDL.OPENGL | SDL.RESIZABLE ) == 0 ) {
+        if( SDL.SetVideoMode( width, height, 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
         renderer.resize( w, h );

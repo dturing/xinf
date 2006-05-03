@@ -52,7 +52,7 @@ class Square extends Sprite {
             speed += .5;
         } else speed *= 0.93;
         if( speed > 5 ) speed = 5;
-        if( speed < 0.001 ) speed = 0;
+        if( speed < 0.1 ) speed = 0.1;
 
         if( speed > 0 ) changed(); 
     }

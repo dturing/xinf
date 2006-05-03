@@ -111,8 +111,9 @@ class DisplayObjectContainer extends InteractiveObject {
         var r:IRenderer = stage.renderer;
         
         r.startPick( pt.x, pt.y );
-        r.callList( _displayList );
-       // render( r );
+        // this takes loong! (displaylists in select mode not accelerated??)
+        // alternatively, do some "low-res" (bbox) preselection?
+        render( r );
         var hits:Array<Array<Int>> = r.endPick();
         
         var a:Array<DisplayObject> = new Array<DisplayObject>();

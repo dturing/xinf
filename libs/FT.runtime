@@ -137,7 +137,7 @@ value ftIterateGlyphs( value font, value callbacks ) {
     field f_advance = val_id("advance");
     
     character = FT_Get_First_Char( *face, &glyph_index );
-    while( (character = FT_Get_Next_Char( *face, character, &glyph_index )) != 0 ) {
+    while( character != 0 ) {
         if( FT_Load_Glyph( *face, glyph_index, FT_LOAD_NO_BITMAP ) ) {
             // ignore (TODO report?)
         } else if( (*face)->glyph->format != FT_GLYPH_FORMAT_OUTLINE ) {
@@ -190,6 +190,7 @@ value ftIterateGlyphs( value font, value callbacks ) {
 
             val_ocall2( callbacks, endGlyph, alloc_int( character ), alloc_int( (*face)->glyph->advance.x ) );
         }
+        character = FT_Get_Next_Char( *face, character, &glyph_index );
     }
     
     return val_true;

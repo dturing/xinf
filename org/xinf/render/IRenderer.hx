@@ -17,6 +17,7 @@ interface IRenderer {
 
     // transform
     function translate( x:Float, y:Float ) : Void;
+    function scale( x:Float, y:Float ) : Void;
     function matrix( m:Matrix ) : Void;
     
     // pen/fill

@@ -33,7 +33,7 @@ class CubicTo extends CountourPart {
     
     public function new( p0:Point, c1:Point, c2:Point, p1:Point ) {
         ctrl = [ p0.x, p0.y, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y ];
-        n = 10; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
+        n = 5; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
         v = CPtr.double_alloc(n*3);
     }
     
@@ -53,7 +53,7 @@ class QuadraticTo extends CountourPart {
     
     public function new( p0:Point, c:Point, p1:Point ) {
         ctrl = [ p0.x, p0.y, c.x, c.y, p1.x, p1.y ];
-        n = 3; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
+        n = 2; // FIXME: subdivision size dependant on viewport distance (use gluProject?)
         v = CPtr.double_alloc(n*3);
     }
     

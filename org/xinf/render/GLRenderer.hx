@@ -58,6 +58,9 @@ class GLRenderer implements IRenderer {
     public function translate( x:Float, y:Float ) : Void {
         GL.Translatef( x, y, 0.0 );
     }
+    public function scale( x:Float, y:Float ) : Void {
+        GL.Scalef( x, y, 0.0 );
+    }
 
     public function matrix( m:Matrix ) : Void {
         GL.MultMatrixf( m._v );

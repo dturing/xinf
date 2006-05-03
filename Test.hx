@@ -4,6 +4,7 @@ import org.xinf.geom.Point;
 import org.xinf.demo.Square;
 import org.xinf.demo.DrawTest;
 import org.xinf.media.Video;
+import org.xinf.display.TextField;
 
 class Test {
     static function main() {
@@ -14,14 +15,21 @@ class Test {
         var s0 = new Square("zero",160,120,10,10,.0,0xffee33);
         root.addChild( s0 );
 
-//        var vid = new Video();
-//        root.addChild( vid );
+  //      var vid = new Video();
+  //      root.addChild( vid );
 
         
-        var test = new DrawTest();
-        root.addChild( test );
+//        var test = new DrawTest();
+//        root.addChild( test );
+
+        var text = new TextField();
+        text.text = "A quick brown fox\njumps over the lazy dog.\nPoor lazy dog,\nbeing jumped by foxes\nall the time.";
+        text.y = 20;
+        text.x = 32;
+        root.addChild( text );
     
         var p:Point;
+                
                 
         /* 
         // circle of squares
@@ -45,7 +53,7 @@ class Test {
             }
         }
         
-        
+
         gst.Object._init();
                 
 //        vid.start();
@@ -58,7 +66,7 @@ class Test {
             }
             
             // FIXME: proper timing, neko idle func?
-            neko.Sys.sleep(0.02);
+            neko.Sys.sleep(0.03);
             
         }
     }

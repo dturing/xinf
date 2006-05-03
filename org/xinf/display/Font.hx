@@ -31,6 +31,14 @@ class Glyph {
 class Font {
     private var glyphs:Array<Glyph>;
     
+    public property family_name(default,null):String;
+    public property style_name(default,null):String;
+    public property ascender(default,null):Float;
+    public property descender(default,null):Float;
+    public property height(default,null):Float;
+    public property underline_thickness(default,null):Float;
+    public property underline_position(default,null):Float;
+    
     public function new() {
         glyphs = new Array<Glyph>();
         untyped glyphs.__resize(0xff);
@@ -52,12 +60,23 @@ class FontReader {
     public function new( name:String ) {
         font = new Font();
         polygon = new Polygon();
-        scale = .0005;
+        scale = .00001;
         
         var _f = FT.LoadFont( untyped name.__s, untyped "abcdefghijklmnopqrstuvwxyz".__s, 1024<<6, 1024<<6 );
        
-        for( field in Reflect.fields(_f) ) {
-            trace("font->"+field + ": " + untyped __dollar__objget( _f, __dollar__hash(field.__s) ) );
+        for( field in [ 
+            "family_name", "style_name", "file_name"
+            ] ) {
+            var h = untyped __dollar__hash(field.__s);
+            untyped __dollar__objset( font, h, untyped __dollar__objget( _f, h ) );
+        }
+
+        for( field in [ 
+            "underline_thickness", "underline_position", 
+            "height", "ascender", "descender" 
+            ] ) {
+            var h = untyped __dollar__hash(field.__s);
+            untyped __dollar__objset( font, h, untyped __dollar__objget( _f, h ) * scale );
         }
         
         FT.IterateGlyphs( _f, this );
