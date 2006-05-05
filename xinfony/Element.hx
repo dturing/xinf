@@ -12,7 +12,7 @@ class Element extends EventDispatcher {
         #else js
             : js.HtmlDom
         #else neko
-            : Dynamic
+            : xinfinity.graphics.Object
         #end
         ;
         
@@ -50,8 +50,17 @@ class Element extends EventDispatcher {
             _e = js.Lib.document.createElement("div");
             _e.style.position="absolute";
             js.Lib.document.getElementById("xinfony").appendChild( _e );
+        #else neko
+            _e = createPrimitive();
+            xinfinity.graphics.Root.root.appendChild( _e );
         #end
     }
+
+    #if neko
+    private function createPrimitive() : xinfinity.graphics.Object {
+        return new xinfinity.graphics.Group();
+    }
+    #end
 
     public function addEventListener( type:String, f:Event->Bool ) :Void {
         #if flash
@@ -87,13 +96,16 @@ class Element extends EventDispatcher {
     #end    
     
     
-    public function move( x:Int, y:Int ) {
+    public function move( x:Float, y:Float ) {
         #if flash
             _e._x = x;
             _e._y = y;
         #else js
-            _e.style.left = x;
-            _e.style.top = y;
+            _e.style.left = Math.round(x);
+            _e.style.top = Math.round(y);
+        #else neko
+            _e.x = x;
+            _e.y = y;
         #end
     }
 }

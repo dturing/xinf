@@ -4,6 +4,10 @@ import xinfony.style.Style;
 import xinfony.style.Tango;
 import xinf.event.Event;
 
+#if neko
+import xinfinity.graphics.Root;
+#end
+
 class Foo extends Text {
     public static var styles:Dynamic = {
         def: new Style( Tango.black, Tango.gray[2], 1, Tango.gray[4] ),
@@ -43,5 +47,9 @@ class Test {
         
         box = new Foo("box2");
         box.move(202,100);
+        
+        #if neko
+            Root.root.run();
+        #end
     }
 }

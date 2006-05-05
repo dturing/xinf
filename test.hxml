@@ -1,3 +1,5 @@
+-cp ./libs/ -cp .
+
 -js bin/test.js
 -main xinfony.Test
 

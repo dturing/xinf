@@ -4,14 +4,34 @@ import xinf.geom.Rectangle;
 
 class Box extends Group {
     public function new() {
+        super();
+        width = 100;
+        height = 100;
+    }
+
+    private var _width:Float;
+    private var _height:Float;
+    private function _getWidth() : Float {
+        return _width;
+    }
+    private function _setWidth(w:Float) : Float {
+        _width=w; return w;
+    }
+    private function _getHeight() : Float {
+        return _height;
+    }
+    private function _setHeight(h:Float) : Float {
+        _height = h; return h;
     }
     
     private function _render() :Void {
         var w = width;
         var h = height;
-        
+
+//        GL.MultMatrixf( transform._v );
+
       //  style.color._render();
-        GL.Color4f( 1., 1., 1., 1. );
+        GL.Color4f( 1., 1., 1., .5 );
         GL.Begin( GL.QUADS );
             GL.Vertex3f( w , 0., 0. );
             GL.Vertex3f( w , h , 0. );

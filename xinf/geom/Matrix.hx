@@ -1,6 +1,6 @@
 package xinf.geom;
 
-import libs.CPtr;
+import CPtr;
 
 class Matrix {
     private static var _A:Int = 0;

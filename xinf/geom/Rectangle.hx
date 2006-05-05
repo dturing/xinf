@@ -13,7 +13,7 @@ class Rectangle {
         h = _h;
     }
     
-    public function clone() : Point {
+    public function clone() : Rectangle {
         return new Rectangle( x, y, w, h );
     }
     

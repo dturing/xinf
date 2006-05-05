@@ -27,17 +27,19 @@ class Object {
         transform.ty = y;
         return y;
     }
+    private var _width:Float;
+    private var _height:Float;
     private function _getWidth() : Float {
-        return 0;
+        return _width;
     }
     private function _setWidth(w:Float) : Float {
-        return 0;
+        _width=w; return w;
     }
     private function _getHeight() : Float {
-        return 0;
+        return _height;
     }
     private function _setHeight(h:Float) : Float {
-        return 0;
+        _height = h; return h;
     }
     
     /* ------------------------------------------------------
@@ -46,6 +48,7 @@ class Object {
     
     public function new() {
         transform = new xinf.geom.Matrix();
+        width = height = .0;
     }
 
     /* ------------------------------------------------------
@@ -57,10 +60,13 @@ class Object {
     private function _cache() :Void {
         if( _displayList == null ) {
             _displayList = GL.GenLists(1);
-            GL.NewList( _displayList, GL.COMPILE );
-            _render();
-            GL.EndList();
         }
+        GL.NewList( _displayList, GL.COMPILE );
+        GL.PushMatrix();
+            GL.MultMatrixf( transform._v );
+            _render();
+        GL.PopMatrix();
+        GL.EndList();
     }
     
     // children overwrite this to render their actual contents
@@ -68,7 +74,7 @@ class Object {
     }
     
     // children can overwrite this to render a simplified version used for hittest
-    private function _render_simplet() :Void {
+    private function _render_simple() :Void {
         // default
         _render();
     }
@@ -76,5 +82,10 @@ class Object {
     // external interface (called from where?)
     public function render() :Void {
         GL.CallList( _displayList );
+    }
+    
+    
+    public function toString() :String {
+        return( "["+ Reflect.getClass(this).__name__.join(".") + "]" );
     }
 }

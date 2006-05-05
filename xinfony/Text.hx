@@ -20,11 +20,15 @@ class Text extends Element {
             _textField.background = true;
         #else js
             _e.style.border = "1px solid #000000";
-//            _div.style.textAlign = "center";
-//            _div.style.verticalAlign = "middle";
         #end
         }
     }
+    
+    #if neko
+    private function createPrimitive() : xinfinity.graphics.Object {
+        return new xinfinity.graphics.Box();
+    }
+    #end
 
     public function applyStyle( style:xinfony.style.Style ) {
         #if flash

@@ -1,7 +1,7 @@
 SUBDIRS = gst libs
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ./libs
 
-HAXE_SRCS = $(shell ls org/xinf/*.hx org/xinf/*/*.hx org/xinf/*/*/*.hx)
+HAXE_SRCS = $(shell find xinf xinfinity xinfony -name *.hx)
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -17,11 +17,15 @@ sdl : cptr
 
 default : subdirs test
 
-Test.n : Test.hx $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -neko Test.hx -main Test Test
+bin/test.n : xinfony/Test.hx $(HAXE_SRCS)
+	haxe $(HAXEFLAGS) -neko $@ -main xinfony.Test
+bin/test.js : xinfony/Test.hx $(HAXE_SRCS)
+	haxe $(HAXEFLAGS) -js $@ -main xinfony.Test
+bin/test.swf : xinfony/Test.hx $(HAXE_SRCS)
+	haxe $(HAXEFLAGS) -fheader 320:240:25:ffffff -swf $@ -main xinfony.Test
 
-test : subdirs Test.n
-	neko Test.n
+test : subdirs bin/test.n
+	neko bin/test.n
 
 cleanall : clean
 	for dir in $(SUBDIRS); do \
