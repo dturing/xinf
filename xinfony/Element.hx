@@ -1,92 +1,99 @@
 package xinfony;
 
-import xinfony.event.EventDispatcher;
+import xinf.event.EventDispatcher;
+import xinf.event.Event;
 
 class Element extends EventDispatcher {
     public var name:String;
     
     private var _e
         #if flash
-            :MovieClip
+            : flash.MovieClip
         #else js
-            :HtmlDom
+            : js.HtmlDom
+        #else neko
+            : Dynamic
         #end
         ;
         
+    #if flash
+        private static var eventNames:Hash<String> = registerEventNames();
+        private static function registerEventNames() : Hash<String> {
+            var h:Hash<String> = new Hash<String>();
+            h.set( Event.MOUSE_DOWN,"onPress");
+            h.set( Event.MOUSE_UP,  "onRelease");
+            h.set( Event.MOUSE_OVER,"onRollOver");
+            h.set( Event.MOUSE_OUT, "onRollOut");
+            return h;
+        }
+    #else js
+        private static var eventNames:Hash<String> = registerEventNames();
+        private static function registerEventNames() : Hash<String> {
+            var h:Hash<String> = new Hash<String>();
+            h.set( Event.MOUSE_DOWN,"onmousedown");
+            h.set( Event.MOUSE_UP,  "onmouseup");
+            h.set( Event.MOUSE_OVER,"onmouseover");
+            h.set( Event.MOUSE_OUT, "onmouseout");
+            return h;
+        }
+    #end
+        
     public function new( _name:String ) {
         name = _name;
         
+        super();
+        
         // create the runtime-specific proxy element
         #if flash
-            _e = null;
+            _e = flash.Lib._root.createEmptyMovieClip(name,flash.Lib._root.getNextHighestDepth());
         #else js
-            _e = js.Lib.window.document.createElement("div");
+            _e = js.Lib.document.createElement("div");
             _e.style.position="absolute";
+            js.Lib.document.getElementById("xinfony").appendChild( _e );
         #end
     }
-    
-    public function attach( parent:Element ) {
+
+    public function addEventListener( type:String, f:Event->Bool ) :Void {
         #if flash
-            _e = parent._e.createEmptyMovieClip(name,parent._e.getNextHighestDepth());
+            var self = this;
+            var eventName:String = eventNames.get(type);
+            if( eventName != null ) {
+                Reflect.setField( _e, eventName, function() {
+                        self.handleFlashEvent( type );
+                    } );
+            }
         #else js
-            parent._e.appendChild( _e );
+            var self = this;
+            var eventName:String = eventNames.get(type);
+            if( eventName != null ) {
+                Reflect.setField( _e, eventName, function() {
+                        self.handleJSEvent( type);
+                    } );
+            }
         #end
+        super.addEventListener( type, f );
     }
-    
-    /*
+
     #if flash
-        public var _clip:flash.MovieClip;
-    #else js
-        public var _div:js.HtmlDom;
-    #end
-    
-    public function new( _name:String ) {
-        name = _name;
-        #if flash
-            _clip = Player.root().createEmptyMovieClip(name,flash.Lib.current.getNextHighestDepth());
-            var v = this;
-            untyped _clip._e = this;
-            untyped _clip.onPress = function() { dispatchFlashEvent("mousedown",this); }
-            untyped _clip.onRelease = function() { dispatchFlashEvent("mouseup",this); }
-            untyped _clip.onRollOver = function() { dispatchFlashEvent("mouseover",this); }
-            untyped _clip.onRollOut = function() { dispatchFlashEvent("mouseout",this); }
-        #else js
-            _div = js.Lib.window.document.createElement("div");
-            _div.style.position="absolute";
-            var v = this;
-            untyped _div._e = this;
-            untyped _div.onmousedown = dispatchJSEvent;
-            untyped _div.onmouseup = dispatchJSEvent;
-            untyped _div.onmouseover = dispatchJSEvent;
-            untyped _div.onmouseout = dispatchJSEvent;
-            Player.root().appendChild( _div );
-        #end
+    public function handleFlashEvent( type:String ) {
+        // TODO: fill Event Structure from flash data
+        dispatchEvent( new Event(type) );
     }
+    #else js
+    public function handleJSEvent( type:String ) {
+        // TODO: fill Event Structure from js data
+        dispatchEvent( new Event(type) );
+    }
+    #end    
+    
     
     public function move( x:Int, y:Int ) {
         #if flash
-            _clip._x = x;
-            _clip._y = y;
+            _e._x = x;
+            _e._y = y;
         #else js
-            _div.style.left = x;
-            _div.style.top = y;
+            _e.style.left = x;
+            _e.style.top = y;
         #end
     }
-    
-    public function dispatchEvent( type:String ) {
-    }
-    
-    #if flash
-    public static function dispatchFlashEvent( e:String, self:flash.MovieClip ) {
-        var target:Element = untyped self._e;
-        target.dispatchEvent( e );
-    }
-    #else js
-    public static function dispatchJSEvent( e:js.Event ) {
-        var target:Element = untyped e.target._e;
-        target.dispatchEvent( e.type );
-    }
-    #end
-    
-    */
 }

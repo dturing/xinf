@@ -5,9 +5,6 @@ class EventDispatcher {
     static function addGlobalEventListener( type:String, f:Event->Bool ) :Void {
         global.addEventListener( type, f );
     }
-    static function dispatchGlobalEvent( Event e ) :Bool {
-        return global.dispatchEvent( e );
-    }
     
     private var _listeners:Hash<Array<Event -> Bool>>;
     
@@ -26,11 +23,12 @@ class EventDispatcher {
     
     public function dispatchEvent( e:Event ) : Bool {
         var a:Array<Event->Bool> = _listeners.get(e.type);
-        if( a == null ) {
+        if( a != null ) {
             for( listener in a ) {
-                if( !a(e) ) return false;
+                if( !listener(e) ) return false;
             }
         }
+        if( this != global ) global.dispatchEvent( e );
         return true;
     }
 }

@@ -2,28 +2,34 @@ package xinfony;
 
 import xinfony.style.Style;
 import xinfony.style.Tango;
+import xinf.event.Event;
 
 class Foo extends Text {
     public static var styles:Dynamic = {
         def: new Style( Tango.black, Tango.gray[2], 1, Tango.gray[4] ),
-        mouseover: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
-        mouseup: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
-        mousedown: new Style( Tango.white, Tango.red, 1, Tango.red )
+        mouseOver: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
+        mouseUp: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
+        mouseDown: new Style( Tango.white, Tango.red, 1, Tango.red )
     };
 
     public function new( name:String ) {
         super( name );
 //        setSize( 100, 100 );
-//        setBackground( Colors.interactiveBG );
         text = "Hello, World!";
         applyStyle( styles.def );
+        
+        for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
+                        Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
+            addEventListener( event, handleEvent );
+        }
     }
     
-    public function dispatchEvent( type:String ) {
-        var style:Style = Reflect.field( styles, type );
+    public function handleEvent( e:Event ) : Bool {
+        var style:Style = Reflect.field( styles, e.type );
         if( style == null ) style = styles.def;
         applyStyle( style );
-        text = name+"\n"+type;
+        text = name+"\n"+e.type;
+        return true;
     }
 }
 

@@ -12,14 +12,14 @@ class Text extends Element {
         super(name);
         untyped {
         #if flash
-            _clip.createTextField( 
+            _e.createTextField( 
                 "theTextField", _clip.getNextHighestDepth(), 0, 0, 100, 100 );
             
-            _textField = _clip.theTextField;
+            _textField = _e.theTextField;
             _textField.autoSize = true;
             _textField.background = true;
         #else js
-            _div.style.border = "1px solid #000000";
+            _e.style.border = "1px solid #000000";
 //            _div.style.textAlign = "center";
 //            _div.style.verticalAlign = "middle";
         #end
@@ -33,9 +33,9 @@ class Text extends Element {
             _textField.border = ( style.border > 0 );
             _textField.borderColor = Colors.toInt(style.borderColor);
         #else js
-            _div.style.color = Colors.toString(style.color);
-            _div.style.background = Colors.toString(style.backgroundColor);
-            _div.style.border = style.border+"px solid "+Colors.toString(style.borderColor);
+            _e.style.color = Colors.toString(style.color);
+            _e.style.background = Colors.toString(style.backgroundColor);
+            _e.style.border = style.border+"px solid "+Colors.toString(style.borderColor);
         #end
     }
     
@@ -44,7 +44,7 @@ class Text extends Element {
         #if flash
             untyped _textField.text = _text;
         #else js
-            untyped _div.innerHTML = _text.split("\n").join("<br/>");
+            untyped _e.innerHTML = _text.split("\n").join("<br/>");
         #end
         return _text;
     }
