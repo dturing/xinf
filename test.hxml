@@ -1,0 +1,11 @@
+-js bin/test.js
+-main xinfony.Test
+
+--next
+-neko bin/test.n
+-main xinfony.Test
+
+--next
+-swf bin/test.swf
+-fheader 320:240:25:ffffff
+-main xinfony.Test

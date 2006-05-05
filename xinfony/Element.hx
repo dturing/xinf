@@ -42,7 +42,7 @@ class Element {
         #end
     }
     
-    public function applyStyle( style:Style ) {
+    public function applyStyle( style:xinfony.style.Style ) {
     }
     
     public function dispatchEvent( type:String ) {

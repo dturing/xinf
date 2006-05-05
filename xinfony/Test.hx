@@ -1,4 +1,8 @@
 package xinfony;
+
+import xinfony.style.Style;
+import xinfony.style.Tango;
+
 class Foo extends Text {
     public static var styles:Dynamic = {
         def: new Style( Tango.black, Tango.gray[2], 1, Tango.gray[4] ),

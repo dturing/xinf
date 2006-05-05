@@ -26,7 +26,7 @@ class Text extends Element {
         }
     }
 
-    public function applyStyle( style:Style ) {
+    public function applyStyle( style:xinfony.style.Style ) {
         #if flash
             _textField.textColor = Colors.toInt( style.color );
             _textField.backgroundColor = Colors.toInt( style.backgroundColor );

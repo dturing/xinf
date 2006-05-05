@@ -1,4 +1,4 @@
-package xinfony;
+package xinfony.style;
 
 import xinfony.Color;
 
