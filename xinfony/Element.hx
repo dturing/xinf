@@ -1,8 +1,39 @@
 package xinfony;
 
-class Element {
+import xinfony.event.EventDispatcher;
+
+class Element extends EventDispatcher {
     public var name:String;
     
+    private var _e
+        #if flash
+            :MovieClip
+        #else js
+            :HtmlDom
+        #end
+        ;
+        
+    public function new( _name:String ) {
+        name = _name;
+        
+        // create the runtime-specific proxy element
+        #if flash
+            _e = null;
+        #else js
+            _e = js.Lib.window.document.createElement("div");
+            _e.style.position="absolute";
+        #end
+    }
+    
+    public function attach( parent:Element ) {
+        #if flash
+            _e = parent._e.createEmptyMovieClip(name,parent._e.getNextHighestDepth());
+        #else js
+            parent._e.appendChild( _e );
+        #end
+    }
+    
+    /*
     #if flash
         public var _clip:flash.MovieClip;
     #else js
@@ -42,9 +73,6 @@ class Element {
         #end
     }
     
-    public function applyStyle( style:xinfony.style.Style ) {
-    }
-    
     public function dispatchEvent( type:String ) {
     }
     
@@ -59,4 +87,6 @@ class Element {
         target.dispatchEvent( e.type );
     }
     #end
+    
+    */
 }
