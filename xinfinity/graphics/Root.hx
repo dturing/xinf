@@ -4,15 +4,27 @@ import SDL;
 import xinf.event.Event;
 
 class Root extends Stage {
+    /* the one player root. */
     public static var root:Root = new Root(320,240);
 
     private var quit : Bool;
-    public var buttonpress : Bool;
+    private var mouseX : Int;
+    private var mouseY : Int;
+    private var buttonpress : Bool;
+    private var objectUnderMouse : Object;
+
+    private static var selectBuffer = CPtr.uint_alloc(64);
+    private static var view = CPtr.int_alloc(4);
+
     
-    public function new( w:Int, h:Int ) {
+    private function new( w:Int, h:Int ) {
         super( w, h );
         
         quit = false;
+        mouseX = -1;
+        mouseY = -1;
+        buttonpress = false;
+        objectUnderMouse = null;
         
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
@@ -29,14 +41,17 @@ class Root extends Stage {
     
     public function run() : Bool {
         while( !quit ) {
+        
+            xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME ) );
             
             processEvents();
+
+            Object.cacheChanged();
+            doOverOut();
+            Object.cacheChanged();
             
             startFrame();
-            
-                Object.cacheChanged();
-                _render();
-        
+                render();
             endFrame();
         
             // check for OpenGL errors
@@ -50,6 +65,10 @@ class Root extends Stage {
         }
         return true;
     }
+
+    /* ------------------------------------------------------
+       SDL Event functions
+       ------------------------------------------------------ */
     
     public function processEvents() {
         var e = SDL._NewEvent();
@@ -68,7 +87,7 @@ class Root extends Stage {
                     handleKeyboardEvent( ke, k );
                 case SDL.MOUSEMOTION:
                     var me = SDL.Event_motion_get(e);
-//                    handleMouseMotionEvent( me, k );
+                    handleMouseMotionEvent( me, k );
                 case SDL.MOUSEBUTTONDOWN:
                     var me = SDL.Event_button_get(e);
                     handleMouseEvent( me, k );
@@ -110,17 +129,18 @@ class Root extends Stage {
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
-        trace( "event: "+type );
-/*        
-        var e:MouseEvent = new MouseEvent( { 
-            type: type,
-            stageX: x,
-            stageY: y
-            } ); 
-
-        dispatchToTargets( e, x, y );
-        */
+        if( objectUnderMouse != null )
+            objectUnderMouse.dispatchEvent( new Event( type ) );
     }
+
+    private function handleMouseMotionEvent( e, k ) {
+        mouseX = SDL.MouseMotionEvent_x_get(e);
+        mouseY = SDL.MouseMotionEvent_y_get(e);
+    }
+    
+    /* ------------------------------------------------------
+       OpenGL Helper Functions
+       ------------------------------------------------------ */
     
     public function startFrame() : Void {
         GL.PushMatrix();
@@ -146,5 +166,93 @@ class Root extends Stage {
     public function endFrame() : Void {
         GL.PopMatrix();
         SDL.GL_SwapBuffers();
+    }
+
+    public function startPick( x:Float, y:Float ) : Void {
+        GL.SelectBuffer( 64, selectBuffer );
+        
+        GL.GetIntegerv( GL.VIEWPORT, view );
+        GL.RenderMode( GL.SELECT );
+        GL.InitNames();
+        
+        GL.MatrixMode( GL.PROJECTION );
+        GL.PushMatrix();
+            
+            GL.LoadIdentity();
+            GLU.PickMatrix( x, y, 1.0, 1.0, view );
+            GL.MatrixMode( GL.MODELVIEW );
+            
+            GL.Disable( GL.BLEND );
+    }
+    
+    public function endPick() : Array<Array<Int>> {
+        
+            GL.MatrixMode( GL.PROJECTION );
+        GL.PopMatrix();
+        
+        var n_hits = GL.RenderMode( GL.RENDER );
+        
+        // process the GL SelectBuffer into a simple array of arrays of names.
+        var stacks = new Array<Array<Int>>();
+        if( n_hits > 0 ) {
+            var i=0; 
+            var j=0;
+            while( i<n_hits && j<64 ) {
+                var n : Int = CPtr.uint_get( selectBuffer, j);
+                var objs = new Array<Int>();
+                j+=3;
+                for( k in 0...n ) {
+                    objs.push( CPtr.uint_get( selectBuffer, j ));
+                    j++;
+                }
+                i++;
+                stacks.unshift(objs);
+            }
+        }
+        
+        GL.MatrixMode( GL.MODELVIEW );
+        
+        return stacks;
+    }
+    
+    /* ------------------------------------------------------
+       HitTest Functions
+       ------------------------------------------------------ */
+    
+    public function getObjectsUnderPoint( x:Float, y:Float ) : Array<Object> {
+        
+        startPick( x, y );
+        
+        // this takes loong! (displaylists in select mode not accelerated??)
+        // alternatively, do some "low-res" (bbox) preselection?
+        renderSimple();
+        var hits:Array<Array<Int>> = endPick();
+        
+        var a:Array<Object> = new Array<Object>();
+        for( hit in hits ) {
+            var object:Object = this;
+            var group:Group;
+            for( id in hit ) {
+                group = cast(object,Group); // will throw if not a Group
+                object = group.getChildAt(id);
+                if( object == null ) throw("hit child not found");
+            }
+            a.push(object);
+        }
+        
+// root has no owner... but..        if( a.length == 0 ) a.push( this );
+        
+        return a;
+    }
+    
+    public function doOverOut() :Void {
+        var o = getObjectsUnderPoint( mouseX, height-mouseY ).pop();
+        if( o != objectUnderMouse ) {
+            if( objectUnderMouse != null )
+                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OUT ) );
+            objectUnderMouse = o;
+            if( objectUnderMouse != null )
+                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OVER ) );
+        }
     }
 }

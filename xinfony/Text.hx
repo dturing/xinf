@@ -19,7 +19,7 @@ class Text extends Element {
             _textField.autoSize = true;
             _textField.background = true;
         #else js
-            _e.style.border = "1px solid #000000";
+//            _e.style.border = "1px solid #000000";
         #end
         }
     }

@@ -8,23 +8,30 @@ class Group extends Object {
         children = new Array<Object>();
     }
 
-    public function appendChild( child:Object ) {
+    public function addChild( child:Object ) {
         children.push(child);
+    }
+    
+    public function getChildAt( index:Int ) : Object {
+        return children[index];
     }
     
     // rendering
     private function _cache() :Void {
-//        trace("Caching "+children.length+" children");
         for( child in children ) {
             child._cache();
         }
         super._cache();
     }
     private function _render() :Void {
-        GL.MultMatrixf( transform._v );
+        for( child in children ) {
+            child.render();
+        }
+    }
+    private function _renderSimple() :Void {
         for( i in 0...children.length ) {
             GL.PushName(i);
-            children[i].render();
+            children[i].renderSimple();
             GL.PopName();
         }
     }

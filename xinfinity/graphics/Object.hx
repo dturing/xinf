@@ -1,5 +1,8 @@
 package xinfinity.graphics;
 
+import xinf.event.EventDispatcher;
+import xinf.event.Event;
+
 class Object {
 
     private var _displayList:Int;
@@ -7,7 +10,7 @@ class Object {
     private var _changed:Bool;
     
     public var transform:xinf.geom.Matrix;
-    
+    public var owner:EventDispatcher;
     
     /* ------------------------------------------------------
        Properties and their Accessors
@@ -54,6 +57,7 @@ class Object {
     public function new() {
         transform = new xinf.geom.Matrix();
         width = height = .0;
+        _displayList = _displayListSimple = null;
         changed();
     }
     
@@ -68,6 +72,11 @@ class Object {
         while( (o=changedObjects.shift()) != null ) {
             o._cache();
         }
+    }
+
+    public function dispatchEvent( e:Event ) {
+        if( owner == null ) throw("Object "+this+" has no owner.");
+        owner.dispatchEvent(e);
     }
 
     /* ------------------------------------------------------
@@ -87,7 +96,7 @@ class Object {
             GL.PopMatrix();
             GL.EndList();
 
-
+            // cache simplified (maybe not do this if they are the same?)
             if( _displayListSimple == null ) {
                 _displayListSimple = GL.GenLists(1);
             }
@@ -122,6 +131,6 @@ class Object {
     
     
     public function toString() :String {
-        return( "["+ Reflect.getClass(this).__name__.join(".") + "]" );
+        return( "<"+ Reflect.getClass(this).__name__.join(".") + " #" + _displayList + ">" );
     }
 }

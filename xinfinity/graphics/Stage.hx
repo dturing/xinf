@@ -39,5 +39,7 @@ class Stage extends Group {
         transform.translate( -1, 1 );
         transform.scale( (2.0/w)*x, (-2.0/h)*y );
         width=w; height=h;
+ //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );
+ //       trace(scaleMode+" - "+x+","+y );
     }
 }

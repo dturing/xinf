@@ -1,8 +1,8 @@
 package xinf.event;
 
 class EventDispatcher {
-    static var global:EventDispatcher = new EventDispatcher();
-    static function addGlobalEventListener( type:String, f:Event->Bool ) :Void {
+    static public var global:EventDispatcher = new EventDispatcher();
+    static public function addGlobalEventListener( type:String, f:Event->Bool ) :Void {
         global.addEventListener( type, f );
     }
     

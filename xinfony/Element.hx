@@ -52,7 +52,8 @@ class Element extends EventDispatcher {
             js.Lib.document.getElementById("xinfony").appendChild( _e );
         #else neko
             _e = createPrimitive();
-            xinfinity.graphics.Root.root.appendChild( _e );
+            _e.owner = this;
+            xinfinity.graphics.Root.root.addChild( _e );
         #end
     }
 
@@ -96,16 +97,54 @@ class Element extends EventDispatcher {
     #end    
     
     
-    public function move( x:Float, y:Float ) {
+    public property x( getX, setX ):Float;
+    private function getX():Float { 
+        return
         #if flash
-            _e._x = x;
-            _e._y = y;
+            _e._x
         #else js
-            _e.style.left = Math.round(x);
-            _e.style.top = Math.round(y);
+            _e.style.left
         #else neko
-            _e.x = x;
-            _e.y = y;
+            _e.x
         #end
+        ;
+    }
+    private function setX(_x:Float):Float { 
+        #if flash
+            _e._x = _x;
+        #else js
+            _e.style.left = Math.floor(_x);
+        #else neko
+            _e.x = _x;
+            _e.changed();
+        #end
+        return _x;
+    }
+    public property y( getY, setY ):Float;
+    private function getY():Float { 
+        return
+        #if flash
+            _e._y
+        #else js
+            _e.style.top
+        #else neko
+            _e.y
+        #end
+        ;
+    }
+    private function setY(_y:Float):Float { 
+        #if flash
+            _e._y = _y;
+        #else js
+            _e.style.top = Math.floor(_y);
+        #else neko
+            _e.y = _y;
+            _e.changed();
+        #end
+        return _y;
+    }
+
+    public function toString() :String {
+        return( "<"+ Reflect.getClass(this).__name__.join(".") + ">" );
     }
 }

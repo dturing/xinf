@@ -25,7 +25,7 @@ bin/test.swf : xinfony/Test.hx $(HAXE_SRCS)
 	haxe $(HAXEFLAGS) -fheader 320:240:25:ffffff -swf $@ -main xinfony.Test
 
 test : subdirs bin/test.n
-	neko bin/test.n
+	NEKOPATH=$(NEKOPATH):./libs:./gst neko bin/test.n
 
 cleanall : clean
 	for dir in $(SUBDIRS); do \
