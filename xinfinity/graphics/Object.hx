@@ -84,7 +84,7 @@ class Object {
        ------------------------------------------------------ */
     
     // cache the object as a displaylist, regard transform.
-    private function _cache() :Void {
+    public function _cache() :Void {
         if( _changed ) {
             if( _displayList == null ) {
                 _displayList = GL.GenLists(1);
@@ -95,7 +95,7 @@ class Object {
                 _render();
             GL.PopMatrix();
             GL.EndList();
-
+            
             // cache simplified (maybe not do this if they are the same?)
             if( _displayListSimple == null ) {
                 _displayListSimple = GL.GenLists(1);

@@ -37,13 +37,28 @@ class Element extends EventDispatcher {
             return h;
         }
     #end
+
+    // event wrappers for js and flash: "this" is the runtime primitive.
+    public function _mouseDown() {
+        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_DOWN) );
+    }
+    public function _mouseUp() {
+        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_UP) );
+    }
+    public function _mouseOver() {
+        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_OVER) );
+    }
+    public function _mouseOut() {
+        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_OUT) );
+    }
+        
         
     public function new( _name:String ) {
         name = _name;
         
         super();
         
-        // create the runtime-specific proxy element
+        // create the runtime-specific primitive
         #if flash
             _e = flash.Lib._root.createEmptyMovieClip(name,flash.Lib._root.getNextHighestDepth());
         #else js
@@ -52,9 +67,9 @@ class Element extends EventDispatcher {
             js.Lib.document.getElementById("xinfony").appendChild( _e );
         #else neko
             _e = createPrimitive();
-            _e.owner = this;
             xinfinity.graphics.Root.root.addChild( _e );
         #end
+        untyped _e.owner = this;
     }
 
     #if neko
@@ -65,36 +80,18 @@ class Element extends EventDispatcher {
 
     public function addEventListener( type:String, f:Event->Bool ) :Void {
         #if flash
-            var self = this;
             var eventName:String = eventNames.get(type);
             if( eventName != null ) {
-                Reflect.setField( _e, eventName, function() {
-                        self.handleFlashEvent( type );
-                    } );
+                Reflect.setField( _e, eventName, Reflect.field( this, "_"+type ) );
             }
         #else js
-            var self = this;
             var eventName:String = eventNames.get(type);
             if( eventName != null ) {
-                Reflect.setField( _e, eventName, function() {
-                        self.handleJSEvent( type);
-                    } );
+                Reflect.setField( _e, eventName, Reflect.field( this, "_"+type ) );
             }
         #end
         super.addEventListener( type, f );
     }
-
-    #if flash
-    public function handleFlashEvent( type:String ) {
-        // TODO: fill Event Structure from flash data
-        dispatchEvent( new Event(type) );
-    }
-    #else js
-    public function handleJSEvent( type:String ) {
-        // TODO: fill Event Structure from js data
-        dispatchEvent( new Event(type) );
-    }
-    #end    
     
     
     public property x( getX, setX ):Float;

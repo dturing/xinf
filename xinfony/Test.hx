@@ -7,9 +7,10 @@ import xinf.event.EventDispatcher;
 
 #if neko
 import xinfinity.graphics.Root;
+import xinfinity.demo.Glyph;
 #end
 
-class Foo extends Text {
+class Foo extends xinfony.Text {
     public static var styles:Dynamic = {
         def: new Style( Tango.black, Tango.gray[2], 1, Tango.gray[4] ),
         mouseOver: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
@@ -20,7 +21,7 @@ class Foo extends Text {
     public function new( name:String ) {
         super( name );
 //        setSize( 100, 100 );
-        text = "Hello, World!";
+        text = "Hello,\nWorld!";
         applyStyle( styles.def );
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
@@ -46,18 +47,28 @@ class Foo extends Text {
     }
 }
 
-
 class Test {
     static function main() {
         trace("Hello");
-    
+
         var box = new Foo("box1");
         box.x = 100; box.y = 100;
         
         box = new Foo("box2");
         box.x = 202; box.y = 100;
-        
+
         #if neko
+        
+            var t = new xinfinity.demo.Glyph();
+            Root.root.addChild(t);
+            t.x = 100; t.y = 250;
+        
+            EventDispatcher.addGlobalEventListener( Event.KEY_DOWN, function(e:Event):Bool {
+                    trace( e.type+" - "+e.key+", "+Reflect.typeof(e.key) );
+                    t.setGlyph( e.key.charCodeAt(0) );
+                    return true;
+                });
+        
             Root.root.run();
         #end
     }

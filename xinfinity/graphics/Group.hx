@@ -17,7 +17,7 @@ class Group extends Object {
     }
     
     // rendering
-    private function _cache() :Void {
+    public function _cache() :Void {
         for( child in children ) {
             child._cache();
         }

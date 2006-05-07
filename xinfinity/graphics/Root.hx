@@ -116,9 +116,16 @@ class Root extends Stage {
         var s = SDL.keysym_sym_get(sym);
         var name = SDL.GetKeyName(s);
         
-        var up = "down";
-        if( k==SDL.KEYUP ) up = "up";
-        trace("Key "+name+" "+up );
+        var str = new String("");
+        untyped str.__s = name;
+        untyped str.length = 1;
+        
+        var type = Event.KEY_DOWN;
+        if( k==SDL.KEYUP ) type = Event.KEY_UP;
+//        trace("Key "+name+" "+type );
+        xinf.event.EventDispatcher.global.dispatchEvent( 
+                xinf.event.Event.KeyboardEvent( type, str )
+            );
     }
 
     private function handleMouseEvent( e, k ) {

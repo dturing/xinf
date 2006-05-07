@@ -26,7 +26,7 @@ class Text extends Element {
     
     #if neko
     private function createPrimitive() : xinfinity.graphics.Object {
-        return new xinfinity.graphics.Box();
+        return new xinfinity.graphics.Text();
     }
     #end
 
@@ -49,6 +49,8 @@ class Text extends Element {
             untyped _textField.text = _text;
         #else js
             untyped _e.innerHTML = _text.split("\n").join("<br/>");
+        #else neko
+            cast(_e,xinfinity.graphics.Text).text = _text;
         #end
         return _text;
     }
