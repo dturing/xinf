@@ -2,7 +2,12 @@ package xinfinity.graphics;
 
 class Object {
 
+    private var _displayList:Int;
+    private var _displayListSimple:Int;
+    private var _changed:Bool;
+    
     public var transform:xinf.geom.Matrix;
+    
     
     /* ------------------------------------------------------
        Properties and their Accessors
@@ -49,6 +54,20 @@ class Object {
     public function new() {
         transform = new xinf.geom.Matrix();
         width = height = .0;
+        changed();
+    }
+    
+    public function changed() {
+        _changed = true;
+        changedObjects.push(this);
+    }
+    
+    private static var changedObjects:Array<Object> = new Array<Object>();
+    public static function cacheChanged() {
+        var o:Object;
+        while( (o=changedObjects.shift()) != null ) {
+            o._cache();
+        }
     }
 
     /* ------------------------------------------------------
@@ -56,17 +75,31 @@ class Object {
        ------------------------------------------------------ */
     
     // cache the object as a displaylist, regard transform.
-    private var _displayList:Int;
     private function _cache() :Void {
-        if( _displayList == null ) {
-            _displayList = GL.GenLists(1);
+        if( _changed ) {
+            if( _displayList == null ) {
+                _displayList = GL.GenLists(1);
+            }
+            GL.NewList( _displayList, GL.COMPILE );
+            GL.PushMatrix();
+                GL.MultMatrixf( transform._v );
+                _render();
+            GL.PopMatrix();
+            GL.EndList();
+
+
+            if( _displayListSimple == null ) {
+                _displayListSimple = GL.GenLists(1);
+            }
+            GL.NewList( _displayListSimple, GL.COMPILE );
+            GL.PushMatrix();
+                GL.MultMatrixf( transform._v );
+                _renderSimple();
+            GL.PopMatrix();
+            GL.EndList();
+            
+            _changed = false;
         }
-        GL.NewList( _displayList, GL.COMPILE );
-        GL.PushMatrix();
-            GL.MultMatrixf( transform._v );
-            _render();
-        GL.PopMatrix();
-        GL.EndList();
     }
     
     // children overwrite this to render their actual contents
@@ -74,7 +107,7 @@ class Object {
     }
     
     // children can overwrite this to render a simplified version used for hittest
-    private function _render_simple() :Void {
+    private function _renderSimple() :Void {
         // default
         _render();
     }
@@ -82,6 +115,9 @@ class Object {
     // external interface (called from where?)
     public function render() :Void {
         GL.CallList( _displayList );
+    }
+    public function renderSimple() :Void {
+        GL.CallList( _displayListSimple );
     }
     
     
