@@ -16,43 +16,6 @@ class Object {
     public var owner:EventDispatcher;
     public var style:Style;
     
-    /* ------------------------------------------------------
-       Properties and their Accessors
-       ------------------------------------------------------ */
-
-    public property x( _getX, _setX ):Float;
-    public property y( _getY, _setY ):Float;
-    public property width( _getWidth, _setWidth ):Float;
-    public property height( _getHeight, _setHeight ):Float;
-       
-    private function _getX() : Float {
-        return transform.tx;
-    }
-    private function _setX(x:Float) : Float {
-        transform.tx = x;
-        return x;
-    }
-    private function _getY() : Float {
-        return transform.ty;
-    }
-    private function _setY(y:Float) : Float {
-        transform.ty = y;
-        return y;
-    }
-    private var _width:Float;
-    private var _height:Float;
-    private function _getWidth() : Float {
-        return _width;
-    }
-    private function _setWidth(w:Float) : Float {
-        _width=w; return w;
-    }
-    private function _getHeight() : Float {
-        return _height;
-    }
-    private function _setHeight(h:Float) : Float {
-        _height = h; return h;
-    }
     
     /* ------------------------------------------------------
        Object API
@@ -60,7 +23,6 @@ class Object {
     
     public function new() {
         transform = new xinf.geom.Matrix();
-        width = height = .0;
         _displayList = _displayListSimple = null;
         style = Style.DEFAULT.clone();
         changed();
@@ -91,8 +53,8 @@ class Object {
     // cache the object as a displaylist, regard transform.
     public function _cache() :Void {
         if( _changed ) {
-            x = style.x.px();
-            y = style.y.px();
+            transform.tx = style.x.px();
+            transform.ty = style.y.px();
         
             if( _displayList == null ) {
                 _displayList = GL.GenLists(1);

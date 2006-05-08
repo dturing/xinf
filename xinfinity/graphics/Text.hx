@@ -1,6 +1,7 @@
 package xinfinity.graphics;
 
 import xinfinity.font.Font;
+import xinf.geom.Point;
 
 class Text extends Box {
     // FIXME this loads the font for each text item, eeew!
@@ -14,9 +15,6 @@ class Text extends Box {
     public function new() {
         super();
         _text = "";
-        _width = -1;
-        _height = -1;
-        
         fontSize = 12;
     }
 
@@ -26,7 +24,6 @@ class Text extends Box {
     
     private function _setText( t:String ) : String {
         _text = t;
-        _height = _width = -1;
         changed();
         return t;
     }
@@ -34,17 +31,8 @@ class Text extends Box {
     private function _getText() : String {
         return _text;
     }
-
-    private function _getWidth() : Float {
-        if( _width == -1 ) calcSize();
-        return _width;
-    }
-    private function _getHeight() : Float {
-        if( _height == -1 ) calcSize();
-        return _height;
-    }
     
-    private function calcSize() : Void {
+    public function getTextExtends() : Point {
         var w:Float = .0;
         var maxW:Float = .0;
         var lines:Int = 1;
@@ -62,12 +50,7 @@ class Text extends Box {
             }
         }
         if( w > maxW ) maxW = w;
-        _height =  (_font.height * fontSize * lines) 
-                    + style.padding.top.px() + style.padding.bottom.px()
-                    + style.margin.top.px() + style.margin.bottom.px();
-        _width = maxW
-                    + style.padding.left.px() + style.padding.right.px()
-                    + style.margin.left.px() + style.margin.right.px();
+        return( new Point( maxW, (_font.height * fontSize * lines) ) );
     }
     
     private function _renderGraphics() :Void {

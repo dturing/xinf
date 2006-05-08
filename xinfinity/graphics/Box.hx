@@ -11,23 +11,23 @@ class Box extends Group {
 
     private function _renderGraphics() :Void {
         var border:Border = style.border;
-        var margin:Pad = style.margin;
+        var padding:Pad = style.padding;
+            
+        var b:Float = border.thickness.px();
         
-        var b:Float = .5;
-    
         var x:Float = 0;
         var y:Float = 0;
-        var w:Float = x+style.width.px()-(2*b);   // w,h are not really width/height here,
-        var h:Float = y+style.height.px()-(2*b);  // but right,bottom!
+        var w:Float = x+style.width.px()+b+b+padding.left.px()+padding.right.px();   // w,h are not really width/height here,
+        var h:Float = y+style.height.px()+b+b+padding.top.px()+padding.bottom.px();  // but right,bottom!
         
       // background
         var c = style.background;
         GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
         GL.Begin( GL.QUADS );
-            GL.Vertex3f( x-b, y-b, 0. );
-            GL.Vertex3f( w+b, y-b, 0. );
-            GL.Vertex3f( w+b, h+b, 0. );
-            GL.Vertex3f( x-b, h+b, 0. );
+            GL.Vertex3f( x-.5, y-.5, 0. );
+            GL.Vertex3f( w+.5, y-.5, 0. );
+            GL.Vertex3f( w+.5, h+.5, 0. );
+            GL.Vertex3f( x-.5, h+.5, 0. );
         GL.End();
         
       // border

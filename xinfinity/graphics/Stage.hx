@@ -9,6 +9,8 @@ class Stage extends Group {
     
     private var definedWidth:Float;
     private var definedHeight:Float;
+    private var width:Float;
+    private var height:Float;
 
     public function new( w:Int, h:Int ) {
         super();

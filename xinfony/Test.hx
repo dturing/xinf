@@ -7,7 +7,6 @@ import xinf.event.EventDispatcher;
 
 #if neko
 import xinfinity.graphics.Root;
-import xinfinity.demo.Glyph;
 #end
 
 class Foo extends xinfony.Text {

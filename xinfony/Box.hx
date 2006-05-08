@@ -30,15 +30,16 @@ class Box extends Element {
         #if flash
            // trace("draw box "+style.width+","+style.height + " "+style.x+","+style.y );
            
-            var th = style.border.thickness.px();
-            var w:Int = Math.floor( style.width.px() - th );
-            var h:Int = Math.floor( style.height.px() - th );
+            var b = style.border.thickness.px();
+            var padding = style.padding;
+            var w:Int = Math.floor( style.width.px() +b+b+padding.left.px()+padding.right.px() );
+            var h:Int = Math.floor( style.height.px() +b+b+padding.top.px()+padding.bottom.px() );
             
             untyped {
             _e.clear();
             _e.beginFill( style.background.toInt(),  100 );
-            if( th > 0 ) {
-                _e.lineStyle( th, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
+            if( b > 0 ) {
+                _e.lineStyle( b, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
             }
             _e.moveTo( 0, 0 );
             _e.lineTo( w, 0 );

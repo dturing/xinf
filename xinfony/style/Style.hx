@@ -114,7 +114,6 @@ class Style {
     
     
     public function _lookup( attr:String ) : Dynamic {
-        // TODO: lookup in style chain.
         var r = values.get(attr);
         return( r );
     }
