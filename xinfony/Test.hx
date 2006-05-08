@@ -10,18 +10,18 @@ import xinfinity.graphics.Root;
 import xinfinity.demo.Glyph;
 #end
 
-class Foo extends xinfony.Box {
+class Foo extends xinfony.Text {
 
     public static var styles:Dynamic = {
         def: Style.DEFAULT,
         mouseOver: Style.HILITE,
         mouseUp: Style.HILITE,
-        mouseDown: new Style("background: #039; color: #fff; border: 0px solid #000; padding: 5px; margin: 2px;")
+        mouseDown: new Style("background: #039; color: #fff; border: 0px solid #000; padding: 3px;")
     };
 
     public function new( name:String ) {
         super( name );
-       // text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
+        text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
         set_style( styles.def );
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
@@ -34,7 +34,7 @@ class Foo extends xinfony.Box {
     
     public function handleEvent( e:Event ) : Bool {
         trace("Event on "+this+": "+e.type );
-     //   text = name+"\n"+e.type;
+        text = name+"\n"+e.type;
         
         var style:Style = Reflect.field( styles, e.type );
         if( style == null ) style = styles.def;

@@ -13,7 +13,7 @@ class Text extends Box {
         untyped {
         #if flash
             _e.createTextField( 
-                "theTextField", _clip.getNextHighestDepth(), 0, 0, 100, 100 );
+                "theTextField", _e.getNextHighestDepth(), 0, 0, 100, 100 );
             
             _textField = _e.theTextField;
             _textField.autoSize = true;
@@ -27,9 +27,12 @@ class Text extends Box {
     }
     #end
 
-    public function applyStyle( style:xinfony.style.Style ) {
-        super.applyStyle( style );
+    public function styleChanged() {
+        super.styleChanged();
         #if flash
+            var b:Float = style.border.thickness.px();
+            _textField._x = style.padding.left.px() + b -2;
+            _textField._y = style.padding.top.px() + b -1;
             _textField.textColor = style.color.toInt();
         #end
     }
