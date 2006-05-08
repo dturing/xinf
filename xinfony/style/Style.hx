@@ -1,33 +1,53 @@
 package xinfony.style;
 
-import xinfony.style.Color;
-
 class Style {
     private var values :Hash<Dynamic>;
 
-    public property color(default,default):Color;
+    public property color(get_color,set_color):Color;
     public property backgroundColor(get_backgroundColor,set_backgroundColor):Dynamic;
-    public property border(default,default):Int;
-    public property borderColor(default,default):Color;
+    public property border(get_border,set_border):Border;
     
+    public function get_color() :Dynamic {
+        return _lookup( "color" );
+    }
+    public function set_color( v:Dynamic ) :Dynamic {
+        var c = Color.fromDynamic(v);
+        values.set( "color", c );
+        return c;
+    }
     public function get_backgroundColor() :Dynamic {
-        return values.get( "backgroundColor" );
+        return _lookup( "backgroundColor" );
     }
     public function set_backgroundColor( v:Dynamic ) :Dynamic {
-        values.set( "backgroundColor", Color.fromDynamic(v) );
+        var c = Color.fromDynamic(v);
+        values.set( "backgroundColor", c );
+        return c;
+    }
+    public function get_border() :Dynamic {
+        return _lookup( "border" );
+    }
+    public function set_border( v:Dynamic ) :Dynamic {
+        var c = Border.fromDynamic(v);
+        values.set( "border", c );
         return c;
     }
     
     public function new( str:String ) {
         values = new Hash<Dynamic>();
         
-        color = Color.rgb(0,0,0);
-        backgroundColor = Color.rgb(0xff,0xff,0xff);
-        border = 1;
-        borderColor = Color.rgb(0,0,0);
+        color = Color.BLACK;
+        backgroundColor = Color.WHITE;
+        border = Border.BLACK_1PX;
 
         setFromString( StringTools.trim(str) );
     }
+    
+    
+    public function _lookup( attr:String ) : Dynamic {
+        // TODO: lookup in style chain.
+        return( values.get(attr) );
+    }
+    
     
     public function setFromString( str:String ) :Void {
         for( _attribute in str.split(";") ) {
@@ -35,7 +55,6 @@ class Style {
             if( a.length == 2 ) {
                 var name = StringTools.trim(a[0]);
                 var value = StringTools.trim(a[1]);
-                trace("Style assignment: "+name+" = "+value );
                 var setter = Reflect.field( this, "set_"+name );
                 if( !setter ) {
                     trace("Unknown style attribute: "+name+" (ignored)" );

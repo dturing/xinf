@@ -1,7 +1,5 @@
 package xinfony.style;
 
-import xinfony.Color;
-
 class Tango {
     public static var Butter:Array<Color> = [ 
         Color.rgb(0xfc,0xe9,0x4f),

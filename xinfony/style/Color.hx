@@ -28,26 +28,22 @@ class Color {
 
     public static function fromDynamic( v:Dynamic ) :Color {
         switch( Reflect.typeof(v) ) {
-            case TEnum:
-                return cast(v,Color);
             case TObject:
                 if( Std.is(v,Color) ) {
-                    trace("value is a color already, fine");
-                    return cast(v,xinfony.Color);
+                    return cast(v,Color);
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
-                    throw("Cannot parse color from "+Reflect.getClass(v).__name__.join(".")+": "+v );
+                    throw("Cannot parse Color from "+Reflect.getClass(v).__name__.join(".")+": "+v );
                 }
             default:
-                throw("Cannot parse color from "+Reflect.typeof(v)+": "+v );
+                throw("Cannot parse Color from "+Reflect.typeof(v)+": "+v );
         }
         return( Color.NIL );
     }
     
     public static function fromString( v:String ) :Color {
-        trace("color from string "+v );
-        
+        var t:Color;
         if( StringTools.startsWith(v,"#") ) {
             var s = v.substr(1,v.length);
             if( s.length == 3 ) {
@@ -60,7 +56,7 @@ class Color {
                 var i = Std.parseInt("0x"+s);
                 return( Color.fromInt( i ) );
             } else {
-                throw("Cannot parse color "+v );
+                throw("Cannot parse Color "+v );
             }
         } else if( StringTools.startsWith(v,"rgb(") ) {
             var s = v.substr(5,v.length-6).split(",");
@@ -71,6 +67,10 @@ class Color {
             }
             trace( c );
             return( Color.rgb( c.shift(), c.shift(), c.shift() ) );
+        } else if( (t = predefined.get(v)) != null ) {
+            return( t );
+        } else {
+            throw("Cannot parse Color "+v );
         }
         
         return Color.NIL;
@@ -78,5 +78,14 @@ class Color {
     
     public function toString() :String {
         return("rgba("+r+","+g+","+b+","+a+")");
+    }
+    
+    public static var predefined:Hash<Color> = _genPredefined();
+    public static function _genPredefined() :Hash<Color> {
+        var p:Hash<Color> = new Hash<Color>();
+        p.set("black",Color.BLACK);
+        p.set("white",Color.WHITE);
+        /* TODO: more, more! */
+        return p;
     }
 }

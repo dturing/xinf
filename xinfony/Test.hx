@@ -62,8 +62,9 @@ class Test {
         
         
         var style = new xinfony.style.Style("
-                backgroundColor: rgb( 200, 150, 100);
-                border: 2px solid black;
+                color: black;
+                backgroundColor: white;
+                border: 1em solid black;
                 ");
         trace("Style: \n"+style );
 
