@@ -8,8 +8,6 @@ import xinf.event.Event;
 import xinfony.style.Style;
 
 class Object {
-    public static var DEFAULT_STYLE = new Style("background: #fff; color: #000; border: none; padding: 1px; margin: 0px;");
-
     private var _displayList:Int;
     private var _displayListSimple:Int;
     private var _changed:Bool;
@@ -64,12 +62,13 @@ class Object {
         transform = new xinf.geom.Matrix();
         width = height = .0;
         _displayList = _displayListSimple = null;
-        style = DEFAULT_STYLE;
+        style = Style.DEFAULT.clone();
         changed();
     }
     
     public function changed() {
         _changed = true;
+        x = style.x.px();
         changedObjects.push(this);
     }
     
