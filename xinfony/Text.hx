@@ -40,6 +40,8 @@ class Text extends Element {
             _e.style.color = style.color.toString();
             _e.style.background = style.background.toString();
             _e.style.border = style.border.toString();
+        #else neko
+            _e.style = style;
         #end
     }
     

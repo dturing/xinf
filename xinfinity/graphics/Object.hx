@@ -3,6 +3,10 @@ package xinfinity.graphics;
 import xinf.event.EventDispatcher;
 import xinf.event.Event;
 
+// TODO: if this remains the only reference to xinfony, 
+// style stuff should probably be move to xinf.style
+import xinfony.style.Style;
+
 class Object {
 
     private var _displayList:Int;
@@ -11,6 +15,7 @@ class Object {
     
     public var transform:xinf.geom.Matrix;
     public var owner:EventDispatcher;
+    public var style:Style;
     
     /* ------------------------------------------------------
        Properties and their Accessors
@@ -58,6 +63,7 @@ class Object {
         transform = new xinf.geom.Matrix();
         width = height = .0;
         _displayList = _displayListSimple = null;
+        style = Style.DEFAULT;
         changed();
     }
     

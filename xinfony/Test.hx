@@ -14,7 +14,9 @@ class Foo extends xinfony.Text {
 
     public static var styles:Dynamic = {
         def: Style.DEFAULT,
-        mouseOver: Style.INVERSE
+        mouseOver: Style.INVERSE,
+        mouseUp: Style.INVERSE,
+        mouseDown: new Style("background: #ff0; color: #0f0; border: 2px solid #0f0;")
     };
 
     public function new( name:String ) {

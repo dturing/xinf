@@ -8,6 +8,13 @@ class Style {
     public property background(get_background,set_background):Color;
     public property border(get_border,set_border):Border;
     
+    public function new( str:String ) {
+        values = new Hash<Dynamic>();
+        trace("new STYLE "+values);
+        
+        setFromString( StringTools.trim(str) );
+    }
+    
     public function get_color() :Dynamic {
         return _lookup( "color" );
     }
@@ -32,17 +39,6 @@ class Style {
         var c = Border.fromDynamic(v);
         values.set( "border", c );
         return c;
-    }
-    
-    public function new( str:String ) {
-        values = new Hash<Dynamic>();
-        trace("new STYLE "+values);
-/*        
-        color = Color.BLACK;
-        background = Color.WHITE;
-        border = Border.BLACK_1PX;
-*/
-        setFromString( StringTools.trim(str) );
     }
     
     
@@ -77,6 +73,6 @@ class Style {
         return r;
     }
 
-    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #000;");
-    public static var DEFAULT = new Style("background: #fff; color: #000; border: 1px solid #fff;");
+    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff;");
+    public static var DEFAULT = new Style("background: #fff; color: #000; border: 1px solid #000;");
 }
