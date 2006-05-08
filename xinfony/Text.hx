@@ -17,6 +17,8 @@ class Text extends Box {
             
             _textField = _e.theTextField;
             _textField.autoSize = true;
+        #else js
+            _e.style.cursor="default";
         #end
         }
     }
