@@ -10,20 +10,19 @@ import xinfinity.graphics.Root;
 import xinfinity.demo.Glyph;
 #end
 
-class Foo extends xinfony.Text {
+class Foo extends xinfony.Box {
 
     public static var styles:Dynamic = {
         def: Style.DEFAULT,
         mouseOver: Style.HILITE,
         mouseUp: Style.HILITE,
-        mouseDown: new Style("background: #039; color: #fff; border: 1px solid #36f; padding: 5px; margin: 2px;")
+        mouseDown: new Style("background: #039; color: #fff; border: 0px solid #000; padding: 5px; margin: 2px;")
     };
 
     public function new( name:String ) {
         super( name );
-//        setSize( 100, 100 );
-        text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
-        applyStyle( styles.def );
+       // text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
+        set_style( styles.def );
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
                         Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
@@ -34,12 +33,12 @@ class Foo extends xinfony.Text {
     }
     
     public function handleEvent( e:Event ) : Bool {
-    //    trace("Event on "+this+": "+e.type );
-        text = name+"\n"+e.type;
+        trace("Event on "+this+": "+e.type );
+     //   text = name+"\n"+e.type;
         
         var style:Style = Reflect.field( styles, e.type );
         if( style == null ) style = styles.def;
-        applyStyle( style );
+        set_style( style );
         
         return true;
     }
@@ -55,12 +54,14 @@ class Test {
         trace("Hello");
 
         var box = new Foo("box1");
-        box.x = 100; box.y = 100;
+        box.style.x = box.style.y = 100;
+        box.style.width = box.style.height = 100;
         
         box = new Foo("box2");
-        box.x = 202; box.y = 100;
+        box.style.x = 202; box.style.y = 100;
+//        box.style.width = box.style.height = 10;
         
-        
+        /*
         var style = new xinfony.style.Style("
                 background: white;
                 border: 2em solid white;
@@ -68,7 +69,8 @@ class Test {
                 padding: 2px 10px 2px 10px;
                 ");
         trace("Style:"+style );
-
+        */
+        
         #if neko
         /* Glyph Test
             var t = new xinfinity.demo.Glyph();

@@ -1,6 +1,6 @@
 package xinfony;
 
-class Text extends Element {
+class Text extends Box {
     public property text( getText, setText ) :String;
     private var _text:String;
     
@@ -17,10 +17,6 @@ class Text extends Element {
             
             _textField = _e.theTextField;
             _textField.autoSize = true;
-            _textField.background = true;
-        #else js
-//            _e.style.border = "1px solid #000000";
-            _e.style.padding = "0px";
         #end
         }
     }
@@ -32,17 +28,9 @@ class Text extends Element {
     #end
 
     public function applyStyle( style:xinfony.style.Style ) {
+        super.applyStyle( style );
         #if flash
             _textField.textColor = style.color.toInt();
-            _textField.backgroundColor = style.background.toInt();
-            _textField.border = ( style.border.thickness.px() > 0 );
-            _textField.borderColor = style.border.color.toInt();
-        #else js
-            _e.style.color = style.color.toString();
-            _e.style.background = style.background.toString();
-            _e.style.border = style.border.toString();
-        #else neko
-            _e.style = style;
         #end
     }
     

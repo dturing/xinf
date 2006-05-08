@@ -2,9 +2,15 @@ package xinfony;
 
 import xinf.event.EventDispatcher;
 import xinf.event.Event;
+import xinfony.style.Style;
+import xinfony.style.StyleChain;
+import xinfony.style.Pad;
+import xinfony.style.Border;
 
 class Element extends EventDispatcher {
     public var name:String;
+    public property style(get_style,set_style):Style;    
+    private var _style:StyleChain;
     
     private var _e
         #if flash
@@ -55,6 +61,7 @@ class Element extends EventDispatcher {
         
     public function new( _name:String ) {
         name = _name;
+        _style = StyleChain.DEFAULT.clone();
         
         super();
         
@@ -70,6 +77,8 @@ class Element extends EventDispatcher {
             xinfinity.graphics.Root.root.addChild( _e );
         #end
         untyped _e.owner = this;
+        
+        styleChanged();
     }
 
     #if neko
@@ -93,54 +102,38 @@ class Element extends EventDispatcher {
         super.addEventListener( type, f );
     }
     
+    public function set_style( style:Style ) :Style {
+        _style.popStyle();
+        _style.pushStyle( style );
+        styleChanged();
+        return _style;
+    }
+    public function get_style() :Style {
+        return _style;
+    }
     
-    public property x( getX, setX ):Float;
-    private function getX():Float { 
-        return
+    public function styleChanged() :Void {
         #if flash
-            _e._x
+            _e._x = _style.x.px();
+            _e._y = _style.y.px();
         #else js
-            _e.style.left
+            var padding:Pad = _style.padding;
+            var b:Float = _style.border.thickness.px();
+            _e.style.left = Math.floor( style.x.px() );
+            _e.style.top  = Math.floor( style.y.px() );
+            _e.style.width  = Math.floor( _style.width.px() - (padding.left.px()+padding.right.px()+(2*b)-1) );
+            _e.style.height = Math.floor( _style.height.px() - (padding.top.px()+padding.bottom.px()+(2*b)-1) );
+            _e.style.color = _style.color.toString();
+            _e.style.background = _style.background.toString();
+            _e.style.border = _style.border.toString();
+            _e.style.padding = _style.padding.toString();
+            _e.style.margin = _style.margin.toString();
         #else neko
-            _e.x
-        #end
-        ;
-    }
-    private function setX(_x:Float):Float { 
-        #if flash
-            _e._x = _x;
-        #else js
-            _e.style.left = Math.floor(_x);
-        #else neko
-            _e.x = _x;
+            _e.style = _style;
             _e.changed();
         #end
-        return _x;
     }
-    public property y( getY, setY ):Float;
-    private function getY():Float { 
-        return
-        #if flash
-            _e._y
-        #else js
-            _e.style.top
-        #else neko
-            _e.y
-        #end
-        ;
-    }
-    private function setY(_y:Float):Float { 
-        #if flash
-            _e._y = _y;
-        #else js
-            _e.style.top = Math.floor(_y);
-        #else neko
-            _e.y = _y;
-            _e.changed();
-        #end
-        return _y;
-    }
-
+    
     public function toString() :String {
         return( "<"+ Reflect.getClass(this).__name__.join(".") + ">" );
     }

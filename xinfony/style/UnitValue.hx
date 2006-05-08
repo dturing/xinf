@@ -31,6 +31,26 @@ class UnitValue {
             } );
     }
     
+    public static function fromDynamic( v:Dynamic ) :UnitValue {
+        switch( Reflect.typeof(v) ) {
+            case TObject:
+                if( Std.is(v,UnitValue) ) {
+                    return cast(v,UnitValue);
+                } else if( Std.is(v,String) ) {
+                    return( fromString( cast(v,String) ) );
+                } else {
+                    throw("Cannot parse UnitValue from "+Reflect.getClass(v).__name__.join(".")+": "+v );
+                }
+            case TInt:
+                return( new UnitValue( v, px ) );
+            case TFloat:
+                return( new UnitValue( v, px ) );
+            default:
+                throw("Cannot parse UnitValue from "+Reflect.typeof(v)+": "+v );
+        }
+        return( UnitValue.NIL );
+    }
+
     public static function fromString( s:String ) :UnitValue {
         var u = s.substr( s.length-2, 2 );
         var v = s.substr( 0, s.length-2 );

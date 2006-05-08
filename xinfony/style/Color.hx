@@ -67,7 +67,6 @@ class Color {
             for( i in 0...3 ) {
                 c.push( Std.parseInt( s[i] ) );
             }
-            trace( c );
             return( Color.rgb( c.shift(), c.shift(), c.shift() ) );
         } else if( (t = predefined.get(v)) != null ) {
             return( t );

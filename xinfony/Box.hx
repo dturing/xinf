@@ -1,51 +1,52 @@
 package xinfony;
 
-import xinfony.Color;
+import xinfony.style.Color;
+import xinfony.style.Style;
 
 class Box extends Element {
-    private var bg:Color;
-    private var borderColor:Color;
-    private var border:Int;
-    private var width:Int;
-    private var height:Int;
-    
+
     public function new( name:String ) {
         super(name);
-        bg = rgb(0xff,0xff,0xff);
-        borderColor = rgb(0,0,0);
-        border = 1;
-        width=height=10;
-    }
-    
-    public function setBackground( c:Color ) {
-        bg = c;
+        
+        #if flash
+            untyped _e.style = Style.DEFAULT;
+        #end
+        
         draw();
     }
-    public function setSize( w:Int, h:Int ) {
-        width = w;
-        height = h;
+
+    #if neko
+    private function createPrimitive() : xinfinity.graphics.Object {
+        return new xinfinity.graphics.Box();
+    }
+    #end
+    
+    public function styleChanged() :Void {
+        super.styleChanged();
         draw();
     }
 
     private function draw() {
         #if flash
+           // trace("draw box "+style.width+","+style.height + " "+style.x+","+style.y );
+            var w:Int = Math.floor( style.width.px() );
+            var h:Int = Math.floor( style.height.px() );
+            
             untyped {
-            _clip.beginFill( Colors.toInt(bg), 100 );
-            _clip.lineStyle( border, Colors.toInt(borderColor), 100, true, "", "", "", 0 );
-            _clip.moveTo( 0, 0 );
-            _clip.lineTo( width, 0 );
-            _clip.lineTo( width, height );
-            _clip.lineTo( 0, height );
-            _clip.lineTo( 0, 0 );
-            _clip.endFill();
+            _e.beginFill( style.background.toInt(),  100 );
+            var th = style.border.thickness.px();
+            if( th > 0 ) {
+                _e.lineStyle( th, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
             }
-        #else js
-            untyped {
-            _div.style.width=width-(border);
-            _div.style.height=height-(border);
-            _div.style.background = Colors.toString(bg);
-            _div.style.border = ""+border+"px solid "+Colors.toString(borderColor);
+            _e.moveTo( 0, 0 );
+            _e.lineTo( w, 0 );
+            _e.lineTo( w, h );
+            _e.lineTo( 0, h );
+            _e.lineTo( 0, 0 );
+            _e.endFill();
             }
+        #else neko
+            _e.changed();
         #end
     }
 }

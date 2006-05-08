@@ -68,7 +68,6 @@ class Object {
     
     public function changed() {
         _changed = true;
-        x = style.x.px();
         changedObjects.push(this);
     }
     
@@ -92,6 +91,9 @@ class Object {
     // cache the object as a displaylist, regard transform.
     public function _cache() :Void {
         if( _changed ) {
+            x = style.x.px();
+            y = style.y.px();
+        
             if( _displayList == null ) {
                 _displayList = GL.GenLists(1);
             }
