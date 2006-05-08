@@ -24,7 +24,7 @@ bin/test.js : xinfony/Test.hx $(HAXE_SRCS)
 bin/test.swf : xinfony/Test.hx $(HAXE_SRCS)
 	haxe $(HAXEFLAGS) -fheader 320:240:25:ffffff -swf $@ -main xinfony.Test
 
-test : subdirs bin/test.n
+test : subdirs bin/test.n bin/test.swf bin/test.js
 	NEKOPATH=$(NEKOPATH):./libs:./gst neko bin/test.n
 
 cleanall : clean

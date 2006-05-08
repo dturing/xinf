@@ -14,7 +14,7 @@ class Border {
         style=s;
     }
     
-    public static var NONE:Border = new Border(UnitValue.ZERO,Border.SOLID,Color.NIL);
+    public static var NIL:Border = new Border(UnitValue.NIL,Border.SOLID,Color.NIL);
     public static var BLACK_1PX:Border = new Border(UnitValue.ONE_PX,Border.SOLID,Color.BLACK);
     
     public static function fromDynamic( v:Dynamic ) :Border {
@@ -30,17 +30,23 @@ class Border {
             default:
                 throw("Cannot parse Border from "+Reflect.typeof(v)+": "+v );
         }
-        return( Border.NONE );
+        return( Border.NIL );
     }
     
     public static function fromString( v:String ) :Border {
         var b = v.split(" ");
         
-        var thickness = UnitValue.fromString( b.shift() );
-        var style = b.shift();
-        var color = Color.fromString( b.shift() );
-        
-        return( new Border( thickness, style, color ) );
+        if( b.length == 3 ) {
+            var thickness = UnitValue.fromString( b.shift() );
+            var style = b.shift();
+            var color = Color.fromString( b.shift() );
+
+            return( new Border( thickness, style, color ) );
+        } else if( v == "none" ) {
+            return( Border.NIL );
+        }
+        throw("Cannot parse Border from '"+v+"'");
+        return( Border.NIL );
     }
     
     public function toString() :String {

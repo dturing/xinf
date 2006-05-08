@@ -14,7 +14,7 @@ class UnitValue {
         value=v;
     }
     
-    public static var ZERO:UnitValue   = new UnitValue( 0.0, px );
+    public static var NIL:UnitValue   = new UnitValue( 0.0, px );
     public static var ONE_PX:UnitValue = new UnitValue( 1.0, px );
     
     public function px() :Float {

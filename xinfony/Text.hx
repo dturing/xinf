@@ -32,14 +32,14 @@ class Text extends Element {
 
     public function applyStyle( style:xinfony.style.Style ) {
         #if flash
-            _textField.textColor = Colors.toInt( style.color );
-            _textField.backgroundColor = Colors.toInt( style.backgroundColor );
-            _textField.border = ( style.border > 0 );
-            _textField.borderColor = Colors.toInt(style.borderColor);
+            _textField.textColor = style.color.toInt();
+            _textField.backgroundColor = style.background.toInt();
+            _textField.border = ( style.border.thickness.px() > 0 );
+            _textField.borderColor = style.border.color.toInt();
         #else js
-            _e.style.color = Colors.toString(style.color);
-            _e.style.background = Colors.toString(style.backgroundColor);
-            _e.style.border = style.border+"px solid "+Colors.toString(style.borderColor);
+            _e.style.color = style.color.toString();
+            _e.style.background = style.background.toString();
+            _e.style.border = style.border.toString();
         #end
     }
     

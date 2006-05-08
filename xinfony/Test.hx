@@ -11,19 +11,17 @@ import xinfinity.demo.Glyph;
 #end
 
 class Foo extends xinfony.Text {
-/*
+
     public static var styles:Dynamic = {
-        def: new Style( Tango.black, Tango.gray[2], 1, Tango.gray[4] ),
-        mouseOver: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
-        mouseUp: new Style( Tango.white, Tango.lightblue, 1, Tango.blue ),
-        mouseDown: new Style( Tango.white, Tango.red, 1, Tango.red )
+        def: Style.DEFAULT,
+        mouseOver: Style.INVERSE
     };
-*/
+
     public function new( name:String ) {
         super( name );
 //        setSize( 100, 100 );
         text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
-//        applyStyle( styles.def );
+        applyStyle( styles.def );
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
                         Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
@@ -34,11 +32,10 @@ class Foo extends xinfony.Text {
     }
     
     public function handleEvent( e:Event ) : Bool {
-    /*
         var style:Style = Reflect.field( styles, e.type );
         if( style == null ) style = styles.def;
         applyStyle( style );
-    */
+
         trace("Event on "+this+": "+e.type );
         text = name+"\n"+e.type;
         return true;
@@ -62,11 +59,10 @@ class Test {
         
         
         var style = new xinfony.style.Style("
-                color: black;
-                backgroundColor: white;
+                background: white;
                 border: 1em solid black;
                 ");
-        trace("Style: \n"+style );
+        trace("Style:"+style );
 
         #if neko
         /* Glyph Test

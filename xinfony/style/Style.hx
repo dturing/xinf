@@ -1,10 +1,11 @@
 package xinfony.style;
 
 class Style {
+
     private var values :Hash<Dynamic>;
 
     public property color(get_color,set_color):Color;
-    public property backgroundColor(get_backgroundColor,set_backgroundColor):Dynamic;
+    public property background(get_background,set_background):Color;
     public property border(get_border,set_border):Border;
     
     public function get_color() :Dynamic {
@@ -15,12 +16,13 @@ class Style {
         values.set( "color", c );
         return c;
     }
-    public function get_backgroundColor() :Dynamic {
-        return _lookup( "backgroundColor" );
+    public function get_background() :Dynamic {
+        return _lookup( "background" );
     }
-    public function set_backgroundColor( v:Dynamic ) :Dynamic {
+    public function set_background( v:Dynamic ) :Dynamic {
         var c = Color.fromDynamic(v);
-        values.set( "backgroundColor", c );
+        trace("set background "+c+", "+values );
+        values.set( "background", c );
         return c;
     }
     public function get_border() :Dynamic {
@@ -34,11 +36,12 @@ class Style {
     
     public function new( str:String ) {
         values = new Hash<Dynamic>();
-        
+        trace("new STYLE "+values);
+/*        
         color = Color.BLACK;
-        backgroundColor = Color.WHITE;
+        background = Color.WHITE;
         border = Border.BLACK_1PX;
-
+*/
         setFromString( StringTools.trim(str) );
     }
     
@@ -73,4 +76,7 @@ class Style {
         }
         return r;
     }
+
+    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #000;");
+    public static var DEFAULT = new Style("background: #fff; color: #000; border: 1px solid #fff;");
 }

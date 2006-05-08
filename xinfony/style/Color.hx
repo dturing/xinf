@@ -30,12 +30,14 @@ class Color {
         switch( Reflect.typeof(v) ) {
             case TObject:
                 if( Std.is(v,Color) ) {
-                    return cast(v,Color);
+                    return( cast(v,Color) );
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
                     throw("Cannot parse Color from "+Reflect.getClass(v).__name__.join(".")+": "+v );
                 }
+            case TInt:
+                return( fromInt( cast(v,Int) ) );
             default:
                 throw("Cannot parse Color from "+Reflect.typeof(v)+": "+v );
         }
@@ -78,6 +80,10 @@ class Color {
     
     public function toString() :String {
         return("rgba("+r+","+g+","+b+","+a+")");
+    }
+
+    public function toInt() : Int {
+        return ( r << 16 ) | ( g << 8 ) | b;
     }
     
     public static var predefined:Hash<Color> = _genPredefined();
