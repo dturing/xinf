@@ -20,6 +20,7 @@ class Text extends Element {
             _textField.background = true;
         #else js
 //            _e.style.border = "1px solid #000000";
+            _e.style.padding = "0px";
         #end
         }
     }

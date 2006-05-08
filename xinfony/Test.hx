@@ -14,9 +14,9 @@ class Foo extends xinfony.Text {
 
     public static var styles:Dynamic = {
         def: Style.DEFAULT,
-        mouseOver: Style.INVERSE,
-        mouseUp: Style.INVERSE,
-        mouseDown: new Style("background: #ff0; color: #0f0; border: 2px solid #0f0;")
+        mouseOver: Style.HILITE,
+        mouseUp: Style.HILITE,
+        mouseDown: new Style("background: #00f; color: #fff; border: 1px solid #36f;")
     };
 
     public function new( name:String ) {
@@ -34,12 +34,13 @@ class Foo extends xinfony.Text {
     }
     
     public function handleEvent( e:Event ) : Bool {
+    //    trace("Event on "+this+": "+e.type );
+        text = name+"\n"+e.type;
+        
         var style:Style = Reflect.field( styles, e.type );
         if( style == null ) style = styles.def;
         applyStyle( style );
-
-        trace("Event on "+this+": "+e.type );
-        text = name+"\n"+e.type;
+        
         return true;
     }
     
@@ -62,7 +63,7 @@ class Test {
         
         var style = new xinfony.style.Style("
                 background: white;
-                border: 1em solid black;
+                border: 2em solid white;
                 ");
         trace("Style:"+style );
 

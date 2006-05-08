@@ -8,6 +8,7 @@ import xinf.event.Event;
 import xinfony.style.Style;
 
 class Object {
+    public static var DEFAULT_STYLE = new Style("background: #fff; color: #000; border: none;");
 
     private var _displayList:Int;
     private var _displayListSimple:Int;
@@ -63,7 +64,7 @@ class Object {
         transform = new xinf.geom.Matrix();
         width = height = .0;
         _displayList = _displayListSimple = null;
-        style = Style.DEFAULT;
+        style = DEFAULT_STYLE;
         changed();
     }
     

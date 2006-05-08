@@ -79,7 +79,7 @@ class Color {
     }
     
     public function toString() :String {
-        return("rgba("+r+","+g+","+b+","+a+")");
+        return("rgb("+r+","+g+","+b+")");
     }
 
     public function toInt() : Int {

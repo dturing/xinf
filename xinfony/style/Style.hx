@@ -9,9 +9,8 @@ class Style {
     public property border(get_border,set_border):Border;
     
     public function new( str:String ) {
+        if( values != null ) throw("values != null");
         values = new Hash<Dynamic>();
-        trace("new STYLE "+values);
-        
         setFromString( StringTools.trim(str) );
     }
     
@@ -28,7 +27,6 @@ class Style {
     }
     public function set_background( v:Dynamic ) :Dynamic {
         var c = Color.fromDynamic(v);
-        trace("set background "+c+", "+values );
         values.set( "background", c );
         return c;
     }
@@ -44,7 +42,9 @@ class Style {
     
     public function _lookup( attr:String ) : Dynamic {
         // TODO: lookup in style chain.
-        return( values.get(attr) );
+        var r = values.get(attr);
+        if( r == null ) throw("style attribute '"+attr+"' not specified.");
+        return( r );
     }
     
     
@@ -58,21 +58,23 @@ class Style {
                 if( !setter ) {
                     trace("Unknown style attribute: "+name+" (ignored)" );
                 } else {
-                    setter( value );
+                    Reflect.callMethod( this, setter, [ value ] );
                 }
             }
         }
     }
     
     public function toString() :String {
-        var r:String="";
+        var r:String="{\n";
         for( f in values.keys() ) {
             var field = values.get(f);
             r += "\t" + f + ": "+field+"\n";
         }
+        r+="\t}";
         return r;
     }
 
+    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000;");
     public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff;");
-    public static var DEFAULT = new Style("background: #fff; color: #000; border: 1px solid #000;");
+    public static var HILITE = new Style("background: #ddd; color: #000; border: 1px solid #009;");
 }
