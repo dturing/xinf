@@ -7,6 +7,8 @@ class Style {
     public property color(get_color,set_color):Color;
     public property background(get_background,set_background):Color;
     public property border(get_border,set_border):Border;
+    public property padding(get_padding,set_padding):Pad;
+    public property margin(get_margin,set_margin):Pad;
     
     public function new( str:String ) {
         if( values != null ) throw("values != null");
@@ -14,28 +16,44 @@ class Style {
         setFromString( StringTools.trim(str) );
     }
     
-    public function get_color() :Dynamic {
+    public function get_color() :Color {
         return _lookup( "color" );
     }
-    public function set_color( v:Dynamic ) :Dynamic {
+    public function set_color( v:Dynamic ) :Color {
         var c = Color.fromDynamic(v);
         values.set( "color", c );
         return c;
     }
-    public function get_background() :Dynamic {
+    public function get_background() :Color {
         return _lookup( "background" );
     }
-    public function set_background( v:Dynamic ) :Dynamic {
+    public function set_background( v:Dynamic ) :Color {
         var c = Color.fromDynamic(v);
         values.set( "background", c );
         return c;
     }
-    public function get_border() :Dynamic {
+    public function get_border() :Border {
         return _lookup( "border" );
     }
-    public function set_border( v:Dynamic ) :Dynamic {
+    public function set_border( v:Dynamic ) :Border {
         var c = Border.fromDynamic(v);
         values.set( "border", c );
+        return c;
+    }
+    public function get_padding() :Pad {
+        return _lookup( "padding" );
+    }
+    public function set_padding( v:Dynamic ) :Pad {
+        var c = Pad.fromDynamic(v);
+        values.set( "padding", c );
+        return c;
+    }
+    public function get_margin() :Pad {
+        return _lookup( "margin" );
+    }
+    public function set_margin( v:Dynamic ) :Pad {
+        var c = Pad.fromDynamic(v);
+        values.set( "margin", c );
         return c;
     }
     
@@ -65,16 +83,15 @@ class Style {
     }
     
     public function toString() :String {
-        var r:String="{\n";
+        var r:String="\n";
         for( f in values.keys() ) {
             var field = values.get(f);
-            r += "\t" + f + ": "+field+"\n";
+            r += "\t" + f + ": "+field+";\n";
         }
-        r+="\t}";
         return r;
     }
 
-    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000;");
-    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff;");
-    public static var HILITE = new Style("background: #ddd; color: #000; border: 1px solid #009;");
+    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000; padding: 5px; margin: 2px;");
+    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff; padding: 5px; margin: 2px;");
+    public static var HILITE = new Style("background: #cce; color: #039; border: 1px solid #039; padding: 5px; margin: 2px;");
 }

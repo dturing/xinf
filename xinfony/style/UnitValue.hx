@@ -10,8 +10,12 @@ class UnitValue {
     public var value:Float;
     
     public function new( v:Float, u:Unit ) {
-        unit=u;
         value=v;
+        unit=u;
+    }
+
+    public function clone() {
+        return( new UnitValue(value,unit) );
     }
     
     public static var NIL:UnitValue   = new UnitValue( 0.0, px );

@@ -8,7 +8,7 @@ import xinf.event.Event;
 import xinfony.style.Style;
 
 class Object {
-    public static var DEFAULT_STYLE = new Style("background: #fff; color: #000; border: none;");
+    public static var DEFAULT_STYLE = new Style("background: #fff; color: #000; border: none; padding: 1px; margin: 0px;");
 
     private var _displayList:Int;
     private var _displayListSimple:Int;

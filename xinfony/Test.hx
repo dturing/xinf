@@ -16,7 +16,7 @@ class Foo extends xinfony.Text {
         def: Style.DEFAULT,
         mouseOver: Style.HILITE,
         mouseUp: Style.HILITE,
-        mouseDown: new Style("background: #00f; color: #fff; border: 1px solid #36f;")
+        mouseDown: new Style("background: #039; color: #fff; border: 1px solid #36f; padding: 5px; margin: 2px;")
     };
 
     public function new( name:String ) {
@@ -45,7 +45,7 @@ class Foo extends xinfony.Text {
     }
     
     public function onEnterFrame( e:Event ) : Bool {
-//        x = (x+2)%204;
+     //   x = (x+2)%204;
         return true;
     }
 }
@@ -64,6 +64,8 @@ class Test {
         var style = new xinfony.style.Style("
                 background: white;
                 border: 2em solid white;
+                margin: 2px;
+                padding: 2px 10px 2px 10px;
                 ");
         trace("Style:"+style );
 
