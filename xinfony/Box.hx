@@ -29,12 +29,14 @@ class Box extends Element {
     private function draw() {
         #if flash
            // trace("draw box "+style.width+","+style.height + " "+style.x+","+style.y );
-            var w:Int = Math.floor( style.width.px() );
-            var h:Int = Math.floor( style.height.px() );
+           
+            var th = style.border.thickness.px();
+            var w:Int = Math.floor( style.width.px() - th );
+            var h:Int = Math.floor( style.height.px() - th );
             
             untyped {
+            _e.clear();
             _e.beginFill( style.background.toInt(),  100 );
-            var th = style.border.thickness.px();
             if( th > 0 ) {
                 _e.lineStyle( th, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
             }

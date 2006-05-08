@@ -17,8 +17,8 @@ class Box extends Group {
     
         var x:Float = 0;
         var y:Float = 0;
-        var w:Float = x+style.width.px();   // w,h are not really width/height here,
-        var h:Float = y+style.height.px();  // but right,bottom!
+        var w:Float = x+style.width.px()-(2*b);   // w,h are not really width/height here,
+        var h:Float = y+style.height.px()-(2*b);  // but right,bottom!
         
       // background
         var c = style.background;
@@ -32,7 +32,7 @@ class Box extends Group {
         
       // border
         if( border.thickness.value > 0 ) {
-            GL.LineWidth( b );
+            GL.LineWidth( border.thickness.value );
             var c = border.color;
             GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
             GL.Begin( GL.LINE_STRIP );

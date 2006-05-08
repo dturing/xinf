@@ -58,7 +58,7 @@ class Test {
         box.style.width = box.style.height = 100;
         
         box = new Foo("box2");
-        box.style.x = 202; box.style.y = 100;
+        box.style.x = 201; box.style.y = 100;
 //        box.style.width = box.style.height = 10;
         
         /*

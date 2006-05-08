@@ -121,8 +121,8 @@ class Element extends EventDispatcher {
             var b:Float = _style.border.thickness.px();
             _e.style.left = Math.floor( style.x.px() );
             _e.style.top  = Math.floor( style.y.px() );
-            _e.style.width  = Math.floor( _style.width.px() - (padding.left.px()+padding.right.px()+(2*b)-1) );
-            _e.style.height = Math.floor( _style.height.px() - (padding.top.px()+padding.bottom.px()+(2*b)-1) );
+            _e.style.width  = Math.floor( _style.width.px() - (padding.left.px()+padding.right.px()+(b*2)) );
+            _e.style.height = Math.floor( _style.height.px() - (padding.top.px()+padding.bottom.px()+(b*2)) );
             _e.style.color = _style.color.toString();
             _e.style.background = _style.background.toString();
             _e.style.border = _style.border.toString();
