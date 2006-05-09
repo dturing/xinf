@@ -3,7 +3,7 @@ package xinfony;
 import xinfony.style.Color;
 import xinfony.style.Style;
 
-class Box extends Element {
+class Box extends Styled {
 
     public function new( name:String ) {
         super(name);
