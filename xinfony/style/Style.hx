@@ -137,15 +137,15 @@ class Style {
     }
     
     public function toString() :String {
-        var r:String="\n";
+        var r:String="";
         for( f in values.keys() ) {
             var field = values.get(f);
-            r += "\t" + f + ": "+field+";\n";
+            r += "" + f + ": "+field+"; ";
         }
         return r;
     }
 
-    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000; padding: 2px; margin: 2px; x:0px; y:0px; width:20px; height:20px;");
+    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000; padding: 6px; margin: 2px; x:0px; y:0px; width:20px; height:20px;");
     public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff;");
     public static var HILITE = new Style("background: #cce; color: #039; border: 1px solid #039;");
 }

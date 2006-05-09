@@ -28,8 +28,8 @@ class Element extends EventDispatcher {
             var h:Hash<String> = new Hash<String>();
             h.set( Event.MOUSE_DOWN,"onPress");
             h.set( Event.MOUSE_UP,  "onRelease");
-            h.set( Event.MOUSE_OVER,"onRollOver");
-            h.set( Event.MOUSE_OUT, "onRollOut");
+            h.set( Event.MOUSE_OVER,"onRollOver,onDragOver");
+            h.set( Event.MOUSE_OUT, "onRollOut,onDragOut");
             return h;
         }
     #else js
@@ -91,7 +91,9 @@ class Element extends EventDispatcher {
         #if flash
             var eventName:String = eventNames.get(type);
             if( eventName != null ) {
-                Reflect.setField( _e, eventName, Reflect.field( this, "_"+type ) );
+                for( name in eventName.split(",") ) {
+                    Reflect.setField( _e, name, Reflect.field( this, "_"+type ) );
+                }
             }
         #else js
             var eventName:String = eventNames.get(type);

@@ -1,7 +1,7 @@
 package xinfony;
 
 import xinfony.style.Style;
-import xinfony.style.Tango;
+import xinfony.style.StyleSheet;
 import xinf.event.Event;
 import xinf.event.EventDispatcher;
 
@@ -62,29 +62,22 @@ class Test {
         box.styleChanged();
 //        box.style.width = box.style.height = 10;
         
-        /*
-        var style = new xinfony.style.Style("
-                background: white;
-                border: 2em solid white;
-                margin: 2px;
+        var style = StyleSheet.newFromString("
+            .foo, .bar {
+                background: #f00;
+                border: 2em solid black;
+                margin: 1em;
                 padding: 2px 10px 2px 10px;
+            }
+            
+            .foo.bar, .qux.quux {
+                background: #f00;
+            }
                 ");
-        trace("Style:"+style );
-        */
+        trace("StyleSheet: " + style );
         
         #if neko
-        /* Glyph Test
-            var t = new xinfinity.demo.Glyph();
-            Root.root.addChild(t);
-            t.x = 100; t.y = 250;
-        
-            EventDispatcher.addGlobalEventListener( Event.KEY_DOWN, function(e:Event):Bool {
-                    trace( e.type+" - "+e.key+", "+Reflect.typeof(e.key) );
-                    t.setGlyph( e.key.charCodeAt(0) );
-                    return true;
-                });
-        */        
-            Root.root.run();
+             Root.root.run();
         #end
     }
 }
