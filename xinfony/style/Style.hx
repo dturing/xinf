@@ -30,7 +30,7 @@ class Style {
         set_width( new UnitValue(0.,px) );
         set_height( new UnitValue(0.,px) );
 */        
-        setFromString( StringTools.trim(str) );
+        fromString( StringTools.trim(str) );
     }
 
     public function clone() :Dynamic {
@@ -119,7 +119,7 @@ class Style {
     }
     
     
-    public function setFromString( str:String ) :Void {
+    public function fromString( str:String ) :Void {
         for( _attribute in str.split(";") ) {
             var a = StringTools.trim(_attribute).split(":");
             if( a.length == 2 ) {

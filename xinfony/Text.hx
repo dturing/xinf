@@ -23,7 +23,11 @@ class Text extends Box {
             
             _textField = _e.theTextField;
             _textField.autoSize = true;
-            //_textField.border = true;
+            
+            var format:flash.TextFormat = new flash.TextFormat();
+            format.size = 12;
+            format.font = "Bitstream Vera Sans";
+            _textField.setNewTextFormat( format );
         #else js
             _e.style.cursor="default";
             _e.style.overflow="hidden";

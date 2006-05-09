@@ -1,4 +1,5 @@
 things i deliberately ignored, but should be fixed:
 
  * border thickness > 1px (works, but has runtime differences deluxe)
+ * non-autosize Box/Text have different concepts of width/height in js and flash_or_xinf
  
