@@ -1,11 +1,11 @@
-package xinfony;
+package org.xinf.ony;
 
 class Player {
     public static function root() {
         #if flash
             return flash.Lib._root;
         #else js
-            return js.Lib.window.document.getElementById("xinfony");
+            return js.Lib.window.document.getElementById("org.xinf.ony");
         #end
     }
 /*    

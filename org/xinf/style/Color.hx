@@ -1,4 +1,4 @@
-package xinfony.style;
+package org.xinf.style;
 
 class Color {
     public var r:Int;

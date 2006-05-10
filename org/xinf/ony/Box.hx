@@ -1,7 +1,7 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinfony.style.Color;
-import xinfony.style.Style;
+import org.xinf.style.Color;
+import org.xinf.style.Style;
 
 class Box extends Styled {
 
@@ -16,8 +16,8 @@ class Box extends Styled {
     }
 
     #if neko
-    private function createPrimitive() : xinfinity.graphics.Object {
-        return new xinfinity.graphics.Box();
+    private function createPrimitive() : org.xinf.inity.Object {
+        return new org.xinf.inity.Box();
     }
     #end
     

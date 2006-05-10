@@ -1,5 +1,5 @@
-package xinfinity.graphics;
-import xinf.geom.Point;
+package org.xinf.inity;
+import org.xinf.geom.Point;
 
 enum ColorSpace {
     RGB;

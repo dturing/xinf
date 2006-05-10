@@ -1,7 +1,7 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinfony.style.Color;
-import xinfony.style.Style;
+import org.xinf.style.Color;
+import org.xinf.style.Style;
 
 class Image extends Box {
 
@@ -10,8 +10,8 @@ class Image extends Box {
     }
 
     #if neko
-    private function createPrimitive() : xinfinity.graphics.Object {
-        return new xinfinity.graphics.Bitmap( xinfinity.graphics.BitmapData.newFromFile(name) );
+    private function createPrimitive() : org.xinf.inity.Object {
+        return new org.xinf.inity.Bitmap( org.xinf.inity.BitmapData.newFromFile(name) );
     }
     #end
     

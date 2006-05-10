@@ -1,6 +1,6 @@
-package xinfony.style;
+package org.xinf.style;
 
-import xinfony.Styled;
+import org.xinf.ony.Styled;
 
 class StyleSelector {
     private var classes:Array<Array<String>>;

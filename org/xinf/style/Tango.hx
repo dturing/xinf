@@ -1,4 +1,4 @@
-package xinfony.style;
+package org.xinf.style;
 
 class Tango {
     public static var Butter:Array<Color> = [ 

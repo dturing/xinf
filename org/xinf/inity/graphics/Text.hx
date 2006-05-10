@@ -1,7 +1,7 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
-import xinfinity.font.Font;
-import xinf.geom.Point;
+import org.xinf.inity.Font;
+import org.xinf.geom.Point;
 
 class Text extends Box {
     // FIXME this loads the font for each text item, eeew!

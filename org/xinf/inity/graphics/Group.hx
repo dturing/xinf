@@ -1,4 +1,4 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
 class Group extends Object {
     private var children:Array<Object>;

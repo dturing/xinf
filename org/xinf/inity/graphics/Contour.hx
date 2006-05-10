@@ -1,6 +1,6 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
-import xinf.geom.Point;
+import org.xinf.geom.Point;
 import CPtr;
 
 class CountourPart {

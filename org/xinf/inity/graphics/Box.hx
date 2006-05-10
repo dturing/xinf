@@ -1,8 +1,8 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
-import xinf.geom.Rectangle;
-import xinfony.style.Border;
-import xinfony.style.Pad;
+import org.xinf.geom.Rectangle;
+import org.xinf.style.Border;
+import org.xinf.style.Pad;
 
 class Box extends Group {
     public function new() {

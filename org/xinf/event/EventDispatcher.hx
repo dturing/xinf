@@ -1,4 +1,4 @@
-package xinf.event;
+package org.xinf.event;
 
 class EventDispatcher {
     static public var global:EventDispatcher = new EventDispatcher();

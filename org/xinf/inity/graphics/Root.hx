@@ -1,7 +1,7 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
 import SDL;
-import xinf.event.Event;
+import org.xinf.event.Event;
 
 class Root extends Stage {
     /* the one player root. SOMEONE MUST SET THIS. FIXME*/
@@ -42,7 +42,7 @@ class Root extends Stage {
     public function run() : Bool {
         while( !quit ) {
         
-            xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME ) );
+            org.xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME ) );
             
             processEvents();
 
@@ -123,8 +123,8 @@ class Root extends Stage {
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
-        xinf.event.EventDispatcher.global.dispatchEvent( 
-                xinf.event.Event.KeyboardEvent( type, str )
+        org.xinf.event.EventDispatcher.global.dispatchEvent( 
+                org.xinf.event.Event.KeyboardEvent( type, str )
             );
     }
 

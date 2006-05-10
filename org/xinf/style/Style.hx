@@ -1,6 +1,6 @@
-package xinfony.style;
+package org.xinf.style;
 
-import xinfony.style.UnitValue;
+import org.xinf.style.UnitValue;
 
 class Style {
 

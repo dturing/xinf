@@ -1,4 +1,4 @@
-package xinf.geom;
+package org.xinf.geom;
 
 import CPtr;
 

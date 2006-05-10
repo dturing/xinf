@@ -1,18 +1,18 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
-import xinf.event.EventDispatcher;
-import xinf.event.Event;
+import org.xinf.event.EventDispatcher;
+import org.xinf.event.Event;
 
-// TODO: if this remains the only reference to xinfony, 
-// style stuff should probably be moved to xinf.style
-import xinfony.style.Style;
+// TODO: if this remains the only reference to org.xinf.ony, 
+// style stuff should probably be moved to org.xinf.style
+import org.xinf.style.Style;
 
 class Object {
     private var _displayList:Int;
     private var _displayListSimple:Int;
     private var _changed:Bool;
     
-    public var transform:xinf.geom.Matrix;
+    public var transform:org.xinf.geom.Matrix;
     public var owner:EventDispatcher;
     public var style:Style;
     
@@ -22,7 +22,7 @@ class Object {
        ------------------------------------------------------ */
     
     public function new() {
-        transform = new xinf.geom.Matrix();
+        transform = new org.xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
         style = Style.DEFAULT;
         changed();

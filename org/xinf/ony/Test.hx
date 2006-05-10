@@ -1,15 +1,15 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinfony.style.Style;
-import xinfony.style.StyleSheet;
-import xinf.event.Event;
-import xinf.event.EventDispatcher;
+import org.xinf.style.Style;
+import org.xinf.style.StyleSheet;
+import org.xinf.event.Event;
+import org.xinf.event.EventDispatcher;
 
 #if neko
-import xinfinity.graphics.Root;
+import org.xinf.inity.Root;
 #end
 
-class Foo extends xinfony.Text {
+class Foo extends org.xinf.ony.Text {
 
     public function new( name:String ) {
         super( name );
@@ -93,7 +93,7 @@ class Test {
         ");
         trace("StyleSheet: " + style );
         
-        xinfony.Styled.globalStyle.append( style );
+        org.xinf.ony.Styled.globalStyle.append( style );
 
         var i = new Image("test.png");
         i.style.x = i.style.y = 10;

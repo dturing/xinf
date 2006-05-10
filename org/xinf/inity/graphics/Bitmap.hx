@@ -1,7 +1,7 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
-import xinfony.style.Border;
-import xinfony.style.Pad;
+import org.xinf.style.Border;
+import org.xinf.style.Pad;
 
 class Bitmap extends Group {
     private var data:BitmapData;

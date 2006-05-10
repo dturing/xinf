@@ -1,4 +1,4 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
 class Polygon extends Object {
     private var contours:Array<Contour>;

@@ -1,7 +1,7 @@
-package xinfinity.demo;
+package org.xinf.inity.demo;
 
-import xinfinity.font.Font;
-import xinfinity.graphics.Object;
+import org.xinf.inity.Font;
+import org.xinf.inity.Object;
 
 class Glyph extends Object {
     private static var _font:Font = new FontReader("/home/dan/.fonts/vera.ttf").getFont();

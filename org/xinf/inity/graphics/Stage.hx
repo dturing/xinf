@@ -1,4 +1,4 @@
-package xinfinity.graphics;
+package org.xinf.inity;
 
 class Stage extends Group {
     public static var EXACT_FIT:String = "exactFit";

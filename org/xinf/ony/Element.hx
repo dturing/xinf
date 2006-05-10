@@ -1,7 +1,7 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinf.event.EventDispatcher;
-import xinf.event.Event;
+import org.xinf.event.EventDispatcher;
+import org.xinf.event.Event;
 
 class Element extends EventDispatcher {
     public var name:String;
@@ -12,7 +12,7 @@ class Element extends EventDispatcher {
         #else js
             : js.HtmlDom
         #else neko
-            : xinfinity.graphics.Object
+            : org.xinf.inity.Object
         #end
         ;
         
@@ -67,14 +67,14 @@ class Element extends EventDispatcher {
             js.Lib.document.getElementById("xinfony").appendChild( _e );
         #else neko
             _e = createPrimitive();
-            xinfinity.graphics.Root.root.addChild( _e );
+            org.xinf.inity.Root.root.addChild( _e );
         #end
         untyped _e.owner = this;
     }
 
     #if neko
-    private function createPrimitive() : xinfinity.graphics.Object {
-        return new xinfinity.graphics.Group();
+    private function createPrimitive() : org.xinf.inity.Object {
+        return new org.xinf.inity.Group();
     }
     #end
 

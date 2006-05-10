@@ -1,6 +1,6 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinf.geom.Point;
+import org.xinf.geom.Point;
 
 class Text extends Box {
     public property text( getText, setText ) :String;
@@ -37,8 +37,8 @@ class Text extends Box {
     }
     
     #if neko
-    private function createPrimitive() : xinfinity.graphics.Object {
-        return new xinfinity.graphics.Text();
+    private function createPrimitive() : org.xinf.inity.Object {
+        return new org.xinf.inity.Text();
     }
     #end
 
@@ -66,7 +66,7 @@ class Text extends Box {
         #else js
             untyped _e.innerHTML = _text.split("\n").join("<br/>");
         #else neko
-            cast(_e,xinfinity.graphics.Text).text = _text;
+            cast(_e,org.xinf.inity.Text).text = _text;
         #end
         if( autoSize ) calcSize();
         draw();
@@ -78,7 +78,7 @@ class Text extends Box {
     
     private function calcSize() :Void {
         #if neko
-            var s:Point = cast(_e,xinfinity.graphics.Text).getTextExtends();
+            var s:Point = cast(_e,org.xinf.inity.Text).getTextExtends();
             style.width = Math.round(s.x);
             style.height = Math.round(s.y);
         #else flash

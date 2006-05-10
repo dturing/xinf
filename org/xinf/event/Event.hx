@@ -1,4 +1,4 @@
-package xinf.event;
+package org.xinf.event;
 
 class Event {
     public static var ENTER_FRAME:String = "enterFrame";

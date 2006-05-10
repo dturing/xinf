@@ -1,10 +1,10 @@
-package xinfony;
+package org.xinf.ony;
 
-import xinfony.style.Style;
-import xinfony.style.StyleChain;
-import xinfony.style.StyleSheet;
-import xinfony.style.Pad;
-import xinfony.style.Border;
+import org.xinf.style.Style;
+import org.xinf.style.StyleChain;
+import org.xinf.style.StyleSheet;
+import org.xinf.style.Pad;
+import org.xinf.style.Border;
 
 
 class Styled extends Element {
@@ -25,7 +25,7 @@ class Styled extends Element {
         addStyleClass( "#"+_name );
         addStyleClass( n[n.length-1] );
 
-        // xinfinity elements depend on style.                
+        // org.xinf.inity elements depend on style.                
         #if neko
             _e.style = style;
         #end
