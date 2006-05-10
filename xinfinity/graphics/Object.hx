@@ -4,7 +4,7 @@ import xinf.event.EventDispatcher;
 import xinf.event.Event;
 
 // TODO: if this remains the only reference to xinfony, 
-// style stuff should probably be move to xinf.style
+// style stuff should probably be moved to xinf.style
 import xinfony.style.Style;
 
 class Object {
@@ -24,7 +24,7 @@ class Object {
     public function new() {
         transform = new xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
-        style = Style.DEFAULT.clone();
+        style = Style.DEFAULT;
         changed();
     }
     
@@ -32,7 +32,6 @@ class Object {
         _changed = true;
         changedObjects.push(this);
     }
-    
     private static var changedObjects:Array<Object> = new Array<Object>();
     public static function cacheChanged() {
         var o:Object;
@@ -53,8 +52,10 @@ class Object {
     // cache the object as a displaylist, regard transform.
     public function _cache() :Void {
         if( _changed ) {
-            transform.tx = style.x.px();
-            transform.ty = style.y.px();
+            if( style != null ) { // FIXME. maybe do this somewhere else?
+                transform.tx = style.x.px();
+                transform.ty = style.y.px();
+            }
         
             if( _displayList == null ) {
                 _displayList = GL.GenLists(1);
@@ -66,7 +67,7 @@ class Object {
             GL.PopMatrix();
             GL.EndList();
             
-            // cache simplified (maybe not do this if they are the same?)
+            // cache simplified (maybe not do this if they are the same? FIXME)
             if( _displayListSimple == null ) {
                 _displayListSimple = GL.GenLists(1);
             }

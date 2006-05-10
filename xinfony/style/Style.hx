@@ -17,7 +17,7 @@ class Style {
     public property width(get_width,set_width):Dynamic;
     public property height(get_height,set_height):Dynamic;
     
-    public function new( str:String ) {
+    public function new() {
         values = new Hash<Dynamic>();
 /*        
         set_color( Color.rgb(0,0,0) );
@@ -30,14 +30,8 @@ class Style {
         set_width( new UnitValue(0.,px) );
         set_height( new UnitValue(0.,px) );
 */        
-        fromString( StringTools.trim(str) );
     }
-
-    public function clone() :Dynamic {
-        var s:Style = new Style( this.toString() );
-        return s;
-    }
-    
+        
     public function get_color() :Color {
         return _lookup( "color" );
     }
@@ -144,8 +138,22 @@ class Style {
         }
         return r;
     }
+    
+    public static function newFromString( str:String ) :Style {
+        var v = new Style();
+        v.fromString(str);
+        return v;
+    }
 
-    public static var DEFAULT = new Style("background: #eee; color: #000; border: 1px solid #000; padding: 6px; margin: 2px; x:0px; y:0px; width:20px; height:20px;");
-    public static var INVERSE = new Style("background: #000; color: #fff; border: 1px solid #fff;");
-    public static var HILITE = new Style("background: #cce; color: #039; border: 1px solid #039;");
+    public function clone() :Dynamic {
+        var s:Style = newFromString( this.toString() ); // FIXME
+        return s;
+    }
+
+    public static var DEFAULT = newFromString("
+                background: #eee; color: #000; border: 1px solid #000; 
+                padding: 3px;
+                x:0px; y:0px; width:20px; height:20px;
+                ");
+    
 }

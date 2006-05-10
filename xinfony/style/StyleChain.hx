@@ -1,23 +1,17 @@
 package xinfony.style;
 
+import xinfony.Styled;
+
 class StyleChain extends Style {
     private var chain:List<Style>;
+    private var element:Styled;
 
-    public function new( str:String ) {
+    public function new( e:Styled ) {
         chain = new List<Style>();
-        super("");
-        pushStyle( Style.DEFAULT );
-        pushStyle( new Style(str) );
+        element = e;
+        super();
     }
-    
-    public function clone() :Dynamic {
-        var s:StyleChain = new StyleChain( this.toString() );
-        for( style in chain ) {
-            s.pushStyle( style );
-        }
-        return s;
-    }
-    
+        
     public function pushStyle( style:Style ) :Void {
         chain.push( style );
     }
@@ -26,22 +20,25 @@ class StyleChain extends Style {
         return( chain.pop() );
     }
     
+    public function setChain( l:List<Style> ) :Void {
+        chain = l;
+    }
+    
     public function _lookup( attr:String ) : Dynamic {
         
         var r:Dynamic = super._lookup(attr);
-        if( r != null ) {
-            return r;
-        }
+        if( r != null ) return(r);
         
         for( style in chain ) {
             r = style._lookup(attr);
-            if( r != null ) {
-                return r;
-            }
+            if( r != null ) return(r);
         }
         
-        throw("Style attribute '"+attr+"' not found in chain.");
+        if( Style.DEFAULT != null ) {
+            r = Style.DEFAULT._lookup(attr);
+            if( r != null ) return(r);
+        }
+        
+        throw("Style attribute '"+attr+"' not found.");
     }
-
-    public static var DEFAULT = new StyleChain("background: #faa;");
 }

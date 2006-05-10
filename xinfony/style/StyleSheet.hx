@@ -1,5 +1,7 @@
 package xinfony.style;
 
+import xinfony.Styled;
+
 class StyleSelector {
     private var classes:Array<Array<String>>;
     
@@ -30,6 +32,18 @@ class StyleSelector {
         if( v.fromString(str) ) return v;
         return null;
     }
+
+    public function matches( o:Styled ) :Bool {
+        for( cls in classes ) {
+            var t:Bool = true;
+            var i:Iterator<String>=cls.iterator();
+            while( i.hasNext() && t ) {
+                if( !o.hasStyleClass( i.next() ) ) t=false;
+            }
+            if( t ) return true;
+        }
+        return( false );
+    }
     
     public function toString() :String {
         var s:String = "";
@@ -41,19 +55,21 @@ class StyleSelector {
         }
         return( s );
     }
+    
+    public function primaryClasses() : Array<String> {
+        var a = new Array<String>();
+        for( b in classes ) {
+            a.push(b[0]);
+        }
+        return a;
+    }
 }
 
 class StyleRule {
     private var selector:StyleSelector;
-    private var style:Style;
-    
-    private var tmp:String; //FIXME
+    public var style:Style;
     
     public function new() {
-    }
-    
-    public function isEmpty() : Bool {
-        return( tmp.length > 0 ); // FIXME
     }
     
     public function fromString( str:String ) :Bool {
@@ -64,8 +80,12 @@ class StyleRule {
         var s_style = StringTools.trim(str.substr( split+1, str.length-split ));
         
         selector = StyleSelector.newFromString( s_sel );
-        style = new Style( s_style );
+        style = Style.newFromString( s_style );
         return true;
+    }
+    
+    public function matches( o:Styled ) :Bool {
+        return( selector.matches(o) );
     }
     
     public static function newFromString( str:String ) :StyleRule {
@@ -76,6 +96,10 @@ class StyleRule {
     
     public function toString() :String {
         return (""+selector+" { "+style+"}");
+    }
+
+    public function selectedClasses() : Array<String> {
+        return(selector.primaryClasses());
     }
 }
 
@@ -88,14 +112,46 @@ class StyleSheet {
         classIndex = new Hash<Array<StyleRule>>();
     }
     
+    public function match( classes:Iterator<String>, o:Styled ) : List<Style> {
+        var list = new List<Style>();
+        for( cl in classes ) {
+            list = matchClass( cl, list, o );
+        }
+        return list;
+    }
+    
+    public function matchClass( cl:String, list:List<Style>, o:Styled ) : List<Style> {
+        var rules:Array<StyleRule> = classIndex.get(cl);
+        if( rules != null ) {
+            for( r in rules ) {
+                if( r.matches(o) ) {
+                    trace("Match ."+cl+": "+r );
+                    list.push(r.style);
+                }
+            }
+        }
+        return list;
+    }
+    
     public function fromString( str:String ) :Bool {
         var rs:Array<String> = str.split("}");
         for( r in rs ) {
             var rule:StyleRule = StyleRule.newFromString( r );
-            if( rule != null ) rules.push(rule);
+            if( rule != null ) {
+                for( c in rule.selectedClasses() ) {
+                    var a = classIndex.get(c);
+                    if( a == null ) {
+                        a = new Array<StyleRule>();
+                        classIndex.set(c,a);
+                    }
+                    a.push(rule);
+                }
+                rules.push(rule);
+            }
         }
         return( rules.length > 0 );
     }
+    
     
     public static function newFromString( str:String ) :StyleSheet {
         var v = new StyleSheet();

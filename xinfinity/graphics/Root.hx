@@ -4,8 +4,8 @@ import SDL;
 import xinf.event.Event;
 
 class Root extends Stage {
-    /* the one player root. */
-    public static var root:Root = new Root(320,240);
+    /* the one player root. SOMEONE MUST SET THIS. FIXME*/
+    public static var root:Root = null;
 
     private var quit : Bool;
     private var mouseX : Int;
@@ -17,7 +17,7 @@ class Root extends Stage {
     private static var view = CPtr.int_alloc(4);
 
     
-    private function new( w:Int, h:Int ) {
+    public function new( w:Int, h:Int ) {
         super( w, h );
         
         quit = false;
