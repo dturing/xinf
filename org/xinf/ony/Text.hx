@@ -2,7 +2,7 @@ package org.xinf.ony;
 
 import org.xinf.geom.Point;
 
-class Text extends RectangularElement {
+class Text extends Pane {
     public property text( getText, setText ) :String;
     private var _text:String;
     
