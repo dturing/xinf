@@ -68,7 +68,6 @@ class Styled extends Element {
             _e.style.background = style.background.toString();
             _e.style.border = style.border.toString();
             _e.style.padding = style.padding.toString();
-            _e.style.margin = style.margin.toString();
         #else neko
             _e.style = style;
             _e.changed();

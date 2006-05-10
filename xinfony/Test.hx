@@ -73,7 +73,7 @@ class Test {
         var style = StyleSheet.newFromString("
             .Foo {
                 background: #f00;
-                padding: 1.5em;
+                padding: 5px;
             }
 
             .hover {
@@ -92,7 +92,7 @@ class Test {
         ");
         trace("StyleSheet: " + style );
         
-        xinfony.Styled.globalStyle = style;
+        xinfony.Styled.globalStyle.append( style );
         
         var box = new Foo("box1");
         box.style.x = box.style.y = 100;

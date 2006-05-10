@@ -98,11 +98,15 @@ class StyleSheet {
         rules = new Array<StyleRule>();
     }
     
+    public function append( s:StyleSheet ) : Void {
+        rules = rules.concat( s.rules );
+    }
+    
     public function match( o:Styled ) : List<Style> {
         var list = new List<Style>();
         for( r in rules ) {
             if( r.matches(o) ) {
-                trace("Match: "+r );
+//                trace("Match: "+r );
                 list.push(r.style);
             }
         }

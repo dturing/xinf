@@ -31,6 +31,7 @@ class Text extends Box {
         #else js
             _e.style.cursor="default";
             _e.style.overflow="hidden";
+            _e.style.whiteSpace="nowrap";
         #end
         }
     }
@@ -43,8 +44,8 @@ class Text extends Box {
 
     public function styleChanged() {
         if( autoSize ) calcSize();
-    
         super.styleChanged();
+        
         #if flash
             var b:Float = style.border.thickness.px();
             _textField._x = style.padding.left.px() + b -2;
@@ -68,6 +69,7 @@ class Text extends Box {
             cast(_e,xinfinity.graphics.Text).text = _text;
         #end
         if( autoSize ) calcSize();
+        draw();
         return _text;
     }
     private function getText() :String {
