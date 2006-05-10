@@ -76,6 +76,11 @@ class <xsl:value-of select="$module"/>Generator {
          so we do it here -->
     <xsl:variable name="type">
         <xsl:choose>
+            <xsl:when test="contains(@decl,').p.p')">
+                <xsl:text>p.p.</xsl:text>
+                <xsl:value-of select="@type"/>
+                <xsl:message>using implicit pointer return type "p.p.<xsl:value-of select="@type"/>" for func <xsl:value-of select="@name"/> (decl is <xsl:value-of select="@decl"/></xsl:message>
+            </xsl:when>
             <xsl:when test="contains(@decl,').p')">
                 <xsl:text>p.</xsl:text>
                 <xsl:value-of select="@type"/>

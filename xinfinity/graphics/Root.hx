@@ -215,7 +215,7 @@ class Root extends Stage {
                     j++;
                 }
                 i++;
-                stacks.unshift(objs);
+                stacks.push(objs);
             }
         }
         

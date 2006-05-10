@@ -13,7 +13,7 @@ class Foo extends xinfony.Text {
 
     public function new( name:String ) {
         super( name );
-        text = "Why,\nTell me Why,\nDoes the quick brown fox\njump over the lazy dog?";
+        text = "Hello, World.";
         
         addEventListener( Event.MOUSE_OVER, onMouseOver );
         addEventListener( Event.MOUSE_OUT, onMouseOut );
@@ -83,27 +83,30 @@ class Test {
             .push {
                 color: white;
             }
-
-            #box2.push {
-                background: #ff0;
-                color: black;
+            
+            .Image {
+                width: 160px;
+                height: 120px;
             }
 
         ");
         trace("StyleSheet: " + style );
         
         xinfony.Styled.globalStyle.append( style );
-        
+
+        var i = new Image("test.png");
+        i.style.x = i.style.y = 10;
+                
         var box = new Foo("box1");
         box.style.x = box.style.y = 100;
         box.style.width = box.style.height = 100;
-        box.style.background = xinfony.style.Color.rgb(0,0xff,0xff);
         box.styleChanged();
         
         box = new Foo("box2");
         box.style.x = 201; box.style.y = 100;
         box.styleChanged();
 //        box.style.width = box.style.height = 10;
+        
         
         #if neko
              Root.root.run();

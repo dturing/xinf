@@ -1,4 +1,4 @@
-GEN_MODS=GL GLU SDL FT
+GEN_MODS=GL GLU SDL FT GdkPixbuf
 
 NEKO_LIBS=${shell pkg-config --libs neko}
 NEKO_CFLAGS=${shell pkg-config --cflags neko} -fPIC
@@ -18,8 +18,12 @@ SDL_CFLAGS=$(NEKO_CFLAGS) ${shell sdl-config --cflags}
 FT_LIBS=$(NEKO_LIBS) ${shell freetype-config --libs} -L. -lcptr
 FT_CFLAGS=$(NEKO_CFLAGS) ${shell freetype-config --cflags}
 
+GdkPixbuf_LIBS=$(NEKO_LIBS) ${shell pkg-config --libs gdk-pixbuf-2.0} -L. -lcptr
+GdkPixbuf_CFLAGS=$(NEKO_CFLAGS) ${shell pkg-config --cflags gdk-pixbuf-2.0}
+
+
 # where to find GL/gl.h
-SWIG_INCLUDE=-I/usr/include ${shell sdl-config --cflags}
+SWIG_INCLUDE=-I/usr/include ${shell sdl-config --cflags} ${shell pkg-config --cflags gdk-pixbuf-2.0}
 
 
 # the rest should stay the same even if you add a module.

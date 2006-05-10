@@ -26,6 +26,7 @@ extern vkind k_unsigned_char_p;
 #define ALLOC_Int(v) (value)alloc_int(v)
 #define ALLOC_Float(v) (value)alloc_float(v)
 #define ALLOC_String(v) (value)alloc_string(v)
+#define ALLOC_Bool(v) (value)alloc_bool(v)
 #define ALLOC_Dynamic(v) val_null
 #define ALLOC_Void(v) val_null
 

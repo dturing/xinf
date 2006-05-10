@@ -8,7 +8,7 @@ class Generator {
     public var buf:String;
     
     public function new( filename:String, mod:String ) {
-        module = mod.toUpperCase();
+        module = mod;
         buf = new String("");
         map = new TypeMap();
         

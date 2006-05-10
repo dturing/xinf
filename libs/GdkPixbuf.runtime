@@ -1,0 +1,27 @@
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "cptr.h"
+
+void ft_failure_2s( const char *one, const char *two ) {
+    buffer b = alloc_buffer(one);
+    buffer_append(b,two);
+    val_throw(buffer_to_string(b));
+}
+
+void ft_failure_v( const char *one, value v ) {
+    buffer b = alloc_buffer(one);
+    val_buffer(b,v);
+    val_throw(buffer_to_string(b));
+}
+
+
+GError **gdk_pixbuf_create_error() {
+    static GError *err;
+    return( &err );
+}
+
+value gdk_pixbuf_get_error( GError **err ) {
+    if( err && *err ) {
+        return( alloc_string((*err)->message ? (*err)->message : "generic error") );
+    }
+    return( val_null );
+}
