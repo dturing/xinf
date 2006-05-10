@@ -45,7 +45,13 @@ class <xsl:value-of select="$module"/>Generator {
 
 <xsl:template match="enum">
     <xsl:apply-templates match="enumitem"/>
+
+    <xsl:text>        gen.typedef("enum </xsl:text>
+    <xsl:value-of select="@unnamed"/>
+    <xsl:text>","int");
+</xsl:text>
 </xsl:template>
+
 <xsl:template match="enumitem">
     <xsl:text>        gen.constant("</xsl:text>
     <xsl:value-of select="@sym_name"/>
@@ -65,7 +71,7 @@ class <xsl:value-of select="$module"/>Generator {
 </xsl:text>
 </xsl:template>
 
-<xsl:template match="cdecl[@kind='function']">
+<xsl:template match="cdecl[substring(@decl,1,1)='f']">
     <!-- somehow, the swig xml output doesnt put a ").p" onto pointer return types,
          so we do it here -->
     <xsl:variable name="type">
@@ -91,7 +97,7 @@ class <xsl:value-of select="$module"/>Generator {
 </xsl:text>
 </xsl:template>
 
-<xsl:template match="cdecl[@kind='typedef' and parmlist]" priority="2">
+<xsl:template match="cdecl[@storage='typedef' and parmlist]" priority="2">
 <!--
     <xsl:text>FUNC_TYPE </xsl:text>
     <xsl:value-of select="@sym_name"/>
@@ -104,7 +110,7 @@ class <xsl:value-of select="$module"/>Generator {
 -->
 </xsl:template>
 
-<xsl:template match="cdecl[@kind='typedef']">
+<xsl:template match="cdecl[@storage='typedef']">
     <xsl:text>        gen.typedef("</xsl:text>
     <xsl:value-of select="@sym_name"/>
     <xsl:text>","</xsl:text>
@@ -118,14 +124,14 @@ class <xsl:value-of select="$module"/>Generator {
     <xsl:value-of select="@sym_name"/>
     <xsl:text>", [ </xsl:text>
     
-    <xsl:for-each select="cdecl[@ismember='1']">
+    <xsl:for-each select="cdecl">
         <xsl:text>[ "</xsl:text>
             <xsl:value-of select="@sym_name"/>
             <xsl:text>","</xsl:text>
             <xsl:value-of select="@decl"/>
             <xsl:value-of select="@type"/>
         <xsl:text>" ] </xsl:text>
-        <xsl:if test="following-sibling::cdecl[@ismember='1']">
+        <xsl:if test="following-sibling::cdecl">
             <xsl:text>, </xsl:text>
         </xsl:if>
     </xsl:for-each>

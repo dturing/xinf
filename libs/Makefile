@@ -33,7 +33,7 @@ HAXE_FLAGS=-cp ~/.haxe/lib/std -cp $(GEN_PATH)
 
 TARGET_LIBS=$(foreach MOD,$(GEN_MODS),$(MOD).ndll $(MOD)__.n)
 TARGET_CLASSES=$(foreach MOD,$(GEN_MODS),$(MOD).hx)
-TARGETS=libcptr.so cptr.ndll $(TARGET_LIBS) $(TARGET_CLASSES)
+TARGETS=libcptr.so cptr.ndll CPtr.hx $(TARGET_LIBS) $(TARGET_CLASSES)
 
 default : $(TARGETS)
 
@@ -76,6 +76,10 @@ lib%.so : %.c
 # compile neko wrapper module
 %.n : %.hx
 	haxe $(HAXE_FLAGS) -neko $*.hx $*
+
+# just copy
+%.hx : %.hx.in
+	cp $< $@
 
 clean :
 	-rm $(wildcard *.xml *_wrap.c *.n *__.hx *.hx *.ndll *.so)
