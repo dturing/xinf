@@ -55,14 +55,6 @@ class StyleSelector {
         }
         return( s );
     }
-    
-    public function primaryClasses() : Array<String> {
-        var a = new Array<String>();
-        for( b in classes ) {
-            a.push(b[0]);
-        }
-        return a;
-    }
 }
 
 class StyleRule {
@@ -97,37 +89,21 @@ class StyleRule {
     public function toString() :String {
         return (""+selector+" { "+style+"}");
     }
-
-    public function selectedClasses() : Array<String> {
-        return(selector.primaryClasses());
-    }
 }
 
 class StyleSheet {
     private var rules:Array<StyleRule>;
-    private var classIndex:Hash<Array<StyleRule>>;
     
     public function new() {
         rules = new Array<StyleRule>();
-        classIndex = new Hash<Array<StyleRule>>();
     }
     
-    public function match( classes:Iterator<String>, o:Styled ) : List<Style> {
+    public function match( o:Styled ) : List<Style> {
         var list = new List<Style>();
-        for( cl in classes ) {
-            list = matchClass( cl, list, o );
-        }
-        return list;
-    }
-    
-    public function matchClass( cl:String, list:List<Style>, o:Styled ) : List<Style> {
-        var rules:Array<StyleRule> = classIndex.get(cl);
-        if( rules != null ) {
-            for( r in rules ) {
-                if( r.matches(o) ) {
-                    trace("Match ."+cl+": "+r );
-                    list.push(r.style);
-                }
+        for( r in rules ) {
+            if( r.matches(o) ) {
+                trace("Match: "+r );
+                list.push(r.style);
             }
         }
         return list;
@@ -138,14 +114,6 @@ class StyleSheet {
         for( r in rs ) {
             var rule:StyleRule = StyleRule.newFromString( r );
             if( rule != null ) {
-                for( c in rule.selectedClasses() ) {
-                    var a = classIndex.get(c);
-                    if( a == null ) {
-                        a = new Array<StyleRule>();
-                        classIndex.set(c,a);
-                    }
-                    a.push(rule);
-                }
                 rules.push(rule);
             }
         }

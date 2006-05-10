@@ -65,7 +65,7 @@ class Test {
                 background: #f00;
             }
             
-            .#box2.hover {
+            .#box2 {
                 background: #00f;
             }
 

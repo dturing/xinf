@@ -51,7 +51,7 @@ class Styled extends Element {
     
     public function styleChanged() :Void {
         // match against stylesheet
-        style.setChain( globalStyle.match( styleClasses.keys(), this ) );
+        style.setChain( globalStyle.match( this ) );
     
         // apply style to primitives
         #if flash
