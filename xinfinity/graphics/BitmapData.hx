@@ -26,8 +26,8 @@ class BitmapData {
     }
 
     public function createTexture() {
-        twidth = 64; while( twidth<width ) twidth<<=1;
-        theight = 64; while( theight<height ) theight<<=1;
+        twidth = 8; while( twidth<width ) twidth<<=1;
+        theight = 8; while( theight<height ) theight<<=1;
 
         var t = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);

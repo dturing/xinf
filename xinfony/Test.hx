@@ -81,12 +81,13 @@ class Test {
             }
             
             .push {
+                background: #009;
                 color: white;
             }
             
             .Image {
-                width: 160px;
-                height: 120px;
+                width: 320px;
+                height: 240px;
             }
 
         ");
