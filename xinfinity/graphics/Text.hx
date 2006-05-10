@@ -64,8 +64,8 @@ class Text extends Box {
         GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
 
         var b = style.border.thickness.px();
-        GL.Translatef( style.padding.left.px() + b - .5, 
-                       style.padding.top.px() + b - .5, .0 );
+        GL.Translatef( style.padding.left.px() + b, 
+                       style.padding.top.px() + b, .0 );
 
         GL.Scalef( fontSize, fontSize, 1.0 );
         GL.Translatef( .0, _font.ascender, .0 );

@@ -17,6 +17,8 @@ class Foo extends xinfony.Text {
         
         addEventListener( Event.MOUSE_OVER, onMouseOver );
         addEventListener( Event.MOUSE_OUT, onMouseOut );
+        addEventListener( Event.MOUSE_DOWN, onMouseDown );
+        addEventListener( Event.MOUSE_UP, onMouseUp );
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
                         Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
@@ -32,6 +34,14 @@ class Foo extends xinfony.Text {
     }
     public function onMouseOut( e:Event ) :Bool {
         removeStyleClass("hover");
+        return true;
+    }
+    public function onMouseDown( e:Event ) :Bool {
+        addStyleClass("push");
+        return true;
+    }
+    public function onMouseUp( e:Event ) :Bool {
+        removeStyleClass("push");
         return true;
     }
     
@@ -63,14 +73,20 @@ class Test {
         var style = StyleSheet.newFromString("
             .Foo {
                 background: #f00;
-            }
-            
-            .#box2 {
-                background: #00f;
+                padding: 1.5em;
             }
 
-            .Foo.hover {
+            .hover {
                 background: #0f0; 
+            }
+            
+            .push {
+                color: white;
+            }
+
+            #box2.push {
+                background: #ff0;
+                color: black;
             }
 
         ");
@@ -81,6 +97,7 @@ class Test {
         var box = new Foo("box1");
         box.style.x = box.style.y = 100;
         box.style.width = box.style.height = 100;
+        box.style.background = xinfony.style.Color.rgb(0,0xff,0xff);
         box.styleChanged();
         
         box = new Foo("box2");
