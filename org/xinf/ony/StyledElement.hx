@@ -12,7 +12,7 @@ class StyledElement extends Element {
 
     public var style:StyleChain;
     
-    public var styleClasses:Hash<Bool>; // FIXME: should be private
+    private var styleClasses:Hash<Bool>;
 
     public function new( _name:String ) {
         super(_name);
