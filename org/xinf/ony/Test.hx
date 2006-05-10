@@ -93,7 +93,7 @@ class Test {
         ");
         trace("StyleSheet: " + style );
         
-        org.xinf.ony.Styled.globalStyle.append( style );
+        org.xinf.ony.StyledElement.globalStyle.append( style );
 
         var i = new Image("test.png");
         i.style.x = i.style.y = 10;

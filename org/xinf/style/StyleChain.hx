@@ -1,6 +1,6 @@
 package org.xinf.style;
 
-import org.xinf.ony.Styled;
+import org.xinf.ony.StyledElement;
 
 class StyleChain extends Style {
     private var chain:List<Style>;
