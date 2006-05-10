@@ -4,9 +4,9 @@ import org.xinf.ony.StyledElement;
 
 class StyleChain extends Style {
     private var chain:List<Style>;
-    private var element:Styled;
+    private var element:StyledElement;
 
-    public function new( e:Styled ) {
+    public function new( e:StyledElement ) {
         chain = new List<Style>();
         element = e;
         super();

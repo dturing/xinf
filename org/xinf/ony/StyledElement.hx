@@ -7,7 +7,7 @@ import org.xinf.style.Pad;
 import org.xinf.style.Border;
 
 
-class Styled extends Element {
+class StyledElement extends Element {
     public static var globalStyle:StyleSheet = new StyleSheet();
 
     public var style:StyleChain;

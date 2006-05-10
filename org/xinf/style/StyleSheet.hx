@@ -33,7 +33,7 @@ class StyleSelector {
         return null;
     }
 
-    public function matches( o:Styled ) :Bool {
+    public function matches( o:StyledElement ) :Bool {
         for( cls in classes ) {
             var t:Bool = true;
             var i:Iterator<String>=cls.iterator();
@@ -76,7 +76,7 @@ class StyleRule {
         return true;
     }
     
-    public function matches( o:Styled ) :Bool {
+    public function matches( o:StyledElement ) :Bool {
         return( selector.matches(o) );
     }
     
@@ -102,7 +102,7 @@ class StyleSheet {
         rules = rules.concat( s.rules );
     }
     
-    public function match( o:Styled ) : List<Style> {
+    public function match( o:StyledElement ) : List<Style> {
         var list = new List<Style>();
         for( r in rules ) {
             if( r.matches(o) ) {

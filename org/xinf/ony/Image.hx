@@ -3,7 +3,7 @@ package org.xinf.ony;
 import org.xinf.style.Color;
 import org.xinf.style.Style;
 
-class Image extends Box {
+class Image extends RectangularElement {
 
     public function new( name:String ) {
         super(name);
