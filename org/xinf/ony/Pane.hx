@@ -1,55 +1,20 @@
 package org.xinf.ony;
 
-import org.xinf.style.Color;
-import org.xinf.style.Style;
+import org.xinf.ony.impl.IPrimitive;
+import org.xinf.ony.impl.Primitives;
 
-class Pane extends StyledElement {
+class Pane extends Element {
 
-    public function new( name:String ) {
-        super(name);
-        
-        #if flash
-            untyped _e.style = Style.DEFAULT;
-        #end
-        
-        draw();
+    public function new( name:String ) :Void {
+        super( name );
     }
-
-    #if neko
-    private function createPrimitive() : org.xinf.inity.Object {
-        return new org.xinf.inity.Box();
-    }
-    #end
     
-    public function styleChanged() :Void {
-        super.styleChanged();
-        draw();
+    private function createPrimitive() :IPrimitive {
+        return Primitives.createPane();
     }
 
-    private function draw() {
-        #if flash
-           // trace("draw box "+style.width+","+style.height + " "+style.x+","+style.y );
-           
-            var b = style.border.thickness.px();
-            var padding = style.padding;
-            var w:Int = Math.floor( style.width.px() +b+b+padding.left.px()+padding.right.px() );
-            var h:Int = Math.floor( style.height.px() +b+b+padding.top.px()+padding.bottom.px() );
-            
-            untyped {
-            _e.clear();
-            _e.beginFill( style.background.toInt(),  100 );
-            if( b > 0 ) {
-                _e.lineStyle( b, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
-            }
-            _e.moveTo( 0, 0 );
-            _e.lineTo( w, 0 );
-            _e.lineTo( w, h );
-            _e.lineTo( 0, h );
-            _e.lineTo( 0, 0 );
-            _e.endFill();
-            }
-        #else neko
-            _e.changed();
-        #end
+    private function draw() :Void {
+        // FIXME shouldnt be here anyhow. where is it called from?
+        throw("Pane.draw() not implemented");
     }
 }
