@@ -1,5 +1,10 @@
 package org.xinf.style;
 
+enum Unit {
+    px;
+    em;
+}
+
 class UnitValue {
     public var unit:Unit;
     public var value:Float;
