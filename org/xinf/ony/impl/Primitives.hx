@@ -7,8 +7,7 @@ class Primitives {
         #if neko
             return new org.xinf.ony.impl.x.XRoot();
         #else flash
-            throw("primitive not implemented");
-            return null;
+            return new org.xinf.ony.impl.flash.FlashRoot();
         #else js
             return new org.xinf.ony.impl.js.JSRoot();
         #end
@@ -18,9 +17,7 @@ class Primitives {
         #if neko
             return new org.xinf.ony.impl.x.XPane();
         #else flash
-            throw("primitive not implemented");
-            return null;
-//            return new org.xinf.ony.impl.flash.FlashPane();
+            return new org.xinf.ony.impl.flash.FlashPane();
         #else js
             return new org.xinf.ony.impl.js.JSPane();
         #end
@@ -44,9 +41,7 @@ class Primitives {
         #if neko
             return new org.xinf.ony.impl.x.XText();
         #else flash
-            throw("text primitive not implemented");
-            return null;
-//            return new org.xinf.ony.impl.flash.FlashText();
+            return new org.xinf.ony.impl.flash.FlashText();
         #else js
             return new org.xinf.ony.impl.js.JSText();
         #end

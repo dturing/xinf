@@ -39,7 +39,7 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     public function new() :Void {
         _e = js.Lib.document.createElement("div");
         _e.style.position="absolute";
-        js.Lib.document.getElementById("xinfony").appendChild( _e );
+        js.Lib.document.getElementById("xinfony").appendChild( _e ); // FIXME: XXX
     }
     
     public function setOwner( owner:org.xinf.event.EventDispatcher ) :Void {
