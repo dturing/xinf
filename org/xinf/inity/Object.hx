@@ -21,26 +21,26 @@ class Object {
        Object API
        ------------------------------------------------------ */
     
-    public function new() {
+    public function new() :Void {
         transform = new org.xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
         style = Style.DEFAULT;
         changed();
     }
     
-    public function changed() {
+    public function changed() :Void {
         _changed = true;
         changedObjects.push(this);
     }
     private static var changedObjects:Array<Object> = new Array<Object>();
-    public static function cacheChanged() {
+    public static function cacheChanged() :Void  {
         var o:Object;
         while( (o=changedObjects.shift()) != null ) {
             o._cache();
         }
     }
 
-    public function dispatchEvent( e:Event ) {
+    public function dispatchEvent( e:Event ) :Void {
         if( owner == null ) throw("Object "+this+" has no owner.");
         owner.dispatchEvent(e);
     }

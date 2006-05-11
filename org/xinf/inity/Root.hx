@@ -17,7 +17,7 @@ class Root extends Stage {
     private static var view = CPtr.int_alloc(4);
 
     
-    public function new( w:Int, h:Int ) {
+    public function new( w:Int, h:Int ) :Void {
         super( w, h );
         
         quit = false;
@@ -70,7 +70,7 @@ class Root extends Stage {
        SDL Event functions
        ------------------------------------------------------ */
     
-    public function processEvents() {
+    public function processEvents() :Void {
         var e = SDL._NewEvent();
         while( SDL.PollEvent( e ) > 0 ) {
             var k = SDL.Event_type_get(e);
@@ -110,7 +110,7 @@ class Root extends Stage {
         }
     }
 
-    private function handleKeyboardEvent( ke, k ) {
+    private function handleKeyboardEvent( ke, k ) :Void {
         var sym = SDL.KeyboardEvent_keysym_get(ke);
         var code = SDL.keysym_scancode_get(sym);
         var s = SDL.keysym_sym_get(sym);
@@ -128,7 +128,7 @@ class Root extends Stage {
             );
     }
 
-    private function handleMouseEvent( e, k ) {
+    private function handleMouseEvent( e, k ) :Void {
         buttonpress = k == SDL.MOUSEBUTTONDOWN;
         var x = SDL.MouseButtonEvent_x_get(e);
         var y = SDL.MouseButtonEvent_y_get(e);
@@ -140,7 +140,7 @@ class Root extends Stage {
             objectUnderMouse.dispatchEvent( new Event( type ) );
     }
 
-    private function handleMouseMotionEvent( e, k ) {
+    private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
     }

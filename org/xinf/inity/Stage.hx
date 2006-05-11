@@ -12,14 +12,14 @@ class Stage extends Group {
     private var width:Float;
     private var height:Float;
 
-    public function new( w:Int, h:Int ) {
+    public function new( w:Int, h:Int ) :Void {
         super();
         scaleMode = NO_SCALE;
         width=w; height=h;
         definedWidth=w; definedHeight=h;
     }
 
-    public function resize( w:Int, h:Int ) {
+    public function resize( w:Int, h:Int ) :Void {
         var x:Float = 1.0;
         var y:Float = 1.0;
         

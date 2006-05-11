@@ -3,16 +3,16 @@ package org.xinf.inity;
 class Group extends Object {
     private var children:Array<Object>;
     
-    public function new() {
+    public function new() :Void {
         super();
         children = new Array<Object>();
     }
 
-    public function addChild( child:Object ) {
+    public function addChild( child:Object ) :Void {
         children.push(child);
     }
     
-    public function getChildAt( index:Int ) : Object {
+    public function getChildAt( index:Int ) :Object {
         return children[index];
     }
     
