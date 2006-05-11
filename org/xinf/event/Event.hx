@@ -15,7 +15,7 @@ class Event {
     public property type(default,null) : String;
     public var key : String;
     
-    public function new( t:String ) {
+    public function new( t:String ) :Void {
         type = t;
     }
     

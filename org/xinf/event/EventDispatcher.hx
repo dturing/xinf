@@ -8,7 +8,7 @@ class EventDispatcher {
     
     private var _listeners:Hash<Array<Event -> Bool>>;
     
-    public function new() {
+    public function new() :Void {
         _listeners = new Hash<Array<Event -> Bool>>();
     }
     
