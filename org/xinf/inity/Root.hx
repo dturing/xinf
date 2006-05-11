@@ -249,7 +249,7 @@ class Root extends Stage {
             a.push(object);
         }
         
-// root has no owner... but..        if( a.length == 0 ) a.push( this );
+// root has no owner... but.. FIXME       if( a.length == 0 ) a.push( this );
         
         return a;
     }

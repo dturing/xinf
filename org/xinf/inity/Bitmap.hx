@@ -21,14 +21,13 @@ class Bitmap extends Group {
         var h:Float = style.height.px()+b+b+padding.top.px()+padding.bottom.px();  // but right,bottom!
         var x:Float = 0;
         var y:Float = 0;
-
         
-      // background
+      // image
         var c = style.background;
         GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
         data.render( w, h, 0, 0, 1, 1 );
         
-      // border
+      // border (dups Box.hx)
         if( border.thickness.value > 0 ) {
             GL.LineWidth( border.thickness.value );
             var c = border.color;
@@ -73,5 +72,7 @@ class Bitmap extends Group {
             GL.Vertex3f( 0., h , 0. );
             GL.Vertex3f( 0., 0., 0. );
         GL.End();
+        
+        super._renderSimple();
     }
 }

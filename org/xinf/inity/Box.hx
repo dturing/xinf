@@ -75,5 +75,7 @@ class Box extends Group {
             GL.Vertex3f( 0., h , 0. );
             GL.Vertex3f( 0., 0., 0. );
         GL.End();
+        
+        super._renderSimple();
     }
 }
