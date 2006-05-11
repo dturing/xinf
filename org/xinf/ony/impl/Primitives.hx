@@ -10,8 +10,7 @@ class Primitives {
             throw("primitive not implemented");
             return null;
         #else js
-            throw("primitive not implemented");
-            return null;
+            return new org.xinf.ony.impl.js.JSRoot();
         #end
     }
 
@@ -23,9 +22,7 @@ class Primitives {
             return null;
 //            return new org.xinf.ony.impl.flash.FlashPane();
         #else js
-            throw("primitive not implemented");
-            return null;
-//            return new org.xinf.ony.impl.js.JSPane();
+            return new org.xinf.ony.impl.js.JSPane();
         #end
     }
 
@@ -33,11 +30,11 @@ class Primitives {
         #if neko
             return new org.xinf.ony.impl.x.XImage();
         #else flash
-            throw("primitive not implemented");
+            throw("image primitive not implemented");
             return null;
 //            return new org.xinf.ony.impl.flash.FlashImage();
         #else js
-            throw("primitive not implemented");
+            throw("image primitive not implemented");
             return null;
 //            return new org.xinf.ony.impl.js.JSImage();
         #end
@@ -47,13 +44,11 @@ class Primitives {
         #if neko
             return new org.xinf.ony.impl.x.XText();
         #else flash
-            throw("primitive not implemented");
+            throw("text primitive not implemented");
             return null;
 //            return new org.xinf.ony.impl.flash.FlashText();
         #else js
-            throw("primitive not implemented");
-            return null;
-//            return new org.xinf.ony.impl.js.JSText();
+            return new org.xinf.ony.impl.js.JSText();
         #end
     }
 }

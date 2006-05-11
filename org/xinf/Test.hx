@@ -91,6 +91,12 @@ class Test {
                 background: #aaa;
             }
             
+            #root {
+                width: 320px;
+                height: 240px;
+                border: none;
+            }
+            
             #container {
                 x: 50;
                 y: 50;
@@ -125,7 +131,7 @@ class Test {
         c.addChild(box);
 
         
-        org.xinf.ony.Root.getRoot().addChild(box);
+//        org.xinf.ony.Root.getRoot().addChild(box);
         
         #if neko
              org.xinf.inity.Root.root.run();

@@ -14,8 +14,8 @@ class JSText extends JSPane, implements ITextPrimitive  {
     public function applyStyle( _style:org.xinf.style.Style ) :Void {
         super.applyStyle(_style);
 //        if( autoSize ) { // FIXME
-            _e.style.width = null;
-            _e.style.height = null;
+              _e.style.width = null;
+              _e.style.height = null;
 //        }
     }
     

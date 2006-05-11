@@ -5,6 +5,7 @@ import org.xinf.event.Event;
 import org.xinf.style.Style;
 import org.xinf.style.Pad;
 import org.xinf.style.Border;
+import org.xinf.ony.impl.IPrimitive;
 
 class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : HtmlDom;
@@ -43,6 +44,16 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     
     public function setOwner( owner:org.xinf.event.EventDispatcher ) :Void {
         untyped _e.owner = owner;
+    }
+
+    public function addChild( child:IPrimitive ) :Void {
+        var p:JSPrimitive = cast(child,JSPrimitive);
+        _e.appendChild( p._e );
+    }
+    
+    public function removeChild( child:IPrimitive ) :Void {
+        var p:JSPrimitive = cast(child,JSPrimitive);
+        _e.removeChild( p._e );
     }
 
     public function applyStyle( _style:org.xinf.style.Style ) :Void {
