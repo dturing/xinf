@@ -8,7 +8,7 @@ class Pad {
     
     public static var NIL:Pad = new Pad( UnitValue.NIL, UnitValue.NIL, UnitValue.NIL, UnitValue.NIL );
     
-    public function new( l:UnitValue, t:UnitValue, r:UnitValue, b:UnitValue ) {
+    public function new( l:UnitValue, t:UnitValue, r:UnitValue, b:UnitValue ) :Void {
         left=l; top=t; right=r; bottom=b;
     }
     
@@ -20,7 +20,7 @@ class Pad {
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
-                    throw("Cannot parse Pad from "+Reflect.getClass(v).__name__.join(".")+": "+v );
+                    return( fromString( v.toString() ) );
                 }
             default:
                 throw("Cannot parse Pad from "+Reflect.typeof(v)+": "+v );

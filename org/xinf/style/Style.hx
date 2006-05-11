@@ -17,7 +17,7 @@ class Style {
     public property width(get_width,set_width):Dynamic;
     public property height(get_height,set_height):Dynamic;
     
-    public function new() {
+    public function new() :Void {
         values = new Hash<Dynamic>();
 /*        
         set_color( Color.rgb(0,0,0) );
@@ -132,6 +132,7 @@ class Style {
     
     public function toString() :String {
         var r:String="";
+        if( values==null ) return "NULL Style";
         for( f in values.keys() ) {
             var field = values.get(f);
             r += "" + f + ": "+field+"; ";
@@ -150,10 +151,6 @@ class Style {
         return s;
     }
 
-    public static var DEFAULT = newFromString("
-                background: #eee; color: #000; border: 1px solid #000; 
-                padding: 3px;
-                x:0px; y:0px; width:20px; height:20px;
-                ");
+    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; x:0px; y:0px; width:20px; height:20px;");
     
 }

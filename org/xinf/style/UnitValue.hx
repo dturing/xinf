@@ -1,20 +1,15 @@
 package org.xinf.style;
 
-enum Unit {
-    px;
-    em;
-}
-
 class UnitValue {
     public var unit:Unit;
     public var value:Float;
     
-    public function new( v:Float, u:Unit ) {
+    public function new( v:Float, u:Unit ) :Void {
         value=v;
         unit=u;
     }
 
-    public function clone() {
+    public function clone() :UnitValue {
         return( new UnitValue(value,unit) );
     }
     
@@ -39,7 +34,7 @@ class UnitValue {
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
-                    throw("Cannot parse UnitValue from "+Reflect.getClass(v).__name__.join(".")+": "+v );
+                    return( fromString( v.toString() ) );
                 }
             case TInt:
                 return( new UnitValue( v, px ) );

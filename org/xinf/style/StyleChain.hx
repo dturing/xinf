@@ -1,12 +1,10 @@
 package org.xinf.style;
 
-import org.xinf.ony.StyledElement;
-
 class StyleChain extends Style {
     private var chain:List<Style>;
-    private var element:StyledElement;
+    private var element:StyledObject;
 
-    public function new( e:StyledElement ) {
+    public function new( e:StyledObject ) :Void {
         chain = new List<Style>();
         element = e;
         super();

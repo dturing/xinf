@@ -8,7 +8,7 @@ class Border {
     // styles other than SOLID are not supported anywhere. FIXME there, then here :)
     public static var SOLID:String = "solid";
     
-    public function new( t:UnitValue, s:String, c:Color ) {
+    public function new( t:UnitValue, s:String, c:Color ) :Void {
         thickness=t;
         color=c;
         style=s;

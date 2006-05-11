@@ -1,11 +1,9 @@
 package org.xinf.style;
 
-import org.xinf.ony.StyledElement;
-
 class StyleSelector {
     private var classes:Array<Array<String>>;
     
-    public function new() {
+    public function new() :Void {
         classes = new Array<Array<String>>();
     }
     
@@ -33,7 +31,7 @@ class StyleSelector {
         return null;
     }
 
-    public function matches( o:StyledElement ) :Bool {
+    public function matches( o:StyledObject ) :Bool {
         for( cls in classes ) {
             var t:Bool = true;
             var i:Iterator<String>=cls.iterator();
@@ -47,6 +45,7 @@ class StyleSelector {
     
     public function toString() :String {
         var s:String = "";
+        if( classes == null ) return("NULL StyleSelector");
         for( i in 0...classes.length ) {
             for( cl in classes[i] ) {
                 s += "."+cl;
@@ -61,7 +60,7 @@ class StyleRule {
     private var selector:StyleSelector;
     public var style:Style;
     
-    public function new() {
+    public function new() :Void {
     }
     
     public function fromString( str:String ) :Bool {
@@ -76,7 +75,7 @@ class StyleRule {
         return true;
     }
     
-    public function matches( o:StyledElement ) :Bool {
+    public function matches( o:StyledObject ) :Bool {
         return( selector.matches(o) );
     }
     
@@ -94,7 +93,7 @@ class StyleRule {
 class StyleSheet {
     private var rules:Array<StyleRule>;
     
-    public function new() {
+    public function new() :Void {
         rules = new Array<StyleRule>();
     }
     
@@ -102,7 +101,7 @@ class StyleSheet {
         rules = rules.concat( s.rules );
     }
     
-    public function match( o:StyledElement ) : List<Style> {
+    public function match( o:StyledObject ) : List<Style> {
         var list = new List<Style>();
         for( r in rules ) {
             if( r.matches(o) ) {
@@ -132,6 +131,7 @@ class StyleSheet {
     }
     
     public function toString() :String {
+        if( rules == null ) return("NULL StyleSheet");
         return( "\n\t"+rules.join("\n\t")+"\n\t" );
     }
 }

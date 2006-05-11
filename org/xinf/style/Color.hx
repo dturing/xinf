@@ -6,7 +6,7 @@ class Color {
     public var b:Int;
     public var a:Int;
     
-    public function new( _r:Int, _g:Int, _b:Int, _a:Int ) {
+    public function new( _r:Int, _g:Int, _b:Int, _a:Int ) :Void {
         r=_r; g=_g; b=_b; a=_a;
     }
         
@@ -14,15 +14,15 @@ class Color {
     public static var NIL:Color = rgba(0,0,0,0);
     public static var WHITE:Color = rgb(0xff,0xff,0xff);
         
-    public static function rgb( r:Int, g:Int, b:Int ) {
+    public static function rgb( r:Int, g:Int, b:Int ) :Color {
         return( new Color(r,g,b,0xff) );
     }
 
-    public static function rgba( r:Int, g:Int, b:Int, a:Int ) {
+    public static function rgba( r:Int, g:Int, b:Int, a:Int ) :Color {
         return( new Color(r,g,b,a) );
     }
     
-    public static function fromInt( c:Int ) {
+    public static function fromInt( c:Int ) :Color {
         return( new Color( c>>16, (c>>8) & 0xff, c & 0xff, 0xff ) );
     }
 
@@ -34,7 +34,7 @@ class Color {
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
-                    throw("Cannot parse Color from "+Reflect.getClass(v).__name__.join(".")+": "+v );
+                    return( fromString( v.toString() ) );
                 }
             case TInt:
                 return( fromInt( cast(v,Int) ) );
