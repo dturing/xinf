@@ -36,37 +36,37 @@ class Matrix {
     private function _get_d() : Float { return CPtr.float_get(_v,_D); }
     private function _set_d( val:Float ) : Float { return CPtr.float_set(_v,_D,val); }
 
-    public function new() {
+    public function new() :Void {
         _v = CPtr.float_alloc(16);
         setIdentity();
     }
     
-    public static function Translation( x:Float, y:Float ) {
+    public static function Translation( x:Float, y:Float ) :Matrix {
         var r = new Matrix();
         r.tx=x; r.ty=y;
         return r;
     }
 
-    public static function Scale( x:Float, y:Float ) {
+    public static function Scale( x:Float, y:Float ) :Matrix {
         var r = new Matrix();
         r.a=x; r.d=y;
         return r;
     }
 
-    public static function Rotation( q:Float ) {
+    public static function Rotation( q:Float ) :Matrix {
         var m = new Matrix();
         m.setRotation(q);
         return m;
     }
     
-    public function setRotation( q:Float ) {
+    public function setRotation( q:Float ) :Void {
         var r = (q/180)*Math.PI;
         a=d=Math.cos(r);
         b=Math.sin(r);
         c=-b;
     }
     
-    public function setIdentity() {
+    public function setIdentity() :Void {
         for( i in 0...16 ) {
             // TODO: cptr function to set to 0?
             CPtr.float_set(_v,i,0.0);
@@ -77,15 +77,15 @@ class Matrix {
         CPtr.float_set(_v,15,1.0);
     }
 
-    public function translate( x:Float, y:Float ) {
+    public function translate( x:Float, y:Float ) :Void {
         concat( Translation(x,y) );
     }
     
-    public function scale( x:Float, y:Float ) {
+    public function scale( x:Float, y:Float ) :Void {
         concat( Scale(x,y) );
     }
 
-    public function rotate( q:Float ) {
+    public function rotate( q:Float ) :Void {
         concat( Rotation(q) );
     }
     
