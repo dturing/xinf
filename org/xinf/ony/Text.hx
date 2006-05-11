@@ -16,7 +16,6 @@ class Text extends Pane {
     public function new( name:String ) {
         super(name);
         autoSize = true;
-        
     }
     
     private function createPrimitive() :IPrimitive {

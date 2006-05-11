@@ -22,4 +22,14 @@ class Primitives {
             return new org.xinf.ony.impl.js.JSText();
         #end
     }
+
+    public static function createImage() :IPrimitive {
+        #if neko
+            return new org.xinf.ony.impl.x.XImage();
+        #else flash
+            return new org.xinf.ony.impl.flash.FlashImage();
+        #else js
+            return new org.xinf.ony.impl.js.JSImage();
+        #end
+    }
 }

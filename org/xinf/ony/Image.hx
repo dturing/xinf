@@ -1,15 +1,15 @@
 package org.xinf.ony;
 
+import org.xinf.ony.impl.IPrimitive;
+import org.xinf.ony.impl.Primitives;
+
 class Image extends Pane {
 
     public function new( name:String ) {
-        throw("not implemented");
         super(name);
     }
-
-    static function __init__() : Void {
-        #if neko
-            untyped org.xinf.ony.Image = org.xinf.ony.x.XImage;
-        #end
+    
+    private function createPrimitive() :IPrimitive {
+        return Primitives.createImage();
     }
 }
