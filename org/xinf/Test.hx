@@ -5,10 +5,6 @@ import org.xinf.style.StyleSheet;
 import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
-#if neko
-import org.xinf.inity.Root;
-#end
-
 class Foo extends org.xinf.ony.Text {
 
     public function new( name:String ) {
@@ -24,8 +20,6 @@ class Foo extends org.xinf.ony.Text {
                         Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
             addEventListener( event, handleEvent );
         }
-        
-        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, onEnterFrame );
     }
 
     public function onMouseOver( e:Event ) :Bool {
@@ -58,19 +52,20 @@ class Foo extends org.xinf.ony.Text {
         return true;
     }
     
-    public function onEnterFrame( e:Event ) : Bool {
-     //   x = (x+2)%204;
-        return true;
-    }
 }
 
 class Test {
+    static var container:org.xinf.ony.Element;
+    static var x:Int;
+    
+    static function onEnterFrame( e:Event ) : Bool {
+        container.style.x = x = (x+2)%204;
+        container.styleChanged();
+        return true;
+    }
     static function main() {
         trace("Hello");
-    
-        #if neko
-            Root.root = new Root(320,240);
-        #end
+        x=0;
 
         var style = StyleSheet.newFromString("
             .Foo {
@@ -91,28 +86,49 @@ class Test {
                 width: 320px;
                 height: 240px;
             }
+            
+            .Pane {
+                background: #aaa;
+            }
+            
+            #container {
+                x: 50;
+                y: 50;
+            }
 
         ");
 //        trace("StyleSheet: " + style );
         
         org.xinf.style.StyledObject.globalStyle.append( style );
+
+        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, Test.onEnterFrame );
+
 /*
-        var i = new Image("test.png");
+        var i = new org.xinf.ony.Image("test.png");
         i.style.x = i.style.y = 10;
-  */      
-                
+*/
+
+        var c = new org.xinf.ony.Pane("container");
+        container = c;
+        org.xinf.ony.Root.getRoot().addChild(c);
+
         var box = new Foo("box1");
         box.style.x = box.style.y = 100;
         box.style.width = box.style.height = 100;
         box.styleChanged();
+        c.addChild(box);
         
         box = new Foo("box2");
         box.style.x = 201; box.style.y = 100;
         box.styleChanged();
 //        box.style.width = box.style.height = 10;
+        c.addChild(box);
+
+        
+        org.xinf.ony.Root.getRoot().addChild(box);
         
         #if neko
-             Root.root.run();
+             org.xinf.inity.Root.root.run();
         #end
     }
 }
