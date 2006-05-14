@@ -14,11 +14,10 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 gl : cptr
-
 sdl : cptr
 
 
-default : subdirs test
+default : subdirs xinfinity
 
 bin/test.n : $(HAXE_SRCS) $(MAIN_CLASS_FILE)
 	haxe $(HAXEFLAGS) -neko bin/test.n -main $(MAIN_CLASS) $(MAIN_CLASS)
@@ -27,7 +26,13 @@ bin/test.js : $(MAIN_CLASS_FILE) $(HAXE_SRCS)
 bin/test.swf : $(MAIN_CLASS_FILE) $(HAXE_SRCS)
 	haxe $(HAXEFLAGS) -fheader 320:240:25:ffffff -swf $@ -main $(MAIN_CLASS)
 
-test : subdirs bin/test.n bin/test.swf bin/test.js
+.PHONY: flash js xinfinity
+
+flash: bin/test.swf
+js: bin/test.js
+xinfinity: bin/test.n
+
+test : subdirs xinfinity
 	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/test.n
 
 cleanall : clean

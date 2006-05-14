@@ -22,6 +22,17 @@ class Glyph {
 }
 
 class Font {
+    private static var fonts:Hash<Font> = new Hash<Font>();
+    public static function getFont( name:String ) {
+        var font:Font;
+        font = fonts.get(name);
+        if( font != null ) return font;
+        
+        font = new FontReader("/home/dan/.fonts/vera.ttf").getFont();
+        fonts.set( name, font );
+        return font;
+    }
+
     private var glyphs:Array<Glyph>;
     
     public property family_name(default,null):String;

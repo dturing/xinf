@@ -43,17 +43,17 @@ class BoxLayout extends Layout {
         }
         
         // iterate again to set position
-        var x:Float = 0;
+        var x:Float = style.padding.left.px();
+        var ofs:Float = style.padding.top.px();
         for( child in children ) {
-            child.style.y = (max - child.style.height.px())/2;
+            child.style.y = ofs + (max - child.style.height.px())/2;
             child.style.x = x;
             x += child.style.width.px();
             child.styleChanged();
         }
         
-        style.width = x;
-        style.height = max;
-        sizeChanged();
+        style.setInnerSize(x,max);
+        styleChanged();
     }
     
     private function _verticalLayout() {
@@ -66,17 +66,17 @@ class BoxLayout extends Layout {
         }
         
         // iterate again to set position
-        var y:Float = 0;
+        var y:Float = style.padding.top.px();
+        var ofs:Float = style.padding.left.px();
         for( child in children ) {
-            child.style.x = (max - child.style.width.px())/2;
+            child.style.x = ofs + (max - child.style.width.px())/2;
             child.style.y = y;
             y += child.style.height.px();
             child.styleChanged();
         }
         
-        style.width = max;
-        style.height = y;
-        parent.sizeChanged();
+        style.setInnerSize(max,y);
+        styleChanged();
     }
     
     public function addChild( child:Element ) :Void {

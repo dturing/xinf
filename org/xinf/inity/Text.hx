@@ -5,7 +5,7 @@ import org.xinf.geom.Point;
 
 class Text extends Box {
     // FIXME this loads the font for each text item, eeew!
-    private static var _font:Font = new FontReader("/home/dan/.fonts/vera.ttf").getFont();
+    private static var _font:Font = Font.getFont("Bitstream Vera Sans");
 
     public property text( _getText, _setText ) : String;
     private var _text:String;
