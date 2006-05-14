@@ -24,6 +24,6 @@ class JSText extends JSPane, implements ITextPrimitive  {
     }
 
     public function getTextExtends() :Point {
-        return( new Point(50,50) ); // FIXME
+        return( new Point(untyped _e.offsetWidth,untyped _e.offsetHeight) ); // FIXME
     }
 }

@@ -29,6 +29,9 @@ class Pad {
                 } else {
                     return( fromString( v.toString() ) );
                 }
+            case TBool:
+                trace("PARSE Pad from TBool "+v+"-- FIXME");
+                return( Pad.NIL );
             default:
                 throw("Cannot parse Pad from "+Reflect.typeof(v)+": "+v );
         }
