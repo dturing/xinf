@@ -5,6 +5,8 @@ import org.xinf.style.StyleSheet;
 import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
+import org.xinf.ony.layout.BoxLayout;
+
 class Foo extends org.xinf.ony.Text {
 
     public function new( name:String ) {
@@ -22,34 +24,27 @@ class Foo extends org.xinf.ony.Text {
         }
     }
 
-    public function onMouseOver( e:Event ) :Bool {
-        trace("OVER "+this);
+    public function onMouseOver( e:Event ) :Void {
         addStyleClass("hover");
-        return true;
     }
-    public function onMouseOut( e:Event ) :Bool {
-        trace("OUT "+this);
+    public function onMouseOut( e:Event ) :Void {
         removeStyleClass("hover");
-        return true;
     }
-    public function onMouseDown( e:Event ) :Bool {
+    public function onMouseDown( e:Event ) :Void {
         addStyleClass("push");
-        return true;
     }
-    public function onMouseUp( e:Event ) :Bool {
+    public function onMouseUp( e:Event ) :Void {
         removeStyleClass("push");
-        return true;
     }
     
-    public function handleEvent( e:Event ) : Bool {
+    public function handleEvent( e:Event ) : Void {
         //trace("Event on "+this+": "+e.type );
         
-        text = name+"\n"+e.type+"\n";
+        var t:String = name+"\n"+e.type+"\n";
         for( cl in this.getStyleClasses() ) {
-            text += cl+" ";
+            t += cl+" ";
         }
-        
-        return true;
+        text = t;
     }
     
 }
@@ -58,10 +53,9 @@ class Test {
     static var container:org.xinf.ony.Element;
     static var x:Int;
     
-    static function onEnterFrame( e:Event ) : Bool {
+    static function onEnterFrame( e:Event ) : Void {
         container.style.x = x = (x+2)%204;
         container.styleChanged();
-        return true;
     }
     static function main() {
         trace("Hello");
@@ -74,12 +68,12 @@ class Test {
             }
 
             .hover {
-                background: #0f0; 
+                background: #faa; 
             }
             
             .push {
-                background: #009;
-                color: white;
+                background: #fcc;
+                color: black;
             }
             
             .Image {
@@ -107,31 +101,29 @@ class Test {
         
         org.xinf.style.StyledObject.globalStyle.append( style );
 
-        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, Test.onEnterFrame );
+//        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, Test.onEnterFrame );
 
 /*
         var i = new org.xinf.ony.Image("test.png");
         i.style.x = i.style.y = 10;
 */
 
-        var c = new org.xinf.ony.Pane("container");
-        container = c;
-        org.xinf.ony.Root.getRoot().addChild(c);
+        var cont = new BoxLayout("container",VERTICAL);
+        container = cont;
+        org.xinf.ony.Root.getRoot().addChild(cont);
 
-        var box = new Foo("box1");
-        box.style.x = box.style.y = 100;
-        box.style.width = box.style.height = 100;
-        box.styleChanged();
-        c.addChild(box);
-        
-        box = new Foo("box2");
-        box.style.x = 201; box.style.y = 100;
-        box.styleChanged();
-//        box.style.width = box.style.height = 10;
-        c.addChild(box);
+        for( j in 0...5 ) {
+            var c = new BoxLayout("container",HORIZONTAL);
+            cont.addChild(c);
 
-        
-//        org.xinf.ony.Root.getRoot().addChild(box);
+            for( i in 0...5 ) {
+                var box = new Foo("box"+j+"/"+i);
+    //            box.style.x = box.style.y = 20;
+                box.style.width = box.style.height = 100;
+        //        box.styleChanged();
+                c.addChild(box);
+            }
+        }
         
         #if neko
              org.xinf.inity.Root.root.run();

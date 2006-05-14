@@ -42,7 +42,7 @@ class Root extends Stage {
     public function run() : Bool {
         while( !quit ) {
         
-            org.xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME ) );
+            org.xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME, this.owner ) );
             
             processEvents();
 
@@ -124,7 +124,7 @@ class Root extends Stage {
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
         org.xinf.event.EventDispatcher.global.dispatchEvent( 
-                org.xinf.event.Event.KeyboardEvent( type, str )
+                org.xinf.event.Event.KeyboardEvent( type, null, str )
             );
     }
 
@@ -137,7 +137,7 @@ class Root extends Stage {
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
         if( objectUnderMouse != null )
-            objectUnderMouse.dispatchEvent( new Event( type ) );
+            objectUnderMouse.dispatchEvent( new Event( type, objectUnderMouse.owner ) );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
@@ -258,10 +258,10 @@ class Root extends Stage {
         var o = getObjectsUnderPoint( mouseX, height-mouseY ).pop();
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
-                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OUT ) );
+                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OUT, objectUnderMouse.owner ) );
             objectUnderMouse = o;
             if( objectUnderMouse != null )
-                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OVER ) );
+                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OVER, objectUnderMouse.owner ) );
         }
     }
 }

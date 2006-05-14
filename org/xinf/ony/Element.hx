@@ -6,12 +6,17 @@ import org.xinf.ony.impl.IPrimitive;
 
 class Element extends StyledObject {
     public var name:String;
+    public var parent:Element;
     
     private var _p:IPrimitive;
     private var children:Array<Element>;
+
+    private var width:Float;
+    private var height:Float;
     
     public function new( _name:String ) :Void {
         name = _name;
+        width = height = 0;
         children = new Array<Element>();
         _p = createPrimitive();
         _p.setOwner( this );
@@ -25,12 +30,14 @@ class Element extends StyledObject {
 
     public function addChild( child:Element ) :Void {
         children.push( child );
+        child.parent = this;
         trace("addChild "+child+" to "+this._p );
         _p.addChild( child._p );
     }
     
     public function removeChild( child:Element ) :Void {
         children.remove( child );
+        child.parent = null;
         _p.removeChild( child._p );
     }
 
@@ -39,7 +46,19 @@ class Element extends StyledObject {
         _p.applyStyle( style );
     }
 
-    public function addEventListener( type:String, f:Event->Bool ) :Void {
+    private function sizeChanged() :Void {
+        dispatchEvent( new Event( Event.SIZE_CHANGED, this ) );
+    }
+    public function dispatchEvent( e:Event ) :Void {
+        super.dispatchEvent( e );
+        
+        // propagate to parent
+        if( !e.stopped && parent != null ) {
+            parent.dispatchEvent(e);
+        }
+    }
+
+    public function addEventListener( type:String, f:Event->Void ) :Void {
         _p.eventRegistered( type );
         super.addEventListener( type, f );
     }

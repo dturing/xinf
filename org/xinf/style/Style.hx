@@ -150,6 +150,19 @@ class Style {
         var s:Style = newFromString( this.toString() ); // FIXME
         return s;
     }
+    
+    public function setInnerSize( w:Float, h:Float ) : Void {
+        var b:Border = border;
+        var p:Pad = padding;
+        width = w + b.horizontal() + p.horizontal();
+        height = h + b.vertical() + p.vertical();
+    }
+    public function getOuterSize() :{ w:Float, h:Float } {
+        var b:Border = border;
+        var p:Pad = padding;
+        return( { w:width-(b.horizontal()+p.horizontal()),
+                  h:height-(b.vertical()+p.vertical()) } );
+    }
 
     public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; x:0px; y:0px; width:20px; height:20px;");
     

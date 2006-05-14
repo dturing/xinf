@@ -14,6 +14,13 @@ class Border {
         style=s;
     }
     
+    public function horizontal() : Float {
+        return( 2*thickness.px() );
+    }
+    public function vertical() : Float {
+        return( 2*thickness.px() );
+    }
+    
     public static var NIL:Border = new Border(UnitValue.NIL,Border.SOLID,Color.NIL);
     public static var BLACK_1PX:Border = new Border(UnitValue.ONE_PX,Border.SOLID,Color.BLACK);
     

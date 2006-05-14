@@ -11,6 +11,13 @@ class Pad {
     public function new( l:UnitValue, t:UnitValue, r:UnitValue, b:UnitValue ) :Void {
         left=l; top=t; right=r; bottom=b;
     }
+
+    public function horizontal() : Float {
+        return( left.px() + right.px() );
+    }
+    public function vertical() : Float {
+        return( top.px() + bottom.px() );
+    }
     
     public static function fromDynamic( v:Dynamic ) :Pad {
         switch( Reflect.typeof(v) ) {
