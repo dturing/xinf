@@ -43,16 +43,16 @@ class BoxLayout extends Layout {
         }
         
         // iterate again to set position
-        var x:Float = style.padding.left.px();
-        var ofs:Float = style.padding.top.px();
+        var x:Float = style.padding.left.px() + style.border.thickness.px();
+        var ofs:Float = style.padding.top.px() + style.border.thickness.px();
         for( child in children ) {
-            child.style.y = ofs + (max - child.style.height.px())/2;
+            child.style.y = ofs + ((max - child.style.height.px()) * child.style.verticalAlign.factor );
             child.style.x = x;
             x += child.style.width.px();
             child.styleChanged();
         }
         
-        style.setInnerSize(x,max);
+        style.setInnerSize(x-(style.padding.left.px() + style.border.thickness.px()),max);
         styleChanged();
     }
     
@@ -66,16 +66,16 @@ class BoxLayout extends Layout {
         }
         
         // iterate again to set position
-        var y:Float = style.padding.top.px();
-        var ofs:Float = style.padding.left.px();
+        var y:Float = style.padding.top.px() + style.border.thickness.px();
+        var ofs:Float = style.padding.left.px() + style.border.thickness.px();
         for( child in children ) {
-            child.style.x = ofs + (max - child.style.width.px())/2;
+            child.style.x = ofs + ((max - child.style.width.px()) * child.style.textAlign.factor );
             child.style.y = y;
             y += child.style.height.px();
             child.styleChanged();
         }
         
-        style.setInnerSize(max,y);
+        style.setInnerSize(max,y-(style.padding.top.px() + style.border.thickness.px()));
         styleChanged();
     }
     

@@ -17,6 +17,9 @@ class Style {
     public property width(get_width,set_width):Dynamic;
     public property height(get_height,set_height):Dynamic;
     
+    public property verticalAlign(get_vertical_align,set_vertical_align):Dynamic;
+    public property textAlign(get_text_align,set_text_align):Dynamic;
+
     public function new() :Void {
         values = new Hash<Dynamic>();
 /*        
@@ -105,6 +108,23 @@ class Style {
         values.set( "height", c );
         return c;
     }
+
+    public function get_text_align() :Alignment {
+        return _lookup( "text-align" );
+    }
+    public function set_text_align( v:Dynamic ) :Alignment {
+        var c = Alignment.fromDynamic(v);
+        values.set( "text-align", c );
+        return c;
+    }
+    public function get_vertical_align() :Alignment {
+        return _lookup( "vertical-align" );
+    }
+    public function set_vertical_align( v:Dynamic ) :Alignment {
+        var c = Alignment.fromDynamic(v);
+        values.set( "vertical-align", c );
+        return c;
+    }
     
     
     public function _lookup( attr:String ) : Dynamic {
@@ -119,7 +139,7 @@ class Style {
             if( a.length == 2 ) {
                 var name = StringTools.trim(a[0]);
                 var value = StringTools.trim(a[1]);
-                var setter = Reflect.field( this, "set_"+name );
+                var setter = Reflect.field( this, "set_"+StringTools.replace(name,"-","_") );
                 if( !setter ) {
                     trace("Unknown style attribute: "+name+" (ignored)" );
                 } else {
@@ -164,6 +184,6 @@ class Style {
                   h:height-(b.vertical()+p.vertical()) } );
     }
 
-    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; x:0px; y:0px; width:20px; height:20px;");
+    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; x:0px; y:0px; width:20px; height:20px; vertical-align:left; text-align:left;");
     
 }

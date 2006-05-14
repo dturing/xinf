@@ -91,11 +91,25 @@ class Test {
                 border: none;
             }
             
-            #container {
+            .BoxLayout {
                 x: 50;
                 y: 50;
+                border: none;
+                background: #ddd;
+                padding: 0;
             }
+            
+            #row1 {
+                text-align: right;
+            }            
+            #row2 {
+                text-align: center;
+            }            
 
+            #box2/2 {
+                background: #0f0;
+                vertical-align: bottom;
+            }
         ");
 //        trace("StyleSheet: " + style );
         
@@ -113,7 +127,7 @@ class Test {
         org.xinf.ony.Root.getRoot().addChild(cont);
 
         for( j in 0...5 ) {
-            var c = new BoxLayout("container",HORIZONTAL);
+            var c = new BoxLayout("row"+j,HORIZONTAL);
             cont.addChild(c);
 
             for( i in 0...5 ) {
