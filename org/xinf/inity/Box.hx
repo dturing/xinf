@@ -15,6 +15,7 @@ class Box extends Group {
             
         var b:Float = border.thickness.px();
         
+        trace("Box width: "+style.width );
         var w:Float = style.width.px()-1;   // w,h are not really width/height here,
         var h:Float = style.height.px()-1;  // but right,bottom!
         var x:Float = 0;

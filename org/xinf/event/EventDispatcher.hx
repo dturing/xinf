@@ -21,6 +21,8 @@ class EventDispatcher {
         a.push(f);
     }
     
+    // TODO: removeEventListener
+    
     public function dispatchEvent( e:Event ) :Void {
         var a:Array<Event -> Void> = _listeners.get(e.type);
         if( a != null ) {

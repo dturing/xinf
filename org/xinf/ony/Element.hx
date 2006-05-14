@@ -31,7 +31,6 @@ class Element extends StyledObject {
     public function addChild( child:Element ) :Void {
         children.push( child );
         child.parent = this;
-        trace("addChild "+child+" to "+this._p );
         _p.addChild( child._p );
     }
     

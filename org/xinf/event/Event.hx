@@ -15,6 +15,8 @@ class Event {
     public static var STYLE_CHANGED:String = "styleChanged";
     public static var SIZE_CHANGED:String = "sizeChanged";
     
+    public static var CHANGED:String = "changed";
+    
     public property type(default,null) : String;
     public property target(default,null) : EventDispatcher;
     public property stopped(default,null) : Bool;

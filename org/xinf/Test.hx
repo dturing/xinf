@@ -5,7 +5,10 @@ import org.xinf.style.StyleSheet;
 import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
+import org.xinf.ony.Pane;
 import org.xinf.ony.layout.BoxLayout;
+import org.xinf.value.Value;
+import org.xinf.value.Expression;
 
 class Foo extends org.xinf.ony.Text {
 
@@ -116,10 +119,22 @@ class Test {
         i.style.x = i.style.y = 10;
 */
 
-        var cont = new BoxLayout("container",VERTICAL);
+        var cont = new Pane("container");
         container = cont;
         org.xinf.ony.Root.getRoot().addChild(cont);
 
+        var last = new Foo("box-1");
+        
+            for( i in 0...5 ) {
+                var box = new Foo("box"+i);
+                box.style.x = new Add( 
+                        last.style.x, last.style.width
+                        );
+                cont.addChild(box);
+                last = box;
+            }
+
+/*
         for( j in 0...5 ) {
             var c = new BoxLayout("row"+j,HORIZONTAL);
             cont.addChild(c);
@@ -130,6 +145,7 @@ class Test {
                 c.addChild(box);
             }
         }
+*/
         
         #if neko
              org.xinf.inity.Root.root.run();
