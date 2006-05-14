@@ -38,20 +38,24 @@ class BoxLayout extends Layout {
 
         // iterate once to find maximum height for alignment.
         for( child in children ) {
-            var h = child.style.height.px();
+            var h = child.style.height.px() + child.style.margin.vertical();
             if( h > max ) max = h;
         }
         
         // iterate again to set position
         var x:Float = style.padding.left.px() + style.border.thickness.px();
         var ofs:Float = style.padding.top.px() + style.border.thickness.px();
+        var margin:Float = 0;
         for( child in children ) {
-            child.style.y = ofs + ((max - child.style.height.px()) * child.style.verticalAlign.factor );
+            x += Math.max( margin, child.style.margin.left.px() );
+            child.style.y = child.style.margin.top.px() + ofs + ((max - (child.style.height.px()+child.style.margin.vertical())) * child.style.verticalAlign.factor );
             child.style.x = x;
             x += child.style.width.px();
+            margin = child.style.margin.right.px();
             child.styleChanged();
         }
         
+        x+=margin;
         style.setInnerSize(x-(style.padding.left.px() + style.border.thickness.px()),max);
         styleChanged();
     }
@@ -61,20 +65,24 @@ class BoxLayout extends Layout {
 
         // iterate once to find maximum width for alignment.
         for( child in children ) {
-            var w = child.style.width.px();
+            var w = child.style.width.px() + child.style.margin.horizontal();
             if( w > max ) max = w;
         }
         
         // iterate again to set position
         var y:Float = style.padding.top.px() + style.border.thickness.px();
         var ofs:Float = style.padding.left.px() + style.border.thickness.px();
+        var margin:Float = 0;
         for( child in children ) {
-            child.style.x = ofs + ((max - child.style.width.px()) * child.style.textAlign.factor );
+            y += Math.max( margin, child.style.margin.top.px() );
+            child.style.x = child.style.margin.left.px() + ofs + ((max - (child.style.width.px()+child.style.margin.horizontal())) * child.style.textAlign.factor );
             child.style.y = y;
             y += child.style.height.px();
+            margin = child.style.margin.bottom.px();
             child.styleChanged();
         }
         
+        y+=margin;
         style.setInnerSize(max,y-(style.padding.top.px() + style.border.thickness.px()));
         styleChanged();
     }

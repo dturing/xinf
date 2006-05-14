@@ -63,7 +63,7 @@ class Test {
 
         var style = StyleSheet.newFromString("
             .Foo {
-                background: #f00;
+                background: #aaa;
                 padding: 5px;
             }
 
@@ -94,21 +94,15 @@ class Test {
             .BoxLayout {
                 x: 50;
                 y: 50;
-                border: none;
+                border: 1px solid #00f;
                 background: #ddd;
                 padding: 0;
+                margin: 2px;
             }
-            
-            #row1 {
-                text-align: right;
-            }            
-            #row2 {
-                text-align: center;
-            }            
 
-            #box2/2 {
-                background: #0f0;
-                vertical-align: bottom;
+            .Foo {
+                margin: 3px;
+                border: 4px solid #000;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -132,9 +126,7 @@ class Test {
 
             for( i in 0...5 ) {
                 var box = new Foo("box"+j+"/"+i);
-    //            box.style.x = box.style.y = 20;
                 box.style.width = box.style.height = 100;
-        //        box.styleChanged();
                 c.addChild(box);
             }
         }

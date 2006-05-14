@@ -184,6 +184,6 @@ class Style {
                   h:height-(b.vertical()+p.vertical()) } );
     }
 
-    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; x:0px; y:0px; width:20px; height:20px; vertical-align:left; text-align:left;");
+    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; margin: 5px; x:0px; y:0px; width:20px; height:20px; vertical-align:left; text-align:left;");
     
 }
