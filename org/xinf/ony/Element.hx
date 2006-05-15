@@ -11,12 +11,8 @@ class Element extends StyledObject {
     private var _p:IPrimitive;
     private var children:Array<Element>;
 
-    private var width:Float;
-    private var height:Float;
-    
     public function new( _name:String ) :Void {
         name = _name;
-        width = height = 0;
         children = new Array<Element>();
         _p = createPrimitive();
         _p.setOwner( this );
