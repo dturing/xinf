@@ -35,6 +35,8 @@ class Foo extends org.xinf.ony.Text {
     }
     public function onMouseDown( e:Event ) :Void {
         addStyleClass("push");
+        
+        trace( this.style );
     }
     public function onMouseUp( e:Event ) :Void {
         removeStyleClass("push");
@@ -104,8 +106,8 @@ class Test {
             }
 
             .Foo {
-                margin: 3px;
-                border: 4px solid #000;
+                margin: 2px;
+                border: 1px solid #000;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -123,16 +125,22 @@ class Test {
         container = cont;
         org.xinf.ony.Root.getRoot().addChild(cont);
 
-        var last = new Foo("box-1");
+        var first = new Foo("box-1");
+        var last = first;
+            first.style.x = new Identity( new Value<Float>(1) );
         
             for( i in 0...5 ) {
                 var box = new Foo("box"+i);
                 box.style.x = new Add( 
                         last.style.x, last.style.width
                         );
+                        
+                box.style.y = new Value<Float>( i*20 );
                 cont.addChild(box);
                 last = box;
             }
+            
+            trace("--------------_");
 
 /*
         for( j in 0...5 ) {
