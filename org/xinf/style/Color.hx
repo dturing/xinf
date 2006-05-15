@@ -1,6 +1,6 @@
 package org.xinf.style;
 
-class Color {
+class Color extends org.xinf.value.SimpleValue {
     public var r:Int;
     public var g:Int;
     public var b:Int;
@@ -57,6 +57,7 @@ class Color {
             } else if( s.length == 6 ) {
                 var i = Std.parseInt("0x"+s);
                 return( Color.fromInt( i ) );
+            // TODO lengths 4 and 8, for rgba?
             } else {
                 throw("Cannot parse Color "+v );
             }
@@ -68,6 +69,7 @@ class Color {
                 c.push( Std.parseInt( s[i] ) );
             }
             return( Color.rgb( c.shift(), c.shift(), c.shift() ) );
+        // TODO rgba()
         } else if( (t = predefined.get(v)) != null ) {
             return( t );
         } else {

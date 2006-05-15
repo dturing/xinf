@@ -8,11 +8,11 @@ enum Unit {
     em;
 }
 
-class UnitValue extends Value {
+class UnitValue extends Value<Float> {
     public var unit:Unit;
-    public var _v:Value;
+    public var _v:Value<Float>;
     
-    public function new( v:Value, u:Unit ) :Void {
+    public function new( v:Value<Float>, u:Unit ) :Void {
         super(-.0);
         _v=v;
         unit=u;
@@ -25,9 +25,14 @@ class UnitValue extends Value {
     }
 
     private function childChanged( e:Event ) :Void {
-        trace("UnitValue changed: "+this );
+      //  trace("UnitValue changed: "+this );
         changed();
     }
+
+    // FIXME: if refactoring of Style to use Values turns out good, replace all px() bullcrap..
+    public function px() :Float {
+        return value;
+    }        
     
     public static var NIL:UnitValue   = new UnitValue( new Value(0.0), px );
     public static var ONE_PX:UnitValue = new UnitValue( new Value(1.0), px );
@@ -47,17 +52,17 @@ class UnitValue extends Value {
             case TObject:
                 if( Std.is(v,UnitValue) ) {
                     return cast(v,UnitValue);
-                } else if( Std.is(v,Value) ) {
-                    return( new UnitValue( cast(v,Value), px ) );
+                } else if( untyped v.set_value != null ) { // workaround for Std.is(v,Value<Float>)
+                    return( new UnitValue( untyped v, px ) );
                 } else if( Std.is(v,String) ) {
                     return( fromString( cast(v,String) ) );
                 } else {
                     return( fromString( v.toString() ) );
                 }
             case TInt:
-                return( new UnitValue( new Value(v), px ) );
+                return( new UnitValue( new Value<Float>(v), px ) );
             case TFloat:
-                return( new UnitValue( new Value(v), px ) );
+                return( new UnitValue( new Value<Float>(v), px ) );
             default:
                 throw("Cannot parse UnitValue from "+Reflect.typeof(v)+": "+v );
         }
@@ -76,8 +81,7 @@ class UnitValue extends Value {
         var v:UnitValue = new UnitValue( new Value(Std.parseFloat(v)), unit );
         return v;
     }
-
     public function toString() :String {
-        return( ""+value+unit );
+        return( ""+_v+unit );
     }
 }

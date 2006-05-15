@@ -1,11 +1,15 @@
 package org.xinf.style;
 
 import org.xinf.style.UnitValue;
+import org.xinf.value.IValue;
+import org.xinf.value.Expression;
 
 class Style {
 
-    private var values :Hash<Dynamic>;
+    private var values :Hash<IValue>;
 
+//    public property color(default,null):Link<Color>;
+    
     public property color(get_color,set_color):Color;
     public property background(get_background,set_background):Color;
     public property border(get_border,set_border):Border;
@@ -21,7 +25,7 @@ class Style {
     public property textAlign(get_text_align,set_text_align):Dynamic;
 
     public function new() :Void {
-        values = new Hash<Dynamic>();
+        values = new Hash<IValue>();
 /*        
         set_color( Color.rgb(0,0,0) );
         set_background( Color.rgb(0xff,0xff,0xff) );
@@ -36,7 +40,7 @@ class Style {
     }
         
     public function get_color() :Color {
-        return _lookup( "color" );
+        return cast(_lookup( "color" ),Color);
     }
     public function set_color( v:Dynamic ) :Color {
         var c = Color.fromDynamic(v);
@@ -80,10 +84,22 @@ class Style {
         return _lookup( "x" );
     }
     public function set_x( v:Dynamic ) :UnitValue {
-        var c = UnitValue.fromDynamic(v);
-        values.set( "x", c );
-        return c;
+        var n = _set( "x", UnitValue, v );
+        return( n );
     }
+    private function _set( name:String, kl:Dynamic, v:Dynamic ) :Dynamic {
+        var value = values.get(name); // dont use _lookup here! we want to create a new one if we dont have the property ourselves
+        var r:Dynamic = kl.fromDynamic(v);
+        if( !value ) {
+            value = new Identity<Float>(r);
+            values.set(name,value);
+        } else
+            value.set(r);
+            
+//        value.changed();
+        return r;
+    }
+    
     public function get_y() :UnitValue {
         return _lookup( "y" );
     }
@@ -96,9 +112,13 @@ class Style {
         return _lookup( "width" );
     }
     public function set_width( v:Dynamic ) :UnitValue {
+        var n = _set( "width", UnitValue, v );
+        return( n );
+        /*
         var c = UnitValue.fromDynamic(v);
         values.set( "width", c );
         return c;
+        */
     }
     public function get_height() :UnitValue {
         return _lookup( "height" );
@@ -127,12 +147,10 @@ class Style {
     }
     
     
-    public function _lookup( attr:String ) : Dynamic {
-        var r = values.get(attr);
-        return( r );
+    public function _lookup( attr:String ) :IValue {
+        return( values.get(attr) );
     }
-    
-    
+        
     public function fromString( str:String ) :Void {
         for( _attribute in str.split(";") ) {
             var a = StringTools.trim(_attribute).split(":");

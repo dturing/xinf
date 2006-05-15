@@ -1,8 +1,11 @@
 package org.xinf.style;
 
+import org.xinf.value.IValue;
+
 class StyleChain extends Style {
     private var chain:List<Style>;
     private var element:StyledObject;
+    private var cache :Hash<IValue>;
 
     public function new( e:StyledObject ) :Void {
         chain = new List<Style>();
@@ -20,23 +23,33 @@ class StyleChain extends Style {
     
     public function setChain( l:List<Style> ) :Void {
         chain = l;
+        clearCache();
     }
     
-    public function _lookup( attr:String ) : Dynamic {
+    public function _lookup( attr:String ) :IValue {
         
-        var r:Dynamic = super._lookup(attr);
-        if( r != null ) return(r);
+        var r:IValue = cache.get(attr);
+        if( r == null ) {
+            r = super._lookup(attr);
         
-        for( style in chain ) {
-            r = style._lookup(attr);
-            if( r != null ) return(r);
+            var i = chain.iterator();
+            while( r == null && i.hasNext() ) {
+                var style = i.next();
+                r = style._lookup(attr);
+            }
+            if( r == null && Style.DEFAULT != null ) {
+                r = Style.DEFAULT._lookup(attr);
+            }
+            if( r == null ) {
+                throw("Style attribute '"+attr+"' not found.");
+            }
+            cache.set(attr, r.identity());   
         }
-        
-        if( Style.DEFAULT != null ) {
-            r = Style.DEFAULT._lookup(attr);
-            if( r != null ) return(r);
-        }
-        
-        throw("Style attribute '"+attr+"' not found.");
+        return r;
     }
+    
+    public function clearCache() :Void {
+        cache = new Hash<IValue>();
+    }
+
 }
