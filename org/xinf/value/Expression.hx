@@ -2,34 +2,35 @@ package org.xinf.value;
 
 import org.xinf.event.Event;
 
-class Expression extends Value {
-    private var input:Array<Value>;
+// destination:T = f(source:S);
+class Expression<T,S> extends Value<T> {
+    private var input:Array<Value<S>>;
     private var dirty:Bool;
     
     public function new() {
         super(null);
-        input = new Array<Value>();
+        input = new Array<Value<S>>();
         dirty = true;
     }
     
-    public function append( v:Value ) :Void {
+    public function append( v:Value<S> ) :Void {
         dirty = true;
         input.push(v);
-        v.addEventListener( Event.CHANGED, childChanged );
+        v.addEventListener( "changed", childChanged );
     }
     
     private function childChanged( e:Event ) :Void {
         dirty = true;
-        trace("Expression changed: "+this );
+//        trace("Expression changed: "+this );
         changed();
     }
 
-    public function evaluate() :Float {
+    public function evaluate() :T {
         throw("not implemented");
         return null;
     }
 
-    public function get_value() :Float {
+    public function get_value() :T {
         if( dirty ) {
             _value = evaluate();
             dirty = false;
@@ -44,36 +45,15 @@ class Expression extends Value {
     }
 }
 
-class Identity extends Expression {
-    public function new( a:Value ) {
-        super();
-        append(a);
-    }
-
-    public function set_value( v:Float ) :Float {
-        throw("Identity values can not be set.");
-        return _value;
-    }
-
-    public function evaluate() :Float {
-        return( input[0].value );
-    }
-    
-    public function set( a:Value ) :Void {
-        input[0] = a;
-        changed();
-    }
-}
-
-class Add extends Expression {
-    public function new( a:Value, b:Value ) {
+class Add extends Expression<Float,Float> {
+    public function new( a:Value<Float>, b:Value<Float> ) {
         super();
         append(a);
         append(b);
     }
     
     public function evaluate() :Float {
-        var r:Float = .0;
+        var r:Float = 0;
         for( variable in input ) {
             r += variable.value;
         }
@@ -81,8 +61,8 @@ class Add extends Expression {
     }
 }
 
-class Subtract extends Expression {
-    public function new( a:Value, b:Value ) {
+class Subtract extends Expression<Float,Float> {
+    public function new( a:Value<Float>, b:Value<Float> ) {
         super();
         append(a);
         append(b);
