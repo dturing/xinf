@@ -26,8 +26,8 @@ class BitmapData {
     }
 
     public function createTexture() {
-        twidth = 8; while( twidth<width ) twidth<<=1;
-        theight = 8; while( theight<height ) theight<<=1;
+        twidth = 2; while( twidth<width ) twidth<<=1;
+        theight = 2; while( theight<height ) theight<<=1;
 
         var t = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);
@@ -35,26 +35,28 @@ class BitmapData {
 
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
-        GL._CreateTexture( texture, twidth, theight );
+        GL.CreateTexture( texture, twidth, theight );
         
-        switch( cspace ) {
-            case RGB:
-                GL._TexSubImage2D_BGR_BYTE( texture, new Point(0,0), new Point(width,height), _d );
-            case RGBA:
-                GL._TexSubImage2D_BGRA_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+        if( _d != null ) {
+            switch( cspace ) {
+                case RGB:
+                    GL.TexSubImage2D_RGB_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+                case RGBA:
+                    GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+            }
         }
         GL.Disable( GL.TEXTURE_2D );
     }
     
     public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
-        trace("BitmapData:render "+w+","+h+" "+rx+","+ry+" "+rw+","+rh );
-        trace("texture "+twidth+","+theight );
+//        trace("BitmapData:render "+texture+" - "+w+","+h+" // "+rx+","+ry+" "+rw+","+rh );
         var tx1:Float = (rx/twidth)*w;
         var ty1:Float = (ry/theight)*h;
         var tx2:Float = ( (rw+rx) / twidth ) * w * (width/w);
         var ty2:Float = ( (rh+ry) / theight ) * h * (height/h);
 
         GL.Enable( GL.TEXTURE_2D );
+        GL.BindTexture( GL.TEXTURE_2D, texture );
         GL.Begin( GL.QUADS );
             
             GL.TexCoord2f( tx1, ty1 );

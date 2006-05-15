@@ -9,6 +9,7 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
     public function new( e:Group ) :Void {
         _e = e;
 //        org.xinf.inity.Root.root.addChild( _e );
+        _e.changed(); // FIXME this is done too often, in XImage ctor too eg.
     }
     
     public function setOwner( owner:org.xinf.event.EventDispatcher ) :Void {

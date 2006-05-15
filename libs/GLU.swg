@@ -18,6 +18,6 @@ typedef double		GLclampd;	/* double precision float in [0,1] */
 
 %include <GL/glu.h>
 
-GLUtesselator *_gluSimpleTesselator( void );
-void _gluTessCubicCurve( GLUtesselator *tess, value ctrl, double *v, int n );
-void _gluTessQuadraticCurve( GLUtesselator *tess, value _ctrl, double *v, int _n );
+GLUtesselator *gluSimpleTesselator( void );
+void gluTessCubicCurve( GLUtesselator *tess, value ctrl, double *v, int n );
+void gluTessQuadraticCurve( GLUtesselator *tess, value _ctrl, double *v, int _n );

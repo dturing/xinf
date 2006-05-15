@@ -37,6 +37,18 @@ value cptr_## ctype ##_alloc( value n ) { \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 
+#define FREE(ctype,hxtype) \
+value cptr_## ctype ##_free( value p ) { \
+    CHECK_KIND( p, k_## ctype ##_p ); \
+    ctype *ptr = ( ctype *)val_data(p); \
+    if( ptr == NULL ) { \
+        val_throw( alloc_string( "null pointer" ) ); \
+        return val_null; \
+    } \
+    free( ptr );\
+    return val_true; \
+} \
+DEFINE_PRIM(cptr_## ctype ##_free,1);
 
 
 #define GET(ctype,hxtype) \
@@ -105,6 +117,7 @@ DEFINE_PRIM(cptr_## ctype ##_from_array,3);
 #define CPTR(ctype,hxtype) \
     DEFINE_KIND( k_## ctype ##_p ); \
     ALLOC(ctype,hxtype) \
+    FREE(ctype,hxtype) \
     GET(ctype,hxtype) \
     SET(ctype,hxtype) \
     TO_ARRAY(ctype,hxtype ) \
@@ -142,3 +155,10 @@ value cptr_void_null() {
     return( ALLOC_KIND( NULL, k_void_p ) );
 }
 DEFINE_PRIM(cptr_void_null,0);
+
+value cptr_is_valid( value ptr ) {
+    if( ptr == val_null || !val_is_abstract(ptr) ) return val_false;
+    if( val_data(ptr) == NULL ) return val_false;
+    return val_true;
+}
+DEFINE_PRIM(cptr_is_valid,1);

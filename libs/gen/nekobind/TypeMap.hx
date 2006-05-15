@@ -9,7 +9,7 @@ class TypeMap {
         
         setMaps( "
 float,double : Float
-int,unsigned int,short,unsigned short,char,unsigned char,signed char : Int
+int,unsigned int,short,unsigned short,char,unsigned char,signed char,long,unsigned long,signed long : Int
 unsigned char*,const unsigned char*,char*,const char* : String
 bool : Bool
 void : Void

@@ -26,7 +26,7 @@ class HaxeImpl extends Generator {
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
         if( args.length <= 5 ) {
             print("\tpublic static var "+stripSymbol(name) );
-            print(" = neko.Lib.load(\""+module+"\",\"_"+name+"\","+args.length+");\n");
+            print(" = neko.Lib.load(\""+module+"\",\"neko_"+name+"\","+args.length+");\n");
         } else {
             print("\t// "+name+" not wrapped because it has > 5 arguments :/\n");
         }

@@ -37,6 +37,7 @@ class Generator {
 
     private function strip( s:String, what:String, mangleNumbers:Bool ) :String {
         // FIXME: use Ereg.
+        if( what.length > 3 || s.substr(0,what.length) == what ) {
             s = s.split(what).join("");
             
             if( !mangleNumbers ) return s;
@@ -46,9 +47,9 @@ class Generator {
             if( c > 47 && c < 58 ) {
                 s = "_"+s;
             }
+        }            
             
-            return s;
-            
+        return s;
         /*
         if( s.substr(0,prefix.length).toUpperCase() == prefix ) {
             s = s.substr(prefix.length,s.length);

@@ -40,7 +40,7 @@ class CubicTo extends CountourPart {
     }
     
     public function render( tess:Dynamic ) {
-        GLU._TessCubicCurve( tess, untyped ctrl.__a, v, n );
+        GLU.TessCubicCurve( tess, untyped ctrl.__a, v, n );
     }
 
     public function toString() {
@@ -60,7 +60,7 @@ class QuadraticTo extends CountourPart {
     }
     
     public function render( tess:Dynamic ) {
-        GLU._TessQuadraticCurve( tess, untyped ctrl.__a, v, n );
+        GLU.TessQuadraticCurve( tess, untyped ctrl.__a, v, n );
     }
     
     public function toString() {

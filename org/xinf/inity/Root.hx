@@ -8,8 +8,8 @@ class Root extends Stage {
     public static var root:Root = null;
 
     private var quit : Bool;
-    private var mouseX : Int;
-    private var mouseY : Int;
+    public var mouseX : Int;
+    public var mouseY : Int;
     private var buttonpress : Bool;
     private var objectUnderMouse : Object;
 
@@ -143,6 +143,8 @@ class Root extends Stage {
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
+        if( objectUnderMouse != null )
+            objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_MOVE, objectUnderMouse.owner ) );
     }
     
     /* ------------------------------------------------------

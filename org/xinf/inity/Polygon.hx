@@ -20,7 +20,7 @@ class Polygon extends Object {
     
 
     public function tessBeginPolygon() : Void {
-        tess = GLU._SimpleTesselator();
+        tess = GLU.SimpleTesselator();
         GL.LineWidth( 2 );
         GLU.TessBeginPolygon( tess, CPtr.void_null );
     }

@@ -27,7 +27,7 @@ class CWrapper extends Generator {
    //     trace( "CWrapper::_func "+args );
         _defines += argList( args, argDefines );
         
-        print( t.cFunc("_"+name) + "( " + argList( args, argFuncDecl ) + ") {\n");
+        print( t.cFunc("neko_"+name) + "( " + argList( args, argFuncDecl ) + ") {\n");
         
             print( argList( args, argCheck ) );
             print( argList( args, argLocal ) );
@@ -37,7 +37,7 @@ class CWrapper extends Generator {
         print("}\n");
 
         var n:Int=args.length;
-        print( "DEFINE_PRIM(_"+name+","+n+");\n\n");
+        print( "DEFINE_PRIM(neko_"+name+","+n+");\n\n");
     }
     
     public function argFuncDecl( type:IType, name:String, last:Bool ) : String {

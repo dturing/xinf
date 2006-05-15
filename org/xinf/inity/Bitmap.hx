@@ -17,15 +17,19 @@ class Bitmap extends Group {
             
         var b:Float = border.thickness.px();
         
-        var w:Float = style.width.px()+b+b+padding.left.px()+padding.right.px();   // w,h are not really width/height here,
-        var h:Float = style.height.px()+b+b+padding.top.px()+padding.bottom.px();  // but right,bottom!
+        var w:Float = style.width.px()+padding.left.px()+padding.right.px();   // w,h are not really width/height here,
+        var h:Float = style.height.px()+padding.top.px()+padding.bottom.px();  // but right,bottom!
         var x:Float = 0;
         var y:Float = 0;
         
       // image
-        var c = style.background;
-        GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
+        //var c = style.background;
+        //GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
+        GL.Color4f( 1., 1., 1., 1. );
+        GL.PushMatrix();
+        GL.Translatef( b, b, 0 );
         data.render( w, h, 0, 0, 1, 1 );
+        GL.PopMatrix();
         
       // border (dups Box.hx)
         if( border.thickness.value > 0 ) {

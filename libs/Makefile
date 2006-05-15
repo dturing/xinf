@@ -1,4 +1,4 @@
-GEN_MODS=GL GLU SDL FT GdkPixbuf
+GEN_MODS=GL GLU SDL FT GdkPixbuf X
 
 NEKO_LIBS=${shell pkg-config --libs neko}
 NEKO_CFLAGS=${shell pkg-config --cflags neko} -fPIC
@@ -20,6 +20,9 @@ FT_CFLAGS=$(NEKO_CFLAGS) ${shell freetype-config --cflags}
 
 GdkPixbuf_LIBS=$(NEKO_LIBS) ${shell pkg-config --libs gdk-pixbuf-2.0} -L. -lcptr
 GdkPixbuf_CFLAGS=$(NEKO_CFLAGS) ${shell pkg-config --cflags gdk-pixbuf-2.0}
+
+X_LIBS=$(NEKO_LIBS) ${shell pkg-config --libs xdamage xtst} -L. -lcptr -lGL
+X_CFLAGS=$(NEKO_CFLAGS) ${shell pkg-config --cflags xdamage xtst}
 
 
 # where to find GL/gl.h
