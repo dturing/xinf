@@ -32,6 +32,7 @@ class Event {
         while( e != null ) {
             n++;
             e.target.dispatchEvent( e );
+            e.stopPropagation(); // some event generators, like Value::changed(), rely on this! maybe do another flag "delivered"?
             e=queue.shift();
         }
         if( n>100 ) {
@@ -58,7 +59,7 @@ class Event {
     public property type(default,null) : String;
     public property target(default,null) : EventDispatcher;
     public property stopped(default,null) : Bool;
-    public var key : String;
+    public var key : String; // FIXME use data.
     
     
     public function new( _type:String, _target:EventDispatcher ) :Void {

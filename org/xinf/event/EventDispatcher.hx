@@ -42,11 +42,10 @@ class EventDispatcher {
         if( this != global ) global.dispatchEvent( e );
     }
     
-    public function postEvent( type:String, data:Dynamic ) :Void {
+    public function postEvent( type:String, data:Dynamic ) :Event {
         var e:Event = new Event( type, this ); // FIXME: data.
-        // FIXME: use global EventQueue.
         Event.push(e);
-//        dispatchEvent( e );
+        return e;
     }
     
     public function hasListeners( type:String ) :Bool {
