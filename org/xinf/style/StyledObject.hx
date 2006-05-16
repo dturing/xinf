@@ -10,15 +10,17 @@ class StyledObject extends EventDispatcher {
     private var styleClasses:Hash<Bool>;
 
     public function new( _name:String ) :Void {
-        super();
-        
         style = new StyleChain(this);
         styleClasses = new Hash<Bool>();
 
+        super();
+        
         // own classname as style class
         var n:Array<String> = Reflect.getClass(this).__name__;
-        addStyleClass( "#"+_name );
-        addStyleClass( n[n.length-1] );
+        styleClasses.set( "#"+_name, true );
+        styleClasses.set( n[n.length-1], true );
+        
+        styleChanged();
     }
 
     public function addStyleClass( c:String ) :Void {

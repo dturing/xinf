@@ -25,24 +25,6 @@ class Color {
     public static function fromInt( c:Int ) :Color {
         return( new Color( c>>16, (c>>8) & 0xff, c & 0xff, 0xff ) );
     }
-
-    public static function fromDynamic( v:Dynamic ) :Color {
-        switch( Reflect.typeof(v) ) {
-            case TObject:
-                if( Std.is(v,Color) ) {
-                    return( cast(v,Color) );
-                } else if( Std.is(v,String) ) {
-                    return( fromString( cast(v,String) ) );
-                } else {
-                    return( fromString( v.toString() ) );
-                }
-            case TInt:
-                return( fromInt( cast(v,Int) ) );
-            default:
-                throw("Cannot parse Color from "+Reflect.typeof(v)+": "+v );
-        }
-        return( Color.NIL );
-    }
     
     public static function fromString( v:String ) :Color {
         var t:Color;

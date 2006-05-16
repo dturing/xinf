@@ -22,7 +22,9 @@ class Element extends StyledObject {
         _p = createPrimitive();
         _p.setOwner( this );
         super(name);
-    }
+
+        _p.applyStyle( style );
+     }
 
     private function createPrimitive() :IPrimitive {
         throw("dont know which Primitive to create for "+this);
@@ -43,7 +45,7 @@ class Element extends StyledObject {
 
     public function styleChanged() :Void {
         super.styleChanged();
-        _p.applyStyle( style );
+   //     _p.applyStyle( style );
     }
 
     private function onBoundsChanged( e:Event ) {

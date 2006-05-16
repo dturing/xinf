@@ -1,5 +1,7 @@
 package org.xinf.style;
 
+import org.xinf.style.Style;
+
 class StyleSelector {
     private var classes:Array<Array<String>>;
     
@@ -58,7 +60,7 @@ class StyleSelector {
 
 class StyleRule {
     private var selector:StyleSelector;
-    public var style:Style;
+    public var style:PropertySet;
     
     public function new() :Void {
     }
@@ -71,7 +73,7 @@ class StyleRule {
         var s_style = StringTools.trim(str.substr( split+1, str.length-split ));
         
         selector = StyleSelector.newFromString( s_sel );
-        style = Style.newFromString( s_style );
+        style = PropertySet.newFromString( s_style );
         return true;
     }
     
@@ -101,12 +103,12 @@ class StyleSheet {
         rules = rules.concat( s.rules );
     }
     
-    public function match( o:StyledObject ) : List<Style> {
-        var list = new List<Style>();
+    public function match( o:StyledObject ) : Array<PropertySet> {
+        var list = new Array<PropertySet>();
         for( r in rules ) {
             if( r.matches(o) ) {
 //                trace("Match: "+r );
-                list.push(r.style);
+                list.unshift(r.style);
             }
         }
         return list;

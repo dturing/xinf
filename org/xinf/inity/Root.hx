@@ -167,10 +167,12 @@ class Root extends Stage {
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         
         GL.ShadeModel( GL.FLAT );
-        
-        var c = style.background;
+        /*
+        var c = style.backgroundColor;
 //        trace("BG: "+style.background );
-        GL.ClearColor( c.r/0xff, c.g/0xff, c.b/0xff, 1 );
+        if( c != null ) // FIXME
+            GL.ClearColor( c.r/0xff, c.g/0xff, c.b/0xff, 1 );
+            */
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }
 

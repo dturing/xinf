@@ -1,8 +1,6 @@
 package org.xinf.inity;
 
 import org.xinf.geom.Rectangle;
-import org.xinf.style.Border;
-import org.xinf.style.Pad;
 
 class Box extends Group {
     public function new() {
@@ -10,10 +8,13 @@ class Box extends Group {
     }
 
     private function _renderGraphics() :Void {
+    /*
         var border:Border = style.border;
         var padding:Pad = style.padding;
             
         var b:Float = border.thickness.px();
+        */
+        var b:Float = 1;
         
         var w:Float = bounds.width;   // w,h are not really width/height here,
         var h:Float = bounds.height;  // but right,bottom!
@@ -21,8 +22,10 @@ class Box extends Group {
         var y:Float = 0;
         
       // background
-        var c = style.background;
-        GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
+        var c = style.backgroundColor;
+        if( c != null ) { // FIXME
+            GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
+        }
         GL.Begin( GL.QUADS );
             GL.Vertex3f( x, y, 0. );
             GL.Vertex3f( w, y, 0. );
@@ -31,6 +34,7 @@ class Box extends Group {
         GL.End();
         
       // border
+      /*
         if( b > 0 ) {
             GL.LineWidth( b );
             b /= 2;
@@ -52,6 +56,7 @@ class Box extends Group {
                 GL.Vertex3f( x+b, y+b, 0. );
             GL.End();
         }
+        */
     }
     
     private function _render() :Void {
@@ -61,9 +66,6 @@ class Box extends Group {
 
     private function _renderSimple() :Void {
         // FIXME: this duplicates stuff in _renderGraphics
-        var border:Border = style.border;
-        var padding:Pad = style.padding;
-        var b:Float = border.thickness.px();
         var w:Float = bounds.width;   // w,h are not really width/height here,
         var h:Float = bounds.height;  // but right,bottom!
 

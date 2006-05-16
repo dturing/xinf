@@ -10,7 +10,9 @@ class Bounds extends ValueBase {
         return _x.get_value();
     }
     private function set_x( v:Float ):Float {
-        _x.set( new Value<Float>(v) );
+        var _v = new Value<Float>();
+        _v.value = v;
+        _x.setLink( _v );
         return _x.get_value();
     }
     
@@ -20,7 +22,9 @@ class Bounds extends ValueBase {
         return _y.get_value();
     }
     private function set_y( v:Float ):Float {
-        _y.set( new Value<Float>(v) );
+        var _v = new Value<Float>();
+        _v.value = v;
+        _y.setLink( _v );
         return _y.get_value();
     }
 
@@ -30,7 +34,9 @@ class Bounds extends ValueBase {
         return _width.get_value();
     }
     private function set_width( v:Float ):Float {
-        _width.set( new Value<Float>(v) );
+        var _v = new Value<Float>();
+        _v.value = v;
+        _width.setLink( _v );
         return _width.get_value();
     }
 
@@ -40,16 +46,18 @@ class Bounds extends ValueBase {
         return _height.get_value();
     }
     private function set_height( v:Float ):Float {
-        _height.set( new Value<Float>(v) );
+        var _v = new Value<Float>();
+        _v.value = v;
+        _height.setLink( _v );
         return _height.get_value();
     }
     
-    public function new( l:Float, t:Float, r:Float, b:Float ) {
+    public function new() {
         super();
-        _x = new Identity<Float>( new Value<Float>( l ) );
-        _y = new Identity<Float>( new Value<Float>( l ) );
-        _width = new Identity<Float>( new Value<Float>( r ) );
-        _height = new Identity<Float>( new Value<Float>( l ) );
+        _x = new Identity<Float>( new Value<Float>() );
+        _y = new Identity<Float>( new Value<Float>() );
+        _width = new Identity<Float>( new Value<Float>() );
+        _height = new Identity<Float>( new Value<Float>() );
         
         _x.addEventListener( "changed", onChildChanged );
         _y.addEventListener( "changed", onChildChanged );
@@ -58,7 +66,9 @@ class Bounds extends ValueBase {
     }
         
     public static function newZero() :Bounds {
-        return new Bounds(.0,.0,.0,.0);
+        var b = new Bounds();
+        b.x = b.y = b.width = b.height = .0;
+        return b;
     }
     
     public function toString() : String {

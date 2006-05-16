@@ -6,23 +6,36 @@ import org.xinf.event.EventDispatcher;
 import org.xinf.value.Value;
 import org.xinf.value.Expression;
 
+import org.xinf.style.StyleChain;
+import org.xinf.style.Style;
+
 class ValueTest {
     static function main() {
         trace("Hello");
+
+        var chain = new Array<PropertySet>();
         
-        var x = new Value<Float>(1);
+        var basic = new Style();
+        basic.alpha = .5;
+        basic.backgroundColor = { r:1, g:0, b:.5 }
+        basic.paddingLeft = 10;
+        chain.push( basic );
         
-        var a = new Identity<Float>( x );
-        var b = new Value<Float>(.5);
+        var s = new StyleChain();
+        s.setChain( chain );
         
-        var e = new Add(a,b);
+        trace( "alpha: "+s.alpha );
+        trace( "bg:    "+s.backgroundColor );
         
-        
-        trace(e);
-        trace("---");
-        x.value = 12;
-        trace("---");
-        x.value = .23;
+
+        var two = new Style();
+        two.alpha = .9;
+        chain.push( two );
+        s.setChain( chain );
+
+        trace( "alpha: "+s.alpha );
+
+        trace( "padding-left: "+s.paddingLeft );
         
         #if neko
 //            org.xinf.ony.Root.getRoot();

@@ -8,7 +8,7 @@ class Expression<T,S> extends Value<T> {
     private var dirty:Bool;
     
     public function new() {
-        super(null);
+        super();
         input = new Array<Value<S>>();
         dirty = true;
     }

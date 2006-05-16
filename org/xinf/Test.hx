@@ -6,7 +6,6 @@ import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
 import org.xinf.ony.Pane;
-import org.xinf.ony.layout.BoxLayout;
 import org.xinf.value.Value;
 import org.xinf.value.Expression;
 
@@ -52,6 +51,7 @@ class Foo extends org.xinf.ony.Text {
             t += cl+" ";
         }
         text = t+postfix;
+        
     }
     
 }
@@ -63,56 +63,26 @@ class Test {
     static var container:org.xinf.ony.Element;
     static var x:Int;
     
-    static function onEnterFrame( e:Event ) : Void {
-        container.style.x = x = (x+2)%204;
-        container.styleChanged();
-    }
     static function main() {
         trace("Hello");
         x=0;
 
         var style = StyleSheet.newFromString("
-            .Foo {
-                background: #aaa;
-                padding: 5px;
-            }
-
-            .hover {
-                background: #faa; 
-            }
-            
-            .push {
-                background: #fcc;
-                color: black;
-            }
-            
-            .Image {
-                width: 320px;
-                height: 240px;
-            }
-            
-            .Pane {
-                background: #aaa;
-            }
-            
             #root {
-                width: 320px;
-                height: 240px;
-                border: none;
-            }
-            
-            .BoxLayout {
-                x: 50;
-                y: 50;
-                border: 1px solid #00f;
-                background: #ddd;
-                padding: 0;
-                margin: 2px;
+                backgroundColor: #ddd;
             }
 
             .Foo {
-                margin: 2px;
-                border: 1px solid #000;
+                color: #f00;
+                backgroundColor: #aaa;
+                alpha: .5;
+                paddingLeft: 5;
+            }
+            
+            .hover {
+                backgroundColor: #faa;
+                color: #000;
+                paddingLeft: 50;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -131,23 +101,22 @@ class Test {
         var last = first;
             first.bounds.y = 10;
             first.bounds.x = 10;
-        
+        /*
             for( i in 0...3 ) {
                 var box = new Foo("box"+i);
                     
-                box.bounds._y.set( new Add( 
+                box.bounds._y.setLink( new Add( 
                         last.bounds._y, last.bounds._height
                         ) );
                        
-                box.bounds._x.set( new Add( 
+                box.bounds._x.setLink( new Add( 
                         last.bounds._x, last.bounds._width
                         ) );
                        
                 cont.addChild(box);
                 last = box;
             }
-            
-        
+        */    
         #if neko
              org.xinf.inity.Root.root.run();
         #end

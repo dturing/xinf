@@ -1,8 +1,5 @@
 package org.xinf.inity;
 
-import org.xinf.style.Border;
-import org.xinf.style.Pad;
-
 class Bitmap extends Group {
     private var data:BitmapData;
 
@@ -12,13 +9,11 @@ class Bitmap extends Group {
     }
 
     private function _renderGraphics() :Void {
-        var border:Border = style.border;
-        var padding:Pad = style.padding;
             
-        var b:Float = border.thickness.px();
+        var b:Float = 1; // FIXME border.thickness.px();
         
-        var w:Float = style.width.px()+padding.left.px()+padding.right.px();   // w,h are not really width/height here,
-        var h:Float = style.height.px()+padding.top.px()+padding.bottom.px();  // but right,bottom!
+        var w:Float = bounds.width;   // w,h are not really width/height here,
+        var h:Float = bounds.height;  // but right,bottom!
         var x:Float = 0;
         var y:Float = 0;
         
@@ -32,8 +27,9 @@ class Bitmap extends Group {
         GL.PopMatrix();
         
       // border (dups Box.hx)
-        if( border.thickness.value > 0 ) {
-            GL.LineWidth( border.thickness.value );
+      /*
+        if( b > 0 ) {
+            GL.LineWidth( b );
             var c = border.color;
             GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
             GL.Begin( GL.LINE_STRIP );
@@ -51,6 +47,7 @@ class Bitmap extends Group {
                 GL.Vertex3f( x, y, 0. );
             GL.End();
         }
+        */
     }
     
     private function _render() :Void {
@@ -59,15 +56,8 @@ class Bitmap extends Group {
     }
 
     private function _renderSimple() :Void {
-        var w = style.width.px();
-        var h = style.height.px();
-
-        // FIXME: this duplicates stuff in _renderGraphics (and Box.hx, for that matter)
-        var border:Border = style.border;
-        var padding:Pad = style.padding;
-        var b:Float = border.thickness.px();
-        var w:Float = style.width.px()+b+b+padding.left.px()+padding.right.px();   // w,h are not really width/height here,
-        var h:Float = style.height.px()+b+b+padding.top.px()+padding.bottom.px();  // but right,bottom!
+        var w = bounds.width;
+        var h = bounds.height;
 
       //  background
         GL.Begin( GL.QUADS );

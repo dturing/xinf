@@ -1,207 +1,176 @@
 package org.xinf.style;
 
-import org.xinf.style.UnitValue;
 import org.xinf.value.Value;
-import org.xinf.value.Expression;
+import Reflect;
 
-class Style {
+class FloatValue extends Value<Float> {
+    public static function create() :ValueBase {
+        return( new FloatValue() );
+    }
+    public static function parseString(s:String) :ValueBase {
+        var v = new FloatValue();
+        v.set( Std.parseFloat(s) );
+        return v;
+    }
+}
+class ColorValue extends Value<Color> {
+    public static function create() :ValueBase {
+        return( new ColorValue() );
+    }
+    public static function parseString(s:String) :ValueBase {
+        var v = new ColorValue();
+        v.set( Color.fromString(s) );
+        return v;
+    }
+}
 
-    private var values :Hash<Dynamic>;
-
-//    public property color(default,null):Link<Color>;
+class PropertyDefinition {
+    public var class_proto:Class;
+    public var parseString:String->ValueBase;
     
-    public property color(get_color,set_color):Color;
-    public property background(get_background,set_background):Color;
-    public property border(get_border,set_border):Border;
-    public property padding(get_padding,set_padding):Pad;
-    public property margin(get_margin,set_margin):Pad;
-
-    public property x(get_x,set_x):Dynamic;
-    public property y(get_y,set_y):Dynamic;
-    public property width(get_width,set_width):Dynamic;
-    public property height(get_height,set_height):Dynamic;
+    public function new( cl:Dynamic, parse:String->ValueBase ) :Void {
+        class_proto = cl;
+        parseString = parse;
+    }
     
-    public property verticalAlign(get_vertical_align,set_vertical_align):Dynamic;
-    public property textAlign(get_text_align,set_text_align):Dynamic;
+    public function create(name:String, ctx:PropertySet) :ValueBase { // name is not strictly needed, just for debuggng
+        trace("creating property of Class "+name );
+        var p:ValueBase;
+        try {
+            p = untyped class_proto.create();
+        } catch(e:Dynamic) {
+            throw("Property class for '"+name+"' has no function create():ValueBase");
+        }
+        return p;
+    }
+}
 
-    public function new() :Void {
-        values = new Hash<Dynamic>();
-/*        
-        set_color( Color.rgb(0,0,0) );
-        set_background( Color.rgb(0xff,0xff,0xff) );
-        set_border( new Border( new UnitValue(1.,Unit.px), "solid", Color.rgb(0,0,0) ) );
-        set_padding( new Pad( new UnitValue(0.,Unit.px), new UnitValue(0.,px), new UnitValue(0.,px), new UnitValue(0.,px) ) );
-        set_margin( new Pad( new UnitValue(0.,Unit.px), new UnitValue(0.,px), new UnitValue(0.,px), new UnitValue(0.,px) ) );
-        set_x( new UnitValue(0.,px) );
-        set_y( new UnitValue(0.,px) );
-        set_width( new UnitValue(0.,px) );
-        set_height( new UnitValue(0.,px) );
-*/        
-    }
-        
-    public function get_color() :Color {
-        return cast(_lookup( "color" ),Color);
-    }
-    public function set_color( v:Dynamic ) :Color {
-        var c = Color.fromDynamic(v);
-        values.set( "color", c );
-        return c;
-    }
-    public function get_background() :Color {
-        return _lookup( "background" );
-    }
-    public function set_background( v:Dynamic ) :Color {
-        var c = Color.fromDynamic(v);
-        values.set( "background", c );
-        return c;
-    }
-    public function get_border() :Border {
-        return _lookup( "border" );
-    }
-    public function set_border( v:Dynamic ) :Border {
-        var c = Border.fromDynamic(v);
-        values.set( "border", c );
-        return c;
-    }
-    public function get_padding() :Pad {
-        return _lookup( "padding" );
-    }
-    public function set_padding( v:Dynamic ) :Pad {
-        var c = Pad.fromDynamic(v);
-        values.set( "padding", c );
-        return c;
-    }
-    public function get_margin() :Pad {
-        return _lookup( "margin" );
-    }
-    public function set_margin( v:Dynamic ) :Pad {
-        var c = Pad.fromDynamic(v);
-        values.set( "margin", c );
-        return c;
-    }
+    
+class Properties {
+    public static var definitions:Hash<PropertyDefinition>;
+    public static function __init__():Void {
+        var defs = new Hash<PropertyDefinition>();
 
-    public function get_x() :UnitValue {
-        return _lookup( "x" );
-    }
-    public function set_x( v:Dynamic ) :UnitValue {
-        var n = _set( "x", UnitValue, v );
-        return( n );
-    }
-    private function _set( name:String, kl:Dynamic, v:Dynamic ) :Dynamic {
-        var value = values.get(name); // dont use _lookup here! we want to create a new one if we dont have the property ourselves
-        var r:Dynamic = kl.fromDynamic(v);
-        if( !value ) {
-            value = new Identity<Float>(r);
-            values.set(name,value);
-        } else
-            value.set(r);
+        defs.set( "alpha", new PropertyDefinition( 
+                FloatValue, FloatValue.parseString
+            ) );
+        defs.set( "backgroundColor", new PropertyDefinition( 
+                ColorValue, ColorValue.parseString
+            ) );
+        defs.set( "color", new PropertyDefinition( 
+                ColorValue, ColorValue.parseString
+            ) );
             
-//        value.changed();
-        return r;
+        defs.set( "paddingLeft", new PropertyDefinition( 
+                FloatValue, FloatValue.parseString
+            ) );
+        defs.set( "paddingRight", new PropertyDefinition( 
+                FloatValue, FloatValue.parseString
+            ) );
+        defs.set( "paddingTop", new PropertyDefinition( 
+                FloatValue, FloatValue.parseString
+            ) );
+        defs.set( "paddingBottom", new PropertyDefinition( 
+                FloatValue, FloatValue.parseString
+            ) );
+        
+        definitions = defs;
     }
     
-    public function get_y() :UnitValue {
-        return _lookup( "y" );
-    }
-    public function set_y( v:Dynamic ) :UnitValue {
-        var c = UnitValue.fromDynamic(v);
-        values.set( "y", c );
-        return c;
-    }
-    public function get_width() :UnitValue {
-        return _lookup( "width" );
-    }
-    public function set_width( v:Dynamic ) :UnitValue {
-        var n = _set( "width", UnitValue, v );
-        return( n );
-        /*
-        var c = UnitValue.fromDynamic(v);
-        values.set( "width", c );
-        return c;
-        */
-    }
-    public function get_height() :UnitValue {
-        return _lookup( "height" );
-    }
-    public function set_height( v:Dynamic ) :UnitValue {
-        var c = UnitValue.fromDynamic(v);
-        values.set( "height", c );
-        return c;
+    public static function create( name:String, ctx:PropertySet ) : ValueBase {
+        var def:PropertyDefinition = definitions.get(name);
+        if( def==null ) throw("no PropertyDefinition for '"+name+"'");
+        
+        var p:ValueBase = def.create(name,ctx);
+        return p;
     }
 
-    public function get_text_align() :Alignment {
-        return _lookup( "text-align" );
-    }
-    public function set_text_align( v:Dynamic ) :Alignment {
-        var c = Alignment.fromDynamic(v);
-        values.set( "text-align", c );
-        return c;
-    }
-    public function get_vertical_align() :Alignment {
-        return _lookup( "vertical-align" );
-    }
-    public function set_vertical_align( v:Dynamic ) :Alignment {
-        var c = Alignment.fromDynamic(v);
-        values.set( "vertical-align", c );
-        return c;
-    }
-    
-    
-    public function _lookup( attr:String ) :Dynamic {
-        return( values.get(attr) );
-    }
+    public static function createFromString( name:String, s:String, ctx:PropertySet ) : ValueBase {
+        var def:PropertyDefinition = definitions.get(name);
+        if( def==null ) throw("no PropertyDefinition for '"+name+"' (createFromString: "+s+")");
         
+        var p:ValueBase = def.parseString(s);
+        return p;
+    }
+}
+
+class PropertySet extends Hash<ValueBase> {
     public function fromString( str:String ) :Void {
         for( _attribute in str.split(";") ) {
             var a = StringTools.trim(_attribute).split(":");
             if( a.length == 2 ) {
                 var name = StringTools.trim(a[0]);
                 var value = StringTools.trim(a[1]);
-                var setter = Reflect.field( this, "set_"+StringTools.replace(name,"-","_") );
-                if( !setter ) {
-                    trace("Unknown style attribute: "+name+" (ignored)" );
-                } else {
-              //      trace("Set style attr "+name+": "+value );
-                    Reflect.callMethod( this, setter, [ value ] );
-                }
+                
+                var p:ValueBase = Properties.createFromString( name, value, this );
+            //    trace("PARSE StyleAttribute "+name+": "+value+" -- "+p );
+                this.set( name, p );
             }
         }
     }
-    
-    public function toString() :String {
-        var r:String="";
-        if( values==null ) return "NULL Style";
-        for( f in values.keys() ) {
-            var field = values.get(f);
-            r += "" + f + ": "+field+"; ";
-        }
-        return r;
-    }
-    
-    public static function newFromString( str:String ) :Style {
-        var v = new Style();
+    public static function newFromString( str:String ) :PropertySet {
+        var v = new PropertySet();
         v.fromString(str);
         return v;
     }
-
-    public function clone() :Dynamic {
-        var s:Style = newFromString( this.toString() ); // FIXME
-        return s;
-    }
     
-    public function setInnerSize( w:Float, h:Float ) : Void {
-        var b:Border = border;
-        var p:Pad = padding;
-        width = w + b.horizontal() + p.horizontal();
-        height = h + b.vertical() + p.vertical();
+    public function getLink( name:String ) :ValueBase {
+        var p:ValueBase = get(name);
+        if( p == null ) {
+            p = Properties.create( name, this ).identity();
+            set(name,p);
+        }
+        return p;
     }
-    public function getOuterSize() :{ w:Float, h:Float } {
-        var b:Border = border;
-        var p:Pad = padding;
-        return( { w:width-(b.horizontal()+p.horizontal()),
-                  h:height-(b.vertical()+p.vertical()) } );
-    }
+}
 
-    public static var DEFAULT:Style = newFromString("background: #eee; color: #000; border: 1px solid #000; padding: 3px; margin: 5px; x:0px; y:0px; width:20px; height:20px; vertical-align:left; text-align:left;");
+
+class Style extends PropertySet {
+    // common style properties are mapped as haxe properties
+    public property alpha(dynamic,dynamic):Float;
+    public property color(dynamic,dynamic):Color;    
+    public property backgroundColor(dynamic,dynamic):Color;    
+
+    public property paddingLeft(dynamic,dynamic):Float;
+    public property paddingTop(dynamic,dynamic):Float;
+    public property paddingRight(dynamic,dynamic):Float;
+    public property paddingBottom(dynamic,dynamic):Float;
+
+    // aggregate properties also
+//    public property background(dynamic,dynamic):String;
     
+    
+    public static function __init__() :Void {
+        trace("init Style");
+        
+        initProperties( Style, [ "alpha", "backgroundColor", "color",
+                "paddingLeft", "paddingTop", "paddingRight", "paddingBottom" ] );
+    }
+    public static function initProperties( cl:Dynamic, props:Array<String> ) :Void {
+        var class_proto:Class = cl;
+        for( prop_name in props ) {
+            var def:PropertyDefinition = Properties.definitions.get(prop_name);
+            if( def == null ) throw("no PropertyDefinition for '"+prop_name+"'");
+            
+            initGetterSetter(class_proto, prop_name, def );
+        }        
+    }
+    public static function initGetterSetter( class_proto:Class, _prop_name:String, _def:PropertyDefinition ) {
+        var prop_name = _prop_name;
+        Reflect.setField(class_proto.prototype, "get_"+prop_name, function() {
+                var othis:PropertySet = untyped this;
+                var f:ValueBase = othis.get(prop_name);
+                if( f != null ) return f.get();
+                return null;
+            });
+        Reflect.setField(class_proto.prototype, "set_"+prop_name, function(v:Dynamic) {
+                var othis:PropertySet = untyped this;
+                var f:ValueBase = othis.get(prop_name);
+                if( f == null ) {
+                    f = Properties.create(prop_name,othis);
+                    othis.set(prop_name,f);
+                }
+                return f.set(v);
+            });
+    }
 }
