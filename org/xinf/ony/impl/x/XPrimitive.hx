@@ -26,6 +26,11 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
 //        _e.removeChild( p._e );
     }
 
+    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
+        _e.bounds = bounds;
+        _e.changed();
+    }
+
     public function applyStyle( style:org.xinf.style.Style ) :Void {
         _e.style = style;
         _e.changed();

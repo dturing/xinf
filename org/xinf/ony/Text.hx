@@ -36,9 +36,7 @@ class Text extends Pane {
     
     private function calcSize() :Void {
         var s:Point = _t.getTextExtends();
-        style.setInnerSize( Math.round(s.x), Math.round(s.y) );
-//        style.width = Math.round(s.x) + style.padding.left.px() + style.padding.right.px();
-//        style.height = Math.round(s.y) + style.padding.top.px() + style.padding.bottom.px();
-        styleChanged();
+        bounds.width = Math.round(s.x);
+        bounds.height = Math.round(s.y);
     }
 }

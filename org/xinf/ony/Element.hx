@@ -8,11 +8,16 @@ class Element extends StyledObject {
     public var name:String;
     public var parent:Element;
     
+    public var bounds:Bounds;
+    
     private var _p:IPrimitive;
     private var children:Array<Element>;
 
     public function new( _name:String ) :Void {
         name = _name;
+        bounds = Bounds.newZero();
+        bounds.addEventListener( Event.CHANGED, onBoundsChanged );
+        
         children = new Array<Element>();
         _p = createPrimitive();
         _p.setOwner( this );
@@ -41,9 +46,14 @@ class Element extends StyledObject {
         _p.applyStyle( style );
     }
 
+    private function onBoundsChanged( e:Event ) {
+        _p.applyBounds(bounds);
+        dispatchEvent( new Event( Event.SIZE_CHANGED, this ) ); // FIXME: this for layouters only-- needed?
+    }
     private function sizeChanged() :Void {
         dispatchEvent( new Event( Event.SIZE_CHANGED, this ) );
     }
+    
     public function dispatchEvent( e:Event ) :Void {
         super.dispatchEvent( e );
         
