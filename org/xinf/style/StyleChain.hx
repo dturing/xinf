@@ -17,7 +17,7 @@ class CachedStyle extends Style {
     
     public function get( name:String ) :ValueBase {
         var p:ValueBase = cache.get(name);
-        trace("CACHE: "+name+" in cache: "+p );
+      //  trace("CACHE: "+name+" in cache: "+p );
         if( p != null ) return p;
         
         p = getNoCache(name);
@@ -41,7 +41,7 @@ class CachedStyle extends Style {
         
         return p;
     }
-    public function getLink( name:String ) :ValueBase {
+    public function getLink( name:String ) :Dynamic {
         var p:ValueBase = get(name);
 //        trace("CREATE cache "+name+" "+p );
         if( p == null ) {

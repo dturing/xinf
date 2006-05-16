@@ -24,14 +24,24 @@ class Text extends Pane {
     public function new( name:String ) {
         super(name);
         autoSize = true;
+        
+        // autosize stuff..
         width = new Value<Float>();
         width.value = 0;
         height = new Value<Float>();
         height.value = 0;
         
-        bounds._width.setLink( new Add( width, untyped style.getLink("paddingLeft") ) );
+        bounds._width.setLink( new Sum( [ 
+                                width, 
+                                style.getLink("paddingLeft"), 
+                                style.getLink("paddingRight") 
+                            ] ) );
+        bounds._height.setLink( new Sum( [ 
+                                height, 
+                                style.getLink("paddingTop"), 
+                                style.getLink("paddingBottom") 
+                            ] ) );
         bounds._width.addEventListener( "changed", debug );
-        bounds._height.setLink( height );
     }
     
     public function debug( e:Event ) {

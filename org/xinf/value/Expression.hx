@@ -60,6 +60,23 @@ class Add extends Expression<Float,Float> {
     }
 }
 
+class Sum extends Expression<Float,Float> {
+    public function new( a:Array<Value<Float>> ) {
+        super();
+        for( v in a ) {
+            append(v);
+        }
+    }
+    
+    public function evaluate() :Float {
+        var r:Float = 0;
+        for( variable in input ) {
+            r += variable.value;
+        }
+        return r;
+    }
+}
+
 class Subtract extends Expression<Float,Float> {
     public function new( a:Value<Float>, b:Value<Float> ) {
         super();

@@ -103,7 +103,6 @@ class PropertySet extends Hash<ValueBase> {
                 var value = StringTools.trim(a[1]);
                 
                 var p:ValueBase = Properties.createFromString( name, value, this );
-            //    trace("PARSE StyleAttribute "+name+": "+value+" -- "+p );
                 this.set( name, p );
             }
         }
@@ -114,7 +113,7 @@ class PropertySet extends Hash<ValueBase> {
         return v;
     }
     
-    public function getLink( name:String ) :ValueBase {
+    public function getLink( name:String ) :Dynamic {
         var p:ValueBase = get(name);
         if( p == null ) {
             p = Properties.create( name, this ).identity();

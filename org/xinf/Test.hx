@@ -50,7 +50,7 @@ class Foo extends org.xinf.ony.Text {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-        text = t+postfix;
+    //    text = t+postfix;
         
     }
     
@@ -77,12 +77,22 @@ class Test {
                 backgroundColor: #aaa;
                 alpha: .5;
                 paddingLeft: 5;
+                paddingTop: 5;
+                paddingRight: 5;
+                paddingBottom: 5;
             }
             
             .hover {
-                backgroundColor: #faa;
+                backgroundColor: #aaf;
                 color: #000;
                 paddingLeft: 50;
+            }
+            
+            .push {
+                backgroundColor: #faa;
+                color: #000;
+                paddingRight: 50;
+                paddingLeft: 5;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -101,7 +111,7 @@ class Test {
         var last = first;
             first.bounds.y = 10;
             first.bounds.x = 10;
-        /*
+            
             for( i in 0...3 ) {
                 var box = new Foo("box"+i);
                     
@@ -116,7 +126,7 @@ class Test {
                 cont.addChild(box);
                 last = box;
             }
-        */    
+            
         #if neko
              org.xinf.inity.Root.root.run();
         #end
