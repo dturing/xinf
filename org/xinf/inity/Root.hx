@@ -42,9 +42,11 @@ class Root extends Stage {
     public function run() : Bool {
         while( !quit ) {
         
-            org.xinf.event.EventDispatcher.global.dispatchEvent( new Event( Event.ENTER_FRAME, this.owner ) );
+            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             
             processEvents();
+
+            Event.processQueue();
 
             Object.cacheChanged();
             doOverOut();
@@ -123,9 +125,7 @@ class Root extends Stage {
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
-        org.xinf.event.EventDispatcher.global.dispatchEvent( 
-                org.xinf.event.Event.KeyboardEvent( type, null, str )
-            );
+        org.xinf.event.EventDispatcher.global.postEvent( type, { key:str } );
     }
 
     private function handleMouseEvent( e, k ) :Void {
@@ -137,14 +137,14 @@ class Root extends Stage {
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
         if( objectUnderMouse != null )
-            objectUnderMouse.dispatchEvent( new Event( type, objectUnderMouse.owner ) );
+            objectUnderMouse.postEvent( type, { x:x, y:y });
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
         if( objectUnderMouse != null )
-            objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_MOVE, objectUnderMouse.owner ) );
+            objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
     }
     
     /* ------------------------------------------------------
@@ -167,12 +167,11 @@ class Root extends Stage {
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         
         GL.ShadeModel( GL.FLAT );
-        /*
+
         var c = style.backgroundColor;
-//        trace("BG: "+style.background );
         if( c != null ) // FIXME
             GL.ClearColor( c.r/0xff, c.g/0xff, c.b/0xff, 1 );
-            */
+            
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }
 
@@ -262,10 +261,10 @@ class Root extends Stage {
         var o = getObjectsUnderPoint( mouseX, height-mouseY ).pop();
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
-                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OUT, objectUnderMouse.owner ) );
+                objectUnderMouse.postEvent( Event.MOUSE_OUT, null );
             objectUnderMouse = o;
             if( objectUnderMouse != null )
-                objectUnderMouse.dispatchEvent( new Event( Event.MOUSE_OVER, objectUnderMouse.owner ) );
+                objectUnderMouse.postEvent( Event.MOUSE_OVER, null );
         }
     }
 }

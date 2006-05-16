@@ -46,9 +46,9 @@ class Object {
         }
     }
 
-    public function dispatchEvent( e:Event ) :Void {
+    public function postEvent( type:String, data:Dynamic ) :Void {
         if( owner == null ) throw("Object "+this+" has no owner.");
-        owner.dispatchEvent(e);
+        owner.postEvent(type,data);
     }
 
     /* ------------------------------------------------------
