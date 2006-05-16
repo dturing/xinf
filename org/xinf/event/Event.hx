@@ -1,6 +1,44 @@
 package org.xinf.event;
 
 class Event {
+    static public var queue:Array<Event>;
+    static public function push( e:Event ) :Void {
+        if( queue == null ) queue = new Array<Event>();
+        queue.push(e);
+    }
+    static public function processQueue() :Void {
+        if( queue == null ) return;
+        var e:Event = queue.shift();
+       // if( queue.length > 0 ) trace("processQueue: "+queue.length+" events" );
+        
+        if( queue.length > 50 ) {
+            trace( queue.length+" is an astonishing number of events, breakdown: ");
+            
+            var h = new Hash<Int>();
+            for( event in queue ) {
+                var t:String = event.type;
+                var i:Int = h.get(t);
+                if( i==null ) i=0;
+                i++;
+                h.set(t,i);
+            }
+            
+            for( type in h.keys() ) {
+                trace( h.get(type) + "\t:"+type );
+            }
+        }
+        
+        var n=0;
+        while( e != null ) {
+            n++;
+            e.target.dispatchEvent( e );
+            e=queue.shift();
+        }
+        if( n>100 ) {
+            trace("event queue processed "+n+" Events total");
+        }
+    }
+
     public static var ENTER_FRAME:String = "enterFrame";
     
     public static var MOUSE_DOWN:String = "mouseDown";

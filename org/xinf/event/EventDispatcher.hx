@@ -20,8 +20,16 @@ class EventDispatcher {
         }
         a.push(f);
     }
-    
-    // TODO: removeEventListener
+
+    public function removeEventListener( type:String, f:Event->Void ) :Void {
+        var a:Array<Event->Void> = _listeners.get(type);
+        if( a != null ) {
+//            trace("remove EventListener "+type+": then "+a.length );
+//            trace( a[0] +" vs "+ f );
+            a.remove( f );
+//            trace("remove EventListener "+type+": now  "+a.length );
+        }
+    }
     
     public function dispatchEvent( e:Event ) :Void {
         var a:Array<Event -> Void> = _listeners.get(e.type);
@@ -32,5 +40,19 @@ class EventDispatcher {
             }
         }
         if( this != global ) global.dispatchEvent( e );
+    }
+    
+    public function postEvent( type:String, data:Dynamic ) :Void {
+        var e:Event = new Event( type, this ); // FIXME: data.
+        // FIXME: use global EventQueue.
+        Event.push(e);
+//        dispatchEvent( e );
+    }
+    
+    public function hasListeners( type:String ) :Bool {
+        var l:Array<Event->Void>;
+        l = _listeners.get(type);
+        if( l != null && l.length>0 ) return true;
+        return false;
     }
 }
