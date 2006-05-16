@@ -15,9 +15,8 @@ class Box extends Group {
             
         var b:Float = border.thickness.px();
         
-        trace("Box width: "+style.width );
-        var w:Float = style.width.px()-1;   // w,h are not really width/height here,
-        var h:Float = style.height.px()-1;  // but right,bottom!
+        var w:Float = bounds.width;   // w,h are not really width/height here,
+        var h:Float = bounds.height;  // but right,bottom!
         var x:Float = 0;
         var y:Float = 0;
         
@@ -61,15 +60,12 @@ class Box extends Group {
     }
 
     private function _renderSimple() :Void {
-        var w = style.width.px();
-        var h = style.height.px();
-
         // FIXME: this duplicates stuff in _renderGraphics
         var border:Border = style.border;
         var padding:Pad = style.padding;
         var b:Float = border.thickness.px();
-        var w:Float = style.width.px();   // w,h are not really width/height here,
-        var h:Float = style.height.px();  // but right,bottom!
+        var w:Float = bounds.width;   // w,h are not really width/height here,
+        var h:Float = bounds.height;  // but right,bottom!
 
       //  background
         GL.Begin( GL.QUADS );

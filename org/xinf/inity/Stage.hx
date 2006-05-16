@@ -40,8 +40,8 @@ class Stage extends Group {
         transform.setIdentity();
         transform.translate( -1, 1 );
         transform.scale( (2.0/w)*x, (-2.0/h)*y );
-        style.x = -1 + (.5/w);
-        style.y =  1 + (-.5/h);
+        bounds.x = -1 + (.5/w);
+        bounds.y =  1 + (-.5/h);
 
         width=w; height=h;
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );

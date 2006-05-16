@@ -5,7 +5,9 @@ import org.xinf.event.Event;
 
 // TODO: if this remains the only reference to org.xinf.ony, 
 // style stuff should probably be moved to org.xinf.style
+// (this note is out of date but here is still sth to do)
 import org.xinf.style.Style;
+import org.xinf.ony.Bounds;
 
 class Object {
     private var _displayList:Int;
@@ -14,6 +16,7 @@ class Object {
     
     public var transform:org.xinf.geom.Matrix;
     public var owner:EventDispatcher;
+    public var bounds:Bounds;
     public var style:Style;
     
     
@@ -25,12 +28,15 @@ class Object {
         transform = new org.xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
         style = Style.DEFAULT;
+        bounds = Bounds.newZero();
         changed();
     }
     
     public function changed() :Void {
-        _changed = true;
-        changedObjects.push(this);
+        if( !_changed ) {
+            _changed = true;
+            changedObjects.push(this);
+        }
     }
     private static var changedObjects:Array<Object> = new Array<Object>();
     public static function cacheChanged() :Void  {
@@ -53,8 +59,8 @@ class Object {
     public function _cache() :Void {
         if( _changed ) {
             if( style != null ) { // FIXME. maybe do this somewhere else?
-                transform.tx = style.x.px();
-                transform.ty = style.y.px();
+                transform.tx = bounds.x;
+                transform.ty = bounds.y;
             }
         
             if( _displayList == null ) {
