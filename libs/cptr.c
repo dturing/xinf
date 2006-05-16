@@ -162,3 +162,17 @@ value cptr_is_valid( value ptr ) {
     return val_true;
 }
 DEFINE_PRIM(cptr_is_valid,1);
+
+
+// FIXME: this is not really CPtr stuff, but "util"
+#include <sys/time.h>
+value util_msec() {
+    // FIXME: Linux only, and it really should work with the std library (neko std.sys_time, if not new Date())
+    // but all i get there is the seconds. i need milliseconds for profiling, tho.
+    struct timeval tv;
+    if( gettimeofday(&tv,NULL) != 0 )
+        neko_error();
+    return alloc_int( (int)((tv.tv_sec*1000)+(tv.tv_usec/1000)) );
+}
+DEFINE_PRIM(util_msec,0);
+

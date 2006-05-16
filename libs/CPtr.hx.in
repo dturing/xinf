@@ -59,6 +59,9 @@ class CPtr {
     public static var void_cast = neko.Lib.load("cptr","cptr_void_cast",1);
     public static var isValid = neko.Lib.load("cptr","cptr_is_valid",1);
 
+    // FIXME: move to some util lib, along with the impl.
+    public static var util_msec = neko.Lib.load("cptr","util_msec",0);
+
     public static function main() {
         trace("informal cptr test");
         

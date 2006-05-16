@@ -3,6 +3,55 @@ package org.xinf.inity;
 import SDL;
 import org.xinf.event.Event;
 
+class Profiler {
+    private var data:Hash<Int>;
+    private var last:Int;
+    private var laps:Int;
+    
+    private function now() :Int {
+        return CPtr.util_msec();
+    }
+    
+    public function new() {
+        data = new Hash<Int>();
+        last = now();
+        laps = 0;
+    }
+    
+    public function check( name:String ) :Void {
+        var _now:Int = now();
+    //    trace( ""+_now+"\t-"+last+"="+(_now-last) );
+        var acc:Int = data.get(name);
+        if( acc == null ) acc = 0;
+        acc += _now-last;
+        data.set(name,acc);
+        last = _now;
+    }
+    
+    public function lap() :Void {
+        check("end of lap");
+        laps++;
+        if( laps % 25 == 0 ) {
+            dump();
+        }
+    }
+    
+    public function dump() :Void {
+        var s:String = "Profile "+laps+" laps:\n";
+        for( check in data.keys() ) {
+            // FIXME: pretty stupid formatting.
+            var v = (data.get(check)*1000)/laps;
+            v = Math.round(v)/1000;
+            s += "\t";
+            if( v<100 ) s+=" ";
+            if( v<10 ) s+=" ";
+            s += v+"\t:"+ check + "\n";
+        }
+        trace(s);
+    }
+}
+
+
 class Root extends Stage {
     /* the one player root. SOMEONE MUST SET THIS. FIXME*/
     public static var root:Root = null;
@@ -40,31 +89,42 @@ class Root extends Stage {
     }
     
     public function run() : Bool {
+        var p:Profiler = new Profiler();
+        var changed:Bool;
         while( !quit ) {
+            changed=false;
         
+          p.check("sleep");
+            
             org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
-            
             processEvents();
-
             Event.processQueue();
+          p.check("Event.queue");
 
-            Object.cacheChanged();
+            if( Object.cacheChanged() ) changed=true;
             doOverOut();
-            Object.cacheChanged();
+            if( Object.cacheChanged() ) changed=true;
+          p.check("xinfinity cache, over/out");
             
+            if( changed ) {
             startFrame();
                 render();
             endFrame();
-        
+            }
+          p.check("render");
+
             // check for OpenGL errors
             var e:Int = GL.GetError();
             if( e > 0 ) {
                 throw( "OpenGL error "+GLU.ErrorString(e) );
             }
+
+          p.lap();
             
             // FIXME: proper timing, neko idle func?
-            neko.Sys.sleep(0.03);
+            neko.Sys.sleep(0.05);
         }
+        p.dump();
         return true;
     }
 

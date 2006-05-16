@@ -39,11 +39,13 @@ class Object {
         }
     }
     private static var changedObjects:Array<Object> = new Array<Object>();
-    public static function cacheChanged() :Void  {
+    public static function cacheChanged() :Bool  {
         var o:Object;
+        if( changedObjects.length == 0 ) return false;
         while( (o=changedObjects.shift()) != null ) {
             o._cache();
         }
+        return true;
     }
 
     public function postEvent( type:String, data:Dynamic ) :Void {

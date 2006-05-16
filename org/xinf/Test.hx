@@ -112,7 +112,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...3 ) {
+            for( i in 0...100 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 
