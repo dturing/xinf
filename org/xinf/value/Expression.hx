@@ -16,13 +16,12 @@ class Expression<T,S> extends Value<T> {
     public function append( v:Value<S> ) :Void {
         dirty = true;
         input.push(v);
-        v.addEventListener( "changed", childChanged );
+        v.addEventListener( "changed", onChildChanged );
     }
     
-    private function childChanged( e:Event ) :Void {
+    private function onChildChanged( e:Event ) :Void {
         dirty = true;
-//        trace("Expression changed: "+this );
-        changed();
+        super.onChildChanged(e);
     }
 
     public function evaluate() :T {
@@ -41,7 +40,7 @@ class Expression<T,S> extends Value<T> {
     public function toString() :String {
         var c = Reflect.getClass(this).__name__;
         var name = c[c.length-1];
-        return("("+name+input+" = "+get_value()+")");
+        return("("+name+input+"="+get_value()+")");
     }
 }
 

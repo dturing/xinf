@@ -3,7 +3,16 @@ package org.xinf.value;
 import org.xinf.event.EventDispatcher;
 import org.xinf.event.Event;
 
-class Value<T> extends EventDispatcher, implements IValue {
+class ValueBase extends EventDispatcher {
+    private function changed() :Void {
+        this.dispatchEvent( new Event( Event.CHANGED, this ) );
+    }
+    private function onChildChanged( e:Event ) :Void {
+        this.dispatchEvent( new Event( Event.CHANGED, this ) );
+    }
+}
+
+class Value<T> extends ValueBase {
     private var _value:T;
     public property value( get_value, set_value ):T;
 
@@ -26,16 +35,8 @@ class Value<T> extends EventDispatcher, implements IValue {
         return cast(value,Float);
     }        
     
-    private function changed() :Void {
-        this.dispatchEvent( new Event( "changed", this ) );
-    }
-    
-    public function identity() :IValue {
-        return( new Identity<T>( this ) );
-    }
-    
     public function toString() :String {
-        return( "Value("+get_value()+")" );
+        return( ""+get_value() );
     }
 }
 
@@ -49,11 +50,11 @@ class Identity<T> extends Value<T> {
 
     public function set_value( v:T ) :T {
         throw("Identity values can (currently) not be set.");
-        return _value;
+        return null;
     }
 
     public function get_value() :T {
-        return linked._value;
+        return linked.value;
     }
 
     public function linkChanged( e:Event ) :Void {
@@ -65,5 +66,9 @@ class Identity<T> extends Value<T> {
         linked = a;
         a.addEventListener( "changed", linkChanged );
         changed();
+    }
+
+    public function toString() :String {
+        return( "_"+linked );
     }
 }
