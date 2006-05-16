@@ -45,7 +45,7 @@ class Text extends Pane {
     }
     
     public function debug( e:Event ) {
-        trace("Width changed: "+bounds._width );
+//        trace("Width changed: "+bounds._width );
     }
     
     private function createPrimitive() :IPrimitive {
@@ -57,7 +57,6 @@ class Text extends Pane {
         _text = t;
         _t.setText( text );
         if( autoSize ) calcSize();
-        sizeChanged();
         return _text;
     }
     private function getText() :String {

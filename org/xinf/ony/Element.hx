@@ -50,10 +50,6 @@ class Element extends StyledObject {
 
     private function onBoundsChanged( e:Event ) {
         _p.applyBounds(bounds);
-        dispatchEvent( new Event( Event.SIZE_CHANGED, this ) ); // FIXME: this for layouters only-- needed?
-    }
-    private function sizeChanged() :Void {
-        dispatchEvent( new Event( Event.SIZE_CHANGED, this ) );
     }
     
     public function dispatchEvent( e:Event ) :Void {
