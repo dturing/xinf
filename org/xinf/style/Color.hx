@@ -1,6 +1,6 @@
 package org.xinf.style;
 
-class Color extends org.xinf.value.SimpleValue {
+class Color {
     public var r:Int;
     public var g:Int;
     public var b:Int;

@@ -1,12 +1,12 @@
 package org.xinf.style;
 
 import org.xinf.style.UnitValue;
-import org.xinf.value.IValue;
+import org.xinf.value.Value;
 import org.xinf.value.Expression;
 
 class Style {
 
-    private var values :Hash<IValue>;
+    private var values :Hash<Dynamic>;
 
 //    public property color(default,null):Link<Color>;
     
@@ -25,7 +25,7 @@ class Style {
     public property textAlign(get_text_align,set_text_align):Dynamic;
 
     public function new() :Void {
-        values = new Hash<IValue>();
+        values = new Hash<Dynamic>();
 /*        
         set_color( Color.rgb(0,0,0) );
         set_background( Color.rgb(0xff,0xff,0xff) );
@@ -147,7 +147,7 @@ class Style {
     }
     
     
-    public function _lookup( attr:String ) :IValue {
+    public function _lookup( attr:String ) :Dynamic {
         return( values.get(attr) );
     }
         
