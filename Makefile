@@ -1,6 +1,6 @@
 SUBDIRS = libs gst
-HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ./libs
-APP_HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ../libs
+HAXEFLAGS=-cp . -cp ./libs
+APP_HAXEFLAGS=-cp . -cp ../libs
 
 HAXE_SRCS = $(shell find org -name *.hx)
 MAIN_CLASS=org.xinf.Test
