@@ -11,10 +11,12 @@ import org.xinf.value.Value;
 import org.xinf.value.Expression;
 
 class Foo extends org.xinf.ony.Text {
+    private var postfix:String;
 
     public function new( name:String ) {
         super( name );
         text = "Hello, World.";
+        postfix = "";
         
         addEventListener( Event.MOUSE_OVER, onMouseOver );
         addEventListener( Event.MOUSE_OUT, onMouseOut );
@@ -35,11 +37,11 @@ class Foo extends org.xinf.ony.Text {
     }
     public function onMouseDown( e:Event ) :Void {
         addStyleClass("push");
-        
-        trace( this.style );
+        postfix = "\nfoo";
     }
     public function onMouseUp( e:Event ) :Void {
         removeStyleClass("push");
+        postfix = "";
     }
     
     public function handleEvent( e:Event ) : Void {
@@ -49,7 +51,7 @@ class Foo extends org.xinf.ony.Text {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-        text = t;
+        text = t+postfix;
     }
     
 }
@@ -116,44 +118,32 @@ class Test {
 
 //        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, Test.onEnterFrame );
 
-/*
-        var i = new org.xinf.ony.Image("test.png");
-        i.style.x = i.style.y = 10;
-*/
 
         var cont = new Pane("container");
         container = cont;
         org.xinf.ony.Root.getRoot().addChild(cont);
 
-        var first = new Foo("box-1");
+        var first = new Foo("box_");
+        cont.addChild( first );
         var last = first;
-            first.style.x = new Identity( new Value<Float>(1) );
+            first.bounds.y = 10;
+            first.bounds.x = 10;
         
-            for( i in 0...5 ) {
+            for( i in 0...3 ) {
                 var box = new Foo("box"+i);
-                box.style.x = new Add( 
-                        last.style.x, last.style.width
-                        );
-                        
-                box.style.y = new Value<Float>( i*20 );
+                    
+                box.bounds._y.set( new Add( 
+                        last.bounds._y, last.bounds._height
+                        ) );
+                       
+                box.bounds._x.set( new Add( 
+                        last.bounds._x, last.bounds._width
+                        ) );
+                       
                 cont.addChild(box);
                 last = box;
             }
             
-            trace("--------------_");
-
-/*
-        for( j in 0...5 ) {
-            var c = new BoxLayout("row"+j,HORIZONTAL);
-            cont.addChild(c);
-
-            for( i in 0...5 ) {
-                var box = new Foo("box"+j+"/"+i);
-                box.style.width = box.style.height = 100;
-                c.addChild(box);
-            }
-        }
-*/
         
         #if neko
              org.xinf.inity.Root.root.run();
