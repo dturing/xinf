@@ -3,17 +3,11 @@ package org.xinf.value;
 import org.xinf.event.EventDispatcher;
 import org.xinf.event.Event;
 
-/*
-    FIXME: the handling of changed() events is overengineered (uhm, creeping featuritis?)
-*/
-
 class ValueBase extends EventDispatcher {
-    private var _changed:Bool;
+    var lastChanged:Event;
     
     public function new() :Void {
         super();
-        _changed = false;
-        addEventListener( "changed", hasChanged );
     }
     
     public function get() :Dynamic {
@@ -26,13 +20,8 @@ class ValueBase extends EventDispatcher {
     }
 
     private function changed() :Void {
-        if( hasListeners("changed") && !_changed ) {
-            _changed = true;
-            postEvent( "changed", null );
-        }
-    }
-    private function hasChanged( e:Event ) :Void {
-        _changed = false;
+        if( lastChanged==null || lastChanged.stopped ) 
+            lastChanged = postEvent( "changed", null );
     }
     private function onChildChanged( e:Event ) :Void {
         changed();
