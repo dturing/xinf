@@ -63,9 +63,10 @@ class Identity<T> extends Value<T> {
 
     public function set( a:Value<T> ) :Void {
         // FIXME linked.removeEventListener()
+        var old:T = linked.value;
         linked = a;
         a.addEventListener( "changed", linkChanged );
-        changed();
+        if( a.value != old ) changed();
     }
 
     public function toString() :String {

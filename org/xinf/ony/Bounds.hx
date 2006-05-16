@@ -3,7 +3,7 @@ package org.xinf.ony;
 import org.xinf.value.Value;
 import org.xinf.event.Event;
 
-class Bounds extends ValueBase{
+class Bounds extends ValueBase {
     public property x(get_x,set_x):Float;
     public var _x:Identity<Float>; // FIXME: private, maybe?
     private function get_x():Float {
