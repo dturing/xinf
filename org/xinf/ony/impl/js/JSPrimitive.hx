@@ -23,16 +23,16 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
 
     // event wrappers: "this" is the runtime primitive.
     public function _mouseDown() {
-        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_DOWN,this.owner) );
+        untyped this.owner.postEvent( Event.MOUSE_DOWN );
     }
     public function _mouseUp() {
-        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_UP,this.owner) );
+        untyped this.owner.postEvent( Event.MOUSE_UP );
     }
     public function _mouseOver() {
-        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_OVER,this.owner) );
+        untyped this.owner.postEvent( Event.MOUSE_OVER );
     }
     public function _mouseOut() {
-        untyped this.owner.dispatchEvent( new Event(Event.MOUSE_OUT,this.owner) );
+        untyped this.owner.postEvent( Event.MOUSE_OUT );
     }
     
 
