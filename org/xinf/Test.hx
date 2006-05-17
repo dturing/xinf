@@ -87,7 +87,6 @@ class Test {
             
             .push {
                 background-color: #f00;
-                padding: 21;
             }
         ");
 //        trace("StyleSheet: " + style );

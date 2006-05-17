@@ -45,10 +45,12 @@ class Element extends StyledObject {
 
     public function styleChanged() :Void {
         super.styleChanged();
-   //     _p.applyStyle( style );
+        // this could be avoided if bg/border/fg couple to the needed styleProperties. FIXME
+        _p.applyStyle( style );
     }
 
     private function onBoundsChanged( e:Event ) {
+        // FIXME: avoid this by setting it once (and linking, for js and fl- inity will keep display uptodate)
         _p.applyBounds(bounds);
     }
     

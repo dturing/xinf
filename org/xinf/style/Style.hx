@@ -84,11 +84,11 @@ class RectangleAggregateProperty extends AggregateProperty {
             trbl = a;
         } else if( a.length == 1 ) {
             for( i in 0...4 ) trbl[i] = a[0];
+        // TODO: length 2 and 3 are also valid CSS.
         } else {
             throw("cannot parse RectangleAggregateProperty '"+name+"' from '"+s+"'." );
         }
         
-        trace("setting RectangleAggr "+name+" from "+trbl );
         Properties.setFromString(name+"Top",trbl[0],ctx);
         Properties.setFromString(name+"Right",trbl[1],ctx);
         Properties.setFromString(name+"Bottom",trbl[2],ctx);
