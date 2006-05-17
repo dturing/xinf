@@ -1,6 +1,7 @@
 package org.xinf.style;
 
 import org.xinf.value.Value;
+import org.xinf.style.Border;
 import Reflect;
 
 class SimpleProperty<T> extends Value<T> {
@@ -44,6 +45,17 @@ class ColorProperty extends SimpleProperty<Color> {
         ctx.set(name,v);
     }
 }
+class BorderStyleProperty extends SimpleProperty<String> {
+    public static function create() :ValueBase {
+        return( new BorderStyleProperty() );
+    }
+    public static function setFromString( name:String, s:String, ctx:PropertySet, cl:Class ) :Void {
+        var v = new BorderStyleProperty();
+        v.set( StringTools.trim(s) );
+        ctx.set(name,v);
+    }
+}
+
 
 class AggregateProperty {
     public static function initGetterSetter( property_class:Class, class_proto:Class, _prop_name:String ) :Void {
@@ -166,9 +178,34 @@ class Properties {
         defs.set( "paddingBottom", new PropertyDefinition( 
                 FloatProperty
             ) );
-
         defs.set( "padding", new PropertyDefinition( 
                 RectangleAggregateProperty
+            ) );
+
+        defs.set( "marginLeft", new PropertyDefinition( 
+                FloatProperty
+            ) );
+        defs.set( "marginRight", new PropertyDefinition( 
+                FloatProperty
+            ) );
+        defs.set( "marginTop", new PropertyDefinition( 
+                FloatProperty
+            ) );
+        defs.set( "marginBottom", new PropertyDefinition( 
+                FloatProperty
+            ) );
+        defs.set( "margin", new PropertyDefinition( 
+                RectangleAggregateProperty
+            ) );
+
+        defs.set( "borderStyleLeft", new PropertyDefinition( 
+                BorderStyleProperty
+            ) );
+        defs.set( "borderWidthLeft", new PropertyDefinition( 
+                FloatProperty
+            ) );
+        defs.set( "borderColorLeft", new PropertyDefinition( 
+                ColorProperty
             ) );
         
         definitions = defs;
@@ -258,6 +295,15 @@ class Style extends PropertySet {
     public property paddingTop(dynamic,dynamic):Float;
     public property paddingRight(dynamic,dynamic):Float;
     public property paddingBottom(dynamic,dynamic):Float;
+
+    public property marginLeft(dynamic,dynamic):Float;
+    public property marginTop(dynamic,dynamic):Float;
+    public property marginRight(dynamic,dynamic):Float;
+    public property marginBottom(dynamic,dynamic):Float;
+
+    public property borderStyleLeft(dynamic,dynamic):String;
+    public property borderWidthLeft(dynamic,dynamic):Float;
+    public property borderColorLeft(dynamic,dynamic):Color;
 
     // aggregate properties also
     public property padding(dynamic,dynamic):String;

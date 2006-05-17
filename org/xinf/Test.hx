@@ -77,6 +77,10 @@ class Test {
                 background-color: #aaa;
                 alpha: .5;
                 padding: 10;
+                
+                border-style-left: solid;
+                border-width-left: 2px;
+                border-color-left: #0f0;
             }
             
             .hover {
