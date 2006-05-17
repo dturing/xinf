@@ -75,7 +75,7 @@ class AggregateProperty {
         throw("Generic AggregateProperty::_set():String must be overwritten");
     }
     public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
-//        throw("NYI");
+        throw("NYI");
     }
 }
 
@@ -86,9 +86,6 @@ class RectangleAggregateProperty extends AggregateProperty {
     public static function _set( s:String ) :Void {
         trace("[RectangleAggregateProperty _set: "+s+"]");
     }
-    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
-//        throw("NYI");
-    }
 }
 
 class PropertyDefinition {
@@ -98,37 +95,31 @@ class PropertyDefinition {
         class_proto = cl;
     }
     
-    private function findClassStaticFunction( name ) {
-        // TODO
+    private function findClassStaticFunction( name ) :Dynamic {
+        var cl:Class = class_proto;
+        var f:Dynamic;
+        while( cl != null ) {
+            f = Reflect.field( cl, name );
+            if( f != null ) return f;
+            cl = cl.__super__;
+        }
+        if( cl == null ) throw("Property class '"+class_proto.__name__.join(".")+"' has no function '"+name+"'");
+        return cl;
     }
     
     public function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
-        try {
-            untyped class_proto.setFromString(name,s,ctx);
-        } catch(e:Dynamic) {
-            throw("Property class '"+class_proto.__name__.join(".")+"' has no function setFromString: "+e);
-        }
+        var f = findClassStaticFunction("setFromString");
+        f(name,s,ctx);
     }
     
     public function create() :ValueBase {
-        var p:ValueBase;
-        try {
-            p = untyped class_proto.create();
-        } catch(e:Dynamic) {
-            return null;
-        }
-        return p;
+        var f = findClassStaticFunction("create");
+        return f();
     }
 
     public function initGetterSetter( into_class:Class, prop_name:String ) :Void {
-        // find static initGetterSetter in property class or parent.
-        
-        var cl:Class = class_proto;
-        while( cl != null && untyped cl.initGetterSetter == null ) {
-            cl = cl.__super__;
-        }
-        if( cl == null ) throw("Property class '"+class_proto.__name__.join(".")+"' has no function initGetterSetter()");
-        untyped cl.initGetterSetter(into_class,prop_name);
+        var f = findClassStaticFunction("initGetterSetter");
+        f(into_class,prop_name);
     }
 }
 
