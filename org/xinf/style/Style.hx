@@ -28,26 +28,28 @@ class FloatProperty extends SimpleProperty<Float> {
     public static function create() :ValueBase {
         return( new FloatProperty() );
     }
-    public static function parseString(s:String) :ValueBase {
+    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
         var v = new FloatProperty();
         v.set( Std.parseFloat(s) );
-        return v;
+        ctx.set(name,v);
     }
 }
 class ColorProperty extends SimpleProperty<Color> {
     public static function create() :ValueBase {
         return( new ColorProperty() );
     }
-    public static function parseString(s:String) :ValueBase {
+    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
         var v = new ColorProperty();
         v.set( Color.fromString(s) );
-        return v;
+        ctx.set(name,v);
     }
 }
 
-class AggregateProperty extends Value<String> {
+class AggregateProperty {
     public static function initGetterSetter( class_proto:Class, _prop_name:String ) :Void {
         var prop_name = _prop_name;
+        var get = _get;
+        var set = _set;
         Reflect.setField(class_proto.prototype, "get_"+prop_name, function() {
                 var othis:PropertySet = untyped this;
                 var f:ValueBase = othis.get(prop_name);
@@ -64,24 +66,48 @@ class AggregateProperty extends Value<String> {
                 return f.set(v);
             });
     }
+    
+    public static function _get() :String {
+        throw("Generic AggregateProperty::_get():String must be overwritten");
+        return null;
+    }
+    public static function _set( s:String ) :Void {
+        throw("Generic AggregateProperty::_set():String must be overwritten");
+    }
+    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
+//        throw("NYI");
+    }
+}
+
+class RectangleAggregateProperty extends AggregateProperty {
+    public static function _get() :String {
+        return("[RectangleAggregateProperty]");
+    }
+    public static function _set( s:String ) :Void {
+        trace("[RectangleAggregateProperty _set: "+s+"]");
+    }
+    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
+//        throw("NYI");
+    }
 }
 
 class PropertyDefinition {
     public var class_proto:Class;
-    public var aggregate:Bool;
     
     public function new( cl:Dynamic ) :Void {
         class_proto = cl;
     }
     
-    public function parseString( s:String ) :ValueBase {
-        var p:ValueBase;
+    private function findClassStaticFunction( name ) {
+        // TODO
+    }
+    
+    public function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
         try {
-            p = untyped class_proto.parseString(s);
+            untyped class_proto.setFromString(name,s,ctx);
         } catch(e:Dynamic) {
-            throw("Property class '"+class_proto.__name__.join(".")+"' has no function parseString(:String):ValueBase");
+            throw("Property class '"+class_proto.__name__.join(".")+"' has no function setFromString: "+e);
         }
-        return p;
     }
     
     public function create() :ValueBase {
@@ -141,6 +167,10 @@ class Properties {
         defs.set( "paddingBottom", new PropertyDefinition( 
                 FloatProperty
             ) );
+
+        defs.set( "padding", new PropertyDefinition( 
+                RectangleAggregateProperty
+            ) );
         
         definitions = defs;
     }
@@ -167,8 +197,7 @@ class Properties {
         var def:PropertyDefinition = definitions.get(name);
         if( def==null ) throw("no PropertyDefinition for '"+name+"' (createFromString: "+s+")");
         
-        var p:ValueBase = def.parseString(s);
-        ctx.set( name, p );
+        def.setFromString( name, s, ctx );
     }
 }
 
@@ -181,8 +210,6 @@ class PropertySet extends Hash<ValueBase> {
                 var value = StringTools.trim(a[1]);
                 
                 Properties.setFromString( name, value, this );
-//                var p:ValueBase = Properties.createFromString( name, value, this );
-//                this.set( name, p );
             }
         }
     }
@@ -217,6 +244,8 @@ class Style extends PropertySet {
     public property paddingTop(dynamic,dynamic):Float;
     public property paddingRight(dynamic,dynamic):Float;
     public property paddingBottom(dynamic,dynamic):Float;
+
+    public property padding(dynamic,dynamic):String;
 
     // aggregate properties also
 //    public property background(dynamic,dynamic):String;

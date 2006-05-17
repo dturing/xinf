@@ -80,6 +80,7 @@ class Test {
                 padding-top: 5;
                 padding-right: 5;
                 padding-bottom: 5;
+                padding: 10;
             }
             
             .hover {
