@@ -8,20 +8,21 @@ import org.xinf.value.Expression;
 
 import org.xinf.style.StyleChain;
 import org.xinf.style.Style;
+import org.xinf.style.Color;
 
 class ValueTest {
     static function main() {
         trace("Hello");
-
+        
         var chain = new Array<PropertySet>();
         
         var basic = new Style();
         basic.alpha = .5;
-        basic.backgroundColor = { r:1, g:0, b:.5 }
+        basic.backgroundColor = Color.rgb(10,20,30);
         basic.paddingLeft = 10;
         chain.push( basic );
         
-        var s = new StyleChain();
+        var s = new StyleChain(null);
         s.setChain( chain );
         
         trace( "alpha: "+s.alpha );

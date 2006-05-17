@@ -4,7 +4,7 @@ import org.xinf.value.Value;
 import Reflect;
 
 class SimpleProperty<T> extends Value<T> {
-    public static function initGetterSetter( class_proto:Class, _prop_name:String ) :Void {
+    public static function initGetterSetter( property_class:Class, class_proto:Class, _prop_name:String ) :Void {
         var prop_name = _prop_name;
         Reflect.setField(class_proto.prototype, "get_"+prop_name, function() {
                 var othis:PropertySet = untyped this;
@@ -28,7 +28,7 @@ class FloatProperty extends SimpleProperty<Float> {
     public static function create() :ValueBase {
         return( new FloatProperty() );
     }
-    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
+    public static function setFromString( name:String, s:String, ctx:PropertySet, cl:Class ) :Void {
         var v = new FloatProperty();
         v.set( Std.parseFloat(s) );
         ctx.set(name,v);
@@ -38,7 +38,7 @@ class ColorProperty extends SimpleProperty<Color> {
     public static function create() :ValueBase {
         return( new ColorProperty() );
     }
-    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
+    public static function setFromString( name:String, s:String, ctx:PropertySet, cl:Class ) :Void {
         var v = new ColorProperty();
         v.set( Color.fromString(s) );
         ctx.set(name,v);
@@ -46,45 +46,53 @@ class ColorProperty extends SimpleProperty<Color> {
 }
 
 class AggregateProperty {
-    public static function initGetterSetter( class_proto:Class, _prop_name:String ) :Void {
+    public static function initGetterSetter( property_class:Class, class_proto:Class, _prop_name:String ) :Void {
         var prop_name = _prop_name;
-        var get = _get;
-        var set = _set;
+        var get = untyped property_class._get;
+        var set = untyped property_class._set;
         Reflect.setField(class_proto.prototype, "get_"+prop_name, function() {
                 var othis:PropertySet = untyped this;
-                var f:ValueBase = othis.get(prop_name);
-                if( f != null ) return f.get();
-                return null;
+                return get( prop_name, othis );
             });
-        Reflect.setField(class_proto.prototype, "set_"+prop_name, function(v:Dynamic) {
+        Reflect.setField(class_proto.prototype, "set_"+prop_name, function(v:String) {
                 var othis:PropertySet = untyped this;
-                var f:ValueBase = othis.get(prop_name);
-                if( f == null ) {
-                    f = Properties.create(prop_name);
-                    othis.set(prop_name,f);
-                }
-                return f.set(v);
+                set( prop_name, v, othis );
+                return v;
             });
     }
     
-    public static function _get() :String {
-        throw("Generic AggregateProperty::_get():String must be overwritten");
-        return null;
-    }
-    public static function _set( s:String ) :Void {
-        throw("Generic AggregateProperty::_set():String must be overwritten");
-    }
-    public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
-        throw("NYI");
+    public static function setFromString( name:String, s:String, ctx:PropertySet, cl:Class ) :Void {
+        var setter:Dynamic = untyped cl._set;
+        if( setter == null ) throw( cl.__name__.join(".")+" has no _set function");
+        setter(name,s,ctx);
     }
 }
 
 class RectangleAggregateProperty extends AggregateProperty {
-    public static function _get() :String {
-        return("[RectangleAggregateProperty]");
+    public static function _get( name:String, ctx:PropertySet ) :String {
+        var buf:String = "";
+        buf += ctx.get(name+"Top").get()+" ";
+        buf += ctx.get(name+"Right").get()+" ";
+        buf += ctx.get(name+"Bottom").get()+" ";
+        buf += ctx.get(name+"Left").get()+"";
+        return buf;
     }
-    public static function _set( s:String ) :Void {
-        trace("[RectangleAggregateProperty _set: "+s+"]");
+    public static function _set( name:String, s:String, ctx:PropertySet ) :Void {
+        var a = s.split(" "); // FIXME: tokenize!
+        var trbl:Array<String> = new Array<String>();
+        if( a.length == 4 ) {
+            trbl = a;
+        } else if( a.length == 1 ) {
+            for( i in 0...4 ) trbl[i] = a[0];
+        } else {
+            throw("cannot parse RectangleAggregateProperty '"+name+"' from '"+s+"'." );
+        }
+        
+        trace("setting RectangleAggr "+name+" from "+trbl );
+        Properties.setFromString(name+"Top",trbl[0],ctx);
+        Properties.setFromString(name+"Right",trbl[1],ctx);
+        Properties.setFromString(name+"Bottom",trbl[2],ctx);
+        Properties.setFromString(name+"Left",trbl[3],ctx);
     }
 }
 
@@ -109,7 +117,7 @@ class PropertyDefinition {
     
     public function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
         var f = findClassStaticFunction("setFromString");
-        f(name,s,ctx);
+        f(name,s,ctx,class_proto);
     }
     
     public function create() :ValueBase {
@@ -119,7 +127,7 @@ class PropertyDefinition {
 
     public function initGetterSetter( into_class:Class, prop_name:String ) :Void {
         var f = findClassStaticFunction("initGetterSetter");
-        f(into_class,prop_name);
+        f(class_proto,into_class,prop_name);
     }
 }
 
@@ -187,12 +195,27 @@ class Properties {
     public static function setFromString( name:String, s:String, ctx:PropertySet ) :Void {
         var def:PropertyDefinition = definitions.get(name);
         if( def==null ) throw("no PropertyDefinition for '"+name+"' (createFromString: "+s+")");
-        
         def.setFromString( name, s, ctx );
     }
 }
 
-class PropertySet extends Hash<ValueBase> {
+class PropertySet {
+    private var properties :Hash<ValueBase>;
+
+    public function new() :Void {
+        properties = new Hash<ValueBase>();
+    }
+    
+    public function get( name:String ) :ValueBase {
+        return( properties.get(name) );
+    }
+    public function set( name:String, value:ValueBase ) :Void {
+        properties.set(name,value);
+    }
+    public function keys() :Iterator<String> {
+        return( properties.keys() );
+    }
+    
     public function fromString( str:String ) :Void {
         for( _attribute in str.split(";") ) {
             var a = StringTools.trim(_attribute).split(":");
@@ -205,7 +228,7 @@ class PropertySet extends Hash<ValueBase> {
         }
     }
     public static function newFromString( str:String ) :PropertySet {
-        var v = new PropertySet();
+        var v:PropertySet = new PropertySet();
         v.fromString(str);
         return v;
     }
@@ -236,9 +259,8 @@ class Style extends PropertySet {
     public property paddingRight(dynamic,dynamic):Float;
     public property paddingBottom(dynamic,dynamic):Float;
 
-    public property padding(dynamic,dynamic):String;
-
     // aggregate properties also
+    public property padding(dynamic,dynamic):String;
 //    public property background(dynamic,dynamic):String;
     
     

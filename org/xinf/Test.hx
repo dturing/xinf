@@ -76,24 +76,18 @@ class Test {
                 color: #f00;
                 background-color: #aaa;
                 alpha: .5;
-                padding-left: 5;
-                padding-top: 5;
-                padding-right: 5;
-                padding-bottom: 5;
                 padding: 10;
             }
             
             .hover {
                 background-color: #aaf;
                 color: #000;
-                padding-left: 50;
+                padding: 20;
             }
             
             .push {
-                background-color: #faa;
-                color: #000;
-                padding-right: 50;
-                padding-left: 5;
+                background-color: #f00;
+                padding: 21;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -127,6 +121,8 @@ class Test {
                 cont.addChild(box);
                 last = box;
             }
+            
+            trace( "Padding Test: "+first.style.padding );
             
         #if neko
              org.xinf.inity.Root.root.run();
