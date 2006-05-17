@@ -62,9 +62,13 @@ class XForward extends XScreen {
 
         var i = new XForward(":1",0);
         root.addChild(i);
+        i.bounds.width = 320;
+        i.bounds.height = 240;
 
         var j = new XForward(":1",1);
         j.bounds.x = 320;
+        j.bounds.width = 320;
+        j.bounds.height = 240;
         root.addChild(j);
         
         #if neko
