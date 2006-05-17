@@ -45,7 +45,7 @@ class CachedStyle extends Style {
         var p:ValueBase = get(name);
 //        trace("CREATE cache "+name+" "+p );
         if( p == null ) {
-            p = Properties.create( name, this ).identity();
+            p = Properties.create( name ).identity();
             cache.set(name,p);
         }
         return p;

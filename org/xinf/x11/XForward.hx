@@ -29,7 +29,9 @@ class XForward extends XScreen {
     }
     public function onMouseMove( e:Event ) :Void {
             //FIXME: this is a very very crude globalToLocal transformation!
-        X.TestFakeMotionEvent( display, screen, org.xinf.inity.Root.root.mouseX-style.x.px(), org.xinf.inity.Root.root.mouseY-style.y.px(), X.CurrentTime );
+        X.TestFakeMotionEvent( display, screen, 
+                Math.round(org.xinf.inity.Root.root.mouseX-bounds.x), 
+                Math.round(org.xinf.inity.Root.root.mouseY-bounds.y), X.CurrentTime );
     }
     
     static function main() {
@@ -39,20 +41,17 @@ class XForward extends XScreen {
             .XForward {
                 width: 320px;
                 height: 240px;
-                background: #080;
-                padding: 0;
-                border: 0px solid white;
+                backgroundColor: #080;
             }
             
             .Pane {
-                background: #aaa;
+                backgroundColor: #aaa;
             }
             
             #root {
                 width: 320px;
                 height: 240px;
-                border: none;
-                background: #008;
+                backgroundColor: #008;
             }
             
         ");
@@ -65,7 +64,7 @@ class XForward extends XScreen {
         root.addChild(i);
 
         var j = new XForward(":1",1);
-        j.style.x = 320;
+        j.bounds.x = 320;
         root.addChild(j);
         
         #if neko

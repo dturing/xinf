@@ -7,13 +7,10 @@ class Box extends Group {
         super();
     }
 
+    private function _renderBorder() :Void {
+    }
+    
     private function _renderGraphics() :Void {
-    /*
-        var border:Border = style.border;
-        var padding:Pad = style.padding;
-            
-        var b:Float = border.thickness.px();
-        */
         var b:Float = 1;
         
         var w:Float = bounds.width;   // w,h are not really width/height here,

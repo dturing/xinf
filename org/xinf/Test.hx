@@ -74,25 +74,25 @@ class Test {
 
             .Foo {
                 color: #f00;
-                backgroundColor: #aaa;
+                background-color: #aaa;
                 alpha: .5;
-                paddingLeft: 5;
-                paddingTop: 5;
-                paddingRight: 5;
-                paddingBottom: 5;
+                padding-left: 5;
+                padding-top: 5;
+                padding-right: 5;
+                padding-bottom: 5;
             }
             
             .hover {
-                backgroundColor: #aaf;
+                background-color: #aaf;
                 color: #000;
-                paddingLeft: 50;
+                padding-left: 50;
             }
             
             .push {
-                backgroundColor: #faa;
+                background-color: #faa;
                 color: #000;
-                paddingRight: 50;
-                paddingLeft: 5;
+                padding-right: 50;
+                padding-left: 5;
             }
         ");
 //        trace("StyleSheet: " + style );
@@ -112,7 +112,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...100 ) {
+            for( i in 0...10 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 

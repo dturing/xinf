@@ -31,9 +31,11 @@ class Profiler {
     public function lap() :Void {
         check("end of lap");
         laps++;
+        /* continuous dumps
         if( laps % 25 == 0 ) {
             dump();
         }
+        */
     }
     
     public function dump() :Void {
