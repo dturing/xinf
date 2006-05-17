@@ -68,8 +68,9 @@ class Test {
         x=0;
 
         var style = StyleSheet.newFromString("
-            #root {
+            .Root, .Pane {
                 backgroundColor: #ddd;
+                margin: 10;
             }
 
             .Foo {
@@ -77,10 +78,15 @@ class Test {
                 background-color: #aaa;
                 alpha: .5;
                 padding: 10;
+                margin: 10;
                 
                 border-style-left: solid;
-                border-width-left: 2px;
-                border-color-left: #0f0;
+                border-width-left: 5px;
+                border-color-left: #000;
+                
+                border-right: 1px solid #00f;
+                border-top: 1px solid #00f;
+                border-bottom: 1px solid #00f;
             }
             
             .hover {
@@ -104,6 +110,7 @@ class Test {
         container = cont;
         org.xinf.ony.Root.getRoot().addChild(cont);
 
+
         var first = new Foo("box_");
         cont.addChild( first );
         var last = first;
@@ -125,7 +132,11 @@ class Test {
                 last = box;
             }
             
-            trace( "Padding Test: "+first.style.padding );
+        
+    var root = org.xinf.ony.Root.getRoot();
+    root.addStyleClass("root");
+    trace( "Root style: "+root.style.marginLeft );
+    trace( "Root style: "+root.style );
             
         #if neko
              org.xinf.inity.Root.root.run();

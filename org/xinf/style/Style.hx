@@ -83,6 +83,7 @@ class AggregateProperty {
 class RectangleAggregateProperty extends AggregateProperty {
     public static function _get( name:String, ctx:PropertySet ) :String {
         var buf:String = "";
+        if( ctx.get(name+"Top") == null ) throw("aggregated prop is null: "+name );
         buf += ctx.get(name+"Top").get()+" ";
         buf += ctx.get(name+"Right").get()+" ";
         buf += ctx.get(name+"Bottom").get()+" ";
@@ -108,6 +109,45 @@ class RectangleAggregateProperty extends AggregateProperty {
     }
 }
 
+class BorderEdgeAggregateProperty extends AggregateProperty {
+    public static function splitName( name:String ) : Array<String> {
+        // FIXME: use regexp.
+        var last:Int=0;
+        var a:Array<String> = new Array<String>();
+        for( i in 1...name.length ) {
+            if( name.charCodeAt(i) <= 90 ) { // stupid for: ifUpperCase
+                   a.push( name.substr(last,i-last) );
+                   last=i;
+            }
+        }
+        a.push( name.substr(last,name.length-last) );
+        return a;
+    }
+    
+    public static function _get( name:String, ctx:PropertySet ) :String {
+        var buf:String = "";
+        var n = splitName(name);
+        buf += ctx.get(name+"Width").get()+" ";
+        buf += ctx.get(name+"Style").get()+" ";
+        buf += ctx.get(name+"Color").get()+"";
+        return buf;
+    }
+    public static function _set( name:String, s:String, ctx:PropertySet ) :Void {
+        var n = splitName(name);
+        var pre = n.shift();
+        var post = n.shift();
+        var a = s.split(" "); // FIXME: tokenize!
+        if( a.length == 3 ) {
+            Properties.setFromString(pre+"Width"+post,a[0],ctx);
+            Properties.setFromString(pre+"Style"+post,a[1],ctx);
+            Properties.setFromString(pre+"Color"+post,a[2],ctx);
+            
+        // TODO: other lengths are also valid CSS.
+        } else {
+            throw("cannot parse BorderEdgeAggregateProperty '"+name+"' from '"+s+"'." );
+        }
+    }
+}
 class PropertyDefinition {
     public var class_proto:Class;
     
@@ -146,68 +186,53 @@ class PropertyDefinition {
     
 class Properties {
     public static var definitions:Hash<PropertyDefinition>;
+    private static function addDef( name:String, cl:Dynamic ) {
+        definitions.set( name, new PropertyDefinition( cl ) );
+    }
     public static function __init__():Void {
-        var defs = new Hash<PropertyDefinition>();
+        var defs = definitions = new Hash<PropertyDefinition>();
 
-        defs.set( "width", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "height", new PropertyDefinition( 
-                FloatProperty
-            ) );
-
-        defs.set( "alpha", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "backgroundColor", new PropertyDefinition( 
-                ColorProperty
-            ) );
-        defs.set( "color", new PropertyDefinition( 
-                ColorProperty
-            ) );
-            
-        defs.set( "paddingLeft", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "paddingRight", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "paddingTop", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "paddingBottom", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "padding", new PropertyDefinition( 
-                RectangleAggregateProperty
-            ) );
-
-        defs.set( "marginLeft", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "marginRight", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "marginTop", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "marginBottom", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "margin", new PropertyDefinition( 
-                RectangleAggregateProperty
-            ) );
-
-        defs.set( "borderStyleLeft", new PropertyDefinition( 
-                BorderStyleProperty
-            ) );
-        defs.set( "borderWidthLeft", new PropertyDefinition( 
-                FloatProperty
-            ) );
-        defs.set( "borderColorLeft", new PropertyDefinition( 
-                ColorProperty
-            ) );
+        addDef( "width", FloatProperty );
+        addDef( "height", FloatProperty );
+        addDef( "alpha", FloatProperty );
         
+        addDef( "backgroundColor", ColorProperty );
+        addDef( "color", ColorProperty );
+            
+        addDef( "paddingLeft", FloatProperty );
+        addDef( "paddingRight", FloatProperty );
+        addDef( "paddingTop", FloatProperty );
+        addDef( "paddingBottom", FloatProperty );
+        addDef( "padding", RectangleAggregateProperty );
+
+        addDef( "marginLeft", FloatProperty );
+        addDef( "marginRight", FloatProperty );
+        addDef( "marginTop", FloatProperty );
+        addDef( "marginBottom", FloatProperty );
+        addDef( "margin", RectangleAggregateProperty );
+
+        addDef( "borderLeft", BorderEdgeAggregateProperty );
+        addDef( "borderStyleLeft", BorderStyleProperty );
+        addDef( "borderWidthLeft", FloatProperty );
+        addDef( "borderColorLeft", ColorProperty );
+        addDef( "borderTop", BorderEdgeAggregateProperty );
+        addDef( "borderStyleTop", BorderStyleProperty );
+        addDef( "borderWidthTop", FloatProperty );
+        addDef( "borderColorTop", ColorProperty );
+        addDef( "borderRight", BorderEdgeAggregateProperty );
+        addDef( "borderStyleRight", BorderStyleProperty );
+        addDef( "borderWidthRight", FloatProperty );
+        addDef( "borderColorRight", ColorProperty );
+        addDef( "borderBottom", BorderEdgeAggregateProperty );
+        addDef( "borderStyleBottom", BorderStyleProperty );
+        addDef( "borderWidthBottom", FloatProperty );
+        addDef( "borderColorBottom", ColorProperty );
+        /*
+        addDef( "border", BorderEdgeAggregateProperty );
+        addDef( "borderStyle", BorderStyleProperty );
+        addDef( "borderWidth", FloatProperty );
+        addDef( "borderColor", ColorProperty );
+        */
         definitions = defs;
     }
     
@@ -283,7 +308,10 @@ class PropertySet {
 
 
 class Style extends PropertySet {
+    
     // common style properties are mapped as haxe properties
+    // a PropertySet can contain any property defined in Properties.definitions, though.
+    
     public property height(dynamic,dynamic):Float;
     public property width(dynamic,dynamic):Float;
 
@@ -295,19 +323,25 @@ class Style extends PropertySet {
     public property paddingTop(dynamic,dynamic):Float;
     public property paddingRight(dynamic,dynamic):Float;
     public property paddingBottom(dynamic,dynamic):Float;
+    public property padding(dynamic,dynamic):String;
 
     public property marginLeft(dynamic,dynamic):Float;
     public property marginTop(dynamic,dynamic):Float;
     public property marginRight(dynamic,dynamic):Float;
     public property marginBottom(dynamic,dynamic):Float;
+    public property margin(dynamic,dynamic):String;
 
     public property borderStyleLeft(dynamic,dynamic):String;
     public property borderWidthLeft(dynamic,dynamic):Float;
     public property borderColorLeft(dynamic,dynamic):Color;
 
-    // aggregate properties also
-    public property padding(dynamic,dynamic):String;
-//    public property background(dynamic,dynamic):String;
+    public property borderStyleRight(dynamic,dynamic):String;
+    public property borderWidthRight(dynamic,dynamic):Float;
+    public property borderColorRight(dynamic,dynamic):Color;
+
+    public property borderStyleTop(dynamic,dynamic):String;
+    public property borderWidthTop(dynamic,dynamic):Float;
+    public property borderColorTop(dynamic,dynamic):Color;
     
     
     public static function __init__() :Void {

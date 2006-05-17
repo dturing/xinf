@@ -28,6 +28,7 @@ class CachedStyle extends Style {
          //   trace("CACHE: cacheing "+name+": "+p );
             cache.set( name, p );
         }
+        
         return p;
     }
     public function getNoCache( name:String ) :ValueBase {
@@ -78,6 +79,13 @@ class StyleChain extends CachedStyle {
         chain = new Array<PropertySet>();
     }
 
+    // FIXME debugging only, remove this function!
+    public function get( name:String ) :ValueBase {
+        var p = super.get(name);
+        if( p == null ) trace("Property not found: "+name+", chain len "+chain.length );
+        return p;
+    }
+
     public function _lookup( name:String ) :ValueBase {
         var p:ValueBase;
         for( style in chain ) {
@@ -93,6 +101,10 @@ class StyleChain extends CachedStyle {
     }
     
     public function toString() :String {
-        return( "StyleChain of "+object );
+        var r:String = "StyleChain of "+object+", length "+chain.length+", cache:\n";
+        for( k in cache.keys() ) {
+            r += "\t"+k+": "+cache.get(k)+"\n";
+        }        
+        return r;
     }
 }
