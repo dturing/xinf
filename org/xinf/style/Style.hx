@@ -109,7 +109,7 @@ class RectangleAggregateProperty extends AggregateProperty {
     }
 }
 
-class BorderEdgeAggregateProperty extends AggregateProperty {
+class BorderAggregateProperty extends AggregateProperty {
     public static function splitName( name:String ) : Array<String> {
         // FIXME: use regexp.
         var last:Int=0;
@@ -126,21 +126,17 @@ class BorderEdgeAggregateProperty extends AggregateProperty {
     
     public static function _get( name:String, ctx:PropertySet ) :String {
         var buf:String = "";
-        var n = splitName(name);
         buf += ctx.get(name+"Width").get()+" ";
         buf += ctx.get(name+"Style").get()+" ";
         buf += ctx.get(name+"Color").get()+"";
         return buf;
     }
     public static function _set( name:String, s:String, ctx:PropertySet ) :Void {
-        var n = splitName(name);
-        var pre = n.shift();
-        var post = n.shift();
         var a = s.split(" "); // FIXME: tokenize!
         if( a.length == 3 ) {
-            Properties.setFromString(pre+"Width"+post,a[0],ctx);
-            Properties.setFromString(pre+"Style"+post,a[1],ctx);
-            Properties.setFromString(pre+"Color"+post,a[2],ctx);
+            Properties.setFromString(name+"Width",a[0],ctx);
+            Properties.setFromString(name+"Style",a[1],ctx);
+            Properties.setFromString(name+"Color",a[2],ctx);
             
         // TODO: other lengths are also valid CSS.
         } else {
@@ -211,28 +207,11 @@ class Properties {
         addDef( "marginBottom", FloatProperty );
         addDef( "margin", RectangleAggregateProperty );
 
-        addDef( "borderLeft", BorderEdgeAggregateProperty );
-        addDef( "borderStyleLeft", BorderStyleProperty );
-        addDef( "borderWidthLeft", FloatProperty );
-        addDef( "borderColorLeft", ColorProperty );
-        addDef( "borderTop", BorderEdgeAggregateProperty );
-        addDef( "borderStyleTop", BorderStyleProperty );
-        addDef( "borderWidthTop", FloatProperty );
-        addDef( "borderColorTop", ColorProperty );
-        addDef( "borderRight", BorderEdgeAggregateProperty );
-        addDef( "borderStyleRight", BorderStyleProperty );
-        addDef( "borderWidthRight", FloatProperty );
-        addDef( "borderColorRight", ColorProperty );
-        addDef( "borderBottom", BorderEdgeAggregateProperty );
-        addDef( "borderStyleBottom", BorderStyleProperty );
-        addDef( "borderWidthBottom", FloatProperty );
-        addDef( "borderColorBottom", ColorProperty );
-        /*
-        addDef( "border", BorderEdgeAggregateProperty );
+        addDef( "border", BorderAggregateProperty );
         addDef( "borderStyle", BorderStyleProperty );
         addDef( "borderWidth", FloatProperty );
         addDef( "borderColor", ColorProperty );
-        */
+        
         definitions = defs;
     }
     
@@ -331,21 +310,9 @@ class Style extends PropertySet {
     public property marginBottom(dynamic,dynamic):Float;
     public property margin(dynamic,dynamic):String;
 
-    public property borderStyleLeft(dynamic,dynamic):String;
-    public property borderWidthLeft(dynamic,dynamic):Float;
-    public property borderColorLeft(dynamic,dynamic):Color;
-
-    public property borderStyleRight(dynamic,dynamic):String;
-    public property borderWidthRight(dynamic,dynamic):Float;
-    public property borderColorRight(dynamic,dynamic):Color;
-
-    public property borderStyleTop(dynamic,dynamic):String;
-    public property borderWidthTop(dynamic,dynamic):Float;
-    public property borderColorTop(dynamic,dynamic):Color;
-
-    public property borderStyleBottom(dynamic,dynamic):String;
-    public property borderWidthBottom(dynamic,dynamic):Float;
-    public property borderColorBottom(dynamic,dynamic):Color;
+    public property borderStyle(dynamic,dynamic):String;
+    public property borderWidth(dynamic,dynamic):Float;
+    public property borderColor(dynamic,dynamic):Color;
     
     
     public static function __init__() :Void {

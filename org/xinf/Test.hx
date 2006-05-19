@@ -80,13 +80,7 @@ class Test {
                 padding: 10;
                 margin: 10;
                 
-                border-style-left: solid;
-                border-width-left: 1px;
-                border-color-left: #000;
-                
-                border-right: 1px solid #000;
-                border-top: 1px solid #00f;
-                border-bottom: 1px solid #00f;
+                border: 1px solid #000;
             }
             
             .hover {
@@ -96,15 +90,10 @@ class Test {
             }
             
             .push {
-                border-right: 20px solid #ff0;
                 background-color: #f00;
             }
         ");
-//        trace("StyleSheet: " + style );
-        
         org.xinf.style.StyledObject.globalStyle.append( style );
-
-//        EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, Test.onEnterFrame );
 
 
         var cont = new Pane("container");
@@ -133,11 +122,6 @@ class Test {
                 last = box;
             }
             
-        
-    var root = org.xinf.ony.Root.getRoot();
-    root.addStyleClass("root");
-    trace( "Root style: "+root.style.marginLeft );
-    trace( "Root style: "+root.style );
             
         #if neko
              org.xinf.inity.Root.root.run();

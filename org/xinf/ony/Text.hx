@@ -33,8 +33,8 @@ class Text extends Pane {
         
         bounds._width.setLink( new Sum( [ 
                                 width, 
-                                style.getLink("borderWidthLeft"), 
-                                style.getLink("borderWidthRight"),
+                                style.getLink("borderWidth"),   // FIXME: multiply*2!
+                                style.getLink("borderWidth"),   //
                                 style.getLink("marginLeft"), 
                                 style.getLink("marginRight"),
                                 style.getLink("paddingLeft"), 
@@ -42,8 +42,8 @@ class Text extends Pane {
                             ] ) );
         bounds._height.setLink( new Sum( [ 
                                 height, 
-                                style.getLink("borderWidthTop"), 
-                                style.getLink("borderWidthBottom"),
+                                style.getLink("borderWidth"),   // FIXME: multiply*2!
+                                style.getLink("borderWidth"),   //
                                 style.getLink("marginTop"), 
                                 style.getLink("marginBottom"),
                                 style.getLink("paddingTop"), 

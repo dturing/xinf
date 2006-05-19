@@ -17,13 +17,18 @@ class Box extends Group {
             var c = color;
             
             GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
-            GL.Begin( GL.LINES );
-                GL.Vertex3f( x, y, 0. );
-                GL.Vertex3f( w, h, 0. );
+            GL.Begin( GL.LINE_STRIP );
+                GL.Vertex3f( x+b, y+b, 0. );
+                GL.Vertex3f( w-b, y+b, 0. );
+                GL.Vertex3f( w-b, h-b, 0. );
+                GL.Vertex3f( x+b, h-b, 0. );
+                GL.Vertex3f( x+b, y+b, 0. );
             GL.End();
             GL.Begin( GL.POINTS );
-                GL.Vertex3f( x, y, 0. );
-                GL.Vertex3f( w, h, 0. );
+                GL.Vertex3f( x+b, y+b, 0. );
+                GL.Vertex3f( w-b, y+b, 0. );
+                GL.Vertex3f( w-b, h-b, 0. );
+                GL.Vertex3f( x+b, h-b, 0. );
             GL.End();
         }
     }
@@ -52,10 +57,7 @@ class Box extends Group {
         GL.End();
         
       // border
-//        _renderBorder( x, y, x, h, style.borderStyleLeft, style.borderWidthLeft, style.borderColorLeft );
-//        _renderBorder( w, y, w, h, style.borderStyleRight, style.borderWidthRight, style.borderColorRight );
-        _renderBorder( x, y, w, y, style.borderStyleTop, style.borderWidthTop, style.borderColorTop );
-//        _renderBorder( x, h, w, h, style.borderStyleBottom, style.borderWidthBottom, style.borderColorBottom );
+        _renderBorder( x, y, w, h, style.borderStyle, style.borderWidth, style.borderColor );
     }
     
     private function _render() :Void {
