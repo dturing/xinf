@@ -3,13 +3,10 @@ package org.xinf.ony.impl.js;
 import js.HtmlDom;
 import org.xinf.event.Event;
 import org.xinf.style.Style;
-import org.xinf.style.Pad;
-import org.xinf.style.Border;
 import org.xinf.ony.impl.IPrimitive;
 
 class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : HtmlDom;
-    private var style : Style; // FIXME: use browser engine?
 
     private static var eventNames:Hash<String> = registerEventNames();
     private static function registerEventNames() : Hash<String> {
@@ -56,19 +53,19 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
         _e.removeChild( p._e );
     }
 
+    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
+        trace("Set JS Bounds: "+bounds );
+        _e.style.left = Math.floor( bounds.x );
+        _e.style.top  = Math.floor( bounds.y );
+//        _e.style.width  = Math.floor( bounds.height );
+//        _e.style.height = Math.floor( bounds.width );
+    }
     public function applyStyle( _style:org.xinf.style.Style ) :Void {
-        style = _style;
-        
-        var padding:Pad = style.padding;
-        var b:Float = style.border.thickness.px();
-        _e.style.left = Math.floor( style.x.px() );
-        _e.style.top  = Math.floor( style.y.px() );
-        _e.style.width  = Math.floor( style.width.px() - (padding.left.px()+padding.right.px()+(b*2)) );
-        _e.style.height = Math.floor( style.height.px() - (padding.top.px()+padding.bottom.px()+(b*2)) );
-        _e.style.color = style.color.toString();
-        _e.style.background = style.background.toString();
-        _e.style.border = style.border.toString();
-        _e.style.padding = style.padding.toString();
+        var cl = "";
+        for( k in untyped _e.owner.getStyleClasses() ) {
+            cl += k+" ";
+        }
+        untyped _e.className = cl;
     }
 
     public function eventRegistered( type:String ) :Void {

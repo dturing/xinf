@@ -57,6 +57,7 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
     public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
         _e._x = bounds.x;
         _e._y = bounds.y;
+            trace("FlashPrimitive::applyBounds: "+bounds);
         width = Math.round(bounds.width);
         height = Math.round(bounds.height);
         redraw();

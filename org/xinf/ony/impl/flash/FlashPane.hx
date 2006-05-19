@@ -11,15 +11,17 @@ class FlashPane extends FlashPrimitive {
     public function redraw() :Void {
         super.redraw();
         
-        var b = style.borderWidthLeft;
+        trace("FlashPane::redraw "+untyped _e.owner+" "+w+"/"+h);
+        
+        var b = style.borderWidth;
         var padding = style.paddingLeft;
-        var w:Int = Math.floor( bounds.width );
-        var h:Int = Math.floor( bounds.height );
+        var w:Int = height;
+        var h:Int = width;
 
         _e.clear();
-        _e.beginFill( style.background.toInt(),  100 );
+        _e.beginFill( style.backgroundColor.toInt(),  100 );
         if( b > 0 ) {
-            _e.lineStyle( b, style.border.color.toInt(), style.border.color.a*100, true, "", "", "", 0 );
+            _e.lineStyle( b, style.borderColor.toInt(), style.borderColor.a*100, true, "", "", "", 0 );
         }
         _e.moveTo( 0, 0 );
         _e.lineTo( w, 0 );

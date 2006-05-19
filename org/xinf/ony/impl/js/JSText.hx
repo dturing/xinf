@@ -10,14 +10,6 @@ class JSText extends JSPane, implements ITextPrimitive  {
         _e.style.overflow="hidden";
         _e.style.whiteSpace="nowrap";
     }
-
-    public function applyStyle( _style:org.xinf.style.Style ) :Void {
-        super.applyStyle(_style);
-//        if( autoSize ) { // FIXME
-              _e.style.width = null;
-              _e.style.height = null;
-//        }
-    }
     
     public function setText( text:String ) :Void {
         untyped _e.innerHTML = text.split("\n").join("<br/>");

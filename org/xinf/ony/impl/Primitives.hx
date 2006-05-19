@@ -3,7 +3,7 @@ package org.xinf.ony.impl;
 class Primitives {
 
     // static functions to generate various runtime-specific primitives
-    public static function createRoot() :IPrimitive {
+    public static function createRoot() :IRootPrimitive {
         #if neko
             return new org.xinf.ony.impl.x.XRoot();
         #else flash
