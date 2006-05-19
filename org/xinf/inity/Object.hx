@@ -60,7 +60,7 @@ class Object {
     // cache the object as a displaylist, regard transform.
     public function _cache() :Void {
         if( _changed ) {
-            if( style != null ) { // FIXME. maybe do this somewhere else?
+            if( bounds.x != null && bounds.y != null ) { // FIXME. maybe do this somewhere else?
                 transform.tx = bounds.x;
                 transform.ty = bounds.y;
             }

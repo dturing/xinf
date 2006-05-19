@@ -52,12 +52,17 @@ class Bounds extends ValueBase {
         return _height.get_value();
     }
     
+    private static var _zero:Value<Float>;
+    public static function __init__() :Void {
+        _zero = new Value<Float>();
+        _zero.value = 0;
+    }
     public function new() {
         super();
-        _x = new Identity<Float>( new Value<Float>() );
-        _y = new Identity<Float>( new Value<Float>() );
-        _width = new Identity<Float>( new Value<Float>() );
-        _height = new Identity<Float>( new Value<Float>() );
+        _x = new Identity<Float>( _zero );
+        _y = new Identity<Float>( _zero );
+        _width = new Identity<Float>( _zero );
+        _height = new Identity<Float>( _zero );
         
         _x.addEventListener( "changed", onChildChanged );
         _y.addEventListener( "changed", onChildChanged );
@@ -67,7 +72,6 @@ class Bounds extends ValueBase {
         
     public static function newZero() :Bounds {
         var b = new Bounds();
-        b.x = b.y = b.width = b.height = .0;
         return b;
     }
     

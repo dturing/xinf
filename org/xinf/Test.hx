@@ -50,7 +50,7 @@ class Foo extends org.xinf.ony.Text {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-        text = t+postfix;
+   //     text = t+postfix;
         
     }
     
@@ -86,7 +86,6 @@ class Test {
             .hover {
                 background-color: #aaf;
                 color: #000;
-                padding: 20;
             }
             
             .push {
@@ -95,6 +94,7 @@ class Test {
         ");
         org.xinf.style.StyledObject.globalStyle.append( style );
 
+        org.xinf.ony.Root.getRoot();
 
         var cont = new Pane("container");
         container = cont;
@@ -107,7 +107,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...2 ) {
+            for( i in 0...100 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 

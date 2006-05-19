@@ -11,7 +11,7 @@ class Event {
         var e:Event = queue.shift();
        // if( queue.length > 0 ) trace("processQueue: "+queue.length+" events" );
         
-        if( queue.length > 50 ) {
+        if( queue.length > 100 ) {
             trace( queue.length+" is an astonishing number of events, breakdown: ");
             
             var h = new Hash<Int>();
