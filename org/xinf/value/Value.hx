@@ -5,9 +5,11 @@ import org.xinf.event.Event;
 
 class ValueBase extends EventDispatcher {
     var lastChanged:Event;
+    var active:Bool;
     
     public function new() :Void {
         super();
+        active = false;
     }
     
     public function get() :Dynamic {
@@ -19,12 +21,28 @@ class ValueBase extends EventDispatcher {
     public function fromString( s:String ) :Void {
     }
 
-    private function changed() :Void {
-        if( lastChanged==null || lastChanged.stopped ) 
-            lastChanged = postEvent( "changed", null );
+    public function addEventListener( type:String, f:Event->Void ) :Void {
+        super.addEventListener( type, f );
+        if( !active ) activate();
+    }
+    public function removeEventListener( type:String, f:Event->Void ) :Void {
+        super.removeEventListener( type, f );
+        if( active  ) deactivate(); // FIXME this is wrong, so wrong!
+    }
+    public function activate() :Void {
+        active = true;
+    }
+    public function deactivate() :Void {
+        active = false;
+    }
+
+    private function changed( _old:Dynamic, _new:Dynamic ) :Void {
+        if( _new != _old && (lastChanged==null || lastChanged.stopped) )  {
+            lastChanged = postEvent( "changed", { _old:_old, _new:_new } );
+        }
     }
     private function onChildChanged( e:Event ) :Void {
-        changed();
+        changed( 0, get() ); // FIXME
     }
 
     public function identity() :ValueBase {
@@ -43,7 +61,7 @@ class Value<T> extends ValueBase {
     public function set_value( v:T ) :T {
         var o:T = _value;
         _value=v;
-        if( o != v && o != null ) changed();
+        changed( o, v );
         return _value;
     }
     public function get_value() :T {
@@ -87,7 +105,7 @@ class Identity<T> extends Value<T> {
     }
 
     public function linkChanged( e:Event ) :Void {
-        changed();
+        changed(0,get()); // FIXME
     }
 
     public function setLink( a:Value<T> ) :Void {
@@ -97,7 +115,7 @@ class Identity<T> extends Value<T> {
         listener = linkChanged;
         linked.addEventListener( "changed", listener );
         if( linked.value != old && old != null ) {
-            changed();
+            changed( old, linked.value );
         }
     }
 
