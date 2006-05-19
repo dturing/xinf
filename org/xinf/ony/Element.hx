@@ -22,8 +22,9 @@ class Element extends StyledObject {
         _p = createPrimitive();
         _p.setOwner( this );
         super(name);
-
-        _p.applyStyle( style );
+    
+        styleChanged();
+//        _p.applyStyle( style );
      }
 
     private function createPrimitive() :IPrimitive {
@@ -51,7 +52,7 @@ class Element extends StyledObject {
 
     private function onBoundsChanged( e:Event ) {
         // FIXME: avoid this by setting it once (and linking, for js and fl- inity will keep display uptodate)
-    //    trace( ""+this+".onBoundsChanged");
+        trace( ""+this+".onBoundsChanged");
         _p.applyBounds(bounds);
     }
     
