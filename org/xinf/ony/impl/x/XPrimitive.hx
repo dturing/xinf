@@ -2,6 +2,7 @@ package org.xinf.ony.impl.x;
 
 import org.xinf.inity.Group;
 import org.xinf.ony.impl.IPrimitive;
+import org.xinf.event.Event;
 
 class XPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : Group;
@@ -26,13 +27,20 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
 //        _e.removeChild( p._e );
     }
 
-    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
+    public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
         _e.bounds = bounds;
+        // FIXME: if we separate painting/translation into differend displaylists, movement could be very lightweight!
+        bounds.addEventListener("changed", redraw );
         _e.changed();
     }
 
-    public function applyStyle( style:org.xinf.style.Style ) :Void {
+    public function setStyle( style:org.xinf.style.Style ) :Void {
         _e.style = style;
+        style.addEventListener("changed", redraw );
+  //      _e.changed();
+    }
+    
+    public function redraw( e:Event ) :Void {
         _e.changed();
     }
 

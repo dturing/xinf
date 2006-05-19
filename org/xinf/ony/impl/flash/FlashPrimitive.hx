@@ -55,7 +55,6 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
     }
 
     public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
-    trace("FlashPrim::setBounds");
         bounds.addEventListener( "positionChanged", onPositionChanged );
         bounds.addEventListener( "sizeChanged", onSizeChanged );
     }

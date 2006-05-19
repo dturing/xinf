@@ -71,12 +71,15 @@ class Test {
             .Root, .Pane {
                 backgroundColor: #ddd;
                 color: #000;
-                margin: 10;
+                margin: 0;
+                margin-left: 320;
+                margin-top: 240;
+
             }
 
             .Foo {
-                color: #f00;
-                background-color: #aaa;
+                color: #008;
+                background-color: #bbb;
                 padding: 10;
                 margin: 10;
                 
@@ -107,7 +110,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...3 ) {
+            for( i in 0...20 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 
