@@ -1,5 +1,8 @@
 package org.xinf.value;
 
+import org.xinf.event.Event;
+import org.xinf.value.Value;
+
 // for setting o.p whenever v changes.
 class ValueMonitor {
     var v:ValueBase; // value

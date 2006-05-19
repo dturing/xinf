@@ -2,6 +2,7 @@ package org.xinf.style;
 
 import org.xinf.style.Style;
 import org.xinf.value.Value;
+import org.xinf.event.Event;
 
 class CachedStyle extends Style {
     private var cache :PropertySet;
@@ -98,6 +99,7 @@ class StyleChain extends CachedStyle {
     public function setChain( l:Array<PropertySet> ) :Void {
         chain = l;
         reCache();
+        postEvent( Event.CHANGED, null );
     }
     
     public function toString() :String {

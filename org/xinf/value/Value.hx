@@ -42,6 +42,7 @@ class ValueBase extends EventDispatcher {
        //     trace("value changed: "+_old+"->"+_new+" l: "+_listeners);
         }
     }
+    
     private function onChildChanged( e:Event ) :Void {
         changed( 0, get() ); // FIXME
     }

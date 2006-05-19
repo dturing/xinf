@@ -57,6 +57,15 @@ class Bounds extends ValueBase {
         _zero = new Value<Float>();
         _zero.value = 0;
     }
+    
+
+    private function positionChanged( e:Event ) :Void {
+        postEvent( "positionChanged", { x:_x.value, y:_y.value } );
+    }
+    private function sizeChanged( e:Event ) :Void {
+        postEvent( "sizeChanged", { width:_width.value, height:_height.value } );
+    }
+
     public function new() {
         super();
         _x = new Identity<Float>( _zero );
@@ -64,10 +73,14 @@ class Bounds extends ValueBase {
         _width = new Identity<Float>( _zero );
         _height = new Identity<Float>( _zero );
         
-        _x.addEventListener( "changed", onChildChanged );
-        _y.addEventListener( "changed", onChildChanged );
-        _width.addEventListener( "changed", onChildChanged );
-        _height.addEventListener( "changed", onChildChanged );
+        
+        // FIXME: wow! really do this?
+        _x.addEventListener( "changed", positionChanged );
+        _y.addEventListener( "changed", positionChanged );
+        _width.addEventListener( "changed", sizeChanged );
+        _height.addEventListener( "changed", sizeChanged );
+        addEventListener( "positionChanged", onChildChanged );
+        addEventListener( "sizeChanged", onChildChanged );
     }
         
     public static function newZero() :Bounds {

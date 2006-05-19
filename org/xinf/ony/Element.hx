@@ -16,15 +16,16 @@ class Element extends StyledObject {
     public function new( _name:String ) :Void {
         name = _name;
         bounds = Bounds.newZero();
-        bounds.addEventListener( Event.CHANGED, onBoundsChanged );
+//        bounds.addEventListener( Event.CHANGED, onBoundsChanged );
         
         children = new Array<Element>();
         _p = createPrimitive();
         _p.setOwner( this );
+        
         super(name);
-    
-        styleChanged();
-//        _p.applyStyle( style );
+
+        _p.setStyle( style );
+        _p.setBounds( bounds );
      }
 
     private function createPrimitive() :IPrimitive {
@@ -43,18 +44,18 @@ class Element extends StyledObject {
         child.parent = null;
         _p.removeChild( child._p );
     }
-
+/*
     public function styleChanged() :Void {
         super.styleChanged();
         // this could be avoided if bg/border/fg couple to the needed styleProperties. FIXME
         _p.applyStyle( style );
     }
-
     private function onBoundsChanged( e:Event ) {
         // FIXME: avoid this by setting it once (and linking, for js and fl- inity will keep display uptodate)
-        trace( ""+this+".onBoundsChanged");
+//        trace( ""+this+".onBoundsChanged");
         _p.applyBounds(bounds);
     }
+*/
     
     public function dispatchEvent( e:Event ) :Void {
         super.dispatchEvent( e );

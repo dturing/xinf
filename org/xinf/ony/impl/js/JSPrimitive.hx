@@ -54,7 +54,7 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     }
 
     public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
-        trace("Set JS Bounds: "+bounds );
+      //  trace("Set JS Bounds: "+bounds );
         _e.style.left = Math.floor( bounds.x );
         _e.style.top  = Math.floor( bounds.y );
 //        _e.style.width  = Math.floor( bounds.height );

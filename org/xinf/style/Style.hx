@@ -2,6 +2,8 @@ package org.xinf.style;
 
 import org.xinf.value.Value;
 import org.xinf.style.Border;
+import org.xinf.event.EventDispatcher;
+import org.xinf.event.Event;
 import Reflect;
 
 class SimpleProperty<T> extends Value<T> {
@@ -20,6 +22,7 @@ class SimpleProperty<T> extends Value<T> {
                     f = Properties.create(prop_name);
                     othis.set(prop_name,f);
                 }
+                othis.postEvent( Event.CHANGED, null );
                 return f.set(v);
             });
     }
@@ -240,10 +243,11 @@ class Properties {
     }
 }
 
-class PropertySet {
+class PropertySet extends EventDispatcher {
     private var properties :Hash<ValueBase>;
 
     public function new() :Void {
+        super();
         properties = new Hash<ValueBase>();
     }
     

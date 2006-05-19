@@ -54,18 +54,26 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
             // FIXME
     }
 
-    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
-        _e._x = bounds.x;
-        _e._y = bounds.y;
-            trace("FlashPrimitive::applyBounds: "+bounds);
-        width = Math.round(bounds.width);
-        height = Math.round(bounds.height);
-        redraw();
+    public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
+    trace("FlashPrim::setBounds");
+        bounds.addEventListener( "positionChanged", onPositionChanged );
+        bounds.addEventListener( "sizeChanged", onSizeChanged );
+    }
+    
+    public function onPositionChanged( e:Event ) {
+        _e._x = e.data.x;
+        _e._y = e.data.y;
+    }
+    
+    public function onSizeChanged( e:Event ) {
+        width = Math.round( e.data.width );
+        height = Math.round( e.data.height );
+        scheduleRedraw();
     }
 
-    public function applyStyle( _style:org.xinf.style.Style ) :Void {
+    public function setStyle( _style:org.xinf.style.Style ) :Void {
         style = _style;
-        redraw();
+     //   scheduleRedraw();
     }
 
     public function eventRegistered( type:String ) :Void {
@@ -75,6 +83,11 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
                 Reflect.setField( _e, name, Reflect.field( this, "_"+type ) );
             }
         }
+    }
+    
+    public function scheduleRedraw() :Void {
+        // FIXME: for now, just redraw. can save a lot to buffer these and process after events!
+        redraw();
     }
     
     public function redraw() :Void {
