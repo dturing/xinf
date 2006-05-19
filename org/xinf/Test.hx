@@ -36,7 +36,7 @@ class Foo extends org.xinf.ony.Text {
     }
     public function onMouseDown( e:Event ) :Void {
         addStyleClass("push");
-        postfix = "\nfoo";
+        postfix = "\nPUSH HARDER!";
     }
     public function onMouseUp( e:Event ) :Void {
         removeStyleClass("push");
@@ -50,7 +50,7 @@ class Foo extends org.xinf.ony.Text {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-   //     text = t+postfix;
+        text = t+postfix;
         
     }
     
@@ -70,13 +70,13 @@ class Test {
         var style = StyleSheet.newFromString("
             .Root, .Pane {
                 backgroundColor: #ddd;
+                color: #000;
                 margin: 10;
             }
 
             .Foo {
                 color: #f00;
                 background-color: #aaa;
-                alpha: .5;
                 padding: 10;
                 margin: 10;
                 
@@ -107,7 +107,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...100 ) {
+            for( i in 0...3 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 
@@ -123,8 +123,6 @@ class Test {
             }
             
             
-        #if neko
-             org.xinf.inity.Root.root.run();
-        #end
+        org.xinf.ony.Root.getRoot().run();
     }
 }

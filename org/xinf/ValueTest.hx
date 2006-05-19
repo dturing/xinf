@@ -15,19 +15,28 @@ class ValueTest {
         trace("Hello");
         
         var chain = new Array<PropertySet>();
-        
+        /*
         var basic = new Style();
         basic.alpha = .5;
         basic.backgroundColor = Color.rgb(10,20,30);
         basic.paddingLeft = 10;
         chain.push( basic );
+        */
         
         var s = new StyleChain(null);
-        s.setChain( chain );
+       // s.setChain( chain );
+       
+       var cl:Dynamic = Reflect.getClass(s);
+       while( cl ) {
+        trace("derives From "+cl.__name__.join("."));
+        trace("-- "+untyped cl.prototype.get_color );
+        cl = Reflect.getClass(cl.prototype);
+       }
         
         trace( "alpha: "+s.alpha );
         trace( "bg:    "+s.backgroundColor );
         
+        /*
 
         var two = new Style();
         two.alpha = .9;
@@ -37,7 +46,7 @@ class ValueTest {
         trace( "alpha: "+s.alpha );
 
         trace( "padding-left: "+s.paddingLeft );
-        
+        */
         #if neko
 //            org.xinf.ony.Root.getRoot();
 //            org.xinf.inity.Root.root.run();
