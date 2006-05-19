@@ -31,6 +31,7 @@ class Event {
         var n=0;
         while( e != null ) {
             n++;
+        //    trace("Delivering "+e.type+" "+e.data+" to "+e.target );
             e.target.dispatchEvent( e );
             e.stopPropagation(); // some event generators, like Value::changed(), rely on this! maybe do another flag "delivered"?
             e=queue.shift();
@@ -56,13 +57,23 @@ class Event {
     
     public static var CHANGED:String = "changed";
     
+    /*
+    public static var FRESH:Int = 0;
+    public static var SCHEDULED:Int = 1;
+    public static var DELIVERING:Int = 2;
+    public static var DELIVERED:Int = 3;
+    public static var STOPPED:Int = 99;
+    */
+    
     public property type(default,null) : String;
     public property target(default,null) : EventDispatcher;
     public property stopped(default,null) : Bool;
-    public var key : String; // FIXME use data.
+    public property data(default,null) : Dynamic;
+//    public property state(default,null) : Int;
     
     
-    public function new( _type:String, _target:EventDispatcher ) :Void {
+    public function new( _type:String, _target:EventDispatcher, _data:Dynamic ) :Void {
+        data = _data;
         type = _type;
         target = _target;
         stopped = false;
@@ -72,9 +83,9 @@ class Event {
         stopped = true;
     }
     
+    // FIXME: do this different, use data!
     public static function KeyboardEvent( type:String, target:EventDispatcher, key:String ) :Event {
-        var e:Event = new Event( type, target );
-        e.key = key;
+        var e:Event = new Event( type, target, { key:key } );
         return e;
     }
 }

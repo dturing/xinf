@@ -43,7 +43,7 @@ class EventDispatcher {
     }
     
     public function postEvent( type:String, data:Dynamic ) :Event {
-        var e:Event = new Event( type, this ); // FIXME: data.
+        var e:Event = new Event( type, this, data );
         Event.push(e);
         return e;
     }
