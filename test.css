@@ -1,0 +1,22 @@
+.Root, .Pane {
+    background-color: #ddd;
+    color: #000;
+    margin: 10;
+}
+
+.Foo {
+    color: #f00;
+    background-color: #aaa;
+    padding: 10;
+    margin: 10;
+    border: 1px solid #000;
+}
+
+.hover {
+    background-color: #aaf;
+    color: #000;
+}
+
+.push {
+    background-color: #f00;
+}
