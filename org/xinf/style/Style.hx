@@ -313,6 +313,7 @@ class Style extends PropertySet {
     public property borderStyle(dynamic,dynamic):String;
     public property borderWidth(dynamic,dynamic):Float;
     public property borderColor(dynamic,dynamic):Color;
+    public property border(dynamic,dynamic):String;
     
     
     public static function __init__() :Void {
@@ -325,8 +326,8 @@ class Style extends PropertySet {
         for( prop_name in props ) {
             var def:PropertyDefinition = Properties.definitions.get(prop_name);
             if( def == null ) throw("no PropertyDefinition for '"+prop_name+"'");
-            
             def.initGetterSetter( class_proto, prop_name );
+//            trace("getter: "+Reflect.field(class_proto.prototype,"get_"+prop_name ));
         }        
     }
 }
