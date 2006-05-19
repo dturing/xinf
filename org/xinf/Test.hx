@@ -50,7 +50,7 @@ class Foo extends org.xinf.ony.Text {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-    //    text = t+postfix;
+        text = t+postfix;
         
     }
     
@@ -81,10 +81,10 @@ class Test {
                 margin: 10;
                 
                 border-style-left: solid;
-                border-width-left: 5px;
+                border-width-left: 1px;
                 border-color-left: #000;
                 
-                border-right: 1px solid #00f;
+                border-right: 1px solid #000;
                 border-top: 1px solid #00f;
                 border-bottom: 1px solid #00f;
             }
@@ -96,6 +96,7 @@ class Test {
             }
             
             .push {
+                border-right: 20px solid #ff0;
                 background-color: #f00;
             }
         ");
@@ -117,7 +118,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...10 ) {
+            for( i in 0...2 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 

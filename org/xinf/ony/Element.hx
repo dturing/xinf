@@ -51,6 +51,7 @@ class Element extends StyledObject {
 
     private function onBoundsChanged( e:Event ) {
         // FIXME: avoid this by setting it once (and linking, for js and fl- inity will keep display uptodate)
+    //    trace( ""+this+".onBoundsChanged");
         _p.applyBounds(bounds);
     }
     

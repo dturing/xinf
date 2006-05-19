@@ -342,6 +342,10 @@ class Style extends PropertySet {
     public property borderStyleTop(dynamic,dynamic):String;
     public property borderWidthTop(dynamic,dynamic):Float;
     public property borderColorTop(dynamic,dynamic):Color;
+
+    public property borderStyleBottom(dynamic,dynamic):String;
+    public property borderWidthBottom(dynamic,dynamic):Float;
+    public property borderColorBottom(dynamic,dynamic):Color;
     
     
     public static function __init__() :Void {
