@@ -8,6 +8,9 @@ import org.xinf.ony.impl.IPrimitive;
 class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : MovieClip;
     private var style : Style;
+    
+    public var width:Int;
+    public var height:Int;
 
     private static var eventNames:Hash<String> = registerEventNames();
     private static function registerEventNames() : Hash<String> {
@@ -51,10 +54,16 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
             // FIXME
     }
 
+    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
+        _e._x = bounds.x;
+        _e._y = bounds.y;
+        width = Math.round(bounds.width);
+        height = Math.round(bounds.height);
+        redraw();
+    }
+
     public function applyStyle( _style:org.xinf.style.Style ) :Void {
         style = _style;
-        _e._x = style.x.px();
-        _e._y = style.y.px();
         redraw();
     }
 

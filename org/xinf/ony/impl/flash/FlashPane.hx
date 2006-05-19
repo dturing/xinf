@@ -11,10 +11,10 @@ class FlashPane extends FlashPrimitive {
     public function redraw() :Void {
         super.redraw();
         
-        var b = style.border.thickness.px();
-        var padding = style.padding;
-        var w:Int = Math.floor( style.width.px() +b+b+padding.left.px()+padding.right.px() );
-        var h:Int = Math.floor( style.height.px() +b+b+padding.top.px()+padding.bottom.px() );
+        var b = style.borderWidthLeft;
+        var padding = style.paddingLeft;
+        var w:Int = Math.floor( bounds.width );
+        var h:Int = Math.floor( bounds.height );
 
         _e.clear();
         _e.beginFill( style.background.toInt(),  100 );

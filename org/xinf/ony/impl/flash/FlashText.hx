@@ -22,9 +22,6 @@ class FlashText extends FlashPane, implements ITextPrimitive  {
     }
 
     public function applyStyle( _style:org.xinf.style.Style ) :Void {
-        var b:Float = style.border.thickness.px();
-        _t._x = style.padding.left.px() + b -2;
-        _t._y = style.padding.top.px() + b -1;
         _t.textColor = style.color.toInt();
         super.applyStyle(_style);
     }
