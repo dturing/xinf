@@ -39,6 +39,7 @@ class ValueBase extends EventDispatcher {
     private function changed( _old:Dynamic, _new:Dynamic ) :Void {
         if( _new != _old && (lastChanged==null || lastChanged.stopped) )  {
             lastChanged = postEvent( "changed", { _old:_old, _new:_new } );
+       //     trace("value changed: "+_old+"->"+_new+" l: "+_listeners);
         }
     }
     private function onChildChanged( e:Event ) :Void {
