@@ -53,14 +53,25 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
         _e.removeChild( p._e );
     }
 
-    public function applyBounds( bounds:org.xinf.ony.Bounds ) :Void {
-      //  trace("Set JS Bounds: "+bounds );
-        _e.style.left = Math.floor( bounds.x );
-        _e.style.top  = Math.floor( bounds.y );
-//        _e.style.width  = Math.floor( bounds.height );
-//        _e.style.height = Math.floor( bounds.width );
+    public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
+        bounds.addEventListener( "positionChanged", onPositionChanged );
+        bounds.addEventListener( "sizeChanged", onSizeChanged );
     }
-    public function applyStyle( _style:org.xinf.style.Style ) :Void {
+    
+    public function onPositionChanged( e:Event ) {
+        _e.style.left = Math.floor( e.data.x );
+        _e.style.top  = Math.floor( e.data.y );
+    }
+    
+    public function onSizeChanged( e:Event ) {
+   //     _e.style.width  = Math.floor( e.data.width );
+   //     _e.style.height = Math.floor( e.data.height );
+    }
+    
+    public function setStyle( _style:org.xinf.style.Style ) :Void {
+        _style.addEventListener( "changed", onStyleChanged );
+    }
+    public function onStyleChanged( e:Event ) :Void {
         var cl = "";
         for( k in untyped _e.owner.getStyleClasses() ) {
             cl += k+" ";

@@ -69,7 +69,7 @@ class Test {
 
         var style = StyleSheet.newFromString("
             .Root, .Pane {
-                backgroundColor: #ddd;
+                background-color: #ddd;
                 color: #000;
                 margin: 0;
                 margin-left: 320;
@@ -110,7 +110,7 @@ class Test {
             first.bounds.y = 10;
             first.bounds.x = 10;
             
-            for( i in 0...20 ) {
+            for( i in 0...5 ) {
                 var box = new Foo("box"+i);
                     
                 box.bounds._y.setLink( new Add( 

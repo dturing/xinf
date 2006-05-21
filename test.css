@@ -1,7 +1,32 @@
 .Root, .Pane {
     background-color: #ddd;
     color: #000;
+    margin: 0;
+}
+
+.Foo {
+    color: #008;
+    background-color: #bbb;
+    padding: 10;
     margin: 10;
+
+    border: 1px solid #000;
+}
+
+.hover {
+    background-color: #aaf;
+    color: #000;
+}
+
+.push {
+    background-color: #f00;
+}
+
+/*
+.Root, .Pane {
+    background-color: #ddd;
+    color: #000;
+    margin: 0;
 }
 
 .Foo {
@@ -20,3 +45,4 @@
 .push {
     background-color: #f00;
 }
+*/
