@@ -24,16 +24,16 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
 
     // event wrappers: "this" is the runtime primitive.
     public function _mouseDown() {
-        untyped this.owner.postEvent( Event.MOUSE_DOWN );
+        untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:this._xmouse, y:this._ymouse } );
     }
     public function _mouseUp() {
-        untyped this.owner.postEvent( Event.MOUSE_UP );
+        untyped this.owner.postEvent( Event.MOUSE_UP, { x:this._xmouse, y:this._ymouse } );
     }
     public function _mouseOver() {
-        untyped this.owner.postEvent( Event.MOUSE_OVER );
+        untyped this.owner.postEvent( Event.MOUSE_OVER, { x:this._xmouse, y:this._ymouse } );
     }
     public function _mouseOut() {
-        untyped this.owner.postEvent( Event.MOUSE_OUT );
+        untyped this.owner.postEvent( Event.MOUSE_OUT, { x:this._xmouse, y:this._ymouse } );
     }
 
     public function new() :Void {
@@ -72,7 +72,7 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
 
     public function setStyle( _style:org.xinf.style.Style ) :Void {
         style = _style;
-     //   scheduleRedraw();
+//        scheduleRedraw();
     }
 
     public function eventRegistered( type:String ) :Void {
