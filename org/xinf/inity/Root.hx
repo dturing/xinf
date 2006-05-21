@@ -124,7 +124,7 @@ class Root extends Stage {
           p.lap();
             
             // FIXME: proper timing, neko idle func?
-            neko.Sys.sleep(0.05);
+            neko.Sys.sleep(0.01);
         }
         p.dump();
         return true;

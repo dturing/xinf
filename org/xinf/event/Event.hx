@@ -36,9 +36,11 @@ class Event {
             e.stopPropagation(); // some event generators, like Value::changed(), rely on this! maybe do another flag "delivered"?
             e=queue.shift();
         }
+        /*
         if( n>100 ) {
             trace("event queue processed "+n+" Events total");
         }
+        */
     }
 
     public static var ENTER_FRAME:String = "enterFrame";

@@ -11,6 +11,7 @@ class XBitmapData extends org.xinf.inity.BitmapData {
     public function new( _display:Dynamic, _screen:Int ) {
         display = _display;
         screen = _screen;
+        // FIXME: find w/h from X.
         super( null, 320, 240, RGBA  );
     }
 
