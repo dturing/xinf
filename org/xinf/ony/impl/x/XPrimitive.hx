@@ -20,11 +20,13 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
     public function addChild( child:IPrimitive ) :Void {
         var p:XPrimitive = cast(child,XPrimitive);
         _e.addChild( p._e );
+        _e.changed();
     }
     
     public function removeChild( child:IPrimitive ) :Void {
         var p:XPrimitive = cast(child,XPrimitive);
 //        _e.removeChild( p._e );
+        _e.changed();
     }
 
     public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
