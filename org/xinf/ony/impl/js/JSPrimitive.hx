@@ -4,6 +4,7 @@ import js.HtmlDom;
 import org.xinf.event.Event;
 import org.xinf.style.Style;
 import org.xinf.ony.impl.IPrimitive;
+import org.xinf.geom.Point;
 
 class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : HtmlDom;
@@ -19,17 +20,32 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     }
 
     // event wrappers: "this" is the runtime primitive.
-    public function _mouseDown() {
-        untyped this.owner.postEvent( Event.MOUSE_DOWN );
+    public function _mouseDown( e:js.Event ) {
+        mouseEvent( Event.MOUSE_DOWN, e, untyped this );
     }
-    public function _mouseUp() {
-        untyped this.owner.postEvent( Event.MOUSE_UP );
+    public function _mouseUp( e:js.Event ) {
+        mouseEvent( Event.MOUSE_UP, e, untyped this );
     }
-    public function _mouseOver() {
-        untyped this.owner.postEvent( Event.MOUSE_OVER );
+    public function _mouseOver( e:js.Event ) {
+        mouseEvent( Event.MOUSE_OVER, e, untyped this );
     }
-    public function _mouseOut() {
-        untyped this.owner.postEvent( Event.MOUSE_OUT );
+    public function _mouseOut( e:js.Event ) {
+        mouseEvent( Event.MOUSE_OUT, e, untyped this );
+    }
+    public static function absPos( div:HtmlDom ) :Point {
+        var r=new Point( untyped div.offsetLeft, untyped div.offsetTop );
+        while( div.parentNode != null && div.parentNode.nodeName == "DIV" ) {
+            div = div.parentNode;
+            r.x += untyped div.offsetLeft;
+            r.y += untyped div.offsetTop;
+        }
+        return r;
+    }
+    public static function mouseEvent( type:String, e:js.Event, target:HtmlDom ) :Void {
+        var abs:Point = absPos(target);
+        var p:Point = new Point( e.clientX, e.clientY );
+        p = p.subtract(abs);
+        untyped target.owner.postEvent( type, { x:p.x, y:p.y } );
     }
     
 
@@ -64,8 +80,8 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
     }
     
     public function onSizeChanged( e:Event ) {
-   //     _e.style.width  = Math.floor( e.data.width );
-   //     _e.style.height = Math.floor( e.data.height );
+        _e.style.width  = Math.floor( e.data.width );
+        _e.style.height = Math.floor( e.data.height );
     }
     
     public function setStyle( _style:org.xinf.style.Style ) :Void {
