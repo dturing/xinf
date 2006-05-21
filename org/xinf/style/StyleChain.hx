@@ -93,6 +93,7 @@ class StyleChain extends CachedStyle {
             p = style.get( name );
             if( p != null ) return p;
         }
+        p = Style.DEFAULT.get( name );
         return p;
     }
 

@@ -22,7 +22,7 @@ class SimpleProperty<T> extends Value<T> {
                     f = Properties.create(prop_name);
                     othis.set(prop_name,f);
                 }
-                othis.postEvent( Event.CHANGED, null );
+                othis.postEvent( "changed", null );
                 return f.set(v);
             });
     }
@@ -320,10 +320,17 @@ class Style extends PropertySet {
     public property border(dynamic,dynamic):String;
     
     
+    public static var DEFAULT:Style;
+    
     public static function __init__() :Void {
-        trace("init Style");
-        
         initProperties( Style, Properties.definitions.keys() );
+        
+        DEFAULT = new Style();
+        DEFAULT.height = DEFAULT.width = 0;
+        DEFAULT.alpha = 1; DEFAULT.color = Color.rgb(0,0,0); DEFAULT.backgroundColor = Color.rgb(0xff,0xff,0xff);
+        DEFAULT.paddingLeft = DEFAULT.paddingRight = DEFAULT.paddingTop = DEFAULT.paddingBottom = .0;
+        DEFAULT.marginLeft = DEFAULT.marginRight = DEFAULT.marginTop = DEFAULT.marginBottom = .0;
+        DEFAULT.borderStyle = "none"; DEFAULT.borderWidth = .0; DEFAULT.borderColor = Color.rgb(0,0,0);
     }
     public static function initProperties( cl:Dynamic, props:Iterator<String> ) :Void {
         var class_proto:Class = cl;
