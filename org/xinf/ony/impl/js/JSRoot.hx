@@ -1,6 +1,7 @@
 package org.xinf.ony.impl.js;
 
 import org.xinf.ony.impl.IRootPrimitive;
+import org.xinf.event.Event;
 
 class JSRoot extends JSPrimitive, implements IRootPrimitive {
 	private static var arr = new Array<JSRoot>();
@@ -11,6 +12,7 @@ class JSRoot extends JSPrimitive, implements IRootPrimitive {
     }
     
     public function step() :Void {
+        org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
         org.xinf.event.Event.processQueue();
     }
     
