@@ -70,8 +70,10 @@ class Sum extends Expression<Float,Float> {
     
     public function evaluate() :Float {
         var r:Float = 0;
+        var v:Float;
         for( variable in input ) {
-            r += variable.value;
+            v = variable.value;
+            if( v != null ) r += v;
         }
         return r;
     }
