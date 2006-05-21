@@ -13,8 +13,4 @@ class Pane extends Element {
         return Primitives.createPane();
     }
 
-    private function draw() :Void {
-        // FIXME shouldnt be here anyhow. where is it called from?
-        throw("Pane.draw() not implemented");
-    }
 }
