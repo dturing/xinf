@@ -19,7 +19,7 @@ class Point {
     }
     
     public function subtract( p:Point ) : Point {
-        return new Point( x-p.x, y-p.x );
+        return new Point( x-p.x, y-p.y );
     }
     
     public function clone() : Point {
