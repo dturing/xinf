@@ -24,11 +24,8 @@ class EventDispatcher {
     public function removeEventListener( type:String, f:Event->Void ) :Void {
         var a:Array<Event->Void> = _listeners.get(type);
         if( a != null ) {
-//            trace("remove EventListener "+type+": then "+a.length );
-//            trace("remove EventListener "+type+": then "+a.length );
-//            trace( a[0] +" vs "+ f );
             a.remove( f );
-//            trace("remove EventListener "+type+": now  "+a.length );
+            trace("remove EventListener "+type+": now  "+a.length );
         }
     }
     

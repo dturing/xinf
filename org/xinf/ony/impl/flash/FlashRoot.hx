@@ -7,6 +7,12 @@ class FlashRoot extends FlashPrimitive, implements IRootPrimitive {
     public function new() :Void {
         super();
     }
+
+    public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
+        // TODO: Stage scale event
+        bounds.width = flash.Stage.width;
+        bounds.height = flash.Stage.height;
+    }
     
     public function run() :Void {
         _e.onEnterFrame = step;

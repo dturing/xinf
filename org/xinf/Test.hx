@@ -9,12 +9,12 @@ import org.xinf.ony.Pane;
 import org.xinf.value.Value;
 import org.xinf.value.Expression;
 
-class Foo extends org.xinf.ony.Pane {
+class Foo extends org.xinf.ony.Text {
     private var postfix:String;
 
     public function new( name:String ) {
         super( name );
-       // text = "Hello, World.";
+        text = "Hello, World.";
         postfix = "";
         
         addEventListener( Event.MOUSE_OVER, onMouseOver );
@@ -50,7 +50,7 @@ class Foo extends org.xinf.ony.Pane {
         for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-     //   text = t+postfix;
+        text = t+postfix;
         
     }
     
@@ -70,12 +70,11 @@ class Test {
         var style = StyleSheet.newFromString(Std.resource("rootCss"));
         org.xinf.style.StyledObject.globalStyle.append( style );
 
-        org.xinf.ony.Root.getRoot();
+        var root = org.xinf.ony.Root.getRoot();
 
         var cont = new Pane("container");
         container = cont;
-        org.xinf.ony.Root.getRoot().addChild(cont);
-
+        root.addChild(cont);
 
         var first = new Foo("box_");
         cont.addChild( first );
