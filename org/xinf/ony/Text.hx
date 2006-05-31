@@ -7,6 +7,7 @@ import org.xinf.ony.impl.Primitives;
 
 import org.xinf.value.Value;
 import org.xinf.value.Expression;
+import org.xinf.value.ValueMonitor;
 
 import org.xinf.event.Event;
 
@@ -16,6 +17,8 @@ class Text extends Pane {
     
     private var width:Value<Float>;
     private var height:Value<Float>;
+    private var wMon:ValueMonitor;
+    private var hMon:ValueMonitor;
     
     public property autoSize( default, default ) :Bool;
     
@@ -31,7 +34,7 @@ class Text extends Pane {
         height = new Value<Float>();
         height.value = 0;
         
-        bounds._width.setLink( new Sum( [ 
+        wMon = new ValueMonitor( new Sum( [ 
                                 width, 
                                 style.getLink("borderWidth"),   // FIXME: multiply*2!
                                 style.getLink("borderWidth"),   //
@@ -39,8 +42,8 @@ class Text extends Pane {
                                 style.getLink("marginRight"),
                                 style.getLink("paddingLeft"), 
                                 style.getLink("paddingRight") 
-                            ] ) );
-        bounds._height.setLink( new Sum( [ 
+                            ] ), null, bounds, "width" );
+        hMon = new ValueMonitor( new Sum( [ 
                                 height, 
                                 style.getLink("borderWidth"),   // FIXME: multiply*2!
                                 style.getLink("borderWidth"),   //
@@ -48,12 +51,7 @@ class Text extends Pane {
                                 style.getLink("marginBottom"),
                                 style.getLink("paddingTop"), 
                                 style.getLink("paddingBottom") 
-                            ] ) );
-        bounds._width.addEventListener( "changed", debug );
-    }
-    
-    public function debug( e:Event ) {
-//        trace("Width changed: "+bounds._width );
+                            ] ), null, bounds, "height" );
     }
     
     private function createPrimitive() :IPrimitive {

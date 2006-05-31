@@ -85,14 +85,14 @@ class Test {
             for( i in 0...5 ) {
                 var box = new Foo("box"+i);
                     
-                box.bounds._y.setLink( new Add( 
+/*                box.bounds._y.setLink( new Add( 
                         last.bounds._y, last.bounds._height
                         ) );
                        
                 box.bounds._x.setLink( new Add( 
                         last.bounds._x, last.bounds._width
                         ) );
-                       
+  */                     
                 cont.addChild(box);
                 last = box;
             }

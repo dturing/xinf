@@ -27,8 +27,7 @@ class Object {
     public function new() :Void {
         transform = new org.xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
-//        style = new Style();
-        bounds = Bounds.newZero();
+        bounds = new Bounds();
         changed();
     }
     

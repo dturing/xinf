@@ -15,7 +15,7 @@ class Element extends StyledObject {
 
     public function new( _name:String ) :Void {
         name = _name;
-        bounds = Bounds.newZero();
+        bounds = new Bounds();
 //        bounds.addEventListener( Event.CHANGED, onBoundsChanged );
         
         children = new Array<Element>();

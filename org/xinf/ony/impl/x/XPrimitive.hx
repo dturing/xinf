@@ -32,7 +32,8 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
     public function setBounds( bounds:org.xinf.ony.Bounds ) :Void {
         _e.bounds = bounds;
         // FIXME: if we separate painting/translation into differend displaylists, movement could be very lightweight!
-        bounds.addEventListener("changed", redraw );
+        bounds.addEventListener("positionChanged", redraw );
+        bounds.addEventListener("sizeChanged", redraw );
         _e.changed();
     }
 
