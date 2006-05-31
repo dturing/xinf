@@ -1,13 +1,9 @@
 package org.xinf;
 
-import org.xinf.style.Style;
-import org.xinf.style.StyleSheet;
 import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
 import org.xinf.ony.Pane;
-import org.xinf.value.Value;
-import org.xinf.value.Expression;
 
 class Foo extends org.xinf.ony.Text {
     private var postfix:String;
@@ -29,17 +25,17 @@ class Foo extends org.xinf.ony.Text {
     }
 
     public function onMouseOver( e:Event ) :Void {
-        addStyleClass("hover");
+//        addStyleClass("hover");
     }
     public function onMouseOut( e:Event ) :Void {
-        removeStyleClass("hover");
+//        removeStyleClass("hover");
     }
     public function onMouseDown( e:Event ) :Void {
-        addStyleClass("push");
+//        addStyleClass("push");
         postfix = "\nPUSH HARDER!";
     }
     public function onMouseUp( e:Event ) :Void {
-        removeStyleClass("push");
+//        removeStyleClass("push");
         postfix = "";
     }
     
@@ -47,10 +43,10 @@ class Foo extends org.xinf.ony.Text {
         //trace("Event on "+this+": "+e.type );
         
         var t:String = name+"\n"+e.type+"\n";
-        for( cl in this.getStyleClasses() ) {
+/*        for( cl in this.getStyleClasses() ) {
             t += cl+" ";
         }
-        text = t+postfix;
+ */       text = t+postfix;
         
     }
     
@@ -66,9 +62,6 @@ class Test {
     static function main() {
         trace("Hello");
         x=0;
-
-        var style = StyleSheet.newFromString(Std.resource("rootCss"));
-        org.xinf.style.StyledObject.globalStyle.append( style );
 
         var root = org.xinf.ony.Root.getRoot();
 

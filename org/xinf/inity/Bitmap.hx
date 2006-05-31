@@ -18,8 +18,6 @@ class Bitmap extends Group {
         var y:Float = 0;
         
       // image
-        //var c = style.background;
-        //GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
         GL.Color4f( 1., 1., 1., 1. );
         GL.PushMatrix();
         GL.Translatef( b, b, 0 );

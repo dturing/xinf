@@ -36,12 +36,6 @@ class XPrimitive implements org.xinf.ony.impl.IPrimitive {
         bounds.addEventListener("sizeChanged", redraw );
         _e.changed();
     }
-
-    public function setStyle( style:org.xinf.style.Style ) :Void {
-        _e.style = style;
-        style.addEventListener("changed", redraw );
-  //      _e.changed();
-    }
     
     public function redraw( e:Event ) :Void {
         _e.changed();

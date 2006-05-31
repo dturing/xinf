@@ -84,17 +84,6 @@ class JSPrimitive implements org.xinf.ony.impl.IPrimitive {
         _e.style.height = Math.floor( e.data.height );
     }
     
-    public function setStyle( _style:org.xinf.style.Style ) :Void {
-        _style.addEventListener( "changed", onStyleChanged );
-    }
-    public function onStyleChanged( e:Event ) :Void {
-        var cl = "";
-        for( k in untyped _e.owner.getStyleClasses() ) {
-            cl += k+" ";
-        }
-        untyped _e.className = cl;
-    }
-
     public function eventRegistered( type:String ) :Void {
         var eventName:String = eventNames.get(type);
         if( eventName != null ) {

@@ -1,16 +1,11 @@
 package org.xinf.ony.impl.flash;
 
 import flash.MovieClip;
-import org.xinf.style.Style;
 import org.xinf.event.Event;
 import org.xinf.ony.impl.IPrimitive;
 
 class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
     private var _e : MovieClip;
-    private var style : Style;
-    
-    public var width:Int;
-    public var height:Int;
 
     private static var eventNames:Hash<String> = registerEventNames();
     private static function registerEventNames() : Hash<String> {
@@ -68,11 +63,6 @@ class FlashPrimitive implements org.xinf.ony.impl.IPrimitive {
         width = Math.round( e.data.width );
         height = Math.round( e.data.height );
         scheduleRedraw();
-    }
-
-    public function setStyle( _style:org.xinf.style.Style ) :Void {
-        style = _style;
-//        scheduleRedraw();
     }
 
     public function eventRegistered( type:String ) :Void {

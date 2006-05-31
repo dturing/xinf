@@ -60,14 +60,9 @@ class Text extends Box {
         
     // text
         GL.PushMatrix();
-        var c = style.color;
-        GL.Color4f( c.r/0xff, c.g/0xff, c.b/0xff, c.a/0xff );
+        GL.Color4f( .0, .0, .0, 1. );
 
-/*
-        var b = style.border.thickness.px() + 0.5;
-*/
-        GL.Translatef( style.paddingLeft+style.marginLeft+style.borderWidth,
-                       style.paddingTop+style.marginTop+style.borderWidth, .0 );
+        GL.Translatef( .0, .0, .0 );
         
         GL.Scalef( fontSize, fontSize, 1.0 );
         GL.Translatef( .0, _font.ascender, .0 );

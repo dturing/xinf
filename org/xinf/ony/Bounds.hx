@@ -1,9 +1,9 @@
 package org.xinf.ony;
 
-import org.xinf.value.Value;
 import org.xinf.event.Event;
+import org.xinf.event.EventDispatcher;
 
-class Bounds extends ValueBase {
+class Bounds extends EventDispatcher {
     public var x:Float;
     public var y:Float;
     public var width:Float;

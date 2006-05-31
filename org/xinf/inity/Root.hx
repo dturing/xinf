@@ -230,9 +230,7 @@ class Root extends Stage {
         
         GL.ShadeModel( GL.FLAT );
 
-        var c = style.backgroundColor;
-        if( c != null ) // FIXME
-            GL.ClearColor( c.r/0xff, c.g/0xff, c.b/0xff, 1 );
+        GL.ClearColor( .0, .0, .5, 1 );
             
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }

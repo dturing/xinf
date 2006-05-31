@@ -6,7 +6,6 @@ import org.xinf.event.Event;
 // TODO: if this remains the only reference to org.xinf.ony, 
 // style stuff should probably be moved to org.xinf.style
 // (this note is out of date but here is still sth to do)
-import org.xinf.style.Style;
 import org.xinf.ony.Bounds;
 
 class Object {
@@ -17,7 +16,6 @@ class Object {
     public var transform:org.xinf.geom.Matrix;
     public var owner:EventDispatcher;
     public var bounds:Bounds;
-    public var style:Style;
     
     
     /* ------------------------------------------------------
