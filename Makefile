@@ -41,15 +41,6 @@ bin/xtest.n : $(HAXE_SRCS)
 xtest : subdirs bin/xtest.n
 	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/xtest.n
 
-bin/valuetest.n : $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -neko bin/valuetest.n -main org.xinf.ValueTest
-bin/valuetest.swf : $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -swf bin/valuetest.swf -main org.xinf.ValueTest
-bin/valuetest.js : $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -js bin/valuetest.js -main org.xinf.ValueTest
-valuetest : subdirs bin/valuetest.n bin/valuetest.swf bin/valuetest.js
-	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/valuetest.n
-
 cleanall : clean
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \

@@ -72,25 +72,20 @@ class Test {
         var first = new Foo("box_");
         cont.addChild( first );
         var last = first;
-            first.bounds.y = 10;
-            first.bounds.x = 10;
+            first.bounds.setPosition( 10, 10 );
+            first.bounds.setSize( 100, 100 );    
             
             for( i in 0...5 ) {
                 var box = new Foo("box"+i);
-                    
-/*                box.bounds._y.setLink( new Add( 
-                        last.bounds._y, last.bounds._height
-                        ) );
-                       
-                box.bounds._x.setLink( new Add( 
-                        last.bounds._x, last.bounds._width
-                        ) );
-  */                     
+                box.bounds.setPosition( 10, last.bounds.y+last.bounds.height+2 );
+                box.bounds.setSize( 100, 100 );
+                
                 cont.addChild(box);
                 last = box;
             }
-            
-            
+        
+        trace("T: "+untyped first._p._width );    
+        
         org.xinf.ony.Root.getRoot().run();
     }
 }
