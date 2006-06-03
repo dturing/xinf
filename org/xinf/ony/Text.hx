@@ -3,7 +3,7 @@ package org.xinf.ony;
 import org.xinf.geom.Point;
 import org.xinf.event.Event;
 
-class Text extends Element {
+class Text extends Pane {
     public property text( getText, setText ) :String;
     
     public property autoSize( default, default ) :Bool;
@@ -21,6 +21,10 @@ class Text extends Element {
     public function new( name:String ) {
         super(name);
         autoSize = true;
+
+        #if js
+            _p.style.background = "#f00";
+        #end
     }
     
     private function createPrimitive() :Dynamic {
@@ -42,7 +46,7 @@ class Text extends Element {
         #else flash
             var e = flash.Lib._root.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
             
-            e.createTextField("_xinfonyText",flash.Lib._root.getNextHighestDepth(), 0, 0, 100, 100 );
+            e.createTextField("_xinfonyText",flash.Lib._root.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = e._xinfonyText;
             
             _t.autoSize = true;
@@ -51,9 +55,8 @@ class Text extends Element {
             format.size = 12;
             format.font = "Bitstream Vera Sans";
             _t.setNewTextFormat( format );
-
-            _t.background = true;
-            _t.backgroundColor = 0xff0000;            
+            
+            return e;         
         #end
         
         return _t;
@@ -63,7 +66,15 @@ class Text extends Element {
         #if neko
             _t.text = t;
         #else js
-            untyped _t.innerHTML = t.split("\n").join("<br/>");
+            while( _t.firstChild != null ) _t.removeChild( _t.firstChild );
+            var ta = t.split("\n");
+            _t.appendChild( untyped js.Lib.document.createTextNode( ta.shift() ) );
+            var ct = ta.shift();
+            while( ct != null ) {
+                _t.appendChild( js.Lib.document.createElement("br") );
+                _t.appendChild( untyped js.Lib.document.createTextNode( ct ) );
+                ct = ta.shift();
+            }
         #else flash
             _t.text = t;
         #end
@@ -90,7 +101,11 @@ class Text extends Element {
         #else flash
             s = new Point( _t._width, _t._height );
         #end
-//        bounds.width = Math.round(s.x);
-//        bounds.height = Math.round(s.y);
+        
+        trace("text size: "+s );
+        #if js
+        #else true
+            bounds.setSize( Math.round(s.x), Math.round(s.y) );
+        #end
     }
 }

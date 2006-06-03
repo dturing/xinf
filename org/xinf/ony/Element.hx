@@ -188,7 +188,6 @@ class Element extends EventDispatcher {
         #else flash
             _p._x = e.data.x;
             _p._y = e.data.y;
-            trace("flash pos change: "+_p._x+"/"+_p._y );
         #end
     }
 

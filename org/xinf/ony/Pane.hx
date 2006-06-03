@@ -4,6 +4,11 @@ class Pane extends Element {
 
     public function new( name:String ) :Void {
         super( name );
+        
+        #if js
+            _p.style.background = "#0f0";
+            _p.style.overflow = "visible";
+        #end
     }
     
     private function createPrimitive() :Dynamic {
@@ -24,8 +29,8 @@ class Pane extends Element {
 
             var x:Int = 0;
             var y:Int = 0;
-            var w:Int = 100; //Math.round(bounds.width);
-            var h:Int = 100; //Math.round(bounds.height);
+            var w:Int = Math.round(bounds.width);
+            var h:Int = Math.round(bounds.height);
 
             _p.clear();
             _p.beginFill( 0xff0000,  100 );
