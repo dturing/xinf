@@ -2,8 +2,8 @@ package org.xinf.ony;
 
 class Pane extends Element {
 
-    public function new( name:String ) :Void {
-        super( name );
+    public function new( name:String, parent:Element ) :Void {
+        super( name, parent );
         
         #if js
             _p.style.background = "#0f0";
@@ -12,15 +12,14 @@ class Pane extends Element {
     }
     
     private function createPrimitive() :Dynamic {
-        return 
-            #if neko
-                new org.xinf.inity.Box()
-            #else js
-                js.Lib.document.createElement("div")
-            #else flash
-                flash.Lib._root.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth())
-            #end
-            ;
+        #if neko
+            return new org.xinf.inity.Box();
+        #else js
+            return js.Lib.document.createElement("div");
+        #else flash
+            if( parent == null ) throw( "Flash runtime needs a parent on creation" );
+            return parent._p.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
+        #end
     }
     
     #if flash

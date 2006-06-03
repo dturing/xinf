@@ -18,8 +18,8 @@ class Text extends Pane {
         #end
         ;
     
-    public function new( name:String ) {
-        super(name);
+    public function new( name:String, parent:Element ) {
+        super(name,parent);
         autoSize = true;
 
         #if js
@@ -44,7 +44,8 @@ class Text extends Pane {
             _t.style.whiteSpace = "nowrap";
             _t.style.background="#f00";
         #else flash
-            var e = flash.Lib._root.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
+            if( parent == null ) throw( "Flash runtime needs a parent on creation" );
+            var e = parent._p.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
             
             e.createTextField("_xinfonyText",flash.Lib._root.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = e._xinfonyText;

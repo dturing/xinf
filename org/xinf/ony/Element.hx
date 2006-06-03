@@ -89,8 +89,9 @@ class Element extends EventDispatcher {
         }
     #end
 
-    public function new( _name:String ) :Void {
+    public function new( _name:String, _parent:Element ) :Void {
         name = _name;
+        parent = _parent;
         bounds = new Bounds();
         
         children = new Array<Element>();
@@ -99,8 +100,13 @@ class Element extends EventDispatcher {
         #if neko
             _p.owner = this;
             _p.bounds = bounds; // FIXME needed? do the change listening in inity.Object?
+            if( parent != null ) {
+                parent._p.addChild( _p );
+                parent._p.changed();
+            }
         #else js
             untyped _p.owner = this;
+            if( parent != null ) parent._p.appendChild( _p );
             _p.style.position="absolute";
         #else flash
             untyped _p.owner = this;
@@ -116,38 +122,11 @@ class Element extends EventDispatcher {
         #if js
             return js.Lib.document.createElement("div");
         #else flash
-            return flash.Lib._root.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
+            if( parent == null ) throw( "Flash runtime needs a parent on creation" );
+            return parent._p.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
         #else neko
             throw("dont know which Primitive to create for "+this);
             return null;
-        #end
-    }
-
-    public function addChild( child:Element ) :Void {
-        children.push( child );
-        child.parent = this;
-        
-        #if neko
-            _p.addChild( child._p );
-            _p.changed();
-        #else js
-            _p.appendChild( child._p );
-        #else flash
-            // FIXME
-        #end
-    }
-    
-    public function removeChild( child:Element ) :Void {
-        children.remove( child );
-        child.parent = null;
-
-        #if neko
-            //_e.removeChild( child._p );
-            _p.changed();
-        #else js
-            _p.removeChild( child._p );
-        #else flash
-            // FIXME
         #end
     }
     

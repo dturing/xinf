@@ -3,6 +3,8 @@ package org.xinf.ony;
 import org.xinf.event.Event;
 
 class Root extends Element {
+    public static var root:Root;
+    
     private var _r:
         #if neko
             org.xinf.inity.Root
@@ -19,7 +21,7 @@ class Root extends Element {
     #end
 
     private function new() {
-        super("root");
+        super("root",null);
     }
     
     private function createPrimitive() :Dynamic {
@@ -65,6 +67,4 @@ class Root extends Element {
             org.xinf.event.Event.processQueue();
         }
     #end
-    
-    public static var root:Root;
 }
