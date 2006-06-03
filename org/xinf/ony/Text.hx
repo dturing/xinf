@@ -45,10 +45,10 @@ class Text extends Pane {
             _t.style.background="#f00";
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-            var e = parent._p.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
+            var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
             
-            e.createTextField("_xinfonyText",flash.Lib._root.getNextHighestDepth(), 0, 0, 0, 0 );
-            _t = e._xinfonyText;
+            e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
+            _t = Reflect.field( e, "_"+name );
             
             _t.autoSize = true;
             

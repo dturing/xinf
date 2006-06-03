@@ -40,20 +40,12 @@ class Test {
         cont.bounds.setSize( 20, 20 );
         container = cont;
         
-        var first = new Foo("box_", cont );
-        first.bounds.setPosition( 10, 10 );
-        var last = first;
-        
-/*            
-            for( i in 0...5 ) {
-                var box = new Foo("box"+i);
+            for( i in 0...3 ) {
+                var box = new Foo("box"+i, cont);
                 box.bounds.setPosition( 10, i*50 ); //last.bounds.y+last.bounds.height+2 );
-                box.bounds.setSize( 100, 100 );
-                
-                cont.addChild(box);
-                last = box;
+//                box.bounds.setSize( 100, 10 );
             }
-*/                
+
         org.xinf.ony.Root.getRoot().run();
     }
 }

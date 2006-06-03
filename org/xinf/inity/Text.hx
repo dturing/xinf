@@ -38,7 +38,7 @@ class Text extends Box {
         var lines:Int = 1;
         for( i in 0..._text.length ) {
             var c = _text.charCodeAt(i);
-            if( c == 10 ) { // \n
+            if( c == 10 && i != _text.length-1 ) { // \n
                 lines++;
                 if( w > maxW ) maxW = w;
                 w = .0;

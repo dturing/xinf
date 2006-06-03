@@ -18,7 +18,7 @@ class Pane extends Element {
             return js.Lib.document.createElement("div");
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-            return parent._p.createEmptyMovieClip("FIXME",flash.Lib._root.getNextHighestDepth());
+            return parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
         #end
     }
     
