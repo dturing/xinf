@@ -16,6 +16,9 @@ class Object {
     public var transform:org.xinf.geom.Matrix;
     public var owner:EventDispatcher;
     public var bounds:Bounds;
+
+    public var bgColor:org.xinf.ony.Color;
+    public var fgColor:org.xinf.ony.Color;
     
     
     /* ------------------------------------------------------

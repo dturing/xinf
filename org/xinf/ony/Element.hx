@@ -36,8 +36,9 @@ class Element extends EventDispatcher {
         }
 
         // event wrappers: "this" is the runtime primitive.
-        public function _mouseDown( e:js.Event ) {
+        public function _mouseDown( e:js.Event ) :Bool {
             mouseEvent( Event.MOUSE_DOWN, e, untyped this );
+            return false;
         }
         public function _mouseUp( e:js.Event ) {
             mouseEvent( Event.MOUSE_UP, e, untyped this );

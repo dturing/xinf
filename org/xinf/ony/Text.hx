@@ -5,8 +5,9 @@ import org.xinf.event.Event;
 
 class Text extends Pane {
     public property text( getText, setText ) :String;
-    
     public property autoSize( default, default ) :Bool;
+
+    private var textColor:org.xinf.ony.Color;
 
     private var _t
         #if neko
@@ -21,10 +22,6 @@ class Text extends Pane {
     public function new( name:String, parent:Element ) {
         super(name,parent);
         autoSize = true;
-
-        #if js
-            _p.style.background = "#f00";
-        #end
     }
     
     private function createPrimitive() :Dynamic {
@@ -103,10 +100,22 @@ class Text extends Pane {
             s = new Point( _t._width, _t._height );
         #end
         
-        trace("text size: "+s );
         #if js
         #else true
             bounds.setSize( Math.round(s.x), Math.round(s.y) );
+        #end
+    }
+
+    public function setTextColor( c:org.xinf.ony.Color ) :Void {
+        textColor = c;
+        
+        #if neko
+            _p.fgColor = textColor;
+            _p.changed();
+        #else js
+            _p.style.color = textColor.toRGBString();
+        #else flash
+            _t.textColor = textColor.toRGBInt();
         #end
     }
 }

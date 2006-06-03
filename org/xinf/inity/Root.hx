@@ -230,7 +230,7 @@ class Root extends Stage {
         
         GL.ShadeModel( GL.FLAT );
 
-        GL.ClearColor( .0, .0, .5, 1 );
+        GL.ClearColor( 1., 1., 1., 1. );
             
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }

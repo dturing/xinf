@@ -35,13 +35,24 @@ class Test {
 
         var root = org.xinf.ony.Root.getRoot();
 
+        var cbg = new org.xinf.ony.Color();
+        cbg.fromRGBInt( 0xaaaaaa );
+        
         var cont = new org.xinf.ony.Pane("container", root);
+        cont.setBackgroundColor( cbg );
         cont.bounds.setPosition( 50, 50 );
         cont.bounds.setSize( 20, 20 );
         container = cont;
         
+        var bg = new org.xinf.ony.Color();
+        bg.fromRGBInt( 0x336699 );
+        var fg = new org.xinf.ony.Color();
+        fg.fromRGBInt( 0xffffff );
+        
             for( i in 0...3 ) {
                 var box = new Foo("box"+i, cont);
+                box.setBackgroundColor( bg );
+                box.setTextColor( fg );
                 box.bounds.setPosition( 10, i*50 ); //last.bounds.y+last.bounds.height+2 );
 //                box.bounds.setSize( 100, 10 );
             }
