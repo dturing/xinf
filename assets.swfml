@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<movie>
+    <library>
+        <clip id="assets/test.jpg" import="assets/test.jpg"/>
+        <clip id="assets/test.png" import="assets/test.png"/>
+    </library>
+    <frame/>
+</movie>

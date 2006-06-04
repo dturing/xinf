@@ -12,10 +12,15 @@ class Bitmap extends Group {
             
         var b:Float = 1; // FIXME border.thickness.px();
         
-        var w:Float = bounds.width;   // w,h are not really width/height here,
-        var h:Float = bounds.height;  // but right,bottom!
         var x:Float = 0;
         var y:Float = 0;
+        var w:Float = bounds.width;   // w,h are not really width/height here,
+        var h:Float = bounds.height;  // but right,bottom!
+
+        if( w==0 && h==0 ) {
+            w = data.width;
+            h = data.height;
+        }        
         
       // image
         GL.Color4f( 1., 1., 1., 1. );

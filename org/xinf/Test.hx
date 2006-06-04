@@ -44,6 +44,10 @@ class Test {
         cont.bounds.setSize( 20, 20 );
         container = cont;
         
+        var i = new org.xinf.ony.Image("test", cont, "assets/test.jpg");
+        i.bounds.setPosition( 100, 0 );
+//        i.bounds.setSize( 80, 60 );
+        
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );
         var fg = new org.xinf.ony.Color();
