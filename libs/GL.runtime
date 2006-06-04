@@ -10,7 +10,6 @@ void glMap1d_01( GLenum target, GLint stride, GLint order, const GLdouble *point
 }
 
 int glCreateTexture( unsigned int tex, int width, int height ) {
-printf("GL createTexture %i\n", tex );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL );
     return tex;
 }

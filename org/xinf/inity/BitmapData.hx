@@ -85,7 +85,7 @@ class BitmapData {
         var h = GdkPixbuf.gdk_pixbuf_get_height( pixbuf );
         var f = if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
         
-        trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
+//        trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
         
         // FIXME: we steal pixel data, but the pixbuf structure should be unref'd.
         
