@@ -1,14 +1,10 @@
 package org.xinf.x11;
 
-import org.xinf.style.Style;
-import org.xinf.style.StyleSheet;
 import org.xinf.event.Event;
 
-import org.xinf.ony.Root;
-
 class XForward extends XScreen {
-    public function new( server:String, _screen:Int ) {
-        super( server, _screen );
+    public function new( server:String, _screen:Int, parent:org.xinf.ony.Element ) {
+        super( server, _screen, parent );
 
         if( !X.HaveTestExtension(display) ) {
             throw( "No XTest extension on display "+name );
@@ -29,50 +25,24 @@ class XForward extends XScreen {
     }
     public function onMouseMove( e:Event ) :Void {
             //FIXME: this is a very very crude globalToLocal transformation!
+        var root:org.xinf.inity.Root = untyped org.xinf.ony.Root.getRoot()._p;
+        trace("FakeMotion: "+display+"."+screen+" - "+Math.round(root.mouseX-bounds.x));
         X.TestFakeMotionEvent( display, screen, 
-                Math.round(org.xinf.inity.Root.root.mouseX-bounds.x), 
-                Math.round(org.xinf.inity.Root.root.mouseY-bounds.y), X.CurrentTime );
+                Math.round(root.mouseX-bounds.x), 
+                Math.round(root.mouseY-bounds.y), X.CurrentTime );
     }
     
     static function main() {
-        trace("Hello");
+        var root = org.xinf.ony.Root.getRoot();
 
-        var style = StyleSheet.newFromString("
-            .XForward {
-                width: 320px;
-                height: 240px;
-                backgroundColor: #080;
-            }
-            
-            .Pane {
-                backgroundColor: #aaa;
-            }
-            
-            #root {
-                width: 320px;
-                height: 240px;
-                backgroundColor: #008;
-            }
-            
-        ");
+        var i = new XForward(":1",0,root);
+        i.bounds.setPosition( 10, 10 );
+        i.bounds.setSize( 320, 240 );
+
+        var j = new XForward(":1",1,root);
+        i.bounds.setPosition( 340, 10 );
+        i.bounds.setSize( 320, 240 );
         
-        org.xinf.style.StyledObject.globalStyle.append( style );
-
-        var root = Root.getRoot();
-
-        var i = new XForward(":1",0);
-        root.addChild(i);
-        i.bounds.width = 320;
-        i.bounds.height = 240;
-
-        var j = new XForward(":1",1);
-        j.bounds.x = 320;
-        j.bounds.width = 320;
-        j.bounds.height = 240;
-        root.addChild(j);
-        
-        #if neko
-             org.xinf.inity.Root.root.run();
-        #end
+        org.xinf.ony.Root.getRoot().run();
     }
 }

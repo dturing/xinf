@@ -10,7 +10,7 @@ class XScreen extends org.xinf.ony.Wrapper {
     private var bitmap:org.xinf.inity.Group;
     private var screen:Int;
 
-    public function new( server:String, _screen:Int ) {
+    public function new( server:String, _screen:Int, parent:org.xinf.ony.Element ) {
         screen = _screen;
         var displayName = server+"."+screen;
         display = X.OpenDisplay(untyped displayName.__s);
@@ -26,9 +26,10 @@ class XScreen extends org.xinf.ony.Wrapper {
         damage = X.DamageCreate( display, X.RootAsDrawable(display,screen), X.DamageReportBoundingBox );
         vfb = new XBitmapData( display, screen );
         bitmap = new org.xinf.inity.Bitmap( vfb );
-        super( displayName, new org.xinf.ony.impl.x.XPrimitive( bitmap ) );
+        super( displayName, parent, bitmap );
         
         EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, processEvents );
+        
     }
 
     public function processEvents( e:Event ) :Void {

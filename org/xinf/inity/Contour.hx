@@ -74,7 +74,7 @@ class Contour {
     private var offset:Point;
     private var current:Point;
     
-    public property length( get_length, null ):Float;
+    public var length( get_length, null ):Float;
     public function get_length() : Float {
         return parts.length;
     }

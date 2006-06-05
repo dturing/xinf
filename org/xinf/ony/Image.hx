@@ -23,7 +23,7 @@ class Image extends Element {
     }
 
     #if flash
-        public function redraw() :Void {
+        private function redraw() :Void {
             _p._width = bounds.width;
             _p._height = bounds.height;
         }

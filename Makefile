@@ -25,7 +25,7 @@ bin/test.js : $(MAIN_CLASS_FILE) $(HAXE_SRCS)
 	haxe $(HAXEFLAGS) -js $@ -main $(MAIN_CLASS) 
 bin/test.swf : $(MAIN_CLASS_FILE) $(HAXE_SRCS) assets.swfml $(shell find assets)
 	swfmill simple assets.swfml assets.swf
-	haxe $(HAXEFLAGS) -fheader 320:240:25:ffffff -swf-lib assets.swf -swf $@ -main $(MAIN_CLASS)
+	haxe $(HAXEFLAGS) -swf-header 320:240:25:ffffff -swf-lib assets.swf -swf $@ -main $(MAIN_CLASS)
 
         
 .PHONY: flash js xinfinity

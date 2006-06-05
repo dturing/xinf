@@ -4,8 +4,8 @@ import org.xinf.geom.Point;
 import org.xinf.event.Event;
 
 class Text extends Pane {
-    public property text( getText, setText ) :String;
-    public property autoSize( default, default ) :Bool;
+    public var text( getText, setText ) :String;
+    public var autoSize( default, default ) :Bool;
 
     private var textColor:org.xinf.ony.Color;
 

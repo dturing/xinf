@@ -35,14 +35,14 @@ class Font {
 
     private var glyphs:Array<Glyph>;
     
-    public property family_name(default,null):String;
-    public property style_name(default,null):String;
-    public property ascender(default,null):Float;
-    public property descender(default,null):Float;
-    public property height(default,null):Float;
-    public property underline_thickness(default,null):Float;
-    public property underline_position(default,null):Float;
-    public property units_per_EM(default,null):Float;
+    public var family_name(default,null):String;
+    public var style_name(default,null):String;
+    public var ascender(default,null):Float;
+    public var descender(default,null):Float;
+    public var height(default,null):Float;
+    public var underline_thickness(default,null):Float;
+    public var underline_position(default,null):Float;
+    public var units_per_EM(default,null):Float;
     
     public function new() {
         glyphs = new Array<Glyph>();

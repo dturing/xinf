@@ -38,7 +38,7 @@ class Pane extends Element {
     }
     
     #if flash
-        public function redraw() :Void {
+        private function redraw() :Void {
             super.redraw();
 
             var x:Int = 0;

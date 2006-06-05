@@ -58,7 +58,6 @@ class Test {
                 box.setBackgroundColor( bg );
                 box.setTextColor( fg );
                 box.bounds.setPosition( 10, i*50 ); //last.bounds.y+last.bounds.height+2 );
-//                box.bounds.setSize( 100, 10 );
             }
 
         org.xinf.ony.Root.getRoot().run();

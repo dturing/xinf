@@ -10,9 +10,10 @@ import org.xinf.geom.Point;
 
 class Element extends EventDispatcher {
     public var name:String;
-    public var parent:Element;
     public var bounds:Bounds;
-    
+
+    private var parent:Element;
+    private var children:Array<Element>;
     private var _p
         #if neko
             :Group
@@ -22,7 +23,6 @@ class Element extends EventDispatcher {
             :flash.MovieClip
         #end
         ;
-    private var children:Array<Element>;
     
     #if js
         private static var eventNames:Hash<String> = registerEventNames();
@@ -36,20 +36,20 @@ class Element extends EventDispatcher {
         }
 
         // event wrappers: "this" is the runtime primitive.
-        public function _mouseDown( e:js.Event ) :Bool {
+        private function _mouseDown( e:js.Event ) :Bool {
             mouseEvent( Event.MOUSE_DOWN, e, untyped this );
             return false;
         }
-        public function _mouseUp( e:js.Event ) {
+        private function _mouseUp( e:js.Event ) {
             mouseEvent( Event.MOUSE_UP, e, untyped this );
         }
-        public function _mouseOver( e:js.Event ) {
+        private function _mouseOver( e:js.Event ) {
             mouseEvent( Event.MOUSE_OVER, e, untyped this );
         }
-        public function _mouseOut( e:js.Event ) {
+        private function _mouseOut( e:js.Event ) {
             mouseEvent( Event.MOUSE_OUT, e, untyped this );
         }
-        public static function absPos( div:js.HtmlDom ) :Point {
+        private static function absPos( div:js.HtmlDom ) :Point {
             var r=new Point( untyped div.offsetLeft, untyped div.offsetTop );
             while( div.parentNode != null && div.parentNode.nodeName == "DIV" ) {
                 div = div.parentNode;
@@ -58,7 +58,7 @@ class Element extends EventDispatcher {
             }
             return r;
         }
-        public static function mouseEvent( type:String, e:js.Event, target:js.HtmlDom ) :Void {
+        private static function mouseEvent( type:String, e:js.Event, target:js.HtmlDom ) :Void {
             var abs:Point = absPos(target);
             var p:Point = new Point( e.clientX, e.clientY );
             p = p.subtract(abs);
@@ -76,16 +76,16 @@ class Element extends EventDispatcher {
         }
 
         // event wrappers: "this" is the runtime primitive.
-        public function _mouseDown() {
+        private function _mouseDown() {
             untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:this._xmouse, y:this._ymouse } );
         }
-        public function _mouseUp() {
+        private function _mouseUp() {
             untyped this.owner.postEvent( Event.MOUSE_UP, { x:this._xmouse, y:this._ymouse } );
         }
-        public function _mouseOver() {
+        private function _mouseOver() {
             untyped this.owner.postEvent( Event.MOUSE_OVER, { x:this._xmouse, y:this._ymouse } );
         }
-        public function _mouseOut() {
+        private function _mouseOut() {
             untyped this.owner.postEvent( Event.MOUSE_OUT, { x:this._xmouse, y:this._ymouse } );
         }
     #end
@@ -159,7 +159,7 @@ class Element extends EventDispatcher {
         super.addEventListener( type, f );
     }
     
-    public function onPositionChanged( e:Event ) :Void {
+    private function onPositionChanged( e:Event ) :Void {
         #if neko
             _p.changed();
         #else js
@@ -171,7 +171,7 @@ class Element extends EventDispatcher {
         #end
     }
 
-    public function onSizeChanged( e:Event ) :Void {
+    private function onSizeChanged( e:Event ) :Void {
         #if neko
             _p.changed();
         #else js
@@ -183,12 +183,12 @@ class Element extends EventDispatcher {
     }
     
     #if flash
-        public function scheduleRedraw() :Void {
+        private function scheduleRedraw() :Void {
             // FIXME: for now, just redraw. can prolly save a lot to buffer these and process after events!
             redraw();
         }
 
-        public function redraw() :Void {
+        private function redraw() :Void {
         }
     #end
     

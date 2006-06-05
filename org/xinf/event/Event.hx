@@ -67,11 +67,11 @@ class Event {
     public static var STOPPED:Int = 99;
     */
     
-    public property type(default,null) : String;
-    public property target(default,null) : EventDispatcher;
-    public property stopped(default,null) : Bool;
-    public property data(default,null) : Dynamic;
-//    public property state(default,null) : Int;
+    public var type(default,null) : String;
+    public var target(default,null) : EventDispatcher;
+    public var stopped(default,null) : Bool;
+    public var data(default,null) : Dynamic;
+//    public var state(default,null) : Int;
     
     
     public function new( _type:String, _target:EventDispatcher, _data:Dynamic ) :Void {

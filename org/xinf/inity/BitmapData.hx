@@ -8,8 +8,8 @@ enum ColorSpace {
 
 class BitmapData {
     private var _d:Dynamic;
-    public property width(default,null):Int;
-    public property height(default,null):Int;
+    public var width(default,null):Int;
+    public var height(default,null):Int;
 
     private var texture:Int;
     private var twidth:Int;

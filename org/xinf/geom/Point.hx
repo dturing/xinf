@@ -4,7 +4,7 @@ class Point {
     public var x:Float;
     public var y:Float;
 
-    public property length(get_length,null):Float;
+    public var length(get_length,null):Float;
     private function get_length() : Float {
         return( Math.sqrt( Math.pow(x,2) + Math.pow(y,2) ) );
     }

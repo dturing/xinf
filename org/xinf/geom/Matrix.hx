@@ -10,29 +10,29 @@ class Matrix {
     private static var _D:Int = 5;
     private static var _TY:Int = 13;
     
-    public property _v(default,null):Dynamic;
+    public var _v(default,null):Dynamic;
 
-    public property tx( _get_tx, _set_tx ) : Float;
+    public var tx( _get_tx, _set_tx ) : Float;
     private function _get_tx() : Float { return CPtr.float_get(_v,_TX); }
     private function _set_tx( val:Float ) : Float { return CPtr.float_set(_v,_TX,val); }
 
-    public property ty( _get_ty, _set_ty ) : Float;
+    public var ty( _get_ty, _set_ty ) : Float;
     private function _get_ty() : Float { return CPtr.float_get(_v,_TY); }
     private function _set_ty( val:Float ) : Float { return CPtr.float_set(_v,_TY,val); }
 
-    public property a( _get_a, _set_a ) : Float;
+    public var a( _get_a, _set_a ) : Float;
     private function _get_a() : Float { return CPtr.float_get(_v,_A); }
     private function _set_a( val:Float ) : Float { return CPtr.float_set(_v,_A,val); }
 
-    public property b( _get_b, _set_b ) : Float;
+    public var b( _get_b, _set_b ) : Float;
     private function _get_b() : Float { return CPtr.float_get(_v,_B); }
     private function _set_b( val:Float ) : Float { return CPtr.float_set(_v,_B,val); }
 
-    public property c( _get_c, _set_c ) : Float;
+    public var c( _get_c, _set_c ) : Float;
     private function _get_c() : Float { return CPtr.float_get(_v,_C); }
     private function _set_c( val:Float ) : Float { return CPtr.float_set(_v,_C,val); }
 
-    public property d( _get_d, _set_d ) : Float;
+    public var d( _get_d, _set_d ) : Float;
     private function _get_d() : Float { return CPtr.float_get(_v,_D); }
     private function _set_d( val:Float ) : Float { return CPtr.float_set(_v,_D,val); }
 

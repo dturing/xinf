@@ -4,7 +4,7 @@ class Polygon extends Object {
     private var contours:Array<Contour>;
     private var tess:Dynamic;
     
-    public property length( get_length, null ):Float;
+    public var length( get_length, null ):Float;
     public function get_length() : Float {
         return contours.length;
     }

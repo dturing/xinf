@@ -1,17 +1,14 @@
 package org.xinf.ony;
 
-import org.xinf.ony.impl.IPrimitive;
-
 class Wrapper extends Pane {
-
-    private var _primitive:IPrimitive;
+    var _primitive:Dynamic;
     
-    public function new( name:String, p:IPrimitive ) {
+    public function new( name:String, parent:Element, p:Dynamic ) {
         _primitive = p;
-        super(name);
+        super(name,parent);
     }
     
-    private function createPrimitive() :IPrimitive {
+    private function createPrimitive() :Dynamic {
         return _primitive;
     }
 }
