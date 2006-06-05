@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,17 +11,34 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.event;
 
+/**
+    Event is a User-Interface (or other) Event. It will be passed through the
+    hierarchy of xinfony elements until it is handled or discarded.
+    <br/>
+    The Event class also (statically) manages the global event queue, and
+    defines STATIC_VARIABLES for the core xinfony event types.
+**/
 class Event {
-    static public var queue:Array<Event>;
+    static private var queue:Array<Event>;
+    /**
+        Push (post) an Event to the global Event queue. 
+        Events are processed in FIFO (first-in-first-out) order.
+    **/
     static public function push( e:Event ) :Void {
         if( queue == null ) queue = new Array<Event>();
         queue.push(e);
     }
+    
+    /**
+        Process all pending events. Do not call this function directly
+        except if you know what you are doing. It will be called in
+        regular intervals (once every frame) once you passed control
+        to xinfony with Root.getRoot().run();
+    **/
     static public function processQueue() :Void {
         if( queue == null ) return;
         var e:Event = queue.shift();
@@ -60,51 +76,96 @@ class Event {
         */
     }
 
+    /**
+        The ENTER_FRAME is a global event that will be dispatched once for
+        every frame cycle. You can listen for it to do animations or other
+        functionality that need regular updates.
+    **/
     public static var ENTER_FRAME:String = "enterFrame";
     
+    /**
+        MOUSE_DOWN is dispatched on an Element when a mouse button is pressed
+        while the mouse curser is above the Element (and no other Element is in
+        front of it).
+    **/
     public static var MOUSE_DOWN:String = "mouseDown";
+
+    /**
+        MOUSE_UP is dispatched on an Element when a mouse button is released
+        while the mouse curser is above the Element (and no other Element is in
+        front of it). It does not matter if the button was pressed while
+        the cursor was on the element.
+    **/
     public static var MOUSE_UP:String = "mouseUp";
+
+    /**
+        MOUSE_MOVE is dispatched on an Element whenever the mouse cursor moves 
+        *within* the bounding rectangle of the Element.
+    **/
     public static var MOUSE_MOVE:String = "mouseMove";
+
+    /**
+        MOUSE_OVER is dispatched on an Element whenever the mouse cursor moves 
+        *into* the bounding rectangle of the Element.
+    **/
     public static var MOUSE_OVER:String = "mouseOver";
+
+    /**
+        MOUSE_OVER is dispatched on an Element whenever the mouse cursor moves 
+        *out of* the bounding rectangle of the Element.
+    **/
     public static var MOUSE_OUT:String = "mouseOut";
 
+
+    /**
+        KEY_DOWN is dispatched globally 
+        when a key is pressed while the player application has
+        keyboard focus.
+    **/
     public static var KEY_DOWN:String = "keyDown";
+
+    /**
+        KEY_UP is dispatched globally 
+        when a key is released while the player application has
+        keyboard focus.
+    **/
     public static var KEY_UP:String = "keyUp";
     
-    public static var STYLE_CHANGED:String = "styleChanged";
+    /** dispatched on a Bounds rectangle when it's position changed **/
+    public static var POSITION_CHANGED:String = "positionChanged";
+    /** dispatched on a Bounds rectangle when it's size changed **/
     public static var SIZE_CHANGED:String = "sizeChanged";
-    
-    public static var CHANGED:String = "changed";
-    
-    /*
-    public static var FRESH:Int = 0;
-    public static var SCHEDULED:Int = 1;
-    public static var DELIVERING:Int = 2;
-    public static var DELIVERED:Int = 3;
-    public static var STOPPED:Int = 99;
-    */
-    
+
+
+
+    /** type of the Event. It's a string, but you should only use
+        the STATIC_VARS defined above to set or compare Event types **/
     public var type(default,null) : String;
+
+    /** the EventDispatcher that the Event was posted on **/
     public var target(default,null) : EventDispatcher;
+
+    /** true if propagation of the Event should be stopped **/
     public var stopped(default,null) : Bool;
+
+    /** Event data. Mouse events carry a { x, y, button } structure (FIXME: not quite),
+        keyboard events information about which key was pressed (FIXME: not unified),
+        other events might carry other information. **/
     public var data(default,null) : Dynamic;
-//    public var state(default,null) : Int;
-    
-    
+
+    /** Constructor **/
     public function new( _type:String, _target:EventDispatcher, _data:Dynamic ) :Void {
         data = _data;
         type = _type;
         target = _target;
         stopped = false;
     }
-    
+
+    /** Stop propagation of this Event. Call this if you dont want
+        any other listeners to receive the event. In case of xinfony
+        Elements, stopping propagation will also stop the Event from being
+        delivered to the Element's parent. **/
     public function stopPropagation() :Void {
         stopped = true;
-    }
-    
-    // FIXME: do this different, use data!
-    public static function KeyboardEvent( type:String, target:EventDispatcher, key:String ) :Event {
-        var e:Event = new Event( type, target, { key:key } );
-        return e;
     }
 }

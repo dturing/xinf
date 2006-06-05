@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,8 +11,7 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.inity;
 
@@ -57,8 +55,7 @@ class Stage extends Group {
         transform.setIdentity();
         transform.translate( -1, 1 );
         transform.scale( (2.0/w)*x, (-2.0/h)*y );
-        bounds.x = -1 + (.5/w);
-        bounds.y =  1 + (-.5/h);
+        bounds.setPosition( -1 + (.5/w), 1 + (-.5/h) );
 
         width=w; height=h;
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );

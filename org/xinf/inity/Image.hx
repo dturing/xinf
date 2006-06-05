@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,8 +11,7 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.inity;
 

@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,30 +11,30 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.ony;
 
-signature IColor {
-    var r:Float;
-    var g:Float;
-    var b:Float;
-    var a:Float;
-
-    function toRGBInt() : Int;
-}
-
+/**
+    Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).
+**/
 class Color {
+    /** Red component **/
     public var r:Float;
+    /** Green component **/
     public var g:Float;
+    /** Blue component **/
     public var b:Float;
+    /** Alpha component. 
+        0.0 is transparent, 1.0 opaque. **/
     public var a:Float;
 
+    /** Constructor. Initializes to (0,0,0,0). **/
     public function new() {
         r = g = b = a = .0;
     }
     
+    /** Sets the R, G and B components from an integer (like 0x00ff00 for green) **/
     public function fromRGBInt( c:Int ) {
         r = ((c&0xff0000)>>16)/0xff;
         g = ((c&0xff00)>>8)/0xff;
@@ -43,10 +42,12 @@ class Color {
         a = 1.;
     }
 
+    /** Returns an integer value describing the RGB (not A) part of the color. **/
     public function toRGBInt() : Int {
         return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
     }
 
+    /** Returns a CSS-like string describing the color, in the form "rgb(<r>,<g>,<b>)". Values will be between 0 and 255.  **/
     public function toRGBString() : String {
         return("rgb("+Math.round(r*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")");
     }

@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,15 +11,23 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.ony;
 
 import org.xinf.event.Event;
 
+/**
+    Root is the root Element of a xinfony application. 
+    Depending on the runtime, the root is either a specific DIV element with an ID of "xinfony" (for JS), the Stage (for Flash), or the player root (for xinfinity).
+
+    There should be only one root. At the start of your application, you should assure the Root is created by calling getRoot() once.
+    After initialization of your application's elements, you should call run() on the Root.  
+    
+    Root will take care of posting global ENTER_FRAME events.
+**/
 class Root extends Element {
-    public static var root:Root;
+    private static var root:Root;
     
     private var _r:
         #if neko
@@ -54,13 +61,20 @@ class Root extends Element {
         return _r;
     }
     
+    /**
+        Return the one, global, singleton Root instance.
+    **/
     public static function getRoot() : Root {
         if( root == null ) {
             root = new Root();
         }
         return root;
     }
-    
+
+    /**
+        Pass application control to xinfony. You should call this after initializing
+        your application. Any further action you do will be caused by Events.
+    **/    
     public function run() : Void {
         #if neko
             _r.run();

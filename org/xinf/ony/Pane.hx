@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,14 +11,19 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.ony;
 
+/**
+    A Pane is a xinfony Element that renders a rectangle in its background color.
+    Pane can be useful by itself, but is also base class for other visible Elements
+    that can have a background.
+**/
 class Pane extends Element {
     private var bgColor:org.xinf.ony.Color;
 
+    /** Constructor. **/
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
         
@@ -41,6 +45,7 @@ class Pane extends Element {
         #end
     }
     
+    /** Set the background color to the Color specified. **/
     public function setBackgroundColor( bg:org.xinf.ony.Color ) :Void {
         bgColor = bg;
         

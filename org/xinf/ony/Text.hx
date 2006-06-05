@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,16 +11,27 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.ony;
 
 import org.xinf.geom.Point;
 import org.xinf.event.Event;
 
+/**
+    Text is an Element that displays Text. Handling of the font style is not yet finalized. The Text is not editable.
+**/
 class Text extends Pane {
+    /**
+        The actual text that will be displayed. 
+        Setting the text with autoSize set to true will trigger a SIZE_CHANGED event on the Element's bounds.
+    **/
     public var text( getText, setText ) :String;
+
+    /**
+        If autoSize is set to true, the Element's bounds rectangle will automatically be set to enclose the
+        contained text. If false, it will always be the size you specified, with text content probably overflowing.
+    **/
     public var autoSize( default, default ) :Bool;
 
     private var textColor:org.xinf.ony.Color;
@@ -35,7 +45,10 @@ class Text extends Pane {
             :flash.TextField
         #end
         ;
-    
+
+    /**
+        Constructor. Initializes to autoSize=true; text content will be empty.
+    **/    
     public function new( name:String, parent:Element ) {
         super(name,parent);
         autoSize = true;

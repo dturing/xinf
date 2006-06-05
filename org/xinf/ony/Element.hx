@@ -1,5 +1,4 @@
-/***********************************************************************
-
+/* 
    xinf is not flash.
    Copyright (c) 2006, Daniel Fischer.
  
@@ -12,8 +11,7 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
    Lesser General Public License or the LICENSE file for more details.
-   
-***********************************************************************/
+*/
 
 package org.xinf.ony;
 
@@ -25,8 +23,23 @@ import org.xinf.geom.Point;
     import org.xinf.inity.Group;
 #end
 
+/**
+    Element is the basic graphical primitive of the xinfony API. All other visible elements derive from it.
+    
+    The implementation of Element depends on the runtime: in Flash, it's a MovieClip; in JavaScript it's a DIV element,
+    and for xinfinity it's a Group.
+**/
+
 class Element extends EventDispatcher {
+    /**
+        The name of the element, usually only needed for identification and debugging.
+    **/
     public var name:String;
+    
+    /**
+        The bounding rectangle of the element. You can manipulate it to move and resize the element.
+        Specific subclasses might automatically set the bounds or react in certain ways to changes.
+    **/
     public var bounds:Bounds;
 
     private var parent:Element;
@@ -107,6 +120,11 @@ class Element extends EventDispatcher {
         }
     #end
 
+    /**
+        Element constructor. You have to supply a name and a parent Element, to which the new Element
+        will be attached to. Currently, xinfony Elements can not be re-parented, because Flash<9 does not
+        support that functionality.
+    **/
     public function new( _name:String, _parent:Element ) :Void {
         name = _name;
         parent = _parent;
@@ -130,11 +148,11 @@ class Element extends EventDispatcher {
             untyped _p.owner = this;
         #end
 
-        bounds.addEventListener("positionChanged", onPositionChanged );
-        bounds.addEventListener("sizeChanged", onSizeChanged );
+        bounds.addEventListener( Event.POSITION_CHANGED, onPositionChanged );
+        bounds.addEventListener( Event.SIZE_CHANGED, onSizeChanged );
         
         super();
-     }
+    }
 
     private function createPrimitive() :Dynamic {
         #if js
@@ -148,15 +166,11 @@ class Element extends EventDispatcher {
         #end
     }
     
-    public function dispatchEvent( e:Event ) :Void {
-        super.dispatchEvent( e );
-        
-        // propagate to parent
-        if( !e.stopped && parent != null ) {
-            parent.dispatchEvent(e);
-        }
-    }
 
+    /**
+        Add a new listener function for a specific event. See the EventDispatcher class for details.
+        Adding listeners for mouse events will setup the needed handlers on the runtime primitive.
+    **/
     public function addEventListener( type:String, f:Event->Void ) :Void {
         #if js
             var eventName:String = eventNames.get(type);
@@ -176,6 +190,21 @@ class Element extends EventDispatcher {
         super.addEventListener( type, f );
     }
     
+
+    /**
+        Dispatch an Event to the Element. See the EventDispatcher class for details.
+        Element will dispatch the Event to it's parent if it is not stopped.
+    **/
+    public function dispatchEvent( e:Event ) :Void {
+        super.dispatchEvent( e );
+        
+        // propagate to parent
+        if( !e.stopped && parent != null ) {
+            parent.dispatchEvent(e);
+        }
+    }
+
+
     private function onPositionChanged( e:Event ) :Void {
         #if neko
             _p.changed();
