@@ -45,7 +45,7 @@ class Generator {
             // start with _ if it starts with a number.
             var c = s.charCodeAt(0);
             if( c > 47 && c < 58 ) {
-                s = "_"+s;
+                s = "n_"+s;
             }
         }            
             

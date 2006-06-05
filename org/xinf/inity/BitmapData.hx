@@ -29,7 +29,7 @@ class BitmapData {
         twidth = 2; while( twidth<width ) twidth<<=1;
         theight = 2; while( theight<height ) theight<<=1;
 
-        var t = CPtr.uint_alloc(1);
+        var t:Dynamic = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);
         texture = CPtr.uint_get(t,0);
 
