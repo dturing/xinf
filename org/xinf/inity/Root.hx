@@ -91,11 +91,12 @@ class Root extends Stage {
         mouseY = -1;
         buttonpress = false;
         objectUnderMouse = null;
+
+        resize( w, h );
         
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
         }
-        resize(w,h);
     }
 
     public function resize( w:Int, h:Int ) : Void {
@@ -108,6 +109,9 @@ class Root extends Stage {
     public function run() : Bool {
         var p:Profiler = new Profiler();
         var changed:Bool;
+
+        resize(Math.round(width),Math.round(height));
+
         while( !quit ) {
             changed=false;
         

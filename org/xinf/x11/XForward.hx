@@ -41,7 +41,6 @@ class XForward extends XScreen {
     public function onMouseMove( e:Event ) :Void {
             //FIXME: this is a very very crude globalToLocal transformation!
         var root:org.xinf.inity.Root = untyped org.xinf.ony.Root.getRoot()._p;
-        trace("FakeMotion: "+display+"."+screen+" - "+Math.round(root.mouseX-bounds.x));
         X.TestFakeMotionEvent( display, screen, 
                 Math.round(root.mouseX-bounds.x), 
                 Math.round(root.mouseY-bounds.y), X.CurrentTime );
@@ -55,8 +54,8 @@ class XForward extends XScreen {
         i.bounds.setSize( 320, 240 );
 
         var j = new XForward(":1",1,root);
-        i.bounds.setPosition( 340, 10 );
-        i.bounds.setSize( 320, 240 );
+        j.bounds.setPosition( 340, 10 );
+        j.bounds.setSize( 320, 240 );
         
         org.xinf.ony.Root.getRoot().run();
     }
