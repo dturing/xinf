@@ -45,3 +45,4 @@ cptr.ndll : libcptr.so
 
 clean :
 	-rm $(wildcard *.n *__.hx *.hx *.ndll *.so)
+	-rm $(wildcard */*.n */*__.hx */*.hx */*.ndll */*.so)

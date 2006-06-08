@@ -7,8 +7,6 @@
 extern "C" {
 #endif
 
-extern vkind k_void_p_p;
-
 #define VAL_Int(v) ((int)val_number(v))
 #define VAL_Float(v) ((float)val_number(v))
 #define VAL_String(v) val_string(v)    // TODO HaXe strings direct?
@@ -41,35 +39,31 @@ void kind_check_failed( const char *function, const char *file, int line, value 
 
 
 /* memory-safe cptr */
-extern vkind k_cptr;
+extern vkind k_void_p_p;
 
-#define CTPR_UNDEFINED      0
-#define CPTR_void           1
-#define CPTR_void_p         2
-#define CPTR_float          3
-#define CPTR_double         4
-#define CPTR_int            5
-#define CPTR_unsigned_int   6
-#define CPTR_short          7
-#define CPTR_unsigned_short 8
-#define CPTR_char           9
-#define CPTR_unsigned_char  10
-#define CPTR_signed_char    11
-#define CPTR_const_char     12
+extern vkind k_void_p;
+extern vkind k_float_p;
+extern vkind k_double_p;
+extern vkind k_int_p;
+extern vkind k_unsigned_int_p;
+extern vkind k_short_p;
+extern vkind k_unsigned_short_p;
+extern vkind k_char_p;
+extern vkind k_unsigned_char_p;
+extern vkind k_signed_char_p;
 
 struct _cptr {
-    unsigned char kind;
     unsigned int length;
-    void *ptr;
+    void *ptr;  /* the type of this ptr is defined by the neko kind. */
 };
 typedef struct _cptr cptr;
 
 #define VAL_CPTR(v) ((cptr*)val_data(v))
-#define CHECK_CPTR_KIND( v, k ) \
-    if( !val_is_abstract(v) || !val_is_kind(v,k_cptr) || val_data(v) == NULL || VAL_CPTR(v)->kind != k ) { \
-        kind_check_failed( __FUNCTION__,__FILE__,__LINE__,v,#k); }
+#define CHECK_CPTR_KIND( v, kind ) \
+    if( !val_is_abstract(v) || !val_is_kind(v, k_## kind ##_p) || val_data(v) == NULL ) { \
+        kind_check_failed( __FUNCTION__,__FILE__,__LINE__,v, #kind ); }
 
-value alloc_cptr( void *ptr, unsigned char kind, int length );
+//value alloc_cptr( void *ptr, vkind kind, int length );
 
 #ifdef __cplusplus
 }

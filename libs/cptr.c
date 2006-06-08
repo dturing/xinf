@@ -1,8 +1,18 @@
 #include "cptr.h"
 #include <memory.h>
 
-DEFINE_KIND(k_cptr);
 DEFINE_KIND(k_void_p_p)
+
+DEFINE_KIND(k_void_p)
+DEFINE_KIND(k_float_p)
+DEFINE_KIND(k_double_p)
+DEFINE_KIND(k_int_p)
+DEFINE_KIND(k_unsigned_int_p)
+DEFINE_KIND(k_short_p)
+DEFINE_KIND(k_unsigned_short_p)
+DEFINE_KIND(k_char_p)
+DEFINE_KIND(k_unsigned_char_p)
+DEFINE_KIND(k_signed_char_p)
 
 void check_failed( const char *function, const char *file, int line, value given ) {
     buffer b = alloc_buffer("");
@@ -24,6 +34,7 @@ void kind_check_failed( const char *function, const char *file, int line, value 
     _neko_failure(buffer_to_string(b), file, line );
 }
 
+/*
 void cptr_finalize( value v ) {
     if( !val_is_abstract(v) || !val_is_kind(v,k_cptr) ) {
         val_throw( alloc_string("value is of invalid kind.") );
@@ -46,19 +57,38 @@ value alloc_cptr( void *ptr, unsigned char kind, int length ) {
     val_gc( r, cptr_finalize );
     return r;
 }
+*/
+
+value alloc_cptr( void *ptr, vkind kind, int length ) {
+    cptr *cp = (cptr*)malloc( sizeof(cptr) );
+    cp->length = length;
+    cp->ptr = ptr;
+    value r = alloc_abstract( kind, cp );
+    return r;
+}
 
 #define ALLOC(ctype,hxtype) \
 value cptr_## ctype ##_alloc( value n ) { \
     CHECK_Int( n ); \
     int sz = (int)val_number(n); \
     ctype *ptr = ( ctype *)malloc( sizeof( ctype ) * sz ); \
-    return( alloc_cptr( (void *)ptr, CPTR_## ctype, sz ) ); \
+    value ret = alloc_cptr( (void *)ptr, k_## ctype ##_p, sz ); \
+    val_gc( ret, cptr_## ctype ##_finalize ); \
+    return( ret ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 
+#define FINALIZE(ctype,hxtype) \
+void cptr_## ctype ##_finalize( value p ) { \
+    CHECK_CPTR_KIND( p, ctype ); \
+    cptr *cp = (cptr*)val_data(p); \
+    if( cp->ptr ) free( cp->ptr ); \
+    cp->ptr = NULL; \
+}
+
 #define GET(ctype,hxtype) \
 value cptr_## ctype ##_get( value p, value n ) { \
-    CHECK_CPTR_KIND( p, CPTR_## ctype ); \
+    CHECK_CPTR_KIND( p, ctype ); \
     CHECK_Int( n ); \
     unsigned int _n = val_number(n); \
     cptr *cp = (cptr*)val_data(p); \
@@ -74,7 +104,7 @@ DEFINE_PRIM(cptr_## ctype ##_get,2);
 
 #define SET(ctype,hxtype) \
 value cptr_## ctype ##_set( value p, value n, value v ) { \
-    CHECK_CPTR_KIND( p, CPTR_## ctype ); \
+    CHECK_CPTR_KIND( p, ctype ); \
     CHECK_## hxtype ( v ); \
     CHECK_Int( n ); \
     unsigned int _n = val_number(n); \
@@ -128,6 +158,7 @@ DEFINE_PRIM(cptr_## ctype ##_from_array,3);
 */
 
 #define CPTR(ctype,hxtype) \
+    FINALIZE(ctype,hxtype) \
     ALLOC(ctype,hxtype) \
     GET(ctype,hxtype) \
     SET(ctype,hxtype) 
@@ -151,7 +182,7 @@ CPTR( unsigned_short, Int );
 
 // FIXME: do cast/null for other types also (maybe)
 value cptr_void_null() {
-    return( alloc_cptr( NULL, CPTR_void, 0 ) );
+    return( alloc_cptr( NULL, k_void_p, 0 ) );
 }
 DEFINE_PRIM(cptr_void_null,0);
 
@@ -189,43 +220,6 @@ value util_msec() {
     return alloc_int( (int)((tv.tv_sec*1000)+(tv.tv_usec/1000)) );
 }
 DEFINE_PRIM(util_msec,0);
-
-
-/* getrusage is USELESS on linux-- at least for getting the memory usage
-
-#include <sys/resource.h>
-value util_rusage() {
-    // FIXME: Linux only?
-    struct rusage r;
-    if( getrusage( RUSAGE_SELF, &r ) != 0 ) {
-        val_throw( alloc_string("getrusage() failed") );
-        return val_null;
-    }
-    
-    value ret = alloc_object(NULL);
-    
-    // FIXME: all these are longs- not 31bit ints..-
-//    alloc_field( ret, val_id("utime"), alloc_int( r.ru_utime ) );
-//    alloc_field( ret, val_id("stime"), alloc_int( r.ru_stime ) );
-    alloc_field( ret, val_id("maxrss"), alloc_int( r.ru_maxrss ) );
-    alloc_field( ret, val_id("ixrss"), alloc_int( r.ru_ixrss ) );
-    alloc_field( ret, val_id("idrss"), alloc_int( r.ru_idrss ) );
-    alloc_field( ret, val_id("isrss"), alloc_int( r.ru_isrss ) );
-    alloc_field( ret, val_id("minflt"), alloc_int( r.ru_minflt ) );
-    alloc_field( ret, val_id("majflt"), alloc_int( r.ru_majflt ) );
-    alloc_field( ret, val_id("nswap"), alloc_int( r.ru_nswap ) );
-    alloc_field( ret, val_id("inblock"), alloc_int( r.ru_inblock ) );
-    alloc_field( ret, val_id("oublock"), alloc_int( r.ru_oublock ) );
-    alloc_field( ret, val_id("msgsnd"), alloc_int( r.ru_msgsnd ) );
-    alloc_field( ret, val_id("msgrcv"), alloc_int( r.ru_msgrcv ) );
-    alloc_field( ret, val_id("nsignals"), alloc_int( r.ru_nsignals ) );
-    alloc_field( ret, val_id("nvcsw"), alloc_int( r.ru_nvcsw ) );
-    alloc_field( ret, val_id("nivcsw"), alloc_int( r.ru_nivcsw ) );
-    
-    return( ret );
-}
-DEFINE_PRIM(util_rusage,0);
-*/
 
 
 #include <sys/types.h>
