@@ -46,7 +46,7 @@ lib%.so : %.c
 	xsltproc $(SWIG_XSL) $< > $@
 
 # generate a nekobind Generator class with a generate() function
-%Generator.hx : %_simple.xml $(GENERATOR_XSL)
+%Generator.hx : %_simple.xml $(GENERATOR_XSL) exceptions
 	xsltproc --stringparam module $* $(GENERATOR_XSL) $< > $@
 
 # compile the generator

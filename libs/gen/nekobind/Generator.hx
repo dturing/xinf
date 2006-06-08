@@ -82,28 +82,33 @@ class Generator {
         return s;
     }
 
+    private function isException( name:String ) :Bool {
+        for( exc in exceptions ) {
+            if( exc == name ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /* usage: override _*, call the plain versions (typemapping is done in between) */
 
     public function constant( name:String, type:String, value:String ) : Void {
+        if( isException(name) ) return;
         _constant( name, type, value );
     }
     public function _constant( name:String, type:String, value:String ) : Void {
     }
 
     public function func( name:String, type:String, args:Array<Array<String>> ) : Void {
-        for( exc in exceptions ) {
-            if( exc == name ) return;
-        }
+        if( isException(name) ) return;
         _func( name, type, args );
     }
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
     }
 
     public function classDefinition( name:String, members:Array<Array<String>> ) : Void {
-        for( exc in exceptions ) {
-            if( exc == name ) return;
-        }
+        if( isException(name) ) return;
         _classDefinition( name, members );
     }
     public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
