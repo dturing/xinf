@@ -24,11 +24,14 @@ void : Void
             if( line.length > 0 ) {
                 var l = line.split(" : ");
                 for( type in l[0].split(",") ) {
+                    var t:IType;
                     if( type == "void" ) {
-                        types.set( type, new VoidType() );
+                        t = new VoidType();
                     } else {
-                        types.set( type, new PrimitiveType( type, l[1] ) );
+                        t = new PrimitiveType( type, l[1] );
                     }
+                    types.set( type, t );
+                    types.set( type+"*", new CPtrType( type, l[1] ) );
                 }
             }
         }

@@ -4,6 +4,7 @@ class Generator {
     public var module:String;
     public var map:TypeMap;
     public var file:neko.File;
+    public var exceptions:Array<String>;
     
     public var buf:String;
     
@@ -13,6 +14,12 @@ class Generator {
         map = new TypeMap();
         
         file = neko.File.write( filename, false );
+        exceptions = new Array<String>();
+        
+        try {
+            exceptions = neko.File.getContent("exceptions").split("\n");
+        } catch( e:Dynamic ) {
+        }
     }
 
     public function finish() {
@@ -85,12 +92,18 @@ class Generator {
     }
 
     public function func( name:String, type:String, args:Array<Array<String>> ) : Void {
+        for( exc in exceptions ) {
+            if( exc == name ) return;
+        }
         _func( name, type, args );
     }
     public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
     }
 
     public function classDefinition( name:String, members:Array<Array<String>> ) : Void {
+        for( exc in exceptions ) {
+            if( exc == name ) return;
+        }
         _classDefinition( name, members );
     }
     public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {

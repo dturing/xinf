@@ -161,7 +161,7 @@ value XvfbOpen( Display *display, int screen, const char *file ) {
     header = (struct _xwd_file_header *)map;
     map = map + ntohl(header->header_size) + (ntohl( header->ncolors) * sizeof(XWDColor));
 
-    alloc_field( r, val_id("_buffer"), ALLOC_KIND(map,k_void_p) );
+    alloc_field( r, val_id("_buffer"), alloc_cptr(map,CPTR_void,0) );
     
     alloc_field( r, val_id("width"), ALLOC_Int( screen_width ) );
     alloc_field( r, val_id("height"), ALLOC_Int( screen_height ) );

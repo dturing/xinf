@@ -1,6 +1,8 @@
 #include "cptr.h"
 #include <memory.h>
 
+DEFINE_KIND(k_cptr);
+
 void check_failed( const char *function, const char *file, int line, value given ) {
     buffer b = alloc_buffer("");
     val_buffer(b,given);
@@ -21,9 +23,27 @@ void kind_check_failed( const char *function, const char *file, int line, value 
     _neko_failure(buffer_to_string(b), file, line );
 }
 
-
 void cptr_finalize( value v ) {
-    free( val_data(v) );
+    if( !val_is_abstract(v) || !val_is_kind(v,k_cptr) ) {
+        val_throw( alloc_string("value is of invalid kind.") );
+        return;
+    }
+    
+    void *ptr = VAL_CPTR(v)->ptr;
+    if( ptr != NULL ) {
+        free( ptr );
+    }
+    free( VAL_CPTR(v) );
+}
+
+value alloc_cptr( void *ptr, unsigned char kind, int length ) {
+    cptr *cp = (cptr*)malloc( sizeof(cptr) );
+    cp->kind = kind;
+    cp->length = length;
+    cp->ptr = ptr;
+    value r = alloc_abstract( k_cptr, cp );
+    val_gc( r, cptr_finalize );
+    return r;
 }
 
 #define ALLOC(ctype,hxtype) \
@@ -31,45 +51,35 @@ value cptr_## ctype ##_alloc( value n ) { \
     CHECK_Int( n ); \
     int sz = (int)val_number(n); \
     ctype *ptr = ( ctype *)malloc( sizeof( ctype ) * sz ); \
-    value r = ALLOC_KIND( ptr, k_## ctype ##_p ); \
-    val_gc( r, cptr_finalize ); \
-    return r; \
+    return( alloc_cptr( (void *)ptr, CPTR_## ctype, sz ) ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 
-#define FREE(ctype,hxtype) \
-value cptr_## ctype ##_free( value p ) { \
-    CHECK_KIND( p, k_## ctype ##_p ); \
-    ctype *ptr = ( ctype *)val_data(p); \
-    if( ptr == NULL ) { \
-        val_throw( alloc_string( "null pointer" ) ); \
-        return val_null; \
-    } \
-    free( ptr );\
-    return val_true; \
-} \
-DEFINE_PRIM(cptr_## ctype ##_free,1);
-
-
 #define GET(ctype,hxtype) \
 value cptr_## ctype ##_get( value p, value n ) { \
-    CHECK_KIND( p, k_## ctype ##_p ); \
+    CHECK_CPTR_KIND( p, CPTR_## ctype ); \
     CHECK_Int( n ); \
-    ctype *ptr = ( ctype *)val_data(p); \
+    unsigned int _n = val_number(n); \
+    cptr *cp = (cptr*)val_data(p); \
+    if( _n >= cp->length ) val_throw( alloc_string( "index out of range" ) ); \
+    ctype *ptr = ( ctype *)cp->ptr; \
     if( ptr == NULL ) { \
         val_throw( alloc_string( "null pointer" ) ); \
         return val_null; \
     } \
-    return( ALLOC_## hxtype ( ptr[ (int)val_number(n) ] ) ); \
+    return( ALLOC_## hxtype ( ptr[ _n ] ) ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_get,2);
 
 #define SET(ctype,hxtype) \
 value cptr_## ctype ##_set( value p, value n, value v ) { \
-    CHECK_KIND( p, k_## ctype ##_p ); \
-    CHECK_Int( n ); \
+    CHECK_CPTR_KIND( p, CPTR_## ctype ); \
     CHECK_## hxtype ( v ); \
-    ctype *ptr = (ctype*)val_data(p); \
+    CHECK_Int( n ); \
+    unsigned int _n = val_number(n); \
+    cptr *cp = (cptr*)val_data(p); \
+    if( _n >= cp->length ) val_throw( alloc_string( "index out of range" ) ); \
+    ctype *ptr = ( ctype *)cp->ptr; \
     if( ptr == NULL ) { \
         val_throw( alloc_string( "null pointer" ) ); \
         return val_null; \
@@ -79,6 +89,7 @@ value cptr_## ctype ##_set( value p, value n, value v ) { \
 } \
 DEFINE_PRIM(cptr_## ctype ##_set,3);
 
+/*
 #define TO_ARRAY(ctype,hxtype) \
 value cptr_## ctype ##_to_array( value p, value f, value t ) { \
     int i; \
@@ -113,16 +124,18 @@ value cptr_## ctype ##_from_array( value p, value f, value values ) { \
     return( val_true ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_from_array,3);
+*/
 
 #define CPTR(ctype,hxtype) \
-    DEFINE_KIND( k_## ctype ##_p ); \
     ALLOC(ctype,hxtype) \
-    FREE(ctype,hxtype) \
     GET(ctype,hxtype) \
-    SET(ctype,hxtype) \
+    SET(ctype,hxtype) 
+    /*\
+    DEFINE_KIND( k_## ctype ##_p ); \
+    FREE(ctype,hxtype) \
     TO_ARRAY(ctype,hxtype ) \
     FROM_ARRAY(ctype,hxtype )
-    
+    */
     
 typedef unsigned int unsigned_int;
 typedef unsigned char unsigned_char;
@@ -137,10 +150,15 @@ CPTR( unsigned_char, Int );
 CPTR( short, Int );
 CPTR( unsigned_short, Int );
 
-
 // FIXME: do cast/null for other types also (maybe)
-DEFINE_KIND(k_void_p)
+value cptr_void_null() {
+    return( alloc_cptr( NULL, CPTR_void, 0 ) );
+}
+DEFINE_PRIM(cptr_void_null,0);
+
 DEFINE_KIND(k_void_p_p)
+/*
+//DEFINE_KIND(k_void_p)
 value cptr_void_cast( value p ) {
     if( !val_is_abstract( p ) ) {
         failure("will only cast #abstract values to void*.");
@@ -151,18 +169,13 @@ value cptr_void_cast( value p ) {
 }
 DEFINE_PRIM(cptr_void_cast,1);
 
-value cptr_void_null() {
-    return( ALLOC_KIND( NULL, k_void_p ) );
-}
-DEFINE_PRIM(cptr_void_null,0);
-
 value cptr_is_valid( value ptr ) {
     if( ptr == val_null || !val_is_abstract(ptr) ) return val_false;
     if( val_data(ptr) == NULL ) return val_false;
     return val_true;
 }
 DEFINE_PRIM(cptr_is_valid,1);
-
+*/
 
 // FIXME: this is not really CPtr stuff, but "util"
 #include <sys/time.h>

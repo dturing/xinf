@@ -28,36 +28,36 @@
 
 class CPtr {
     public static var float_alloc      = neko.Lib.load("cptr","cptr_float_alloc",1);
-    public static var float_free       = neko.Lib.load("cptr","cptr_float_free",1);
+//    public static var float_free       = neko.Lib.load("cptr","cptr_float_free",1);
     public static var float_set        = neko.Lib.load("cptr","cptr_float_set",3);
     public static var float_get        = neko.Lib.load("cptr","cptr_float_get",2);
-    public static var float_to_array   = neko.Lib.load("cptr","cptr_float_to_array",3);
-    public static var float_from_array = neko.Lib.load("cptr","cptr_float_from_array",3);
+//    public static var float_to_array   = neko.Lib.load("cptr","cptr_float_to_array",3);
+//    public static var float_from_array = neko.Lib.load("cptr","cptr_float_from_array",3);
 
     public static var double_alloc      = neko.Lib.load("cptr","cptr_double_alloc",1);
-    public static var double_free       = neko.Lib.load("cptr","cptr_double_free",1);
+//    public static var double_free       = neko.Lib.load("cptr","cptr_double_free",1);
     public static var double_set        = neko.Lib.load("cptr","cptr_double_set",3);
     public static var double_get        = neko.Lib.load("cptr","cptr_double_get",2);
-    public static var double_to_array   = neko.Lib.load("cptr","cptr_double_to_array",3);
-    public static var double_from_array = neko.Lib.load("cptr","cptr_double_from_array",3);
+//    public static var double_to_array   = neko.Lib.load("cptr","cptr_double_to_array",3);
+//    public static var double_from_array = neko.Lib.load("cptr","cptr_double_from_array",3);
 
     public static var int_alloc      = neko.Lib.load("cptr","cptr_int_alloc",1);
-    public static var int_free       = neko.Lib.load("cptr","cptr_int_free",1);
+//    public static var int_free       = neko.Lib.load("cptr","cptr_int_free",1);
     public static var int_set        = neko.Lib.load("cptr","cptr_int_set",3);
     public static var int_get        = neko.Lib.load("cptr","cptr_int_get",2);
-    public static var int_to_array   = neko.Lib.load("cptr","cptr_int_to_array",3);
-    public static var int_from_array = neko.Lib.load("cptr","cptr_int_from_array",3);
+//    public static var int_to_array   = neko.Lib.load("cptr","cptr_int_to_array",3);
+//    public static var int_from_array = neko.Lib.load("cptr","cptr_int_from_array",3);
 
     public static var uint_alloc      = neko.Lib.load("cptr","cptr_unsigned_int_alloc",1);
-    public static var uint_free       = neko.Lib.load("cptr","cptr_unsigned_int_free",1);
+//    public static var uint_free       = neko.Lib.load("cptr","cptr_unsigned_int_free",1);
     public static var uint_set        = neko.Lib.load("cptr","cptr_unsigned_int_set",3);
     public static var uint_get        = neko.Lib.load("cptr","cptr_unsigned_int_get",2);
-    public static var uint_to_array   = neko.Lib.load("cptr","cptr_unsigned_int_to_array",3);
-    public static var uint_from_array = neko.Lib.load("cptr","cptr_unsigned_int_from_array",3);
+//    public static var uint_to_array   = neko.Lib.load("cptr","cptr_unsigned_int_to_array",3);
+//    public static var uint_from_array = neko.Lib.load("cptr","cptr_unsigned_int_from_array",3);
     
     public static var void_null = neko.Lib.load("cptr","cptr_void_null",0)();
-    public static var void_cast = neko.Lib.load("cptr","cptr_void_cast",1);
-    public static var isValid = neko.Lib.load("cptr","cptr_is_valid",1);
+//    public static var void_cast = neko.Lib.load("cptr","cptr_void_cast",1);
+//    public static var isValid = neko.Lib.load("cptr","cptr_is_valid",1);
 
     // FIXME: move to some util lib, along with the impl.
     public static var util_msec = neko.Lib.load("cptr","util_msec",0);
@@ -78,7 +78,7 @@ class CPtr {
             if( int_get(ptr,i) != i*10 ) throw("get("+i+") failed");
         }
         
-        var a2 = int_to_array(ptr,0,10);
+/*        var a2 = int_to_array(ptr,0,10);
         for( i in 0...n ) {
             if( a2[i] != i*10 ) throw("to_array()["+i+"] failed");
         }
@@ -90,7 +90,7 @@ class CPtr {
         for( i in 0...n ) {
             if( int_get(ptr,i) != i*100 ) throw("from_array()["+i+"] failed");
         }
-
+*/
         trace("tests passed.");        
     }
 }
