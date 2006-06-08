@@ -35,7 +35,7 @@ class LineTo extends CountourPart {
     
     public function render( tess:Dynamic ) {
 //    trace("render "+this);
-        GLU.TessVertex( tess, _vertex, CPtr.void_cast(_vertex) );
+        GLU.TessVertexSimple( tess, _vertex );
     }
 
     public function toString() {
