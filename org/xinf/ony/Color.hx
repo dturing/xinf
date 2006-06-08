@@ -35,11 +35,12 @@ class Color {
     }
     
     /** Sets the R, G and B components from an integer (like 0x00ff00 for green) **/
-    public function fromRGBInt( c:Int ) {
+    public function fromRGBInt( c:Int ) :Color {
         r = ((c&0xff0000)>>16)/0xff;
         g = ((c&0xff00)>>8)/0xff;
         b =  (c&0xff)/0xff;
         a = 1.;
+        return this;
     }
 
     /** Returns an integer value describing the RGB (not A) part of the color. **/
