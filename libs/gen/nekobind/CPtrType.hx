@@ -71,7 +71,7 @@ class CPtrType implements IType {
 
     public function toHx( name:String ) : String {
     /* fixme: 0 is not really true here, but how can we know? */
-        return( "cptr_"+ctype.split(" ").join("_")+"_alloc( "+name+", 0 )" );
+        return( "cptr_"+ctype.split(" ").join("_")+"_wrap( "+name+", 0 )" );
     }
     
     public function toString() : String {

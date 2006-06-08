@@ -34,30 +34,6 @@ void kind_check_failed( const char *function, const char *file, int line, value 
     _neko_failure(buffer_to_string(b), file, line );
 }
 
-/*
-void cptr_finalize( value v ) {
-    if( !val_is_abstract(v) || !val_is_kind(v,k_cptr) ) {
-        val_throw( alloc_string("value is of invalid kind.") );
-        return;
-    }
-    
-    void *ptr = VAL_CPTR(v)->ptr;
-    if( ptr != NULL ) {
-        free( ptr );
-    }
-    free( VAL_CPTR(v) );
-}
-
-value alloc_cptr( void *ptr, unsigned char kind, int length ) {
-    cptr *cp = (cptr*)malloc( sizeof(cptr) );
-    cp->kind = kind;
-    cp->length = length;
-    cp->ptr = ptr;
-    value r = alloc_abstract( k_cptr, cp );
-    val_gc( r, cptr_finalize );
-    return r;
-}
-*/
 
 value alloc_cptr( void *ptr, vkind kind, int length ) {
     cptr *cp = (cptr*)malloc( sizeof(cptr) );
@@ -78,12 +54,20 @@ value cptr_## ctype ##_alloc( value n ) { \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 
+#define WRAP(ctype,hxtype) \
+value cptr_## ctype ##_wrap( ctype *ptr, int sz ) { \
+    value ret = alloc_cptr( (void *)ptr, k_## ctype ##_p, sz ); \
+    val_gc( ret, cptr_## ctype ##_finalize ); \
+    return( ret ); \
+}
+
 #define FINALIZE(ctype,hxtype) \
 void cptr_## ctype ##_finalize( value p ) { \
     CHECK_CPTR_KIND( p, ctype ); \
     cptr *cp = (cptr*)val_data(p); \
     if( cp->ptr ) free( cp->ptr ); \
     cp->ptr = NULL; \
+    free( cp ); \
 }
 
 #define GET(ctype,hxtype) \
@@ -159,6 +143,7 @@ DEFINE_PRIM(cptr_## ctype ##_from_array,3);
 
 #define CPTR(ctype,hxtype) \
     FINALIZE(ctype,hxtype) \
+    WRAP(ctype,hxtype) \
     ALLOC(ctype,hxtype) \
     GET(ctype,hxtype) \
     SET(ctype,hxtype) 
