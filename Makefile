@@ -38,7 +38,7 @@ test : subdirs xinfinity
 	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/test.n
 
 bin/xtest.n : $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -neko bin/xtest.n -main org.xinf.x11.XForward
+	haxe $(HAXEFLAGS) -neko bin/xtest.n -main org.xinf.x11.XinfTest
 xtest : subdirs bin/xtest.n
 	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/xtest.n
 
