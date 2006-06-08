@@ -9,21 +9,9 @@ extern "C" {
 
 extern vkind k_void_p_p;
 
-/*
-extern vkind k_void_p;
-extern vkind k_float_p;
-extern vkind k_double_p;
-extern vkind k_int_p;
-extern vkind k_unsigned_int_p;
-extern vkind k_short_p;
-extern vkind k_unsigned_short_p;
-extern vkind k_char_p;
-extern vkind k_unsigned_char_p;
-*/
-
 #define VAL_Int(v) ((int)val_number(v))
 #define VAL_Float(v) ((float)val_number(v))
-#define VAL_String(v) val_string(v)    // HaXe strings direct?
+#define VAL_String(v) val_string(v)    // TODO HaXe strings direct?
 #define VAL_Dynamic(v) 0
 
 #define ALLOC_Int(v) (value)alloc_int(v)
@@ -52,7 +40,7 @@ void kind_check_failed( const char *function, const char *file, int line, value 
 #define ALLOC_KIND(v,kind) (alloc_abstract(kind,(void*)v))
 
 
-/* nu-style cptr */
+/* memory-safe cptr */
 extern vkind k_cptr;
 
 #define CTPR_UNDEFINED      0
