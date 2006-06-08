@@ -86,7 +86,7 @@ class BitmapData {
         GL.End();
         GL.Disable( GL.TEXTURE_2D );
     }
-    
+
     public static function newFromFile( filename:String ) :BitmapData {
         GdkPixbuf.g_type_init();
         var err = GdkPixbuf.gdk_pixbuf_create_error();
