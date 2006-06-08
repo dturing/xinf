@@ -18,6 +18,10 @@ package org.xinf.ony;
 import org.xinf.geom.Point;
 import org.xinf.event.Event;
 
+#if js
+    import js.Dom;
+#end
+
 /**
     Text is an Element that displays Text. Handling of the font style is not yet finalized. The Text is not editable.
 **/

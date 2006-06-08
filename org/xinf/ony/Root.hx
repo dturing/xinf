@@ -17,6 +17,10 @@ package org.xinf.ony;
 
 import org.xinf.event.Event;
 
+#if js
+import js.Dom;
+#end
+
 /**
     Root is the root Element of a xinfony application. 
     Depending on the runtime, the root is either a specific DIV element with an ID of "xinfony" (for JS), the Stage (for Flash), or the player root (for xinfinity).

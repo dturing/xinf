@@ -15,6 +15,10 @@
 
 package org.xinf.ony;
 
+#if js
+import js.Dom;
+#end
+
 /**
     Image is the xinfony Element that will display an (surprise!) Image.
     It's bounds rectangle, if not changed by your application's code, will be

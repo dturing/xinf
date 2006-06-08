@@ -21,6 +21,8 @@ import org.xinf.geom.Point;
 
 #if neko
     import org.xinf.inity.Group;
+#else js
+    import js.Dom;
 #end
 
 /**
