@@ -21,8 +21,8 @@ import org.xinf.event.EventDispatcher;
 class XScreen extends org.xinf.ony.Wrapper {
     private var display:Dynamic;
     private var damage:Dynamic;
-    private var vfb:XBitmapData;
-    private var bitmap:org.xinf.inity.Group;
+    public var vfb:XBitmapData;
+    public var bitmap:org.xinf.inity.Bitmap;
     private var screen:Int;
 
     public function new( server:String, _screen:Int, parent:org.xinf.ony.Element ) {

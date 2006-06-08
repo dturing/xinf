@@ -45,18 +45,4 @@ class XForward extends XScreen {
                 Math.round(root.mouseX-bounds.x), 
                 Math.round(root.mouseY-bounds.y), X.CurrentTime );
     }
-    
-    static function main() {
-        var root = org.xinf.ony.Root.getRoot();
-
-        var i = new XForward(":1",0,root);
-        i.bounds.setPosition( 10, 10 );
-        i.bounds.setSize( 320, 240 );
-
-        var j = new XForward(":1",1,root);
-        j.bounds.setPosition( 340, 10 );
-        j.bounds.setSize( 320, 240 );
-        
-        org.xinf.ony.Root.getRoot().run();
-    }
 }
