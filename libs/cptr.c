@@ -104,16 +104,25 @@ value cptr_## ctype ##_set( value p, value n, value v ) { \
 } \
 DEFINE_PRIM(cptr_## ctype ##_set,3);
 
-/*
 #define TO_ARRAY(ctype,hxtype) \
 value cptr_## ctype ##_to_array( value p, value f, value t ) { \
     int i; \
-    CHECK_KIND( p, k_## ctype ##_p );  \
+    CHECK_CPTR_KIND( p, ctype ); \
     CHECK_Int( f ); \
     CHECK_Int( t ); \
     int from = (int)val_number(f); \
     int to = (int)val_number(t); \
-    ctype* ptr = (ctype*)val_data(p); \
+    \
+    cptr *cp = (cptr*)val_data(p); \
+    if( from >= cp->length ) val_throw( alloc_string( "from index out of range" ) ); \
+    if( to > cp->length ) val_throw( alloc_string( "to index out of range" ) ); \
+    if( from >= to ) val_throw( alloc_string( "from must be lower than to" ) ); \
+    ctype *ptr = ( ctype *)cp->ptr; \
+    if( ptr == NULL ) { \
+        val_throw( alloc_string( "null pointer" ) ); \
+        return val_null; \
+    } \
+    \
     value result = alloc_array( to-from ); \
     value *a = val_array_ptr( result ); \
     for( i=from; i<to; i++ ) { \
@@ -126,12 +135,21 @@ DEFINE_PRIM(cptr_## ctype ##_to_array,3);
 #define FROM_ARRAY(ctype,hxtype) \
 value cptr_## ctype ##_from_array( value p, value f, value values ) { \
     int i; \
-    CHECK_KIND( p, k_## ctype ##_p );  \
+    CHECK_CPTR_KIND( p, ctype ); \
     CHECK_Int( f ); \
     CHECK_Array( values ); \
     int from = (int)val_number(f); \
-    int to = from + val_array_size(values); \
-    ctype* ptr = (ctype*)val_data(p); \
+    int to = from + val_array_size( values ); \
+    \
+    cptr *cp = (cptr*)val_data(p); \
+    if( from >= cp->length ) val_throw( alloc_string( "from index out of range" ) ); \
+    if( from >= to ) val_throw( alloc_string( "no values after from" ) ); \
+    ctype *ptr = ( ctype *)cp->ptr; \
+    if( ptr == NULL ) { \
+        val_throw( alloc_string( "null pointer" ) ); \
+        return val_null; \
+    } \
+    \
     value *a = val_array_ptr( values ); \
     for( i=from; i<to; i++ ) { \
         ptr[i] = VAL_## hxtype ( a[i-from] ); \
@@ -139,18 +157,15 @@ value cptr_## ctype ##_from_array( value p, value f, value values ) { \
     return( val_true ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_from_array,3);
-*/
 
 #define CPTR(ctype,hxtype) \
     FINALIZE(ctype,hxtype) \
     WRAP(ctype,hxtype) \
     ALLOC(ctype,hxtype) \
     GET(ctype,hxtype) \
-    SET(ctype,hxtype) 
-    /*\
+    SET(ctype,hxtype) \
     TO_ARRAY(ctype,hxtype ) \
     FROM_ARRAY(ctype,hxtype )
-    */
     
 typedef unsigned int unsigned_int;
 typedef unsigned char unsigned_char;

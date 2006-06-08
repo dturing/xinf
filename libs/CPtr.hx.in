@@ -1,10 +1,7 @@
 /*
     CPtr: Low-Level haXe access to C Pointers.
-    
-    BEWARE: playing with pointers is not for the faint of heart. there are little checks,
-    so this interface helps you to shoot in your foot as good as you could with C.
-    
-    ALSO: do not modify "CPtr.hx", but "CPtr.hx.in".
+        
+    do not modify "CPtr.hx", but "CPtr.hx.in".
     
     
     _alloc(sz) 
@@ -23,6 +20,7 @@
         sets p[from...] to (the neko array) values.
 */
 
+#if test
 class TestCPtr extends haxe.unit.TestCase {
     function testInt() {
         var n:Int = 1024;
@@ -32,7 +30,7 @@ class TestCPtr extends haxe.unit.TestCase {
             CPtr.int_set(ptr,i,i*10);
         }
         for( i in 0...n ) {
-            assertEquals( CPtr.int_get(ptr,i), i*10 );
+            assertEquals( i*10, CPtr.int_get(ptr,i) );
         }
     }
 
@@ -44,7 +42,7 @@ class TestCPtr extends haxe.unit.TestCase {
             CPtr.float_set(ptr,i,i*10);
         }
         for( i in 0...n ) {
-            assertEquals( CPtr.float_get(ptr,i), i*10 );
+            assertEquals( i*10, CPtr.float_get(ptr,i) );
         }
     }
 
@@ -56,10 +54,37 @@ class TestCPtr extends haxe.unit.TestCase {
             CPtr.double_set(ptr,i,i*10);
         }
         for( i in 0...n ) {
-            assertEquals( CPtr.double_get(ptr,i), i*10 );
+            assertEquals( i*10, CPtr.double_get(ptr,i) );
+        }
+    }
+
+    function testIntToArray() {
+        var n:Int = 1024;
+        var ptr:Dynamic = CPtr.int_alloc(n);
+        var a:Array<Int>;
+        
+        for( i in 0...n ) {
+            CPtr.int_set(ptr,i,i*10);
+        }
+        a = CPtr.int_to_array( ptr, 0, n );
+        for( i in 0...n ) {
+            assertEquals( i*10, a[i] );
         }
     }
     
+    function testIntFromArray() {
+        var n:Int = 1024;
+        var ptr:Dynamic = CPtr.int_alloc(n);
+        var a = new Array<Int>();
+        
+        for( i in 0...n ) {
+            a[i] = i*10;
+        }
+        CPtr.int_from_array( ptr, 0, untyped a.__a );
+        for( i in 0...n ) {
+            assertEquals( i*10, CPtr.int_get(ptr,i) );
+        }
+    }
     
     function testMemleak() {
         var n:Int = 1024 * 1024;
@@ -80,32 +105,62 @@ class TestCPtr extends haxe.unit.TestCase {
         mem1 = CPtr.getTotalMemUsage();
         assertEquals( mem0, mem1 );
     }
+    
+    function testInvalidAssignment() {
+        var ptr:Dynamic = CPtr.double_alloc(2);
+        try {
+            CPtr.float_set( ptr, 2, 1 );
+        } catch( e:Dynamic ) {
+            assertTrue( true );
+            return;
+        }
+        assertTrue( false );
+    }
+
+    function testIndexOutOfBounds() {
+        var ptr:Dynamic = CPtr.double_alloc(2);
+        try {
+            CPtr.double_set( ptr, 3, 1 );
+        } catch( e:Dynamic ) {
+            assertTrue( true );
+            return;
+        }
+        try {
+            CPtr.double_set( ptr, -1, 1 );
+        } catch( e:Dynamic ) {
+            assertTrue( true );
+            return;
+        }
+        assertTrue( false );
+    }
 }
+
+#end // test
 
 class CPtr {
     public static var float_alloc      = neko.Lib.load("cptr","cptr_float_alloc",1);
     public static var float_set        = neko.Lib.load("cptr","cptr_float_set",3);
     public static var float_get        = neko.Lib.load("cptr","cptr_float_get",2);
-//    public static var float_to_array   = neko.Lib.load("cptr","cptr_float_to_array",3);
-//    public static var float_from_array = neko.Lib.load("cptr","cptr_float_from_array",3);
+    public static var float_to_array   = neko.Lib.load("cptr","cptr_float_to_array",3);
+    public static var float_from_array = neko.Lib.load("cptr","cptr_float_from_array",3);
 
     public static var double_alloc      = neko.Lib.load("cptr","cptr_double_alloc",1);
     public static var double_set        = neko.Lib.load("cptr","cptr_double_set",3);
     public static var double_get        = neko.Lib.load("cptr","cptr_double_get",2);
-//    public static var double_to_array   = neko.Lib.load("cptr","cptr_double_to_array",3);
-//    public static var double_from_array = neko.Lib.load("cptr","cptr_double_from_array",3);
+    public static var double_to_array   = neko.Lib.load("cptr","cptr_double_to_array",3);
+    public static var double_from_array = neko.Lib.load("cptr","cptr_double_from_array",3);
 
     public static var int_alloc      = neko.Lib.load("cptr","cptr_int_alloc",1);
     public static var int_set        = neko.Lib.load("cptr","cptr_int_set",3);
     public static var int_get        = neko.Lib.load("cptr","cptr_int_get",2);
-//    public static var int_to_array   = neko.Lib.load("cptr","cptr_int_to_array",3);
-//    public static var int_from_array = neko.Lib.load("cptr","cptr_int_from_array",3);
+    public static var int_to_array   = neko.Lib.load("cptr","cptr_int_to_array",3);
+    public static var int_from_array = neko.Lib.load("cptr","cptr_int_from_array",3);
 
     public static var uint_alloc      = neko.Lib.load("cptr","cptr_unsigned_int_alloc",1);
     public static var uint_set        = neko.Lib.load("cptr","cptr_unsigned_int_set",3);
     public static var uint_get        = neko.Lib.load("cptr","cptr_unsigned_int_get",2);
-//    public static var uint_to_array   = neko.Lib.load("cptr","cptr_unsigned_int_to_array",3);
-//    public static var uint_from_array = neko.Lib.load("cptr","cptr_unsigned_int_from_array",3);
+    public static var uint_to_array   = neko.Lib.load("cptr","cptr_unsigned_int_to_array",3);
+    public static var uint_from_array = neko.Lib.load("cptr","cptr_unsigned_int_from_array",3);
     
     public static var void_null = neko.Lib.load("cptr","cptr_void_null",0)();
 //    public static var isValid = neko.Lib.load("cptr","cptr_is_valid",1);
@@ -132,16 +187,11 @@ class CPtr {
         return( Std.parseInt( r[0] ) );
     }
     
-    public static function main() {
-        var r = new haxe.unit.TestRunner();
-        r.add( new TestCPtr() );
-        r.run();
-/*
-            trace("alloc");
-            CPtr.double_alloc(100);
-            trace("trigger gc");
-            CPtr.util_gc_major();
-            trace("GC should happen before this!");
-*/
-    }
+    #if test
+        public static function main() {
+                var r = new haxe.unit.TestRunner();
+                r.add( new TestCPtr() );
+                r.run();
+        }
+    #end
 }
