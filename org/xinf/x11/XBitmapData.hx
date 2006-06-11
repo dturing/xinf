@@ -28,18 +28,18 @@ class XBitmapData extends org.xinf.inity.BitmapData {
         display = _display;
         screen = _screen;
         // FIXME: find w/h from X.
-        super( null, 320, 240, RGBA  );
+        data = CPtr.uint_alloc( 320*240 );
+        super( data, 320, 240, RGBA  );
     }
 
     public function update( x:Int, y:Int, w:Int, h:Int ) {
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
   
-//      FIXME: cptrs are now garbage-collected-- i hope. please check!
-//        if( data != null ) CPtr.uint_free( data );
-        data = X.GetImageRGBA( display, new Point(x,y), new Point(w,h), 0xff, screen );
-//        if( !CPtr.isValid(data) ) throw("XGetImage failed");
-        GL.TexSubImage2D_RGBA_BYTE( texture, new Point(x,y), new Point(w,h), data );
+        X.GetImageRGBA( { display:display, screen:screen }, new Point(x,y), new Point(w,h), new Point(320,240), data );
+        
+        // FIXME: update only the updated rect, somehow.
+        GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(320,240), data );
         
         GL.Disable( GL.TEXTURE_2D );
     }

@@ -54,12 +54,12 @@ class XinfTest extends org.xinf.ony.Pane {
     
     public function onEnterFrame( e:org.xinf.event.Event ) :Void {
         frame++;
-        var e;
+        var e:Float;
         if( (frame % 25) == 0 ) {
             for( i in 1...3 ) {
                 e = X.image_compare( screen[i].vfb.data, screen[0].vfb.data, 320*240 );
-                e = Math.round((1.-e)*100);
-                info[i].text = ""+e+"%";
+                e = Math.round((1.-e)*10000)/100;
+                info[i].text = screen[i].name+"\n"+e+"%";
                     
             }
         }

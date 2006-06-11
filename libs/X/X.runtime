@@ -39,30 +39,34 @@ XEvent *XNextEventVolatile( Display *display ) {
     return &xev;
 }
 
-const unsigned int *XGetImageRGBA( Display *display, value pos, value sz, int alpha, int screen ) {
+void XGetImageRGBA( value dpy, value pos, value sz, value data_sz, unsigned int *data ) {
+    int _x, _y;
+
     field f_x = val_id("x");
     field f_y = val_id("y");
+
+    Display *display = val_data( val_field( dpy, val_id("display") ) );
+    int screen = val_number( val_field( dpy, val_id("screen") ) );
+    
     int x = val_number( val_field( pos, f_x ) );
     int y = val_number( val_field( pos, f_y ) );
     int width = val_number( val_field( sz, f_x ) );
     int height = val_number( val_field( sz, f_y ) );
+    int d_width = val_number( val_field( data_sz, f_x ) );
+    int d_height = val_number( val_field( data_sz, f_y ) );
     
     unsigned int size = width * height * 4;
-	unsigned char *data = (unsigned char *)malloc( size );
-	if( !data ) {
-        return NULL;
-    }
 
     XGrabServer(display);
     
     XImage *ximg = XGetImage( display, RootWindow( display, screen ),
                     x, y, width, height, -1, ZPixmap );
     XFlush( display );
-    if( ximg == NULL ) return NULL;
+    if( ximg == NULL ) return;
     
     {
-		unsigned char *p = data;
-		int            x,y,br,bg,bb,mg,mb,mr,lr,lg,lb;
+		unsigned char *p;
+		int            br,bg,bb,mg,mb,mr,lr,lg,lb;
 		unsigned long  xpixel;
 		switch( DefaultDepth( display, screen ) ) {
 			case 15:
@@ -83,23 +87,22 @@ const unsigned int *XGetImageRGBA( Display *display, value pos, value sz, int al
 				mr = mg = mb = 0xff;
 				break;
 			default:
-                return NULL;
+                return;
 		}
 
-		for (y = 0; y < height; y++) {
-			for (x = 0; x < width; x++) {
-				xpixel = XGetPixel(ximg, x, y);
+		for (_y = 0; _y < height; _y++) {
+            p = &data[ (x + ((_y+y)*d_width)) ];
+			for (_x = 0; _x < width; _x++) {
+				xpixel = XGetPixel(ximg, _x, _y);
 				*p++ = (((xpixel >> br) << lr) & mr);	// r
 				*p++ = (((xpixel >> bg) << lg) & mg);	// g
 				*p++ = (((xpixel >> bb) << lb) & mb);	// b 
-				*p++ = alpha;							// a
+				*p++ = 0xff;							// a
 			}
 		}
     }
     
     XUngrabServer(display);
-    
-    return (unsigned int*)data;
 }
 
 // XDamage Helpers /////////////////////////////////////////////////////////
@@ -175,8 +178,8 @@ value image_compare( const unsigned int *one, const unsigned int *two, int nPixe
     float acc=.0;
     int i;
     
-    const unsigned char *a = (const char *)one;
-    const unsigned char *b = (const char *)two;
+    const unsigned char *a = (const unsigned char *)one;
+    const unsigned char *b = (const unsigned char *)two;
     nPixels *= 4;
     
     for( i=0; i<nPixels; i++ ) {
