@@ -23,10 +23,17 @@ package org.xinf.ony;
 class Pane extends Element {
     private var bgColor:org.xinf.ony.Color;
 
+    public var crop(get_crop,set_crop):Bool;
+    private var _crop:Bool;
+    #if flash
+        private var _crop_mc:flash.MovieClip;
+    #end
+
     /** Constructor. **/
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
-        
+        _crop = false;
+
         #if js
             _p.style.overflow = "visible";
         #end
@@ -45,6 +52,63 @@ class Pane extends Element {
         #end
     }
     
+    private function get_crop() :Bool {
+        return _crop;
+    }
+    private function set_crop( val:Bool ) :Bool {
+        _crop=val;
+        #if js
+            _p.style.overflow = 
+                if( _crop ) "hidden";
+                else "visible";
+        #else flash
+            if( _crop ) {
+                _crop_mc = makeMask();
+                _p.setMask( _crop_mc );
+            } else {
+                if( _crop_mc != null ) _crop_mc.removeMovieClip(); // FIXME: untested
+                _crop_mc = null;
+            }
+        #end
+        return _crop;
+    }
+    
+    #if flash
+    private function makeMask() :flash.MovieClip {
+        var clip:flash.MovieClip = _crop_mc;
+        if( clip == null ) clip = parent._p.createEmptyMovieClip( "mask", parent._p.getNextHighestDepth() );
+        
+        _p.setMask( clip );
+        
+        var w:Int = Math.round(bounds.width);
+        var h:Int = Math.round(bounds.height);
+        clip.clear();
+        clip.beginFill( 0xaa0000 );
+        clip.moveTo( 0, 0 );
+        clip.lineTo( w, 0 );
+        clip.lineTo( w, h );
+        clip.lineTo( 0, h );
+        clip.endFill();
+        clip._x = bounds.x;
+        clip._y = bounds.y;
+        return clip;
+    }
+    
+    private function onSizeChanged( e:org.xinf.event.Event ) :Void {
+        if( _crop ) {
+            _crop_mc = makeMask();
+        }
+        super.onSizeChanged( e );
+    }
+    private function onPositionChanged( e:org.xinf.event.Event ) :Void {
+        if( _crop ) {
+            _crop_mc._x = e.data.x;
+            _crop_mc._y = e.data.y;
+        }
+        super.onPositionChanged( e );
+    }
+    #end
+
     /** Set the background color to the Color specified. **/
     public function setBackgroundColor( bg:org.xinf.ony.Color ) :Void {
         bgColor = bg;
@@ -77,7 +141,7 @@ class Pane extends Element {
             _p.lineTo( w, y );
             _p.lineTo( w, h );
             _p.lineTo( x, h );
-            _p.lineTo( x, y );
+//            _p.lineTo( x, y );
             _p.endFill();
         }
     #end
