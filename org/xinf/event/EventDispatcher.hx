@@ -44,7 +44,7 @@ class EventDispatcher {
         Add a listener function for the specified Event type
         to this EventDispatcher. It will be appended
         to the current list of dispatchers, Events will be posted in order
-        of registration until someone calls stopPropagation() on the event.
+        of registration.
     **/    
     public function addEventListener( type:String, f:Event->Void ) :Void {
         var a:Array<Event->Void> = _listeners.get(type);
@@ -66,10 +66,8 @@ class EventDispatcher {
         if( a != null ) {
             for( listener in a ) {
                 listener(e);
-                if( e.stopped ) return;
             }
         }
-//        if( this != GlobalEventDispatcher.global ) GlobalEventDispatcher.global.dispatchEvent( e );
     }
 
 

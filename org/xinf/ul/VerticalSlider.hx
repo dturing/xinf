@@ -86,7 +86,6 @@ class VerticalSlider extends Pane {
         var self=this;
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _move );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
-        e.stopPropagation();
     }
     public function move( e:Event ) {
         var y:Float = (e.data.y - offset) + thumb.bounds.y;

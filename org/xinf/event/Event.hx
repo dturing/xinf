@@ -66,7 +66,6 @@ class Event {
             n++;
         //    trace("Delivering "+e.type+" "+e.data+" to "+e.target );
             e.target.dispatchEvent( e );
-            e.stopPropagation(); // some event generators, like Value::changed(), rely on this! maybe do another flag "delivered"?
             e=queue.shift();
         }
         /*
@@ -151,9 +150,6 @@ class Event {
     /** the EventDispatcher that the Event was posted on **/
     public var target(default,null) : EventDispatcher;
 
-    /** true if propagation of the Event should be stopped **/
-    public var stopped(default,null) : Bool;
-
     /** Event data. Mouse events carry a { x, y, button } structure (FIXME: not quite),
         keyboard events information about which key was pressed (FIXME: not unified),
         other events might carry other information. **/
@@ -164,14 +160,5 @@ class Event {
         data = _data;
         type = _type;
         target = _target;
-        stopped = false;
-    }
-
-    /** Stop propagation of this Event. Call this if you dont want
-        any other listeners to receive the event. In case of xinfony
-        Elements, stopping propagation will also stop the Event from being
-        delivered to the Element's parent. **/
-    public function stopPropagation() :Void {
-        stopped = true;
     }
 }
