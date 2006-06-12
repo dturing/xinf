@@ -23,6 +23,10 @@ package org.xinf.ony;
 class Pane extends Element {
     private var bgColor:org.xinf.ony.Color;
 
+    /**
+        if true, contents will be cropped to the Pane's bounds. if false, they will be visible
+        in any case.
+    **/
     public var crop(get_crop,set_crop):Bool;
     private var _crop:Bool;
     #if flash
@@ -69,6 +73,9 @@ class Pane extends Element {
                 if( _crop_mc != null ) _crop_mc.removeMovieClip(); // FIXME: untested
                 _crop_mc = null;
             }
+        #else neko
+            untyped _p.crop = _crop;
+            _p.changed();
         #end
         return _crop;
     }
