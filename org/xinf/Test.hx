@@ -47,21 +47,23 @@ class Test {
     
     static function main() {
         x=0;
-
+        
         var root = org.xinf.ony.Root.getRoot();
 
         var cbg = new org.xinf.ony.Color();
-        cbg.fromRGBInt( 0xaaaaaa );
+        cbg.fromRGBInt( 0xeeeeee );
         
         var cont = new org.xinf.ony.Pane("container", root);
         cont.setBackgroundColor( cbg );
-        cont.bounds.setPosition( 50, 50 );
-        cont.bounds.setSize( 20, 20 );
+        cont.bounds.setPosition( 10, 10 );
+        cont.bounds.setSize( 300, 220 );
         container = cont;
-        
+
+/*        
         var i = new org.xinf.ony.Image("test", cont, "assets/test.jpg");
         i.bounds.setPosition( 100, 0 );
 //        i.bounds.setSize( 80, 60 );
+*/
         
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );
@@ -74,6 +76,8 @@ class Test {
                 box.setTextColor( fg );
                 box.bounds.setPosition( 10, i*50 ); //last.bounds.y+last.bounds.height+2 );
             }
+
+        var slider = new org.xinf.ul.VerticalSlider( "test", cont );
 
         org.xinf.ony.Root.getRoot().run();
     }

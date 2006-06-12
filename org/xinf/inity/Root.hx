@@ -117,7 +117,7 @@ class Root extends Stage {
         
           p.check("sleep");
             
-            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             processEvents();
             Event.processQueue();
           p.check("Event.queue");
@@ -206,7 +206,7 @@ class Root extends Stage {
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
-        org.xinf.event.EventDispatcher.global.postEvent( type, { key:str } );
+        org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { key:str } );
     }
 
     private function handleMouseEvent( e, k ) :Void {

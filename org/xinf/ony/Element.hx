@@ -64,6 +64,7 @@ class Element extends EventDispatcher {
             h.set( Event.MOUSE_UP,  "onmouseup");
             h.set( Event.MOUSE_OVER,"onmouseover");
             h.set( Event.MOUSE_OUT, "onmouseout");
+            h.set( Event.MOUSE_MOVE, "onmousemove");
             return h;
         }
 
@@ -93,7 +94,7 @@ class Element extends EventDispatcher {
         private static function mouseEvent( type:String, e:js.Event, target:js.HtmlDom ) :Void {
             var abs:Point = absPos(target);
             var p:Point = new Point( e.clientX, e.clientY );
-            p = p.subtract(abs);
+//            p = p.subtract(abs);
             untyped target.owner.postEvent( type, { x:p.x, y:p.y } );
         }
     #else flash
@@ -104,12 +105,13 @@ class Element extends EventDispatcher {
             h.set( Event.MOUSE_UP,  "onRelease");
             h.set( Event.MOUSE_OVER,"onRollOver,onDragOver");
             h.set( Event.MOUSE_OUT, "onRollOut,onDragOut");
+            h.set( Event.MOUSE_MOVE, "onMouseMove" );
             return h;
         }
 
         // event wrappers: "this" is the runtime primitive.
         private function _mouseDown() {
-            untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:this._xmouse, y:this._ymouse } );
+            untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:flash.Lib._root._xmouse, y:flash.Lib._root._ymouse } );
         }
         private function _mouseUp() {
             untyped this.owner.postEvent( Event.MOUSE_UP, { x:this._xmouse, y:this._ymouse } );
@@ -172,6 +174,8 @@ class Element extends EventDispatcher {
     /**
         Add a new listener function for a specific event. See the EventDispatcher class for details.
         Adding listeners for mouse events will setup the needed handlers on the runtime primitive.
+        
+        FIXME XXX: removing special events doesnt work yet!
     **/
     public function addEventListener( type:String, f:Event->Void ) :Void {
         #if js

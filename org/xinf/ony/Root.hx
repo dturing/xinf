@@ -93,12 +93,12 @@ class Root extends Element {
     
     #if js
         public function step() :Void {
-            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             org.xinf.event.Event.processQueue();
         }
     #else flash
         public function step() :Void {
-            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             org.xinf.event.Event.processQueue();
         }
     #end
