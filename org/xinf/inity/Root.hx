@@ -219,6 +219,8 @@ class Root extends Stage {
         
         if( objectUnderMouse != null )
             objectUnderMouse.postEvent( type, { x:x, y:y });
+        else
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { x:x, y:y });
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
@@ -226,6 +228,8 @@ class Root extends Stage {
         mouseY = SDL.MouseMotionEvent_y_get(e);
         if( objectUnderMouse != null )
             objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+        else
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY });
     }
     
     /* ------------------------------------------------------
