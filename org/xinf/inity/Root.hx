@@ -92,15 +92,18 @@ class Root extends Stage {
         buttonpress = false;
         objectUnderMouse = null;
 
-        resize( w, h );
-        
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
         }
+
+        resize( w, h );
     }
 
     public function resize( w:Int, h:Int ) : Void {
         super.resize(w,h);
+
+        SDL.GL_SetAttribute( SDL.GL_STENCIL_SIZE, 8 ); // FIXME 1 might be enough
+
         if( SDL.SetVideoMode( Math.floor(width), Math.floor(height), 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }

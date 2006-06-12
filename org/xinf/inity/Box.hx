@@ -44,24 +44,33 @@ class Box extends Group {
     
     private function _render() :Void {
         _renderGraphics();
-        
+ 
         if( crop ) {
-            /* note: xinfinity uses scissor, which is likely faster
-               and enjoys wider support (is this both true? maybe not!)
-               it's a bit weird though, and only applies to integer pixels
-               
-               additionally, how we do it here is very, very hacky (FIXME).
-               AND it doesnt go well with resizing windows (sigh).
-               */
-            var pos:org.xinf.geom.Point = untyped owner.localToGlobal( new org.xinf.geom.Point(10,0) );
-            var win_h:Float = untyped org.xinf.ony.Root.getRoot()._p.height;
-            trace("crop pos: "+pos+", win_h "+win_h );
+            GL.Enable( GL.STENCIL_TEST );
+            GL.Clear( GL.STENCIL_BUFFER_BIT );
+        
+            GL.ColorMask( 0,0,0,1 );
+            GL.StencilFunc( GL.ALWAYS, 1, 1 );
+            GL.StencilOp( GL.KEEP, GL.KEEP, GL.REPLACE );
 
-            GL.Scissor( Math.round(pos.x), Math.round(win_h-(pos.y+bounds.height)),
-                Math.round( bounds.width ), Math.round( bounds.height ) );
-            GL.Enable( GL.SCISSOR_TEST );
-            super._render();
-            GL.Disable( GL.SCISSOR_TEST );
+                var w:Float = bounds.width;   // w,h are not really width/height here,
+                var h:Float = bounds.height;  // but right,bottom!
+              //  background
+                GL.Color4f( 1, 0, 0, 1 );
+                GL.Begin( GL.QUADS );
+                    GL.Vertex3f( w , 0., 0. );
+                    GL.Vertex3f( w , h , 0. );
+                    GL.Vertex3f( 0., h , 0. );
+                    GL.Vertex3f( 0., 0., 0. );
+                GL.End();
+
+            GL.StencilFunc( GL.EQUAL, 1, 1 );
+            GL.StencilOp( GL.KEEP, GL.KEEP, GL.KEEP );
+
+            GL.ColorMask( 1,1,1,1 );
+                super._render();
+                
+            GL.Disable( GL.STENCIL_TEST );
         } else {
             super._render();
         }
