@@ -55,8 +55,8 @@ class Test {
         
         var cont = new org.xinf.ony.Pane("container", root);
         cont.setBackgroundColor( cbg );
-        cont.bounds.setPosition( 10, 10 );
-        cont.bounds.setSize( 300, 220 );
+        cont.bounds.setPosition( 10, 100 );
+        cont.bounds.setSize( 300, 100 );
         container = cont;
 
 /*        

@@ -37,10 +37,14 @@ class GlobalEventDispatcher extends EventDispatcher {
     
     #if js
         private function _mouseMove( e:js.Event ) {
-            GlobalEventDispatcher.global.postEvent( org.xinf.event.Event.MOUSE_MOVE, { x:e.clientX,y:e.clientY } );
+            GlobalEventDispatcher.global.postEvent( org.xinf.event.Event.MOUSE_MOVE, jsRootLocalCoords(e) );
         }
         private function _mouseUp( e:js.Event ) {
-            GlobalEventDispatcher.global.postEvent( org.xinf.event.Event.MOUSE_UP, { x:e.clientX,y:e.clientY } );
+            GlobalEventDispatcher.global.postEvent( org.xinf.event.Event.MOUSE_UP, jsRootLocalCoords(e) );
+        }
+        private function jsRootLocalCoords( e:js.Event ) :Dynamic {
+            var r:org.xinf.geom.Point = org.xinf.ony.Element.absPos( untyped org.xinf.ony.Root.getRoot()._p );
+            return( { x:(e.clientX-r.x), y:(e.clientY-r.y) } );
         }
     #else flash
         private function _mouseUp() {

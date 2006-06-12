@@ -40,7 +40,7 @@ class VerticalSlider extends Pane {
         bounds.setPosition( parent.bounds.width-thumbSize, 0 );
         parent.bounds.addEventListener( Event.SIZE_CHANGED, parentSizeChanged );
         setBackgroundColor( new Color().fromRGBInt( 0xdddddd ) );
-        addEventListener( Event.MOUSE_DOWN, clickBar );
+//        addEventListener( Event.MOUSE_DOWN, clickBar );
         
         thumb = new org.xinf.ony.Pane( name+"_thumb", this );
         thumb.bounds.setSize( thumbSize, thumbSize );
@@ -75,17 +75,20 @@ class VerticalSlider extends Pane {
     }
     
     public function clickThumb( e:Event ) {
-        offset = e.data.y - thumb.bounds.y;
+        var p:Point = thumb.localToGlobal( new Point( e.data.x, e.data.y ) );
+        offset = p.y;
+        trace("click: "+offset );
         var self=this;
-        trace("clickThumb: "+e.data.y );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _clickedMove );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _unclickThumb );
         e.stopPropagation();
     }
     public function clickedMove( e:Event ) {
-        var y:Float = e.data.y - offset;
+        var y:Float = (e.data.y - offset) + thumb.bounds.y;
+//        trace("clickMove "+e.data.y+", ofs "+offset );
         if( y < 0 ) y = 0;
         else if( y > bounds.height-thumbSize ) y = bounds.height-thumbSize;
+        else offset = e.data.y;
         thumb.bounds.setPosition( 0, y );
     }
     public function unclickThumb( e:Event ) {

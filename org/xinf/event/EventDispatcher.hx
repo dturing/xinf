@@ -69,7 +69,7 @@ class EventDispatcher {
                 if( e.stopped ) return;
             }
         }
-        if( this != GlobalEventDispatcher.global ) GlobalEventDispatcher.global.dispatchEvent( e );
+//        if( this != GlobalEventDispatcher.global ) GlobalEventDispatcher.global.dispatchEvent( e );
     }
 
 

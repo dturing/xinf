@@ -85,7 +85,7 @@ class Element extends EventDispatcher {
         private function _mouseMove( e:js.Event ) {
             mouseEvent( Event.MOUSE_MOVE, e, untyped this );
         }
-        private static function absPos( div:js.HtmlDom ) :Point {
+        public static function absPos( div:js.HtmlDom ) :Point {
             var r=new Point( untyped div.offsetLeft, untyped div.offsetTop );
             while( div.parentNode != null && div.parentNode.nodeName == "DIV" ) {
                 div = div.parentNode;
@@ -114,7 +114,7 @@ class Element extends EventDispatcher {
 
         // event wrappers: "this" is the runtime primitive.
         private function _mouseDown() {
-            untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:flash.Lib._root._xmouse, y:flash.Lib._root._ymouse } );
+            untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:this._xmouse, y:this._ymouse } );
         }
         private function _mouseUp() {
             untyped this.owner.postEvent( Event.MOUSE_UP, { x:this._xmouse, y:this._ymouse } );
@@ -211,12 +211,15 @@ class Element extends EventDispatcher {
         super.dispatchEvent( e );
         
         // propagate to parent
-        if( !e.stopped && parent != null ) {
+        if( !e.stopped ) {
             if( e.data != null && e.data.x != null ) {
                 e.data.x += bounds.x;
                 e.data.y += bounds.y;
             }
-            parent.dispatchEvent(e);
+            if( parent != null ) 
+                parent.dispatchEvent(e);
+            else
+                org.xinf.event.GlobalEventDispatcher.global.dispatchEvent( e );
         }
     }
 
@@ -246,34 +249,30 @@ class Element extends EventDispatcher {
 
     /**
         Convert a point in global coordinate space to local coordinates.
-        This function doesnt consider any kind of zoom, just position of parent elements.
-        Note that "global coordinate space" might not be completely global: it's the
-        coordinate system of the Root.
+        Note that "global coordinate space" means the one of Root.
     **/
     public function globalToLocal( p:org.xinf.geom.Point ) :org.xinf.geom.Point {
         var q = new org.xinf.geom.Point( p.x, p.y );
-        var p:Element = this;
-        while( p != null ) {
-            q.x -= p.bounds.x;
-            q.y -= p.bounds.y;
-            p = p.parent;
+        var parent:Element = this;
+        while( parent != null ) {
+            q.x -= parent.bounds.x;
+            q.y -= parent.bounds.y;
+            parent = parent.parent;
         }
         return q;
     }
 
     /**
         Convert a point in local coordinate space to global coordinates.
-        This function doesnt consider any kind of zoom, just position of parent elements.
-        Note that "global coordinate space" might not be completely global: it's the
-        coordinate system of the Root.
+        Note that "global coordinate space" means the one of Root.
     **/
     public function localToGlobal( p:org.xinf.geom.Point ) :org.xinf.geom.Point {
         var q = new org.xinf.geom.Point( p.x, p.y );
-        var p:Element = this;
-        while( p != null ) {
-            q.x += p.bounds.x;
-            q.y += p.bounds.y;
-            p = p.parent;
+        var parent:Element = this;
+        while( parent != null ) {
+            q.x += parent.bounds.x;
+            q.y += parent.bounds.y;
+            parent = parent.parent;
         }
         return q;
     }
