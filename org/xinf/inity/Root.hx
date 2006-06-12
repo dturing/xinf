@@ -213,23 +213,30 @@ class Root extends Stage {
         buttonpress = k == SDL.MOUSEBUTTONDOWN;
         var x = SDL.MouseButtonEvent_x_get(e);
         var y = SDL.MouseButtonEvent_y_get(e);
-
+        
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( type, { x:x, y:y });
+            objectUnderMouse.postEvent( type, globalToLocal({ x:x, y:y }, objectUnderMouse ) );
         else
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { x:x, y:y });
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { x:x, y:y } );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+            objectUnderMouse.postEvent( Event.MOUSE_MOVE, globalToLocal({ x:mouseX, y:mouseY }, objectUnderMouse ) );
         else
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY });
+            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+    }
+    
+    private function globalToLocal( p:Dynamic, o:Object ) :Dynamic {
+        var p = new org.xinf.geom.Point( p.x, p.y );
+        if( o.owner != null ) 
+            p = untyped o.owner.globalToLocal( p ); // FIXME: dangerous. owner might not be an ony.Element.
+        return( { x:Math.round(p.x), y:Math.round(p.y) } );
     }
     
     /* ------------------------------------------------------
@@ -282,7 +289,7 @@ class Root extends Stage {
     
     public function endPick() : Array<Array<Int>> {
         
-            GL.MatrixMode( GL.PROJECTION );
+        GL.MatrixMode( GL.PROJECTION );
         GL.PopMatrix();
         
         var n_hits = GL.RenderMode( GL.RENDER );
@@ -318,8 +325,6 @@ class Root extends Stage {
         
         startPick( x, y );
         
-        // this takes loong! (displaylists in select mode not accelerated??)
-        // alternatively, do some "low-res" (bbox) preselection?
         renderSimple();
         var hits:Array<Array<Int>> = endPick();
         

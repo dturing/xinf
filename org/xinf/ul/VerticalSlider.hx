@@ -38,15 +38,13 @@ class VerticalSlider extends Pane {
         
         bounds.setSize( thumbSize, parent.bounds.height );
         bounds.setPosition( parent.bounds.width-thumbSize, 0 );
-        trace("VSlider size: "+bounds );
         parent.bounds.addEventListener( Event.SIZE_CHANGED, parentSizeChanged );
-
         setBackgroundColor( new Color().fromRGBInt( 0xdddddd ) );
+        addEventListener( Event.MOUSE_DOWN, clickBar );
         
         thumb = new org.xinf.ony.Pane( name+"_thumb", this );
         thumb.bounds.setSize( thumbSize, thumbSize );
         thumb.setBackgroundColor( new Color().fromRGBInt( 0x999999 ) );
-        
         thumb.addEventListener( Event.MOUSE_DOWN, clickThumb );
         
         _clickedMove = clickedMove;
@@ -56,7 +54,24 @@ class VerticalSlider extends Pane {
     public function parentSizeChanged( e:Event ) {
         bounds.setSize( thumbSize, parent.bounds.height );
         bounds.setPosition( parent.bounds.width-thumbSize, 0 );
-        trace("VSlider size: "+bounds );
+    }
+
+    public function clickBar( e:Event ) {
+        var o = e.data.y - bounds.y;
+        if( o > thumb.bounds.y+thumb.bounds.height ) step( true );
+        else if( o < thumb.bounds.y ) step( false );
+    }
+    
+    public function step( down:Bool ) {
+        var y:Float = thumb.bounds.y;
+        if( down ) {
+            y += thumbSize;
+            if( y > bounds.height-thumbSize ) y = bounds.height-thumbSize;
+        } else {
+            y -= thumbSize;
+            if( y < 0 ) y = 0;
+        }
+        thumb.bounds.setPosition( 0, y );
     }
     
     public function clickThumb( e:Event ) {
@@ -65,6 +80,7 @@ class VerticalSlider extends Pane {
         trace("clickThumb: "+e.data.y );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _clickedMove );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _unclickThumb );
+        e.stopPropagation();
     }
     public function clickedMove( e:Event ) {
         var y:Float = e.data.y - offset;

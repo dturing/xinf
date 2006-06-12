@@ -64,7 +64,7 @@ class Test {
         i.bounds.setPosition( 100, 0 );
 //        i.bounds.setSize( 80, 60 );
 */
-        
+
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );
         var fg = new org.xinf.ony.Color();
