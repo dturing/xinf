@@ -21,16 +21,17 @@ package org.xinf.event;
 **/
 class EventDispatcher {
     /**
-        The one global EventDispatcher. Some Events are not specific to any
-        EventHandler (eg. ENTER_FRAME). Those will be dispatched on this global one.
-    **/
-    static public var global:EventDispatcher = new EventDispatcher();
-    
-    /**
         Add a listener function to the global EventDispatcher.
     **/
     static public function addGlobalEventListener( type:String, f:Event->Void ) :Void {
-        global.addEventListener( type, f );
+        GlobalEventDispatcher.global.addEventListener( type, f );
+    }
+
+    /**
+        Remove a listener function from the global EventDispatcher.
+    **/
+    static public function removeGlobalEventListener( type:String, f:Event->Void ) :Void {
+        GlobalEventDispatcher.global.removeEventListener( type, f );
     }
     
     private var _listeners:Hash<Array<Event -> Void>>;
@@ -68,7 +69,7 @@ class EventDispatcher {
                 if( e.stopped ) return;
             }
         }
-        if( this != global ) global.dispatchEvent( e );
+        if( this != GlobalEventDispatcher.global ) GlobalEventDispatcher.global.dispatchEvent( e );
     }
 
 

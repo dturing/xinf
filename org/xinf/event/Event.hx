@@ -99,6 +99,12 @@ class Event {
     public static var MOUSE_UP:String = "mouseUp";
 
     /**
+        dispatched on an Element when a mouse button is released
+        outside the element area, while it was pressed while inside.
+    **/
+    public static var MOUSE_UP_OUTSIDE:String = "mouseUpOutside";
+
+    /**
         MOUSE_MOVE is dispatched on an Element whenever the mouse cursor moves 
         *within* the bounding rectangle of the Element.
     **/
