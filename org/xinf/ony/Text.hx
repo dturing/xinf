@@ -36,7 +36,6 @@ class Text extends Pane {
         If autoSize is set to true, the Element's bounds rectangle will automatically be set to enclose the
         contained text. If false, it will always be the size you specified, with text content probably overflowing.
     **/
-    public var autoSize( default, default ) :Bool;
 
     private var textColor:org.xinf.ony.Color;
 
@@ -56,6 +55,7 @@ class Text extends Pane {
     public function new( name:String, parent:Element ) {
         super(name,parent);
         autoSize = true;
+        setTextColor( new org.xinf.ony.Color().fromRGBInt(0) );
     }
     
     private function createPrimitive() :Dynamic {
@@ -135,6 +135,18 @@ class Text extends Pane {
         #end
         
         #if js
+            /* in js, at least mozilla, offsetWidth awkwardly is 0 until the
+               page is rendered. i dont know how i can trigger- or wait for- 
+               rendering, so we timeout here until we have a  proper value..
+               gives us some flickering, sadly. */
+            if( text != "" && s.x == 0 ) {
+                var self = this;
+                untyped js.Lib.window.setTimeout( function() {
+                    self.calcSize();
+                }, 100 );
+            } else {
+                bounds.setSize( s.x, s.y );
+            }
         #else true
             bounds.setSize( Math.round(s.x), Math.round(s.y) );
         #end

@@ -38,6 +38,8 @@ class Element extends EventDispatcher {
     **/
     public var name:String;
     
+    public var autoSize( default, default ) :Bool;
+
     /**
         The bounding rectangle of the element. You can manipulate it to move and resize the element.
         Specific subclasses might automatically set the bounds or react in certain ways to changes.
@@ -139,6 +141,7 @@ class Element extends EventDispatcher {
         name = _name;
         parent = _parent;
         bounds = new Bounds();
+        autoSize = false;
         
         children = new Array<Element>();
         _p = createPrimitive();
@@ -205,22 +208,20 @@ class Element extends EventDispatcher {
 
     /**
         Dispatch an Event to the Element. See the EventDispatcher class for details.
-        Element will dispatch the Event to it's parent if it is not stopped.
+        Element will dispatch the Event to it's parent.
     **/
     public function dispatchEvent( e:Event ) :Void {
         super.dispatchEvent( e );
         
         // propagate to parent
-        if( !e.stopped ) {
-            if( e.data != null && e.data.x != null ) {
-                e.data.x += bounds.x;
-                e.data.y += bounds.y;
-            }
-            if( parent != null ) 
-                parent.dispatchEvent(e);
-            else
-                org.xinf.event.GlobalEventDispatcher.global.dispatchEvent( e );
+        if( e.data != null && e.data.x != null ) {
+            e.data.x += bounds.x;
+            e.data.y += bounds.y;
         }
+        if( parent != null ) 
+            parent.dispatchEvent(e);
+        else
+            org.xinf.event.GlobalEventDispatcher.global.dispatchEvent( e );
     }
 
 
@@ -240,8 +241,10 @@ class Element extends EventDispatcher {
         #if neko
             _p.changed();
         #else js
-            _p.style.width  = Math.floor( e.data.width );
-            _p.style.height = Math.floor( e.data.height );
+            if( !autoSize ) {
+                _p.style.width  = Math.floor( e.data.width );
+                _p.style.height = Math.floor( e.data.height );
+            }
         #else flash
             scheduleRedraw();
         #end
