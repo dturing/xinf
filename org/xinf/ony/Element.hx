@@ -47,7 +47,6 @@ class Element extends EventDispatcher {
     public var bounds:Bounds;
 
     private var parent:Element;
-    private var children:Array<Element>;
     private var _p
         #if neko
             :Group
@@ -143,7 +142,6 @@ class Element extends EventDispatcher {
         bounds = new Bounds();
         autoSize = false;
         
-        children = new Array<Element>();
         _p = createPrimitive();
         
         #if neko
@@ -167,6 +165,8 @@ class Element extends EventDispatcher {
         super();
     }
 
+    // TODO: destroy element
+    
     private function createPrimitive() :Dynamic {
         #if js
             return js.Lib.document.createElement("div");

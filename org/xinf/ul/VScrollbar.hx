@@ -57,7 +57,7 @@ class VScrollbar extends Pane {
     }
 
     public function parentSizeChanged( e:Event ) {
-        bounds.setPosition( parent.bounds.width-thumbSize, 0 );
+//        bounds.setPosition( parent.bounds.width-thumbSize, 0 );
         bounds.setSize( thumbSize, parent.bounds.height );
         bg.bounds.setSize( thumbSize, parent.bounds.height );
     }
@@ -99,6 +99,9 @@ class VScrollbar extends Pane {
             y = bounds.height-thumbSize;
         }
         thumb.bounds.setPosition( 0, y );
+        
+        var value:Float = y/(bounds.height-thumbSize);
+        postEvent( Event.SCROLLED, { value:value } );
     }
     public function releaseThumb( e:Event ) {
         org.xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _move );

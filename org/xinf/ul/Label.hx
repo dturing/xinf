@@ -38,9 +38,7 @@ class Label extends Pane {
         textE = new org.xinf.ony.Text( name+"_text", this );
         textE.bounds.setPosition( hpadding, vpadding );
         textE.bounds.addEventListener( Event.SIZE_CHANGED, textResized );
-        textE.setBackgroundColor( new Color().fromRGBInt( 0xaaaaaa ) );
 
-        setBackgroundColor( new Color().fromRGBInt( 0xaaaaaa ) );
         bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
     }
     

@@ -33,13 +33,15 @@ class Box extends Group {
         var h:Float = bounds.height;   // but right,bottom!
         
       // background
-        GL.Color4f( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
-        GL.Begin( GL.QUADS );
-            GL.Vertex3f( x, y, 0. );
-            GL.Vertex3f( w, y, 0. );
-            GL.Vertex3f( w, h, 0. );
-            GL.Vertex3f( x, h, 0. );
-        GL.End();
+        if( bgColor != null ) {
+            GL.Color4f( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
+            GL.Begin( GL.QUADS );
+                GL.Vertex3f( x, y, 0. );
+                GL.Vertex3f( w, y, 0. );
+                GL.Vertex3f( w, h, 0. );
+                GL.Vertex3f( x, h, 0. );
+            GL.End();
+        }
     }
     
     private function _render() :Void {

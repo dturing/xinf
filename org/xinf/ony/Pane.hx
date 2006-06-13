@@ -41,8 +41,6 @@ class Pane extends Element {
         #if js
             _p.style.overflow = "visible";
         #end
-
-        setBackgroundColor( new org.xinf.ony.Color() );
     }
     
     private function createPrimitive() :Dynamic {

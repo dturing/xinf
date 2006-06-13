@@ -18,6 +18,8 @@ package org.xinf;
 import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
+import org.xinf.ul.ListModel;
+
 class Foo extends org.xinf.ony.Text {
     public function new( name:String, parent:org.xinf.ony.Element ) {
         super( name, parent );
@@ -55,7 +57,7 @@ class Test {
         cont.setBackgroundColor( cbg );
         cont.crop = true;
         cont.bounds.setPosition( 10, 10 );
-        cont.bounds.setSize( 300, 100 );
+        cont.bounds.setSize( 300, 200 );
         container = cont;
 
 /*        
@@ -64,18 +66,29 @@ class Test {
 //        i.bounds.setSize( 80, 60 );
 */
 
+        var model = new SimpleListModel();
+        for( i in 0...50 ) {
+            model.addItem( "ListItem "+i );
+        }
+        
+        var list = new org.xinf.ul.ListBox("listTest", cont, model );
+        list.bounds.setSize( 100, 200 );
+
+/*
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );
         var fg = new org.xinf.ony.Color();
         fg.fromRGBInt( 0xffffff );
         
-            for( i in 0...3 ) {
+            for( i in 0...10 ) {
                 var box = new org.xinf.ul.Label("label"+i, cont);
                 box.bounds.setPosition( 10, i*40 );
                 box.text = "Hello "+i;
+                list.addChild( box );
             }
 
         var slider = new org.xinf.ul.VScrollbar( "test", cont );
+*/
 
         org.xinf.ony.Root.getRoot().run();
     }

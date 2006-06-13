@@ -141,6 +141,11 @@ class Event {
     /** dispatched on a Bounds rectangle when it's size changed **/
     public static var SIZE_CHANGED:String = "sizeChanged";
 
+    /** generic "changed" event -- something changed. **/
+    public static var CHANGED:String = "changed";
+
+    /** Scrollbar is scrolled. data.value denotes the new position (0-1). **/
+    public static var SCROLLED:String = "scrolled";
 
 
     /** type of the Event. It's a string, but you should only use

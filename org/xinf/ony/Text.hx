@@ -73,7 +73,6 @@ class Text extends Pane {
             _t.style.cursor = "default";
             _t.style.overflow = "hidden";
             _t.style.whiteSpace = "nowrap";
-            _t.style.background="#f00";
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
             var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
