@@ -43,10 +43,8 @@ class Foo extends org.xinf.ony.Text {
 **/
 class Test {
     static var container:org.xinf.ony.Element;
-    static var x:Int;
     
     static function main() {
-        x=0;
         
         var root = org.xinf.ony.Root.getRoot();
 
@@ -72,13 +70,12 @@ class Test {
         fg.fromRGBInt( 0xffffff );
         
             for( i in 0...3 ) {
-                var box = new Foo("box"+i, cont);
-                box.setBackgroundColor( bg );
-                box.setTextColor( fg );
-                box.bounds.setPosition( 10, i*40 ); //last.bounds.y+last.bounds.height+2 );
+                var box = new org.xinf.ul.Label("label"+i, cont);
+                box.bounds.setPosition( 10, i*40 );
+                box.text = "Hello "+i;
             }
 
-        var slider = new org.xinf.ul.VerticalSlider( "test", cont );
+        var slider = new org.xinf.ul.VScrollbar( "test", cont );
 
         org.xinf.ony.Root.getRoot().run();
     }

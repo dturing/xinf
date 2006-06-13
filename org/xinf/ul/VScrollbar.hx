@@ -22,10 +22,10 @@ import org.xinf.event.Event;
 import org.xinf.ony.Color;
 
 /**
-    Improvised Vertical Slider (Scrollbar) element.
+    Improvised Vertical Scrollbar element.
 **/
 
-class VerticalSlider extends Pane {
+class VScrollbar extends Pane {
     private static var thumbSize:Float = 12;
 
     private var thumb:Pane;
