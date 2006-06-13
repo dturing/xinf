@@ -19,11 +19,13 @@ import org.xinf.event.Event;
 import org.xinf.event.EventDispatcher;
 
 import org.xinf.ul.ListModel;
+import org.xinf.ony.Color;
 
-class Foo extends org.xinf.ony.Text {
+class Foo extends org.xinf.ony.Pane {
     public function new( name:String, parent:org.xinf.ony.Element ) {
         super( name, parent );
-        text = "Hello,\nWorld.";
+//        text = "Hello,\nWorld.";
+        autoSize = false;
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
                         Event.MOUSE_OVER, Event.MOUSE_OUT ] ) {
@@ -32,10 +34,11 @@ class Foo extends org.xinf.ony.Text {
     }
     
     public function handleEvent( e:Event ) : Void {
-//        trace("Event on "+this+": "+e.type );
+
+        trace( name+": "+e.type );
         
         var t:String = name+"\n"+e.type+"\n";
-        text = t;
+    //    text = t;
     }
     
 }
@@ -73,6 +76,31 @@ class Test {
         
         var list = new org.xinf.ul.ListBox("listTest", cont, model );
         list.bounds.setSize( 100, 200 );
+
+        var a = new Foo( "foo a", cont );
+        a.bounds.setPosition( 120, 25 );
+        a.bounds.setSize( 150, 150 );
+        a.setBackgroundColor( new Color().fromRGBInt( 0xffaaaa ) );
+
+        var b = new Foo( "foo b", a );
+        b.bounds.setPosition( 25, 25 );
+        b.bounds.setSize( 100, 100 );
+        b.setBackgroundColor( new Color().fromRGBInt( 0xaaffaa ) );
+
+        var b2 = new Foo( "foo b2", a );
+        b2.bounds.setPosition( 125, 25 );
+        b2.bounds.setSize( 50, 25 );
+        b2.setBackgroundColor( new Color().fromRGBInt( 0xaaffaa ) );
+
+        var c = new Foo( "foo c", b );
+        c.bounds.setPosition( 25, 25 );
+        c.bounds.setSize( 50, 50 );
+        c.setBackgroundColor( new Color().fromRGBInt( 0xaaaaff ) );
+
+        var c2 = new Foo( "foo c2", b );
+        c2.bounds.setPosition( 125, 25 );
+        c2.bounds.setSize( 50, 25 );
+        c2.setBackgroundColor( new Color().fromRGBInt( 0xaaaaff ) );
 
 /*
         var bg = new org.xinf.ony.Color();

@@ -81,6 +81,7 @@ class Text extends Pane {
             _t = Reflect.field( e, "_"+name );
             
             _t.autoSize = true;
+            _t.selectable = false;
             
             var format:flash.TextFormat = new flash.TextFormat();
             format.size = 12;

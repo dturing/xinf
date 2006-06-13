@@ -25,6 +25,9 @@ import org.xinf.ul.ListModel;
 
 /**
     Improvised ListBox element.
+    
+    TODO: currently, all child labels are reassigned. that could be optimized
+    to reassign only one, and move the rest.
 **/
 
 class ListBox extends Pane {
@@ -52,11 +55,11 @@ class ListBox extends Pane {
         scrollbar.addEventListener( Event.SCROLLED, scroll );
 
         scrollPane = new Pane( name+"_pane", this );
-//        scrollPane.setBackgroundColor( new Color().fromRGBInt( 0xffaaaa ) );
+        scrollPane.crop = true;
         
         model = _model;
         model.addChangedListener( reDo );
-        
+                
         reLayout( null );
     }
 
@@ -104,6 +107,7 @@ class ListBox extends Pane {
             for( i in 0...(n - children.length) ) {
                 var child = new Label( name+"_"+children.length, scrollPane );
                 child.autoSize = false;
+                if( hoverColor != null ) child.setHoverColor( hoverColor );
                 children.push( child );
             }
         } else if( children.length > n ) {

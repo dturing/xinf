@@ -51,6 +51,8 @@ class Box extends Group {
             GL.Enable( GL.STENCIL_TEST );
             GL.Clear( GL.STENCIL_BUFFER_BIT );
         
+            /* FIXME: stencilling will break when we have a child that crops too. */
+        
             GL.ColorMask( 0,0,0,1 );
             GL.StencilFunc( GL.ALWAYS, 1, 1 );
             GL.StencilOp( GL.KEEP, GL.KEEP, GL.REPLACE );

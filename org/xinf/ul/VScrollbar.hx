@@ -81,8 +81,8 @@ class VScrollbar extends Pane {
     }
     
     public function clickThumb( e:Event ) {
-        var p:Point = thumb.localToGlobal( new Point( e.data.x, e.data.y ) );
-        offset = p.y;
+        offset = e.data.y;
+        trace("ClickThumb");
         var self=this;
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _move );
         org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _releaseThumb );

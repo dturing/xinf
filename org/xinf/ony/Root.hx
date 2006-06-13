@@ -46,10 +46,29 @@ class Root extends Element {
     #if js
 	    private static var arr = new Array<Root>();
     	private var timerId : Int;
+        private var eventMonitor:org.xinf.ony.js.JSEventMonitor;
+
+        private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
+            untyped haxe_JSTrace( pos.fileName+":"+pos.lineNumber+"||"+v );
+        }
+    #else flash
+        private var eventMonitor:org.xinf.ony.flash.EventMonitor;
+        
+        private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
+            flash.Lib.fscommand("trace", pos.fileName+":"+pos.lineNumber+"||"+v );
+        }
     #end
 
     private function new() {
         super("root",null);
+        
+        #if flash
+            haxe.Log.trace = xinfHtmlTrace;
+            eventMonitor = new org.xinf.ony.flash.EventMonitor();
+        #else js
+            haxe.Log.trace = xinfHtmlTrace;
+            eventMonitor = new org.xinf.ony.js.JSEventMonitor();
+        #end
     }
     
     private function createPrimitive() :Dynamic {
@@ -93,12 +112,12 @@ class Root extends Element {
     
     #if js
         public function step() :Void {
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             org.xinf.event.Event.processQueue();
         }
     #else flash
         public function step() :Void {
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
             org.xinf.event.Event.processQueue();
         }
     #end

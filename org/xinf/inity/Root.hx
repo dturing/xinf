@@ -120,7 +120,7 @@ class Root extends Stage {
         
           p.check("sleep");
             
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            org.xinf.event.EventDispatcher.postGlobalEvent( Event.ENTER_FRAME, { } );
             processEvents();
             Event.processQueue();
           p.check("Event.queue");
@@ -209,7 +209,7 @@ class Root extends Stage {
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
-        org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { key:str } );
+        org.xinf.event.EventDispatcher.postGlobalEvent( type, { key:str } );
     }
 
     private function handleMouseEvent( e, k ) :Void {
@@ -220,28 +220,22 @@ class Root extends Stage {
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
+        trace( type+" - "+objectUnderMouse );
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( type, globalToLocal({ x:x, y:y }, objectUnderMouse ) );
+            objectUnderMouse.postEvent( type, { x:x, y:y } );
         else
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( type, { x:x, y:y } );
+            org.xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y } );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( Event.MOUSE_MOVE, globalToLocal({ x:mouseX, y:mouseY }, objectUnderMouse ) );
+            objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
         else
-            org.xinf.event.GlobalEventDispatcher.global.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+            org.xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
     }
-    
-    private function globalToLocal( p:Dynamic, o:Object ) :Dynamic {
-        var p = new org.xinf.geom.Point( p.x, p.y );
-        if( o.owner != null ) 
-            p = untyped o.owner.globalToLocal( p ); // FIXME: dangerous. owner might not be an ony.Element.
-        return( { x:Math.round(p.x), y:Math.round(p.y) } );
-    }
-    
+        
     /* ------------------------------------------------------
        OpenGL Helper Functions
        ------------------------------------------------------ */
@@ -352,10 +346,11 @@ class Root extends Stage {
         var o = getObjectsUnderPoint( mouseX, height-mouseY ).pop();
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
-                objectUnderMouse.postEvent( Event.MOUSE_OUT, null );
+                objectUnderMouse.postEvent( Event.MOUSE_OUT, { x:mouseX, y:mouseY } );
+//                trace("overOut: old "+objectUnderMouse+", new "+o );
             objectUnderMouse = o;
             if( objectUnderMouse != null )
-                objectUnderMouse.postEvent( Event.MOUSE_OVER, null );
+                objectUnderMouse.postEvent( Event.MOUSE_OVER, { x:mouseX, y:mouseY } );
         }
     }
 }

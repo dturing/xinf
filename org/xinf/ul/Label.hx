@@ -28,6 +28,9 @@ import org.xinf.ony.Text;
 class Label extends Pane {
     private static var hpadding:Float = 6;
     private static var vpadding:Float = 3;
+    
+    private var hoverColor:Color;
+    private var nonHoverColor:Color;
 
     public var text(get_text,set_text):String;
     private var textE:Text;
@@ -35,11 +38,17 @@ class Label extends Pane {
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 
+        nonHoverColor = new Color().fromRGBInt( 0xffffff );
+        setBackgroundColor( nonHoverColor );
+
         textE = new org.xinf.ony.Text( name+"_text", this );
         textE.bounds.setPosition( hpadding, vpadding );
         textE.bounds.addEventListener( Event.SIZE_CHANGED, textResized );
 
         bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
+        
+        addEventListener( Event.MOUSE_OUT, onMouseOut );
+        addEventListener( Event.MOUSE_OVER, onMouseOver );
     }
     
     private function get_text() :String {
@@ -51,6 +60,20 @@ class Label extends Pane {
     }
 
     public function textResized( e:Event ) {
-        bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
+        if( autoSize ) {
+            bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
+        }
+    }
+
+    public function setHoverColor( c:org.xinf.ony.Color ) :Void {
+        hoverColor=c;
+    }
+    public function onMouseOver( e:Event ) :Void {
+        if( hoverColor != null ) {
+            setBackgroundColor( hoverColor );
+        }
+    }
+    public function onMouseOut( e:Event ) :Void {
+        setBackgroundColor( nonHoverColor );
     }
 }

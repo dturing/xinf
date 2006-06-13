@@ -20,19 +20,29 @@ package org.xinf.event;
     (most notable, Element and its derivations, and Bounds).
 **/
 class EventDispatcher {
+    private static var global = new EventDispatcher();
+
     /**
         Add a listener function to the global EventDispatcher.
     **/
     static public function addGlobalEventListener( type:String, f:Event->Void ) :Void {
-        GlobalEventDispatcher.global.addEventListener( type, f );
+        global.addEventListener( type, f );
     }
 
     /**
         Remove a listener function from the global EventDispatcher.
     **/
     static public function removeGlobalEventListener( type:String, f:Event->Void ) :Void {
-        GlobalEventDispatcher.global.removeEventListener( type, f );
+        global.removeEventListener( type, f );
     }
+
+    /**
+        Post an Event to the global EventDispatcher.
+    **/
+    static public function postGlobalEvent( type:String, data:Dynamic ) :Void {
+        global.postEvent( type, data );
+    }
+
     
     private var _listeners:Hash<Array<Event -> Void>>;
     

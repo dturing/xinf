@@ -57,80 +57,6 @@ class Element extends EventDispatcher {
         #end
         ;
     
-    #if js
-        private static var eventNames:Hash<String> = registerEventNames();
-        private static function registerEventNames() : Hash<String> {
-            var h:Hash<String> = new Hash<String>();
-            h.set( Event.MOUSE_DOWN,"onmousedown");
-            h.set( Event.MOUSE_UP,  "onmouseup");
-            h.set( Event.MOUSE_OVER,"onmouseover");
-            h.set( Event.MOUSE_OUT, "onmouseout");
-            h.set( Event.MOUSE_MOVE, "onmousemove");
-            return h;
-        }
-
-        // event wrappers: "this" is the runtime primitive.
-        private function _mouseDown( e:js.Event ) :Bool {
-            mouseEvent( Event.MOUSE_DOWN, e, untyped this );
-            return false;
-        }
-        private function _mouseUp( e:js.Event ) {
-            mouseEvent( Event.MOUSE_UP, e, untyped this );
-        }
-        private function _mouseOver( e:js.Event ) {
-            mouseEvent( Event.MOUSE_OVER, e, untyped this );
-        }
-        private function _mouseOut( e:js.Event ) {
-            mouseEvent( Event.MOUSE_OUT, e, untyped this );
-        }
-        private function _mouseMove( e:js.Event ) {
-            mouseEvent( Event.MOUSE_MOVE, e, untyped this );
-        }
-        public static function absPos( div:js.HtmlDom ) :Point {
-            var r=new Point( untyped div.offsetLeft, untyped div.offsetTop );
-            while( div.parentNode != null && div.parentNode.nodeName == "DIV" ) {
-                div = div.parentNode;
-                r.x += untyped div.offsetLeft;
-                r.y += untyped div.offsetTop;
-            }
-            return r;
-        }
-        private static function mouseEvent( type:String, e:js.Event, target:js.HtmlDom ) :Void {
-            var abs:Point = absPos(target);
-            var p:Point = new Point( e.clientX, e.clientY );
-            p = p.subtract(abs);
-            untyped target.owner.postEvent( type, { x:p.x, y:p.y } );
-        }
-    #else flash
-        private static var eventNames:Hash<String> = registerEventNames();
-        private static function registerEventNames() : Hash<String> {
-            var h:Hash<String> = new Hash<String>();
-            h.set( Event.MOUSE_DOWN,"onPress");
-            h.set( Event.MOUSE_UP,  "onRelease");
-            h.set( Event.MOUSE_OVER,"onRollOver,onDragOver");
-            h.set( Event.MOUSE_OUT, "onRollOut,onDragOut");
-            h.set( Event.MOUSE_MOVE, "onMouseMove" );
-            return h;
-        }
-
-        // event wrappers: "this" is the runtime primitive.
-        private function _mouseDown() {
-            untyped this.owner.postEvent( Event.MOUSE_DOWN, { x:this._xmouse, y:this._ymouse } );
-        }
-        private function _mouseUp() {
-            untyped this.owner.postEvent( Event.MOUSE_UP, { x:this._xmouse, y:this._ymouse } );
-        }
-        private function _mouseOver() {
-            untyped this.owner.postEvent( Event.MOUSE_OVER, { x:this._xmouse, y:this._ymouse } );
-        }
-        private function _mouseOut() {
-            untyped this.owner.postEvent( Event.MOUSE_OUT, { x:this._xmouse, y:this._ymouse } );
-        }
-        private function _mouseMove() {
-            untyped this.owner.postEvent( Event.MOUSE_MOVE, { x:this._xmouse, y:this._ymouse } );
-        }
-    #end
-
     /**
         Element constructor. You have to supply a name and a parent Element, to which the new Element
         will be attached to. Currently, xinfony Elements can not be re-parented, because Flash<9 does not
@@ -178,33 +104,7 @@ class Element extends EventDispatcher {
             return null;
         #end
     }
-    
 
-    /**
-        Add a new listener function for a specific event. See the EventDispatcher class for details.
-        Adding listeners for mouse events will setup the needed handlers on the runtime primitive.
-        
-        FIXME XXX: removing special events doesnt work yet!
-    **/
-    public function addEventListener( type:String, f:Event->Void ) :Void {
-        #if js
-            var eventName:String = eventNames.get(type);
-            if( eventName != null ) {
-                for( name in eventName.split(",") ) {
-                    Reflect.setField( _p, name, Reflect.field( this, "_"+type ) );
-                }
-            }
-        #else flash
-            var eventName:String = eventNames.get(type);
-            if( eventName != null ) {
-                for( name in eventName.split(",") ) {
-                    Reflect.setField( _p, name, Reflect.field( this, "_"+type ) );
-                }
-            }
-        #end
-        super.addEventListener( type, f );
-    }
-    
 
     /**
         Dispatch an Event to the Element. See the EventDispatcher class for details.
@@ -214,14 +114,16 @@ class Element extends EventDispatcher {
         super.dispatchEvent( e );
         
         // propagate to parent
+        /*
         if( e.data != null && e.data.x != null ) {
             e.data.x += bounds.x;
             e.data.y += bounds.y;
         }
+        */
         if( parent != null ) 
             parent.dispatchEvent(e);
         else
-            org.xinf.event.GlobalEventDispatcher.global.dispatchEvent( e );
+            org.xinf.event.EventDispatcher.global.dispatchEvent( e );
     }
 
 

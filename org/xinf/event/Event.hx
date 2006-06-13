@@ -146,6 +146,12 @@ class Event {
 
     /** Scrollbar is scrolled. data.value denotes the new position (0-1). **/
     public static var SCROLLED:String = "scrolled";
+    /** Scrollbar is scrolled by a step. data.direction is 0 (up) or 1 (down).
+        You must update the scrollbar yourself. **/
+    public static var SCROLL_STEP:String = "scrollLeap";
+    /** Scrollbar is scrolled by a leap (page). data.direction is 0 (up) or 1 (down).
+        You must update the scrollbar yourself. **/
+    public static var SCROLL_LEAP:String = "scrollLeap";
 
 
     /** type of the Event. It's a string, but you should only use
