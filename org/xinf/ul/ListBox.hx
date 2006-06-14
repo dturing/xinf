@@ -58,6 +58,9 @@ class ListBox extends Pane {
         model = _model;
         model.addChangedListener( reDo );
                 
+        addEventListener( Event.SCROLL_STEP, scrollStep );
+        addEventListener( Event.SCROLL_LEAP, scrollLeap );
+                
         reLayout( null );
     }
 
@@ -117,4 +120,29 @@ class ListBox extends Pane {
         offset = ((model.getLength() * labelHeight) - bounds.height) * e.data.value;
         reDo(null);
     }
+
+    private function scrollStep( e:Event ) :Void {
+        var factor = if( e.data.direction>0 ) 1 else -1;
+        offset += 3 * factor * labelHeight;
+        if( offset < 0 ) offset = 0;
+        if( offset > ((model.getLength() * labelHeight) - bounds.height) )
+            offset = ((model.getLength() * labelHeight) - bounds.height);
+            
+        scrollbar.setScrollPosition( offset / ((model.getLength() * labelHeight) - bounds.height) );
+            
+        reDo(null);
+    }
+
+    private function scrollLeap( e:Event ) :Void {
+        var factor = if( e.data.direction>0 ) 1 else -1;
+        offset += bounds.height * factor;
+        if( offset < 0 ) offset = 0;
+        if( offset > ((model.getLength() * labelHeight) - bounds.height) )
+            offset = ((model.getLength() * labelHeight) - bounds.height);
+            
+        scrollbar.setScrollPosition( offset / ((model.getLength() * labelHeight) - bounds.height) );
+            
+        reDo(null);
+    }
+    
 }

@@ -64,22 +64,13 @@ class VScrollbar extends Pane {
 
     public function clickBar( e:Event ) {
         var o = e.data.y - bounds.y;
-        if( o > thumb.bounds.y+thumb.bounds.height ) step( true );
-        else if( o < thumb.bounds.y ) step( false );
+        var direction:Int;
+        if( o > thumb.bounds.y+thumb.bounds.height ) direction = 1;
+        else if( o < thumb.bounds.y ) direction = 0;
+        else return;
+        postEvent( Event.SCROLL_LEAP, { direction:direction } );
     }
-    
-    public function step( down:Bool ) {
-        var y:Float = thumb.bounds.y;
-        if( down ) {
-            y += thumbSize;
-            if( y > bounds.height-thumbSize ) y = bounds.height-thumbSize;
-        } else {
-            y -= thumbSize;
-            if( y < 0 ) y = 0;
-        }
-        thumb.bounds.setPosition( 0, y );
-    }
-    
+        
     public function clickThumb( e:Event ) {
         offset = e.data.y;
         trace("ClickThumb");
@@ -106,5 +97,11 @@ class VScrollbar extends Pane {
     public function releaseThumb( e:Event ) {
         org.xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _move );
         org.xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
+    }
+    
+    public function setScrollPosition( position:Float ) :Void {
+        trace("setScrollPos: "+position );
+        position = Math.max( 0, Math.min( 1, position ) );
+        thumb.bounds.setPosition( 0, position * (bounds.height-thumbSize) );
     }
 }
