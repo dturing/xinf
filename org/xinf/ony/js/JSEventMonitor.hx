@@ -30,6 +30,12 @@ class JSEventMonitor {
         js.Lib.document.onmouseover = untyped this.mouseOver;
         js.Lib.document.onmouseout  = untyped this.mouseOut;
         js.Lib.document.onmousemove = untyped this.mouseMove;
+        
+        // Firefox mousewheel support
+        // IE to be done, just use document.onmousewheel there...
+        if( untyped js.Lib.window.addEventListener ) {
+            untyped js.Lib.window.addEventListener('DOMMouseScroll', this.mouseWheelFF, false);
+        }
     }
     
     private function mouseDown( e:js.Event ) :Bool {
@@ -52,14 +58,27 @@ class JSEventMonitor {
         return postMouseEvent( e, org.xinf.event.Event.MOUSE_MOVE );
     }
 
-    private function postMouseEvent( e:js.Event, type:String ) :Bool {
+    private function mouseWheelFF( e:js.Event ) :Bool {
+        var target:Element = findTarget(e);
+        if( target!=null ) {
+            target.postEvent( org.xinf.event.Event.SCROLL_STEP, { delta:(untyped e.detail/3) } );
+            untyped e.preventDefault();
+        }
+        return false;
+    }
+
+    private function findTarget( e:js.Event ) :Element {
         var targetNode:js.HtmlDom = e.target;
         var target:Element = untyped targetNode.owner;
         while( target == null && targetNode.parentNode != null ) {
             targetNode = targetNode.parentNode;
             if( targetNode != null ) target = untyped targetNode.owner;
         }
-        
+        return target;
+    }
+    
+    private function postMouseEvent( e:js.Event, type:String ) :Bool {
+        var target:Element = findTarget(e);
         if( target == null ) return true;
         
         if( rootX == null ) {

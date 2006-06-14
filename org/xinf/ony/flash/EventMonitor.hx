@@ -38,6 +38,13 @@ class EventMonitor {
         mouseTrackingClip.onMouseMove = function() {
             self.mouseMove( m._droptarget );
         }
+        
+        var mouseListener:Dynamic = { 
+            onMouseWheel : function(delta) {
+                self.mouseWheel( m._droptarget, delta );
+            }
+        };
+        flash.Mouse.addListener( mouseListener );
     }
     
     private function mouseDown( targetPath:String ) {
@@ -62,6 +69,11 @@ class EventMonitor {
         } else {
             postMouseEvent( target, Event.MOUSE_MOVE );
         }
+    }
+
+    private function mouseWheel( targetPath:String, delta:Int ) {
+        var target = findTarget( targetPath );
+        target.postEvent( Event.SCROLL_STEP, { delta:-delta } );
     }
     
     private function postMouseEvent( target:Element, type:String ) :Void {

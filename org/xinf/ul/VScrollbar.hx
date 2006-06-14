@@ -64,11 +64,11 @@ class VScrollbar extends Pane {
 
     public function clickBar( e:Event ) {
         var o = e.data.y - bounds.y;
-        var direction:Int;
-        if( o > thumb.bounds.y+thumb.bounds.height ) direction = 1;
-        else if( o < thumb.bounds.y ) direction = 0;
+        var delta:Int;
+        if( o > thumb.bounds.y+thumb.bounds.height ) delta = 1;
+        else if( o < thumb.bounds.y ) delta = -1;
         else return;
-        postEvent( Event.SCROLL_LEAP, { direction:direction } );
+        postEvent( Event.SCROLL_LEAP, { delta:delta } );
     }
         
     public function clickThumb( e:Event ) {

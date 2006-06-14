@@ -218,12 +218,12 @@ class Root extends Stage {
         
         if( button == 4 || button == 5 ) {
             if( k == SDL.MOUSEBUTTONUP ) {
-                var direction:Int = 0; // up;
-                if( button==5 ) direction = 1; // down
+                var delta:Int = -1; // up;
+                if( button==5 ) delta = 1; // down
                 if( objectUnderMouse != null )
-                    objectUnderMouse.postEvent( Event.SCROLL_STEP, { direction:direction } );
+                    objectUnderMouse.postEvent( Event.SCROLL_STEP, { delta:delta } );
                 else
-                    org.xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { direction:direction } );
+                    org.xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { delta:delta } );
             }
             return;
         }

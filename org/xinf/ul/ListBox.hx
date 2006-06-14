@@ -122,7 +122,7 @@ class ListBox extends Pane {
     }
 
     private function scrollStep( e:Event ) :Void {
-        var factor = if( e.data.direction>0 ) 1 else -1;
+        var factor = e.data.delta;
         offset += 3 * factor * labelHeight;
         if( offset < 0 ) offset = 0;
         if( offset > ((model.getLength() * labelHeight) - bounds.height) )
@@ -134,7 +134,7 @@ class ListBox extends Pane {
     }
 
     private function scrollLeap( e:Event ) :Void {
-        var factor = if( e.data.direction>0 ) 1 else -1;
+        var factor = e.data.delta;
         offset += bounds.height * factor;
         if( offset < 0 ) offset = 0;
         if( offset > ((model.getLength() * labelHeight) - bounds.height) )
