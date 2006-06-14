@@ -43,41 +43,60 @@ class Box extends Group {
             GL.End();
         }
     }
+
+    public function getHitChild( chain:Array<Int>, x:Float, y:Float ) :Object {
+//            trace("getHitChild "+x+"/"+y+", "+bounds.x+"/"+bounds.y );
+        if( crop ) {
+            if( x<bounds.x || x > bounds.x+bounds.width
+             || y<bounds.y || y > bounds.y+bounds.height ) {
+                 throw("cropped hit");
+            }
+        }
     
+        return( super.getHitChild( chain, x, y ) );
+    }
+
+    private function startCrop() :Void {
+        if( !crop ) return;
+        
+        GL.Enable( GL.STENCIL_TEST );
+        GL.Clear( GL.STENCIL_BUFFER_BIT );
+
+        /* FIXME: stencilling will break when we have a child that crops too. */
+
+        GL.ColorMask( 0,0,0,1 );
+        GL.StencilFunc( GL.ALWAYS, 1, 1 );
+        GL.StencilOp( GL.KEEP, GL.KEEP, GL.REPLACE );
+
+            var w:Float = bounds.width;   // w,h are not really width/height here,
+            var h:Float = bounds.height;  // but right,bottom!
+          //  background
+            GL.Color4f( 1, 0, 0, 1 );
+            GL.Begin( GL.QUADS );
+                GL.Vertex3f( w , 0., 0. );
+                GL.Vertex3f( w , h , 0. );
+                GL.Vertex3f( 0., h , 0. );
+                GL.Vertex3f( 0., 0., 0. );
+            GL.End();
+
+        GL.StencilFunc( GL.EQUAL, 1, 1 );
+        GL.StencilOp( GL.KEEP, GL.KEEP, GL.KEEP );
+
+        GL.ColorMask( 1,1,1,1 );
+    }
+
+    private function endCrop() :Void {
+        if( !crop ) return;
+        
+        GL.Disable( GL.STENCIL_TEST );
+    }
+           
     private function _render() :Void {
         _renderGraphics();
  
-        if( crop ) {
-            GL.Enable( GL.STENCIL_TEST );
-            GL.Clear( GL.STENCIL_BUFFER_BIT );
-        
-            /* FIXME: stencilling will break when we have a child that crops too. */
-        
-            GL.ColorMask( 0,0,0,1 );
-            GL.StencilFunc( GL.ALWAYS, 1, 1 );
-            GL.StencilOp( GL.KEEP, GL.KEEP, GL.REPLACE );
-
-                var w:Float = bounds.width;   // w,h are not really width/height here,
-                var h:Float = bounds.height;  // but right,bottom!
-              //  background
-                GL.Color4f( 1, 0, 0, 1 );
-                GL.Begin( GL.QUADS );
-                    GL.Vertex3f( w , 0., 0. );
-                    GL.Vertex3f( w , h , 0. );
-                    GL.Vertex3f( 0., h , 0. );
-                    GL.Vertex3f( 0., 0., 0. );
-                GL.End();
-
-            GL.StencilFunc( GL.EQUAL, 1, 1 );
-            GL.StencilOp( GL.KEEP, GL.KEEP, GL.KEEP );
-
-            GL.ColorMask( 1,1,1,1 );
-                super._render();
-                
-            GL.Disable( GL.STENCIL_TEST );
-        } else {
-            super._render();
-        }
+        startCrop();
+        super._render();
+        endCrop();
     }
 
     private function _renderSimple() :Void {
@@ -85,7 +104,6 @@ class Box extends Group {
         var w:Float = bounds.width;   // w,h are not really width/height here,
         var h:Float = bounds.height;  // but right,bottom!
 
-      //  background
         GL.Begin( GL.QUADS );
             GL.Vertex3f( w , 0., 0. );
             GL.Vertex3f( w , h , 0. );

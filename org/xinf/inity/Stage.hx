@@ -37,10 +37,9 @@ class Stage extends Group {
     public function resize( w:Int, h:Int ) :Void {
         var x:Float = 1.0;
         var y:Float = 1.0;
-        
+
         if( scaleMode == NO_SCALE ) {
             x = y = 1.0;
-            trace("Stage Scale event should trigger, FIXME");
         } else if( scaleMode == EXACT_FIT ) {
             x = (w/definedWidth);
             y = (h/definedHeight);
@@ -58,6 +57,8 @@ class Stage extends Group {
         bounds.setPosition( -1 + (.5/w), 1 + (-.5/h) );
 
         width=w; height=h;
+        
+        org.xinf.event.EventDispatcher.postGlobalEvent( org.xinf.event.Event.STAGE_SCALE, { w:width, h:height } );
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );
  //       trace(scaleMode+" - "+x+","+y );
     }

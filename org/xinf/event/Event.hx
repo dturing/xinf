@@ -153,6 +153,9 @@ class Event {
         You must update the scrollbar yourself. **/
     public static var SCROLL_LEAP:String = "scrollLeap";
 
+    /** triggered when the Stage is resized. data contains w,h describing new size 
+        FIXME: only works in xinfinity (yet) **/
+    public static var STAGE_SCALE:String = "stageScale";
 
     /** type of the Event. It's a string, but you should only use
         the STATIC_VARS defined above to set or compare Event types **/

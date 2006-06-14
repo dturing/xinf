@@ -21,10 +21,10 @@ import org.xinf.event.EventDispatcher;
 import org.xinf.ul.ListModel;
 import org.xinf.ony.Color;
 
-class Foo extends org.xinf.ony.Pane {
+class Foo extends org.xinf.ony.Text {
     public function new( name:String, parent:org.xinf.ony.Element ) {
         super( name, parent );
-//        text = "Hello,\nWorld.";
+        text = "Hello,\nWorld.";
         autoSize = false;
         
         for( event in [ Event.MOUSE_DOWN, Event.MOUSE_UP,
@@ -34,11 +34,9 @@ class Foo extends org.xinf.ony.Pane {
     }
     
     public function handleEvent( e:Event ) : Void {
-
         trace( name+": "+e.type );
-        
         var t:String = name+"\n"+e.type+"\n";
-    //    text = t;
+        text = t;
     }
     
 }
@@ -58,7 +56,6 @@ class Test {
         
         var cont = new org.xinf.ony.Pane("container", root);
         cont.setBackgroundColor( cbg );
-        cont.crop = true;
         cont.bounds.setPosition( 10, 10 );
         cont.bounds.setSize( 300, 200 );
         container = cont;
@@ -77,16 +74,18 @@ class Test {
         var list = new org.xinf.ul.ListBox("listTest", cont, model );
         list.bounds.setSize( 100, 200 );
 
-        var a = new Foo( "foo a", cont );
+        var a = new Foo( "crop1", cont );
         a.bounds.setPosition( 120, 25 );
         a.bounds.setSize( 150, 150 );
+        a.crop = true;
         a.setBackgroundColor( new Color().fromRGBInt( 0xffaaaa ) );
 
-        var b = new Foo( "foo b", a );
-        b.bounds.setPosition( 25, 25 );
-        b.bounds.setSize( 100, 100 );
+        var b = new Foo( "tooBig1", a );
+        b.bounds.setPosition( -50, -50 );
+        b.bounds.setSize( 250, 150 );
         b.setBackgroundColor( new Color().fromRGBInt( 0xaaffaa ) );
 
+/*
         var b2 = new Foo( "foo b2", a );
         b2.bounds.setPosition( 125, 25 );
         b2.bounds.setSize( 50, 25 );
@@ -101,6 +100,7 @@ class Test {
         c2.bounds.setPosition( 125, 25 );
         c2.bounds.setSize( 50, 25 );
         c2.setBackgroundColor( new Color().fromRGBInt( 0xaaaaff ) );
+*/
 
 /*
         var bg = new org.xinf.ony.Color();

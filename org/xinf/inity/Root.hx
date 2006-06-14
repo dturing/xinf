@@ -220,7 +220,8 @@ class Root extends Stage {
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
-        trace( type+" - "+objectUnderMouse );
+//        trace( type+" - "+objectUnderMouse );
+        
         if( objectUnderMouse != null )
             objectUnderMouse.postEvent( type, { x:x, y:y } );
         else
@@ -266,6 +267,10 @@ class Root extends Stage {
         GL.PopMatrix();
         SDL.GL_SwapBuffers();
     }
+
+    /* ------------------------------------------------------
+       HitTest Functions
+       ------------------------------------------------------ */
 
     public function startPick( x:Float, y:Float ) : Void {
         GL.SelectBuffer( 64, selectBuffer );
@@ -314,13 +319,10 @@ class Root extends Stage {
         return stacks;
     }
     
-    /* ------------------------------------------------------
-       HitTest Functions
-       ------------------------------------------------------ */
     
     public function getObjectsUnderPoint( x:Float, y:Float ) : Array<Object> {
         
-        startPick( x, y );
+        startPick( x, height-y );
         
         renderSimple();
         var hits:Array<Array<Int>> = endPick();
@@ -329,12 +331,14 @@ class Root extends Stage {
         for( hit in hits ) {
             var object:Object = this;
             var group:Group;
-            for( id in hit ) {
-                group = cast(object,Group); // will throw if not a Group
-                object = group.getChildAt(id);
-                if( object == null ) throw("hit child not found");
+            try {
+                group = cast(object,Group);
+                object = group.getHitChild(hit,x,y);
+                a.push(object);
+            } catch(e:Dynamic) {
+                // dont do anything
+                // should only happen if the hitpoint is cropped out
             }
-            a.push(object);
         }
         
 // root has no owner... but.. FIXME       if( a.length == 0 ) a.push( this );
@@ -343,7 +347,7 @@ class Root extends Stage {
     }
     
     public function doOverOut() :Void {
-        var o = getObjectsUnderPoint( mouseX, height-mouseY ).pop();
+        var o = getObjectsUnderPoint( mouseX, mouseY ).pop();
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
                 objectUnderMouse.postEvent( Event.MOUSE_OUT, { x:mouseX, y:mouseY } );

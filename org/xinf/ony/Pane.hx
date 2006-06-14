@@ -72,7 +72,7 @@ class Pane extends Element {
                 _crop_mc = null;
             }
         #else neko
-            untyped _p.crop = _crop;
+            untyped _p.crop = _crop; // FIXME
             _p.changed();
         #end
         return _crop;

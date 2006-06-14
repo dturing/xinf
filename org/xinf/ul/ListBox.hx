@@ -44,8 +44,6 @@ class ListBox extends Pane {
     public function new( name:String, parent:Element, _model:ListModel ) :Void {
         super( name, parent );
         
-        crop = true;
-        
         offset = 0;
         children = new Array<Label>();
         bounds.addEventListener( Event.SIZE_CHANGED, reLayout ); 

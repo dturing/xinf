@@ -69,6 +69,14 @@ class Root extends Element {
             haxe.Log.trace = xinfHtmlTrace;
             eventMonitor = new org.xinf.ony.js.JSEventMonitor();
         #end
+        
+        // keep our own bounds up to date.
+        org.xinf.event.EventDispatcher.addGlobalEventListener(
+            org.xinf.event.Event.STAGE_SCALE, updateSize );
+    }
+    
+    private function updateSize( e:Event ) :Void {
+        bounds.setSize( e.data.w, e.data.h );
     }
     
     private function createPrimitive() :Dynamic {

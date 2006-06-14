@@ -30,6 +30,16 @@ class Group extends Object {
     public function getChildAt( index:Int ) :Object {
         return children[index];
     }
+
+    public function getHitChild( chain:Array<Int>, x:Float, y:Float ) :Object {
+        var index = chain.shift();
+        var object:Object = children[index];
+        if( chain.length > 0 ) {
+            var group:Group = cast(object,Group);
+            return( group.getHitChild( chain, x-bounds.x, y-bounds.y ) );
+        }
+        return object;
+    }
     
     // rendering
     public function _cache() :Void {
