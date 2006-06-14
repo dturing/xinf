@@ -27,7 +27,7 @@ import org.xinf.ul.ListModel;
     Improvised ListBox element.
     
     TODO: currently, all child labels are reassigned. that could be optimized
-    to reassign only one, and move the rest.
+    to reassign only the ones that need to be, and move the rest.
 **/
 
 class ListBox extends Pane {

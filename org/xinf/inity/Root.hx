@@ -187,7 +187,6 @@ class Root extends Stage {
                     //trace("active event");
                     // todo: mouseout on any overe'd item
                 case SDL.VIDEOEXPOSE:
-                    trace("expose event");
                     changed();
                 default:
                     trace("Event "+k);
