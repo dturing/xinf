@@ -20,6 +20,9 @@ import org.xinf.ony.Element;
 import js.Dom;
 
 class JSEventMonitor {
+    private var rootX:Int;
+    private var rootY:Int;
+
     public function new() :Void {
         var self = this;
         js.Lib.document.onmousedown = untyped this.mouseDown;
@@ -59,7 +62,15 @@ class JSEventMonitor {
         
         if( target == null ) return true;
         
-        target.postEvent( type, { x:e.clientX, y:e.clientY } );
+        if( rootX == null ) {
+            untyped {
+                var root = untyped org.xinf.ony.Root.getRoot()._p;
+                rootX = root.offsetLeft;
+                rootY = root.offsetTop;
+            }
+        }
+            
+        target.postEvent( type, { x:e.clientX - rootX, y:e.clientY - rootY } );
         
         untyped {
             if( e.stopPropagation ) e.stopPropagation();

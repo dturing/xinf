@@ -100,7 +100,6 @@ class VScrollbar extends Pane {
     }
     
     public function setScrollPosition( position:Float ) :Void {
-        trace("setScrollPos: "+position );
         position = Math.max( 0, Math.min( 1, position ) );
         thumb.bounds.setPosition( 0, position * (bounds.height-thumbSize) );
     }
