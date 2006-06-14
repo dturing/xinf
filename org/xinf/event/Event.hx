@@ -141,6 +141,9 @@ class Event {
     /** dispatched on a Bounds rectangle when it's size changed **/
     public static var SIZE_CHANGED:String = "sizeChanged";
 
+    /** xinfinity only: dispatched on a Box when it's cropping changed **/
+    public static var CROP_CHANGED:String = "cropChanged";
+
     /** generic "changed" event -- something changed. **/
     public static var CHANGED:String = "changed";
 
@@ -148,7 +151,7 @@ class Event {
     public static var SCROLLED:String = "scrolled";
     /** Scrollbar is scrolled by a step. data.direction is 0 (up) or 1 (down).
         You must update the scrollbar yourself. **/
-    public static var SCROLL_STEP:String = "scrollLeap";
+    public static var SCROLL_STEP:String = "scrollStep";
     /** Scrollbar is scrolled by a leap (page). data.direction is 0 (up) or 1 (down).
         You must update the scrollbar yourself. **/
     public static var SCROLL_LEAP:String = "scrollLeap";

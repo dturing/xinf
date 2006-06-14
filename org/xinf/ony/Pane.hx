@@ -72,8 +72,8 @@ class Pane extends Element {
                 _crop_mc = null;
             }
         #else neko
-            untyped _p.crop = _crop; // FIXME
-            _p.changed();
+            var _b:org.xinf.inity.Box = cast(_p,org.xinf.inity.Box);
+            _b.crop = _crop;
         #end
         return _crop;
     }

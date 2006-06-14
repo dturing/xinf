@@ -102,8 +102,6 @@ class Root extends Stage {
     public function resize( w:Int, h:Int ) : Void {
         super.resize(w,h);
 
-        SDL.GL_SetAttribute( SDL.GL_STENCIL_SIZE, 1 ); // FIXME 1 might be enough
-
         if( SDL.SetVideoMode( Math.floor(width), Math.floor(height), 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
@@ -186,10 +184,11 @@ class Root extends Stage {
                     resize( SDL.ResizeEvent_w_get(re), SDL.ResizeEvent_h_get(re) );
                     
                 case SDL.ACTIVEEVENT:
-                //    trace("active event");
+                    //trace("active event");
                     // todo: mouseout on any overe'd item
                 case SDL.VIDEOEXPOSE:
-               //     trace("expose event");
+                    trace("expose event");
+                    changed();
                 default:
                     trace("Event "+k);
             }
@@ -216,16 +215,27 @@ class Root extends Stage {
         buttonpress = k == SDL.MOUSEBUTTONDOWN;
         var x = SDL.MouseButtonEvent_x_get(e);
         var y = SDL.MouseButtonEvent_y_get(e);
+        var button = SDL.MouseButtonEvent_button_get(e);
         
+        if( button == 4 || button == 5 ) {
+            if( k == SDL.MOUSEBUTTONUP ) {
+                var direction:Int = 0; // up;
+                if( button==5 ) direction = 1; // down
+                if( objectUnderMouse != null )
+                    objectUnderMouse.postEvent( Event.SCROLL_STEP, { direction:direction } );
+                else
+                    org.xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { direction:direction } );
+            }
+            return;
+        }
+
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
-//        trace( type+" - "+objectUnderMouse );
-        
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( type, { x:x, y:y } );
+            objectUnderMouse.postEvent( type, { x:x, y:y, button:button } );
         else
-            org.xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y } );
+            org.xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y, button:button } );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {

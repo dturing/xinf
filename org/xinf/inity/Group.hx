@@ -25,6 +25,7 @@ class Group extends Object {
 
     public function addChild( child:Object ) :Void {
         children.push(child);
+        child.parent = this;
     }
     
     public function getChildAt( index:Int ) :Object {

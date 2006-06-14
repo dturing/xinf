@@ -26,11 +26,14 @@ class Stage extends Group {
     private var definedHeight:Float;
     private var width:Float;
     private var height:Float;
+    private var x:Float;
+    private var y:Float;
 
     public function new( w:Int, h:Int ) :Void {
         super();
         scaleMode = NO_SCALE;
         width=w; height=h;
+        x=y=0;
         definedWidth=w; definedHeight=h;
     }
 
@@ -54,12 +57,53 @@ class Stage extends Group {
         transform.setIdentity();
         transform.translate( -1, 1 );
         transform.scale( (2.0/w)*x, (-2.0/h)*y );
-        bounds.setPosition( -1 + (.5/w), 1 + (-.5/h) );
+        this.x = -1 + (.5/w);
+        this.y = 1 + (-.5/h);
 
         width=w; height=h;
         
         org.xinf.event.EventDispatcher.postGlobalEvent( org.xinf.event.Event.STAGE_SCALE, { w:width, h:height } );
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );
  //       trace(scaleMode+" - "+x+","+y );
+    }
+
+    public function _cache() :Void {
+        /*
+            FIXME_ this is ugly, combi of Group::_cache and Object::_cache,
+            for the sole purpose of using x/y instead of bounds.x/y
+        */
+    
+        for( child in children ) {
+            child._cache();
+        }
+        if( _changed ) {
+            if( bounds.x != null && bounds.y != null ) { // FIXME. maybe do this somewhere else?
+                transform.tx = x;
+                transform.ty = y;
+            }
+        
+            if( _displayList == null ) {
+                _displayList = GL.GenLists(1);
+            }
+            GL.NewList( _displayList, GL.COMPILE );
+            GL.PushMatrix();
+                GL.MultMatrixf( transform._v );
+                _render();
+            GL.PopMatrix();
+            GL.EndList();
+            
+            // cache simplified (maybe not do this if they are the same? FIXME)
+            if( _displayListSimple == null ) {
+                _displayListSimple = GL.GenLists(1);
+            }
+            GL.NewList( _displayListSimple, GL.COMPILE );
+            GL.PushMatrix();
+                GL.MultMatrixf( transform._v );
+                _renderSimple();
+            GL.PopMatrix();
+            GL.EndList();
+            
+            _changed = false;
+        }
     }
 }

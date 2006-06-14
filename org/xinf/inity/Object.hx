@@ -31,10 +31,10 @@ class Object {
     public var transform:org.xinf.geom.Matrix;
     public var owner:EventDispatcher;
     public var bounds:Bounds;
+    public var parent:org.xinf.inity.Group;
 
     public var bgColor:org.xinf.ony.Color;
-    public var fgColor:org.xinf.ony.Color;
-    
+    public var fgColor:org.xinf.ony.Color;    
     
     /* ------------------------------------------------------
        Object API

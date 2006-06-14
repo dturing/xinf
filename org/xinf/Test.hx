@@ -85,23 +85,21 @@ class Test {
         b.bounds.setSize( 250, 150 );
         b.setBackgroundColor( new Color().fromRGBInt( 0xaaffaa ) );
 
-/*
-        var b2 = new Foo( "foo b2", a );
-        b2.bounds.setPosition( 125, 25 );
-        b2.bounds.setSize( 50, 25 );
-        b2.setBackgroundColor( new Color().fromRGBInt( 0xaaffaa ) );
-
-        var c = new Foo( "foo c", b );
-        c.bounds.setPosition( 25, 25 );
-        c.bounds.setSize( 50, 50 );
+        var c = new Foo( "crop2", b );
+        c.crop = true;
+        c.bounds.setPosition( 75, 75 );
+        c.bounds.setSize( 100, 100 );
         c.setBackgroundColor( new Color().fromRGBInt( 0xaaaaff ) );
 
-        var c2 = new Foo( "foo c2", b );
-        c2.bounds.setPosition( 125, 25 );
-        c2.bounds.setSize( 50, 25 );
-        c2.setBackgroundColor( new Color().fromRGBInt( 0xaaaaff ) );
-*/
+        var d = new Foo( "tooBig2", c );
+        d.bounds.setPosition( -25, -25 );
+        d.bounds.setSize( 150, 50 );
+        d.setBackgroundColor( new Color().fromRGBInt( 0xffffaa ) );
 
+        var e = new Foo( "tooBig_fail", a );
+        e.bounds.setPosition( -25, -25 );
+        e.bounds.setSize( 200, 45 );
+        e.setBackgroundColor( new Color().fromRGBInt( 0xff0000 ) );
 /*
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );

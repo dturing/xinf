@@ -105,3 +105,9 @@ void glTexSubImage2D_BGRA_BYTE_PART( unsigned int tex, value pos, value size, co
             GL_BGRA, GL_UNSIGNED_BYTE, ((unsigned char *)d)+((x+(_y*width))*4) );
     }
 }
+
+int glGetInteger( GLenum pname ) {
+    int v;
+    glGetIntegerv( pname, &v );
+    return v;
+}
