@@ -44,7 +44,7 @@ class Foo extends org.xinf.ony.Text {
 /**
     Informal xinf Test (used during development).
 **/
-class Test {
+class AdhocTest {
     static var container:org.xinf.ony.Element;
     
     static function main() {

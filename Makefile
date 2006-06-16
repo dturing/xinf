@@ -3,8 +3,8 @@ HAXEFLAGS=-cp . -cp ./libs
 APP_HAXEFLAGS=-cp . -cp ../libs
 
 HAXE_SRCS = $(shell find org -name *.hx)
-MAIN_CLASS=org.xinf.Test
-MAIN_CLASS_FILE=org/xinf/Test.hx
+TEST_CLASS=test.Test
+TEST_CLASS_FILE=test/Test.hx
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -19,28 +19,35 @@ sdl : cptr
 
 default : subdirs xinfinity
 
-bin/test.n : $(HAXE_SRCS) $(MAIN_CLASS_FILE)
-	haxe $(HAXEFLAGS) -neko bin/test.n -main $(MAIN_CLASS) $(MAIN_CLASS)
-bin/test.js : $(MAIN_CLASS_FILE) $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -js $@ -main $(MAIN_CLASS) 
-bin/test.swf : $(MAIN_CLASS_FILE) $(HAXE_SRCS) assets.swfml $(shell find assets)
-	swfmill simple assets.swfml assets.swf
-	haxe $(HAXEFLAGS) -swf-header 320:240:25:ffffff -swf-lib assets.swf -swf $@ -main $(MAIN_CLASS)
 
-        
+
+
+test/run/test.n : $(HAXE_SRCS) $(TEST_CLASS_FILE)
+	haxe $(HAXEFLAGS) -neko $@ -main $(TEST_CLASS)
+test/run/test.js : $(TEST_CLASS_FILE) $(HAXE_SRCS)
+	haxe $(HAXEFLAGS) -js $@ -main $(TEST_CLASS) 
+test/run/test.swf : $(TEST_CLASS_FILE) $(HAXE_SRCS) assets.swfml $(shell find assets)
+	swfmill simple assets.swfml assets.swf
+	haxe $(HAXEFLAGS) -swf-header 320:240:25:ffffff -swf-lib assets.swf -swf $@ -main $(TEST_CLASS)
+test/TestServer.n : test/TestServer.hx
+	haxe -neko test/TestServer.n -main test.TestServer
+                
 .PHONY: flash js xinfinity
 
-flash: bin/test.swf
-js: bin/test.js
-xinfinity: bin/test.n
+swftest: test/run/test.swf
+jstest: test/run/test.js
+xinfinitytest: test/run/test.n
 
-test : subdirs xinfinity
-	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/test.n
+test : subdirs xinfinitytest jstest swftest test/TestServer.n
+	test/runTests.sh
 
-bin/xtest.n : $(HAXE_SRCS)
-	haxe $(HAXEFLAGS) -neko bin/xtest.n -main org.xinf.x11.XinfTest
-xtest : subdirs bin/xtest.n
-	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/xtest.n
+
+bin/adhoc.n : $(HAXE_SRCS)
+	haxe $(HAXEFLAGS) -neko bin/adhoc.n -main org.xinf.AdhocTest
+adhoc : subdirs bin/adhoc.n
+	NEKOPATH=$(NEKOPATH):./libs:./gst:./bin neko bin/adhoc.n
+
+
 
 cleanall : clean
 	for dir in $(SUBDIRS); do \
