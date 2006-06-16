@@ -123,7 +123,16 @@ class ListBox extends Pane {
 
     private function scrollStep( e:Event ) :Void {
         var factor = e.data.delta;
-        offset += 3 * factor * labelHeight;
+        scrollBy( 3 * factor * labelHeight );
+    }
+
+    private function scrollLeap( e:Event ) :Void {
+        var factor = e.data.delta;
+        scrollBy( bounds.height * factor );
+    }
+    
+    private function scrollBy( pixsels:Float ) :Void {
+        offset += pixsels;
         if( offset < 0 ) offset = 0;
         if( offset > ((model.getLength() * labelHeight) - bounds.height) )
             offset = ((model.getLength() * labelHeight) - bounds.height);
@@ -133,16 +142,5 @@ class ListBox extends Pane {
         reDo(null);
     }
 
-    private function scrollLeap( e:Event ) :Void {
-        var factor = e.data.delta;
-        offset += bounds.height * factor;
-        if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * labelHeight) - bounds.height) )
-            offset = ((model.getLength() * labelHeight) - bounds.height);
-            
-        scrollbar.setScrollPosition( offset / ((model.getLength() * labelHeight) - bounds.height) );
-            
-        reDo(null);
-    }
     
 }
