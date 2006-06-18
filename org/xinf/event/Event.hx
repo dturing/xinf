@@ -160,6 +160,9 @@ class Event {
         FIXME: only works in xinfinity (yet) **/
     public static var STAGE_SCALE:String = "stageScale";
 
+    /** triggered on Image once completely loaded **/
+    public static var LOADED:String = "loaded";
+
     /** type of the Event. It's a string, but you should only use
         the STATIC_VARS defined above to set or compare Event types **/
     public var type(default,null) : String;

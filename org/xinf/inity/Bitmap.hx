@@ -16,7 +16,7 @@
 package org.xinf.inity;
 
 class Bitmap extends Group {
-    private var data:BitmapData;
+    public var data:BitmapData;
 
     public var alpha:Float;
 
@@ -25,6 +25,7 @@ class Bitmap extends Group {
         data = _data;
         alpha = 1.0;
     }
+    
 
     private function _renderGraphics() :Void {
             
@@ -39,14 +40,13 @@ class Bitmap extends Group {
         }        
         
       // image
+    
         GL.Color4f( 1., 1., 1., alpha );
-        GL.PushMatrix();
         data.render( w, h, 0, 0, 1, 1 );
-        GL.PopMatrix();
         
     }
-    
     private function _render() :Void {
+    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );
         _renderGraphics();
         super._render();
     }
@@ -65,4 +65,5 @@ class Bitmap extends Group {
         
         super._renderSimple();
     }
+    
 }

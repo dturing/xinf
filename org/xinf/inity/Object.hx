@@ -83,6 +83,7 @@ class Object {
             if( _displayList == null ) {
                 _displayList = GL.GenLists(1);
             }
+          //  trace("Cache "+this+", in List "+_displayList );
             GL.NewList( _displayList, GL.COMPILE );
             GL.PushMatrix();
                 GL.MultMatrixf( transform._v );
@@ -95,6 +96,7 @@ class Object {
                 _displayListSimple = GL.GenLists(1);
             }
             GL.NewList( _displayListSimple, GL.COMPILE );
+          //  trace("Cache "+this+" simple, in List "+_displayListSimple );
             GL.PushMatrix();
                 GL.MultMatrixf( transform._v );
                 _renderSimple();

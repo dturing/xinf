@@ -105,6 +105,13 @@ class Root extends Stage {
         if( SDL.SetVideoMode( Math.floor(width), Math.floor(height), 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
+
+        GL.PixelStorei( GL.UNPACK_ALIGNMENT, 1 );
+
+        GL.Enable( GL.BLEND );
+        GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
+        
+        GL.ShadeModel( GL.SMOOTH );
     }
     
     public function run() : Bool {
@@ -258,17 +265,8 @@ class Root extends Stage {
         GL.MatrixMode( GL.MODELVIEW );
         GL.LoadIdentity();
         
-        GL.PixelStorei( GL.UNPACK_ALIGNMENT, 1 );
-	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
-	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
-
-        GL.Enable( GL.BLEND );
-        GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
-        
-        GL.ShadeModel( GL.FLAT );
 
         GL.ClearColor( 1., 1., 1., 1. );
-            
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }
 
@@ -324,6 +322,7 @@ class Root extends Stage {
         }
         
         GL.MatrixMode( GL.MODELVIEW );
+        GL.Enable( GL.BLEND );
         
         return stacks;
     }

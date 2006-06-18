@@ -37,6 +37,7 @@ class BitmapData {
         height = h;
         cspace = cs;
         
+        trace("new BitmapData "+w+"/"+h );
         createTexture();
     }
 
@@ -50,16 +51,26 @@ class BitmapData {
 
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
-        GL.CreateTexture( texture, twidth, theight );
+	    
+        GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
+	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
         
+        GL.CreateTexture( texture, twidth, theight );
+
         if( _d != null ) {
             switch( cspace ) {
                 case RGB:
                     GL.TexSubImage2D_RGB_BYTE( texture, new Point(0,0), new Point(width,height), _d );
                 case RGBA:
                     GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+                default:
+                    throw("unknown colorspace");
             }
+        } else {
+            throw("data is null");
         }
+
+ //       GL.BindTexture( GL.TEXTURE_2D, 0 );
         GL.Disable( GL.TEXTURE_2D );
     }
     
@@ -72,8 +83,8 @@ class BitmapData {
 
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
+
         GL.Begin( GL.QUADS );
-            
             GL.TexCoord2f( tx1, ty1 );
             GL.Vertex2f  (   0,   0 ); 
             GL.TexCoord2f( tx2, ty1 );
@@ -82,28 +93,33 @@ class BitmapData {
             GL.Vertex2f  (   w,   h ); 
             GL.TexCoord2f( tx1, ty2 );
             GL.Vertex2f  (   0,   h ); 
-
         GL.End();
+
+  //      GL.BindTexture( GL.TEXTURE_2D, 0 );
         GL.Disable( GL.TEXTURE_2D );
+
     }
 
     public static function newFromFile( filename:String ) :BitmapData {
-        GdkPixbuf.g_type_init();
+    
         var err = GdkPixbuf.gdk_pixbuf_create_error();
         var pixbuf = GdkPixbuf.gdk_pixbuf_new_from_file( untyped filename.__s,err);
         
         var msg = GdkPixbuf.gdk_pixbuf_get_error(err);
         if( msg ) throw(msg);
         
-        var d = GdkPixbuf.gdk_pixbuf_get_pixels( pixbuf );
         var w = GdkPixbuf.gdk_pixbuf_get_width( pixbuf );
         var h = GdkPixbuf.gdk_pixbuf_get_height( pixbuf );
         var f = if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
+        var d = GdkPixbuf.gdk_pixbuf_get_pixels_uint( pixbuf );
         
-//        trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
+        trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
         
         // FIXME: we steal pixel data, but the pixbuf structure should be unref'd.
-        
         return( new BitmapData( d, w, h, f ) );
+    }
+    
+    public static function __init__() :Void {
+        GdkPixbuf.g_type_init();
     }
 }

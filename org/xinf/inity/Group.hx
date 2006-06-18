@@ -53,6 +53,7 @@ class Group extends Object {
         for( child in children ) {
             child.render();
         }
+//        super._render();
     }
     private function _renderSimple() :Void {
         for( i in 0...children.length ) {

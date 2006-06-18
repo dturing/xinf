@@ -28,6 +28,9 @@ import js.Dom;
 class Image extends Element {
 
     private var uri:String;
+    #if neko
+    private var _i:org.xinf.inity.Image;
+    #end
 
     /**
         Constructor. The 'src' parameter is the key here: for xinfinity 
@@ -39,11 +42,33 @@ class Image extends Element {
     public function new( name:String, parent:Element, src:String ) :Void {
         uri = src;
         super( name, parent );
+        
+        addEventListener( org.xinf.event.Event.LOADED, sizeKnown );
+        
+        #if flash
+            postEvent( org.xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
+        #else js
+            untyped _p.onload=imageLoaded;
+        #else neko
+            postEvent( org.xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
+        #end
     }
+    
+    private function sizeKnown( e:org.xinf.event.Event ) :Void {
+ //   trace("image "+this+" sizeKnown: "+e.data.w+"x"+e.data.h );
+        bounds.setSize( e.data.w, e.data.h );
+    }
+    
+    #if js
+    private function imageLoaded( e:Dynamic ) :Void {
+        postEvent( org.xinf.event.Event.LOADED, { w:untyped _p.offsetWidth, h:untyped _p.offsetHeight } );
+    }
+    #end
     
     private function createPrimitive() :Dynamic {
         #if neko
-            return new org.xinf.inity.Image( uri );
+            _i = new org.xinf.inity.Image( uri );
+            return _i;
         #else js
             var i:js.HtmlDom = js.Lib.document.createElement("img");
             untyped i.src = uri;

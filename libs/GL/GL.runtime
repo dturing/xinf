@@ -18,16 +18,12 @@
 #include <GL/gl.h>
 #include <GL/glext.h> /* win32 needs this for GL 1.2/1.3 */
 
-/* ------------------------------------------------------------- */
-/* simplifications for functions with >5 arguments
-/* ------------------------------------------------------------- */
-
 void glMap1d_01( GLenum target, GLint stride, GLint order, const GLdouble *points ) {
     glMap1d( target, .0, 1., stride, order, points );
 }
 
 int glCreateTexture( unsigned int tex, int width, int height ) {
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
     return tex;
 }
 
@@ -67,10 +63,10 @@ void glTexSubImage2D_RGBA_BYTE( unsigned int tex, value pos, value size, const u
     int y = val_number( val_field( pos, f_y ) );
     int w = val_number( val_field( size, f_x ) );
     int h = val_number( val_field( size, f_y ) );
-    const unsigned char *d = (unsigned char *)data;
 
+printf("glTexSubImage2D_RGBA_BYTE tex %i data %p\n", tex, data );
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)d );
+        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImage2D_RGB_BYTE( unsigned int tex, value pos, value size, const unsigned int * data ) {
@@ -81,10 +77,10 @@ void glTexSubImage2D_RGB_BYTE( unsigned int tex, value pos, value size, const un
     int y = val_number( val_field( pos, f_y ) );
     int w = val_number( val_field( size, f_x ) );
     int h = val_number( val_field( size, f_y ) );
-    const unsigned char *d = (unsigned char *)data;
-   
+
+//printf("glTexSubImage2D_RGB_BYTE tex %i data %p\n", tex, d );
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)d );
+        GL_RGB, GL_UNSIGNED_BYTE, data );
 }
 
 void glTexSubImage2D_BGRA_BYTE_PART( unsigned int tex, value pos, value size, const unsigned int * data, value img_width ) {

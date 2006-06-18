@@ -60,12 +60,7 @@ class AdhocTest {
         cont.bounds.setSize( 300, 200 );
         container = cont;
 
-/*        
-        var i = new org.xinf.ony.Image("test", cont, "assets/test.jpg");
-        i.bounds.setPosition( 100, 0 );
-//        i.bounds.setSize( 80, 60 );
-*/
-
+/* listbox test
         var model = new SimpleListModel();
         for( i in 0...50 ) {
             model.addItem( "ListItem "+i );
@@ -73,7 +68,9 @@ class AdhocTest {
         
         var list = new org.xinf.ul.ListBox("listTest", cont, model );
         list.bounds.setSize( 100, 200 );
+*/
 
+/* crop test
         var a = new Foo( "crop1", cont );
         a.bounds.setPosition( 120, 25 );
         a.bounds.setSize( 150, 150 );
@@ -100,7 +97,9 @@ class AdhocTest {
         e.bounds.setPosition( -25, -25 );
         e.bounds.setSize( 200, 45 );
         e.setBackgroundColor( new Color().fromRGBInt( 0xff0000 ) );
-/*
+*/
+
+/* labels
         var bg = new org.xinf.ony.Color();
         bg.fromRGBInt( 0x336699 );
         var fg = new org.xinf.ony.Color();
@@ -115,6 +114,39 @@ class AdhocTest {
 
         var slider = new org.xinf.ul.VScrollbar( "test", cont );
 */
+
+
+/* images test */
+
+        var p2 = new org.xinf.ony.Pane("testPane", cont );
+        p2.setBackgroundColor( new Color().fromRGBInt( 0x333388 ) );
+        p2.bounds.setSize( 340, 260 );
+        p2.bounds.setPosition( 10, 10 );
+
+        var i = new org.xinf.ony.Image("testImg",p2,"assets/test.jpg");
+            i.bounds.setPosition( 10, 10 );
+        var i3 = new org.xinf.ony.Image("testImg3",p2,"assets/test.png");
+        i3.bounds.setPosition( 120, 10 );
+ 
+        
+/* decorator test, simulate a button */
+/*
+        var deco = new org.xinf.ul.Decorator("deco",cont);
+        var test = new org.xinf.ony.Text("test button text", deco );
+        deco.setChild( test );
+        test.text = "Hello";
+        deco.bounds.setPosition(20,20);
+*/
+//        GL.BindTexture( GL.TEXTURE_2D, 1 );
+//        GL.BindTexture( GL.TEXTURE_2D, 5 );
+
+        var frame:Int = 0;
+        org.xinf.event.EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, function (e:Event) {
+//            trace("enter_frame");
+//            untyped org.xinf.ony.Root.getRoot()._p.changed();
+            frame++;
+           //  i2.bounds.setSize( Math.sin(frame/25)*100, Math.sin(frame/25)*100 );
+        } );
 
         org.xinf.ony.Root.getRoot().run();
     }
