@@ -17,23 +17,31 @@ package test;
 
 
 class TestServerConnection {
+    private var cnx:haxe.remoting.AsyncConnection;
     
+    public function new() :Void {
+        var URL = "http://localhost/~dan/xinf/server.n";
+        cnx = haxe.remoting.AsyncConnection.urlConnect(URL);
+        cnx.onError = function(err) { trace("Error : "+Std.string(err)); };        
+    }    
+    
+    public function checkpoint( msg:String ) :Void {
+        cnx.Server.checkpoint.call([ {message:msg} ],replyReceived);
+    }
+    
+    private function replyReceived(d:Dynamic) :Void {
+        trace("reply: "+d );
+    }
 }
 
 class Test {
     static function main() {
         
         var server = new TestServerConnection();
-        
         var root = org.xinf.ony.Root.getRoot();
 
-        var cbg = new org.xinf.ony.Color();
-        cbg.fromRGBInt( 0xeeeeee );
-        
-        var cont = new org.xinf.ony.Pane("container", root);
-        cont.setBackgroundColor( cbg );
-        cont.bounds.setPosition( 10, 10 );
-        cont.bounds.setSize( 300, 200 );
+
+        server.checkpoint("hello");
 
 
         org.xinf.ony.Root.getRoot().run();
