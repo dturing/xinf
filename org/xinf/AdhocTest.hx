@@ -117,36 +117,19 @@ class AdhocTest {
 
 
 /* images test */
-
-        var p2 = new org.xinf.ony.Pane("testPane", cont );
-        p2.setBackgroundColor( new Color().fromRGBInt( 0x333388 ) );
-        p2.bounds.setSize( 340, 260 );
-        p2.bounds.setPosition( 10, 10 );
-
-        var i = new org.xinf.ony.Image("testImg",p2,"assets/test.jpg");
-            i.bounds.setPosition( 10, 10 );
-        var i3 = new org.xinf.ony.Image("testImg3",p2,"assets/test.png");
-        i3.bounds.setPosition( 120, 10 );
- 
+        var i = new org.xinf.ony.Image("testImg",cont,"assets/test.jpg");
+        i.bounds.setPosition( 10, 10 );
+        
+        var i3 = new org.xinf.ony.Image("testImg3",cont,"assets/test.png");
+        i3.bounds.setPosition( 25, 25 );
         
 /* decorator test, simulate a button */
-/*
+
         var deco = new org.xinf.ul.Decorator("deco",cont);
-        var test = new org.xinf.ony.Text("test button text", deco );
+        var test = new org.xinf.ul.Label("test button text", deco );
         deco.setChild( test );
         test.text = "Hello";
-        deco.bounds.setPosition(20,20);
-*/
-//        GL.BindTexture( GL.TEXTURE_2D, 1 );
-//        GL.BindTexture( GL.TEXTURE_2D, 5 );
-
-        var frame:Int = 0;
-        org.xinf.event.EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, function (e:Event) {
-//            trace("enter_frame");
-//            untyped org.xinf.ony.Root.getRoot()._p.changed();
-            frame++;
-           //  i2.bounds.setSize( Math.sin(frame/25)*100, Math.sin(frame/25)*100 );
-        } );
+        deco.bounds.setPosition(120,20);
 
         org.xinf.ony.Root.getRoot().run();
     }
