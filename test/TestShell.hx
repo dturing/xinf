@@ -16,8 +16,7 @@ import tests.TestPane;
 
 class TestShell {
     public static var mTests = [
-        tests.TestPane,
-        tests.Test2
+        tests.TestPane
     ];    
     
     public static var nTest:Int;
