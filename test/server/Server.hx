@@ -1,6 +1,8 @@
 class Server {
     private static var testDir="results";
-    static function testResult( name:String, number:Int, visual:Bool, targetEquality:Float ) :Dynamic {
+    static function testResult( name:String, number:Int, visual:Bool, targetEquality:Float, runtime:String ) :Dynamic {
+        var exitCode:Int = 0;
+    
         // assure test directory exists
         if( !neko.FileSystem.exists( testDir ) ) {
             neko.FileSystem.createDir( testDir );
@@ -10,12 +12,13 @@ class Server {
         }
         
         // make screenshot
-        neko.Sys.command("xwd  -display :0.1 -root | xwdtopnm | pnmtopng > "+testDir+"/shot.png");
+        exitCode = neko.Sys.command("xwd -display :1.0 -root | xwdtopnm > "+testDir+"/"+name+":"+number+":"+runtime+".pnm");
+        if( exitCode != 0 ) throw("Could not take screenshot.");
     }
 
-    static function result( name:String, number:Int, visual:Bool, targetEquality:Float ) :Dynamic {
+    static function result( name:String, number:Int, visual:Bool, targetEquality:Float, runtime:String ) :Dynamic {
         try {
-            testResult( name, number, visual, targetEquality );
+            testResult( name, number, visual, targetEquality, runtime );
         } catch( e:Dynamic ) {
             return( { result:false, exception:e } );
         }

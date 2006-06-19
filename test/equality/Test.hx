@@ -25,8 +25,18 @@ class TestServerConnection {
     }    
     
     public function screenshot( testName:String, targetEquality:Float ) :Void {
+        var runtime:String =
+            #if neko
+                "neko"
+            #else js
+                "js"
+            #else flash
+                "fp"
+            #end
+            ;
+            
         try {
-            cnx.Server.result.call([ testName, testNumber++, true, targetEquality ], replyReceived );
+            cnx.Server.result.call([ testName, testNumber++, true, targetEquality, runtime ], replyReceived );
         } catch( e:Dynamic ) {
             trace("couldnt call server: "+e );
         }
@@ -44,8 +54,6 @@ class TestServerConnection {
 
 class Test {
     static function main() {
-                try {
-
         var server = new TestServerConnection();
         var root = org.xinf.ony.Root.getRoot();
 
@@ -63,9 +71,6 @@ class Test {
         };
         org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, test );
     
-            org.xinf.ony.Root.getRoot().run();
-        } catch(e:Dynamic) {
-            trace("Exception: "+e );
-        }
+        org.xinf.ony.Root.getRoot().run();
     }
 }
