@@ -31,6 +31,16 @@ class TestShell {
     }
 
     public static function testStep( e:org.xinf.event.Event ) :Void {
+        #if flash
+            if( untyped flash.Lib._root.runTest != null ) {
+                trace("should run test "+ untyped flash.Lib._root.runTest );
+                untyped flash.Lib._root.runTest = null;
+                
+                trace("test 0 is "+mTests[0] );
+            }
+        #end
+        
+        /*
         if( nTest == null ) nTest=0;
         else nTest++;
         
@@ -46,5 +56,6 @@ class TestShell {
         } else if( nTest == mTests.length ) {
         
         }
+        */
     }
 }

@@ -1,5 +1,4 @@
-#TEST_MODULES=$(foreach TEST, $(shell find tests -name Test\*.hx), $(basename $(TEST)) )
-#TEST_SHELLS=$(foreach MOD, $(MODULES), tests/$(MOD)Shell)
+DEPENDENCIES=$(shell find tests -name Test\*.hx)
 
 CLEAN_FILES=index.n
 
@@ -10,7 +9,9 @@ NEKO_MODULES=TestMain collect/Collector
 
 include ../make.settings
 
-
+foo:
+	echo $(DEPENDENCIES)
+        
 index.n : TestMain.n
 	cp $< $@
 serve : index.n
