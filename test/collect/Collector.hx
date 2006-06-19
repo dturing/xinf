@@ -1,4 +1,4 @@
-class Server {
+class Collector {
     private static var testDir="results";
     static function testResult( name:String, number:Int, visual:Bool, targetEquality:Float, runtime:String ) :Dynamic {
         var exitCode:Int = 0;
@@ -27,7 +27,7 @@ class Server {
     
     static function main() {
         var r = new haxe.remoting.Server();
-        r.addObject("Server",Server);
+        r.addObject("Collector",Collector);
         if( r.handleRequest() )
             return;
         
