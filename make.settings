@@ -1,0 +1,61 @@
+XINFROOT=/home/dan/develop/xinf/
+
+
+NEKO=neko
+NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs
+NEKO_SERVER=nekotools server
+
+LD_LIBRARY_PATH=$(XINFROOT)/libs
+
+HAXE=haxe -cp ~/.haxe/lib/std
+HAXEFLAGS=-cp $(XINFROOT) -cp $(XINFROOT)/libs
+
+XINF_SRC=$(shell find $(XINFROOT)/org -name \*.hx)
+
+#
+# no local modifications should be neccessary beyond here 
+# (if still, i'd like to hear about it- dan_AT_xinf.org
+#
+
+XINF_RUNTIMES=n swf js
+XINF_BINARIES=$(foreach MODULE,$(XINF_MODULES),$(foreach RUNTIME,$(XINF_RUNTIMES),$(MODULE).$(RUNTIME)))
+
+NEKO_BINARIES=$(foreach MODULE,$(NEKO_MODULES),$(MODULE).n)
+SWF_BINARIES=$(foreach MODULE,$(SWF_MODULES),$(MODULE).swf)
+JS_BINARIES=$(foreach MODULE,$(JS_MODULES),$(MODULE).js)
+
+BINARIES=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
+
+#
+# patterns
+#
+%.n : %.hx $(XINF_SRC)
+	$(HAXE) $(HAXEFLAGS) -neko $@ -main $*
+
+%.js : %.hx $(XINF_SRC)
+	$(HAXE) $(HAXEFLAGS) -js $@ -main $*
+
+%.swf : %.hx $(XINF_SRC)
+	$(HAXE) $(HAXEFLAGS) -swf $@ -swf-header 320:240:25:ffffff --flash-strict -main $*
+
+
+default: compile
+
+#
+# default targets
+#
+compile: $(BINARIES)
+
+clean:
+	@rm $(BINARIES)
+
+#serve: $(MODULE).swf
+#	firefox http://localhost:2000/
+#	$(NEKO_SERVER)
+ 
+#view: $(RUN).swf
+#	firefox $(RUN).swf
+   
+run: $(RUN).n
+	neko $(RUN).n
+
