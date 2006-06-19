@@ -1,2 +1,2 @@
-NEKO_MODULES=Server
+NEKO_MODULES=Collector
 include ../../make.settings

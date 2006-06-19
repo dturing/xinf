@@ -18,7 +18,7 @@ class TestServerConnection {
     private var testNumber:Int;
     
     public function new() :Void {
-        var URL = "http://localhost:2000/server/Server.n";
+        var URL = "http://localhost:2000/collect/Collector.n";
         cnx = haxe.remoting.AsyncConnection.urlConnect(URL);
         cnx.onError = function(err) { trace("Error : "+Std.string(err)); };        
         testNumber = 0;
@@ -36,7 +36,7 @@ class TestServerConnection {
             ;
             
         try {
-            cnx.Server.result.call([ testName, testNumber++, true, targetEquality, runtime ], replyReceived );
+            cnx.Collector.result.call([ testName, testNumber++, true, targetEquality, runtime ], replyReceived );
         } catch( e:Dynamic ) {
             trace("couldnt call server: "+e );
         }
@@ -52,25 +52,31 @@ class TestServerConnection {
     }
 }
 
-class Test {
-    static function main() {
-        var server = new TestServerConnection();
-        var root = org.xinf.ony.Root.getRoot();
+import org.xinf.ony.Element;
 
-        var sq = new org.xinf.ony.Pane( "testPane", root );
-        sq.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0xff0000 ) );
-        sq.bounds.setPosition( 10, 10 );
-        sq.bounds.setSize( 100, 100 );
-
-
-        var test:Dynamic;
-        test = function (e:org.xinf.event.Event) {
-            trace("frame 1: "+untyped sq._p);
-            server.screenshot("basic",1.0);
-            org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, test );
-        };
-        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, test );
+class TestCase extends org.xinf.ony.Pane {
+    static var server = new TestServerConnection();
     
-        org.xinf.ony.Root.getRoot().run();
+    private var description:String;
+    private var targetEquality:Float;
+    
+    public function new( parent:Element, _name:String, _desc:String, _targetEquality:Float ) :Void {
+        super( _name, parent );
+        description=_desc;
+        targetEquality = _targetEquality;
+    }
+    
+    public function screenshotFrame1() :Void {
+        var shoot:Dynamic;
+        var self = this;
+        shoot = function (e:org.xinf.event.Event) {
+            TestCase.server.screenshot(self.name,self.targetEquality);
+            org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+        };
+        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+    }
+    
+    public static function main() :Void {
+        trace("TestCase main");
     }
 }
