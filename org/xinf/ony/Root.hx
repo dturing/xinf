@@ -55,13 +55,12 @@ class Root extends Element {
         private var eventMonitor:org.xinf.ony.flash.EventMonitor;
         
         private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
-            flash.Lib.fscommand("trace", pos.fileName+":"+pos.lineNumber+"||"+v );
+            flash.Lib.fscommand("trace", pos.fileName+":"+pos.lineNumber+"||"+v.toString().split("'") );
         }
     #end
 
     private function new() {
         super("root",null);
-        
         #if flash
             haxe.Log.trace = xinfHtmlTrace;
             eventMonitor = new org.xinf.ony.flash.EventMonitor();

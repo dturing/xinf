@@ -84,7 +84,7 @@ class Element extends EventDispatcher {
         #else flash
             untyped _p.owner = this;
         #end
-
+        
         bounds.addEventListener( Event.POSITION_CHANGED, onPositionChanged );
         bounds.addEventListener( Event.SIZE_CHANGED, onSizeChanged );
         
@@ -128,6 +128,7 @@ class Element extends EventDispatcher {
 
 
     private function onPositionChanged( e:Event ) :Void {
+            if( _p == null ) throw("no _p for onPositionChanged "+this);
         #if neko
             _p.changed();
         #else js
@@ -140,6 +141,7 @@ class Element extends EventDispatcher {
     }
 
     private function onSizeChanged( e:Event ) :Void {
+            if( _p == null ) throw("no _p for onSizeChanged "+this);
         #if neko
             _p.changed();
         #else js

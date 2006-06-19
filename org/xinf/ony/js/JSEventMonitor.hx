@@ -20,16 +20,16 @@ import org.xinf.ony.Element;
 import js.Dom;
 
 class JSEventMonitor {
-    private var rootX:Int;
-    private var rootY:Int;
+    private static var rootX:Int;
+    private static var rootY:Int;
 
     public function new() :Void {
         var self = this;
-        js.Lib.document.onmousedown = untyped this.mouseDown;
-        js.Lib.document.onmouseup   = untyped this.mouseUp;
-        js.Lib.document.onmouseover = untyped this.mouseOver;
-        js.Lib.document.onmouseout  = untyped this.mouseOut;
-        js.Lib.document.onmousemove = untyped this.mouseMove;
+        js.Lib.document.onmousedown = untyped mouseDown;
+        js.Lib.document.onmouseup   = untyped mouseUp;
+        js.Lib.document.onmouseover = untyped mouseOver;
+        js.Lib.document.onmouseout  = untyped mouseOut;
+        js.Lib.document.onmousemove = untyped mouseMove;
         
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
@@ -67,7 +67,7 @@ class JSEventMonitor {
         return false;
     }
 
-    private function findTarget( e:js.Event ) :Element {
+    private static  function findTarget( e:js.Event ) :Element {
         var targetNode:js.HtmlDom = e.target;
         var target:Element = untyped targetNode.owner;
         while( target == null && targetNode.parentNode != null ) {
@@ -77,7 +77,7 @@ class JSEventMonitor {
         return target;
     }
     
-    private function postMouseEvent( e:js.Event, type:String ) :Bool {
+    private static function postMouseEvent( e:js.Event, type:String ) :Bool {
         var target:Element = findTarget(e);
         if( target == null ) return true;
         

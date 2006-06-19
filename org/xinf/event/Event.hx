@@ -64,7 +64,7 @@ class Event {
         var n=0;
         while( e != null ) {
             n++;
-        //    trace("Delivering "+e.type+" "+e.data+" to "+e.target );
+    //        if( e.type != Event.ENTER_FRAME ) trace("Delivering "+e.type+" "+e.data+" to "+e.target );
             e.target.dispatchEvent( e );
             e=queue.shift();
         }
@@ -180,5 +180,9 @@ class Event {
         data = _data;
         type = _type;
         target = _target;
+    }
+
+    public function toString() :String {
+        return( "<"+type+" to "+target+", "+data+">" );
     }
 }

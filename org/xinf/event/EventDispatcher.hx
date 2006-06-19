@@ -57,6 +57,7 @@ class EventDispatcher {
         of registration.
     **/    
     public function addEventListener( type:String, f:Event->Void ) :Void {
+       //         trace("add listener "+type+": "+f );
         var a:Array<Event->Void> = _listeners.get(type);
         if( a == null ) {
             a = new Array<Event->Void>();
@@ -75,7 +76,12 @@ class EventDispatcher {
         var a:Array<Event -> Void> = _listeners.get(e.type);
         if( a != null ) {
             for( listener in a ) {
-                listener(e);
+                try {
+//                    trace("deliver "+e.type+": "+listener );
+                    listener(e);
+                } catch(exc:Dynamic) {
+                    trace("Exception delivering "+e.type+": "+exc );
+                }
             }
         }
     }
@@ -89,6 +95,7 @@ class EventDispatcher {
     **/
     public function postEvent( type:String, data:Dynamic ) :Event {
         var e:Event = new Event( type, this, data );
+   //     if( type != "enterFrame" ) trace("postEvent "+this+": "+e );
         Event.push(e);
         return e;
     }
