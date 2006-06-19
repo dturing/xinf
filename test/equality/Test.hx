@@ -15,32 +15,57 @@
 
 class TestServerConnection {
     private var cnx:haxe.remoting.AsyncConnection;
+    private var testNumber:Int;
     
     public function new() :Void {
-        var URL = "http://localhost/~dan/xinf/server.n";
+        var URL = "http://localhost:2000/server/Server.n";
         cnx = haxe.remoting.AsyncConnection.urlConnect(URL);
         cnx.onError = function(err) { trace("Error : "+Std.string(err)); };        
+        testNumber = 0;
     }    
     
-    public function checkpoint( msg:String ) :Void {
-        cnx.Server.checkpoint.call([ {message:msg} ],replyReceived);
+    public function screenshot( testName:String, targetEquality:Float ) :Void {
+        try {
+            cnx.Server.result.call([ testName, testNumber++, true, targetEquality ], replyReceived );
+        } catch( e:Dynamic ) {
+            trace("couldnt call server: "+e );
+        }
     }
     
     private function replyReceived(d:Dynamic) :Void {
-        trace("reply: "+d );
+        var s = "{ ";
+        for( field in Reflect.fields(d) ) {
+            s+=field+":"+Reflect.field(d,field)+" ";
+        }
+        s+="}";
+        trace("reply: "+s );
     }
 }
 
 class Test {
     static function main() {
-        
+                try {
+
         var server = new TestServerConnection();
         var root = org.xinf.ony.Root.getRoot();
 
+        var sq = new org.xinf.ony.Pane( "testPane", root );
+        sq.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0xff0000 ) );
+        sq.bounds.setPosition( 10, 10 );
+        sq.bounds.setSize( 100, 100 );
 
-        server.checkpoint("hello");
 
-
-        org.xinf.ony.Root.getRoot().run();
+        var test:Dynamic;
+        test = function (e:org.xinf.event.Event) {
+            trace("frame 1: "+untyped sq._p);
+            server.screenshot("basic",1.0);
+            org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, test );
+        };
+        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, test );
+    
+            org.xinf.ony.Root.getRoot().run();
+        } catch(e:Dynamic) {
+            trace("Exception: "+e );
+        }
     }
 }
