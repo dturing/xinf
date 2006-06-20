@@ -13,18 +13,18 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ul;
+package xinf.ul;
 
-import org.xinf.event.Event;
+import xinf.event.Event;
 
 interface ListModel {
     function getLength() :Int;
     function getItemAt( index:Int ) :String;
-    function addChangedListener( f:org.xinf.event.Event -> Void ) :Void;
-    function removeChangedListener( f:org.xinf.event.Event -> Void ) :Void;
+    function addChangedListener( f:xinf.event.Event -> Void ) :Void;
+    function removeChangedListener( f:xinf.event.Event -> Void ) :Void;
 }
 
-class SimpleListModel extends org.xinf.event.EventDispatcher, implements ListModel {
+class SimpleListModel extends xinf.event.EventDispatcher, implements ListModel {
     private var items:Array<String>;
     
     public function new() :Void {
@@ -47,11 +47,11 @@ class SimpleListModel extends org.xinf.event.EventDispatcher, implements ListMod
         return items[index];
     }
 
-    public function addChangedListener( f:org.xinf.event.Event -> Void ) :Void {
+    public function addChangedListener( f:xinf.event.Event -> Void ) :Void {
         addEventListener( Event.CHANGED, f );
     }
     
-    public function removeChangedListener( f:org.xinf.event.Event -> Void ) :Void {
+    public function removeChangedListener( f:xinf.event.Event -> Void ) :Void {
         removeEventListener( Event.CHANGED, f );
     }
 }

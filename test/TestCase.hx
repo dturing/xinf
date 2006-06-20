@@ -14,9 +14,9 @@
 */
 
 
-import org.xinf.ony.Element;
+import xinf.ony.Element;
 
-class TestCase extends org.xinf.ony.Pane {
+class TestCase extends xinf.ony.Pane {
     public static var logger:TestLogger;
     
     private var description:String;
@@ -32,12 +32,12 @@ class TestCase extends org.xinf.ony.Pane {
         var shoot:Dynamic;
         var self = this;
         var frame:Int=0;
-        shoot = function (e:org.xinf.event.Event) {
+        shoot = function (e:xinf.event.Event) {
             if( frame++ == 1 ) {
                 if( logger != null ) logger.screenshot(self,self.targetEquality,TestShell.runNextTest);
-                org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+                xinf.event.EventDispatcher.removeGlobalEventListener( xinf.event.Event.ENTER_FRAME, shoot );
             }
         };
-        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, shoot );
     }
 }

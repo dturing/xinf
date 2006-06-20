@@ -13,9 +13,9 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony.js;
+package xinf.ony.js;
 
-import org.xinf.ony.Element;
+import xinf.ony.Element;
 
 import js.Dom;
 
@@ -39,29 +39,29 @@ class JSEventMonitor {
     }
     
     private function mouseDown( e:js.Event ) :Bool {
-        return postMouseEvent( e, org.xinf.event.Event.MOUSE_DOWN );
+        return postMouseEvent( e, xinf.event.Event.MOUSE_DOWN );
     }
 
     private function mouseUp( e:js.Event ) :Bool {
-        return postMouseEvent( e, org.xinf.event.Event.MOUSE_UP );
+        return postMouseEvent( e, xinf.event.Event.MOUSE_UP );
     }
 
     private function mouseOver( e:js.Event ) :Bool {
-        return postMouseEvent( e, org.xinf.event.Event.MOUSE_OVER );
+        return postMouseEvent( e, xinf.event.Event.MOUSE_OVER );
     }
 
     private function mouseOut( e:js.Event ) :Bool {
-        return postMouseEvent( e, org.xinf.event.Event.MOUSE_OUT );
+        return postMouseEvent( e, xinf.event.Event.MOUSE_OUT );
     }
 
     private function mouseMove( e:js.Event ) :Bool {
-        return postMouseEvent( e, org.xinf.event.Event.MOUSE_MOVE );
+        return postMouseEvent( e, xinf.event.Event.MOUSE_MOVE );
     }
 
     private function mouseWheelFF( e:js.Event ) :Bool {
         var target:Element = findTarget(e);
         if( target!=null ) {
-            target.postEvent( org.xinf.event.Event.SCROLL_STEP, { delta:(untyped e.detail/3) } );
+            target.postEvent( xinf.event.Event.SCROLL_STEP, { delta:(untyped e.detail/3) } );
             untyped e.preventDefault();
         }
         return false;
@@ -83,7 +83,7 @@ class JSEventMonitor {
         
         if( rootX == null ) {
             untyped {
-                var root = untyped org.xinf.ony.Root.getRoot()._p;
+                var root = untyped xinf.ony.Root.getRoot()._p;
                 rootX = root.offsetLeft;
                 rootY = root.offsetTop;
             }

@@ -13,14 +13,14 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
-import org.xinf.event.EventDispatcher;
-import org.xinf.event.Event;
-import org.xinf.geom.Point;
+import xinf.event.EventDispatcher;
+import xinf.event.Event;
+import xinf.geom.Point;
 
 #if neko
-    import org.xinf.inity.Group;
+    import xinf.inity.Group;
 #else js
     import js.Dom;
 #end
@@ -138,7 +138,7 @@ class Element extends EventDispatcher {
         if( parent != null ) 
             parent.dispatchEvent(e);
         else
-            org.xinf.event.EventDispatcher.global.dispatchEvent( e );
+            xinf.event.EventDispatcher.global.dispatchEvent( e );
     }
 
 
@@ -173,8 +173,8 @@ class Element extends EventDispatcher {
         Convert a point in global coordinate space to local coordinates.
         Note that "global coordinate space" means the one of Root.
     **/
-    public function globalToLocal( p:org.xinf.geom.Point ) :org.xinf.geom.Point {
-        var q = new org.xinf.geom.Point( p.x, p.y );
+    public function globalToLocal( p:xinf.geom.Point ) :xinf.geom.Point {
+        var q = new xinf.geom.Point( p.x, p.y );
         var parent:Element = this;
         while( parent != null ) {
             q.x -= parent.bounds.x;
@@ -188,8 +188,8 @@ class Element extends EventDispatcher {
         Convert a point in local coordinate space to global coordinates.
         Note that "global coordinate space" means the one of Root.
     **/
-    public function localToGlobal( p:org.xinf.geom.Point ) :org.xinf.geom.Point {
-        var q = new org.xinf.geom.Point( p.x, p.y );
+    public function localToGlobal( p:xinf.geom.Point ) :xinf.geom.Point {
+        var q = new xinf.geom.Point( p.x, p.y );
         var parent:Element = this;
         while( parent != null ) {
             q.x += parent.bounds.x;

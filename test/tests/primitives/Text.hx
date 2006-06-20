@@ -16,13 +16,13 @@
 package tests.primitives;
 
 class Text extends TestCase {
-    var testElement:org.xinf.ony.Text;
-    public function new( parent:org.xinf.ony.Element ) :Void {
+    var testElement:xinf.ony.Text;
+    public function new( parent:xinf.ony.Element ) :Void {
         super( parent, "Text", "tests xinf.ony.Text for proper position, size, color", .99 );
 
-        testElement = new org.xinf.ony.Text( "test", this );
-        testElement.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0x333333 ) );
-        testElement.setTextColor( new org.xinf.ony.Color().fromRGBInt( 0xeeeeee ) );
+        testElement = new xinf.ony.Text( "test", this );
+        testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x333333 ) );
+        testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0xeeeeee ) );
         testElement.bounds.setPosition(10,10);
         testElement.text = "the quick brown fox\njumps over the lazy dog";
 

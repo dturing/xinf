@@ -13,19 +13,19 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.x11;
+package xinf.x11;
 
-import org.xinf.event.Event;
-import org.xinf.event.EventDispatcher;
+import xinf.event.Event;
+import xinf.event.EventDispatcher;
 
-class XScreen extends org.xinf.ony.Wrapper {
+class XScreen extends xinf.ony.Wrapper {
     private var display:Dynamic;
     private var damage:Dynamic;
     public var vfb:XBitmapData;
-    public var bitmap:org.xinf.inity.Bitmap;
+    public var bitmap:xinf.inity.Bitmap;
     private var screen:Int;
 
-    public function new( server:String, _screen:Int, parent:org.xinf.ony.Element ) {
+    public function new( server:String, _screen:Int, parent:xinf.ony.Element ) {
         screen = _screen;
         var displayName = server+"."+screen;
         display = X.OpenDisplay(untyped displayName.__s);
@@ -40,7 +40,7 @@ class XScreen extends org.xinf.ony.Wrapper {
         
         damage = X.DamageCreate( display, X.RootAsDrawable(display,screen), X.DamageReportBoundingBox );
         vfb = new XBitmapData( display, screen );
-        bitmap = new org.xinf.inity.Bitmap( vfb );
+        bitmap = new xinf.inity.Bitmap( vfb );
         super( displayName, parent, bitmap );
         
         EventDispatcher.addGlobalEventListener( Event.ENTER_FRAME, processEvents );

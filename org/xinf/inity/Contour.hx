@@ -13,9 +13,9 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
-import org.xinf.geom.Point;
+import xinf.geom.Point;
 import CPtr;
 
 class CountourPart {

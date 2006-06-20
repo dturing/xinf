@@ -13,12 +13,12 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.x11;
+package xinf.x11;
 
-import org.xinf.event.Event;
+import xinf.event.Event;
 
 class XForward extends XScreen {
-    public function new( server:String, _screen:Int, parent:org.xinf.ony.Element ) {
+    public function new( server:String, _screen:Int, parent:xinf.ony.Element ) {
         super( server, _screen, parent );
 
         if( !X.HaveTestExtension(display) ) {
@@ -40,7 +40,7 @@ class XForward extends XScreen {
     }
     public function onMouseMove( e:Event ) :Void {
             //FIXME: this is a very very crude globalToLocal transformation!
-        var root:org.xinf.inity.Root = untyped org.xinf.ony.Root.getRoot()._p;
+        var root:xinf.inity.Root = untyped xinf.ony.Root.getRoot()._p;
         X.TestFakeMotionEvent( display, screen, 
                 Math.round(root.mouseX-bounds.x), 
                 Math.round(root.mouseY-bounds.y), X.CurrentTime );

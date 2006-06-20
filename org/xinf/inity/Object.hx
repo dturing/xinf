@@ -13,35 +13,35 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
-import org.xinf.event.EventDispatcher;
-import org.xinf.event.Event;
+import xinf.event.EventDispatcher;
+import xinf.event.Event;
 
-// TODO: if this remains the only reference to org.xinf.ony, 
-// style stuff should probably be moved to org.xinf.style
+// TODO: if this remains the only reference to xinf.ony, 
+// style stuff should probably be moved to xinf.style
 // (this note is out of date but here is still sth to do)
-import org.xinf.ony.Bounds;
+import xinf.ony.Bounds;
 
 class Object {
     private var _displayList:Int;
     private var _displayListSimple:Int;
     private var _changed:Bool;
     
-    public var transform:org.xinf.geom.Matrix;
+    public var transform:xinf.geom.Matrix;
     public var owner:EventDispatcher;
     public var bounds:Bounds;
-    public var parent:org.xinf.inity.Group;
+    public var parent:xinf.inity.Group;
 
-    public var bgColor:org.xinf.ony.Color;
-    public var fgColor:org.xinf.ony.Color;    
+    public var bgColor:xinf.ony.Color;
+    public var fgColor:xinf.ony.Color;    
     
     /* ------------------------------------------------------
        Object API
        ------------------------------------------------------ */
     
     public function new() :Void {
-        transform = new org.xinf.geom.Matrix();
+        transform = new xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
         bounds = new Bounds();
         changed();

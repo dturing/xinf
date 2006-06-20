@@ -13,13 +13,13 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ul;
+package xinf.ul;
 
-import org.xinf.ony.Pane;
-import org.xinf.ony.Element;
-import org.xinf.event.Event;
-import org.xinf.ony.Color;
-import org.xinf.ony.Text;
+import xinf.ony.Pane;
+import xinf.ony.Element;
+import xinf.event.Event;
+import xinf.ony.Color;
+import xinf.ony.Text;
 
 /**
     Simple Label element.
@@ -41,7 +41,7 @@ class Label extends Pane {
         nonHoverColor = new Color().fromRGBInt( 0xffffff );
         setBackgroundColor( nonHoverColor );
 
-        textE = new org.xinf.ony.Text( name+"_text", this );
+        textE = new xinf.ony.Text( name+"_text", this );
         textE.bounds.setPosition( hpadding, vpadding );
         textE.bounds.addEventListener( Event.SIZE_CHANGED, textResized );
 
@@ -65,7 +65,7 @@ class Label extends Pane {
         }
     }
 
-    public function setHoverColor( c:org.xinf.ony.Color ) :Void {
+    public function setHoverColor( c:xinf.ony.Color ) :Void {
         hoverColor=c;
     }
     public function onMouseOver( e:Event ) :Void {

@@ -13,13 +13,13 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ul;
+package xinf.ul;
 
-import org.xinf.ony.Pane;
-import org.xinf.ony.Element;
-import org.xinf.geom.Point;
-import org.xinf.event.Event;
-import org.xinf.ony.Color;
+import xinf.ony.Pane;
+import xinf.ony.Element;
+import xinf.geom.Point;
+import xinf.event.Event;
+import xinf.ony.Color;
 
 /**
     Improvised Vertical Scrollbar element.
@@ -40,12 +40,12 @@ class VScrollbar extends Pane {
         bounds.setPosition( parent.bounds.width-thumbSize, 0 );
         bounds.setSize( thumbSize, parent.bounds.height );
         
-        bg = new org.xinf.ony.Pane( name+"_background", this );
+        bg = new xinf.ony.Pane( name+"_background", this );
         bg.bounds.setSize( thumbSize, parent.bounds.height );
         bg.setBackgroundColor( new Color().fromRGBInt( 0xdddddd ) );
         bg.addEventListener( Event.MOUSE_DOWN, clickBar );
         
-        thumb = new org.xinf.ony.Pane( name+"_thumb", this );
+        thumb = new xinf.ony.Pane( name+"_thumb", this );
         thumb.bounds.setSize( thumbSize, thumbSize );
         thumb.setBackgroundColor( new Color().fromRGBInt( 0x999999 ) );
         thumb.addEventListener( Event.MOUSE_DOWN, clickThumb );
@@ -74,8 +74,8 @@ class VScrollbar extends Pane {
     public function clickThumb( e:Event ) {
         offset = e.data.y;
         var self=this;
-        org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _move );
-        org.xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
+        xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _move );
+        xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
     }
     public function move( e:Event ) {
         var y:Float = (e.data.y - offset) + thumb.bounds.y;
@@ -94,8 +94,8 @@ class VScrollbar extends Pane {
         postEvent( Event.SCROLLED, { value:value } );
     }
     public function releaseThumb( e:Event ) {
-        org.xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _move );
-        org.xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
+        xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _move );
+        xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_UP, _releaseThumb );
     }
     
     public function setScrollPosition( position:Float ) :Void {

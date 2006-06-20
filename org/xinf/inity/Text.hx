@@ -13,10 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
-import org.xinf.inity.Font;
-import org.xinf.geom.Point;
+import xinf.inity.Font;
+import xinf.geom.Point;
 
 class Text extends Box {
     // FIXME this loads the font for each text item, eeew!

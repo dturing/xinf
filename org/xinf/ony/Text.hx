@@ -13,10 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
-import org.xinf.geom.Point;
-import org.xinf.event.Event;
+import xinf.geom.Point;
+import xinf.event.Event;
 
 #if js
     import js.Dom;
@@ -37,11 +37,11 @@ class Text extends Pane {
         contained text. If false, it will always be the size you specified, with text content probably overflowing.
     **/
 
-    private var textColor:org.xinf.ony.Color;
+    private var textColor:xinf.ony.Color;
 
     private var _t
         #if neko
-            :org.xinf.inity.Text
+            :xinf.inity.Text
         #else js
             :js.HtmlDom
         #else flash
@@ -55,13 +55,13 @@ class Text extends Pane {
     public function new( name:String, parent:Element ) {
         super(name,parent);
         autoSize = true;
-        setTextColor( new org.xinf.ony.Color().fromRGBInt(0) );
+        setTextColor( new xinf.ony.Color().fromRGBInt(0) );
     }
     
     private function createPrimitive() :Dynamic {
         _t =
             #if neko
-                new org.xinf.inity.Text()
+                new xinf.inity.Text()
             #else js
                 js.Lib.document.createElement("div")
             #else true
@@ -152,7 +152,7 @@ class Text extends Pane {
         #end
     }
 
-    public function setTextColor( c:org.xinf.ony.Color ) :Void {
+    public function setTextColor( c:xinf.ony.Color ) :Void {
         textColor = c;
         
         #if neko

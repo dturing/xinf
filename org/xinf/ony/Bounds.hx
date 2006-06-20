@@ -13,10 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
-import org.xinf.event.Event;
-import org.xinf.event.EventDispatcher;
+import xinf.event.Event;
+import xinf.event.EventDispatcher;
 
 /**
     Bounds describes the bounding rectangle of a xinfony Element.

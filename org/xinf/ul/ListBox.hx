@@ -13,15 +13,15 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ul;
+package xinf.ul;
 
-import org.xinf.event.Event;
-import org.xinf.ony.Pane;
-import org.xinf.ony.Element;
-import org.xinf.ony.Color;
-import org.xinf.ul.VScrollbar;
-import org.xinf.ul.Label;
-import org.xinf.ul.ListModel;
+import xinf.event.Event;
+import xinf.ony.Pane;
+import xinf.ony.Element;
+import xinf.ony.Color;
+import xinf.ul.VScrollbar;
+import xinf.ul.Label;
+import xinf.ul.ListModel;
 
 /**
     Improvised ListBox element.
@@ -49,7 +49,7 @@ class ListBox extends Pane {
         bounds.addEventListener( Event.SIZE_CHANGED, reLayout ); 
         setBackgroundColor( new Color().fromRGBInt( 0xffffff ) );
         
-        scrollbar = new org.xinf.ul.VScrollbar( name+"_scroll", this );
+        scrollbar = new xinf.ul.VScrollbar( name+"_scroll", this );
         scrollbar.addEventListener( Event.SCROLLED, scroll );
 
         scrollPane = new Pane( name+"_pane", this );

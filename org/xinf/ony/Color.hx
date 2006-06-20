@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
 /**
     Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).

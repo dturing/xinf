@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
 /**
     A Pane is a xinfony Element that renders a rectangle in its background color.
@@ -21,7 +21,7 @@ package org.xinf.ony;
     that can have a background.
 **/
 class Pane extends Element {
-    private var bgColor:org.xinf.ony.Color;
+    private var bgColor:xinf.ony.Color;
 
     /**
         if true, contents will be cropped to the Pane's bounds. if false, they will be visible
@@ -45,7 +45,7 @@ class Pane extends Element {
     
     private function createPrimitive() :Dynamic {
         #if neko
-            return new org.xinf.inity.Box();
+            return new xinf.inity.Box();
         #else js
             return js.Lib.document.createElement("div");
         #else flash
@@ -72,7 +72,7 @@ class Pane extends Element {
                 _crop_mc = null;
             }
         #else neko
-            var _b:org.xinf.inity.Box = cast(_p,org.xinf.inity.Box);
+            var _b:xinf.inity.Box = cast(_p,xinf.inity.Box);
             _b.crop = _crop;
         #end
         return _crop;
@@ -99,13 +99,13 @@ class Pane extends Element {
         return clip;
     }
     
-    private function onSizeChanged( e:org.xinf.event.Event ) :Void {
+    private function onSizeChanged( e:xinf.event.Event ) :Void {
         if( _crop ) {
             _crop_mc = makeMask();
         }
         super.onSizeChanged( e );
     }
-    private function onPositionChanged( e:org.xinf.event.Event ) :Void {
+    private function onPositionChanged( e:xinf.event.Event ) :Void {
         if( _crop ) {
             _crop_mc._x = e.data.x;
             _crop_mc._y = e.data.y;
@@ -115,7 +115,7 @@ class Pane extends Element {
     #end
 
     /** Set the background color to the Color specified. **/
-    public function setBackgroundColor( bg:org.xinf.ony.Color ) :Void {
+    public function setBackgroundColor( bg:xinf.ony.Color ) :Void {
         bgColor = bg;
         
         #if neko

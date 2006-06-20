@@ -1,4 +1,4 @@
-XINFROOT=/home/dan/develop/xinf/
+XINFROOT=/tmp/xinf/trunk/
 
 NEKO=neko
 NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs

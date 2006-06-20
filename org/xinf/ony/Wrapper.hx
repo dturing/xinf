@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
 class Wrapper extends Pane {
     var _primitive:Dynamic;

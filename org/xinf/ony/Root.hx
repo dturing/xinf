@@ -13,9 +13,9 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony;
+package xinf.ony;
 
-import org.xinf.event.Event;
+import xinf.event.Event;
 
 #if js
 import js.Dom;
@@ -35,7 +35,7 @@ class Root extends Element {
     
     private var _r:
         #if neko
-            org.xinf.inity.Root
+            xinf.inity.Root
         #else js
             js.HtmlDom
         #else flash
@@ -46,13 +46,13 @@ class Root extends Element {
     #if js
 	    private static var arr = new Array<Root>();
     	private var timerId : Int;
-        private var eventMonitor:org.xinf.ony.js.JSEventMonitor;
+        private var eventMonitor:xinf.ony.js.JSEventMonitor;
 
         private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
             untyped haxe_JSTrace( pos.fileName+":"+pos.lineNumber+"||"+v );
         }
     #else flash
-        private var eventMonitor:org.xinf.ony.flash.EventMonitor;
+        private var eventMonitor:xinf.ony.flash.EventMonitor;
         
         private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
             flash.Lib.fscommand("trace", pos.fileName+":"+pos.lineNumber+"||"+v.toString().split("'") );
@@ -63,15 +63,15 @@ class Root extends Element {
         super("root",null);
         #if flash
             haxe.Log.trace = xinfHtmlTrace;
-            eventMonitor = new org.xinf.ony.flash.EventMonitor();
+            eventMonitor = new xinf.ony.flash.EventMonitor();
         #else js
             haxe.Log.trace = xinfHtmlTrace;
-            eventMonitor = new org.xinf.ony.js.JSEventMonitor();
+            eventMonitor = new xinf.ony.js.JSEventMonitor();
         #end
         
         // keep our own bounds up to date.
-        org.xinf.event.EventDispatcher.addGlobalEventListener(
-            org.xinf.event.Event.STAGE_SCALE, updateSize );
+        xinf.event.EventDispatcher.addGlobalEventListener(
+            xinf.event.Event.STAGE_SCALE, updateSize );
     }
     
     private function updateSize( e:Event ) :Void {
@@ -81,7 +81,7 @@ class Root extends Element {
     private function createPrimitive() :Dynamic {
         _r = 
             #if neko
-                new org.xinf.inity.Root(320,240)
+                new xinf.inity.Root(320,240)
             #else js
                 js.Lib.document.getElementById("xinfony")
             #else flash
@@ -111,7 +111,7 @@ class Root extends Element {
         #else js
 		    var id = arr.length;
 	    	arr[id] = this;
-    		timerId = untyped window.setInterval("org.xinf.ony.Root.arr["+id+"].step();",40);
+    		timerId = untyped window.setInterval("xinf.ony.Root.arr["+id+"].step();",40);
         #else flash
             _p.onEnterFrame = step;
         #end
@@ -119,13 +119,13 @@ class Root extends Element {
     
     #if js
         public function step() :Void {
-            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
-            org.xinf.event.Event.processQueue();
+            xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            xinf.event.Event.processQueue();
         }
     #else flash
         public function step() :Void {
-            org.xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
-            org.xinf.event.Event.processQueue();
+            xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
+            xinf.event.Event.processQueue();
         }
     #end
 }

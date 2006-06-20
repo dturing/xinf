@@ -13,10 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.ony.flash;
+package xinf.ony.flash;
 
-import org.xinf.ony.Element;
-import org.xinf.event.Event;
+import xinf.ony.Element;
+import xinf.event.Event;
 
 class EventMonitor {
     private var mouseTrackingClip:flash.MovieClip;

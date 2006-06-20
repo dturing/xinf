@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
 class Box extends Group {
     public var crop(get_crop,set_crop):Bool;
@@ -43,12 +43,12 @@ class Box extends Group {
         _crop = to;
         if( _crop ) {
             // FIXME untyped!
-            untyped owner.bounds.addEventListener( org.xinf.event.Event.SIZE_CHANGED, sizeChanged );
+            untyped owner.bounds.addEventListener( xinf.event.Event.SIZE_CHANGED, sizeChanged );
     
             cropParent = findCropParent();
             if( cropParent != null ) {
-                cropParent.owner.addEventListener( org.xinf.event.Event.CROP_CHANGED, parentCropChanged );
-                org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.STAGE_SCALE, stageSizeChanged );
+                cropParent.owner.addEventListener( xinf.event.Event.CROP_CHANGED, parentCropChanged );
+                xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.STAGE_SCALE, stageSizeChanged );
             }
             changed();
         }
@@ -68,26 +68,26 @@ class Box extends Group {
         }
         return null;
     }
-    private function sizeChanged( e:org.xinf.event.Event ) {
+    private function sizeChanged( e:xinf.event.Event ) {
         if( crop ) {
-            owner.postEvent( org.xinf.event.Event.CROP_CHANGED, null );
+            owner.postEvent( xinf.event.Event.CROP_CHANGED, null );
         }
     }
-    private function stageSizeChanged( e:org.xinf.event.Event ) {
+    private function stageSizeChanged( e:xinf.event.Event ) {
         if( crop ) {
             // cropping depends on stage size; rerender.
             changed();
         }
     }
-    private function parentCropChanged( e:org.xinf.event.Event ) {
+    private function parentCropChanged( e:xinf.event.Event ) {
         if( crop && e.data != this ) {
-            owner.postEvent( org.xinf.event.Event.CROP_CHANGED, this );
+            owner.postEvent( xinf.event.Event.CROP_CHANGED, this );
         }
     }
     private function setScissors() {
-        var win_h = org.xinf.ony.Root.getRoot().bounds.height;
+        var win_h = xinf.ony.Root.getRoot().bounds.height;
         // FIXME...
-        var pos:org.xinf.geom.Point = untyped owner.localToGlobal( new org.xinf.geom.Point(0,0) );
+        var pos:xinf.geom.Point = untyped owner.localToGlobal( new xinf.geom.Point(0,0) );
 
         // FIXME: take parent crop into account...
         GL.Scissor( Math.round(pos.x), Math.round(win_h-(pos.y+bounds.height)), 

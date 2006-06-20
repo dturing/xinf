@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
 class Polygon extends Object {
     private var contours:Array<Contour>;

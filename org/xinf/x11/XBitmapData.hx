@@ -13,12 +13,12 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.x11;
+package xinf.x11;
 
-import org.xinf.geom.Point;
-import org.xinf.inity.BitmapData;
+import xinf.geom.Point;
+import xinf.inity.BitmapData;
 
-class XBitmapData extends org.xinf.inity.BitmapData {
+class XBitmapData extends xinf.inity.BitmapData {
     private var fb:Dynamic;
     private var display:Dynamic;
     private var screen:Int;

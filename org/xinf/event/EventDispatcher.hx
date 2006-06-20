@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.event;
+package xinf.event;
 
 /**
     EventDispatcher is the base class for all objects that can trigger Events

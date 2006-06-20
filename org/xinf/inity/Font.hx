@@ -13,11 +13,11 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
-import org.xinf.inity.Polygon;
-import org.xinf.inity.Contour;
-import org.xinf.geom.Point;
+import xinf.inity.Polygon;
+import xinf.inity.Contour;
+import xinf.geom.Point;
 
 class Glyph {
     private var polygon:Polygon;

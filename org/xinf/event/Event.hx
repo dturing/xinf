@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.event;
+package xinf.event;
 
 /**
     Event is a User-Interface (or other) Event. It will be passed through the

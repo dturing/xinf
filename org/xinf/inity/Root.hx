@@ -13,10 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
 import SDL;
-import org.xinf.event.Event;
+import xinf.event.Event;
 
 class Profiler {
     private var data:Hash<Int>;
@@ -96,12 +96,12 @@ class Root extends Stage {
             throw("SDL Video Initialization failed.");
         }
 
-        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.QUIT, doQuit );
+        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.QUIT, doQuit );
 
         resize( w, h );
     }
     
-    public function doQuit( e:org.xinf.event.Event ) {
+    public function doQuit( e:xinf.event.Event ) {
         quit=true;
     }
 
@@ -131,7 +131,7 @@ class Root extends Stage {
         
           p.check("sleep");
             
-            org.xinf.event.EventDispatcher.postGlobalEvent( Event.ENTER_FRAME, { } );
+            xinf.event.EventDispatcher.postGlobalEvent( Event.ENTER_FRAME, { } );
             processEvents();
             Event.processQueue();
           p.check("Event.queue");
@@ -220,7 +220,7 @@ class Root extends Stage {
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
 //        trace("Key "+name+" "+type );
-        org.xinf.event.EventDispatcher.postGlobalEvent( type, { key:str } );
+        xinf.event.EventDispatcher.postGlobalEvent( type, { key:str } );
     }
 
     private function handleMouseEvent( e, k ) :Void {
@@ -236,7 +236,7 @@ class Root extends Stage {
                 if( objectUnderMouse != null )
                     objectUnderMouse.postEvent( Event.SCROLL_STEP, { delta:delta } );
                 else
-                    org.xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { delta:delta } );
+                    xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { delta:delta } );
             }
             return;
         }
@@ -247,7 +247,7 @@ class Root extends Stage {
         if( objectUnderMouse != null )
             objectUnderMouse.postEvent( type, { x:x, y:y, button:button } );
         else
-            org.xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y, button:button } );
+            xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y, button:button } );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
@@ -256,7 +256,7 @@ class Root extends Stage {
         if( objectUnderMouse != null )
             objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
         else
-            org.xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+            xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
     }
         
     /* ------------------------------------------------------

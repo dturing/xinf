@@ -13,8 +13,8 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
-import org.xinf.geom.Point;
+package xinf.inity;
+import xinf.geom.Point;
 
 enum ColorSpace {
     RGB;

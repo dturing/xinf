@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package org.xinf.inity;
+package xinf.inity;
 
 class Stage extends Group {
     public static var EXACT_FIT:String = "exactFit";
@@ -62,7 +62,7 @@ class Stage extends Group {
 
         width=w; height=h;
         
-        org.xinf.event.EventDispatcher.postGlobalEvent( org.xinf.event.Event.STAGE_SCALE, { w:width, h:height } );
+        xinf.event.EventDispatcher.postGlobalEvent( xinf.event.Event.STAGE_SCALE, { w:width, h:height } );
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );
  //       trace(scaleMode+" - "+x+","+y );
     }

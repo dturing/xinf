@@ -19,8 +19,7 @@ import TestCase;
 class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
-        tests.primitives.Text,
-        tests.primitives.Image
+        tests.primitives.Text
     ];    
     
     public static var nTest:Int;
@@ -33,8 +32,8 @@ class TestShell {
         testFeedback = null;
 
 
-        var root = org.xinf.ony.Root.getRoot();
-        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, testStep);
+        var root = xinf.ony.Root.getRoot();
+        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, testStep);
         
         #if neko
             testName="";
@@ -87,7 +86,7 @@ class TestShell {
             }                    
         #end
 
-        org.xinf.ony.Root.getRoot().run();
+        xinf.ony.Root.getRoot().run();
     }
 
     public static function runNextTest() :Void {
@@ -100,7 +99,7 @@ class TestShell {
                 TestCase.logger.finished( finished );
             }
             #if neko
-                org.xinf.event.EventDispatcher.postGlobalEvent( org.xinf.event.Event.QUIT, null );
+                xinf.event.EventDispatcher.postGlobalEvent( xinf.event.Event.QUIT, null );
             #end
         } else {
             testName = untyped mTests[nTest].__name__.join(".");
@@ -116,7 +115,7 @@ class TestShell {
         #end
     }
     
-    public static function testStep( e:org.xinf.event.Event ) :Void {
+    public static function testStep( e:xinf.event.Event ) :Void {
         var nextTest:String = null;
         
         #if flash
@@ -147,7 +146,7 @@ class TestShell {
                 var t = untyped testClass.__name__.join(".");
                 if( nextTest == t ) {
 //                    trace("Run test "+nextTest+", log to "+TestCase.logger );
-                    cTest = Reflect.createInstance( testClass, [ org.xinf.ony.Root.getRoot() ] );
+                    cTest = Reflect.createInstance( testClass, [ xinf.ony.Root.getRoot() ] );
                 }
             }
             testName = null;
