@@ -96,7 +96,13 @@ class Root extends Stage {
             throw("SDL Video Initialization failed.");
         }
 
+        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.QUIT, doQuit );
+
         resize( w, h );
+    }
+    
+    public function doQuit( e:org.xinf.event.Event ) {
+        quit=true;
     }
 
     public function resize( w:Int, h:Int ) : Void {

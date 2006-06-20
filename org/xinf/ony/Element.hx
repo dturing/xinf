@@ -87,12 +87,10 @@ class Element extends EventDispatcher {
         
         bounds.addEventListener( Event.POSITION_CHANGED, onPositionChanged );
         bounds.addEventListener( Event.SIZE_CHANGED, onSizeChanged );
-        
+
         super();
     }
 
-    // TODO: destroy element
-    
     private function createPrimitive() :Dynamic {
         #if js
             return js.Lib.document.createElement("div");
@@ -105,6 +103,23 @@ class Element extends EventDispatcher {
         #end
     }
 
+    // TODO: destroy element
+    public function destroy() :Void {
+        // TODO: keep track of children, to destroy, too?        
+        #if neko
+            _p.owner = null;
+            _p.parent.removeChild( _p );
+            _p = null;
+        #else js
+            untyped _p.owner = null;
+            parent._p.removeChild( _p );
+            _p = null;
+        #else flash
+            untyped _p.owner = null;
+            _p.removeMovieClip();
+            _p = null;
+        #end
+    }
 
     /**
         Dispatch an Event to the Element. See the EventDispatcher class for details.

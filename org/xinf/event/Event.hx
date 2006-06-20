@@ -76,6 +76,11 @@ class Event {
     }
 
     /**
+        Triggered globally when the application should quit (xinfinity only).
+    **/
+    public static var QUIT:String = "quit";
+
+    /**
         The ENTER_FRAME is a global event that will be dispatched once for
         every frame cycle. You can listen for it to do animations or other
         functionality that need regular updates.

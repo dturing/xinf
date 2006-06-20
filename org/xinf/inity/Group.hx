@@ -27,6 +27,11 @@ class Group extends Object {
         children.push(child);
         child.parent = this;
     }
+
+    public function removeChild( child:Object ) :Void {
+        children.remove(child);
+        child.parent = null;
+    }
     
     public function getChildAt( index:Int ) :Object {
         return children[index];
