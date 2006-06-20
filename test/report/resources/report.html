@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>xinf test report</title>
+        <link rel="stylesheet" type="text/css" href="../static/xinftest.css"/>
+    </head>
+    <body>
+        <img src="../static/xinf.gif" alt="xinf" title="xinf is not flash"
+            style="margin: 2px; margin-right: 10px;"/>
+        <h1>xinf test report</h1>
+        
+        test results compiled at ::runDate::
+        
+        <table cellpadding="0" border="0">
+                <tr>
+                    <th>
+                        Reference
+                    </th>
+                    <th>
+                        Flash Player
+                    </th>
+                    <th>
+                        JavaScript
+                    </th>
+                    <th>
+                        Xinfinity
+                    </th>
+                </tr>
+            ::foreach tests::
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ::name::
+                    </td>
+                    <td style="background-color: ::if (fp >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                        ::fp::
+                    </td>
+                    <td style="background-color: ::if (js >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                        ::js::
+                    </td>
+                    <td style="background-color: ::if (neko >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                        ::neko::
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../reference/::name::.png" width="160" height="120"/>
+                    </td>
+                    <td>
+                        <img src="../results/::name:::fp.png" width="160" height="120"/>
+                    </td>
+                    <td>
+                        <img src="../results/::name:::js.png" width="160" height="120"/>
+                    </td>
+                    <td>
+                        <img src="../results/::name:::neko.png" width="160" height="120"/>
+                    </td>
+                </tr>
+            ::end::
+        </table>
+    <body>
+</html>

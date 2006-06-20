@@ -21,8 +21,19 @@
                type="application/x-shockwave-flash"
                pluginspage="http://www.macromedia.com/go/getflashplayer"
         />
- 
-        <script language="javascript">
+
+       <script language="javascript">
+                  
+            window.statusbar.visible =
+ 	        window.toolbar.visible =
+ 	        window.locationbar.visible =
+ 	        window.menubar.visible =
+ 	        window.personalbar.visible =
+ 	                false;
+                    
+            window.innerWidth = 320;
+            window.innerHeight = 240;
+        
             var test = window.location.search;
             if( test.length>0 ) {
                 test = test.substr(1,test.length-1);
@@ -30,9 +41,13 @@
                 document.getElementById("swfEmbed").SetVariable("testFeedback", true );
             }
             
-            function haxe_DoFSCommand() {
+            function haxe_DoFSCommand( command, args ) {
+                if( command=="quit" ) {
+                    window.close();
+                }
             }
         </script> 
-    </body>
+ 
+     </body>
 </html>
 

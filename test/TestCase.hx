@@ -13,49 +13,11 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-class TestServerConnection {
-    private var cnx:haxe.remoting.AsyncConnection;
-    private var testNumber:Int;
-    
-    public function new() :Void {
-        var URL = "http://localhost:2000/collect/Collector.n";
-        cnx = haxe.remoting.AsyncConnection.urlConnect(URL);
-        cnx.onError = function(err) { trace("Error : "+Std.string(err)); };        
-        testNumber = 0;
-    }    
-    
-    public function screenshot( testName:String, targetEquality:Float ) :Void {
-        var runtime:String =
-            #if neko
-                "neko"
-            #else js
-                "js"
-            #else flash
-                "fp"
-            #end
-            ;
-            
-        try {
-            cnx.Collector.result.call([ testName, testNumber++, true, targetEquality, runtime ], replyReceived );
-        } catch( e:Dynamic ) {
-            trace("couldnt call server: "+e );
-        }
-    }
-    
-    private function replyReceived(d:Dynamic) :Void {
-        var s = "{ ";
-        for( field in Reflect.fields(d) ) {
-            s+=field+":"+Reflect.field(d,field)+" ";
-        }
-        s+="}";
-        trace("reply: "+s );
-    }
-}
 
 import org.xinf.ony.Element;
 
 class TestCase extends org.xinf.ony.Pane {
-    static var server = new TestServerConnection();
+    public static var logger:TestLogger;
     
     private var description:String;
     private var targetEquality:Float;
@@ -69,9 +31,12 @@ class TestCase extends org.xinf.ony.Pane {
     public function screenshotFrame1() :Void {
         var shoot:Dynamic;
         var self = this;
+        var frame:Int=0;
         shoot = function (e:org.xinf.event.Event) {
-            TestCase.server.screenshot(self.name,self.targetEquality);
-            org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+            if( frame++ == 1 ) {
+                if( logger != null ) logger.screenshot(self,self.targetEquality,TestShell.runNextTest);
+                org.xinf.event.EventDispatcher.removeGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
+            }
         };
         org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
     }

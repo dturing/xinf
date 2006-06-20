@@ -13,10 +13,14 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
+import TestLogger;
+import TestCase;
+
 class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
-        tests.primitives.Text
+        tests.primitives.Text,
+        tests.primitives.Image
     ];    
     
     public static var nTest:Int;
@@ -27,12 +31,20 @@ class TestShell {
     public static function main() :Void {
         testName = null;
         testFeedback = null;
+
+
+        var root = org.xinf.ony.Root.getRoot();
+        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, testStep);
         
         #if neko
-           testName="";
-           var t = untyped __dollar__loader.args[0];
-           untyped testName.__s = t;
-           trace("test: "+testName );
+            testName="";
+            var t = untyped __dollar__loader.args[0];
+            if( t == null ) {
+                testName=null;
+                runNextTest();
+                testFeedback=true;
+            } else
+               untyped testName.__s = t;
         #else js
             // find initialization params
             var test:String = js.Lib.window.location.search;
@@ -74,12 +86,36 @@ class TestShell {
                     untyped navigator.appName + " " + untyped navigator.appVersion;
             }                    
         #end
-        
-        var root = org.xinf.ony.Root.getRoot();
-        org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, testStep);
+
         org.xinf.ony.Root.getRoot().run();
     }
 
+    public static function runNextTest() :Void {
+        if( nTest == null ) nTest=0;
+        else nTest++;
+        
+        if( nTest >= mTests.length ) {
+            trace("Tests Finished.");
+            if( TestCase.logger != null ) {
+                TestCase.logger.finished( finished );
+            }
+            #if neko
+                org.xinf.event.EventDispatcher.postGlobalEvent( org.xinf.event.Event.QUIT, null );
+            #end
+        } else {
+            testName = untyped mTests[nTest].__name__.join(".");
+            trace("next: "+testName );
+        }
+    }
+    
+    public static function finished() :Void {
+        #if js
+            js.Lib.window.close();
+        #else flash
+            flash.Lib.fscommand("quit", "" );
+        #end
+    }
+    
     public static function testStep( e:org.xinf.event.Event ) :Void {
         var nextTest:String = null;
         
@@ -89,8 +125,11 @@ class TestShell {
                 untyped flash.Lib._root.runTest = null;
             }
             if( untyped flash.Lib._root.testFeedback != null ) {
-                testFeedback = true;
+                testFeedback = untyped flash.Lib._root.testFeedback;
+                TestCase.logger = if( testFeedback ) new TestServerConnection(); else null;
             }
+        #else true
+            TestCase.logger = if( testFeedback ) new TestServerConnection(); else null;
         #end
         
         if( testName != null ) {
@@ -103,10 +142,11 @@ class TestShell {
                 cTest.destroy();
                 cTest = null;
             }
+            
             for( testClass in mTests ) {
                 var t = untyped testClass.__name__.join(".");
                 if( nextTest == t ) {
-                    trace("Run test "+nextTest );
+                    trace("Run test "+nextTest+", log to "+TestCase.logger );
                     cTest = Reflect.createInstance( testClass, [ org.xinf.ony.Root.getRoot() ] );
                 }
             }

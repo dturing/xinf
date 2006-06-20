@@ -60,3 +60,13 @@ h2.runtime {
 #swfEmbed {
     margin: 0px;
 }
+
+
+table {
+    margin-top: 1em;
+}
+th {
+    text-align: left;
+    background: #fff;
+    padding: 5px;
+}

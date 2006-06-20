@@ -1,7 +1,5 @@
 DEPENDENCIES=$(shell find tests -name \*.hx)
 
-CLEAN_FILES=index.n
-
 RUN=TestShell
 RUN_ARGS=$(TEST)
 
@@ -10,8 +8,6 @@ NEKO_MODULES=collect/Collector
 
 include ../make.settings
 
-index.n : TestMain.n
-	cp $< $@
-serve : index.n
+serve : 
 	nekotools server
 

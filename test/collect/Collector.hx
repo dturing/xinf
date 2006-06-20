@@ -24,6 +24,11 @@ class Collector {
         }
         return( { result:true } );
     }
+
+    static function finished() :Dynamic {
+        neko.Sys.command("touch /tmp/xinfTestFinished");
+        return( { result:true } );
+    }
     
     static function main() {
         var r = new haxe.remoting.Server();
