@@ -19,22 +19,25 @@ class Pane extends TestCase {
     public function new( parent:org.xinf.ony.Element ) :Void {
         super( parent, "Pane", "tests xinf.ony.Pane for proper position, size, color, hierarchy", 1.0 );
 
+    // a red square
         var sq = new org.xinf.ony.Pane( "testPane", this );
         sq.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0xff0000 ) );
         sq.bounds.setPosition( 10, 10 );
         sq.bounds.setSize( 100, 100 );
 
+    // a green square, next to it
         var sq2 = new org.xinf.ony.Pane( "testPane2", this );
         sq2.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
         sq2.bounds.setPosition( 110, 10 );
         sq2.bounds.setSize( 100, 100 );
 
-        var sq3 = new org.xinf.ony.Pane( "testPane2", sq2 );
+    // a blue square, visually next to, but logically inside of, green
+        var sq3 = new org.xinf.ony.Pane( "testPane3", sq2 );
         sq3.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0x0000ff ) );
         sq3.bounds.setPosition( 100, 0 );
         sq3.bounds.setSize( 100, 100 );
-
-    /* todo: green peer, blue child */
+        
+    // TODO: test alpha, once it's around.
 
         screenshotFrame1();
     }

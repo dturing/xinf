@@ -146,7 +146,7 @@ class TestShell {
             for( testClass in mTests ) {
                 var t = untyped testClass.__name__.join(".");
                 if( nextTest == t ) {
-                    trace("Run test "+nextTest+", log to "+TestCase.logger );
+//                    trace("Run test "+nextTest+", log to "+TestCase.logger );
                     cTest = Reflect.createInstance( testClass, [ org.xinf.ony.Root.getRoot() ] );
                 }
             }
