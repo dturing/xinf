@@ -75,8 +75,4 @@ class TestCase extends org.xinf.ony.Pane {
         };
         org.xinf.event.EventDispatcher.addGlobalEventListener( org.xinf.event.Event.ENTER_FRAME, shoot );
     }
-    
-    public static function main() :Void {
-        trace("TestCase main");
-    }
 }

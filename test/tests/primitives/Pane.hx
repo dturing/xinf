@@ -13,17 +13,26 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package tests;
+package tests.primitives;
 
-class TestPane extends TestCase {
-    var sq:org.xinf.ony.Pane;
+class Pane extends TestCase {
     public function new( parent:org.xinf.ony.Element ) :Void {
-        super( parent, "TestPane", "tests xinf.ony.Pane for proper position, size, color, hierarchy", 1.0 );
+        super( parent, "Pane", "tests xinf.ony.Pane for proper position, size, color, hierarchy", 1.0 );
 
-        sq = new org.xinf.ony.Pane( "testPane", this );
+        var sq = new org.xinf.ony.Pane( "testPane", this );
         sq.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0xff0000 ) );
         sq.bounds.setPosition( 10, 10 );
         sq.bounds.setSize( 100, 100 );
+
+        var sq2 = new org.xinf.ony.Pane( "testPane2", this );
+        sq2.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
+        sq2.bounds.setPosition( 110, 10 );
+        sq2.bounds.setSize( 100, 100 );
+
+        var sq3 = new org.xinf.ony.Pane( "testPane2", sq2 );
+        sq3.setBackgroundColor( new org.xinf.ony.Color().fromRGBInt( 0x0000ff ) );
+        sq3.bounds.setPosition( 100, 0 );
+        sq3.bounds.setSize( 100, 100 );
 
     /* todo: green peer, blue child */
 

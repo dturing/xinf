@@ -9,7 +9,8 @@
     </head>
     <body bgcolor="#0000ff">
  
-        <embed src="TestShell.swf"
+        <embed src="../TestShell.swf"
+               id="swfEmbed"
                bgcolor="#ffffff"
                width="320"
                height="240"
@@ -21,6 +22,17 @@
                pluginspage="http://www.macromedia.com/go/getflashplayer"
         />
  
+        <script language="javascript">
+            var test = window.location.search;
+            if( test.length>0 ) {
+                test = test.substr(1,test.length-1);
+                document.getElementById("swfEmbed").SetVariable("runTest", test );
+                document.getElementById("swfEmbed").SetVariable("testFeedback", true );
+            }
+            
+            function haxe_DoFSCommand() {
+            }
+        </script> 
     </body>
 </html>
 

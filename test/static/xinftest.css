@@ -1,5 +1,5 @@
 
-* {
+body {
     font-family: Bitstream Vera Sans, Arial, sans-serif;
 }
 
@@ -45,4 +45,18 @@ h3 {
     padding-right: 5px;
     
     cursor: default;
+}
+
+h2.runtime {
+    width: 310px;
+    margin: 0px;
+    background: #ddd;
+    margin-top: 1em;
+    padding: 5px;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+#swfEmbed {
+    margin: 0px;
 }
