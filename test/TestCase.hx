@@ -19,12 +19,10 @@ import xinf.ony.Element;
 class TestCase extends xinf.ony.Pane {
     public static var logger:TestLogger;
     
-    private var description:String;
     private var targetEquality:Float;
     
-    public function new( parent:Element, _name:String, _desc:String, _targetEquality:Float ) :Void {
-        super( _name, parent );
-        description=_desc;
+    public function new( parent:Element, _targetEquality:Float ) :Void {
+        super( "test", parent );
         targetEquality = _targetEquality;
     }
     

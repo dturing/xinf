@@ -17,7 +17,7 @@ package tests.primitives;
 
 class Pane extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
-        super( parent, "Pane", "tests xinf.ony.Pane for proper position, size, color, hierarchy", 1.0 );
+        super( parent, 1.0 );
 
     // a red square
         var sq = new xinf.ony.Pane( "testPane", this );

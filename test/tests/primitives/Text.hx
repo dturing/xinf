@@ -18,7 +18,7 @@ package tests.primitives;
 class Text extends TestCase {
     var testElement:xinf.ony.Text;
     public function new( parent:xinf.ony.Element ) :Void {
-        super( parent, "Text", "tests xinf.ony.Text for proper position, size, color", .99 );
+        super( parent, .99 );
 
         testElement = new xinf.ony.Text( "test", this );
         testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x333333 ) );
