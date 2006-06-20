@@ -22,20 +22,6 @@
 /* simple GLU tesselator, outputs the tesselation using glVertex */
 /* ------------------------------------------------------------- */
 
-void simple_tess_begin( GLenum prim ) {
-    glBegin( prim );
-}
-
-void simple_tess_vertex( void *_data ) {
-    GLdouble* data = (GLdouble*)_data;
-    glVertex3dv( data );
-    glTexCoord3dv( data );
-}
-
-void simple_tess_end() {
-    glEnd();
-}
-
 void simple_tess_combine( GLdouble c[3], void *d[4], GLfloat w[4], void **out ) {
     GLdouble *nv = (GLdouble*)malloc(sizeof(GLdouble)*3);
     nv[0] = c[0];
@@ -44,12 +30,17 @@ void simple_tess_combine( GLdouble c[3], void *d[4], GLfloat w[4], void **out ) 
     *out = nv;
 }
 
+void simple_tess_error( GLenum err ) {
+    val_throw( alloc_string( "tesselation error" ) );
+}
+
 GLUtesselator *gluSimpleTesselator( void ) {
     GLUtesselator *tess = gluNewTess();
-    gluTessCallback( tess, GLU_TESS_BEGIN, (_GLUfuncptr)simple_tess_begin );
-    gluTessCallback( tess, GLU_TESS_VERTEX, (_GLUfuncptr)simple_tess_vertex );
-    gluTessCallback( tess, GLU_TESS_END, (_GLUfuncptr)simple_tess_end );
+    gluTessCallback( tess, GLU_TESS_BEGIN, (_GLUfuncptr)glBegin );
+    gluTessCallback( tess, GLU_TESS_VERTEX, (_GLUfuncptr)glVertex3dv );
+    gluTessCallback( tess, GLU_TESS_END, (_GLUfuncptr)glEnd );
     gluTessCallback( tess, GLU_TESS_COMBINE, (_GLUfuncptr)simple_tess_combine );
+    gluTessCallback( tess, GLU_TESS_ERROR, (_GLUfuncptr)simple_tess_error );
     return tess;
 }
 
