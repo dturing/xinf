@@ -1,14 +1,10 @@
 XINFROOT=/home/dan/develop/xinf/
 
-
 NEKO=neko
 NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs
 NEKO_SERVER=nekotools server
 
-LD_LIBRARY_PATH=$(XINFROOT)/libs
-
-HAXE=haxe -cp ~/.haxe/lib/std
-HAXEFLAGS=-cp $(XINFROOT) -cp $(XINFROOT)/libs
+HAXE=haxe -cp ~/.haxe/lib/std -cp $(XINFROOT) -cp $(XINFROOT)/libs
 
 XINF_SRC=$(shell find $(XINFROOT)/org -name \*.hx)
 
@@ -16,6 +12,11 @@ XINF_SRC=$(shell find $(XINFROOT)/org -name \*.hx)
 # no local modifications should be neccessary beyond here 
 # (if still, i'd like to hear about it- dan_AT_xinf.org
 #
+
+RESOURCES=$(shell find resources/*)
+HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
+LD_LIBRARY_PATH=$(XINFROOT)/libs
+
 
 XINF_RUNTIMES=n swf js
 XINF_BINARIES=$(foreach MODULE,$(XINF_MODULES),$(foreach RUNTIME,$(XINF_RUNTIMES),$(MODULE).$(RUNTIME)))
@@ -29,14 +30,14 @@ BINARIES=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
 #
 # patterns
 #
-%.n : %.hx $(XINF_SRC)
-	$(HAXE) $(HAXEFLAGS) -neko $@ -main $*
+%.n : %.hx $(XINF_SRC) $(DEPENDENCIES)
+	$(HAXE) $(HAXEFLAGS) $(HAXE_RESOURCES) -cp $(dir $*) -neko $@ -main $(notdir $*)
 
-%.js : %.hx $(XINF_SRC)
-	$(HAXE) $(HAXEFLAGS) -js $@ -main $*
+%.js : %.hx $(XINF_SRC) $(DEPENDENCIES)
+	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(notdir $*)
 
-%.swf : %.hx $(XINF_SRC)
-	$(HAXE) $(HAXEFLAGS) -swf $@ -swf-header 320:240:25:ffffff --flash-strict -main $*
+%.swf : %.hx $(XINF_SRC) $(DEPENDENCIES)
+	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ -swf-header 320:240:25:ffffff --flash-strict -main $(notdir $*)
 
 
 default: compile
@@ -47,7 +48,7 @@ default: compile
 compile: $(BINARIES)
 
 clean:
-	@rm $(BINARIES)
+	@rm $(BINARIES) $(CLEAN_FILES)
 
 #serve: $(MODULE).swf
 #	firefox http://localhost:2000/
@@ -57,5 +58,5 @@ clean:
 #	firefox $(RUN).swf
    
 run: $(RUN).n
-	neko $(RUN).n
+	neko $(RUN).n $(RUN_ARGS)
 
