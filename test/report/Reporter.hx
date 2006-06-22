@@ -35,7 +35,7 @@ class Reporter {
             }
             
             // TODO: target equality is defined in test...
-            var runtimeResults = { name:test, targetEq:0.9999 };
+            var runtimeResults = { name:test, targetEq:1000 };
             for( runtime in runtimes ) {
                 var img = testDir+"/"+test+":"+runtime+".pnm";
                 var diff = testDir+"/"+test+":"+runtime+".diff.pnm";
@@ -44,7 +44,7 @@ class Reporter {
                 neko.Sys.command("pamarith -subtract "+img+" "+ref+" > "+diff );
                 neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
                 var eq = 1.0 - Std.parseFloat( neko.File.getContent("/tmp/xinftest-diff") );
-                trace( img+" eq: "+eq );
+                eq *= 1000;
                 
                 // convert image and diff image to png
                 var png = testDir+"/"+test+":"+runtime+".png";
@@ -53,7 +53,6 @@ class Reporter {
                 neko.Sys.command("cat "+diff+" | pnmtopng > "+pngdiff );
                 
                 Reflect.setField( runtimeResults, runtime, eq );
-                trace("runtime res: "+runtimeResults );
             }
             results.tests.push( runtimeResults );
         }
@@ -62,7 +61,5 @@ class Reporter {
         var f = neko.File.write( "report.html", false );
         f.write( t.execute( results ) );
         f.close();
-        
-        trace( results );
     }
 }

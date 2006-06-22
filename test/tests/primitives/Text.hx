@@ -18,14 +18,20 @@ package tests.primitives;
 class Text extends TestCase {
     var testElement:xinf.ony.Text;
     public function new( parent:xinf.ony.Element ) :Void {
-        super( parent, .99 );
+        super( parent, .999 );
 
         testElement = new xinf.ony.Text( "test", this );
         testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x333333 ) );
         testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0xeeeeee ) );
         testElement.bounds.setPosition(10,10);
-        testElement.text = "the quick brown fox\njumps over the lazy dog";
+        testElement.setFontSize( 10 );
+        testElement.text = "the quick brown fox\nindeed\njumps over the lazy dog";
 
+        var t = new xinf.ony.Text("glyph", this );
+        t.setTextColor( new xinf.ony.Color().fromRGBInt( 0x0000ff ) );
+        t.bounds.setPosition( 10, 50 );
+        t.setFontSize( 64 );
+        t.text = "a";
         screenshotFrame1();
     }
 }

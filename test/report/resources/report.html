@@ -34,28 +34,36 @@
                     <td>
                         ::name::
                     </td>
-                    <td style="background-color: ::if (fp >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                    <td style="background-color: ::if (fp >= targetEq):: #0f0 ::elseif (fp > 999):: #fa0 ::else:: #f00 ::end::;">
                         ::fp::
                     </td>
-                    <td style="background-color: ::if (js >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                    <td style="background-color: ::if (js >= targetEq):: #0f0 ::elseif (fp > 999):: #fa0 ::else:: #f00 ::end::;">
                         ::js::
                     </td>
-                    <td style="background-color: ::if (neko >= targetEq):: #0f0 ::else:: #f00 ::end::;">
+                    <td style="background-color: ::if (neko >= targetEq):: #0f0 ::elseif (fp > 999):: #fa0 ::else:: #f00 ::end::;">
                         ::neko::
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img src="../reference/::name::.png" width="160" height="120"/>
+                        <a href="http://localhost:2000/?::name::">
+                            <img src="../reference/::name::.png" width="160" height="120"/>
+                        </a>
                     </td>
                     <td>
-                        <img src="../results/::name:::fp.png" width="160" height="120"/>
+                        <a href="../results/::name:::fp.diff.png">
+                            <img src="../results/::name:::fp.png" width="160" height="120"/>
+                        </a>
                     </td>
                     <td>
-                        <img src="../results/::name:::js.png" width="160" height="120"/>
+                        <a href="../results/::name:::js.diff.png">
+                            <img src="../results/::name:::js.png" width="160" height="120"/>
+                        </a>
                     </td>
                     <td>
-                        <img src="../results/::name:::neko.png" width="160" height="120"/>
+                        <a href="../results/::name:::neko.diff.png">
+                            <img src="../results/::name:::neko.png" width="160" height="120"/>
+                        </a>
                     </td>
                 </tr>
             ::end::
