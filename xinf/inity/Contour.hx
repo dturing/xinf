@@ -34,7 +34,6 @@ class LineTo extends CountourPart {
     }
     
     public function render( tess:Dynamic ) {
-//    trace("render "+this);
         GLU.TessVertexSimple( tess, _vertex );
     }
 
@@ -124,7 +123,6 @@ class Contour {
         GLU.TessBeginContour( tess );
         GL.PushMatrix();
         GL.Translatef( offset.x, offset.y, .0 );
-        
         for( p in parts ) {
             p.render(tess);
         }

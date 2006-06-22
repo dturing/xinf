@@ -77,10 +77,11 @@ class Text extends Box {
         GL.PushMatrix();
         GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
 
-        GL.Translatef( .0, .0, .0 );
+        GL.Translatef( .75, .75, .0 );
         
         GL.Scalef( fontSize, fontSize, 1.0 );
         GL.Translatef( .0, _font.ascender, .0 );
+        GL.Translatef( .0, .0, .0 );
         
         GL.PushMatrix();
         

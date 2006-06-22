@@ -73,6 +73,10 @@ class Text extends Pane {
             _t.style.cursor = "default";
             _t.style.overflow = "hidden";
             _t.style.whiteSpace = "nowrap";
+            _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
+            _t.style.fontSize = 10;
+            _t.style.paddingLeft = 2;
+            _t.style.paddingRight = 2;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
             var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
@@ -162,6 +166,21 @@ class Text extends Pane {
             _p.style.color = textColor.toRGBString();
         #else flash
             _t.textColor = textColor.toRGBInt();
+        #end
+    }
+    
+    public function setFontSize( s:Float ) :Void {
+        #if neko
+            _t.fontSize = s;
+            _p.changed();
+        #else js
+            _p.style.fontSize = ""+(s*1.0)+"px";
+        #else flash
+            var format:flash.TextFormat = new flash.TextFormat();
+            format.size = s*1.1;
+            format.font = "Bitstream Vera Sans";
+            _t.setNewTextFormat( format );
+            _t.setTextFormat( format );
         #end
     }
 }

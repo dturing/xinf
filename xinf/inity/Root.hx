@@ -108,6 +108,7 @@ class Root extends Stage {
     public function resize( w:Int, h:Int ) : Void {
         super.resize(w,h);
 
+        SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE , 8 );
         if( SDL.SetVideoMode( Math.floor(width), Math.floor(height), 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
             throw("SDL SetVideoMode failed.");
         }
@@ -116,9 +117,12 @@ class Root extends Stage {
 
         GL.Enable( GL.BLEND );
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
+//        GL.BlendFunc( GL.SRC_ALPHA_SATURATE, GL.ONE );
         
         GL.ShadeModel( GL.SMOOTH );
-    }
+        GL.Enable( GL.POLYGON_SMOOTH );
+        GL.Hint( GL.POLYGON_SMOOTH_HINT, GL.NICEST );
+      }
     
     public function run() : Bool {
         var p:Profiler = new Profiler();
@@ -272,7 +276,7 @@ class Root extends Stage {
         GL.LoadIdentity();
         
 
-        GL.ClearColor( 1., 1., 1., 1. );
+        GL.ClearColor( 1., 1., 1., .0 );
         GL.Clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
     }
 

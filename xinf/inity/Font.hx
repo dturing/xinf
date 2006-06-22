@@ -38,7 +38,7 @@ class Glyph {
 
 class Font {
     private static var fonts:Hash<Font> = new Hash<Font>();
-    public static function getFont( name:String ) {
+    public static function getFont( name:String ) :Font {
         var font:Font;
         font = fonts.get(name);
         if( font != null ) return font;

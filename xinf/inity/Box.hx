@@ -97,11 +97,11 @@ class Box extends Group {
     private function _renderGraphics() :Void {
         var b:Float = 0;
         
-        var x:Float = 0;//-.5;
-        var y:Float = 0;//-.5;
+        var x:Float = -0.25;
+        var y:Float = -0.25;
         
-        var w:Float = bounds.width;    // w,h are not really width/height here,
-        var h:Float = bounds.height;   // but right,bottom!
+        var w:Float = bounds.width-.25;    // w,h are not really width/height here,
+        var h:Float = bounds.height-.25;   // but right,bottom!
         
       // background
         if( bgColor != null ) {
