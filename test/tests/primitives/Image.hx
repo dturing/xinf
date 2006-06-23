@@ -20,12 +20,12 @@ class Image extends TestCase {
         super( parent, 1.0 );
 
     // PNG
-        var sq = new xinf.ony.Image( "png", this, "../static/test.png" );
+        var sq = new xinf.ony.Image( "png", this, "static/test.png" );
         sq.bounds.setPosition( 60, 80 );
         sq.bounds.setSize(180,20);
 
     // JPEG
-        var sq = new xinf.ony.Image( "jpg", this, "../static/test.jpg" );
+        var sq = new xinf.ony.Image( "jpg", this, "static/test.jpg" );
         sq.bounds.setPosition( 60, 120 );
         sq.bounds.setSize(180,20);
 

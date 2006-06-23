@@ -14,11 +14,11 @@ function wait_finish() {
 }
 
 echo Running SWF tests
-firefox -P test -chrome "javascript:void(window.open('http://localhost:2000/static/swf.html?tests.primitives.Pane','','chrome'))"
+firefox -P test -chrome "javascript:void(window.open('http://localhost:2000/swf.html?tests.primitives.Pane','','chrome'))"
 wait_finish
 
 echo Running JS tests
-firefox -P test -chrome "javascript:void(window.open('http://localhost:2000/static/js.html?tests.primitives.Pane','','chrome'))"
+firefox -P test -chrome "javascript:void(window.open('http://localhost:2000/js.html?tests.primitives.Pane','','chrome'))"
 wait_finish
 pkill mozilla
 
