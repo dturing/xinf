@@ -6,7 +6,7 @@ RUN_ARGS=$(TEST)
 XINF_MODULES=TestShell
 NEKO_MODULES=collect/Collector
 
-include ../make.settings
+include ../project.make
 
 serve : 
 	nekotools server

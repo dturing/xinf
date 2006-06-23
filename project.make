@@ -17,7 +17,11 @@ RESOURCES=$(shell find resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
 LD_LIBRARY_PATH=$(XINFROOT)/libs
 
-
+ASSETS=$(shell find assets/*)
+ifneq (,$(ASSETS))
+	SWF_ASSETS=assets.swf
+endif
+    
 XINF_RUNTIMES=n swf js
 XINF_BINARIES=$(foreach MODULE,$(XINF_MODULES),$(foreach RUNTIME,$(XINF_RUNTIMES),$(MODULE).$(RUNTIME)))
 
@@ -36,19 +40,21 @@ BINARIES=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
 %.js : %.hx $(XINF_SRC) $(DEPENDENCIES)
 	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(notdir $*)
 
-%.swf : %.hx $(XINF_SRC) $(DEPENDENCIES)
-	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ -swf-header 320:240:25:ffffff --flash-strict -main $(notdir $*)
-
+%.swf : %.hx $(XINF_SRC) $(DEPENDENCIES) $(SWF_ASSETS)
+	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ $(foreach ASSET, $(SWF_ASSETS), -swf-lib $(ASSET)) -swf-header 320:240:25:ffffff --flash-strict -main $(notdir $*)
 
 default: compile
 
 #
 # default targets
 #
+assets.swf : $(ASSETS)
+	echo "<movie><library>" $(foreach ASSET, $(ASSETS), "<clip id=\"$(ASSET)\" import=\"$(ASSET)\"/>") "</library><frame/></movie>" | swfmill simple stdin $@
+
 compile: $(BINARIES)
 
 clean:
-	@rm $(BINARIES) $(CLEAN_FILES)
+	-@rm $(BINARIES) $(CLEAN_FILES) 2> /dev/null
 
 #serve: $(MODULE).swf
 #	firefox http://localhost:2000/

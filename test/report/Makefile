@@ -1,3 +1,3 @@
 NEKO_MODULES=Reporter
 RUN=Reporter
-include ../../make.settings
+include ../../project.make

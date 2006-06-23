@@ -48,7 +48,7 @@ class Image extends Element {
         addEventListener( xinf.event.Event.LOADED, sizeKnown );
         
         #if flash
-        //    postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
+            postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
         #else js
             untyped _p.onload=imageLoaded;
         #else neko
@@ -77,10 +77,13 @@ class Image extends Element {
             return i;
         #else flash
             _checkLoaded = checkLoaded;
-            xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
+      //      xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
+      
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-            _p = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
-            _p.loadMovie( uri );
+            return parent._p.attachMovie(uri,name,parent._p.getNextHighestDepth());
+            
+      //      _p = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
+      //      _p.loadMovie( uri );
             return _p;
         #end
     }
@@ -94,12 +97,5 @@ class Image extends Element {
                 postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
             }
         }
-/*        
-        private function redraw() :Void {
-            trace("redraw: "+bounds );
-       //     _p._width = bounds.width;
-       //     _p._height = bounds.height;
-        }
-*/
     #end
 }
