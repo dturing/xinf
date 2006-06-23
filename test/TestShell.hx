@@ -19,7 +19,8 @@ import TestCase;
 class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
-        tests.primitives.Text
+        tests.primitives.Text,
+        tests.primitives.Image
     ];    
     
     public static var nTest:Int;
