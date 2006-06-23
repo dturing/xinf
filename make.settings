@@ -1,4 +1,4 @@
-XINFROOT=/tmp/xinf/trunk/
+XINFROOT=/home/dan/develop/xinf
 
 NEKO=neko
 NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs
@@ -6,7 +6,7 @@ NEKO_SERVER=nekotools server
 
 HAXE=haxe -cp ~/.haxe/lib/std -cp $(XINFROOT) -cp $(XINFROOT)/libs
 
-XINF_SRC=$(shell find $(XINFROOT)/org -name \*.hx)
+XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
 
 #
 # no local modifications should be neccessary beyond here 
