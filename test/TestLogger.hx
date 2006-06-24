@@ -30,6 +30,7 @@ class TestServerConnection implements TestLogger {
     public function screenshot( testObject:Dynamic, targetEquality:Float, next:Dynamic ) :Void {
         var testName = Reflect.getClass( testObject ).__name__.join(".");
         nextFunction = next;
+        
         try {
             cnx.Collector.result.call([ testName, testNumber++, true, targetEquality, runtime ], replyReceived );
         } catch( e:Dynamic ) {

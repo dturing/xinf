@@ -38,6 +38,8 @@
             if( test.length>0 ) {
                 test = test.substr(1,test.length-1);
                 document.getElementById("swfEmbed").SetVariable("runTest", test );
+            } else {
+                document.getElementById("swfEmbed").SetVariable("runTest", "tests.primitives.Pane" );
                 document.getElementById("swfEmbed").SetVariable("testFeedback", true );
             }
             

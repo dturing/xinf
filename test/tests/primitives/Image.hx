@@ -29,6 +29,8 @@ class Image extends TestCase {
         sq.bounds.setPosition( 60, 120 );
         sq.bounds.setSize(180,20);
 
+    // TODO: image loading via http
+
         screenshotFrame1();
     }
 }

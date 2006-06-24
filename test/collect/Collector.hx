@@ -1,3 +1,5 @@
+package collect;
+
 class Collector {
     private static var testDir="results";
     static function testResult( name:String, number:Int, visual:Bool, targetEquality:Float, runtime:String ) :Dynamic {

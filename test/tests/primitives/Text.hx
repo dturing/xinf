@@ -19,18 +19,29 @@ class Text extends TestCase {
     var testElement:xinf.ony.Text;
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, .999 );
+        
+        var y:Float=0;
+        
+        for( i in 0...4 ) {
+            testElement = new xinf.ony.Text( "test", this );
+            testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0 ) );
+            testElement.bounds.setPosition( 10, 10+y );
+            testElement.setFontSize( 10 + (i*4) );
+            testElement.text = "the quick brown fox\njumps over the lazy dog";
+            y+=testElement.bounds.height;
+        }
 
         testElement = new xinf.ony.Text( "test", this );
-        testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x333333 ) );
-        testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0xeeeeee ) );
-        testElement.bounds.setPosition(10,10);
-        testElement.setFontSize( 10 );
-        testElement.text = "the quick brown fox\nindeed\njumps over the lazy dog";
-
+        testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0 ) );
+        testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0xffffff ) );
+        testElement.bounds.setPosition( 10, 10+y );
+        testElement.setFontSize( 10 + (3*4) );
+        testElement.text = "the quick brown fox\njumps over the lazy dog";
+        
         var t = new xinf.ony.Text("glyph", this );
         t.setTextColor( new xinf.ony.Color().fromRGBInt( 0x0000ff ) );
-        t.bounds.setPosition( 10, 50 );
-        t.setFontSize( 64 );
+        t.bounds.setPosition( 220, -20 );
+        t.setFontSize( 128 );
         t.text = "a";
         screenshotFrame1();
     }

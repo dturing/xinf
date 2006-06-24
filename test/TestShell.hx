@@ -20,7 +20,10 @@ class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
         tests.primitives.Text,
-        tests.primitives.Image
+        tests.primitives.Image,
+        tests.xinful.Scrollbar,
+        tests.xinful.Listbox,
+        tests.xinful.Dropdown
     ];    
     
     public static var nTest:Int;
@@ -49,7 +52,7 @@ class TestShell {
             // find initialization params
             var test:String = js.Lib.window.location.search;
             if( test.length>0 ) {
-                test = test.substr(1,test.length-1);
+                test = test.substr(1,test.length-1).split(":")[0];
 
                 // set the test name for js          
                 testName = test;
@@ -59,6 +62,9 @@ class TestShell {
                 if( embed != null ) {
                     untyped embed.SetVariable("runTest",test);
                 }
+            } else {
+                testName = "tests.primitives.Pane";
+                testFeedback=true;
             }
         
             // produce test dropdown box

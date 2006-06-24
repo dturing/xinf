@@ -37,7 +37,9 @@ class Pane extends TestCase {
         sq3.bounds.setPosition( 100, 0 );
         sq3.bounds.setSize( 100, 100 );
         
-    // TODO: test alpha, once it's around.
+    // TODO: 
+    // test alpha, once it's around.
+    // test cropping
 
         screenshotFrame1();
     }
