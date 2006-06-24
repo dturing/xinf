@@ -33,6 +33,7 @@ class Object {
     public var bounds:Bounds;
     public var parent:xinf.inity.Group;
 
+    public var visible:Bool;
     public var bgColor:xinf.ony.Color;
     public var fgColor:xinf.ony.Color;    
     
@@ -44,6 +45,7 @@ class Object {
         transform = new xinf.geom.Matrix();
         _displayList = _displayListSimple = null;
         bounds = new Bounds();
+        visible = true;
         changed();
     }
     
@@ -85,10 +87,12 @@ class Object {
             }
           //  trace("Cache "+this+", in List "+_displayList );
             GL.NewList( _displayList, GL.COMPILE );
-            GL.PushMatrix();
-                GL.MultMatrixf( transform._v );
-                _render();
-            GL.PopMatrix();
+            if( visible ) {
+                GL.PushMatrix();
+                    GL.MultMatrixf( transform._v );
+                    _render();
+                GL.PopMatrix();
+            }
             GL.EndList();
             
             // cache simplified (maybe not do this if they are the same? FIXME)
@@ -96,11 +100,12 @@ class Object {
                 _displayListSimple = GL.GenLists(1);
             }
             GL.NewList( _displayListSimple, GL.COMPILE );
-          //  trace("Cache "+this+" simple, in List "+_displayListSimple );
-            GL.PushMatrix();
-                GL.MultMatrixf( transform._v );
-                _renderSimple();
-            GL.PopMatrix();
+            if( visible ) {
+                GL.PushMatrix();
+                    GL.MultMatrixf( transform._v );
+                    _renderSimple();
+                GL.PopMatrix();
+            }
             GL.EndList();
             
             _changed = false;

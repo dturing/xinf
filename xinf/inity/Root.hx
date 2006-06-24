@@ -119,9 +119,9 @@ class Root extends Stage {
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 //        GL.BlendFunc( GL.SRC_ALPHA_SATURATE, GL.ONE );
         
-        GL.ShadeModel( GL.SMOOTH );
-        GL.Enable( GL.POLYGON_SMOOTH );
-        GL.Hint( GL.POLYGON_SMOOTH_HINT, GL.NICEST );
+        GL.ShadeModel( GL.FLAT );
+  //      GL.Enable( GL.POLYGON_SMOOTH );
+  //      GL.Hint( GL.POLYGON_SMOOTH_HINT, GL.NICEST );
       }
     
     public function run() : Bool {
