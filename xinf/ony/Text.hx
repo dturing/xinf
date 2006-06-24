@@ -75,6 +75,8 @@ class Text extends Pane {
             _t.style.whiteSpace = "nowrap";
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
             _t.style.fontSize = 10;
+//            _t.style.paddingTop = 1;
+//            _t.style.paddingBottom = 1;
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
         #else flash
@@ -88,7 +90,7 @@ class Text extends Pane {
             _t.selectable = false;
             
             var format:flash.TextFormat = new flash.TextFormat();
-            format.size = 12;
+            format.size = 10*1.05;
             format.font = "Bitstream Vera Sans";
             _t.setNewTextFormat( format );
             
@@ -177,7 +179,7 @@ class Text extends Pane {
             _p.style.fontSize = ""+(s*1.0)+"px";
         #else flash
             var format:flash.TextFormat = new flash.TextFormat();
-            format.size = s*1.1;
+            format.size = s*1.05;
             format.font = "Bitstream Vera Sans";
             _t.setNewTextFormat( format );
             _t.setTextFormat( format );

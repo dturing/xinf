@@ -39,6 +39,7 @@ class Element extends EventDispatcher {
     public var name:String;
     
     public var autoSize( default, default ) :Bool;
+    public var visible( get_visible, set_visible ) :Bool;
 
     /**
         The bounding rectangle of the element. You can manipulate it to move and resize the element.
@@ -197,6 +198,34 @@ class Element extends EventDispatcher {
             parent = parent.parent;
         }
         return q;
+    }
+    
+    private function get_visible():Bool {
+        #if flash
+            return( _p._visible );
+        #else js
+            if( _p.style.visibility == "hidden" )
+                return false;
+            return true;
+        #else neko
+            return( _p.visible );
+        #end
+    }
+    private function set_visible(v:Bool):Bool {
+        #if flash
+            return( _p._visible=v );
+        #else js
+            if( v ) {
+                _p.style.visibility="visible";
+            } else {
+                _p.style.visibility="hidden";
+            }
+            return v;
+        #else neko
+            _p.visible = v;
+            _p.changed();
+            return( v );
+        #end
     }
     
     #if flash
