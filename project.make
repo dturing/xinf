@@ -1,4 +1,4 @@
-XINFROOT=/home/dan/develop/xinf
+    XINFROOT=/home/dan/develop/xinf
 
 NEKO=neko
 NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs
@@ -13,11 +13,11 @@ XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
 # (if still, i'd like to hear about it- dan_AT_xinf.org
 #
 
-RESOURCES=$(shell find resources/*)
+RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
 LD_LIBRARY_PATH=$(XINFROOT)/libs
 
-ASSETS=$(shell find assets/*)
+ASSETS=$(wildcard assets/*)
 ifneq (,$(ASSETS))
 	SWF_ASSETS=assets.swf
 endif
@@ -30,12 +30,12 @@ SWF_BINARIES=$(foreach MODULE,$(SWF_MODULES),$(MODULE).swf)
 JS_BINARIES=$(foreach MODULE,$(JS_MODULES),$(MODULE).js)
 
 BINARIES=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
-
+    
 #
 # patterns
 #
 %.n : %.hx $(XINF_SRC) $(DEPENDENCIES)
-	$(HAXE) $(HAXEFLAGS) $(HAXE_RESOURCES) -cp $(dir $*) -neko $@ -main $(notdir $*)
+	$(HAXE) $(HAXEFLAGS) $(HAXE_RESOURCES) -cp $(dir $*) -neko $@ -main $(notdir $(subst /,.,$*))
 
 %.js : %.hx $(XINF_SRC) $(DEPENDENCIES)
 	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(notdir $*)
@@ -54,7 +54,7 @@ assets.swf : $(ASSETS)
 compile: $(BINARIES)
 
 clean:
-	-@rm $(BINARIES) $(CLEAN_FILES) 2> /dev/null
+	-@rm $(BINARIES) $(CLEAN_FILES) $(SWF_ASSETS) 2> /dev/null
 
 #serve: $(MODULE).swf
 #	firefox http://localhost:2000/
@@ -66,3 +66,5 @@ clean:
 run: $(RUN).n
 	neko $(RUN).n $(RUN_ARGS)
 
+foo:
+	echo Testing: 
