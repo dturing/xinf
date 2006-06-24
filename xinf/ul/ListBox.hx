@@ -60,6 +60,8 @@ class ListBox extends Pane {
                 
         addEventListener( Event.SCROLL_STEP, scrollStep );
         addEventListener( Event.SCROLL_LEAP, scrollLeap );
+
+        scrollPane.addEventListener( Event.MOUSE_DOWN, entryClicked );
                 
         reLayout( null );
     }
@@ -81,7 +83,7 @@ class ListBox extends Pane {
             scrollPane.bounds.setSize( bounds.width, bounds.height );
             scrollbar.bounds.setPosition( bounds.width, 100 );
         }
-        
+
         reDo(e);
     }
     
@@ -142,5 +144,10 @@ class ListBox extends Pane {
         reDo(null);
     }
 
+    private function entryClicked( e:Event ) :Void {
+        var y = globalToLocal( new xinf.geom.Point(e.data.x, e.data.y) ).y;
+        var i:Int = Math.floor((y+offset)/labelHeight);
+        postEvent( Event.ITEM_PICKED, { index:i } );
+    }
     
 }

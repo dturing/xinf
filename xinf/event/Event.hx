@@ -168,6 +168,11 @@ class Event {
     /** triggered on Image once completely loaded **/
     public static var LOADED:String = "loaded";
 
+    /** triggered on Menu/Listbox when an item is chosen **/
+    public static var ITEM_PICKED:String = "itemPicked";
+
+
+
     /** type of the Event. It's a string, but you should only use
         the STATIC_VARS defined above to set or compare Event types **/
     public var type(default,null) : String;
