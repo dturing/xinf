@@ -74,11 +74,12 @@ class Text extends Pane {
             _t.style.overflow = "hidden";
             _t.style.whiteSpace = "nowrap";
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
-            _t.style.fontSize = 10;
-//            _t.style.paddingTop = 1;
-//            _t.style.paddingBottom = 1;
+            _t.style.fontSize = 11;
+            _t.style.paddingTop = 2;
+            _t.style.paddingBottom = 2;
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
+            _t.style.lineHeight = "110%";
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
             var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
@@ -90,11 +91,13 @@ class Text extends Pane {
             _t.selectable = false;
             
             var format:flash.TextFormat = new flash.TextFormat();
-            format.size = 10*1.05;
+            format.size = 11; //*1.05;
             format.font = "Bitstream Vera Sans";
             _t.setNewTextFormat( format );
             
-            return e;         
+            return e;     
+        #else neko
+            _t.fontSize = 11;
         #end
         
         return _t;
@@ -172,6 +175,7 @@ class Text extends Pane {
     }
     
     public function setFontSize( s:Float ) :Void {
+        s = Math.floor(s);
         #if neko
             _t.fontSize = s;
             _p.changed();
@@ -179,7 +183,7 @@ class Text extends Pane {
             _p.style.fontSize = ""+(s*1.0)+"px";
         #else flash
             var format:flash.TextFormat = new flash.TextFormat();
-            format.size = s*1.05;
+            format.size = s;//*1.05;
             format.font = "Bitstream Vera Sans";
             _t.setNewTextFormat( format );
             _t.setTextFormat( format );

@@ -37,14 +37,13 @@ class BitmapData {
         height = h;
         cspace = cs;
         
-        trace("new BitmapData "+w+"/"+h );
         createTexture();
     }
 
     public function createTexture() {
-        twidth = 2; while( twidth<width ) twidth<<=1;
-        theight = 2; while( theight<height ) theight<<=1;
-
+        twidth = 64; while( twidth<width ) twidth<<=1;
+        theight = 64; while( theight<height ) theight<<=1;
+        
         var t:Dynamic = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);
         texture = CPtr.uint_get(t,0);
@@ -52,8 +51,10 @@ class BitmapData {
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
 	    
-        GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
-	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
+        GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
+        GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
+        GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
+	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
         
         GL.CreateTexture( texture, twidth, theight );
 
@@ -84,15 +85,20 @@ class BitmapData {
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
 
+        var x:Float = -.25;
+        var y:Float = -.25;
+        w+=x;
+        h+=y;
+
         GL.Begin( GL.QUADS );
             GL.TexCoord2f( tx1, ty1 );
-            GL.Vertex2f  (   0,   0 ); 
+            GL.Vertex2f  (   x,   y ); 
             GL.TexCoord2f( tx2, ty1 );
-            GL.Vertex2f  (   w,   0 ); 
+            GL.Vertex2f  (   w,   y ); 
             GL.TexCoord2f( tx2, ty2 );
             GL.Vertex2f  (   w,   h ); 
             GL.TexCoord2f( tx1, ty2 );
-            GL.Vertex2f  (   0,   h ); 
+            GL.Vertex2f  (   x,   h ); 
         GL.End();
 
   //      GL.BindTexture( GL.TEXTURE_2D, 0 );

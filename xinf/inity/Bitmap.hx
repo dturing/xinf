@@ -46,7 +46,7 @@ class Bitmap extends Group {
         
     }
     private function _render() :Void {
-    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );
+//    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );
         _renderGraphics();
         super._render();
     }
@@ -57,10 +57,10 @@ class Bitmap extends Group {
 
       //  background
         GL.Begin( GL.QUADS );
-            GL.Vertex3f( w , 0., 0. );
-            GL.Vertex3f( w , h , 0. );
-            GL.Vertex3f( 0., h , 0. );
-            GL.Vertex3f( 0., 0., 0. );
+            GL.Vertex3f( w, 0, 0. );
+            GL.Vertex3f( w, h, 0. );
+            GL.Vertex3f( 0, h, 0. );
+            GL.Vertex3f( 0, 0, 0. );
         GL.End();
         
         super._renderSimple();

@@ -24,6 +24,7 @@ class TestCase extends xinf.ony.Pane {
     public function new( parent:Element, _targetEquality:Float ) :Void {
         super( "test", parent );
         targetEquality = _targetEquality;
+        bounds.setSize(320,240);
     }
     
     public function screenshotFrame1() :Void {

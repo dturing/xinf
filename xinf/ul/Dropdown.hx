@@ -75,6 +75,7 @@ class Dropdown extends Pane {
         selectedIndex = e.data.index;
         label.text = model.getItemAt( selectedIndex );
         menu.visible = false;
+        postEvent( Event.ITEM_PICKED, selectedIndex );
     }
     
     private function open( e:Event ) :Void {

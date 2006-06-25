@@ -19,7 +19,6 @@ class Skin extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, 1.0 );
 
-        setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xdddddd ) );
 
     // We simulate a button, doing a Skin/Label combi
         var skin = new xinf.ul.Skin( "testSkin", this );
@@ -30,7 +29,15 @@ class Skin extends TestCase {
         skin.setChild( label );
         
         label.bounds.setSize( 100, 20 );
-        label.setBackgroundColor( null );
+
+
+        var skin = new xinf.ul.Skin( "testSkin", this );
+        skin.bounds.setPosition( 120, 10 );
+        var label = new xinf.ul.Label( "test", skin );
+        label.text = "Hello, great World!";
+        skin.setChild( label );
+        label.bounds.setSize( 120, 20 );
+        label.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xffaaaa ) );
 
         screenshotFrame1();
     }

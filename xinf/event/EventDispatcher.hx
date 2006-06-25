@@ -76,12 +76,11 @@ class EventDispatcher {
         var a:Array<Event -> Void> = _listeners.get(e.type);
         if( a != null ) {
             for( listener in a ) {
-                try {
-//                    trace("deliver "+e.type+": "+listener );
+//                try {
                     listener(e);
-                } catch(exc:Dynamic) {
-                    trace("Exception delivering "+e.type+": "+exc );
-                }
+//                } catch(exc:Dynamic) {
+//                    trace("Exception delivering "+e.type+": "+exc );
+//                }
             }
         }
     }

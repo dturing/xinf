@@ -45,6 +45,7 @@ class Image extends Element {
         uri = src;
         super( name, parent );
         
+        autoSize = true;
         addEventListener( xinf.event.Event.LOADED, sizeKnown );
         
         #if flash
@@ -57,8 +58,11 @@ class Image extends Element {
     }
     
     private function sizeKnown( e:xinf.event.Event ) :Void {
- //   trace("image "+this+" sizeKnown: "+e.data.w+"x"+e.data.h );
-        bounds.setSize( e.data.w, e.data.h );
+        if( autoSize ) {
+            bounds.setSize( e.data.w, e.data.h );
+        }
+//        trace("image "+this+" sizeKnown: "+e.data.w+"x"+e.data.h );
+//        trace("  autosize "+autoSize+" bounds: "+bounds );
     }
     
     #if js
@@ -89,6 +93,13 @@ class Image extends Element {
     }
 
     #if flash
+        private function onSizeChanged( e:xinf.event.Event ) :Void {
+            if( !autoSize ) {
+                _p._width  = Math.floor( e.data.width );
+                _p._height = Math.floor( e.data.height );
+            }
+        }
+        
         private function checkLoaded( e:xinf.event.Event ) :Void {
     		var loaded = true;
 			if( ( _p.getBytesTotal() < 4 ) || ( _p.getBytesLoaded() != _p.getBytesTotal() ) ) loaded = false;

@@ -24,12 +24,18 @@
         <div id="xinfony" 
             style="margin-top:0px;position:absolute;height:240px;width:320px;background:#fff;z-index:1;overflow:hidden">
         </div>
-        <div id="haxe:trace" class="trace"></div>
+        <div id="haxe:flash:trace" class="trace"></div>
         <script type="text/javascript" src="TestShell.js"></script>
 
         <script language="JavaScript">
-            function haxe_JSTrace( args ) {
-            }
+    function haxe_JSTrace( args ) {
+            var a = args.split("||");
+            var div = document.createElement("div");
+            div.appendChild( document.createTextNode( a[1] ) );
+            div.setAttribute("title",a[0]);
+            document.getElementById("haxe:trace").appendChild(div);
+            div.scrollIntoView();
+    }
         </script>
  
     </body>

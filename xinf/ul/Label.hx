@@ -39,16 +39,17 @@ class Label extends Pane {
         super( name, parent );
 
         nonHoverColor = new Color().fromRGBInt( 0xffffff );
-        setBackgroundColor( nonHoverColor );
+       // setBackgroundColor( nonHoverColor );
 
         textE = new xinf.ony.Text( name+"_text", this );
-        textE.bounds.setPosition( hpadding, vpadding );
+        textE.bounds.setPosition( hpadding, vpadding-1 );
         textE.bounds.addEventListener( Event.SIZE_CHANGED, textResized );
 
         bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
-        
+        /*
         addEventListener( Event.MOUSE_OUT, onMouseOut );
         addEventListener( Event.MOUSE_OVER, onMouseOver );
+        */
     }
     
     private function get_text() :String {
@@ -68,6 +69,7 @@ class Label extends Pane {
     public function setHoverColor( c:xinf.ony.Color ) :Void {
         hoverColor=c;
     }
+    
     public function onMouseOver( e:Event ) :Void {
         if( hoverColor != null ) {
             setBackgroundColor( hoverColor );
@@ -76,4 +78,5 @@ class Label extends Pane {
     public function onMouseOut( e:Event ) :Void {
         setBackgroundColor( nonHoverColor );
     }
+    
 }

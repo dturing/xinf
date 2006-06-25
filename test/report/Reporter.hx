@@ -31,7 +31,7 @@ class Reporter {
             if( !neko.FileSystem.exists(ref) ) {
                 trace("Warning: Reference image for "+test+" does not exists, creating.");
                 neko.Sys.command("cp "+imgs[0]+" "+ref );
-                neko.Sys.command("cat "+ref+" | pnmtopng > "+refDir+"/"+test+".png" );
+                neko.Sys.command("cat "+ref+" | pnmtopng > "+refDir+"/"+test+".png 2>/dev/null" );
             }
             
             // TODO: target equality is defined in test...
@@ -41,7 +41,7 @@ class Reporter {
                 var diff = testDir+"/"+test+":"+runtime+".diff.pnm";
 
                 // compare
-                neko.Sys.command("pamarith -subtract "+img+" "+ref+" > "+diff );
+                neko.Sys.command("pamarith -difference "+img+" "+ref+" > "+diff );
                 neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
                 var eq = 1.0 - Std.parseFloat( neko.File.getContent("/tmp/xinftest-diff") );
                 eq *= 1000;
@@ -49,8 +49,8 @@ class Reporter {
                 // convert image and diff image to png
                 var png = testDir+"/"+test+":"+runtime+".png";
                 var pngdiff = testDir+"/"+test+":"+runtime+".diff.png";
-                neko.Sys.command("cat "+img+" | pnmtopng > "+png );
-                neko.Sys.command("cat "+diff+" | pnmtopng > "+pngdiff );
+                neko.Sys.command("cat "+img+" | pnmtopng > "+png+" 2>/dev/null" );
+                neko.Sys.command("cat "+diff+" | pnmtopng > "+pngdiff+" 2>/dev/null" );
                 
                 Reflect.setField( runtimeResults, runtime, eq );
             }

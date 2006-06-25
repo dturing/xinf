@@ -31,7 +31,7 @@ class XinfTest extends xinf.ony.Pane {
         
         screen = new Array<XForward>();
         info = new Array<xinf.ony.Text>();
-        for( i in 0...3 ) {
+        for( i in 0...2 ) {
             screen[i] = new XForward(":1",i,this);
             screen[i].bounds.setPosition( 0, 0 );
             screen[i].bounds.setSize( w, h );

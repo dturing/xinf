@@ -17,7 +17,7 @@ RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
 LD_LIBRARY_PATH=$(XINFROOT)/libs
 
-ASSETS=$(wildcard assets/*)
+ASSETS=$(wildcard assets/* assets/*/*)
 ifneq (,$(ASSETS))
 	SWF_ASSETS=assets.swf
 endif

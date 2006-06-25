@@ -30,7 +30,6 @@ class Text extends Box {
     public function new() {
         super();
         _text = "";
-        fontSize = 12;
     }
 
     private function _getLength() : Int {
@@ -77,7 +76,7 @@ class Text extends Box {
         GL.PushMatrix();
         GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
 
-        GL.Translatef( .75, .75, .0 );
+        GL.Translatef( 0.65, 1.5, .0 );
         
         GL.Scalef( fontSize, fontSize, 1.0 );
         GL.Translatef( .0, _font.ascender, .0 );
@@ -91,11 +90,11 @@ class Text extends Box {
                 GL.PopMatrix();
                 GL.PushMatrix();
                 lines++;
-                GL.Translatef( .0, _font.height*lines, .0 );
+                GL.Translatef( .0, Math.round(_font.height*lines*fontSize)/fontSize, .0 );
             } else {
                 var g = _font.getGlyph(c);
                 if( g != null ) {
-                    g.render();
+                    g.render(fontSize);
                 }
             }
         }

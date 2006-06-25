@@ -9,6 +9,7 @@ rm /tmp/xinfTestFinished
 function wait_finish() {
     while [ ! -e /tmp/xinfTestFinished ]; do
         sleep .5s;
+        echo "wait."
     done
     rm /tmp/xinfTestFinished
 }
@@ -20,7 +21,6 @@ wait_finish
 echo Running JS tests
 firefox -P test -chrome "javascript:void(window.open('http://localhost:2000/js.html','','chrome'))"
 wait_finish
-pkill mozilla
 
 echo Running Xinfinity tests
 make run

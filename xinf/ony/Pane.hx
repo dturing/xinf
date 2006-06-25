@@ -122,7 +122,7 @@ class Pane extends Element {
             _p.bgColor = bgColor;
             _p.changed();
         #else js
-            _p.style.background = bgColor.toRGBString();
+            _p.style.background = if( bgColor != null ) bgColor.toRGBString(); else "none";
         #else flash
             scheduleRedraw();
         #end

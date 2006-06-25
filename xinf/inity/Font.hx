@@ -30,9 +30,9 @@ class Glyph {
         list = 0;
     }
     
-    public function render() {
+    public function render( s:Float ) {
         polygon.render();
-        GL.Translatef( advance, .0, .0 );
+        GL.Translatef( Math.round((advance*s))/s, .0, .0 );
     }
 }
 
@@ -43,6 +43,7 @@ class Font {
         font = fonts.get(name);
         if( font != null ) return font;
         
+        // FIXME
         font = new FontReader("/home/dan/.fonts/vera.ttf").getFont();
         fonts.set( name, font );
         return font;

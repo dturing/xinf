@@ -113,7 +113,7 @@ class Root extends Stage {
             throw("SDL SetVideoMode failed.");
         }
 
-        GL.PixelStorei( GL.UNPACK_ALIGNMENT, 1 );
+        GL.PixelStorei( GL.UNPACK_ALIGNMENT, 4 );
 
         GL.Enable( GL.BLEND );
         GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
