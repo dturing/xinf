@@ -23,7 +23,8 @@ class TestShell {
         tests.primitives.Image,
         tests.xinful.Scrollbar,
         tests.xinful.Listbox,
-        tests.xinful.Dropdown
+        tests.xinful.Dropdown,
+        tests.xinful.Skin
     ];    
     
     public static var nTest:Int;

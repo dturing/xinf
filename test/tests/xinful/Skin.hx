@@ -15,22 +15,22 @@
 
 package tests.xinful;
 
-import xinf.ul.ListModel;
-
-class Dropdown extends TestCase {
-    private var display:xinf.ony.Text;
-
+class Skin extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, 1.0 );
 
-        var model = new SimpleListModel();
-        for( i in 0...20 ) {
-            model.addItem("Item "+i);
-        }
-    
-        var t = new xinf.ul.Dropdown( "test", this, model );
-        t.bounds.setPosition( 10, 10 );
-        t.bounds.setSize( 150, 20 );
+        setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xdddddd ) );
+
+    // We simulate a button, doing a Skin/Label combi
+        var skin = new xinf.ul.Skin( "testSkin", this );
+        skin.bounds.setPosition( 10, 10 );
+        
+        var label = new xinf.ul.Label( "test", skin );
+        label.text = "Hello, World!";
+        skin.setChild( label );
+        
+        label.bounds.setSize( 100, 20 );
+        label.setBackgroundColor( null );
 
         screenshotFrame1();
     }

@@ -19,15 +19,26 @@ class Image extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, 1.0 );
 
+    // 2x2px checkerboard, scaled
+        var t = new xinf.ony.Image( "test", this, "assets/checker2x2.png" );
+        t.bounds.setPosition( 60, 20 );
+        t.autoSize = false;
+        t.bounds.setSize(40,40);
+
+    // 4x4px checkerboard, scaled
+        var t = new xinf.ony.Image( "test", this, "assets/checker.png" );
+        t.bounds.setPosition( 110, 20 );
+        t.autoSize = false;
+        t.bounds.setSize(40,40);
+
+    // color images
     // PNG
         var sq = new xinf.ony.Image( "png", this, "assets/test.png" );
         sq.bounds.setPosition( 60, 80 );
-        sq.bounds.setSize(180,20);
 
     // JPEG
         var sq = new xinf.ony.Image( "jpg", this, "assets/test.jpg" );
         sq.bounds.setPosition( 60, 120 );
-        sq.bounds.setSize(180,20);
 
     // TODO: image loading via http
 
