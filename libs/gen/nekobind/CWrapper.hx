@@ -12,9 +12,11 @@ class CWrapper extends Generator {
         
         kinds = new Hash<String>();
         // these kinds are defined in the cptr library
+        /*
         for( kind in [ "k_float_p", "k_double_p", "k_int_p", "k_unsigned_int_p", "k_short_p", "k_unsigned_short_p", "k_char_p", "k_unsigned_char_p", "k_void_p", "k_void_p_p" ] ) {
             kinds.set( kind, "" );
         }
+        */
     }
 
     override public function _constant( name:String, type:String, value:String ) : Void {

@@ -91,7 +91,7 @@ void XGetImageRGBA( value dpy, value pos, value sz, value data_sz, unsigned int 
 		}
 
 		for (_y = 0; _y < height; _y++) {
-            p = &data[ (x + ((_y+y)*d_width)) ];
+            p = (unsigned char *)&data[ (x + ((_y+y)*d_width)) ];
 			for (_x = 0; _x < width; _x++) {
 				xpixel = XGetPixel(ximg, _x, _y);
 				*p++ = (((xpixel >> br) << lr) & mr);	// r
@@ -164,7 +164,7 @@ value XvfbOpen( Display *display, int screen, const char *file ) {
     header = (struct _xwd_file_header *)map;
     map = map + ntohl(header->header_size) + (ntohl( header->ncolors) * sizeof(XWDColor));
 
-    alloc_field( r, val_id("_buffer"), cptr_void_alloc(map,0) );
+    alloc_field( r, val_id("_buffer"), cptr_wrap(map,size) );
     
     alloc_field( r, val_id("width"), ALLOC_Int( screen_width ) );
     alloc_field( r, val_id("height"), ALLOC_Int( screen_height ) );

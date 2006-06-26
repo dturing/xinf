@@ -34,7 +34,7 @@ class CPtrType implements IType {
     }
 
     public function check( name:String ) : String {
-        return("\tCHECK_CPTR_KIND( v_"+name+", "+ctype.split(" ").join("_")+" );\n");
+        return("\tCHECK_CPTR( v_"+name+" );\n");
     }
     
     public function sizeof() : String {
@@ -66,7 +66,7 @@ class CPtrType implements IType {
     }
     
     public function toC( name:String ) : String {
-        return( "("+ctype+"*)VAL_CPTR( "+name+" )->ptr" );
+        return( "CPTR_PTR( "+name+", "+ctype+" )" );
     }
 
     public function toHx( name:String ) : String {

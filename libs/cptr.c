@@ -3,20 +3,22 @@
 
 DEFINE_KIND( k_cptr );
 
-#define CHECK_CPTR(cp) if( !val_is_abstract(cp) || !val_is_kind(cp,k_cptr) ) { val_throw(alloc_string("invalid cptr")); }
-#define CPTR_SIZE(cp) (((cptr*)val_data(cp))->size)
-#define CPTR_PTR(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
-
-typedef struct _cptr {
-    int size;
-    void *ptr;
-} cptr;
-
 void check_failed( const char *function, const char *file, int line, value given ) {
     buffer b = alloc_buffer("");
     val_buffer(b,given);
     buffer_append(b," is of invalid type for ");
     buffer_append(b, function );
+   
+    _neko_failure(buffer_to_string(b), file, line );
+}
+
+void kind_check_failed( const char *function, const char *file, int line, value given, const char *kind ) {
+    buffer b = alloc_buffer("");
+    val_buffer(b,given);
+    buffer_append(b," is of invalid kind for ");
+    buffer_append(b,function );
+    buffer_append(b,", expected: ");
+    buffer_append(b,kind);
    
     _neko_failure(buffer_to_string(b), file, line );
 }

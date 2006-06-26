@@ -38,3 +38,5 @@ glGetProgramRegisterfvMESA
 GL_ATI_blend_equation_separate
 GL_ALPHA_BLEND_EQUATION_ATI
 glBlendEquationSeparateATI
+
+glGetPointerv

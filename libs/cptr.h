@@ -9,6 +9,15 @@ extern "C" {
 
 extern vkind k_cptr;
 
+typedef struct _cptr {
+    int size;
+    void *ptr;
+} cptr;
+#define CHECK_CPTR(cp) if( !val_is_abstract(cp) || !val_is_kind(cp,k_cptr) ) { val_throw(alloc_string("invalid cptr")); }
+#define CPTR_SIZE(cp) (((cptr*)val_data(cp))->size)
+#define CPTR_PTR(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
+
+
 /* convenience macros */
 
 #define VAL_Int(v) ((int)val_number(v))
@@ -33,6 +42,13 @@ extern vkind k_cptr;
 
 void check_failed( const char *function, const char *file, int line, value given );
 value cptr_wrap( void *ptr, int size );
+
+/* handle kinds - convenience only, not needed for cptr */
+#define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
+                                    kind_check_failed(__FUNCTION__,__FILE__,__LINE__,v,#kind); }
+#define VAL_KIND(v,kind) val_data(v)
+#define ALLOC_KIND(v,kind) (alloc_abstract(kind,(void*)v))
+void kind_check_failed( const char *function, const char *file, int line, value given, const char *kind );
 
 #ifdef __cplusplus
 }
