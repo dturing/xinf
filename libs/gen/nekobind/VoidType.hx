@@ -5,23 +5,23 @@ class VoidType extends PrimitiveType {
         super( "void", "Void" );
     }
     
-    public function cCacheReturn( call:String ) : String {
+    override public function cCacheReturn( call:String ) : String {
         return("\t"+call+";\n" );
     }
     
-    public function cReturn() : String {
+    override public function cReturn() : String {
         return("\treturn val_true;\n");
     }
     
-    public function cLocal( name:String ) : String {
+    override public function cLocal( name:String ) : String {
         return("");
     }
     
-    public function cArg( name:String ) : String {
+    override public function cArg( name:String ) : String {
         return("");
     }
     
-    public function cCallArg( name:String ) : String {
+    override public function cCallArg( name:String ) : String {
         return("");
     }
 }

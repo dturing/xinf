@@ -5,15 +5,15 @@ class NativeType extends PrimitiveType {
         super( "value", "Dynamic" );
     }
     
-    public function check( name:String ) : String {
+    override public function check( name:String ) : String {
         return("");
     }
     
-    public function toC( name:String ) : String {
+    override public function toC( name:String ) : String {
         return( name );
     }
 
-    public function toHx( name:String ) : String {
+    override public function toHx( name:String ) : String {
         return( name );
     }
 }

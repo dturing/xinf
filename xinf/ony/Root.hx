@@ -78,7 +78,7 @@ class Root extends Element {
         bounds.setSize( e.data.w, e.data.h );
     }
     
-    private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Dynamic {
         _r = 
             #if neko
                 new xinf.inity.Root(320,240)

@@ -67,7 +67,7 @@ class Stage extends Group {
  //       trace(scaleMode+" - "+x+","+y );
     }
 
-    public function _cache() :Void {
+    override public function _cache() :Void {
         /*
             FIXME_ this is ugly, combi of Group::_cache and Object::_cache,
             for the sole purpose of using x/y instead of bounds.x/y

@@ -126,7 +126,7 @@ class Element extends EventDispatcher {
         Dispatch an Event to the Element. See the EventDispatcher class for details.
         Element will dispatch the Event to it's parent.
     **/
-    public function dispatchEvent( e:Event ) :Void {
+    override public function dispatchEvent( e:Event ) :Void {
         super.dispatchEvent( e );
         
         // propagate to parent

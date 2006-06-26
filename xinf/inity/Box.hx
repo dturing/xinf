@@ -116,7 +116,7 @@ class Box extends Group {
         }
     }
 
-    public function getHitChild( chain:Array<Int>, x:Float, y:Float ) :Object {
+    public override function getHitChild( chain:Array<Int>, x:Float, y:Float ) :Object {
 //            trace("getHitChild "+x+"/"+y+", "+bounds.x+"/"+bounds.y );
         if( crop ) {
             if( x<bounds.x || x > bounds.x+bounds.width
@@ -128,7 +128,7 @@ class Box extends Group {
         return( super.getHitChild( chain, x, y ) );
     }
 
-    private function _render() :Void {
+    override function _render() :Void {
         _renderGraphics();
 
         if( _crop ) {
@@ -149,7 +149,7 @@ class Box extends Group {
         }
     }
 
-    private function _renderSimple() :Void {
+    override function _renderSimple() :Void {
         // FIXME: this duplicates stuff in _renderGraphics
         var w:Float = bounds.width;   // w,h are not really width/height here,
         var h:Float = bounds.height;  // but right,bottom!

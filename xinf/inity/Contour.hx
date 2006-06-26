@@ -33,7 +33,7 @@ class LineTo extends CountourPart {
         CPtr.double_set(_vertex,2,.0);
     }
     
-    public function render( tess:Dynamic ) {
+    override public function render( tess:Dynamic ) {
         GLU.TessVertexSimple( tess, _vertex );
     }
 
@@ -53,7 +53,7 @@ class CubicTo extends CountourPart {
         v = CPtr.double_alloc(n*3);
     }
     
-    public function render( tess:Dynamic ) {
+    override public function render( tess:Dynamic ) {
         GLU.TessCubicCurve( tess, untyped ctrl.__a, v, n );
     }
 
@@ -73,7 +73,7 @@ class QuadraticTo extends CountourPart {
         v = CPtr.double_alloc(n*3);
     }
     
-    public function render( tess:Dynamic ) {
+    override public function render( tess:Dynamic ) {
         GLU.TessQuadraticCurve( tess, untyped ctrl.__a, v, n );
     }
     

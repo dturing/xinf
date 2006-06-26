@@ -17,10 +17,10 @@ class CWrapper extends Generator {
         }
     }
 
-    public function _constant( name:String, type:String, value:String ) : Void {
+    override public function _constant( name:String, type:String, value:String ) : Void {
     }
 
-    public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
+    override public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
         var t:IType = map.get(type);
         
         _defines += t.defines( kinds );
@@ -65,11 +65,11 @@ class CWrapper extends Generator {
         return( type.defines(kinds) );
     }
 
-    public function defines() : String {
+    override public function defines() : String {
         return(_defines+"\n\n");
     }
     
-    public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
+    override public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
         var p:IType = WrappedType.make(name.split("."),map);
         map.addType( name, p );
         

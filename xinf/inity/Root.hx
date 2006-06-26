@@ -24,7 +24,8 @@ class Profiler {
     private var laps:Int;
     
     private function now() :Int {
-        return CPtr.util_msec();
+        return 0; // FIXME
+//        return CPtr.util_msec();
     }
     
     public function new() {
@@ -105,7 +106,7 @@ class Root extends Stage {
         quit=true;
     }
 
-    public function resize( w:Int, h:Int ) : Void {
+    override public function resize( w:Int, h:Int ) : Void {
         super.resize(w,h);
 
         SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE , 8 );

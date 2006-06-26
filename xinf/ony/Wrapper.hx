@@ -23,7 +23,7 @@ class Wrapper extends Pane {
         super(name,parent);
     }
     
-    private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Dynamic {
         return _primitive;
     }
 }

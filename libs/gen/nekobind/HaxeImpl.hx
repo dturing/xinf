@@ -7,7 +7,7 @@ class HaxeImpl extends Generator {
         print("class "+module+"__ extends "+module+" {\n");
     }
     
-    public function finish() {
+    override public function finish() {
         print("
     public static function __init__() : Void {
         untyped {
@@ -19,11 +19,11 @@ class HaxeImpl extends Generator {
         super.finish();
     }
     
-    public function _constant( name:String, type:String, value:String ) : Void {
+    override public function _constant( name:String, type:String, value:String ) : Void {
         print("\tpublic static var "+stripSymbol(name)+":"+map.get(type).hxType()+" = "+stripCode(value)+";\n");
     }
 
-    public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
+    override public function _func( name:String, type:String, args:Array<Array<String>> ) : Void {
         if( args.length <= 5 ) {
             print("\tpublic static var "+stripSymbol(name) );
             print(" = neko.Lib.load(\""+module+"\",\"neko_"+name+"\","+args.length+");\n");
@@ -33,7 +33,7 @@ class HaxeImpl extends Generator {
     }
     
 
-    public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
+    override public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
         var p:IType = WrappedType.make(name.split("."),map);
         map.addType( name, p );
         

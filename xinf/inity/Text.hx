@@ -67,7 +67,7 @@ class Text extends Box {
         return( new Point( maxW, (_font.height * fontSize * lines)+2 ) );
     }
     
-    private function _renderGraphics() :Void {
+    override function _renderGraphics() :Void {
         var lines:Int = 0;
 
         super._renderGraphics();

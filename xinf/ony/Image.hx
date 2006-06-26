@@ -71,7 +71,7 @@ class Image extends Element {
     }
     #end
     
-    private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Dynamic {
         #if neko
             _i = new xinf.inity.Image( uri );
             return _i;
@@ -93,7 +93,7 @@ class Image extends Element {
     }
 
     #if flash
-        private function onSizeChanged( e:xinf.event.Event ) :Void {
+        override private function onSizeChanged( e:xinf.event.Event ) :Void {
             if( !autoSize ) {
                 _p._width  = Math.floor( e.data.width );
                 _p._height = Math.floor( e.data.height );

@@ -45,13 +45,13 @@ class Bitmap extends Group {
         data.render( w, h, 0, 0, 1, 1 );
         
     }
-    private function _render() :Void {
+    override private function _render() :Void {
 //    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );
         _renderGraphics();
         super._render();
     }
 
-    private function _renderSimple() :Void {
+    override private function _renderSimple() :Void {
         var w = bounds.width;
         var h = bounds.height;
 

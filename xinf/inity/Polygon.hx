@@ -55,12 +55,12 @@ class Polygon extends Object {
         tessEndPolygon();
     }
     
-    private function _render() :Void {
+    override function _render() :Void {
         _renderGraphics();
         super._render();
     }
 
-    private function _renderSimple() :Void {
+    override function _renderSimple() :Void {
         _renderGraphics();
         super._renderSimple();
     }

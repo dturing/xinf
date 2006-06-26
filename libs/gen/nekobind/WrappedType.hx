@@ -70,15 +70,15 @@ class WrappedType extends PrimitiveType {
     }
     
         
-    public function cReturn() : String {
+    override public function cReturn() : String {
         return("\treturn ALLOC_KIND( c_result, "+kind+" );\n");
     }
     
-    public function check( name:String ) : String {
+    override public function check( name:String ) : String {
         return("\tCHECK_KIND( v_"+name+", "+kind+" );\n");
     }
 
-    public function defines( kinds:Hash<String> ):String {
+    override public function defines( kinds:Hash<String> ):String {
         var def:String = "";
     
         // if the kind (or kind_p) is not defined yet, return its DEFINE_KIND.
@@ -98,23 +98,23 @@ class WrappedType extends PrimitiveType {
         return def;
     }
 
-    public function kPrimitive() : String {
+    override public function kPrimitive() : String {
         var k:String = "";
         k += primitive.kPrimitive();
         for( i in 0...ptr ) k+="_p";
         return( k );
     }
 
-    public function toC( name:String ) : String {
+    override public function toC( name:String ) : String {
         return( "VAL_KIND( "+name+", "+kind+" )" );
     }
 
 
-    public function setMember( o:String, name:String, val:String ):String {
+    override public function setMember( o:String, name:String, val:String ):String {
         return("\tmemcpy(&("+o+"->"+name+"), "+toC(val)+", "+sizeof()+" );\n" );
     }
 
-    public function returnMember( o:String, name:String ):String {
+    override public function returnMember( o:String, name:String ):String {
         return("\treturn ALLOC_KIND( &("+( o+"->"+name )+"), "+kind+"_p );\n");
     }
 }

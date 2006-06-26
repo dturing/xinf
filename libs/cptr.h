@@ -7,6 +7,10 @@
 extern "C" {
 #endif
 
+extern vkind k_cptr;
+
+/* convenience macros */
+
 #define VAL_Int(v) ((int)val_number(v))
 #define VAL_Float(v) ((float)val_number(v))
 #define VAL_String(v) val_string(v)    // TODO HaXe strings direct?
@@ -19,9 +23,6 @@ extern "C" {
 #define ALLOC_Dynamic(v) val_null
 #define ALLOC_Void(v) val_null
 
-void check_failed( const char *function, const char *file, int line, value given );
-void kind_check_failed( const char *function, const char *file, int line, value given, const char *kind );
-
 #define CHECK(v,type) if( !val_is_ ## type (v) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,v); return NULL; }
 #define CHECK_NUMBER(v,type) if( !(val_is_int(v) || val_is_float(v)) ) { check_failed(__FUNCTION__,__FILE__,__LINE__,v); return NULL; }
 #define CHECK_Int(v) CHECK_NUMBER(v,int)
@@ -30,40 +31,8 @@ void kind_check_failed( const char *function, const char *file, int line, value 
 #define CHECK_Array(v) CHECK(v,array)
 #define CHECK_Dynamic(v) check_failed(__FUNCTION__,__FILE__,__LINE__,v)
 
-
-/* handle kinds */
-#define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
-                                    kind_check_failed(__FUNCTION__,__FILE__,__LINE__,v,#kind); }
-#define VAL_KIND(v,kind) val_data(v)
-#define ALLOC_KIND(v,kind) (alloc_abstract(kind,(void*)v))
-
-
-/* memory-safe cptr */
-extern vkind k_void_p_p;
-
-extern vkind k_void_p;
-extern vkind k_float_p;
-extern vkind k_double_p;
-extern vkind k_int_p;
-extern vkind k_unsigned_int_p;
-extern vkind k_short_p;
-extern vkind k_unsigned_short_p;
-extern vkind k_char_p;
-extern vkind k_unsigned_char_p;
-extern vkind k_signed_char_p;
-
-struct _cptr {
-    unsigned int length;
-    void *ptr;  /* the type of this ptr is defined by the neko kind. */
-};
-typedef struct _cptr cptr;
-
-#define VAL_CPTR(v) ((cptr*)val_data(v))
-#define CHECK_CPTR_KIND( v, kind ) \
-    if( !val_is_abstract(v) || !val_is_kind(v, k_## kind ##_p) || val_data(v) == NULL ) { \
-        kind_check_failed( __FUNCTION__,__FILE__,__LINE__,v, #kind ); }
-
-//value alloc_cptr( void *ptr, vkind kind, int length );
+void check_failed( const char *function, const char *file, int line, value given );
+value cptr_wrap( void *ptr, int size );
 
 #ifdef __cplusplus
 }

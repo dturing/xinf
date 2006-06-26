@@ -43,7 +43,7 @@ class Pane extends Element {
         #end
     }
     
-    private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Dynamic {
         #if neko
             return new xinf.inity.Box();
         #else js
@@ -99,13 +99,13 @@ class Pane extends Element {
         return clip;
     }
     
-    private function onSizeChanged( e:xinf.event.Event ) :Void {
+    override private function onSizeChanged( e:xinf.event.Event ) :Void {
         if( _crop ) {
             _crop_mc = makeMask();
         }
         super.onSizeChanged( e );
     }
-    private function onPositionChanged( e:xinf.event.Event ) :Void {
+    override private function onPositionChanged( e:xinf.event.Event ) :Void {
         if( _crop ) {
             _crop_mc._x = e.data.x;
             _crop_mc._y = e.data.y;
@@ -129,7 +129,7 @@ class Pane extends Element {
     }
     
     #if flash
-        private function redraw() :Void {
+        override private function redraw() :Void {
             super.redraw();
 
             var x:Int = 0;

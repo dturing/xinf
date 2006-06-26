@@ -34,6 +34,68 @@ class TestCPtr extends haxe.unit.TestCase {
         }
     }
 
+    function testUInt() {
+        var n:Int = 1024;
+        var ptr = CPtr.uint_alloc(n);
+        
+        for( i in 0...n ) {
+            CPtr.uint_set(ptr,i,i*10);
+        }
+        for( i in 0...n ) {
+            assertEquals( i*10, CPtr.uint_get(ptr,i) );
+        }
+    }
+
+    function testShort() {
+        var n:Int = 1024;
+        var ptr = CPtr.short_alloc(n);
+        
+        for( i in 0...n ) {
+            CPtr.short_set(ptr,i,i*10);
+        }
+        for( i in 0...n ) {
+            assertEquals( i*10, CPtr.short_get(ptr,i) );
+        }
+    }
+
+    function testUShort() {
+        var n:Int = 1024;
+        var ptr = CPtr.ushort_alloc(n);
+        
+        for( i in 0...n ) {
+            CPtr.ushort_set(ptr,i,i*10);
+        }
+        for( i in 0...n ) {
+            assertEquals( i*10, CPtr.ushort_get(ptr,i) );
+        }
+    }
+
+    function testChar() {
+        var n:Int = -128;
+        var m:Int = 128;
+        var ptr = CPtr.char_alloc(m-n);
+        
+        for( i in n...m ) {
+            CPtr.char_set(ptr,i-n,i);
+        }
+        for( i in n...m ) {
+            assertEquals( i, CPtr.char_get(ptr,i-n) );
+        }
+    }
+    
+    function testUChar() {
+        var n:Int = 0;
+        var m:Int = 255;
+        var ptr = CPtr.uchar_alloc(m-n);
+        
+        for( i in n...m ) {
+            CPtr.uchar_set(ptr,i-n,i);
+        }
+        for( i in n...m ) {
+            assertEquals( i, CPtr.uchar_get(ptr,i-n) );
+        }
+    }
+    
     function testFloat() {
         var n:Int = 1024;
         var ptr = CPtr.float_alloc(n);
@@ -57,20 +119,6 @@ class TestCPtr extends haxe.unit.TestCase {
             assertEquals( i*10, CPtr.double_get(ptr,i) );
         }
     }
-
-    function testIntToArray() {
-        var n:Int = 1024;
-        var ptr:Dynamic = CPtr.int_alloc(n);
-        var a:Array<Int>;
-        
-        for( i in 0...n ) {
-            CPtr.int_set(ptr,i,i*10);
-        }
-        a = CPtr.int_to_array( ptr, 0, n );
-        for( i in 0...n ) {
-            assertEquals( i*10, a[i] );
-        }
-    }
     
     function testIntFromArray() {
         var n:Int = 1024;
@@ -86,30 +134,24 @@ class TestCPtr extends haxe.unit.TestCase {
         }
     }
     
-    function testMemleak() {
-        var n:Int = 1024 * 1024;
-        var ptr:Dynamic;
-        var mem1:Int;
+    function testIntToArray() {
+        var n:Int = 1024;
+        var ptr:Dynamic = CPtr.int_alloc(n);
+        var a:Array<Int>;
         
-        var mem0:Int = CPtr.getTotalMemUsage();
-        
-        for( i in 0...100 ) {
-            ptr = CPtr.float_alloc(n);
-            ptr = CPtr.double_alloc(n);
-            ptr = CPtr.int_alloc(n);
-            ptr = CPtr.uint_alloc(n);
-            ptr = null;
+        for( i in 0...n ) {
+            CPtr.int_set(ptr,i,i*10);
         }
-        CPtr.util_gc_major();
-
-        mem1 = CPtr.getTotalMemUsage();
-        assertEquals( mem0, mem1 );
+        a = CPtr.int_to_array( ptr, 0, n );
+        for( i in 0...n ) {
+            assertEquals( i*10, a[i] );
+        }
     }
-    
+   
     function testInvalidAssignment() {
         var ptr:Dynamic = CPtr.double_alloc(2);
         try {
-            CPtr.float_set( ptr, 2, 1 );
+            CPtr.double_set( ptr, 2, 1 );
         } catch( e:Dynamic ) {
             assertTrue( true );
             return;
@@ -133,6 +175,30 @@ class TestCPtr extends haxe.unit.TestCase {
         }
         assertTrue( false );
     }
+
+    function testCast() {
+        var ptr:Dynamic = CPtr.uint_alloc(1);
+        CPtr.uint_set( ptr, 0, 0xffffffff );
+        
+        for( i in 0...4 ) {
+            assertEquals( 0xff, CPtr.uchar_get(ptr,i) );
+        }
+    }
+
+    function testAsString() {
+        var ptr:Dynamic = CPtr.short_alloc(2);
+        CPtr.short_set( ptr, 0, 0x4241 );
+        CPtr.short_set( ptr, 1, 0x4443 );
+        
+        assertEquals( untyped "ABCD".__s, CPtr.as_string(ptr) );
+    }
+
+    function testFromString() {
+        var ptr:Dynamic = CPtr.from_string(untyped "ABCD".__s);
+        
+        assertEquals( 0x4241, CPtr.short_get(ptr,0) );
+        assertEquals( 0x4443, CPtr.short_get(ptr,1) );
+    }
 }
 
 #end // test
@@ -143,7 +209,7 @@ class CPtr {
     public static var float_get        = neko.Lib.load("cptr","cptr_float_get",2);
     public static var float_to_array   = neko.Lib.load("cptr","cptr_float_to_array",3);
     public static var float_from_array = neko.Lib.load("cptr","cptr_float_from_array",3);
-
+    
     public static var double_alloc      = neko.Lib.load("cptr","cptr_double_alloc",1);
     public static var double_set        = neko.Lib.load("cptr","cptr_double_set",3);
     public static var double_get        = neko.Lib.load("cptr","cptr_double_get",2);
@@ -156,39 +222,43 @@ class CPtr {
     public static var int_to_array   = neko.Lib.load("cptr","cptr_int_to_array",3);
     public static var int_from_array = neko.Lib.load("cptr","cptr_int_from_array",3);
 
-    public static var uint_alloc      = neko.Lib.load("cptr","cptr_unsigned_int_alloc",1);
-    public static var uint_set        = neko.Lib.load("cptr","cptr_unsigned_int_set",3);
-    public static var uint_get        = neko.Lib.load("cptr","cptr_unsigned_int_get",2);
-    public static var uint_to_array   = neko.Lib.load("cptr","cptr_unsigned_int_to_array",3);
-    public static var uint_from_array = neko.Lib.load("cptr","cptr_unsigned_int_from_array",3);
-    
+    public static var uint_alloc      = neko.Lib.load("cptr","cptr_uint_alloc",1);
+    public static var uint_set        = neko.Lib.load("cptr","cptr_uint_set",3);
+    public static var uint_get        = neko.Lib.load("cptr","cptr_uint_get",2);
+    public static var uint_to_array   = neko.Lib.load("cptr","cptr_uint_to_array",3);
+    public static var uint_from_array = neko.Lib.load("cptr","cptr_uint_from_array",3);
+
+    public static var char_alloc      = neko.Lib.load("cptr","cptr_char_alloc",1);
+    public static var char_set        = neko.Lib.load("cptr","cptr_char_set",3);
+    public static var char_get        = neko.Lib.load("cptr","cptr_char_get",2);
+    public static var char_to_array   = neko.Lib.load("cptr","cptr_char_to_array",3);
+    public static var char_from_array = neko.Lib.load("cptr","cptr_char_from_array",3);
+
+    public static var uchar_alloc      = neko.Lib.load("cptr","cptr_uchar_alloc",1);
+    public static var uchar_set        = neko.Lib.load("cptr","cptr_uchar_set",3);
+    public static var uchar_get        = neko.Lib.load("cptr","cptr_uchar_get",2);
+    public static var uchar_to_array   = neko.Lib.load("cptr","cptr_uchar_to_array",3);
+    public static var uchar_from_array = neko.Lib.load("cptr","cptr_uchar_from_array",3);
+
+    public static var short_alloc      = neko.Lib.load("cptr","cptr_short_alloc",1);
+    public static var short_set        = neko.Lib.load("cptr","cptr_short_set",3);
+    public static var short_get        = neko.Lib.load("cptr","cptr_short_get",2);
+    public static var short_to_array   = neko.Lib.load("cptr","cptr_short_to_array",3);
+    public static var short_from_array = neko.Lib.load("cptr","cptr_short_from_array",3);
+
+    public static var ushort_alloc      = neko.Lib.load("cptr","cptr_ushort_alloc",1);
+    public static var ushort_set        = neko.Lib.load("cptr","cptr_ushort_set",3);
+    public static var ushort_get        = neko.Lib.load("cptr","cptr_ushort_get",2);
+    public static var ushort_to_array   = neko.Lib.load("cptr","cptr_ushort_to_array",3);
+    public static var ushort_from_array = neko.Lib.load("cptr","cptr_ushort_from_array",3);
+
     public static var void_null = neko.Lib.load("cptr","cptr_void_null",0)();
-//    public static var isValid = neko.Lib.load("cptr","cptr_is_valid",1);
-
-    // FIXME: move to some util lib, along with the impl.
-    /** returns the number of milliseconds since start of the Epoch,
-        but as a simple integer - so it does not necessarily express a date,
-        but can be used for profiling **/
-    public static var util_msec = neko.Lib.load("cptr","util_msec",0);
-
-    public static var util_getpid = neko.Lib.load("cptr","util_getpid",0);
-    public static var util_gc_major = neko.Lib.load("cptr","util_gc_major",0);
-
-    public static function getTotalMemUsage() :Int {
-        var fname = "/proc/"+util_getpid()+"/statm";
-        
-        // linux reports a filesize of 0 for /proc/#/statm, so this is neccessary
-        // (though it could be more beautiful maybe with neko.FileSytem?)
-        neko.Sys.command("cp "+fname+" /tmp/neko-statm");
-        var statm = neko.File.getContent( "/tmp/neko-statm" );
-        neko.Sys.command("rm -f /tmp/neko-statm");
-        
-        var r = statm.split(" ");
-        return( Std.parseInt( r[0] ) );
-    }
+    public static var as_string = neko.Lib.load("cptr","cptr_as_string",1);
+    public static var from_string = neko.Lib.load("cptr","cptr_from_string",1);
     
     #if test
         public static function main() {
+    
                 var r = new haxe.unit.TestRunner();
                 r.add( new TestCPtr() );
                 r.run();

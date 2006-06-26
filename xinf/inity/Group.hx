@@ -48,19 +48,19 @@ class Group extends Object {
     }
     
     // rendering
-    public function _cache() :Void {
+    override public function _cache() :Void {
         for( child in children ) {
             child._cache();
         }
         super._cache();
     }
-    private function _render() :Void {
+    override private function _render() :Void {
         for( child in children ) {
             child.render();
         }
 //        super._render();
     }
-    private function _renderSimple() :Void {
+    override private function _renderSimple() :Void {
         for( i in 0...children.length ) {
             GL.PushName(i);
             children[i].renderSimple();

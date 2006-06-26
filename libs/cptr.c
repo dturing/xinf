@@ -1,18 +1,16 @@
 #include "cptr.h"
 #include <memory.h>
 
-DEFINE_KIND(k_void_p_p)
+DEFINE_KIND( k_cptr );
 
-DEFINE_KIND(k_void_p)
-DEFINE_KIND(k_float_p)
-DEFINE_KIND(k_double_p)
-DEFINE_KIND(k_int_p)
-DEFINE_KIND(k_unsigned_int_p)
-DEFINE_KIND(k_short_p)
-DEFINE_KIND(k_unsigned_short_p)
-DEFINE_KIND(k_char_p)
-DEFINE_KIND(k_unsigned_char_p)
-DEFINE_KIND(k_signed_char_p)
+#define CHECK_CPTR(cp) if( !val_is_abstract(cp) || !val_is_kind(cp,k_cptr) ) { val_throw(alloc_string("invalid cptr")); }
+#define CPTR_SIZE(cp) (((cptr*)val_data(cp))->size)
+#define CPTR_PTR(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
+
+typedef struct _cptr {
+    int size;
+    void *ptr;
+} cptr;
 
 void check_failed( const char *function, const char *file, int line, value given ) {
     buffer b = alloc_buffer("");
@@ -23,101 +21,96 @@ void check_failed( const char *function, const char *file, int line, value given
     _neko_failure(buffer_to_string(b), file, line );
 }
 
-void kind_check_failed( const char *function, const char *file, int line, value given, const char *kind ) {
-    buffer b = alloc_buffer("");
-    val_buffer(b,given);
-    buffer_append(b," is of invalid kind for ");
-    buffer_append(b,function );
-    buffer_append(b,", expected: ");
-    buffer_append(b,kind);
-   
-    _neko_failure(buffer_to_string(b), file, line );
+void cptr_finalize( value cp ) {
+    CHECK_CPTR(cp);
+    cptr *p = val_data( cp );
+    if( p->ptr ) free(p->ptr);
+    if( p ) free(p);
 }
 
+value cptr_wrap( void *ptr, int size ) {
+    cptr *p = (cptr*)malloc( sizeof(cptr) );
+    p->size = size;
+    p->ptr = ptr;
+    value r = alloc_abstract( k_cptr, p );
+    val_gc( r, cptr_finalize );
+    return(r);
+}
 
-value alloc_cptr( void *ptr, vkind kind, int length ) {
-    cptr *cp = (cptr*)malloc( sizeof(cptr) );
-    cp->length = length;
-    cp->ptr = ptr;
-    value r = alloc_abstract( kind, cp );
+value cptr_alloc( int size ) {
+    void *ptr = (void*)malloc( size );
+    if( !ptr ) val_throw( alloc_string("out of memory"));
+    return( cptr_wrap( ptr, size ) );
+}
+
+value cptr_void_null() {
+    return cptr_wrap( NULL, 0 );
+}
+DEFINE_PRIM(cptr_void_null,0);
+
+value cptr_as_string( value cp ) {
+    CHECK_CPTR(cp);
+    return copy_string( CPTR_PTR(cp,void), CPTR_SIZE(cp) );
+}
+DEFINE_PRIM( cptr_as_string, 1 );
+
+value cptr_from_string( value s ) {
+    CHECK_String(s);
+    unsigned char *str = VAL_String(s);
+    int n = val_strlen(s);
+    value r = cptr_alloc( n );
+    memcpy( CPTR_PTR(r,void), str, n );
     return r;
 }
+DEFINE_PRIM( cptr_from_string, 1 );
 
-#define ALLOC(ctype,hxtype) \
+#define CPTR_ALLOC(ctype,hxtype) \
 value cptr_## ctype ##_alloc( value n ) { \
-    CHECK_Int( n ); \
-    int sz = (int)val_number(n); \
-    ctype *ptr = ( ctype *)malloc( sizeof( ctype ) * sz ); \
-    value ret = alloc_cptr( (void *)ptr, k_## ctype ##_p, sz ); \
-    val_gc( ret, cptr_## ctype ##_finalize ); \
-    return( ret ); \
+    CHECK_NUMBER(n,int); \
+    int size = val_number(n); \
+    return cptr_alloc( size*sizeof( ctype ) ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 
-#define WRAP(ctype,hxtype) \
-value cptr_## ctype ##_wrap( ctype *ptr, int sz ) { \
-    value ret = alloc_cptr( (void *)ptr, k_## ctype ##_p, sz ); \
-    val_gc( ret, cptr_## ctype ##_finalize ); \
-    return( ret ); \
-}
-
-#define FINALIZE(ctype,hxtype) \
-void cptr_## ctype ##_finalize( value p ) { \
-    CHECK_CPTR_KIND( p, ctype ); \
-    cptr *cp = (cptr*)val_data(p); \
-    if( cp->ptr ) free( cp->ptr ); \
-    cp->ptr = NULL; \
-    free( cp ); \
-}
-
-#define GET(ctype,hxtype) \
-value cptr_## ctype ##_get( value p, value n ) { \
-    CHECK_CPTR_KIND( p, ctype ); \
-    CHECK_Int( n ); \
-    unsigned int _n = val_number(n); \
-    cptr *cp = (cptr*)val_data(p); \
-    if( _n >= cp->length ) val_throw( alloc_string( "index out of range" ) ); \
-    ctype *ptr = ( ctype *)cp->ptr; \
-    if( ptr == NULL ) { \
-        val_throw( alloc_string( "null pointer" ) ); \
-        return val_null; \
-    } \
-    return( ALLOC_## hxtype ( ptr[ _n ] ) ); \
+#define CPTR_GET(ctype,hxtype) \
+value cptr_## ctype ##_get( value cp, value _i ) { \
+    CHECK_CPTR( cp ); \
+    CHECK_NUMBER( _i, int ); \
+    int n=CPTR_SIZE(cp)/sizeof(ctype); \
+    int i=val_number(_i); \
+    if( i<0 || i>=n ) val_throw(alloc_string("cptr index out of bounds")); \
+    return ALLOC_## hxtype ( CPTR_PTR(cp,ctype)[i] ); \
 } \
 DEFINE_PRIM(cptr_## ctype ##_get,2);
 
-#define SET(ctype,hxtype) \
-value cptr_## ctype ##_set( value p, value n, value v ) { \
-    CHECK_CPTR_KIND( p, ctype ); \
-    CHECK_## hxtype ( v ); \
-    CHECK_Int( n ); \
-    unsigned int _n = val_number(n); \
-    cptr *cp = (cptr*)val_data(p); \
-    if( _n >= cp->length ) val_throw( alloc_string( "index out of range" ) ); \
-    ctype *ptr = ( ctype *)cp->ptr; \
-    if( ptr == NULL ) { \
-        val_throw( alloc_string( "null pointer" ) ); \
-        return val_null; \
-    } \
-    ptr[ (int)val_number(n) ] = (ctype)VAL_## hxtype(v);\
-    return( v ); \
+#define CPTR_SET(ctype,hxtype) \
+value cptr_## ctype ##_set( value cp, value _i, value _v ) { \
+    CHECK_CPTR( cp ); \
+    CHECK_NUMBER( _i, int ); \
+    CHECK_## hxtype ( _v ); \
+    int n=CPTR_SIZE(cp)/sizeof(ctype ); \
+    int i=val_number(_i); \
+    if( i<0 || i>=n ) val_throw(alloc_string("cptr index out of bounds")); \
+    CPTR_PTR(cp,ctype)[i] = val_number(_v); \
+    return _v; \
 } \
 DEFINE_PRIM(cptr_## ctype ##_set,3);
 
-#define TO_ARRAY(ctype,hxtype) \
-value cptr_## ctype ##_to_array( value p, value f, value t ) { \
+
+#define CPTR_TO_ARRAY(ctype,hxtype) \
+value cptr_## ctype ##_to_array( value cp, value f, value t ) { \
     int i; \
-    CHECK_CPTR_KIND( p, ctype ); \
+    CHECK_CPTR( cp ); \
     CHECK_Int( f ); \
     CHECK_Int( t ); \
     int from = (int)val_number(f); \
     int to = (int)val_number(t); \
     \
-    cptr *cp = (cptr*)val_data(p); \
-    if( from >= cp->length ) val_throw( alloc_string( "from index out of range" ) ); \
-    if( to > cp->length ) val_throw( alloc_string( "to index out of range" ) ); \
+    int n = CPTR_SIZE(cp)/sizeof(ctype); \
+    ctype *ptr = CPTR_PTR(cp,ctype); \
+    if( from >= n ) val_throw( alloc_string( "from index out of range" ) ); \
+    if( to > n ) val_throw( alloc_string( "to index out of range" ) ); \
     if( from >= to ) val_throw( alloc_string( "from must be lower than to" ) ); \
-    ctype *ptr = ( ctype *)cp->ptr; \
     if( ptr == NULL ) { \
         val_throw( alloc_string( "null pointer" ) ); \
         return val_null; \
@@ -132,19 +125,19 @@ value cptr_## ctype ##_to_array( value p, value f, value t ) { \
 } \
 DEFINE_PRIM(cptr_## ctype ##_to_array,3);
 
-#define FROM_ARRAY(ctype,hxtype) \
-value cptr_## ctype ##_from_array( value p, value f, value values ) { \
+#define CPTR_FROM_ARRAY(ctype,hxtype) \
+value cptr_## ctype ##_from_array( value cp, value f, value values ) { \
     int i; \
-    CHECK_CPTR_KIND( p, ctype ); \
+    CHECK_CPTR( cp ); \
     CHECK_Int( f ); \
     CHECK_Array( values ); \
     int from = (int)val_number(f); \
     int to = from + val_array_size( values ); \
     \
-    cptr *cp = (cptr*)val_data(p); \
-    if( from >= cp->length ) val_throw( alloc_string( "from index out of range" ) ); \
+    int n = CPTR_SIZE(cp)/sizeof(ctype); \
+    ctype *ptr = CPTR_PTR(cp,ctype); \
+    if( from >= n ) val_throw( alloc_string( "from index out of range" ) ); \
     if( from >= to ) val_throw( alloc_string( "no values after from" ) ); \
-    ctype *ptr = ( ctype *)cp->ptr; \
     if( ptr == NULL ) { \
         val_throw( alloc_string( "null pointer" ) ); \
         return val_null; \
@@ -159,78 +152,22 @@ value cptr_## ctype ##_from_array( value p, value f, value values ) { \
 DEFINE_PRIM(cptr_## ctype ##_from_array,3);
 
 #define CPTR(ctype,hxtype) \
-    FINALIZE(ctype,hxtype) \
-    WRAP(ctype,hxtype) \
-    ALLOC(ctype,hxtype) \
-    GET(ctype,hxtype) \
-    SET(ctype,hxtype) \
-    TO_ARRAY(ctype,hxtype ) \
-    FROM_ARRAY(ctype,hxtype )
-    
-typedef unsigned int unsigned_int;
-typedef unsigned char unsigned_char;
-typedef unsigned short unsigned_short;
-
-CPTR( float, Float );
-CPTR( double, Float );
-CPTR( int, Int );
-CPTR( unsigned_int, Int );
-CPTR( char, Int );
-CPTR( unsigned_char, Int );
-CPTR( short, Int );
-CPTR( unsigned_short, Int );
-
-// FIXME: do cast/null for other types also (maybe)
-value cptr_void_null() {
-    return( alloc_cptr( NULL, k_void_p, 0 ) );
-}
-DEFINE_PRIM(cptr_void_null,0);
+    CPTR_ALLOC(ctype,hxtype) \
+    CPTR_GET(ctype,hxtype) \
+    CPTR_SET(ctype,hxtype) \
+    CPTR_TO_ARRAY(ctype,hxtype ) \
+    CPTR_FROM_ARRAY(ctype,hxtype )
 
 
-/*
-//DEFINE_KIND(k_void_p)
-value cptr_void_cast( value p ) {
-    if( !val_is_abstract( p ) ) {
-        failure("will only cast #abstract values to void*.");
-        return NULL;
-    }
-    void *ptr = (void*)val_data(p);
-    return( ALLOC_KIND( ptr, k_void_p ) );
-}
-DEFINE_PRIM(cptr_void_cast,1);
+typedef unsigned int uint;
+typedef unsigned char uchar;
+typedef unsigned short ushort;
 
-value cptr_is_valid( value ptr ) {
-    if( ptr == val_null || !val_is_abstract(ptr) ) return val_false;
-    if( val_data(ptr) == NULL ) return val_false;
-    return val_true;
-}
-DEFINE_PRIM(cptr_is_valid,1);
-*/
-
-
-
-// FIXME: this is not really CPtr stuff, but "util"
-#include <sys/time.h>
-value util_msec() {
-    // FIXME: Linux only, and it really should work with the std library (neko std.sys_time, if not new Date())
-    // but all i get there is the seconds. i need milliseconds for profiling, tho.
-    struct timeval tv;
-    if( gettimeofday(&tv,NULL) != 0 )
-        neko_error();
-    return alloc_int( (int)((tv.tv_sec*1000)+(tv.tv_usec/1000)) );
-}
-DEFINE_PRIM(util_msec,0);
-
-
-#include <sys/types.h>
-#include <unistd.h>
-value util_getpid() {
-    return alloc_int( getpid() );
-}
-DEFINE_PRIM( util_getpid, 0 );
-
-value util_gc_major() {
-    neko_gc_major();
-    return val_null;
-}
-DEFINE_PRIM( util_gc_major, 0 );
+CPTR(float,Float);
+CPTR(double,Float);
+CPTR(int,Float);
+CPTR(uint,Float);
+CPTR(char,Float);
+CPTR(uchar,Float);
+CPTR(short,Float);
+CPTR(ushort,Float);
