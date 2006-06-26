@@ -64,7 +64,7 @@ class Text extends Box {
             }
         }
         if( w > maxW ) maxW = w;
-        return( new Point( maxW, (_font.height * fontSize * lines)+4 ) );
+        return( new Point( maxW, (_font.height * fontSize * lines)+2 ) );
     }
     
     private function _renderGraphics() :Void {

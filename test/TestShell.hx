@@ -23,8 +23,8 @@ class TestShell {
         tests.primitives.Image,
         tests.xinful.Scrollbar,
         tests.xinful.Listbox,
-        tests.xinful.Skin,
-        tests.xinful.Dropdown
+        tests.xinful.Dropdown,
+        tests.xinful.Skin
     ];    
     
     public static var nTest:Int;
@@ -35,7 +35,6 @@ class TestShell {
     public static function main() :Void {
         testName = null;
         testFeedback = null;
-
 
         var root = xinf.ony.Root.getRoot();
         xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, testStep);
