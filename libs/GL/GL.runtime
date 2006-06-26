@@ -27,34 +27,6 @@ int glCreateTexture( unsigned int tex, int width, int height ) {
     return tex;
 }
 
-void glTexSubImage2D_BGRA_BYTE( unsigned int tex, value pos, value size, value data ) {
-    field f_x = val_id("x");
-    field f_y = val_id("y");
-    
-    int x = val_number( val_field( pos, f_x ) );
-    int y = val_number( val_field( pos, f_y ) );
-    int w = val_number( val_field( size, f_x ) );
-    int h = val_number( val_field( size, f_y ) );
-    unsigned char *d = (unsigned char *)val_data(data);
-
-    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)d );
-}
-
-void glTexSubImage2D_BGR_BYTE( unsigned int tex, value pos, value size, value data ) {
-    field f_x = val_id("x");
-    field f_y = val_id("y");
-    
-    int x = val_number( val_field( pos, f_x ) );
-    int y = val_number( val_field( pos, f_y ) );
-    int w = val_number( val_field( size, f_x ) );
-    int h = val_number( val_field( size, f_y ) );
-    unsigned char *d = (unsigned char *)val_data(data);
-   
-    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_BGR, GL_UNSIGNED_BYTE, (unsigned char *)d );
-}
-
 void glTexSubImage2D_RGBA_BYTE( unsigned int tex, value pos, value size, const unsigned int *data ) {
     field f_x = val_id("x");
     field f_y = val_id("y");

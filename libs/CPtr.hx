@@ -113,10 +113,10 @@ class TestCPtr extends haxe.unit.TestCase {
         var ptr = CPtr.double_alloc(n);
         
         for( i in 0...n ) {
-            CPtr.double_set(ptr,i,i*10);
+            CPtr.double_set(ptr,i,i/10);
         }
         for( i in 0...n ) {
-            assertEquals( i*10, CPtr.double_get(ptr,i) );
+            assertEquals( i/10, CPtr.double_get(ptr,i) );
         }
     }
     
@@ -255,6 +255,7 @@ class CPtr {
     public static var void_null = neko.Lib.load("cptr","cptr_void_null",0)();
     public static var as_string = neko.Lib.load("cptr","cptr_as_string",1);
     public static var from_string = neko.Lib.load("cptr","cptr_from_string",1);
+    public static var info = neko.Lib.load("cptr","cptr_info",1);
     
     #if test
         public static function main() {

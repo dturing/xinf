@@ -9,4 +9,4 @@ lib%.so : %.c
 	gcc $(NEKO_CFLAGS) $(NEKO_LIBS) -shared -o $@ $<
 
 cptr.ndll : libcptr.so
-	cp $< $@
+	ln -s $< $@

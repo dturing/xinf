@@ -15,7 +15,7 @@ class HaxeImpl extends Generator {
         }
     }\n");
     
-        print("\tpublic static function main() :Void {\n\t\ttrace(\"this is 'implementation' class of the '"+module+"' binding.\");\n\t}\n");
+        print("\tpublic static function main() :Void { }\n");
             
         print("}\n");
         super.finish();

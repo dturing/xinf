@@ -37,6 +37,7 @@ typedef struct _cptr {
 #define CHECK_Int(v) CHECK_NUMBER(v,int)
 #define CHECK_Float(v) CHECK_NUMBER(v,float)
 #define CHECK_String(v) CHECK(v,string)
+#define CHECK_Bool(v) CHECK(v,bool)
 #define CHECK_Array(v) CHECK(v,array)
 #define CHECK_Dynamic(v) check_failed(__FUNCTION__,__FILE__,__LINE__,v)
 

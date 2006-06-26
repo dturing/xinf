@@ -42,3 +42,7 @@ value gdk_pixbuf_get_error( GError **err ) {
     }
     return( val_null );
 }
+
+unsigned int *gdk_pixbuf_get_pixels_cptr(GdkPixbuf *pixbuf) {
+    return gdk_pixbuf_get_pixels(pixbuf);
+}

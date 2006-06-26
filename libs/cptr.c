@@ -66,6 +66,23 @@ value cptr_from_string( value s ) {
 }
 DEFINE_PRIM( cptr_from_string, 1 );
 
+value cptr_info( value cp ) {
+    if( !val_is_abstract(cp) )
+        return alloc_string("[not abstract]");
+    if( !val_is_kind(cp,k_cptr) )
+        return alloc_string("[no cptr]");
+    
+    value r = alloc_object(NULL);
+    alloc_field(r,val_id("address"),alloc_float( (float)((int)CPTR_PTR(cp,void)) ) );
+    alloc_field(r,val_id("size"),alloc_int( CPTR_SIZE(cp) ) );
+
+    printf("k_cptr: %p\n", k_cptr);
+
+    return r;
+}
+DEFINE_PRIM( cptr_info, 1 );
+
+
 #define CPTR_ALLOC(ctype,hxtype) \
 value cptr_## ctype ##_alloc( value n ) { \
     CHECK_NUMBER(n,int); \
