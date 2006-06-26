@@ -14,6 +14,8 @@ class HaxeImpl extends Generator {
             untyped __dollar__exports."+module+"__ = "+module+"__;
         }
     }\n");
+    
+        print("\tpublic static function main() :Void {\n\t\ttrace(\"this is 'implementation' class of the '"+module+"' binding.\");\n\t}\n");
             
         print("}\n");
         super.finish();
