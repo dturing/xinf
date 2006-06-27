@@ -58,6 +58,7 @@ class BitmapData {
         
         GL.CreateTexture( texture, twidth, theight );
 
+        trace("BitmapData cptr: "+CPtr.info(_d) );
         if( _d != null ) {
             switch( cspace ) {
                 case RGB:
@@ -109,15 +110,33 @@ class BitmapData {
     public static function newFromFile( filename:String ) :BitmapData {
     
         var err = GdkPixbuf.gdk_pixbuf_create_error();
+
+/*
+
         var pixbuf = GdkPixbuf.gdk_pixbuf_new_from_file( untyped filename.__s,err);
+ */
+        var pixbufLoader = GdkPixbuf.gdk_pixbuf_loader_new();
+        var data = neko.File.getContent( filename );
+        trace("pixbufLoader, data size "+data.length );
         
+        var err = GdkPixbuf.gdk_pixbuf_create_error();
+        try {
+            GdkPixbuf.gdk_pixbuf_loader_write( pixbufLoader, untyped data.__s, data.length, err );
+            GdkPixbuf.gdk_pixbuf_loader_close( pixbufLoader, err );
+            trace("pixbufLoader: err "+GdkPixbuf.gdk_pixbuf_get_error( err ) );
+        } catch( e:Dynamic ) {
+            trace("pixbufLoader: exc "+e+", err "+GdkPixbuf.gdk_pixbuf_get_error( err ) );
+        }
+        
+        var pixbuf = GdkPixbuf.gdk_pixbuf_loader_get_pixbuf( pixbufLoader );        
+       
         var msg = GdkPixbuf.gdk_pixbuf_get_error(err);
         if( msg ) throw(msg);
         
         var w = GdkPixbuf.gdk_pixbuf_get_width( pixbuf );
         var h = GdkPixbuf.gdk_pixbuf_get_height( pixbuf );
         var f = if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
-        var d = GdkPixbuf.gdk_pixbuf_get_pixels_uint( pixbuf );
+        var d = GdkPixbuf.gdk_pixbuf_get_pixels_cptr( pixbuf );
         
         trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
         

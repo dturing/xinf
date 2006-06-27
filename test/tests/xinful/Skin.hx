@@ -25,19 +25,10 @@ class Skin extends TestCase {
         skin.bounds.setPosition( 10, 10 );
         
         var label = new xinf.ul.Label( "test", skin );
-        label.text = "Hello, World!";
+        label.text = "";
         skin.setChild( label );
         
         label.bounds.setSize( 100, 20 );
-
-
-        var skin = new xinf.ul.Skin( "testSkin", this );
-        skin.bounds.setPosition( 120, 10 );
-        var label = new xinf.ul.Label( "test", skin );
-        label.text = "Hello, great World!";
-        skin.setChild( label );
-        label.bounds.setSize( 120, 20 );
-        label.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xffaaaa ) );
 
         screenshotFrame1();
     }

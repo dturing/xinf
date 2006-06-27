@@ -1,10 +1,14 @@
-    XINFROOT=/home/dan/develop/xinf
+XINFROOT=/home/dan/develop/xinf
+
+LIB_PATHS=$(foreach LIB, GL GLU SDL GdkPixbuf X FT, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
 
 NEKO=neko
-NEKOPATH=/usr/neko/lib:$(XINFROOT)/libs
+NEKOPATH=$(subst : ,:,$(foreach PATH,$(LIB_PATHS),$(PATH):) /usr/neko/lib)
 NEKO_SERVER=nekotools server
+NEKO_CFLAGS=-I/usr/local/include/neko -I$(XINFROOT)/libs
+NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs
 
-HAXE=haxe -cp ~/.haxe/lib/std -cp $(XINFROOT) -cp $(XINFROOT)/libs
+HAXE=haxe  -D test -cp ~/.haxe/lib/std -cp $(XINFROOT) $(foreach PATH, $(LIB_PATHS), -cp $(PATH))
 
 XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
 
@@ -29,7 +33,7 @@ NEKO_BINARIES=$(foreach MODULE,$(NEKO_MODULES),$(MODULE).n)
 SWF_BINARIES=$(foreach MODULE,$(SWF_MODULES),$(MODULE).swf)
 JS_BINARIES=$(foreach MODULE,$(JS_MODULES),$(MODULE).js)
 
-BINARIES=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
+BINARIES+=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
     
 #
 # patterns
@@ -51,20 +55,14 @@ default: compile
 assets.swf : $(ASSETS)
 	echo "<movie><library>" $(foreach ASSET, $(ASSETS), "<clip id=\"$(ASSET)\" import=\"$(ASSET)\"/>") "</library><frame/></movie>" | swfmill simple stdin $@
 
-compile: $(BINARIES)
+subdirs: 
+	$(foreach SUBDIR, $(SUBDIRS), $(MAKE) -C $(SUBDIR);)
+
+compile: subdirs $(BINARIES) 
 
 clean:
 	-@rm $(BINARIES) $(CLEAN_FILES) $(SWF_ASSETS) 2> /dev/null
-
-#serve: $(MODULE).swf
-#	firefox http://localhost:2000/
-#	$(NEKO_SERVER)
- 
-#view: $(RUN).swf
-#	firefox $(RUN).swf
+	$(foreach SUBDIR, $(SUBDIRS), $(MAKE) -C $(SUBDIR) clean;)
    
 run: $(RUN).n
-	neko $(RUN).n $(RUN_ARGS)
-
-foo:
-	echo Testing: 
+	NEKOPATH=$(NEKOPATH) neko $(RUN).n $(RUN_ARGS)

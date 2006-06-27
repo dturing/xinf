@@ -66,7 +66,9 @@ class Object {
     }
 
     public function postEvent( type:String, data:Dynamic ) :Void {
-        if( owner == null ) throw("Object "+this+" has no owner.");
+        if( owner == null ) {
+            throw("Object "+this+" has no owner.");
+        }
         owner.postEvent(type,data);
     }
 

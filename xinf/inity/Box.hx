@@ -117,7 +117,6 @@ class Box extends Group {
     }
 
     public override function getHitChild( chain:Array<Int>, x:Float, y:Float ) :Object {
-//            trace("getHitChild "+x+"/"+y+", "+bounds.x+"/"+bounds.y );
         if( crop ) {
             if( x<bounds.x || x > bounds.x+bounds.width
              || y<bounds.y || y > bounds.y+bounds.height ) {

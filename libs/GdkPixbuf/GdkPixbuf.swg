@@ -76,4 +76,16 @@ GdkPixbuf* gdk_pixbuf_new_from_inline	(gint          data_length,
 void       gdk_pixbuf_fill              (GdkPixbuf    *pixbuf,
                                          guint32       pixel);
 
+
+/** GdkPixbufLoader **/
+/* signals are not handled--
+    this is just good for decoding images from data that is already in memory,
+    not in a file... */
+GdkPixbufLoader *gdk_pixbuf_loader_new();
+GdkPixbufLoader *gdk_pixbuf_loader_new_with_type( const char *image_type, GError **error );
+GdkPixbufLoader *gdk_pixbuf_loader_new_with_mime_type( const char *mime_type, GError **error );
+gboolean gdk_pixbuf_loader_write( GdkPixbufLoader *loader, unsigned char *buf, int count, GError **error );
+gboolean gdk_pixbuf_loader_close( GdkPixbufLoader *loader, GError **error );
+GdkPixbuf *gdk_pixbuf_loader_get_pixbuf( GdkPixbufLoader *loader );
+
 %include <GdkPixbuf.runtime>

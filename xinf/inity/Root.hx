@@ -324,7 +324,7 @@ class Root extends Stage {
                 var objs = new Array<Int>();
                 j+=3;
                 for( k in 0...n ) {
-                    objs.push( CPtr.uint_get( selectBuffer, j ));
+                    objs.push( Math.round(CPtr.uint_get( selectBuffer, j )));
                     j++;
                 }
                 i++;
@@ -334,7 +334,6 @@ class Root extends Stage {
         
         GL.MatrixMode( GL.MODELVIEW );
         GL.Enable( GL.BLEND );
-        
         return stacks;
     }
     
@@ -359,7 +358,7 @@ class Root extends Stage {
                 // should only happen if the hitpoint is cropped out
             }
         }
-        
+
 // root has no owner... but.. FIXME       if( a.length == 0 ) a.push( this );
         
         return a;

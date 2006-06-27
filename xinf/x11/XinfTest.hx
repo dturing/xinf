@@ -56,7 +56,7 @@ class XinfTest extends xinf.ony.Pane {
         frame++;
         var e:Float;
         if( (frame % 25) == 0 ) {
-            for( i in 1...3 ) {
+            for( i in 1...2 ) {
                 e = X.image_compare( screen[i].vfb.data, screen[0].vfb.data, 320*240 );
                 e = Math.round((1.-e)*10000)/100;
                 info[i].text = screen[i].name+"\n"+e+"%";
