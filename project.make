@@ -1,12 +1,12 @@
 XINFROOT=/home/dan/develop/xinf
 
-LIB_PATHS=$(foreach LIB, GL GLU SDL GdkPixbuf X FT, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
+LIB_PATHS=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
 
 NEKO=neko
 NEKOPATH=$(subst : ,:,$(foreach PATH,$(LIB_PATHS),$(PATH):) /usr/neko/lib)
 NEKO_SERVER=nekotools server
-NEKO_CFLAGS=-I/usr/local/include/neko -I$(XINFROOT)/libs
-NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs
+NEKO_CFLAGS=-I/usr/local/include/neko -I$(XINFROOT)/libs/cptr
+NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs/cptr
 
 HAXE=haxe  -D test -cp ~/.haxe/lib/std -cp $(XINFROOT) $(foreach PATH, $(LIB_PATHS), -cp $(PATH))
 
@@ -19,7 +19,7 @@ XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
 
 RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
-LD_LIBRARY_PATH=$(XINFROOT)/libs
+LD_LIBRARY_PATH=$(XINFROOT)/libs/cptr
 
 ASSETS=$(wildcard assets/* assets/*/*)
 ifneq (,$(ASSETS))

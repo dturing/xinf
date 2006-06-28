@@ -373,7 +373,6 @@ class Root extends Stage {
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
                 objectUnderMouse.postEvent( Event.MOUSE_OUT, { x:mouseX, y:mouseY } );
-//                trace("overOut: old "+objectUnderMouse+", new "+o );
             objectUnderMouse = o;
             if( objectUnderMouse != null )
                 objectUnderMouse.postEvent( Event.MOUSE_OVER, { x:mouseX, y:mouseY } );
