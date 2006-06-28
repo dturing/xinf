@@ -97,6 +97,9 @@ class Root extends Stage {
             throw("SDL Video Initialization failed.");
         }
 
+        SDL.EnableUNICODE(1);
+        SDL.EnableKeyRepeat( SDL.DEFAULT_REPEAT_DELAY, SDL.DEFAULT_REPEAT_INTERVAL );
+
         xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.QUIT, doQuit );
 
         resize( w, h );
@@ -224,7 +227,8 @@ class Root extends Stage {
         
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
-//        trace("Key "+name+" "+type );
+        
+        trace("Key "+name+" "+type+", keysym "+s+" code "+code+" unicode "+SDL.keysym_unicode_get(sym) );
         xinf.event.EventDispatcher.postGlobalEvent( type, { key:str } );
     }
 

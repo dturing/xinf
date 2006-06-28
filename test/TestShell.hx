@@ -24,7 +24,8 @@ class TestShell {
         tests.xinful.Scrollbar,
         tests.xinful.Listbox,
         tests.xinful.Dropdown,
-        tests.xinful.Skin
+        tests.xinful.Skin,
+        tests.xinful.LineEdit
     ];    
     
     public static var nTest:Int;
