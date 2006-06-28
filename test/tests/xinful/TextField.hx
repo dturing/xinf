@@ -15,15 +15,13 @@
 
 package tests.xinful;
 
-import xinf.ul.ListModel;
-
-class LineEdit extends TestCase {
+class TextField extends TestCase {
     private var display:xinf.ony.Text;
 
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, 1.0 );
 
-        var t = new xinf.ul.LineEdit( "test", this );
+        var t = new xinf.ul.TextField( "test", this );
         t.bounds.setPosition( 10, 10 );
         t.bounds.setSize( 150, 20 );
         t.text = "Edit me!";

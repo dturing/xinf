@@ -63,7 +63,7 @@ class Text extends TestCase {
         var i = 0;
         for( child in children ) {
             var sz = Math.round( (10+((3-i)*4)) * factor * 100)/100;
-         //   child.text = "Hamburgefons "+sz;
+            child.text = "Hamburgefons "+sz;
             child.setFontSize( sz );
             i++;
         }
