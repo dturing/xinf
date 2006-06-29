@@ -140,7 +140,7 @@ class LineEdit extends Text {
 
 	public function findLeftWordBoundary() :Int {
 		var p:Int=sel.to-1;
-		if( _text.charCodeAt(p)==32 ) p--;
+		while( _text.charCodeAt(p)==32 ) p--;
 		while( p>=0 && p<_text.length && _text.charCodeAt(p) != 32 ) {
 			p-=1;
 		}
@@ -149,7 +149,7 @@ class LineEdit extends Text {
 	}
 	public function findRightWordBoundary() :Int {
 		var p:Int=sel.to;
-		if( _text.charCodeAt(p)==32 ) p++;
+		while( _text.charCodeAt(p)==32 ) p++;
 		while( p>=0 && p<_text.length && _text.charCodeAt(p) != 32 ) {
 			p++;
 		}
