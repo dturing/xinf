@@ -80,9 +80,10 @@ class Text extends Pane {
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
             _t.style.lineHeight = "110%";
+			return _t;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-            var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
+			var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
             
             e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = Reflect.field( e, "_"+name );
@@ -98,9 +99,9 @@ class Text extends Pane {
             return e;     
         #else neko
             _t.fontSize = 11;
+			return _t;
         #end
         
-        return _t;
     }
     
     private function setText( t:String ) :String {

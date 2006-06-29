@@ -69,7 +69,7 @@ class Text extends Box {
             } else {
                 var g = _font.getGlyph(c);
                 if( g != null ) {
-                    w += g.advance * fontSize;
+                    w += Math.round( g.advance * fontSize );
                 }
             }
         }

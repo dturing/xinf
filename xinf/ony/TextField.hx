@@ -49,7 +49,9 @@ class TextField extends Pane {
     public function new( name:String, parent:Element ) {
         super(name,parent);
         setTextColor( new xinf.ony.Color().fromRGBInt(0) );
-		addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
+		#if neko
+			addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
+		#end
     }
     
     override function createPrimitive() :Primitive {
@@ -73,11 +75,12 @@ class TextField extends Pane {
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
             _t.style.lineHeight = "110%";
+			return _t;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
             var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
             
-            e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
+			e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = Reflect.field( e, "_"+name );
             
             _t.autoSize = false;
@@ -91,9 +94,8 @@ class TextField extends Pane {
             return e;     
         #else neko
             _t.fontSize = 11;
+			return _t;
         #end
-        
-        return _t;
     }
     
     private function setText( t:String ) :String {
@@ -116,7 +118,6 @@ class TextField extends Pane {
             return _t.text;
         #end
     }
-    
     public function setTextColor( c:xinf.ony.Color ) :Void {
         textColor = c;
         
