@@ -52,7 +52,7 @@ class TextField extends Pane {
 		addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
     }
     
-    override function createPrimitive() :Dynamic {
+    override function createPrimitive() :Primitive {
         _t =
             #if neko
                 new xinf.inity.LineEdit()

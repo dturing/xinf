@@ -48,15 +48,7 @@ class Element extends EventDispatcher {
     public var bounds:Bounds;
 
     private var parent:Element;
-    private var _p
-        #if neko
-            :Group
-        #else js
-            :js.HtmlDom
-        #else flash
-            :flash.MovieClip
-        #end
-        ;
+    private var _p:Primitive;
     
     /**
         Element constructor. You have to supply a name and a parent Element, to which the new Element
@@ -92,7 +84,7 @@ class Element extends EventDispatcher {
         super();
     }
 
-    private function createPrimitive() :Dynamic {
+    private function createPrimitive() :Primitive {
         #if js
             return js.Lib.document.createElement("div");
         #else flash

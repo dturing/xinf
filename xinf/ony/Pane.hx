@@ -43,7 +43,7 @@ class Pane extends Element {
         #end
     }
     
-    override private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Primitive {
         #if neko
             return new xinf.inity.Box();
         #else js

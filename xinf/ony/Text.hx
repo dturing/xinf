@@ -58,7 +58,7 @@ class Text extends Pane {
         setTextColor( new xinf.ony.Color().fromRGBInt(0) );
     }
     
-    override function createPrimitive() :Dynamic {
+    override function createPrimitive() :Primitive {
         _t =
             #if neko
                 new xinf.inity.Text()

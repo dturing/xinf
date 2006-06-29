@@ -71,7 +71,7 @@ class Image extends Element {
     }
     #end
     
-    override private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Primitive {
         #if neko
             _i = new xinf.inity.Image( uri );
             return _i;

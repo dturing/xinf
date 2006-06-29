@@ -16,14 +16,14 @@
 package xinf.ony;
 
 class Wrapper extends Pane {
-    var _primitive:Dynamic;
+    var _primitive:Primitive;
     
     public function new( name:String, parent:Element, p:Dynamic ) {
         _primitive = p;
         super(name,parent);
     }
     
-    override private function createPrimitive() :Dynamic {
+    override private function createPrimitive() :Primitive {
         return _primitive;
     }
 }
