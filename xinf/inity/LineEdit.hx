@@ -60,9 +60,19 @@ class LineEdit extends Text {
 					if( sel.to==sel.from ) sel.from=sel.to-1;
 					replaceSelection("");
 				case "left":
-					moveCursor( sel.to-1, e.data.shiftMod );
+					moveCursor( 
+						if( e.data.ctrlMod )
+							findLeftWordBoundary()
+						else 
+							sel.to-1
+						, e.data.shiftMod );
 				case "right":
-					moveCursor( sel.to+1, e.data.shiftMod );
+					moveCursor( 
+						if( e.data.ctrlMod )
+							findRightWordBoundary()
+						else 
+							sel.to+1
+						, e.data.shiftMod );
 				case "home":
 					moveCursor( 0, e.data.shiftMod );
 				case "end":
@@ -120,6 +130,24 @@ class LineEdit extends Text {
 		u += t.substr(sel.to, t.length-sel.to);
 		sel.to=sel.from=sel.from+str.length;
 		text=u;
+	}
+
+	public function findLeftWordBoundary() :Int {
+		var p:Int=sel.to-1;
+		if( _text.charCodeAt(p)==32 ) p--;
+		while( p>=0 && p<_text.length && _text.charCodeAt(p) != 32 ) {
+			p-=1;
+		}
+		p++;
+		return p;
+	}
+	public function findRightWordBoundary() :Int {
+		var p:Int=sel.to;
+		if( _text.charCodeAt(p)==32 ) p++;
+		while( p>=0 && p<_text.length && _text.charCodeAt(p) != 32 ) {
+			p++;
+		}
+		return p;
 	}
 
 	public function findIndex( p:Point ) :Int {
