@@ -43,7 +43,6 @@ class LineEdit extends Text {
     }
 
     public function onKeyDown( e:Event ) :Void {
-		trace(e.data);
 		if( e.data.code >= 32 ) {
 			switch( e.data.code ) {
 				case 127: // Del
@@ -77,6 +76,8 @@ class LineEdit extends Text {
 					moveCursor( 0, e.data.shiftMod );
 				case "end":
 					moveCursor( _text.length, e.data.shiftMod );
+				case "a":
+					selectAll();
 				default:
 					trace("unhandled control key: "+e.data.key);
 			}
@@ -105,6 +106,11 @@ class LineEdit extends Text {
         xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_UP, _mouseUp );
         xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _mouseMove );
 		_mouseUp = _mouseMove = null;
+	}
+	
+	public function selectAll() :Void {
+		sel.from=0; sel.to=_text.length;
+		changed();
 	}
 	
 	public function moveCursor( to:Int, extendSelection:Bool ) :Void {
