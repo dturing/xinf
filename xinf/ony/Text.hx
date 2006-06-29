@@ -75,17 +75,19 @@ class Text extends Pane {
             _t.style.whiteSpace = "nowrap";
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
             _t.style.fontSize = 11;
+			/*
             _t.style.paddingTop = 2;
             _t.style.paddingBottom = 2;
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
+			*/
             _t.style.lineHeight = "110%";
 			return _t;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
 			var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
             
-            e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
+            e.createTextField("_"+name, e.getNextHighestDepth(), -2, -2, 0, 0 );
             _t = Reflect.field( e, "_"+name );
             
             _t.autoSize = true;
@@ -141,7 +143,7 @@ class Text extends Pane {
         #else js
             s = new Point(untyped _t.offsetWidth, untyped _t.offsetHeight);
         #else flash
-            s = new Point( _t._width, _t._height );
+            s = new Point( _t._width-4, _t._height-4 );
         #end
         
         #if js

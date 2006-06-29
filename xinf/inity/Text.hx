@@ -74,7 +74,7 @@ class Text extends Box {
             }
         }
         if( w > maxW ) maxW = w;
-        return( new Point( maxW, (_font.height * fontSize * lines)+2 ) );
+        return( new Point( maxW, (_font.height * fontSize * lines) ) );
     }
     
     override function _renderGraphics() :Void {
@@ -89,7 +89,7 @@ class Text extends Box {
         GL.PushMatrix();
         GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
 
-        GL.Translatef( 0.65, 1.5, .0 );
+        GL.Translatef( -1.45, -.5, .0 );
         
         GL.Scalef( fontSize, fontSize, 1.0 );
         GL.Translatef( .0, _font.ascender, .0 );

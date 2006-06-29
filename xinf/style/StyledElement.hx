@@ -39,7 +39,7 @@ class StyledElement extends Pane {
 		autoSize=true;
 		
 		style = {
-			padding: { l:5, t:2, r:5, b:2 },
+			padding: { l:6, t:3, r:6, b:3 },
 			border: {
 				l: 	new ImageBorderStyle( 2, "assets/button/button_l.png" ),
 				t: 	new ImageBorderStyle( 2, "assets/button/button_t.png" ),
@@ -51,7 +51,9 @@ class StyledElement extends Pane {
 				br: new ImageBorderStyle( 2, "assets/button/button_br.png" )
 			},
 			color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
-			background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
+			background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
+			minWidth: 75.,
+			hAlign: .5
 		};
 		applyStyle();
     }
@@ -99,6 +101,8 @@ class StyledElement extends Pane {
 			h = bounds.height - ( border.t.width + border.b.width );
 		}
 
+		if( w < style.minWidth ) w=style.minWidth;
+
 		border.l.setLeft( 0, border.tl.width, h );
 		border.r.setRight( border.l.width+w, border.tr.width, h );
 		border.t.setTop( border.tl.width, 0, w );
@@ -111,8 +115,10 @@ class StyledElement extends Pane {
 		if( autoSize ) {
 			bounds.setSize( w+border.l.width+border.r.width, h+border.t.width+border.b.width );
 		}
-		if( child != null )
-			child.bounds.setPosition( pad.l+border.l.width, pad.t+border.t.width );
+		if( child != null ) {
+			var l = style.hAlign * ((w-(pad.r+pad.l))-child.bounds.width);
+			child.bounds.setPosition( l + pad.l+border.l.width, pad.t+border.t.width );
+		}
     }
     
     override private function onSizeChanged( e:Event ) :Void {

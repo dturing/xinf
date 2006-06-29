@@ -8,4 +8,6 @@ signature Style {
 	var border :SidesAndCorners<BorderStyle>;
 	var background :xinf.ony.Color;
 	var color :xinf.ony.Color;
+	var minWidth :Float;
+	var hAlign :Float;
 }
