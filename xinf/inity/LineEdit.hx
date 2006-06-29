@@ -21,6 +21,11 @@ import xinf.geom.Point;
 
 /**
     single-line text input element
+	
+	TODO:
+	  * double-click selects word
+	  * alt-drag selects word boundaries
+	  * dragging out of bounds scrolls
 **/
 
 class LineEdit extends Text {
@@ -35,7 +40,7 @@ class LineEdit extends Text {
     public function new() :Void {
         super();
 		sel = { from:0, to:0 };
-
+		
 		selBgColor = new xinf.ony.Color().fromRGBInt( 0x333333 );
 		selFgColor = new xinf.ony.Color().fromRGBInt( 0xeeeeee );
 

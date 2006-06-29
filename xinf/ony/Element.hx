@@ -68,7 +68,7 @@ class Element extends EventDispatcher {
             _p.bounds = bounds; // FIXME needed? do the change listening in inity.Object?
             if( parent != null ) {
                 parent._p.addChild( _p );
-                parent._p.changed();
+                parent._p.changed(); // FIXME needed?
             }
         #else js
             untyped _p.owner = this;
