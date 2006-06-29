@@ -21,11 +21,11 @@ class TestShell {
         tests.primitives.Pane,
         tests.primitives.Text,
         tests.primitives.Image,
+        tests.primitives.TextField,
         tests.xinful.Scrollbar,
         tests.xinful.Listbox,
         tests.xinful.Dropdown,
-        tests.xinful.Skin,
-        tests.xinful.LineEdit
+        tests.xinful.Skin
     ];    
     
     public static var nTest:Int;

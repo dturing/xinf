@@ -227,10 +227,15 @@ class Root extends Stage {
         
         var type = Event.KEY_DOWN;
         if( k==SDL.KEYUP ) type = Event.KEY_UP;
-        
-        trace("Key "+name+" "+type+", keysym "+s+" code "+code+" unicode "+SDL.keysym_unicode_get(sym) );
-        xinf.event.EventDispatcher.postGlobalEvent( type, { key:str } );
-    }
+		
+		var mods = SDL.GetModState();
+        xinf.event.EventDispatcher.postGlobalEvent( type, { 
+				key:str, code:SDL.keysym_unicode_get(sym),
+				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
+				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
+				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
+			} );
+    } 
 
     private function handleMouseEvent( e, k ) :Void {
         buttonpress = k == SDL.MOUSEBUTTONDOWN;
@@ -253,19 +258,34 @@ class Root extends Stage {
         var type:String = Event.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
         
+		var mods = SDL.GetModState();
+		var data = { x:x, y:y, button:button,
+				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
+				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
+				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
+			}
+		
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( type, { x:x, y:y, button:button } );
+            objectUnderMouse.postEvent( type, data );
         else
-            xinf.event.EventDispatcher.postGlobalEvent( type, { x:x, y:y, button:button } );
+            xinf.event.EventDispatcher.postGlobalEvent( type,data );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
-        if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+	
+		var mods = SDL.GetModState();
+		var data = { x:mouseX, y:mouseY,
+				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
+				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
+				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
+			}
+
+		if( objectUnderMouse != null )
+            objectUnderMouse.postEvent( Event.MOUSE_MOVE, data );
         else
-            xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:mouseX, y:mouseY } );
+            xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, data );
     }
         
     /* ------------------------------------------------------

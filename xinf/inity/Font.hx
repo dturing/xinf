@@ -33,7 +33,8 @@ class Glyph {
     public function render( s:Float ) {
         polygon.render();
         GL.Translatef( Math.round((advance*s))/s, .0, .0 );
-    }
+//        GL.Translatef( advance, .0, .0 );
+	}
 }
 
 class Font {
@@ -45,7 +46,7 @@ class Font {
         
         // FIXME
         font = new FontReader("/home/dan/.fonts/vera.ttf").getFont();
-        fonts.set( name, font );
+		fonts.set( name, font );
         return font;
     }
 
@@ -98,7 +99,7 @@ class FontReader {
             "height", "ascender", "descender", "units_per_EM"
             ] ) {
             var h = untyped __dollar__hash(field.__s);
-            untyped __dollar__objset( font, h, untyped __dollar__objget( _f, h ) / _f.units_per_EM );
+			untyped __dollar__objset( font, h, untyped __dollar__objget( _f, h ) / _f.units_per_EM );
         }
         
         FT.IterateGlyphs( _f, this );

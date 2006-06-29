@@ -17,18 +17,28 @@ package xinf.inity;
 
 import xinf.inity.Font;
 import xinf.geom.Point;
+import xinf.ony.Color;
+
+signature StyleChange {
+	var pos:Int;
+	var color:Color;
+}
 
 class Text extends Box {
-    // FIXME this loads the font for each text item, eeew!
-    private static var _font:Font = Font.getFont("Bitstream Vera Sans");
+	// FIXME
+	public static var _font:Font = Font.getFont("Bitstream Vera Sans");
 
     public var text( _getText, _setText ) : String;
     private var _text:String;
     public var length( _getLength, null ) : Int;
     public var fontSize:Float;
+	
+	public var styles:Array<StyleChange>;
 
-    public function new() {
-        super();
+    public function new() :Void {
+		super();
+
+		styles = new Array<StyleChange>();
         _text = "";
     }
 
@@ -69,6 +79,9 @@ class Text extends Box {
     
     override function _renderGraphics() :Void {
         var lines:Int = 0;
+		
+		var style:Int = 0;
+		var nextStyle:StyleChange = styles[style];
 
         super._renderGraphics();
         
@@ -85,6 +98,12 @@ class Text extends Box {
         GL.PushMatrix();
         
         for( i in 0..._text.length ) {
+			if( nextStyle != null && nextStyle.pos == i ) {
+				GL.Color4f( nextStyle.color.r, nextStyle.color.g, nextStyle.color.b, nextStyle.color.a );
+				style++;
+				nextStyle = styles[style];
+			}
+			
             var c = _text.charCodeAt(i);
             if( c == 10 ) { // \n
                 GL.PopMatrix();

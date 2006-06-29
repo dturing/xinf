@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package tests.xinful;
+package tests.primitives;
 
 class TextField extends TestCase {
     private var display:xinf.ony.Text;
@@ -21,7 +21,7 @@ class TextField extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
         super( parent, 1.0 );
 
-        var t = new xinf.ul.TextField( "test", this );
+        var t = new xinf.ony.TextField( "test", this );
         t.bounds.setPosition( 10, 10 );
         t.bounds.setSize( 150, 20 );
         t.text = "Edit me!";
