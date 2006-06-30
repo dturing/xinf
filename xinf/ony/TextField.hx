@@ -75,6 +75,7 @@ class TextField extends Pane {
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
             _t.style.lineHeight = "110%";
+			_t.style.border = "none";
 			return _t;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
@@ -83,9 +84,10 @@ class TextField extends Pane {
 			e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = Reflect.field( e, "_"+name );
             
-            _t.autoSize = false;
+            _t.autoSize = true;
             _t.selectable = true;
-            
+			_t.type = "input";
+			
             var format:flash.TextFormat = new flash.TextFormat();
             format.size = 11; //*1.05;
             format.font = "Bitstream Vera Sans";

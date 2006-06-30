@@ -94,7 +94,6 @@ class JSEventMonitor {
         untyped {
             if( e.stopPropagation ) e.stopPropagation();
         }
-        
-        return false;
+        return e.target.nodeName=="INPUT";
     }
 }

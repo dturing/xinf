@@ -33,7 +33,7 @@ class StyledElement extends TestCase {
 		
 		var s = "";
 		var y=40;
-		for( str in [ "foo", "bar", "        baz" ] ) {
+		for( str in [ "qux", "quux", "quuuuux" ] ) {
 			s+=" "+str;
 			var sq = new xinf.style.StyledElement( "test_"+s, this );
 			sq.bounds.setPosition( 10, y );

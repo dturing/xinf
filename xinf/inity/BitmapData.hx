@@ -58,7 +58,6 @@ class BitmapData {
         
         GL.CreateTexture( texture, twidth, theight );
 
-        trace("BitmapData cptr: "+CPtr.info(_d) );
         if( _d != null ) {
             switch( cspace ) {
                 case RGB:
@@ -107,23 +106,31 @@ class BitmapData {
 
     }
 
+	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
+	public static var cache:Hash<BitmapData> = new Hash<BitmapData>();
+    public static function newByName( filename:String ) :BitmapData {
+		var r:BitmapData;
+		r = cache.get(filename);
+		if( r==null ) {
+			r = newFromFile( filename );
+			cache.set(filename,r);
+		}
+		return r;
+	}
+	
     public static function newFromFile( filename:String ) :BitmapData {
-    
         var err = GdkPixbuf.gdk_pixbuf_create_error();
-
-/*
-
-        var pixbuf = GdkPixbuf.gdk_pixbuf_new_from_file( untyped filename.__s,err);
- */
-        var pixbufLoader = GdkPixbuf.gdk_pixbuf_loader_new();
         var data = neko.File.getContent( filename );
-        trace("pixbufLoader, data size "+data.length );
+		return newFromStringData( data );
+	}
+	
+    public static function newFromStringData( data:String ) :BitmapData {
+		var pixbufLoader = GdkPixbuf.gdk_pixbuf_loader_new();
         
         var err = GdkPixbuf.gdk_pixbuf_create_error();
         try {
             GdkPixbuf.gdk_pixbuf_loader_write( pixbufLoader, untyped data.__s, data.length, err );
             GdkPixbuf.gdk_pixbuf_loader_close( pixbufLoader, err );
-            trace("pixbufLoader: err "+GdkPixbuf.gdk_pixbuf_get_error( err ) );
         } catch( e:Dynamic ) {
             trace("pixbufLoader: exc "+e+", err "+GdkPixbuf.gdk_pixbuf_get_error( err ) );
         }
@@ -137,8 +144,6 @@ class BitmapData {
         var h = GdkPixbuf.gdk_pixbuf_get_height( pixbuf );
         var f = if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
         var d = GdkPixbuf.gdk_pixbuf_get_pixels_cptr( pixbuf );
-        
-        trace("Loading "+filename+": "+w+"x"+h+" - a?"+GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) );
         
         // FIXME: we steal pixel data, but the pixbuf structure should be unref'd.
         return( new BitmapData( d, w, h, f ) );

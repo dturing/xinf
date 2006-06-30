@@ -17,7 +17,7 @@ package xinf.inity;
 
 class Image extends Bitmap {
     public function new( uri:String ) {
-        var d:BitmapData = BitmapData.newFromFile( uri );
+        var d:BitmapData = BitmapData.newByName( uri );
         super( d );
     }
 }

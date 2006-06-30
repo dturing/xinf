@@ -197,8 +197,8 @@ class LineEdit extends Text {
 		}
 		
 		GL.Color4f( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
-		var x=selStart-.35; var y=.5; 
-		var w=selEnd+.65; var h=(Text._font.height*fontSize)+2.5;
+		var x=selStart-1.5; var y=-.5; 
+		var w=selEnd-.5; var h=(Text._font.height*fontSize)-.5;
 		GL.Begin( GL.QUADS );
 			GL.Vertex3f( x, y, 0. );
 			GL.Vertex3f( w, y, 0. );

@@ -76,8 +76,6 @@ value cptr_info( value cp ) {
     alloc_field(r,val_id("address"),alloc_float( (float)((int)CPTR_PTR(cp,void)) ) );
     alloc_field(r,val_id("size"),alloc_int( CPTR_SIZE(cp) ) );
 
-    printf("k_cptr: %p\n", k_cptr);
-
     return r;
 }
 DEFINE_PRIM( cptr_info, 1 );
