@@ -13,10 +13,10 @@ class StyleSheet {
 	public static function __init__() :Void {
 		defaultStyle = {
 			padding: { l:0, t:0, r:0, b:0 },
-			border: null,
 			color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
 			background: null,
 			minWidth: null,
+			skin: null,
 			textAlign: 0
 		};
 		

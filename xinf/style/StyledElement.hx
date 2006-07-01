@@ -31,58 +31,26 @@ class StyledElement extends Pane {
     private var child:Element;
 	private var style:Style;
     
-	private var border:SidesAndCorners<Border>;
+	private var skin:Skin;
 	
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 		autoSize=true;
-		/*
-		style = {
-			padding: { l:6, t:3, r:6, b:3 },
-			border: {
-				l: 	new ImageBorderStyle( 2, "assets/button/button_l.png" ),
-				t: 	new ImageBorderStyle( 2, "assets/button/button_t.png" ),
-				r: 	new ImageBorderStyle( 2, "assets/button/button_r.png" ),
-				b:  new ImageBorderStyle( 2, "assets/button/button_b.png" ),
-				tl: new ImageBorderStyle( 2, "assets/button/button_tl.png" ),
-				tr: new ImageBorderStyle( 2, "assets/button/button_tr.png" ),
-				bl:	new ImageBorderStyle( 2, "assets/button/button_bl.png" ),
-				br: new ImageBorderStyle( 2, "assets/button/button_br.png" )
-			},
-			color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
-			background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
-			minWidth: 75.,
-			textAlign: .5
-		};
-		*/
-		//applyStyle();
+		skin = new Skin( this );
+		addEventListener( xinf.event.Event.STYLE_CHANGED, reallyApplyStyle );
     }
     
 	public function applyStyle() :Void {
+		postEvent( xinf.event.Event.STYLE_CHANGED, null );
+	}
+	
+	private function reallyApplyStyle( e:xinf.event.Event ) {
 		if( style == null ) return;
 		
-		if( border!=null ) {
-			border.l.remove(this);
-			border.t.remove(this);
-			border.r.remove(this);
-			border.b.remove(this);
-			border.tl.remove(this);
-			border.tr.remove(this);
-			border.bl.remove(this);
-			border.br.remove(this);
-		}
-		border = null;
-		if( style.border != null ) {
-			border = { l:null, t:null, r:null, b:null,
-						tl:null, tr:null, bl:null, br: null };
-			border.l = style.border.l.make( this );
-			border.t = style.border.t.make( this );
-			border.r = style.border.r.make( this );
-			border.b = style.border.b.make( this );
-			border.tl = style.border.tl.make( this );
-			border.tr = style.border.tr.make( this );
-			border.bl = style.border.bl.make( this );
-			border.br = style.border.br.make( this );
+		if( style.skin != null ) {
+			skin.set( "assets/"+style.skin, 2 ); // FIXME: always 2? neee.
+		} else {
+			skin.reset();
 		}
 		
 		if( style.color != null ) {
@@ -111,40 +79,19 @@ class StyledElement extends Pane {
 		} else {
 			w = bounds.width;
 			h = bounds.height;
-			if( border != null ) {
-				w -= ( border.l.width + border.r.width );
-				h -= ( border.t.width + border.b.width );
-			}
 		}
 
 		if( style.minWidth != null && w < style.minWidth ) w=style.minWidth;
 
-		if( border!=null ) {
-			border.l.setLeft( 0, border.tl.width, h );
-			border.r.setRight( border.l.width+w, border.tr.width, h );
-			border.t.setTop( border.tl.width, 0, w );
-			border.b.setBottom( border.tl.width, border.t.width+h, w );
-			border.tl.set(0,0);
-			border.tr.set(border.l.width+w,0);
-			border.bl.set(0,border.t.width+h);
-			border.br.set(border.l.width+w,border.t.width+h);
+		var p = skin.update( w, h );
+				
+		if( autoSize ) {
+			bounds.setSize( w, h );
 		}
 		
-		if( autoSize && border != null ) {
-			var w2 = w;
-			var h2 = h;
-			if( border != null ) {
-				w2 += ( border.l.width + border.r.width );
-				h2 += ( border.t.width + border.b.width );
-			}
-			bounds.setSize( w2, h2 );
-		}
 		if( child != null ) {
 			var l = style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width);
-			if( border != null ) 
-				child.bounds.setPosition( l + pad.l+border.l.width, pad.t+border.t.width );
-			else
-				child.bounds.setPosition( l + pad.l, pad.t );
+			child.bounds.setPosition( l+p.x+pad.l, p.y+pad.t );
 		}
     }
     

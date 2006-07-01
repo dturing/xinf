@@ -171,7 +171,8 @@ class Event {
     /** triggered on Menu/Listbox when an item is chosen **/
     public static var ITEM_PICKED:String = "itemPicked";
 
-
+	/** when a StyledElement has been set a new Style, and needs update **/
+	public static var STYLE_CHANGED:String = "styleChanged";
 
     /** type of the Event. It's a string, but you should only use
         the STATIC_VARS defined above to set or compare Event types **/

@@ -31,7 +31,9 @@ class Image extends Element {
     private var _checkLoaded:Dynamic;
     
     #if neko
-    private var _i:xinf.inity.Image;
+    private var _i:xinf.inity.Bitmap;
+	#else flash
+	private var _i:flash.MovieClip;
     #end
 
     /**
@@ -41,7 +43,7 @@ class Image extends Element {
         IDs can contain slashes ('/'), so if you embed images properly 
         for flash, you can use the same src parameter for any runtime here.
     **/
-    public function new( name:String, parent:Element, src:String ) :Void {
+    public function new( name:String, parent:Element, ?src:String ) :Void {
         uri = src;
         super( name, parent );
         
@@ -49,11 +51,11 @@ class Image extends Element {
         addEventListener( xinf.event.Event.LOADED, sizeKnown );
         
         #if flash
-            postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
+            //postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
         #else js
             untyped _p.onload=imageLoaded;
         #else neko
-            postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
+            //postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
         #end
     }
     
@@ -73,30 +75,61 @@ class Image extends Element {
     
     override private function createPrimitive() :Primitive {
         #if neko
-            _i = new xinf.inity.Image( uri );
+            _i = new xinf.inity.Bitmap();
+	//	_i.load( uri );
             return _i;
         #else js
             var i:js.HtmlDom = js.Lib.document.createElement("img");
-            untyped i.src = uri;
+       //     untyped i.src = uri;
             return i;
         #else flash
-            _checkLoaded = checkLoaded;
-      //      xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
-      
+			
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-            return parent._p.attachMovie(uri,name,parent._p.getNextHighestDepth());
-            
-      //      _p = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
-      //      _p.loadMovie( uri );
-            return _p;
-        #end
+			_p = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
+
+			// loadMovie (external; doesnt work for PNGs!)
+			//_p.loadMovie( uri );
+            //_checkLoaded = checkLoaded;
+			//xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
+
+			return _p;
+		#end
     }
+
+	public function load( src:String ) :Void {
+		if( src == uri ) return;
+		uri = src;
+		#if js 
+			untyped _p.src = uri;
+		#else neko
+			_i.load( uri );
+		#else flash
+			// delete old
+			if( _i != null ) _i.removeMovieClip();
+			// load from asset library
+            _i = _p.attachMovie(uri,"foo",1);
+			if( !autoSize ) {
+			//trace("set "+_p+" img "+_i+" size: "+_p._width+"/"+_p._height );
+				_i._width = bounds.width;
+				_i._height = bounds.height;
+//			} else {
+				// do the checkLoaded thang FIXME
+//				trace("autoSize image");
+			}
+		#end
+	}
 
     #if flash
         override private function onSizeChanged( e:xinf.event.Event ) :Void {
             if( !autoSize ) {
                 _p._width  = Math.floor( e.data.width );
                 _p._height = Math.floor( e.data.height );
+				
+				#if flash
+			//		trace("upd img "+_i+" size: "+_p._width+"/"+_p._height+" -- "+e.data.width );
+					_i._width = e.data.width;
+					_i._height = e.data.height;
+				#end
             }
         }
         

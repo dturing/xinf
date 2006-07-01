@@ -16,7 +16,6 @@
 package tests.style;
 
 import xinf.style.StyleSheet;
-import xinf.style.ImageBorder;
 
 class StyleClassElement extends TestCase {
     public function new( parent:xinf.ony.Element ) :Void {
@@ -30,17 +29,8 @@ class StyleClassElement extends TestCase {
 		// setup test stylesheet
 		StyleSheet.defaultSheet.add(
 			[ "button" ], {
-				padding: { l:6, t:2, r:6, b:4 },
-				border: {
-					l: 	new ImageBorderStyle( 2, "assets/button/l.png" ),
-					t: 	new ImageBorderStyle( 2, "assets/button/t.png" ),
-					r: 	new ImageBorderStyle( 2, "assets/button/r.png" ),
-					b:  new ImageBorderStyle( 2, "assets/button/b.png" ),
-					tl: new ImageBorderStyle( 2, "assets/button/tl.png" ),
-					tr: new ImageBorderStyle( 2, "assets/button/tr.png" ),
-					bl:	new ImageBorderStyle( 2, "assets/button/bl.png" ),
-					br: new ImageBorderStyle( 2, "assets/button/br.png" )
-				},
+				padding: { l:6, t:4, r:6, b:2 },
+				skin: "button/",
 				color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 75.,
@@ -49,32 +39,14 @@ class StyleClassElement extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "button", "hover" ], {
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
-				border: {
-					l: 	new ImageBorderStyle( 2, "assets/button/hover/l.png" ),
-					t: 	new ImageBorderStyle( 2, "assets/button/hover/t.png" ),
-					r: 	new ImageBorderStyle( 2, "assets/button/hover/r.png" ),
-					b:  new ImageBorderStyle( 2, "assets/button/hover/b.png" ),
-					tl: new ImageBorderStyle( 2, "assets/button/hover/tl.png" ),
-					tr: new ImageBorderStyle( 2, "assets/button/hover/tr.png" ),
-					bl:	new ImageBorderStyle( 2, "assets/button/hover/bl.png" ),
-					br: new ImageBorderStyle( 2, "assets/button/hover/br.png" )
-				},
+				skin: "button/hover/",
 				padding: null, color: null, minWidth:null, textAlign:null, 
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "button", "hover", "press" ], {
-				padding: { l:7, t:3, r:5, b:3 },
+				padding: { l:7, t:5, r:5, b:1 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
-				border: {
-					l: 	new ImageBorderStyle( 2, "assets/button/press/l.png" ),
-					t: 	new ImageBorderStyle( 2, "assets/button/press/t.png" ),
-					r: 	new ImageBorderStyle( 2, "assets/button/press/r.png" ),
-					b:  new ImageBorderStyle( 2, "assets/button/press/b.png" ),
-					tl: new ImageBorderStyle( 2, "assets/button/press/tl.png" ),
-					tr: new ImageBorderStyle( 2, "assets/button/press/tr.png" ),
-					bl:	new ImageBorderStyle( 2, "assets/button/press/bl.png" ),
-					br: new ImageBorderStyle( 2, "assets/button/press/br.png" )
-				},
+				skin: "button/press/",
 				color: null, minWidth:null, textAlign:null
 			} );
 

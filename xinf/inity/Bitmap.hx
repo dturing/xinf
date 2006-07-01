@@ -20,16 +20,19 @@ class Bitmap extends Group {
 
     public var alpha:Float;
 
-    public function new( _data:BitmapData ) {
+    public function new() {
         super();
-        data = _data;
         alpha = 1.0;
     }
-    
+
+	public function load( uri:String ) {
+		data = BitmapData.newByName( uri );
+	}
 
     private function _renderGraphics() :Void {
-            
-        var x:Float = 0;
+		if( data == null ) return;
+
+		var x:Float = 0;
         var y:Float = 0;
         var w:Float = bounds.width;   // w,h are not really width/height here,
         var h:Float = bounds.height;  // but right,bottom!
@@ -42,8 +45,7 @@ class Bitmap extends Group {
       // image
     
         GL.Color4f( 1., 1., 1., alpha );
-        data.render( w, h, 0, 0, 1, 1 );
-        
+		data.render( w, h, 0, 0, 1, 1 );
     }
     override private function _render() :Void {
 //    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );
