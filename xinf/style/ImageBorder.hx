@@ -1,6 +1,7 @@
 package xinf.style;
 
 import xinf.ony.Image;
+import xinf.style.Style;
 
 class ImageBorderStyle {
 	public var width :Float;

@@ -21,7 +21,7 @@ import xinf.event.Event;
 import xinf.ony.Color;
 import xinf.ony.Image;
 
-import xinf.style.Sides;
+import xinf.style.Style;
 import xinf.style.ImageBorder;
 
 /**
