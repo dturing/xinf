@@ -22,7 +22,6 @@ import xinf.ony.Color;
 import xinf.ony.Image;
 
 import xinf.style.Style;
-import xinf.style.ImageBorder;
 
 /**
 	StyledElement
@@ -37,7 +36,7 @@ class StyledElement extends Pane {
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 		autoSize=true;
-		
+		/*
 		style = {
 			padding: { l:6, t:3, r:6, b:3 },
 			border: {
@@ -53,18 +52,29 @@ class StyledElement extends Pane {
 			color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
 			background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 			minWidth: 75.,
-			hAlign: .5
+			textAlign: .5
 		};
-		applyStyle();
+		*/
+		//applyStyle();
     }
     
 	public function applyStyle() :Void {
 		if( style == null ) return;
 		
-		border = { l:null, t:null, r:null, b:null,
-					tl:null, tr:null, bl:null, br:null };
-		
+		if( border!=null ) {
+			border.l.remove(this);
+			border.t.remove(this);
+			border.r.remove(this);
+			border.b.remove(this);
+			border.tl.remove(this);
+			border.tr.remove(this);
+			border.bl.remove(this);
+			border.br.remove(this);
+		}
+		border = null;
 		if( style.border != null ) {
+			border = { l:null, t:null, r:null, b:null,
+						tl:null, tr:null, bl:null, br: null };
 			border.l = style.border.l.make( this );
 			border.t = style.border.t.make( this );
 			border.r = style.border.r.make( this );
@@ -82,6 +92,8 @@ class StyledElement extends Pane {
 		if( style.background != null ) {
 			setBackgroundColor( style.background );
 		}
+		
+		updateSize();
 	}
 
     private function updateSize() {
@@ -97,27 +109,42 @@ class StyledElement extends Pane {
 			w = child.bounds.width + pad.l + pad.r;
 			h = child.bounds.height + pad.t + pad.b;
 		} else {
-			w = bounds.width - ( border.l.width + border.r.width );
-			h = bounds.height - ( border.t.width + border.b.width );
+			w = bounds.width;
+			h = bounds.height;
+			if( border != null ) {
+				w -= ( border.l.width + border.r.width );
+				h -= ( border.t.width + border.b.width );
+			}
 		}
 
-		if( w < style.minWidth ) w=style.minWidth;
+		if( style.minWidth != null && w < style.minWidth ) w=style.minWidth;
 
-		border.l.setLeft( 0, border.tl.width, h );
-		border.r.setRight( border.l.width+w, border.tr.width, h );
-		border.t.setTop( border.tl.width, 0, w );
-		border.b.setBottom( border.tl.width, border.t.width+h, w );
-		border.tl.set(0,0);
-		border.tr.set(border.l.width+w,0);
-		border.bl.set(0,border.t.width+h);
-		border.br.set(border.l.width+w,border.t.width+h);
-
-		if( autoSize ) {
-			bounds.setSize( w+border.l.width+border.r.width, h+border.t.width+border.b.width );
+		if( border!=null ) {
+			border.l.setLeft( 0, border.tl.width, h );
+			border.r.setRight( border.l.width+w, border.tr.width, h );
+			border.t.setTop( border.tl.width, 0, w );
+			border.b.setBottom( border.tl.width, border.t.width+h, w );
+			border.tl.set(0,0);
+			border.tr.set(border.l.width+w,0);
+			border.bl.set(0,border.t.width+h);
+			border.br.set(border.l.width+w,border.t.width+h);
+		}
+		
+		if( autoSize && border != null ) {
+			var w2 = w;
+			var h2 = h;
+			if( border != null ) {
+				w2 += ( border.l.width + border.r.width );
+				h2 += ( border.t.width + border.b.width );
+			}
+			bounds.setSize( w2, h2 );
 		}
 		if( child != null ) {
-			var l = style.hAlign * ((w-(pad.r+pad.l))-child.bounds.width);
-			child.bounds.setPosition( l + pad.l+border.l.width, pad.t+border.t.width );
+			var l = style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width);
+			if( border != null ) 
+				child.bounds.setPosition( l + pad.l+border.l.width, pad.t+border.t.width );
+			else
+				child.bounds.setPosition( l + pad.l, pad.t );
 		}
     }
     

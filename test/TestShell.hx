@@ -23,6 +23,7 @@ class TestShell {
         tests.primitives.Image,
         tests.primitives.TextField,
         tests.style.StyledElement,
+        tests.style.StyleClassElement,
         tests.xinful.Scrollbar,
         tests.xinful.Listbox,
         tests.xinful.Dropdown

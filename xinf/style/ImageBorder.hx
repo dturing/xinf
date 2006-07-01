@@ -47,4 +47,8 @@ class ImageBorder implements Border {
 	public function set( x:Float, y:Float ) {
 		i.bounds.setPosition( x, y );
 	}
+	public function remove( e:xinf.ony.Element ) :Void {
+		i.destroy();
+		i=null;
+	}
 }

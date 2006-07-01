@@ -30,6 +30,7 @@ interface Border {
 	function setTop( x:Float, y:Float, w:Float ):Void;
 	function setBottom( x:Float, y:Float, w:Float ):Void;
 	function set( x:Float, y:Float ):Void;
+	function remove( e:xinf.ony.Element ) :Void;
 }
 
 signature Style {
@@ -38,5 +39,5 @@ signature Style {
 	var background :xinf.ony.Color;
 	var color :xinf.ony.Color;
 	var minWidth :Float;
-	var hAlign :Float;
+	var textAlign :Float;
 }
