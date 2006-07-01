@@ -22,14 +22,14 @@ class StyleClassElement extends TestCase {
         super( parent, 1.0 );
 
         var sq = new xinf.style.StyleClassElement( "testStyledElement", this );
-		sq.autoSize = false;
+//		sq.autoSize = false;
         sq.bounds.setPosition( 10, 10 );
-        sq.bounds.setSize( 90, 20 );
+//        sq.bounds.setSize( 90, 20 );
 
 		// setup test stylesheet
 		StyleSheet.defaultSheet.add(
 			[ "button" ], {
-				padding: { l:6, t:4, r:6, b:2 },
+				padding: { l:6, t:3, r:6, b:3 },
 				skin: "button/",
 				color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
@@ -44,7 +44,7 @@ class StyleClassElement extends TestCase {
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "button", "hover", "press" ], {
-				padding: { l:7, t:5, r:5, b:1 },
+				padding: { l:7, t:4, r:5, b:2 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				skin: "button/press/",
 				color: null, minWidth:null, textAlign:null

@@ -27,6 +27,7 @@ class Bitmap extends Group {
 
 	public function load( uri:String ) {
 		data = BitmapData.newByName( uri );
+		changed();
 	}
 
     private function _renderGraphics() :Void {

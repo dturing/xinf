@@ -17,7 +17,7 @@ class StyleClassElement extends StyledElement {
 
 	private function updateStyles() :Void {
 		style = StyleSheet.defaultSheet.match( styleClasses );
-		trace(""+this.name+" updateStyles: "+styleClasses.join(" ") );
+//		trace(""+this.name+" updateStyles: "+styleClasses.join(" ") );
 		applyStyle();
 	}
 
