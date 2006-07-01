@@ -60,9 +60,11 @@ class Bounds extends EventDispatcher {
         a POSITION_CHANGED Event.
     **/
     public function setPosition( _x:Float, _y:Float ) :Void {
-        x = _x;
-        y = _y;
-        postEvent( Event.POSITION_CHANGED, { x:x, y:y } );
+		if( x!=_x || y!=_y ) { // FIXME premature optimization?
+			x = _x;
+			y = _y;
+			postEvent( Event.POSITION_CHANGED, { x:x, y:y } );
+		}
     }
 
     /**
@@ -70,9 +72,11 @@ class Bounds extends EventDispatcher {
         a SIZE_CHANGED Event.
     **/
     public function setSize( _width:Float, _height:Float ) :Void {
-        width = _width;
-        height = _height;
-        postEvent( Event.SIZE_CHANGED, { width:width, height:height } );
+		if( width != _width || height != _height ) { // FIXME premature optimization?
+			width = _width;
+			height = _height;
+			postEvent( Event.SIZE_CHANGED, { width:width, height:height } );
+		}
     }
     
     public function toString() : String {

@@ -20,15 +20,15 @@ class Image extends TestCase {
         super( parent, 1.0 );
 
     // 2x2px checkerboard, scaled
-        var t = new xinf.ony.Image( "test", this, "assets/checker2x2.png" );
-        t.bounds.setPosition( 60, 20 );
+        var t = new xinf.ony.Image( "test2x2", this, "assets/checker2x2.png" );
         t.autoSize = false;
+        t.bounds.setPosition( 60, 20 );
         t.bounds.setSize(40,40);
 
     // 4x4px checkerboard, scaled
-        var t = new xinf.ony.Image( "test", this, "assets/checker.png" );
-        t.bounds.setPosition( 110, 20 );
+        var t = new xinf.ony.Image( "test4x4", this, "assets/checker.png" );
         t.autoSize = false;
+        t.bounds.setPosition( 110, 20 );
         t.bounds.setSize(40,40);
 
     // color images
@@ -39,6 +39,8 @@ class Image extends TestCase {
     // JPEG
         var sq = new xinf.ony.Image( "jpg", this, "assets/test.jpg" );
         sq.bounds.setPosition( 60, 120 );
+
+		trace("JPEG size: "+sq.bounds );
 
     // TODO: image loading via http
 

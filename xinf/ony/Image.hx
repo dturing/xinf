@@ -44,10 +44,7 @@ class Image extends Element {
         for flash, you can use the same src parameter for any runtime here.
     **/
     public function new( name:String, parent:Element, ?src:String ) :Void {
-        uri = src;
         super( name, parent );
-        
-        autoSize = true;
         addEventListener( xinf.event.Event.LOADED, sizeKnown );
         
         #if flash
@@ -57,6 +54,8 @@ class Image extends Element {
         #else neko
             //postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
         #end
+		
+		if( src != null ) load( src );
     }
     
     private function sizeKnown( e:xinf.event.Event ) :Void {
@@ -98,6 +97,7 @@ class Image extends Element {
 
 	public function load( src:String ) :Void {
 		if( src == uri ) return;
+		
 		uri = src;
 		#if js 
 			untyped _p.src = uri;
@@ -107,13 +107,18 @@ class Image extends Element {
 			// delete old
 			if( _i != null ) _i.removeMovieClip();
 			// load from asset library
-            _i = _p.attachMovie(uri,"foo",1);
+            _i = _p.attachMovie(uri,name,1);
+			
+			// wow - really do nothing it seems? FIXME
+			// remove this once you understand whats going on
 			if( !autoSize ) {
-			//trace("set "+_p+" img "+_i+" size: "+_p._width+"/"+_p._height );
-				_i._width = bounds.width;
-				_i._height = bounds.height;
-//			} else {
-				// do the checkLoaded thang FIXME
+//			trace("set img "+_i+" size: "+bounds );
+			//	_i._width = _p._width;
+			//	_i._height = _p._height;
+			} else {
+				//bounds.setSize( _i._width, _i._height );
+//				trace("img bounds: "+bounds );
+				// do the checkLoaded thang in case of loadMovie FIXME
 //				trace("autoSize image");
 			}
 		#end
@@ -124,12 +129,6 @@ class Image extends Element {
             if( !autoSize ) {
                 _p._width  = Math.floor( e.data.width );
                 _p._height = Math.floor( e.data.height );
-				
-				#if flash
-			//		trace("upd img "+_i+" size: "+_p._width+"/"+_p._height+" -- "+e.data.width );
-					_i._width = e.data.width;
-					_i._height = e.data.height;
-				#end
             }
         }
         
