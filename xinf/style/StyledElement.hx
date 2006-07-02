@@ -36,7 +36,6 @@ class StyledElement extends Pane {
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 		autoSize=true;
-		skin = new Skin( this );
 		addEventListener( xinf.event.Event.STYLE_CHANGED, reallyApplyStyle );
     }
     
@@ -48,17 +47,15 @@ class StyledElement extends Pane {
 		if( style == null ) return;
 		
 		if( style.skin != null ) {
+			if( skin == null ) skin = new Skin( this );
 			skin.set( "assets/"+style.skin, 2 ); // FIXME: always 2? neee.
 		} else {
-			skin.reset();
+			if( skin != null )
+				skin.reset();
 		}
 		
-		if( style.color != null ) {
-			setForegroundColor( style.color );
-		}
-		if( style.background != null ) {
-			setBackgroundColor( style.background );
-		}
+		setForegroundColor( style.color );
+		setBackgroundColor( style.background );
 		
 		updateSize();
 	}
@@ -82,7 +79,7 @@ class StyledElement extends Pane {
 
 		if( style.minWidth != null && w < style.minWidth ) w=style.minWidth;
 
-		var p = skin.update( w, h );
+		if( skin != null ) skin.update( w, h );
 				
 		if( autoSize ) {
 			bounds.setSize( w, h );
@@ -90,7 +87,7 @@ class StyledElement extends Pane {
 		
 		if( child != null ) {
 			var l = style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width);
-			child.bounds.setPosition( l+p.x+pad.l, p.y+pad.t );
+			child.bounds.setPosition( l+pad.l, pad.t );
 		}
     }
     

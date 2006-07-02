@@ -18,38 +18,22 @@ package xinf.ul;
 import xinf.ony.Pane;
 import xinf.ony.Element;
 import xinf.event.Event;
-import xinf.ony.Color;
 import xinf.ony.Text;
+import xinf.style.StyleClassElement;
 
 /**
     Simple Label element.
 **/
 
-class Label extends Pane {
-    private static var hpadding:Float = 6;
-    private static var vpadding:Float = 3;
-    
-    private var hoverColor:Color;
-    private var nonHoverColor:Color;
-
+class Label extends StyleClassElement {
     public var text(get_text,set_text):String;
     private var textE:Text;
     
     public function new( name:String, parent:Element ) :Void {
-        super( name, parent );
-
-        nonHoverColor = new Color().fromRGBInt( 0xffffff );
-       // setBackgroundColor( nonHoverColor );
+		super( name, parent );
 
         textE = new xinf.ony.Text( name+"_text", this );
-        textE.bounds.setPosition( hpadding, vpadding-1 );
-        textE.bounds.addEventListener( Event.SIZE_CHANGED, textResized );
-
-        bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
-        /*
-        addEventListener( Event.MOUSE_OUT, onMouseOut );
-        addEventListener( Event.MOUSE_OVER, onMouseOver );
-        */
+		setChild( textE );
     }
     
     private function get_text() :String {
@@ -59,24 +43,4 @@ class Label extends Pane {
         textE.text = t;
         return(t);
     }
-
-    public function textResized( e:Event ) {
-        if( autoSize ) {
-            bounds.setSize( textE.bounds.width + (2*hpadding), textE.bounds.height + (2*vpadding) );
-        }
-    }
-
-    public function setHoverColor( c:xinf.ony.Color ) :Void {
-        hoverColor=c;
-    }
-    
-    public function onMouseOver( e:Event ) :Void {
-        if( hoverColor != null ) {
-            setBackgroundColor( hoverColor );
-        }
-    }
-    public function onMouseOut( e:Event ) :Void {
-        setBackgroundColor( nonHoverColor );
-    }
-    
 }

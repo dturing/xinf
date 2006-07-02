@@ -13,11 +13,21 @@ class StyleClassElement extends StyledElement {
 		// add our own class to the list of style classes
 		var clNames = Reflect.getClass(this).__name__;
 		addStyleClass( clNames[ clNames.length-1 ] );
+
+		// :hover pseudo-class
+		addEventListener( xinf.event.Event.MOUSE_OVER, onMouseOver );
+		addEventListener( xinf.event.Event.MOUSE_OUT, onMouseOut );
 	}
 
+	private function onMouseOver( e:xinf.event.Event ) {
+		addStyleClass(":hover");
+	}
+	private function onMouseOut( e:xinf.event.Event ) {
+		removeStyleClass(":hover");
+	}
+		
 	private function updateStyles() :Void {
 		style = StyleSheet.defaultSheet.match( styleClasses );
-//		trace(""+this.name+" updateStyles: "+styleClasses.join(" ") );
 		applyStyle();
 	}
 

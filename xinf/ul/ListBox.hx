@@ -39,7 +39,6 @@ class ListBox extends Pane {
     private var offset:Float;
     
     private static var labelHeight:Int = 20;
-    private static var hoverColor:Color = new Color().fromRGBInt( 0xdddddd );
     
     public function new( name:String, parent:Element, _model:ListModel ) :Void {
         super( name, parent );
@@ -110,7 +109,6 @@ class ListBox extends Pane {
             for( i in 0...(n - children.length) ) {
                 var child = new Label( name+"_"+children.length, scrollPane );
                 child.autoSize = false;
-                if( hoverColor != null ) child.setHoverColor( hoverColor );
                 children.push( child );
             }
         } else if( children.length > n ) {

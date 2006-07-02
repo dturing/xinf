@@ -11,15 +11,7 @@ class StyleSheet {
 	public static var defaultStyle:Style;
 	public static var defaultSheet:StyleSheet;
 	public static function __init__() :Void {
-		defaultStyle = {
-			padding: { l:0, t:0, r:0, b:0 },
-			color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
-			background: null,
-			minWidth: null,
-			skin: null,
-			textAlign: 0
-		};
-		
+		defaultStyle = newDefaultStyle();
 		defaultSheet = new StyleSheet();
 	}
 	
@@ -52,7 +44,7 @@ class StyleSheet {
 		if( primary==null ) return null;
 		
 		var styles = new List<Style>();
-		styles.push( defaultStyle );
+	//	styles.push( defaultStyle );
 		for( rule in primary ) {
 			var match:Bool = true;
 			for( c in rule.classes ) {
@@ -68,8 +60,8 @@ class StyleSheet {
 	}
 	
 	private function aggregateStyles( styles:Iterator<Style> ) :Style {
-		var r = defaultStyle;
-		if( styles == null ) return defaultStyle;
+		var r = newDefaultStyle();
+		if( styles == null ) return r;
 		for( style in styles ) {
 			for( field in Reflect.fields(style) ) {
 				var v = Reflect.field(style, field);
@@ -83,5 +75,17 @@ class StyleSheet {
 	
 	public function match( classNames:Array<String> ) :Style {
 		return aggregateStyles( findStyles( classNames ) );
+	}
+	
+	
+	private static function newDefaultStyle():Style {
+		return {
+			padding: { l:0, t:0, r:0, b:0 },
+			color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+			background: null,
+			minWidth: null,
+			skin: null,
+			textAlign: 0
+		};
 	}
 }

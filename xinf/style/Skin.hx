@@ -59,7 +59,7 @@ class Skin {
 		border = { l:0, t:0, r:0, b:0 };
 	}
 	
-	public function update( w:Float, h:Float ) :{ x:Float, y:Float } {
+	public function update( w:Float, h:Float ) :Void {
 		images.l.bounds.setPosition( -border.l, 0 );
 		images.t.bounds.setPosition( 0, -border.t );
 		images.r.bounds.setPosition( w, 0 );
@@ -77,8 +77,5 @@ class Skin {
 		images.tr.bounds.setSize( border.r, border.t );
 		images.bl.bounds.setSize( border.l, border.b );
 		images.br.bounds.setSize( border.r, border.b );
-		
-//		return { x:border.l, y:border.t };
-		return { x:0, y:0 };
 	}
 }

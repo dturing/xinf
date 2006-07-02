@@ -37,14 +37,14 @@ class StyleClassElement extends TestCase {
 				textAlign: .5
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "button", "hover" ], {
+			[ "button", ":hover" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				skin: "button/hover/",
 				padding: null, minWidth:null, textAlign:null, 
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "button", "hover", "press" ], {
+			[ "button", ":hover", "press" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				padding: { l:6, t:4, r:6, b:2 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
@@ -59,12 +59,6 @@ class StyleClassElement extends TestCase {
 
 		sq.addStyleClass("button");
 
-		sq.addEventListener( xinf.event.Event.MOUSE_OVER, function (e:xinf.event.Event) {
-			sq.addStyleClass("hover");
-		} );
-		sq.addEventListener( xinf.event.Event.MOUSE_OUT, function (e:xinf.event.Event) {
-			sq.removeStyleClass("hover");
-		} );
 		sq.addEventListener( xinf.event.Event.MOUSE_DOWN, function (e:xinf.event.Event) {
 			sq.addStyleClass("press");
 		} );
