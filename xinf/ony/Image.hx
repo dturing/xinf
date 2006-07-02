@@ -75,23 +75,13 @@ class Image extends Element {
     override private function createPrimitive() :Primitive {
         #if neko
             _i = new xinf.inity.Bitmap();
-	//	_i.load( uri );
             return _i;
         #else js
             var i:js.HtmlDom = js.Lib.document.createElement("img");
-       //     untyped i.src = uri;
             return i;
         #else flash
-			
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
-			_p = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
-
-			// loadMovie (external; doesnt work for PNGs!)
-			//_p.loadMovie( uri );
-            //_checkLoaded = checkLoaded;
-			//xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
-
-			return _p;
+			return parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
 		#end
     }
 
@@ -108,6 +98,13 @@ class Image extends Element {
 			if( _i != null ) _i.removeMovieClip();
 			// load from asset library
             _i = _p.attachMovie(uri,name,1);
+			
+			// loadMovie (external; doesnt work for PNGs!)
+			//_p.loadMovie( uri );
+            //_checkLoaded = checkLoaded;
+			//xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
+
+			
 			
 			// wow - really do nothing it seems? FIXME
 			// remove this once you understand whats going on

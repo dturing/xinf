@@ -22,42 +22,35 @@ class StyleClassElement extends TestCase {
         super( parent, 1.0 );
 
         var sq = new xinf.style.StyleClassElement( "testStyledElement", this );
-//		sq.autoSize = false;
         sq.bounds.setPosition( 10, 10 );
-//        sq.bounds.setSize( 90, 20 );
 
-		// setup test stylesheet
 		StyleSheet.defaultSheet.add(
-			[ "button" ], {
-				padding: { l:6, t:3, r:6, b:3 },
-				skin: "button/",
+			[ "test" ], {
+				padding: { l:3, t:1, r:3, b:1 },
+				border: { l:2, t:2, r:0, b:2 },
+				skin: "slider/box/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 75.,
 				textAlign: .5
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "button", ":hover" ], {
+			[ "test", ":hover" ], {
+				padding: null,
+				border: { l:2, t:2, r:0, b:2 },
+				skin: "slider/box/hover/",
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
-				skin: "button/hover/",
-				padding: null, minWidth:null, textAlign:null, 
-			} );
-		StyleSheet.defaultSheet.add(
-			[ "button", ":hover", "press" ], {
-				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:6, t:4, r:6, b:2 },
-				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
-				skin: "button/press/",
-				minWidth:null, textAlign:null
-			} );
+				background: new xinf.ony.Color().fromRGBInt( 0xdddddd ),
+				minWidth: 75.,
+				textAlign: .5
+			} );		
 
 		// simulate a button
 		var t = new xinf.ony.Text("testT", sq );
 		t.text = "Hello World!";
 		sq.setChild(t);
 
-		sq.addStyleClass("button");
+		sq.addStyleClass("test");
 
 		sq.addEventListener( xinf.event.Event.MOUSE_DOWN, function (e:xinf.event.Event) {
 			sq.addStyleClass("press");

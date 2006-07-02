@@ -45,14 +45,14 @@ class Skin {
 		if( b==null ) b=t;
 		border = { l:l, t:t, r:r, b:b };
 
-		images.l.load( name+"l.png" );
-		images.t.load( name+"t.png" );
-		images.r.load( name+"r.png" );
-		images.b.load( name+"b.png" );
-		images.tl.load( name+"tl.png" );
-		images.tr.load( name+"tr.png" );
-		images.bl.load( name+"bl.png" );
-		images.br.load( name+"br.png" );
+		if( border.l!=0 ) images.l.load( name+"l.png" );
+		if( border.t!=0 ) images.t.load( name+"t.png" );
+		if( border.r!=0 ) images.r.load( name+"r.png" );
+		if( border.b!=0 ) images.b.load( name+"b.png" );
+		if( border.t!=0 && border.l!=0 ) images.tl.load( name+"tl.png" );
+		if( border.t!=0 && border.r!=0 ) images.tr.load( name+"tr.png" );
+		if( border.b!=0 && border.l!=0 ) images.bl.load( name+"bl.png" );
+		if( border.b!=0 && border.r!=0 ) images.br.load( name+"br.png" );
 	}
 	
 	public function reset() :Void {

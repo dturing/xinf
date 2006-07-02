@@ -120,8 +120,13 @@ class BitmapData {
 	
     public static function newFromFile( filename:String ) :BitmapData {
         var err = GdkPixbuf.gdk_pixbuf_create_error();
-        var data = neko.File.getContent( filename );
-		return newFromStringData( data );
+		try {
+			var data = neko.File.getContent( filename );
+			return newFromStringData( data );
+		} catch( e:Dynamic ) {
+			trace("Couldn't read: "+e );
+			return null;
+		}
 	}
 	
     public static function newFromStringData( data:String ) :BitmapData {

@@ -21,7 +21,7 @@ RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
 LD_LIBRARY_PATH=$(XINFROOT)/libs/cptr
 
-ASSETS=$(wildcard assets/* assets/*/* assets/*/*/*)
+ASSETS=$(wildcard assets)
 ifneq (,$(ASSETS))
 	SWF_ASSETS=assets.swf
 endif
@@ -53,8 +53,9 @@ default: compile
 # default targets
 #
 assets.swf : $(ASSETS)
-	echo "<movie>" $(foreach ASSET, $(ASSETS), "<library><clip id=\"$(ASSET)\" import=\"$(ASSET)\"/></library>") "<frame/></movie>" | swfmill simple stdin $@
-
+#	echo "<movie>" $(foreach ASSET, $(ASSETS), "<library><clip id=\"$(ASSET)\" import=\"$(ASSET)\"/></library>") "<frame/></movie>" | swfmill simple stdin $@
+	swfmill library $(ASSETS) $@
+	
 subdirs: 
 	$(foreach SUBDIR, $(SUBDIRS), $(MAKE) -C $(SUBDIR);)
 

@@ -81,6 +81,7 @@ class StyleSheet {
 	private static function newDefaultStyle():Style {
 		return {
 			padding: { l:0, t:0, r:0, b:0 },
+			border: { l:0, t:0, r:0, b:0 },
 			color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 			background: null,
 			minWidth: null,

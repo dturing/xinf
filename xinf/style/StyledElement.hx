@@ -48,7 +48,8 @@ class StyledElement extends Pane {
 		
 		if( style.skin != null ) {
 			if( skin == null ) skin = new Skin( this );
-			skin.set( "assets/"+style.skin, 2 ); // FIXME: always 2? neee.
+			skin.set( "assets/"+style.skin, 
+				style.border.l, style.border.t, style.border.r, style.border.b ); // FIXME: always 2? neee.
 		} else {
 			if( skin != null )
 				skin.reset();

@@ -10,6 +10,7 @@ signature Sides<T> {
 signature Style {
 	var padding :Sides<Float>;
 	var background :xinf.ony.Color;
+	var border :Sides<Float>;
 	var color :xinf.ony.Color;
 	var skin :String;
 	var minWidth :Float;
