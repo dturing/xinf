@@ -27,7 +27,7 @@ class Pane extends TestCase {
 
     // a green square, next to it
         var sq2 = new xinf.ony.Pane( "testPane2", this );
-        sq2.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
+		sq2.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
         sq2.bounds.setPosition( 110, 10 );
         sq2.bounds.setSize( 100, 100 );
 

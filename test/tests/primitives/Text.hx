@@ -28,7 +28,7 @@ class Text extends TestCase {
         
         for( i in 0...4 ) {
             testElement = new xinf.ony.Text( "test", this );
-            testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0 ) );
+            testElement.setForegroundColor( new xinf.ony.Color().fromRGBInt( 0 ) );
             testElement.bounds.setPosition( 10, 10+y );
             testElement.setFontSize( 11 + (i*4) );
             testElement.text = "the quick brown fox\njumps over the lazy dog\n";
@@ -39,14 +39,14 @@ class Text extends TestCase {
 
         testElement = new xinf.ony.Text( "test", this );
         testElement.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0 ) );
-        testElement.setTextColor( new xinf.ony.Color().fromRGBInt( 0xffffff ) );
+        testElement.setForegroundColor( new xinf.ony.Color().fromRGBInt( 0xffffff ) );
         testElement.bounds.setPosition( 10, 10+y );
         testElement.setFontSize( 11 + (3*4) );
         testElement.text = "the quick brown fox\njumps over the lazy dog";
         last = testElement;
         
         var t = new xinf.ony.Text("glyph", this );
-        t.setTextColor( new xinf.ony.Color().fromRGBInt( 0x0000ff ) );
+        t.setForegroundColor( new xinf.ony.Color().fromRGBInt( 0x0000ff ) );
         t.bounds.setPosition( 220, -20 );
         t.setFontSize( 128 );
         t.text = "a";

@@ -31,23 +31,25 @@ class StyleClassElement extends TestCase {
 			[ "button" ], {
 				padding: { l:6, t:3, r:6, b:3 },
 				skin: "button/",
-				color: new xinf.ony.Color().fromRGBInt( 0xaa0000 ),
+				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 75.,
 				textAlign: .5
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "button", "hover" ], {
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				skin: "button/hover/",
-				padding: null, color: null, minWidth:null, textAlign:null, 
+				padding: null, minWidth:null, textAlign:null, 
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "button", "hover", "press" ], {
-				padding: { l:7, t:4, r:5, b:2 },
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				padding: { l:6, t:4, r:6, b:2 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				skin: "button/press/",
-				color: null, minWidth:null, textAlign:null
+				minWidth:null, textAlign:null
 			} );
 
 		// simulate a button

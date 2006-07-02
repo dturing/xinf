@@ -87,7 +87,9 @@ class Text extends Box {
         
     // text
         GL.PushMatrix();
-        GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
+		
+		if( fgColor != null )
+			GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
 
         GL.Translatef( -0.5, 0.25, .0 );
         

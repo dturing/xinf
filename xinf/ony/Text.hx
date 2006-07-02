@@ -32,12 +32,10 @@ class Text extends Pane {
     **/
     public var text( getText, setText ) :String;
 
-    /**
+    /* FIXME. autoSized moved somewhere else.
         If autoSize is set to true, the Element's bounds rectangle will automatically be set to enclose the
         contained text. If false, it will always be the size you specified, with text content probably overflowing.
-    **/
-
-    private var textColor:xinf.ony.Color;
+    */
 
     private var _t
         #if neko
@@ -55,7 +53,6 @@ class Text extends Pane {
     public function new( name:String, parent:Element ) {
         super(name,parent);
         autoSize = true;
-        setTextColor( new xinf.ony.Color().fromRGBInt(0) );
     }
     
     override function createPrimitive() :Primitive {
@@ -75,12 +72,6 @@ class Text extends Pane {
             _t.style.whiteSpace = "nowrap";
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
             _t.style.fontSize = 11;
-			/*
-            _t.style.paddingTop = 2;
-            _t.style.paddingBottom = 2;
-            _t.style.paddingLeft = 2;
-            _t.style.paddingRight = 2;
-			*/
             _t.style.lineHeight = "110%";
 			return _t;
         #else flash
@@ -105,6 +96,13 @@ class Text extends Pane {
         #end
         
     }
+	
+	#if flash
+    override public function setForegroundColor( fg:xinf.ony.Color ) :Void {
+		super.setForegroundColor(fg);
+		_t.textColor = fgColor.toRGBInt();
+    }
+	#end
     
     private function setText( t:String ) :String {
         #if neko
@@ -161,19 +159,6 @@ class Text extends Pane {
             }
         #else true
             bounds.setSize( Math.round(s.x), Math.round(s.y) );
-        #end
-    }
-
-    public function setTextColor( c:xinf.ony.Color ) :Void {
-        textColor = c;
-        
-        #if neko
-            _p.fgColor = textColor;
-            _p.changed();
-        #else js
-            _p.style.color = textColor.toRGBString();
-        #else flash
-            _t.textColor = textColor.toRGBInt();
         #end
     }
     

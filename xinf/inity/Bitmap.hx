@@ -44,9 +44,10 @@ class Bitmap extends Group {
         }        
         
       // image
-    
-        GL.Color4f( 1., 1., 1., alpha );
-		data.render( w, h, 0, 0, 1, 1 );
+		GL.PushAttrib( GL.CURRENT_BIT );
+			GL.Color4f( 1., 1., 1., alpha );
+			data.render( w, h, 0, 0, 1, 1 );
+		GL.PopAttrib();
     }
     override private function _render() :Void {
 //    trace("render bitmap, dl "+_displayList+" tex "+untyped data.texture );

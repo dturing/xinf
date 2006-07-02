@@ -93,7 +93,11 @@ class Object {
             if( visible ) {
                 GL.PushMatrix();
                     GL.MultMatrixf( transform._v );
-                    _render();
+					GL.PushAttrib( GL.CURRENT_BIT );
+						if( fgColor != null )
+							GL.Color4f( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
+						_render();
+					GL.PopAttrib();
                 GL.PopMatrix();
             }
             GL.EndList();

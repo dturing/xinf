@@ -22,6 +22,7 @@ package xinf.ony;
 **/
 class Pane extends Element {
     private var bgColor:xinf.ony.Color;
+    private var fgColor:xinf.ony.Color;
 
     /**
         if true, contents will be cropped to the Pane's bounds. if false, they will be visible
@@ -127,7 +128,22 @@ class Pane extends Element {
             scheduleRedraw();
         #end
     }
-    
+
+
+    /** Set the foreground color to the Color specified. **/
+    public function setForegroundColor( fg:xinf.ony.Color ) :Void {
+        fgColor = fg;
+		
+        #if neko
+            _p.fgColor = fgColor;
+            _p.changed();
+        #else js
+            _p.style.color = if( fgColor != null ) fgColor.toRGBString(); else "rgb(0,0,0)";
+        #else flash
+			scheduleRedraw();
+        #end
+    }
+
     #if flash
         override private function redraw() :Void {
             super.redraw();

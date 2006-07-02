@@ -105,14 +105,16 @@ class Box extends Group {
         
       // background
         if( bgColor != null ) {
-            GL.BindTexture( GL.TEXTURE_2D, 0 );
-            GL.Color4f( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
-            GL.Begin( GL.QUADS );
-                GL.Vertex3f( x, y, 0. );
-                GL.Vertex3f( w, y, 0. );
-                GL.Vertex3f( w, h, 0. );
-                GL.Vertex3f( x, h, 0. );
-            GL.End();
+			GL.PushAttrib( GL.CURRENT_BIT );
+				GL.BindTexture( GL.TEXTURE_2D, 0 );
+				GL.Color4f( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
+				GL.Begin( GL.QUADS );
+					GL.Vertex3f( x, y, 0. );
+					GL.Vertex3f( w, y, 0. );
+					GL.Vertex3f( w, h, 0. );
+					GL.Vertex3f( x, h, 0. );
+				GL.End();
+			GL.PopAttrib();
         }
     }
 

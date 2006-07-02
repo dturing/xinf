@@ -84,7 +84,7 @@ class TextField extends Pane {
 			e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = Reflect.field( e, "_"+name );
             
-            _t.autoSize = true;
+            _t.autoSize = false;
             _t.selectable = true;
 			_t.type = "input";
 			

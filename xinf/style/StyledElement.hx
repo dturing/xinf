@@ -54,8 +54,7 @@ class StyledElement extends Pane {
 		}
 		
 		if( style.color != null ) {
-			// FIXME: no such thing as foreground yet.
-//			setForegroundColor( style.color );
+			setForegroundColor( style.color );
 		}
 		if( style.background != null ) {
 			setBackgroundColor( style.background );
@@ -120,4 +119,16 @@ class StyledElement extends Pane {
         child.bounds.addEventListener( Event.SIZE_CHANGED, childSizeChanged );
         updateSize();
     }
+	
+	#if flash
+	// FIXME this doesnt work for inherited foreground!
+    override public function setForegroundColor( fg:xinf.ony.Color ) :Void {
+		super.setForegroundColor(fg);
+		if( child!=null ) {
+			var c:xinf.ony.Pane = cast(child,xinf.ony.Pane);
+			if( c!=null ) 
+				c.setForegroundColor(fg);
+		}
+    }
+	#end
 }
