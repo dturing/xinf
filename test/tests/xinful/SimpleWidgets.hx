@@ -16,6 +16,7 @@
 package tests.xinful;
 
 import xinf.style.StyleSheet;
+import xinf.ul.Button;
 
 class SimpleWidgets extends TestCase {
     private var display:xinf.ony.Text;
@@ -51,8 +52,8 @@ class SimpleWidgets extends TestCase {
 	// Button
 
 		StyleSheet.defaultSheet.add(
-			[ "Button" ], {
-				padding: { l:6, t:3, r:6, b:3 },
+			[ "TextButton" ], {
+				padding: { l:5, t:2, r:5, b:3 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
@@ -61,7 +62,7 @@ class SimpleWidgets extends TestCase {
 				textAlign: .5
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", ":hover" ], {
+			[ "TextButton", ":hover" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				border: { l:2, t:2, r:2, b:2 },
@@ -69,18 +70,18 @@ class SimpleWidgets extends TestCase {
 				padding: null, minWidth:null, textAlign:null, 
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", ":hover", ":press" ], {
+			[ "TextButton", ":hover", ":press" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:6, t:4, r:6, b:2 },
+				padding: { l:5, t:3, r:5, b:2 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/press/",
 				minWidth:null, textAlign:null
 			} );
 			
-        var t = new xinf.ul.Button( "testButton", this );
+        var t = new xinf.ul.TextButton( "testButton", this );
         t.bounds.setPosition( 10, 40 );
-		t.text="Click Me.";
+		t.contained.text="Click Me.";
 		var buttonClicks:Int=0;
 		var texts = [ "", "Thank you", "Thank you", "Thank You", "Thanks", "Thank you very much.", "Thanks, really",
 						"Danke","Merci","Gracias","Tak","Thank you","","..." ];
@@ -88,22 +89,22 @@ class SimpleWidgets extends TestCase {
 		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
 					var c = if( buttonClicks<texts.length ) texts[buttonClicks] 
 							else stopTexts[Math.floor(Math.random()*stopTexts.length)];
-					t.text=c;
+					t.contained.text=c;
 					buttonClicks++;
 				} );
 
-
+	
 	/////////////////////////////////////////////////////////////////////////////////
 	// Combobox
 		StyleSheet.defaultSheet.add(
 			[ "Label", "combo" ], {
-				padding: { l:3, t:2, r:6, b:2 },
+				padding: { l:3, t:1, r:6, b:1 },
 				border: { l:2, t:2, r:0, b:2 },
 				skin: "slider/box/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
-				minWidth: 100.,
-				textAlign: 0
+				minWidth: 60.,
+				textAlign: 1
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "Label", "combo", ":hover" ], {
@@ -114,8 +115,8 @@ class SimpleWidgets extends TestCase {
 				minWidth: null,	textAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", "combo" ], {
-				padding: { l:3, t:2, r:3, b:2 },
+			[ "ImageButton", "combo" ], {
+				padding: { l:1, t:1, r:1, b:1 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "slider/button/",
 				textAlign: null, minWidth: 0,
@@ -123,39 +124,35 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", "combo", ":hover" ], {
+			[ "ImageButton", "combo", ":hover" ], {
 				skin: "slider/button/hover/",
 				border: null, padding: null, textAlign: null, minWidth: 0,
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", "combo", ":hover" ], {
+			[ "ImageButton", "combo", ":hover" ], {
 				skin: "slider/button/hover/",
 				border: null, padding: null, textAlign: null, minWidth: 0,
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Button", "combo", ":press" ], {
+			[ "ImageButton", "combo", ":press" ], {
 				skin: "slider/button/press/",
-				padding: { l:3, t:3, r:3, b:1 },
+				padding: { l:1, t:2, r:1, b:0 },
 				border: null, textAlign: null, minWidth: 0,
 				color: null,
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 )
 			} );
 			
-        var t = new xinf.ul.Combo<xinf.ul.Label,xinf.ul.Button>( "testCombo", this );
-
-		var l = new xinf.ul.Label( "comboLabel", t );
-		l.text = "Combo Label";
-		t.setLeft( l );
-		var b = new xinf.ul.Button( "comboButton", t );
-		b.text = "btn";
-		t.setRight(b);
-		
-		t.bounds.setPosition( 10, 80 );
-
+        var t = new xinf.ul.Combo<xinf.ul.Label,ImageButton>( "testCombo", this );
+			var l = new xinf.ul.Label( "comboLabel", t );
+			l.text = "0.0";
+			t.setLeft( l );
+			var b = new ImageButton( "comboButton", t, "assets/slider/buttonicon/norm.png" );
+			t.setRight(b);
+		t.bounds.setPosition( 10, 70 );
 
         screenshotFrame1();
     }

@@ -25,24 +25,28 @@ import xinf.style.StyleClassElement;
     Button element.
 **/
 
-class Button extends StyleClassElement {
+class Button<T:Element> extends StyleClassElement {
 	public static var CLICK:String = "buttonClick";
 
-    public var text(get_text,set_text):String;
-    private var textE:Text;
-	
+	public var contained(get_contained,set_contained):T;
+	private var _contained:T;
+	public function get_contained():T {
+		return _contained;
+	}
+    public function set_contained( c:T ):T {
+        _contained = c;
+		setChild( c );
+		return c;
+	}
+    
 	private var _mouseUp:Dynamic;
 	private var _localMouseUp:Dynamic;
     
     public function new( name:String, parent:Element ) :Void {
 		super( name, parent );
-
-        textE = new xinf.ony.Text( name+"_text", this );
-		setChild( textE );
-		
 		addEventListener( xinf.event.Event.MOUSE_DOWN, onMouseDown );
     }
-    
+	    
 	private function onMouseDown( e:xinf.event.Event ) {
 		addStyleClass(":press");
 		xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.MOUSE_UP,
@@ -62,12 +66,23 @@ class Button extends StyleClassElement {
 		removeEventListener( xinf.event.Event.MOUSE_UP,
 			_localMouseUp );
 	}
+}
 
-	private function get_text() :String {
-        return(textE.text);
-    }
-    private function set_text( t:String ) :String {
-        textE.text = if( t=="" || t==null ) " " else t;
-        return(t);
-    }
+class TextButton extends Button<xinf.ony.Text> {
+	public function new( name:String, parent:Element, ?initialText:String ) :Void {
+		super( name, parent );
+		var c = new xinf.ony.Text( name+"_text", this );
+		if( initialText!=null ) c.text = initialText;
+		contained = c;
+	}
+}
+
+class ImageButton extends Button<xinf.ony.Image> {
+	public function new( name:String, parent:Element, ?url:String ) :Void {
+		super( name, parent );
+		var c = new xinf.ony.Image( name+"_img", this );
+		c.autoSize=true;
+		contained = c;
+		if( url!=null ) c.load(url);
+	}
 }

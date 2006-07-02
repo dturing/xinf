@@ -47,14 +47,6 @@ class Image extends Element {
         super( name, parent );
         addEventListener( xinf.event.Event.LOADED, sizeKnown );
         
-        #if flash
-            //postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
-        #else js
-            untyped _p.onload=imageLoaded;
-        #else neko
-            //postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
-        #end
-		
 		if( src != null ) load( src );
     }
     
@@ -103,22 +95,15 @@ class Image extends Element {
 			//_p.loadMovie( uri );
             //_checkLoaded = checkLoaded;
 			//xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, _checkLoaded );
-
-			
-			
-			// wow - really do nothing it seems? FIXME
-			// remove this once you understand whats going on
-			if( !autoSize ) {
-//			trace("set img "+_i+" size: "+bounds );
-			//	_i._width = _p._width;
-			//	_i._height = _p._height;
-			} else {
-				//bounds.setSize( _i._width, _i._height );
-//				trace("img bounds: "+bounds );
-				// do the checkLoaded thang in case of loadMovie FIXME
-//				trace("autoSize image");
-			}
 		#end
+
+        #if flash
+            postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
+        #else js
+            untyped _p.onload=imageLoaded;
+        #else neko
+            postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
+        #end
 	}
 
     #if flash
