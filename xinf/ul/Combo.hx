@@ -31,12 +31,8 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
     public var left:Left;
 	public var right:Right;
 	
-	private var _mouseUp:Dynamic;
-	private var _localMouseUp:Dynamic;
-    
     public function new( name:String, parent:Element) :Void {
 		super( name, parent );
-		addEventListener( xinf.event.Event.MOUSE_DOWN, onMouseDown );
     }
 	
 	public function setLeft( l:Left ) :Void {
@@ -67,25 +63,6 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
 		super.onMouseOver(e);
 		left.removeStyleClass(":hover");
 		right.removeStyleClass(":hover");
-	}
-	private function onMouseDown( e:xinf.event.Event ) {
-		addStyleClass(":press");
-		xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.MOUSE_UP,
-			_mouseUp=onMouseUp );
-		addEventListener( xinf.event.Event.MOUSE_UP,
-			_localMouseUp=onLocalMouseUp );
-	}
-
-	private function onLocalMouseUp( e:xinf.event.Event ) :Void {
-		postEvent( Button.CLICK, null );
-	}
-	
-	private function onMouseUp( e:xinf.event.Event ) {
-		removeStyleClass(":press");
-		xinf.event.EventDispatcher.removeGlobalEventListener( xinf.event.Event.MOUSE_UP,
-			_mouseUp );
-		removeEventListener( xinf.event.Event.MOUSE_UP,
-			_localMouseUp );
 	}
 
     override public function childSizeChanged( e:Event ) :Void {

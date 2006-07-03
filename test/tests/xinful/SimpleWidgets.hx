@@ -83,7 +83,7 @@ class SimpleWidgets extends TestCase {
         t.bounds.setPosition( 10, 40 );
 		t.contained.text="Click Me.";
 		var buttonClicks:Int=0;
-		var texts = [ "", "Thank you", "Thank you", "Thank You", "Thanks", "Thank you very much.", "Thanks, really",
+		var texts = [ "Thank you", "Thank you", "Thank You", "Thanks", "Thank you very much.", "Thanks, really",
 						"Danke","Merci","Gracias","Tak","Thank you","","..." ];
 		var stopTexts = [ "Enough!","Ouch!","Stop it!","Aaaaaargh!","AAAAAAAAAAaaaaaaargh!","Please,","I can't stand it any more","Mommy!" ];
 		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
@@ -93,7 +93,40 @@ class SimpleWidgets extends TestCase {
 					buttonClicks++;
 				} );
 
-	
+	/////////////////////////////////////////////////////////////////////////////////
+	// ImageButton
+
+		StyleSheet.defaultSheet.add(
+			[ "ImageButton" ], {
+				padding: { l:2, t:2, r:2, b:2 },
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "button/",
+				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
+				minWidth: 75.,
+				textAlign: .5
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "ImageButton", ":hover" ], {
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "button/hover/",
+				padding: null, minWidth:null, textAlign:null, 
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "ImageButton", ":hover", ":press" ], {
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				padding: { l:2, t:3, r:2, b:1 },
+				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "button/press/",
+				minWidth:null, textAlign:null
+			} );
+			
+        var t = new xinf.ul.ImageButton( "testImageButton", this, "assets/test.png" );
+        t.bounds.setPosition( 100, 40 );
+		
 	/////////////////////////////////////////////////////////////////////////////////
 	// Combobox
 		StyleSheet.defaultSheet.add(
@@ -112,6 +145,14 @@ class SimpleWidgets extends TestCase {
 				skin: "slider/box/hover/",
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: null,
+				minWidth: null,	textAlign: null
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "Label", "combo", ":focus" ], {
+				border: null, padding: null,
+				skin: "slider/box/focus/",
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				minWidth: null,	textAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
@@ -145,7 +186,7 @@ class SimpleWidgets extends TestCase {
 				color: null,
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 )
 			} );
-			
+		/*
         var t = new xinf.ul.Combo<xinf.ul.Label,ImageButton>( "testCombo", this );
 			var l = new xinf.ul.Label( "comboLabel", t );
 			l.text = "0.0";
@@ -153,8 +194,12 @@ class SimpleWidgets extends TestCase {
 			var b = new ImageButton( "comboButton", t, "assets/slider/buttonicon/norm.png" );
 			t.setRight(b);
 		t.bounds.setPosition( 10, 70 );
+		*/
+		
+        var t = new xinf.ul.Slider( "testSlider", this );
+		t.bounds.setPosition( 10, 70 );
 
-        screenshotFrame1();
+		screenshotFrame1();
     }
     
     public function displayEvent( e:xinf.event.Event ) {

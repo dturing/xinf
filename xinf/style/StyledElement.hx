@@ -45,7 +45,7 @@ class StyledElement extends Pane {
 	
 	private function reallyApplyStyle( e:xinf.event.Event ) {
 		if( style == null ) return;
-		
+
 		if( style.skin != null ) {
 			if( skin == null ) skin = new Skin( this );
 			skin.set( "assets/"+style.skin, 
@@ -77,7 +77,7 @@ class StyledElement extends Pane {
 			w = bounds.width;
 			h = bounds.height;
 		}
-
+		
 		if( style.minWidth != null && w < style.minWidth ) w=style.minWidth;
 
 		if( skin != null ) skin.update( w, h );
@@ -119,13 +119,12 @@ class StyledElement extends Pane {
     }
 	
 	#if flash
-	// FIXME this doesnt work for inherited foreground!
+	// FIXME 
     override public function setForegroundColor( fg:xinf.ony.Color ) :Void {
 		super.setForegroundColor(fg);
-		if( child!=null ) {
+		if( child!=null && Std.is( child, xinf.ony.Pane )) {
 			var c:xinf.ony.Pane = cast(child,xinf.ony.Pane);
-			if( c!=null ) 
-				c.setForegroundColor(fg);
+			c.setForegroundColor(fg);
 		}
     }
 	#end

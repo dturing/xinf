@@ -102,7 +102,8 @@ class Image extends Element {
         #else js
             untyped _p.onload=imageLoaded;
         #else neko
-            postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
+			if( _i.data != null ) 
+				postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
         #end
 	}
 

@@ -124,12 +124,6 @@ class Element extends EventDispatcher {
         super.dispatchEvent( e );
         
         // propagate to parent
-        /*
-        if( e.data != null && e.data.x != null ) {
-            e.data.x += bounds.x;
-            e.data.y += bounds.y;
-        }
-        */
         if( parent != null ) 
             parent.dispatchEvent(e);
         else
