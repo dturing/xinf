@@ -16,38 +16,22 @@
 package xinf.inity;
 import xinf.geom.Point;
 
-enum ColorSpace {
-    RGB;
-    RGBA;
-}
+import xinf.inity.Texture;
 
-class BitmapData {
+class BitmapData extends Texture {
     private var _d:Dynamic;
-    public var width(default,null):Int;
-    public var height(default,null):Int;
+ 
+	public function new( data:Dynamic, w:Int, h:Int, cspace:ColorSpace ) {
+		_d = data;
+        var tw = 2; while( tw<w ) tw<<=1;
+        var th = 2; while( th<w ) th<<=1;
 
-    private var texture:Int;
-    private var twidth:Int;
-    private var theight:Int;
-    private var cspace:ColorSpace;
-
-    public function new( data:Dynamic, w:Int, h:Int, cs:ColorSpace ) {
-        _d = data;
-        width = w;
-        height = h;
-        cspace = cs;
-        
-        createTexture();
-    }
-
-    public function createTexture() {
-        twidth = 64; while( twidth<width ) twidth<<=1;
-        theight = 64; while( theight<height ) theight<<=1;
-        
         var t:Dynamic = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);
-        texture = CPtr.uint_get(t,0);
+        var texture:Int = CPtr.uint_get(t,0);
 
+		GL.PushAttrib( GL.ENABLE_BIT );
+		
         GL.Enable( GL.TEXTURE_2D );
         GL.BindTexture( GL.TEXTURE_2D, texture );
 	    
@@ -56,14 +40,14 @@ class BitmapData {
         GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
 	    GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
         
-        GL.CreateTexture( texture, twidth, theight );
+        GL.CreateTexture( texture, tw, th );
 
         if( _d != null ) {
             switch( cspace ) {
                 case RGB:
-                    GL.TexSubImage2D_RGB_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+                    GL.TexSubImage2D_RGB_BYTE( texture, new Point(0,0), new Point(w,h), _d );
                 case RGBA:
-                    GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(width,height), _d );
+                    GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(w,h), _d );
                 default:
                     throw("unknown colorspace");
             }
@@ -71,40 +55,11 @@ class BitmapData {
             throw("data is null");
         }
 
- //       GL.BindTexture( GL.TEXTURE_2D, 0 );
-        GL.Disable( GL.TEXTURE_2D );
-    }
-    
-    public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
-//        trace("BitmapData:render "+texture+" - "+w+","+h+" // "+rx+","+ry+" "+rw+","+rh );
-        var tx1:Float = (rx/twidth)*w;
-        var ty1:Float = (ry/theight)*h;
-        var tx2:Float = ( (rw+rx) / twidth ) * w * (width/w);
-        var ty2:Float = ( (rh+ry) / theight ) * h * (height/h);
+		GL.PopAttrib();
 
-        GL.Enable( GL.TEXTURE_2D );
-        GL.BindTexture( GL.TEXTURE_2D, texture );
-
-        var x:Float = -.25;
-        var y:Float = -.25;
-        w+=x;
-        h+=y;
-
-        GL.Begin( GL.QUADS );
-            GL.TexCoord2f( tx1, ty1 );
-            GL.Vertex2f  (   x,   y ); 
-            GL.TexCoord2f( tx2, ty1 );
-            GL.Vertex2f  (   w,   y ); 
-            GL.TexCoord2f( tx2, ty2 );
-            GL.Vertex2f  (   w,   h ); 
-            GL.TexCoord2f( tx1, ty2 );
-            GL.Vertex2f  (   x,   h ); 
-        GL.End();
-
-  //      GL.BindTexture( GL.TEXTURE_2D, 0 );
-        GL.Disable( GL.TEXTURE_2D );
-
-    }
+		super(w,h,tw,th,texture);
+	}
+	
 
 	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
 	public static var cache:Hash<BitmapData> = new Hash<BitmapData>();

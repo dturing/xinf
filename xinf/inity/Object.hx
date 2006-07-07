@@ -67,7 +67,9 @@ class Object {
 
     public function postEvent( type:String, data:Dynamic ) :Void {
         if( owner == null ) {
-            trace("WARNING: Object "+this+" has no owner to post "+type);
+//            trace("WARNING: Object "+this+" has no owner to post "+type);
+			// object likely has been deleted
+			// this happens, eg, with mouseOut Events, as Root's objectUnderMouse might be deleted. (unconfirmed)
 			return;
         }
         owner.postEvent(type,data);
