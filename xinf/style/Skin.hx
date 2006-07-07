@@ -60,22 +60,27 @@ class Skin {
 	}
 	
 	public function update( w:Float, h:Float ) :Void {
-		images.l.bounds.setPosition( -border.l, 0 );
-		images.t.bounds.setPosition( 0, -border.t );
-		images.r.bounds.setPosition( w, 0 );
-		images.b.bounds.setPosition( 0, h );
-		images.l.bounds.setSize( border.l, h );
-		images.t.bounds.setSize( w, border.t );
-		images.r.bounds.setSize( border.r, h );
-		images.b.bounds.setSize( w, border.b );
-
-		images.tl.bounds.setPosition(-border.l,-border.t);
-		images.tr.bounds.setPosition(w,-border.t);
-		images.bl.bounds.setPosition(-border.l,h);
-		images.br.bounds.setPosition(w,h);
+		var x=w-border.r;
+		var y=h-border.b;
+		images.l.bounds.setPosition( 0, border.t );
+		images.t.bounds.setPosition( border.l, 0 );
+		images.r.bounds.setPosition( x, border.t );
+		images.b.bounds.setPosition( border.l, y );
+		
+		images.tl.bounds.setPosition(0,0);
+		images.tr.bounds.setPosition(x,0);
+		images.bl.bounds.setPosition(0,y);
+		images.br.bounds.setPosition(x,y);
 		images.tl.bounds.setSize( border.l, border.t );
 		images.tr.bounds.setSize( border.r, border.t );
 		images.bl.bounds.setSize( border.l, border.b );
 		images.br.bounds.setSize( border.r, border.b );
+
+		x-=border.l;
+		y-=border.t;
+		images.l.bounds.setSize( border.l, y );
+		images.t.bounds.setSize( x, border.t );
+		images.r.bounds.setSize( border.r, y );
+		images.b.bounds.setSize( x, border.b );
 	}
 }
