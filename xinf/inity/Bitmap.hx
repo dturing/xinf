@@ -16,7 +16,7 @@
 package xinf.inity;
 
 class Bitmap extends Group {
-    public var data:BitmapData;
+    public var data:Texture;
 
     public var alpha:Float;
 
@@ -27,6 +27,11 @@ class Bitmap extends Group {
 
 	public function load( uri:String ) {
 		data = BitmapData.newByName( uri );
+		changed();
+	}
+
+	public function set( t:Texture ) {
+		data = t;
 		changed();
 	}
 

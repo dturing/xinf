@@ -24,7 +24,7 @@ class BitmapData extends Texture {
 	public function new( data:Dynamic, w:Int, h:Int, cspace:ColorSpace ) {
 		_d = data;
         var tw = 2; while( tw<w ) tw<<=1;
-        var th = 2; while( th<w ) th<<=1;
+        var th = 2; while( th<h ) th<<=1;
 
         var t:Dynamic = CPtr.uint_alloc(1);
         GL.GenTextures(1,t);

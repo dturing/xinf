@@ -37,13 +37,15 @@ class Texture {
 	}
 
     public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
+		if( texture==-1 ) return;
 //        trace("BitmapData:render "+texture+" - "+w+","+h+" // "+rx+","+ry+" "+rw+","+rh );
+		
         var tx1:Float = (rx/twidth)*w;
         var ty1:Float = (ry/theight)*h;
         var tx2:Float = ( (rw+rx) / twidth ) * w * (width/w);
         var ty2:Float = ( (rh+ry) / theight ) * h * (height/h);
 
-	//	GL.PushAttrib( GL.ENABLE_BIT );
+		GL.PushAttrib( GL.ENABLE_BIT );
 			GL.Enable( GL.TEXTURE_2D );
 			GL.BindTexture( GL.TEXTURE_2D, texture );
 
@@ -63,6 +65,6 @@ class Texture {
 				GL.Vertex2f  (   x,   h ); 
 			GL.End();
 
-     //   GL.PopAttrib();
+        GL.PopAttrib();
     }
 }
