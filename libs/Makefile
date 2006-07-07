@@ -1,2 +1,2 @@
-SUBDIRS=cptr GL GLU FT SDL X GdkPixbuf
+SUBDIRS=cptr GL GLU FT SDL X GdkPixbuf gst
 include ../project.make
