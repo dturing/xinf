@@ -22,13 +22,14 @@ import js.Dom;
 class JSEventMonitor {
     private static var rootX:Int;
     private static var rootY:Int;
+    private var latestOver:Element;
 
     public function new() :Void {
         var self = this;
         js.Lib.document.onmousedown = untyped mouseDown;
         js.Lib.document.onmouseup   = untyped mouseUp;
-        js.Lib.document.onmouseover = untyped mouseOver;
-        js.Lib.document.onmouseout  = untyped mouseOut;
+  //      js.Lib.document.onmouseover = untyped mouseOver;
+  //      js.Lib.document.onmouseout  = untyped mouseOut;
         js.Lib.document.onmousemove = untyped mouseMove;
         
         // Firefox mousewheel support
@@ -55,7 +56,13 @@ class JSEventMonitor {
     }
 
     private function mouseMove( e:js.Event ) :Bool {
-        return postMouseEvent( e, xinf.event.Event.MOUSE_MOVE );
+		var target = findTarget(e);
+		if( target != latestOver ) {
+			if( latestOver!=null ) postMouseEventTo( e, xinf.event.Event.MOUSE_OUT, latestOver );
+			latestOver = target;
+			return postMouseEventTo( e, xinf.event.Event.MOUSE_OVER, target );				
+		} else
+			return postMouseEvent( e, xinf.event.Event.MOUSE_MOVE );
     }
 
     private function mouseWheelFF( e:js.Event ) :Bool {
@@ -80,7 +87,10 @@ class JSEventMonitor {
     private static function postMouseEvent( e:js.Event, type:String ) :Bool {
         var target:Element = findTarget(e);
         if( target == null ) return true;
-        
+		return postMouseEventTo( e, type, target );
+	}
+	
+    private static function postMouseEventTo( e:js.Event, type:String, target:Element ) :Bool {
         if( rootX == null ) {
             untyped {
                 var root = untyped xinf.ony.Root.getRoot()._p;

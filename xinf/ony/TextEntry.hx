@@ -25,7 +25,7 @@ import xinf.event.Event;
 /**
 	One-line Text Input element
 **/
-class TextField extends Pane {
+class TextEntry extends Pane {
     /**
         The actual text that will be displayed. 
     **/

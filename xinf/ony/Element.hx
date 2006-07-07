@@ -119,7 +119,7 @@ class Element extends EventDispatcher {
         Element will dispatch the Event to it's parent.
     **/
     override public function dispatchEvent( e:Event ) :Void {
-		if( _p == null ) return;
+		if( _p == null ) throw("no primitive while dispatching Event "+e);
 		
         super.dispatchEvent( e );
         
