@@ -47,7 +47,6 @@ class SimpleWidgets extends TestCase {
         t.bounds.setPosition( 10, 10 );
 		t.text="Test Label";
 		
-
 	/////////////////////////////////////////////////////////////////////////////////
 	// Button
 
@@ -92,6 +91,45 @@ class SimpleWidgets extends TestCase {
 					t.contained.text=c;
 					buttonClicks++;
 				} );
+
+
+	/////////////////////////////////////////////////////////////////////////////////
+	// Input
+
+		StyleSheet.defaultSheet.add(
+			[ "Input" ], {
+				padding: { l:4, t:4, r:4, b:4 },
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "input/",
+				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
+				minWidth: 100.,
+				textAlign: 0
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "Input", ":hover" ], {
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "input/hover/",
+				padding: null, minWidth:null, textAlign:null, 
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "Input", ":focus" ], {
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				padding: { l:5, t:3, r:5, b:2 },
+				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
+				border: { l:2, t:2, r:2, b:2 },
+				skin: "input/focus/",
+				minWidth:null, textAlign:null
+			} );
+			
+        var t = new xinf.ul.Input( "testInput", this );
+        t.bounds.setPosition( 10, 80 );
+        t.bounds.setSize( 100, 16 );
+		t.text="Edit me.";
+//		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
+//			} );
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// ImageButton
@@ -197,7 +235,7 @@ class SimpleWidgets extends TestCase {
 		*/
 		
         var t = new xinf.ul.Slider( "testSlider", this );
-		t.bounds.setPosition( 10, 70 );
+		t.bounds.setPosition( 10, 120 );
 
 		screenshotFrame1();
     }

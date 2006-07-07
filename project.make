@@ -1,6 +1,6 @@
 XINFROOT=/home/dan/develop/xinf
 
-LIB_PATHS=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
+LIB_PATHS=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT gst, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
 
 NEKO=neko
 NEKOPATH=$(subst : ,:,$(foreach PATH,$(LIB_PATHS),$(PATH):) /usr/neko/lib)
