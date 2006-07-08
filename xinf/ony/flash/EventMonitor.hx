@@ -67,7 +67,8 @@ class EventMonitor {
             latestOver = target;
             postMouseEvent( target, Event.MOUSE_OVER );
         } else {
-            postMouseEvent( target, Event.MOUSE_MOVE );
+			xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:flash.Lib._root._xmouse, y:flash.Lib._root._ymouse } );
+            //postMouseEvent( target, Event.MOUSE_MOVE );
         }
     }
 
