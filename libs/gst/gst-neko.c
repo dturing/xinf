@@ -296,7 +296,9 @@ value wait_texture_available( value obj ) {
 	GCond *cond = get_glcond( obj, "texture_ready" );
 	GMutex *mutex = get_glmutex(obj);
 	if( !mutex || !cond ) throw("Couldn't aquire GL mutex/condition");
+	g_mutex_lock(mutex);
 	g_cond_wait( cond, mutex );
+	g_mutex_unlock(mutex);
 	return val_true;
 }
 DEFINE_PRIM(wait_texture_available,1);
@@ -311,6 +313,19 @@ value set_texture_consumed( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(set_texture_consumed,1);
+
+value produce_texture( value obj ) {
+	GCond *consumed = get_glcond( obj, "texture_consumed" );
+	GCond *ready = get_glcond( obj, "texture_ready" );
+	GMutex *mutex = get_glmutex(obj);
+	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
+	g_mutex_lock(mutex);
+	g_cond_signal( consumed );
+	g_cond_wait( ready,mutex );
+	g_mutex_unlock(mutex);
+	return val_true;
+}
+DEFINE_PRIM(produce_texture,1);
 
 /* locked conditions */
 /*

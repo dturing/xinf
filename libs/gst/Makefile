@@ -5,7 +5,7 @@ GST_ELEMENTS=gstgltexturesink
 NEKO_LIBS=${shell pkg-config --libs neko}
 NEKO_CFLAGS=${shell pkg-config --cflags neko} -fPIC
 
-GST_LIBS=${shell pkg-config --libs gstreamer-0.10} -lgstvideo-0.10
+GST_LIBS=${shell pkg-config --libs gstreamer-0.10} -lgstvideo-0.10 -lGL -lGLU
 GST_CFLAGS=${shell pkg-config --cflags gstreamer-0.10}
 
 CPTR_LIBS=-L../libs 

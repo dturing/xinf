@@ -69,6 +69,8 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 	return GST_FLOW_ERROR;
   }
 
+	g_mutex_lock( gl->mutex );
+
 	  glPushAttrib( GL_TEXTURE_2D );
 		glEnable( GL_TEXTURE_2D );
 		glBindTexture( GL_TEXTURE_2D, gl->texture_id );
@@ -80,11 +82,11 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 						GL_BGRA, GL_UNSIGNED_BYTE, GST_BUFFER_DATA(buf) );
 	
 	  glPopAttrib();
-	
-	g_mutex_lock( gl->mutex );
+
 	g_cond_signal(gl->texture_ready);
- //   g_cond_wait(gl->texture_consumed, gl->mutex);
-	g_mutex_unlock( gl->mutex );
+    g_cond_wait(gl->texture_consumed, gl->mutex);
+  	g_mutex_unlock( gl->mutex );
+  
 
     GLenum err = glGetError();
   

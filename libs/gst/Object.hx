@@ -39,4 +39,9 @@ class Object {
     public function set_texture_consumed() : Void {
         return _set_texture_consumed( untyped this.__o );
     }
+
+	private static var _produce_texture = neko.Lib.load("GST","produce_texture",1);
+    public function produce_texture() : Void {
+        return _produce_texture( untyped this.__o );
+    }
 }
