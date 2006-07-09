@@ -92,7 +92,6 @@ class LineEdit extends Text {
 	public function onMouseDown( e:Event ) :Void {
 	// FIXME: untyped, ugly!
 		var p:Point = untyped owner.globalToLocal( new Point( e.data.x, e.data.y ) );
-		
 		_mouseUp = onMouseUp;
 		_mouseMove = onMouseMove;
         xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _mouseUp );

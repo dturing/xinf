@@ -195,8 +195,8 @@ class GstTest {
         gst.Object._init();
 		var pipeline = new gst.Pipeline( 
 //		"gnomevfssrc location=/beta/video/aida/dance.avi ! decodebin ! ffmpegcolorspace ! fixedalpha ! texturesink name=sink");
-		"scanline ! graytorgba ! texturesink name=sink");
-//		"videotestsrc ! fixedalpha alpha=255 ! texturesink name=sink");
+//		"scanline ! graytorgba ! texturesink name=sink");
+		"videotestsrc ! video/x-raw-rgb, width=320, height=240 ! fixedalpha alpha=255 ! texturesink name=sink");
 		gltest.sink = pipeline.findChild("sink");
 		gltest.sink.set_texture_consumed();
 		

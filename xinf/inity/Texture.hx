@@ -30,7 +30,7 @@ class Texture {
     public var width(default,null):Int;
     public var height(default,null):Int;
 	
-	private function new( w:Int, h:Int, tw:Int, th:Int, tex:Int ) {
+	public function new( w:Int, h:Int, tw:Int, th:Int, tex:Int ) {
 		width=w; height=h;
 		twidth=tw; theight=th;
 		texture=tex;

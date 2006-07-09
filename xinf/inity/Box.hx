@@ -35,6 +35,10 @@ class Box extends Group {
          * trigger cropParent CROP_CHANGED if crop is modified
          * un/re/register parent CROP_CHANGED on parent CROP_CHANGED event.
          * unregister STAGE_SCALE event when crop set to false
+		 
+		UPDATE: we can just push the scissor box on the attribute stack with glPushAttrib.
+		 that will avoid the cropParent mess.
+		 the window size problem still remains, though..
     */
     private function get_crop() :Bool {
         return _crop;
