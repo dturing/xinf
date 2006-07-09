@@ -31,7 +31,7 @@ import js.Dom;
     Root will take care of posting global ENTER_FRAME events.
 **/
 class Root extends Element {
-    private static var root:Root;
+    private static var root:Root;// = new Root();
     
     private var _r:
         #if neko
