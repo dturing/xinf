@@ -39,6 +39,8 @@ class Pane extends Element {
         super( name, parent );
         _crop = false;
 
+		setForegroundColor( Color.BLACK );
+
         #if js
             _p.style.overflow = "visible";
         #end

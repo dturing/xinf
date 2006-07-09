@@ -56,4 +56,7 @@ class Color {
     public function toString() : String {
         return("("+r+","+g+","+b+","+a+")");
     }
+	
+	public static var BLACK:Color = new Color().fromRGBInt(0);
+	public static var WHITE:Color = new Color().fromRGBInt(0xffffff);
 }

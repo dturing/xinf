@@ -81,7 +81,7 @@ class Element extends EventDispatcher {
         bounds.addEventListener( Event.POSITION_CHANGED, onPositionChanged );
         bounds.addEventListener( Event.SIZE_CHANGED, onSizeChanged );
 
-        super();
+		super();
     }
 
     private function createPrimitive() :Primitive {
