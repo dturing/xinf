@@ -14,6 +14,7 @@
 */
 
 package tests.primitives;
+import xinf.ony.ScrollEvent;
 
 class Text extends TestCase {
     var children:List<xinf.ony.Text>;
@@ -53,13 +54,13 @@ class Text extends TestCase {
         
         var sb = new xinf.ul.VScrollbar("param", this );
         sb.bounds.setPosition( 310, 0 );
-        sb.addEventListener( xinf.event.Event.SCROLLED, changeParam );
+        sb.addEventListener( ScrollEvent.SCROLL_TO, changeParam );
 
         screenshotFrame1();
     }
     
-    public function changeParam( e:xinf.event.Event ) :Void {
-        var factor = .8+(e.data.value/2.5);
+    public function changeParam( e:ScrollEvent ) :Void {
+        var factor = .8+(e.value/2.5);
         var i = 0;
         for( child in children ) {
             var sz = Math.round( (10+((3-i)*4)) * factor * 100)/100;

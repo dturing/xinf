@@ -22,6 +22,8 @@ import xinf.ony.Color;
 import xinf.ony.Image;
 
 import xinf.style.Style;
+import xinf.ony.SimpleEvent;
+import xinf.ony.GeometryEvent;
 
 /**
 	StyledElement
@@ -36,14 +38,14 @@ class StyledElement extends Pane {
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 		autoSize=true;
-		addEventListener( xinf.event.Event.STYLE_CHANGED, reallyApplyStyle );
+		addEventListener( SimpleEvent.STYLE_CHANGED, reallyApplyStyle );
     }
     
 	public function applyStyle() :Void {
-		postEvent( xinf.event.Event.STYLE_CHANGED, null );
+		postEvent( new SimpleEvent( SimpleEvent.STYLE_CHANGED, this ) );
 	}
 	
-	private function reallyApplyStyle( e:xinf.event.Event ) {
+	private function reallyApplyStyle( e:SimpleEvent ) {
 		if( style == null ) return;
 
 		if( style.skin != null ) {
@@ -92,7 +94,7 @@ class StyledElement extends Pane {
 		}
     }
     
-    override private function onSizeChanged( e:Event ) :Void {
+    override private function onSizeChanged( e:GeometryEvent ) :Void {
 		// HACK, FIXME just for js' background. Element wont set size if autoSize=true
 		// this prob should go away once we do styles natively on js..
 		var o=autoSize;
@@ -105,7 +107,7 @@ class StyledElement extends Pane {
         }
     }
 
-    public function childSizeChanged( e:Event ) {
+    public function childSizeChanged( e:GeometryEvent ) {
         if( autoSize ) {
             updateSize();
         }
@@ -114,7 +116,7 @@ class StyledElement extends Pane {
     public function setChild( e:Element ) :Void {
         // FIXME: unregister old handler
         child = e;
-        child.bounds.addEventListener( Event.SIZE_CHANGED, childSizeChanged );
+        child.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, childSizeChanged );
         updateSize();
     }
 	

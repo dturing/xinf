@@ -21,8 +21,8 @@ package xinf.ony;
     that can have a background.
 **/
 class Pane extends Element {
-    private var bgColor:xinf.ony.Color;
-    private var fgColor:xinf.ony.Color;
+    private var bgColor:Color;
+    private var fgColor:Color;
 
     /**
         if true, contents will be cropped to the Pane's bounds. if false, they will be visible
@@ -102,23 +102,23 @@ class Pane extends Element {
         return clip;
     }
     
-    override private function onSizeChanged( e:xinf.event.Event ) :Void {
+    override private function onSizeChanged( e:GeometryEvent ) :Void {
         if( _crop ) {
             _crop_mc = makeMask();
         }
         super.onSizeChanged( e );
     }
-    override private function onPositionChanged( e:xinf.event.Event ) :Void {
+    override private function onPositionChanged( e:GeometryEvent ) :Void {
         if( _crop ) {
-            _crop_mc._x = e.data.x;
-            _crop_mc._y = e.data.y;
+            _crop_mc._x = e.x;
+            _crop_mc._y = e.y;
         }
         super.onPositionChanged( e );
     }
     #end
 
     /** Set the background color to the Color specified. **/
-    public function setBackgroundColor( bg:xinf.ony.Color ) :Void {
+    public function setBackgroundColor( bg:Color ) :Void {
         bgColor = bg;
         
         #if neko
@@ -133,7 +133,7 @@ class Pane extends Element {
 
 
     /** Set the foreground color to the Color specified. **/
-    public function setForegroundColor( fg:xinf.ony.Color ) :Void {
+    public function setForegroundColor( fg:Color ) :Void {
         fgColor = fg;
 		
         #if neko

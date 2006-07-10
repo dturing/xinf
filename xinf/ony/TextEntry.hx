@@ -31,7 +31,7 @@ class TextEntry extends Pane {
     **/
     public var text( getText, setText ) :String;
 
-    private var textColor:xinf.ony.Color;
+    private var textColor:Color;
 
     private var _t
         #if neko
@@ -48,9 +48,10 @@ class TextEntry extends Pane {
     **/    
     public function new( name:String, parent:Element ) {
         super(name,parent);
-        setTextColor( new xinf.ony.Color().fromRGBInt(0) );
+        setTextColor( Color.BLACK );
 		#if neko
-			addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
+		// FIXME
+		//	addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
 		#end
     }
     
@@ -120,7 +121,7 @@ class TextEntry extends Pane {
             return _t.text;
         #end
     }
-    public function setTextColor( c:xinf.ony.Color ) :Void {
+    public function setTextColor( c:Color ) :Void {
         textColor = c;
         
         #if neko

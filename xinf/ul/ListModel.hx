@@ -16,15 +16,16 @@
 package xinf.ul;
 
 import xinf.event.Event;
+import xinf.ony.SimpleEvent;
 
 interface ListModel {
     function getLength() :Int;
     function getItemAt( index:Int ) :String;
-    function addChangedListener( f:xinf.event.Event -> Void ) :Void;
-    function removeChangedListener( f:xinf.event.Event -> Void ) :Void;
+    function addChangedListener( f:SimpleEvent -> Void ) :Void;
+    function removeChangedListener( f:SimpleEvent -> Void ) :Void;
 }
 
-class SimpleListModel extends xinf.event.EventDispatcher, implements ListModel {
+class SimpleListModel extends xinf.event.SimpleEventDispatcher, implements ListModel {
     private var items:Array<String>;
     
     public function new() :Void {
@@ -34,9 +35,8 @@ class SimpleListModel extends xinf.event.EventDispatcher, implements ListModel {
     
     public function addItem( text:String ) {
         items.push( text );
-        if( hasListeners( Event.CHANGED ) ) {
-            postEvent( Event.CHANGED, null );
-        }
+		// FIXME: provide a way to add a lot of items with triggering only one change event.
+		postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
     }
     
     public function getLength() :Int {
@@ -47,11 +47,11 @@ class SimpleListModel extends xinf.event.EventDispatcher, implements ListModel {
         return items[index];
     }
 
-    public function addChangedListener( f:xinf.event.Event -> Void ) :Void {
-        addEventListener( Event.CHANGED, f );
+    public function addChangedListener( f:SimpleEvent -> Void ) :Void {
+        addEventListener( SimpleEvent.CHANGED, f );
     }
     
-    public function removeChangedListener( f:xinf.event.Event -> Void ) :Void {
-        removeEventListener( Event.CHANGED, f );
+    public function removeChangedListener( f:SimpleEvent -> Void ) :Void {
+        removeEventListener( SimpleEvent.CHANGED, f );
     }
 }

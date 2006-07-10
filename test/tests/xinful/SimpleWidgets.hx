@@ -85,7 +85,7 @@ class SimpleWidgets extends TestCase {
 		var texts = [ "Thank you", "Thank you", "Thank You", "Thanks", "Thank you very much.", "Thanks, really",
 						"Danke","Merci","Gracias","Tak","Thank you","","..." ];
 		var stopTexts = [ "Enough!","Ouch!","Stop it!","Aaaaaargh!","AAAAAAAAAAaaaaaaargh!","Please,","I can't stand it any more","Mommy!" ];
-		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
+		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.ony.MouseEvent) {
 					var c = if( buttonClicks<texts.length ) texts[buttonClicks] 
 							else stopTexts[Math.floor(Math.random()*stopTexts.length)];
 					t.contained.text=c;
@@ -238,9 +238,5 @@ class SimpleWidgets extends TestCase {
 		t.bounds.setPosition( 10, 120 );
 
 		screenshotFrame1();
-    }
-    
-    public function displayEvent( e:xinf.event.Event ) {
-        display.text = ""+e.type+"\n"+e.data;
     }
 }

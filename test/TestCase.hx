@@ -30,13 +30,12 @@ class TestCase extends xinf.ony.Pane {
     public function screenshotFrame1() :Void {
         var shoot:Dynamic;
         var self = this;
-        var frame:Int=0;
-        shoot = function (e:xinf.event.Event) {
-            if( frame++ == 1 ) {
+        shoot = function (e:xinf.ony.FrameEvent) {
+            if( e.frame == 1 ) {
                 if( logger != null ) logger.screenshot(self,self.targetEquality,TestShell.runNextTest);
-                xinf.event.EventDispatcher.removeGlobalEventListener( xinf.event.Event.ENTER_FRAME, shoot );
+                xinf.event.Global.removeEventListener( xinf.ony.FrameEvent.ENTER_FRAME, shoot );
             }
         };
-        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, shoot );
+        xinf.event.Global.addEventListener( xinf.ony.FrameEvent.ENTER_FRAME, shoot );
     }
 }

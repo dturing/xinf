@@ -15,19 +15,16 @@
 
 package xinf.ul;
 
-import xinf.ony.Pane;
 import xinf.ony.Element;
-import xinf.event.Event;
-import xinf.ony.Text;
 import xinf.style.StyleClassElement;
+import xinf.ony.GeometryEvent;
+import xinf.ony.MouseEvent;
 
 /**
     Button element.
 **/
 
 class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassElement {
-	public static var CLICK:String = "buttonClick";
-
     public var left:Left;
 	public var right:Right;
 	
@@ -40,7 +37,7 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
 		left.addStyleClass("combo");
 
         // FIXME: unregister old handler
-        left.bounds.addEventListener( Event.SIZE_CHANGED, childSizeChanged );
+        left.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, childSizeChanged );
         updateSize();
 	}
 
@@ -49,23 +46,25 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
 		right.addStyleClass("combo");
 
 	// FIXME: unregister old handler
-        right.bounds.addEventListener( Event.SIZE_CHANGED, childSizeChanged );
+        right.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, childSizeChanged );
         updateSize();
 	}
 
-	
-	override private function onMouseOver( e:xinf.event.Event ) :Void {
+	/*
+		FIXME: XSS needs rules by parents
+	*/
+	override private function onMouseOver( e:MouseEvent ) :Void {
 		super.onMouseOver(e);
 		left.addStyleClass(":hover");
 		right.addStyleClass(":hover");
 	}
-	override private function onMouseOut( e:xinf.event.Event ) :Void {
+	override private function onMouseOut( e:MouseEvent ) :Void {
 		super.onMouseOver(e);
 		left.removeStyleClass(":hover");
 		right.removeStyleClass(":hover");
 	}
 
-    override public function childSizeChanged( e:Event ) :Void {
+    override public function childSizeChanged( e:GeometryEvent) :Void {
         if( autoSize ) {
             updateSize();
         }

@@ -98,7 +98,7 @@ class Text extends Pane {
     }
 	
 	#if flash
-    override public function setForegroundColor( fg:xinf.ony.Color ) :Void {
+    override public function setForegroundColor( fg:Color ) :Void {
 		super.setForegroundColor(fg);
 		_t.textColor = fgColor.toRGBInt();
     }

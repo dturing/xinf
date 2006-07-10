@@ -40,6 +40,8 @@ class Pane extends TestCase {
     // TODO: 
     // test alpha, once it's around.
     // test cropping
+	
+	trace("Created Panes");
 
         screenshotFrame1();
     }

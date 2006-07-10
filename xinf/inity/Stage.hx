@@ -62,7 +62,9 @@ class Stage extends Group {
 
         width=w; height=h;
         
-        xinf.event.EventDispatcher.postGlobalEvent( xinf.event.Event.STAGE_SCALE, { w:width, h:height } );
+        xinf.event.Global.postEvent( 
+			new xinf.ony.GeometryEvent( xinf.ony.GeometryEvent.STAGE_SCALED, 
+				owner, width, height ) );
  //       trace("stage resize: "+width+","+height+" def "+definedWidth+","+definedHeight );
  //       trace(scaleMode+" - "+x+","+y );
     }

@@ -15,6 +15,8 @@
 
 package tests.xinful;
 
+import xinf.ony.ScrollEvent;
+
 class Scrollbar extends TestCase {
     private var display:xinf.ony.Text;
 
@@ -36,14 +38,14 @@ class Scrollbar extends TestCase {
         sb.bounds.setPosition( 290, 0 );
 //        sq.bounds.setSize( 100, 10 );
 
-        sb.addEventListener( xinf.event.Event.SCROLLED, displayScrollEvent );
-        sb.addEventListener( xinf.event.Event.SCROLL_LEAP, displayScrollEvent );
-        bg.addEventListener( xinf.event.Event.SCROLL_STEP, displayScrollEvent );
+        sb.addEventListener( ScrollEvent.SCROLL_TO, displayScrollEvent );
+        sb.addEventListener( ScrollEvent.SCROLL_LEAP, displayScrollEvent );
+        bg.addEventListener( ScrollEvent.SCROLL_STEP, displayScrollEvent );
 
         screenshotFrame1();
     }
     
-    public function displayScrollEvent( e:xinf.event.Event ) {
-        display.text = ""+e.type+"\n"+e.data;
+    public function displayScrollEvent<T>( e:xinf.event.Event<T> ) {
+        display.text = ""+e;
     }
 }

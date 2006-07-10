@@ -18,6 +18,8 @@ package xinf.inity;
 import xinf.event.Event;
 import xinf.inity.Text;
 import xinf.geom.Point;
+import xinf.ony.KeyboardEvent;
+import xinf.ony.MouseEvent;
 
 /**
     single-line text input element
@@ -44,71 +46,69 @@ class LineEdit extends Text {
 		selBgColor = new xinf.ony.Color().fromRGBInt( 0x333333 );
 		selFgColor = new xinf.ony.Color().fromRGBInt( 0xeeeeee );
 
-        xinf.event.EventDispatcher.addGlobalEventListener( Event.KEY_DOWN, onKeyDown );
+        xinf.event.Global.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
 
-    public function onKeyDown( e:Event ) :Void {
-		if( e.data.code >= 32 ) {
-			switch( e.data.code ) {
+    public function onKeyDown( e:KeyboardEvent ) :Void {
+		if( e.code >= 32 ) {
+			switch( e.code ) {
 				case 127: // Del
 					if( sel.from==sel.to ) {
 						sel.to=sel.from+1;
 					}
 					replaceSelection("");
 				default:
-					replaceSelection( Std.chr(e.data.code) );
+					replaceSelection( Std.chr(e.code) );
 			}
 		} else {
-			switch( e.data.key ) {
+			switch( e.key ) {
 				case "backspace":
 					if( sel.to==sel.from ) sel.from=sel.to-1;
 					replaceSelection("");
 				case "left":
 					moveCursor( 
-						if( e.data.ctrlMod )
+						if( e.ctrlMod )
 							findLeftWordBoundary()
 						else 
 							sel.to-1
-						, e.data.shiftMod );
+						, e.shiftMod );
 				case "right":
 					moveCursor( 
-						if( e.data.ctrlMod )
+						if( e.ctrlMod )
 							findRightWordBoundary()
 						else 
 							sel.to+1
-						, e.data.shiftMod );
+						, e.shiftMod );
 				case "home":
-					moveCursor( 0, e.data.shiftMod );
+					moveCursor( 0, e.shiftMod );
 				case "end":
-					moveCursor( _text.length, e.data.shiftMod );
+					moveCursor( _text.length, e.shiftMod );
 				case "a":
 					selectAll();
 				default:
-					trace("unhandled control key: "+e.data.key);
+					trace("unhandled control key: "+e.key);
 			}
 		}
     }
 	
-	public function onMouseDown( e:Event ) :Void {
-	// FIXME: untyped, ugly!
-		var p:Point = untyped owner.globalToLocal( new Point( e.data.x, e.data.y ) );
+	public function onMouseDown( e:MouseEvent ) :Void {
+		var p:Point = owner.globalToLocal( new Point( e.x, e.y ) );
 		_mouseUp = onMouseUp;
 		_mouseMove = onMouseMove;
-        xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_UP, _mouseUp );
-        xinf.event.EventDispatcher.addGlobalEventListener( Event.MOUSE_MOVE, _mouseMove );
+        xinf.event.Global.addEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        xinf.event.Global.addEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
 		
-		moveCursor( findIndex(p), e.data.shiftMod );
+		moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
 	}
 	
-	public function onMouseMove( e:Event ) :Void {
-	// FIXME: untyped, ugly!
-		var p:Point = untyped owner.globalToLocal( new Point( e.data.x, e.data.y ) );
+	public function onMouseMove( e:MouseEvent ) :Void {
+		var p:Point = owner.globalToLocal( new Point( e.x, e.y ) );
 		moveCursor( findIndex(p), true );
 	}
 	
-	public function onMouseUp( e:Event ) :Void {
-        xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_UP, _mouseUp );
-        xinf.event.EventDispatcher.removeGlobalEventListener( Event.MOUSE_MOVE, _mouseMove );
+	public function onMouseUp( e:MouseEvent ) :Void {
+        xinf.event.Global.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        xinf.event.Global.removeEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
 		_mouseUp = _mouseMove = null;
 	}
 	

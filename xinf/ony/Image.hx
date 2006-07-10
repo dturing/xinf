@@ -14,6 +14,7 @@
 */
 
 package xinf.ony;
+import xinf.event.EventKind;
 
 #if js
 import js.Dom;
@@ -24,9 +25,10 @@ import js.Dom;
     It's bounds rectangle, if not changed by your application's code, will be
     set to the image's native size (FIXME: is this already so for flash/js?).
     If you change the bounds, the image will be scaled.
+	
+	TODO: does IMAGE_LOADED really have to be an event?
 **/
 class Image extends Element {
-
     private var uri:String;
     private var _checkLoaded:Dynamic;
     
@@ -45,14 +47,14 @@ class Image extends Element {
     **/
     public function new( name:String, parent:Element, ?src:String ) :Void {
         super( name, parent );
-        addEventListener( xinf.event.Event.LOADED, sizeKnown );
+        addEventListener( GeometryEvent.IMAGE_LOADED, sizeKnown );
         
 		if( src != null ) load( src );
     }
     
-    private function sizeKnown( e:xinf.event.Event ) :Void {
+    private function sizeKnown( e:GeometryEvent ) :Void {
         if( autoSize ) {
-            bounds.setSize( e.data.w, e.data.h );
+            bounds.setSize( e.x, e.y );
         }
 //        trace("image "+this+" sizeKnown: "+e.data.w+"x"+e.data.h );
 //        trace("  autosize "+autoSize+" bounds: "+bounds );
@@ -60,7 +62,8 @@ class Image extends Element {
     
     #if js
     private function imageLoaded( e:Dynamic ) :Void {
-        postEvent( xinf.event.Event.LOADED, { w:untyped _p.offsetWidth, h:untyped _p.offsetHeight } );
+        postEvent( new GeometryEvent( GeometryEvent.IMAGE_LOADED, this,
+					untyped _p.offsetWidth, untyped _p.offsetHeight ) );
     }
     #end
     
@@ -98,23 +101,23 @@ class Image extends Element {
 		#end
 
         #if flash
-            postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
+            postEvent( new GeometryEvent( GeometryEvent.IMAGE_LOADED, this, _p._width, _p._height ) );
         #else js
             untyped _p.onload=imageLoaded;
         #else neko
 			if( _i.data != null ) 
-				postEvent( xinf.event.Event.LOADED, { w:_i.data.width, h:_i.data.height } );
+				postEvent( new GeometryEvent( GeometryEvent.IMAGE_LOADED, this, _i.data.width, _i.data.height ) );
         #end
 	}
 
     #if flash
-        override private function onSizeChanged( e:xinf.event.Event ) :Void {
+        override private function onSizeChanged( e:GeometryEvent ) :Void {
             if( !autoSize ) {
-                _p._width  = Math.floor( e.data.width );
-                _p._height = Math.floor( e.data.height );
+                _p._width  = Math.floor( e.x );
+                _p._height = Math.floor( e.y );
             }
         }
-        
+        /* FIXME
         private function checkLoaded( e:xinf.event.Event ) :Void {
     		var loaded = true;
 			if( ( _p.getBytesTotal() < 4 ) || ( _p.getBytesLoaded() != _p.getBytesTotal() ) ) loaded = false;
@@ -123,5 +126,6 @@ class Image extends Element {
                 postEvent( xinf.event.Event.LOADED, { w:_p._width, h:_p._height } );
             }
         }
+		*/
     #end
 }

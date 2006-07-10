@@ -14,6 +14,8 @@
 */
 
 package xinf.inity;
+import xinf.ony.GeometryEvent;
+import xinf.ony.SimpleEvent;
 
 class Box extends Group {
     public var crop(get_crop,set_crop):Bool;
@@ -46,13 +48,12 @@ class Box extends Group {
     private function set_crop( to:Bool ) :Bool {
         _crop = to;
         if( _crop ) {
-            // FIXME untyped!
-            untyped owner.bounds.addEventListener( xinf.event.Event.SIZE_CHANGED, sizeChanged );
+            owner.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, sizeChanged );
     
             cropParent = findCropParent();
             if( cropParent != null ) {
-                cropParent.owner.addEventListener( xinf.event.Event.CROP_CHANGED, parentCropChanged );
-                xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.STAGE_SCALE, stageSizeChanged );
+// FIXME                cropParent.owner.addEventListener( SimpleEvent.CROP_CHANGED, parentCropChanged );
+                xinf.event.Global.addEventListener( GeometryEvent.STAGE_SCALED, stageSizeChanged );
             }
             changed();
         }
@@ -72,26 +73,25 @@ class Box extends Group {
         }
         return null;
     }
-    private function sizeChanged( e:xinf.event.Event ) {
+    private function sizeChanged( e:GeometryEvent ) {
         if( crop ) {
-            owner.postEvent( xinf.event.Event.CROP_CHANGED, null );
+// FIXME            owner.postEvent( new SimpleEvent( SimpleEvent.CROP_CHANGED, this.owner ) );
         }
     }
-    private function stageSizeChanged( e:xinf.event.Event ) {
+    private function stageSizeChanged( e:GeometryEvent ) {
         if( crop ) {
             // cropping depends on stage size; rerender.
             changed();
         }
     }
-    private function parentCropChanged( e:xinf.event.Event ) {
-        if( crop && e.data != this ) {
-            owner.postEvent( xinf.event.Event.CROP_CHANGED, this );
-        }
+    private function parentCropChanged( e:SimpleEvent ) {
+    //   if( crop && e.target._p != this ) {
+// FIXME            owner.postEvent( new SimpleEvent( SimpleEvent.CROP_CHANGED, this ) );
+    //    }
     }
     private function setScissors() {
         var win_h = xinf.ony.Root.getRoot().bounds.height;
-        // FIXME...
-        var pos:xinf.geom.Point = untyped owner.localToGlobal( new xinf.geom.Point(0,0) );
+        var pos:xinf.geom.Point = owner.localToGlobal( new xinf.geom.Point(0,0) );
 
         // FIXME: take parent crop into account...
         GL.Scissor( Math.round(pos.x), Math.round(win_h-(pos.y+bounds.height)), 

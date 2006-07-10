@@ -16,7 +16,8 @@
 package xinf.ony.flash;
 
 import xinf.ony.Element;
-import xinf.event.Event;
+import xinf.ony.MouseEvent;
+import xinf.event.EventKind;
 
 class EventMonitor {
     private var mouseTrackingClip:flash.MovieClip;
@@ -49,12 +50,12 @@ class EventMonitor {
     
     private function mouseDown( targetPath:String ) {
         var target = findTarget( targetPath );
-        postMouseEvent( target, Event.MOUSE_DOWN );
+        postMouseEvent( target, MouseEvent.MOUSE_DOWN );
     }
 
     private function mouseUp( targetPath:String ) {
         var target = findTarget( targetPath );
-        postMouseEvent( target, Event.MOUSE_UP );
+        postMouseEvent( target, MouseEvent.MOUSE_UP );
     }
 
     private function mouseMove( targetPath:String ) {
@@ -63,22 +64,27 @@ class EventMonitor {
         if( target == null ) return;
         
         if( target != latestOver ) {
-            postMouseEvent( latestOver, Event.MOUSE_OUT );
+            postMouseEvent( latestOver, MouseEvent.MOUSE_OUT );
             latestOver = target;
-            postMouseEvent( target, Event.MOUSE_OVER );
+            postMouseEvent( target, MouseEvent.MOUSE_OVER );
         } else {
-			xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, { x:flash.Lib._root._xmouse, y:flash.Lib._root._ymouse } );
-            //postMouseEvent( target, Event.MOUSE_MOVE );
+			xinf.event.Global.postEvent( 
+				new MouseEvent( MouseEvent.MOUSE_MOVE, target, 
+					Math.round(flash.Lib._root._xmouse), 
+					Math.round(flash.Lib._root._ymouse) ) );
         }
     }
 
     private function mouseWheel( targetPath:String, delta:Int ) {
         var target = findTarget( targetPath );
-        target.postEvent( Event.SCROLL_STEP, { delta:-delta } );
+        target.postEvent( new xinf.ony.ScrollEvent( 
+							xinf.ony.ScrollEvent.SCROLL_STEP, target, -delta ) );
     }
     
-    private function postMouseEvent( target:Element, type:String ) :Void {
-        target.postEvent( type, { x:flash.Lib._root._xmouse, y:flash.Lib._root._ymouse } );
+    private function postMouseEvent( target:Element, type:EventKind<MouseEvent> ) :Void {
+		target.postEvent( new MouseEvent( type, target,
+								Math.round(flash.Lib._root._xmouse), 
+								Math.round(flash.Lib._root._ymouse) ) );
     }
     
     private function findTarget( path:String ) :Element {

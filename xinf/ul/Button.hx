@@ -21,12 +21,14 @@ import xinf.event.Event;
 import xinf.ony.Text;
 import xinf.style.StyleClassElement;
 
+import xinf.ony.MouseEvent;
+
 /**
     Button element.
 **/
 
 class Button<T:Element> extends StyleClassElement {
-	public static var CLICK:String = "buttonClick";
+	public static var CLICK = new xinf.event.EventKind<MouseEvent>("buttonClick");
 
 	public var contained(get_contained,set_contained):T;
 	private var _contained:T;
@@ -44,26 +46,27 @@ class Button<T:Element> extends StyleClassElement {
     
     public function new( name:String, parent:Element ) :Void {
 		super( name, parent );
-		addEventListener( xinf.event.Event.MOUSE_DOWN, onMouseDown );
+		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
     }
 	    
-	private function onMouseDown( e:xinf.event.Event ) {
+	private function onMouseDown( e:MouseEvent ) {
 		addStyleClass(":press");
-		xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.MOUSE_UP,
+		xinf.event.Global.addEventListener( MouseEvent.MOUSE_UP,
 			_mouseUp=onMouseUp );
-		addEventListener( xinf.event.Event.MOUSE_UP,
+		addEventListener( MouseEvent.MOUSE_UP,
 			_localMouseUp=onLocalMouseUp );
 	}
 
-	private function onLocalMouseUp( e:xinf.event.Event ) {
-		postEvent( Button.CLICK, null );
+	private function onLocalMouseUp( e:MouseEvent ) {
+		// FIXME: globalToLocal?
+		postEvent( new MouseEvent( Button.CLICK, this, e.x, e.y ) );
 	}
 	
-	private function onMouseUp( e:xinf.event.Event ) {
+	private function onMouseUp( e:MouseEvent ) {
 		removeStyleClass(":press");
-		xinf.event.EventDispatcher.removeGlobalEventListener( xinf.event.Event.MOUSE_UP,
+		xinf.event.Global.removeEventListener( MouseEvent.MOUSE_UP,
 			_mouseUp );
-		removeEventListener( xinf.event.Event.MOUSE_UP,
+		removeEventListener( MouseEvent.MOUSE_UP,
 			_localMouseUp );
 	}
 }

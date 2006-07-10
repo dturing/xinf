@@ -15,7 +15,7 @@
 
 package xinf.ony;
 
-import xinf.event.EventDispatcher;
+import xinf.event.SimpleEventDispatcher;
 import xinf.event.Event;
 import xinf.geom.Point;
 
@@ -32,7 +32,7 @@ import xinf.geom.Point;
     and for xinfinity it's a Group.
 **/
 
-class Element extends EventDispatcher {
+class Element extends SimpleEventDispatcher {
     /**
         The name of the element, usually only needed for identification and debugging.
     **/
@@ -78,8 +78,8 @@ class Element extends EventDispatcher {
             untyped _p.owner = this;
         #end
         
-        bounds.addEventListener( Event.POSITION_CHANGED, onPositionChanged );
-        bounds.addEventListener( Event.SIZE_CHANGED, onSizeChanged );
+        bounds.addEventListener( GeometryEvent.POSITION_CHANGED, onPositionChanged );
+        bounds.addEventListener( GeometryEvent.SIZE_CHANGED, onSizeChanged );
 
 		super();
     }
@@ -118,40 +118,38 @@ class Element extends EventDispatcher {
         Dispatch an Event to the Element. See the EventDispatcher class for details.
         Element will dispatch the Event to it's parent.
     **/
-    override public function dispatchEvent( e:Event ) :Void {
+	override public function dispatchEvent<T>( e : Event<T> ) :Void {
 		if( _p == null ) throw("no primitive while dispatching Event "+e);
 		
         super.dispatchEvent( e );
-        
+
         // propagate to parent
-        if( parent != null ) 
+        if( !e.stopped && parent != null ) 
             parent.dispatchEvent(e);
-        else
-            xinf.event.EventDispatcher.global.dispatchEvent( e );
     }
 
 
-    private function onPositionChanged( e:Event ) :Void {
+    private function onPositionChanged( e:GeometryEvent ) :Void {
             if( _p == null ) throw("no _p for onPositionChanged "+this);
         #if neko
             _p.changed();
         #else js
-            _p.style.left = Math.floor( e.data.x );
-            _p.style.top  = Math.floor( e.data.y );
+            _p.style.left = Math.floor( e.x );
+            _p.style.top  = Math.floor( e.y );
         #else flash
-            _p._x = e.data.x;
-            _p._y = e.data.y;
+            _p._x = e.x;
+            _p._y = e.y;
         #end
     }
 
-    private function onSizeChanged( e:Event ) :Void {
+    private function onSizeChanged( e:GeometryEvent ) :Void {
             if( _p == null ) throw("no _p for onSizeChanged "+this);
         #if neko
             _p.changed();
         #else js
             if( !autoSize ) {
-                _p.style.width  = Math.floor( e.data.width );
-                _p.style.height = Math.floor( e.data.height );
+                _p.style.width  = Math.floor( e.x );
+                _p.style.height = Math.floor( e.y );
             }
         #else flash
             scheduleRedraw();

@@ -3,6 +3,12 @@ package xinf.style;
 import xinf.style.Style;
 import xinf.ony.Element;
 
+import xinf.ony.MouseEvent;
+
+/**
+	FIXME: really do the :hover here?
+**/
+
 class StyleClassElement extends StyledElement {
 	private var styleClasses :Array<String>;
 	
@@ -15,14 +21,14 @@ class StyleClassElement extends StyledElement {
 		addStyleClass( clNames[ clNames.length-1 ] );
 
 		// :hover pseudo-class
-		addEventListener( xinf.event.Event.MOUSE_OVER, onMouseOver );
-		addEventListener( xinf.event.Event.MOUSE_OUT, onMouseOut );
+		addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
+		addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
 	}
 
-	private function onMouseOver( e:xinf.event.Event ) {
+	private function onMouseOver( e:MouseEvent ) {
 		addStyleClass(":hover");
 	}
-	private function onMouseOut( e:xinf.event.Event ) {
+	private function onMouseOut( e:MouseEvent ) {
 		removeStyleClass(":hover");
 	}
 		

@@ -15,13 +15,9 @@
 
 package xinf.inity;
 
-import xinf.event.EventDispatcher;
 import xinf.event.Event;
-
-// TODO: if this remains the only reference to xinf.ony, 
-// style stuff should probably be moved to xinf.style
-// (this note is out of date but here is still sth to do)
 import xinf.ony.Bounds;
+import xinf.ony.Element;
 
 class Object {
     private var _displayList:Int;
@@ -29,7 +25,7 @@ class Object {
     private var _changed:Bool;
     
     public var transform:xinf.geom.Matrix;
-    public var owner:EventDispatcher;
+    public var owner:Element;
     public var bounds:Bounds;
     public var parent:xinf.inity.Group;
 
@@ -65,14 +61,14 @@ class Object {
         return true;
     }
 
-    public function postEvent( type:String, data:Dynamic ) :Void {
+    public function postEvent<T>( e:Event<T>, pos:haxe.PosInfos ) :Void {
         if( owner == null ) {
 //            trace("WARNING: Object "+this+" has no owner to post "+type);
 			// object likely has been deleted
 			// this happens, eg, with mouseOut Events, as Root's objectUnderMouse might be deleted. (unconfirmed)
 			return;
         }
-        owner.postEvent(type,data);
+        owner.postEvent(e,pos);
     }
 
     /* ------------------------------------------------------

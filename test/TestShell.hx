@@ -19,16 +19,14 @@ import TestCase;
 class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
+		tests.primitives.Mouse,
         tests.primitives.Text,
         tests.primitives.Image,
         tests.primitives.TextEntry,
-        tests.primitives.Mouse,
-        tests.style.StyleClassElement,
-        tests.xinful.Scrollbar,
-        tests.xinful.Listbox,
-        tests.xinful.Dropdown,
+
         tests.xinful.SimpleWidgets
-    ];    
+
+	];    
     
     public static var nTest:Int;
     public static var cTest:TestCase;
@@ -40,7 +38,7 @@ class TestShell {
         testFeedback = null;
 
         var root = xinf.ony.Root.getRoot();
-        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.ENTER_FRAME, testStep);
+        xinf.event.Global.addEventListener( xinf.ony.FrameEvent.ENTER_FRAME, testStep);
         
         #if neko
             testName="";
@@ -100,7 +98,8 @@ class TestShell {
     }
 
     public static function runNextTest() :Void {
-        if( nTest == null ) nTest=0;
+		if( nTest == null ) nTest=0;
+		if( nTest == null ) nTest=0;
         else nTest++;
         
         if( nTest >= mTests.length ) {
@@ -109,11 +108,12 @@ class TestShell {
                 TestCase.logger.finished( finished );
             }
             #if neko
-                xinf.event.EventDispatcher.postGlobalEvent( xinf.event.Event.QUIT, null );
+                xinf.event.Global.postEvent( 
+					new xinf.ony.SimpleEvent( xinf.ony.SimpleEvent.QUIT,
+						xinf.ony.Root.getRoot() ) );
             #end
         } else {
             testName = untyped mTests[nTest].__name__.join(".");
-            trace("next: "+testName );
         }
     }
     
@@ -125,7 +125,7 @@ class TestShell {
         #end
     }
     
-    public static function testStep( e:xinf.event.Event ) :Void {
+    public static function testStep( e:xinf.ony.FrameEvent ) :Void {
         var nextTest:String = null;
         
         #if flash

@@ -16,13 +16,13 @@
 package xinf.ony;
 
 import xinf.event.Event;
-import xinf.event.EventDispatcher;
+import xinf.event.SimpleEventDispatcher;
 
 /**
     Bounds describes the bounding rectangle of a xinfony Element.
     It derives from EventDispatcher, and will post POSITION_CHANGED and SIZE_CHANGED events.
 **/
-class Bounds extends EventDispatcher {
+class Bounds extends SimpleEventDispatcher {
     /**
         Horizontal part of the top-left corner of the bounds. Read-only.
         Can be set using setPosition().
@@ -63,7 +63,7 @@ class Bounds extends EventDispatcher {
 		if( x!=_x || y!=_y ) { // FIXME premature optimization?
 			x = _x;
 			y = _y;
-			postEvent( Event.POSITION_CHANGED, { x:x, y:y } );
+			postEvent( new GeometryEvent( GeometryEvent.POSITION_CHANGED, this, x, y ) );
 		}
     }
 
@@ -75,7 +75,7 @@ class Bounds extends EventDispatcher {
 		if( width != _width || height != _height ) { // FIXME premature optimization?
 			width = _width;
 			height = _height;
-			postEvent( Event.SIZE_CHANGED, { width:width, height:height } );
+			postEvent( new GeometryEvent( GeometryEvent.SIZE_CHANGED, this, width, height ) );
 		}
     }
     

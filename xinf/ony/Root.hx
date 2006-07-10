@@ -16,6 +16,7 @@
 package xinf.ony;
 
 import xinf.event.Event;
+import xinf.ony.FrameEvent;
 
 #if js
 import js.Dom;
@@ -32,7 +33,8 @@ import js.Dom;
 **/
 class Root extends Element {
     private static var root:Root;// = new Root();
-    
+    private var frame:Int; // FIXME unneeded/used for xinfinity?
+	
     private var _r:
         #if neko
             xinf.inity.Root
@@ -61,6 +63,7 @@ class Root extends Element {
 
     private function new() {
         super("root",null);
+		frame=0;
         #if flash
             haxe.Log.trace = xinfHtmlTrace;
             eventMonitor = new xinf.ony.flash.EventMonitor();
@@ -70,13 +73,17 @@ class Root extends Element {
         #end
         
         // keep our own bounds up to date.
+		/* FIXME EVENT
         xinf.event.EventDispatcher.addGlobalEventListener(
             xinf.event.Event.STAGE_SCALE, updateSize );
+		*/
     }
     
-    private function updateSize( e:Event ) :Void {
+	/* FIXME EVENT
+    private function updateSize( e:GeometryEvent ) :Void {
         bounds.setSize( e.data.w, e.data.h );
     }
+	*/
     
     override private function createPrimitive() :Primitive {
         _r = 
@@ -119,13 +126,17 @@ class Root extends Element {
     
     #if js
         public function step() :Void {
-            xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
-            xinf.event.Event.processQueue();
+            xinf.event.Global.postEvent( 
+				new FrameEvent( FrameEvent.ENTER_FRAME, 
+					xinf.ony.Root.getRoot(), frame++ ) );
+// FIXME EVENT            xinf.event.Event.processQueue();
         }
     #else flash
         public function step() :Void {
-            xinf.event.EventDispatcher.global.postEvent( Event.ENTER_FRAME, { } );
-            xinf.event.Event.processQueue();
+            xinf.event.Global.postEvent( 
+				new FrameEvent( FrameEvent.ENTER_FRAME, 
+					xinf.ony.Root.getRoot(), frame++ ) );
+// FIXME EVENT            xinf.event.Event.processQueue();
         }
     #end
 }

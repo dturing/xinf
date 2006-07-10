@@ -18,6 +18,11 @@ package xinf.inity;
 import SDL;
 import xinf.event.Event;
 
+import xinf.ony.MouseEvent;
+import xinf.ony.KeyboardEvent;
+import xinf.ony.FrameEvent;
+import xinf.ony.ScrollEvent;
+
 class Profiler {
     private var data:Hash<Int>;
     private var last:Int;
@@ -79,6 +84,7 @@ class Root extends Stage {
     public var mouseY : Int;
     private var buttonpress : Bool;
     private var objectUnderMouse : Object;
+	public var frame :Int;
 
     private static var selectBuffer = CPtr.uint_alloc(64);
     private static var view = CPtr.int_alloc(4);
@@ -92,6 +98,7 @@ class Root extends Stage {
         mouseY = -1;
         buttonpress = false;
         objectUnderMouse = null;
+		frame=0;
 
         if( SDL.Init( SDL.INIT_VIDEO ) < 0 ) {
             throw("SDL Video Initialization failed.");
@@ -100,12 +107,12 @@ class Root extends Stage {
         SDL.EnableUNICODE(1);
         SDL.EnableKeyRepeat( SDL.DEFAULT_REPEAT_DELAY, SDL.DEFAULT_REPEAT_INTERVAL );
 
-        xinf.event.EventDispatcher.addGlobalEventListener( xinf.event.Event.QUIT, doQuit );
+        xinf.event.Global.addEventListener( xinf.ony.SimpleEvent.QUIT, doQuit );
 
         resize( w, h );
     }
     
-    public function doQuit( e:xinf.event.Event ) {
+    public function doQuit( e:xinf.ony.SimpleEvent ) {
         quit=true;
     }
 
@@ -139,9 +146,11 @@ class Root extends Stage {
         
           p.check("sleep");
             
-            xinf.event.EventDispatcher.postGlobalEvent( Event.ENTER_FRAME, { } );
+            xinf.event.Global.postEvent( new FrameEvent(
+						FrameEvent.ENTER_FRAME, owner, frame++ ) );
             processEvents();
-            Event.processQueue();
+			// FIXME EVENTS
+            // Event.processQueue();
           p.check("Event.queue");
 
             if( Object.cacheChanged() ) changed=true;
@@ -225,16 +234,17 @@ class Root extends Stage {
         untyped str.__s = name;
         untyped str.length = 1;
         
-        var type = Event.KEY_DOWN;
-        if( k==SDL.KEYUP ) type = Event.KEY_UP;
+        var type = KeyboardEvent.KEY_DOWN;
+        if( k==SDL.KEYUP ) type = KeyboardEvent.KEY_UP;
 		
 		var mods = SDL.GetModState();
-        xinf.event.EventDispatcher.postGlobalEvent( type, { 
-				key:str, code:SDL.keysym_unicode_get(sym),
-				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
-				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
-				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
-			} );
+		// FIXME: key events are global?
+        xinf.event.Global.postEvent( new KeyboardEvent( type,
+				owner, SDL.keysym_unicode_get(sym), str,
+				mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
+				mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
+				mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
+			) );
     } 
 
     private function handleMouseEvent( e, k ) :Void {
@@ -248,15 +258,17 @@ class Root extends Stage {
                 var delta:Int = -1; // up;
                 if( button==5 ) delta = 1; // down
                 if( objectUnderMouse != null )
-                    objectUnderMouse.postEvent( Event.SCROLL_STEP, { delta:delta } );
+                    objectUnderMouse.postEvent( new ScrollEvent( 
+						ScrollEvent.SCROLL_STEP, objectUnderMouse.owner, delta ) );
                 else
-                    xinf.event.EventDispatcher.postGlobalEvent( Event.SCROLL_STEP, { delta:delta } );
+                    xinf.event.Global.postEvent( new ScrollEvent( 
+						ScrollEvent.SCROLL_STEP, xinf.ony.Root.getRoot(), delta ) );
             }
             return;
         }
 
-        var type:String = Event.MOUSE_UP;
-        if( k == SDL.MOUSEBUTTONDOWN ) type = Event.MOUSE_DOWN;
+        var type = MouseEvent.MOUSE_UP;
+        if( k == SDL.MOUSEBUTTONDOWN ) type = MouseEvent.MOUSE_DOWN;
         
 		var mods = SDL.GetModState();
 		var data = { x:x, y:y, button:button,
@@ -266,26 +278,25 @@ class Root extends Stage {
 			}
 		
         if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( type, data );
+			objectUnderMouse.postEvent( new MouseEvent( 
+				type, objectUnderMouse.owner, x, y ) );
         else
-            xinf.event.EventDispatcher.postGlobalEvent( type,data );
+			xinf.event.Global.postEvent( new MouseEvent( 
+				type, xinf.ony.Root.getRoot(), x, y ) );
     }
 
     private function handleMouseMotionEvent( e, k ) :Void {
         mouseX = SDL.MouseMotionEvent_x_get(e);
         mouseY = SDL.MouseMotionEvent_y_get(e);
-	
-		var mods = SDL.GetModState();
-		var data = { x:mouseX, y:mouseY,
-				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
-				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
-				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
-			}
 
 		if( objectUnderMouse != null )
-            objectUnderMouse.postEvent( Event.MOUSE_MOVE, data );
+			objectUnderMouse.postEvent( new MouseEvent( 
+				MouseEvent.MOUSE_MOVE, objectUnderMouse.owner, 
+				Math.round(x), Math.round(y) ) );
         else
-            xinf.event.EventDispatcher.postGlobalEvent( Event.MOUSE_MOVE, data );
+			xinf.event.Global.postEvent( new MouseEvent( 
+				MouseEvent.MOUSE_MOVE, xinf.ony.Root.getRoot(),
+				Math.round(x), Math.round(y) ) );
     }
         
     /* ------------------------------------------------------
@@ -392,10 +403,12 @@ class Root extends Stage {
         var o = getObjectsUnderPoint( mouseX, mouseY ).pop();
         if( o != objectUnderMouse ) {
             if( objectUnderMouse != null )
-                objectUnderMouse.postEvent( Event.MOUSE_OUT, { x:mouseX, y:mouseY } );
+				objectUnderMouse.postEvent( new MouseEvent( 
+					MouseEvent.MOUSE_OUT, objectUnderMouse.owner, mouseX, mouseY ) );
             objectUnderMouse = o;
             if( objectUnderMouse != null )
-                objectUnderMouse.postEvent( Event.MOUSE_OVER, { x:mouseX, y:mouseY } );
+            	objectUnderMouse.postEvent( new MouseEvent( 
+					MouseEvent.MOUSE_OVER, objectUnderMouse.owner, mouseX, mouseY ) );
         }
     }
 }
