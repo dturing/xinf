@@ -51,6 +51,7 @@ class LineEdit extends Text {
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
 		if( e.code >= 32 ) {
+			trace("key: "+e.code+", "+e.key );
 			switch( e.code ) {
 				case 127: // Del
 					if( sel.from==sel.to ) {

@@ -269,13 +269,6 @@ class Root extends Stage {
 
         var type = MouseEvent.MOUSE_UP;
         if( k == SDL.MOUSEBUTTONDOWN ) type = MouseEvent.MOUSE_DOWN;
-        
-		var mods = SDL.GetModState();
-		var data = { x:x, y:y, button:button,
-				shiftMod:mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
-				altMod:  mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
-				ctrlMod: mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0
-			}
 		
         if( objectUnderMouse != null )
 			objectUnderMouse.postEvent( new MouseEvent( 
@@ -292,11 +285,11 @@ class Root extends Stage {
 		if( objectUnderMouse != null )
 			objectUnderMouse.postEvent( new MouseEvent( 
 				MouseEvent.MOUSE_MOVE, objectUnderMouse.owner, 
-				Math.round(x), Math.round(y) ) );
+				Math.round(mouseX), Math.round(mouseY) ) );
         else
 			xinf.event.Global.postEvent( new MouseEvent( 
 				MouseEvent.MOUSE_MOVE, xinf.ony.Root.getRoot(),
-				Math.round(x), Math.round(y) ) );
+				Math.round(mouseX), Math.round(mouseY) ) );
     }
         
     /* ------------------------------------------------------

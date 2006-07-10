@@ -124,8 +124,12 @@ class Element extends SimpleEventDispatcher {
         super.dispatchEvent( e );
 
         // propagate to parent
-        if( !e.stopped && parent != null ) 
-            parent.dispatchEvent(e);
+        if( !e.stopped ) {
+			if( parent != null ) 
+				parent.dispatchEvent(e);
+			else
+				xinf.event.Global.dispatchEvent(e);
+		}
     }
 
 

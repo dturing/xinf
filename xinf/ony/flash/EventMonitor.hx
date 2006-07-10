@@ -68,6 +68,7 @@ class EventMonitor {
             latestOver = target;
             postMouseEvent( target, MouseEvent.MOUSE_OVER );
         } else {
+			// FIXME: this is different from js and inity, but maybe better.
 			xinf.event.Global.postEvent( 
 				new MouseEvent( MouseEvent.MOUSE_MOVE, target, 
 					Math.round(flash.Lib._root._xmouse), 

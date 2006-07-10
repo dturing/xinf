@@ -19,7 +19,7 @@ import TestCase;
 class TestShell {
     public static var mTests = [
         tests.primitives.Pane,
-		tests.primitives.Mouse,
+//		tests.primitives.Mouse,
         tests.primitives.Text,
         tests.primitives.Image,
         tests.primitives.TextEntry,
