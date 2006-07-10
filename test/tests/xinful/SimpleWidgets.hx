@@ -25,7 +25,7 @@ class SimpleWidgets extends TestCase {
         super( parent, 1.0 );
 		
 		setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xababab ) );
-
+/*
 	/////////////////////////////////////////////////////////////////////////////////
 	// Label
 		StyleSheet.defaultSheet.add(
@@ -91,7 +91,7 @@ class SimpleWidgets extends TestCase {
 					t.contained.text=c;
 					buttonClicks++;
 				} );
-
+*/
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// Input
@@ -133,7 +133,7 @@ class SimpleWidgets extends TestCase {
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// ImageButton
-
+/*
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton" ], {
 				padding: { l:2, t:2, r:2, b:2 },
@@ -166,7 +166,7 @@ class SimpleWidgets extends TestCase {
         t.bounds.setPosition( 100, 40 );
 		
 	/////////////////////////////////////////////////////////////////////////////////
-	// Combobox
+	// Slider
 		StyleSheet.defaultSheet.add(
 			[ "Label", "combo" ], {
 				padding: { l:3, t:1, r:6, b:1 },
@@ -224,19 +224,10 @@ class SimpleWidgets extends TestCase {
 				color: null,
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 )
 			} );
-		/*
-        var t = new xinf.ul.Combo<xinf.ul.Label,ImageButton>( "testCombo", this );
-			var l = new xinf.ul.Label( "comboLabel", t );
-			l.text = "0.0";
-			t.setLeft( l );
-			var b = new ImageButton( "comboButton", t, "assets/slider/buttonicon/norm.png" );
-			t.setRight(b);
-		t.bounds.setPosition( 10, 70 );
-		*/
 		
         var t = new xinf.ul.Slider( "testSlider", this );
 		t.bounds.setPosition( 10, 120 );
-
+*/
 		screenshotFrame1();
     }
 }

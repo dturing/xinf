@@ -73,18 +73,14 @@ class Root extends Element {
         #end
         
         // keep our own bounds up to date.
-		/* FIXME EVENT
-        xinf.event.EventDispatcher.addGlobalEventListener(
-            xinf.event.Event.STAGE_SCALE, updateSize );
-		*/
+        xinf.event.Global.addEventListener(
+            GeometryEvent.STAGE_SCALED, updateSize );
     }
     
-	/* FIXME EVENT
-    private function updateSize( e:GeometryEvent ) :Void {
-        bounds.setSize( e.data.w, e.data.h );
+	private function updateSize( e:GeometryEvent ) :Void {
+        bounds.setSize( e.x, e.y );
     }
-	*/
-    
+	
     override private function createPrimitive() :Primitive {
         _r = 
             #if neko

@@ -23,23 +23,44 @@ class Pane extends TestCase {
         var sq = new xinf.ony.Pane( "testPane", this );
         sq.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xff0000 ) );
         sq.bounds.setPosition( 10, 10 );
-        sq.bounds.setSize( 100, 100 );
+        sq.bounds.setSize( 50, 50 );
 
     // a green square, next to it
         var sq2 = new xinf.ony.Pane( "testPane2", this );
 		sq2.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
-        sq2.bounds.setPosition( 110, 10 );
-        sq2.bounds.setSize( 100, 100 );
+        sq2.bounds.setPosition( 70, 10 );
+        sq2.bounds.setSize( 50, 50 );
 
     // a blue square, visually next to, but logically inside of, green
         var sq3 = new xinf.ony.Pane( "testPane3", sq2 );
         sq3.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x0000ff ) );
-        sq3.bounds.setPosition( 100, 0 );
-        sq3.bounds.setSize( 100, 100 );
-        
+        sq3.bounds.setPosition( 60, 0 );
+        sq3.bounds.setSize( 50, 50 );
+
+// test cropping
+
+    // cropping element
+        var c = new xinf.ony.Pane( "cropper", this );
+		c.crop=true;
+        c.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xdddddd ) );
+        c.bounds.setPosition( 10, 70 );
+        c.bounds.setSize( 110, 50 );
+
+	// a red square, left
+        var sq = new xinf.ony.Pane( "testPane", c );
+        sq.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xff0000 ) );
+        sq.bounds.setPosition( -50, -10 );
+        sq.bounds.setSize( 100, 70 );
+
+	// a green square, left
+        var sq = new xinf.ony.Pane( "testPane", c );
+        sq.setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0x00ff00 ) );
+        sq.bounds.setPosition( 60, -10 );
+        sq.bounds.setSize( 100, 70 );
+
     // TODO: 
     // test alpha, once it's around.
-    // test cropping
+
 	
 	trace("Created Panes");
 

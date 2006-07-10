@@ -48,52 +48,23 @@ class Box extends Group {
     private function set_crop( to:Bool ) :Bool {
         _crop = to;
         if( _crop ) {
-            owner.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, sizeChanged );
-    
-            cropParent = findCropParent();
-            if( cropParent != null ) {
-// FIXME                cropParent.owner.addEventListener( SimpleEvent.CROP_CHANGED, parentCropChanged );
-                xinf.event.Global.addEventListener( GeometryEvent.STAGE_SCALED, stageSizeChanged );
-            }
+            xinf.event.Global.addEventListener( GeometryEvent.STAGE_SCALED, stageSizeChanged );
             changed();
         }
         return _crop;
     }
     
-    private function findCropParent() :Box {
-        var o:Object = this.parent;
-        if( o == null ) return null;
-        while( o.parent != null ) {
-            try {
-                var b = cast(o,Box);
-                if( b.crop ) return b;
-            } catch( e:Dynamic ) {
-            }
-            o = o.parent;
-        }
-        return null;
-    }
-    private function sizeChanged( e:GeometryEvent ) {
-        if( crop ) {
-// FIXME            owner.postEvent( new SimpleEvent( SimpleEvent.CROP_CHANGED, this.owner ) );
-        }
-    }
     private function stageSizeChanged( e:GeometryEvent ) {
         if( crop ) {
             // cropping depends on stage size; rerender.
             changed();
         }
     }
-    private function parentCropChanged( e:SimpleEvent ) {
-    //   if( crop && e.target._p != this ) {
-// FIXME            owner.postEvent( new SimpleEvent( SimpleEvent.CROP_CHANGED, this ) );
-    //    }
-    }
     private function setScissors() {
         var win_h = xinf.ony.Root.getRoot().bounds.height;
         var pos:xinf.geom.Point = owner.localToGlobal( new xinf.geom.Point(0,0) );
 
-        // FIXME: take parent crop into account...
+		// FIXME: parent scissor? do proper test!
         GL.Scissor( Math.round(pos.x), Math.round(win_h-(pos.y+bounds.height)), 
                     Math.round(bounds.width), Math.round(bounds.height) );
     }
@@ -137,18 +108,14 @@ class Box extends Group {
         _renderGraphics();
 
         if( _crop ) {
-            if( cropParent==null ) {
-                GL.Enable( GL.SCISSOR_TEST );
-            }
+			GL.PushAttrib( GL.SCISSOR_BIT );
+
+			GL.Enable( GL.SCISSOR_TEST );
             setScissors();
             
             super._render();
             
-            if( cropParent==null ) {
-                GL.Disable( GL.SCISSOR_TEST );
-            } else {
-                cropParent.setScissors();
-            }
+            GL.PopAttrib();
         } else {
             super._render();
         }
