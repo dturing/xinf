@@ -98,7 +98,7 @@ class SimpleWidgets extends TestCase {
 
 		StyleSheet.defaultSheet.add(
 			[ "Input" ], {
-				padding: { l:4, t:4, r:4, b:4 },
+				padding: { l:3, t:3, r:2, b:3 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "input/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
@@ -126,8 +126,8 @@ class SimpleWidgets extends TestCase {
 			
         var t = new xinf.ul.Input( "testInput", this );
         t.bounds.setPosition( 10, 80 );
-        t.bounds.setSize( 100, 16 );
-		t.text="Edit me.";
+        t.bounds.setSize( 100, 20 );
+		t.text="I feel too long for this Widget.";
 //		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
 //			} );
 

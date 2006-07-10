@@ -26,8 +26,7 @@ import xinf.ony.MouseEvent;
 	
 	TODO:
 	  * double-click selects word
-	  * alt-drag selects word boundaries
-	  * dragging out of bounds scrolls
+	  * dragging out of bounds should scroll onEnterFrame.
 **/
 
 class LineEdit extends Text {
@@ -35,6 +34,7 @@ class LineEdit extends Text {
     public var selBgColor:xinf.ony.Color;
     public var selFgColor:xinf.ony.Color;
 	
+	private var xOffset:Float;
 	private var mouseSelAnchor:Int;
 	private var _mouseMove:Dynamic;
 	private var _mouseUp:Dynamic;
@@ -42,6 +42,7 @@ class LineEdit extends Text {
     public function new() :Void {
         super();
 		sel = { from:0, to:0 };
+		xOffset = 0;
 		
 		selBgColor = new xinf.ony.Color().fromRGBInt( 0x333333 );
 		selFgColor = new xinf.ony.Color().fromRGBInt( 0xeeeeee );
@@ -94,6 +95,7 @@ class LineEdit extends Text {
 	
 	public function onMouseDown( e:MouseEvent ) :Void {
 		var p:Point = owner.globalToLocal( new Point( e.x, e.y ) );
+		p.x += xOffset;
 		_mouseUp = onMouseUp;
 		_mouseMove = onMouseMove;
         xinf.event.Global.addEventListener( MouseEvent.MOUSE_UP, _mouseUp );
@@ -104,6 +106,7 @@ class LineEdit extends Text {
 	
 	public function onMouseMove( e:MouseEvent ) :Void {
 		var p:Point = owner.globalToLocal( new Point( e.x, e.y ) );
+		p.x += xOffset;
 		moveCursor( findIndex(p), true );
 	}
 	
@@ -179,12 +182,12 @@ class LineEdit extends Text {
 	}
 
     override function _renderGraphics() :Void {
-		// draw selection background
+		// calc selection background
 		var selStart:Float = 0;
 		var selEnd:Float = 0;
 		var x:Float=0;
 		var s:Float=fontSize;
-        for( i in 0..._text.length+1 ) {
+		for( i in 0..._text.length+1 ) {
 			if( i==sel.from ) selStart = x;
 			if( i==sel.to ) selEnd = x;
 			
@@ -195,25 +198,48 @@ class LineEdit extends Text {
 				}
 			}
 		}
-		
-		GL.Color4f( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
-		var x=selStart-1.5; var y=-.5; 
-		var w=selEnd-.5; var h=(Text._font.height*fontSize)-.5;
-		GL.Begin( GL.QUADS );
-			GL.Vertex3f( x, y, 0. );
-			GL.Vertex3f( w, y, 0. );
-			GL.Vertex3f( w, h, 0. );
-			GL.Vertex3f( x, h, 0. );
-		GL.End();
-		
-		
-		// setup styles for selection foreground
-		styles = new Array<StyleChange>();
-		if( sel.from != sel.to ) {
-			styles.push( { pos:Math.round(Math.min(sel.to,sel.from)), color:selFgColor } );
-			styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
+
+		// "ScrollIntoView" - FIXME you can do better, no?
+		var c=selEnd-xOffset;
+		if( c < 10 ) {
+			xOffset += c-10;
 		}
+		if( c > bounds.width-10 ) {
+			xOffset += c - (bounds.width-10);
+		}
+		if( xOffset != 0 && (x-xOffset) < bounds.width ) {
+			if( x < bounds.width ) {
+				xOffset=0;
+			} else {
+				xOffset -= (bounds.width - (x-xOffset));
+			}
+		}
+		if( xOffset<0 ) xOffset=0;
 		
-        super._renderGraphics();
+        GL.PushMatrix();
+			GL.Translatef( -xOffset, .0, .0 );
+
+			GL.Color4f( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
+			var x=selStart-1.5; var y=-.5; 
+			var w=selEnd-.5; var h=Math.ceil((Text._font.height*fontSize)+.5)-.5;
+			GL.Begin( GL.QUADS );
+				GL.Vertex3f( x, y, 0. );
+				GL.Vertex3f( w, y, 0. );
+				GL.Vertex3f( w, h, 0. );
+				GL.Vertex3f( x, h, 0. );
+			GL.End();
+			
+			
+			// setup styles for selection foreground
+			styles = new Array<StyleChange>();
+			if( sel.from != sel.to ) {
+				styles.push( { pos:Math.round(Math.min(sel.to,sel.from)), color:selFgColor } );
+				styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
+			}
+			
+		
+			super._renderGraphics();
+			
+        GL.PopMatrix();
 	}
 }

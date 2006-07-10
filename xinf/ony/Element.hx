@@ -34,7 +34,7 @@ import xinf.geom.Point;
 
 class Element extends SimpleEventDispatcher {
     /**
-        The name of the element, usually only needed for identification and debugging.
+        The name of the element, usually only needed for debugging.
     **/
     public var name:String;
     

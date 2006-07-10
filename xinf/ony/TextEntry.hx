@@ -51,7 +51,7 @@ class TextEntry extends Pane {
         setTextColor( Color.BLACK );
 		#if neko
 		// FIXME
-		//	addEventListener( Event.MOUSE_DOWN, _t.onMouseDown );
+			addEventListener( xinf.ony.MouseEvent.MOUSE_DOWN, _t.onMouseDown );
 		#end
     }
     
@@ -71,11 +71,12 @@ class TextEntry extends Pane {
             _t.style.whiteSpace = "nowrap";
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
             _t.style.fontSize = 11;
-            _t.style.paddingTop = 2;
-            _t.style.paddingBottom = 2;
+            _t.style.paddingTop = 0;
+            _t.style.paddingBottom = 0;
             _t.style.paddingLeft = 2;
             _t.style.paddingRight = 2;
             _t.style.lineHeight = "110%";
+            _t.style.background = "transparent";
 			_t.style.border = "none";
 			return _t;
         #else flash
@@ -89,6 +90,9 @@ class TextEntry extends Pane {
             _t.selectable = true;
 			_t.type = "input";
 			
+			_t._x=-1;
+			_t._y=-1;
+			
             var format:flash.TextFormat = new flash.TextFormat();
             format.size = 11; //*1.05;
             format.font = "Bitstream Vera Sans";
@@ -100,7 +104,15 @@ class TextEntry extends Pane {
 			return _t;
         #end
     }
-    
+
+	#if flash
+    override private function onSizeChanged( e:GeometryEvent ) :Void {
+		super.onSizeChanged(e);
+		_t._width = e.x;
+		_t._height = e.y+2;
+	}
+	#end
+	
     private function setText( t:String ) :String {
         #if neko
             _t.text = t;
