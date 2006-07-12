@@ -15,4 +15,5 @@ signature Style {
 	var skin :String;
 	var minWidth :Float;
 	var textAlign :Float;
+	var verticalAlign :Float;
 }

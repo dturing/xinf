@@ -63,6 +63,7 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 		setLeft( new xinf.ul.Label(name+"_lbl", this ) );
 		// FIXME: image should be part of the style.
 		setRight( new ImageButton(name+"_btn", this, "assets/slider/icon.png" ) );
+		right.autoSize = false;
 		
 		slideBar = new xinf.ony.Image(name+"_slide", this, "assets/slider/bg.png");
 		slideBar.visible = false;
@@ -78,8 +79,7 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	
 	private function onMouseDown( e:MouseEvent ) {
 		if( _mouseUp == null ) {
-			left.addStyleClass(":focus");
-			right.addStyleClass(":focus");
+			addStyleClass( ":focus" );
 		
 			xinf.event.Global.addEventListener( 
 				MouseEvent.MOUSE_UP, _mouseUp=onMouseUp );
@@ -87,7 +87,7 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 				MouseEvent.MOUSE_MOVE, _mouseMove=onMouseMove );
 				
 			var y = -(100-(get_normalized()*100));
-			slideBar.bounds.setPosition( right.bounds.x-2, y );
+			slideBar.bounds.setPosition( right.bounds.x, y );
 			slideThumb.bounds.setPosition( 2+slideBar.bounds.x, (101-(get_normalized()*100))+slideBar.bounds.y );
 			slideBar.visible = true;
 			slideThumb.visible = true;
@@ -98,16 +98,14 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	}
 	
 	private function onMouseUp( e:MouseEvent ) {
-		left.removeStyleClass(":focus");
-		right.removeStyleClass(":focus");
-		
+		removeStyleClass( ":focus" );
+
 		xinf.event.Global.removeEventListener( 
 			MouseEvent.MOUSE_UP, _mouseUp );
 		xinf.event.Global.removeEventListener( 
 			MouseEvent.MOUSE_MOVE, _mouseMove );
 		_mouseUp = null;
 		
-		trace("up");
 		slideBar.visible = false;
 		slideThumb.visible = false;
 	}

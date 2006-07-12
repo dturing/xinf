@@ -32,8 +32,8 @@ class StyleClassElement extends StyledElement {
 		removeStyleClass(":hover");
 	}
 		
-	private function updateStyles() :Void {
-		style = StyleSheet.defaultSheet.match( styleClasses );
+	public function updateStyles() :Void {
+		style = StyleSheet.defaultSheet.match( this );
 		applyStyle();
 	}
 
@@ -45,5 +45,16 @@ class StyleClassElement extends StyledElement {
 	public function removeStyleClass( name:String ) :Void {
 		styleClasses.remove( name );
 		updateStyles();
+	}
+	
+	public function hasStyleClass( name:String ) :Bool {
+		for( c in styleClasses ) {
+			if( c == name ) return true;
+		}
+		return false;
+	}
+
+	public function getStyleClasses() :Array<String> {
+		return styleClasses;
 	}
 }

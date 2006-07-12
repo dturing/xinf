@@ -73,6 +73,7 @@ class Text extends Pane {
             _t.style.fontFamily = "Bitstream Vera Sans, Arial, sans-serif";
             _t.style.fontSize = 11;
             _t.style.lineHeight = "110%";
+			_t.style.paddingTop = 1;
 			return _t;
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
@@ -83,6 +84,7 @@ class Text extends Pane {
             
             _t.autoSize = true;
             _t.selectable = false;
+			_t._y = -1;
             
             var format:flash.TextFormat = new flash.TextFormat();
             format.size = 11; //*1.05;
@@ -141,7 +143,7 @@ class Text extends Pane {
         #else js
             s = new Point(untyped _t.offsetWidth, untyped _t.offsetHeight);
         #else flash
-            s = new Point( _t._width-4, _t._height-4 );
+            s = new Point( _t._width-4, _t._height-3 );
         #end
         
         #if js

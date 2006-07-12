@@ -32,21 +32,23 @@ class SimpleWidgets extends TestCase {
 			[ "Label" ], {
 				padding: { l:6, t:3, r:6, b:3 },
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xaaaaff ),
 				border: null,
-				skin: null, background: null, minWidth: null, textAlign: null
+				skin: null, minWidth: null, textAlign: null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "Label", ":hover" ], {
 				background: new xinf.ony.Color().fromRGBInt( 0xffaaaa ),
 				padding: null, color: null,
 				border: null,
-				skin: null, minWidth: null, textAlign: null
+				skin: null, minWidth: null, textAlign: null, verticalAlign: null
 			} );
 
         var t = new xinf.ul.Label( "testLabel", this );
         t.bounds.setPosition( 10, 10 );
 		t.text="Test Label";
-		
+
+
 	/////////////////////////////////////////////////////////////////////////////////
 	// Button
 
@@ -58,7 +60,7 @@ class SimpleWidgets extends TestCase {
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 75.,
-				textAlign: .5
+				textAlign: .5, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "TextButton", ":hover" ], {
@@ -66,7 +68,7 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/hover/",
-				padding: null, minWidth:null, textAlign:null, 
+				padding: null, minWidth:null, textAlign:null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "TextButton", ":hover", ":press" ], {
@@ -75,7 +77,7 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/press/",
-				minWidth:null, textAlign:null
+				minWidth:null, textAlign:null, verticalAlign: null
 			} );
 			
         var t = new xinf.ul.TextButton( "testButton", this );
@@ -103,7 +105,7 @@ class SimpleWidgets extends TestCase {
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 100.,
-				textAlign: 0
+				textAlign: 0, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "Input", ":hover" ], {
@@ -111,7 +113,7 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "input/hover/",
-				padding: null, minWidth:null, textAlign:null, 
+				padding: null, minWidth:null, textAlign:null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "Input", ":focus" ], {
@@ -120,7 +122,7 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "input/focus/",
-				minWidth:null, textAlign:null
+				minWidth:null, textAlign:null, verticalAlign: null
 			} );
 			
         var t = new xinf.ul.Input( "testInput", this );
@@ -144,7 +146,7 @@ class SimpleWidgets extends TestCase {
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 75.,
-				textAlign: .5
+				textAlign: .5, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton", ":hover" ], {
@@ -152,7 +154,7 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/hover/",
-				padding: null, minWidth:null, textAlign:null, 
+				padding: null, minWidth:null, textAlign:null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton", ":hover", ":press" ], {
@@ -161,70 +163,65 @@ class SimpleWidgets extends TestCase {
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/press/",
-				minWidth:null, textAlign:null
+				minWidth:null, textAlign:null, verticalAlign: null
 			} );
 			
         var t = new xinf.ul.ImageButton( "testImageButton", this, "assets/test.png" );
         t.bounds.setPosition( 100, 40 );
-		
+        
 	/////////////////////////////////////////////////////////////////////////////////
 	// Slider
 		StyleSheet.defaultSheet.add(
-			[ "Label", "combo" ], {
-				padding: { l:3, t:1, r:6, b:1 },
+			[ "Label" ],
+			new ParentSelector( new ClassNameSelector( ["Slider"] ) ), 
+			{
+				padding: { l:3, t:3, r:6, b:3 },
 				border: { l:2, t:2, r:0, b:2 },
 				skin: "slider/box/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 				minWidth: 60.,
-				textAlign: 1
+				textAlign: 1, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Label", "combo", ":hover" ], {
+			[ "Label" ],
+			new ParentSelector( new ClassNameSelector( ["Slider",":hover"] ) ), 
+			{
 				border: null, padding: null,
 				skin: "slider/box/hover/",
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: null,
-				minWidth: null,	textAlign: null
+				minWidth: null,	textAlign: null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "Label", "combo", ":focus" ], {
+			[ "Label" ],
+			new ParentSelector( new ClassNameSelector( ["Slider",":focus"] ) ), 
+			{
 				border: null, padding: null,
 				skin: "slider/box/focus/",
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
-				minWidth: null,	textAlign: null
+				minWidth: null,	textAlign: null, verticalAlign: null
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "ImageButton", "combo" ], {
-				padding: { l:1, t:1, r:1, b:1 },
+			[ "ImageButton" ],
+			new ParentSelector( new ClassNameSelector( ["Slider"] ) ), 
+			{
+				padding: { l:2, t:2, r:2, b:2 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "slider/button/",
-				textAlign: null, minWidth: 0,
+				textAlign: null, verticalAlign: .5, minWidth: 0,
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
 			} );
 		StyleSheet.defaultSheet.add(
-			[ "ImageButton", "combo", ":hover" ], {
+			[ "ImageButton" ],
+			new ParentSelector( new ClassNameSelector( ["Slider",":hover"] ) ), 
+			{
 				skin: "slider/button/hover/",
-				border: null, padding: null, textAlign: null, minWidth: 0,
+				border: null, padding: null, textAlign: null, verticalAlign: null, minWidth: 0,
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
-			} );
-		StyleSheet.defaultSheet.add(
-			[ "ImageButton", "combo", ":hover" ], {
-				skin: "slider/button/hover/",
-				border: null, padding: null, textAlign: null, minWidth: 0,
-				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
-			} );
-		StyleSheet.defaultSheet.add(
-			[ "ImageButton", "combo", ":press" ], {
-				skin: "slider/button/press/",
-				padding: { l:1, t:2, r:1, b:0 },
-				border: null, textAlign: null, minWidth: 0,
-				color: null,
-				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 )
 			} );
 		
         var t = new xinf.ul.Slider( "testSlider", this );

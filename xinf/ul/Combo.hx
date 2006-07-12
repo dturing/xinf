@@ -34,8 +34,6 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
 	
 	public function setLeft( l:Left ) :Void {
 		left=l;
-		left.addStyleClass("combo");
-
         // FIXME: unregister old handler
         left.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, childSizeChanged );
         updateSize();
@@ -43,25 +41,9 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
 
 	public function setRight( r:Right ) :Void {
 		right=r;
-		right.addStyleClass("combo");
-
 	// FIXME: unregister old handler
         right.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, childSizeChanged );
         updateSize();
-	}
-
-	/*
-		FIXME: XSS needs rules by parents
-	*/
-	override private function onMouseOver( e:MouseEvent ) :Void {
-		super.onMouseOver(e);
-		left.addStyleClass(":hover");
-		right.addStyleClass(":hover");
-	}
-	override private function onMouseOut( e:MouseEvent ) :Void {
-		super.onMouseOver(e);
-		left.removeStyleClass(":hover");
-		right.removeStyleClass(":hover");
 	}
 
     override public function childSizeChanged( e:GeometryEvent) :Void {
@@ -70,9 +52,17 @@ class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassEl
         }
     }
 
+	override public function updateStyles() :Void {
+		super.updateStyles();
+		if( left != null ) left.updateStyles();
+		if( right != null ) right.updateStyles();
+	}
+
+
 	override private function updateSize() :Void {
 		if( left!=null && right!=null ) {
 			right.bounds.setPosition( left.bounds.width, 0 );
+			right.bounds.setSize( left.bounds.height, left.bounds.height );
 		}
 	}
 }

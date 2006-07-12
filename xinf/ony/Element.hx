@@ -47,7 +47,7 @@ class Element extends SimpleEventDispatcher {
     **/
     public var bounds:Bounds;
 
-    private var parent:Element;
+    public var parent:Element;
     private var _p:Primitive;
     
     /**

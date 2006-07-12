@@ -89,11 +89,10 @@ class StyledElement extends Pane {
 		}
 		
 		if( child != null ) {
-			var l = style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width);
-			child.bounds.setPosition( l+pad.l, pad.t );
-			if( !autoSize ) {
-				child.bounds.setSize( w-(pad.l+pad.r), h-(pad.t+pad.b) );
-			}
+			var l = Math.floor( style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width) );
+			var t = Math.floor( style.verticalAlign * ((h-(pad.t+pad.b))-child.bounds.height) );
+			child.bounds.setPosition( l+pad.l, t+pad.t );
+//				child.bounds.setSize( w-(pad.l+pad.r), h-(pad.t+pad.b) );
 		}
     }
     
@@ -111,9 +110,9 @@ class StyledElement extends Pane {
     }
 
     public function childSizeChanged( e:GeometryEvent ) {
-        if( autoSize ) {
+//        if( autoSize ) {
             updateSize();
-        }
+//       }
     }
     
     public function setChild( e:Element ) :Void {

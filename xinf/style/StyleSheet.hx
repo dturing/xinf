@@ -1,9 +1,68 @@
 package xinf.style;
 
+import xinf.ony.Element;
 import xinf.style.Style;
+import xinf.style.StyleClassElement;
+
+class StyleSelector {
+	public function matches( e:Element ) :Bool {
+		return true;
+	}
+}
+
+class ClassNameSelector extends StyleSelector {
+	var classes:Array<String>;
+
+	public function new( c:Array<String> ) :Void {
+		classes = c;
+	}
+	
+	override public function matches( _e:Element ) :Bool {
+		if( !Std.is(_e,StyleClassElement) ) return false;
+		var e:StyleClassElement = cast( _e, StyleClassElement );
+		for( c in classes ) {
+			if( !e.hasStyleClass(c) ) return false;
+		}
+		return true;
+	}
+}
+
+class ParentSelector extends StyleSelector {
+	private var selector:StyleSelector;
+
+	public function new( s:StyleSelector ) :Void {
+		selector=s;
+	}
+
+	override public function matches( e:Element ) :Bool {
+		var p = e.parent;
+		while( p != null ) {
+			if( selector.matches(p) ) {
+				return true;
+			}
+			p = p.parent;
+		}
+		return false;
+	}
+}
+
+class CombinedSelector extends StyleSelector {
+	private var selectors:Array<StyleSelector>;
+
+	public function new( s:Array<StyleSelector> ) :Void {
+		selectors = s;
+	}
+	
+	override public function matches( e:Element ) :Bool {
+		for( s in selectors ) {
+			if( !s.matches( e ) ) return false;
+		}
+		return true;
+	}
+}
 
 signature StyleRule {
-	var classes:Array<String>;
+	var selector:StyleSelector;
 	var style:Style;
 }
 
@@ -20,12 +79,15 @@ class StyleSheet {
 		byClassName = new Hash<List<StyleRule>>();
 	}
 	
-	public function add( classNames:Array<String>, style:Style ) {
+	public function add( classNames:Array<String>, ?otherSelector:StyleSelector, style:Style ) {
+		var selector:StyleSelector = new ClassNameSelector(classNames);
+		if( otherSelector != null ) {
+			selector = new CombinedSelector( [ selector, otherSelector ] );
+		}
 		var rule = {
-			classes:classNames,
+			selector:selector,
 			style:style
 		};
-		
 		var l = byClassName.get(classNames[0]);
 		if( l==null ) {
 			l = new List<StyleRule>();
@@ -34,9 +96,10 @@ class StyleSheet {
 		l.push( rule );
 	}
 	
-	private function findStyles( classNames:Array<String> ) :Iterator<Style> {
+	private function findStyles( e:StyleClassElement ) :Iterator<Style> {
 		var primary:List<StyleRule> = null;
 		var i=0;
+		var classNames = e.getStyleClasses();
 		while( i<classNames.length && primary==null ) {
 			primary = byClassName.get( classNames[i] );
 			i++;
@@ -44,17 +107,8 @@ class StyleSheet {
 		if( primary==null ) return null;
 		
 		var styles = new List<Style>();
-	//	styles.push( defaultStyle );
 		for( rule in primary ) {
-			var match:Bool = true;
-			for( c in rule.classes ) {
-				var match2:Bool = false;
-				for( className in classNames ) {
-					if( className == c ) match2=true;
-				}
-				if( match2 == false ) match=false;
-			}
-			if( match ) styles.push( rule.style );
+			if( rule.selector.matches(e) ) styles.push( rule.style );
 		}
 		return styles.iterator();
 	}
@@ -73,8 +127,8 @@ class StyleSheet {
 		return r;
 	}
 	
-	public function match( classNames:Array<String> ) :Style {
-		return aggregateStyles( findStyles( classNames ) );
+	public function match( e:StyleClassElement ) :Style {
+		return aggregateStyles( findStyles( e ) );
 	}
 	
 	
@@ -86,7 +140,7 @@ class StyleSheet {
 			background: null,
 			minWidth: null,
 			skin: null,
-			textAlign: 0
+			textAlign: 0, verticalAlign: 0
 		};
 	}
 }
