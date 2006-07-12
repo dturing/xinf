@@ -47,7 +47,7 @@ class LineEdit extends Text {
 		selBgColor = new xinf.ony.Color().fromRGBInt( 0x333333 );
 		selFgColor = new xinf.ony.Color().fromRGBInt( 0xeeeeee );
 
-        xinf.event.Global.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+//        xinf.event.Global.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
 
     public function onKeyDown( e:KeyboardEvent ) :Void {

@@ -25,7 +25,7 @@ class SimpleWidgets extends TestCase {
         super( parent, 1.0 );
 		
 		setBackgroundColor( new xinf.ony.Color().fromRGBInt( 0xababab ) );
-/*
+
 	/////////////////////////////////////////////////////////////////////////////////
 	// Label
 		StyleSheet.defaultSheet.add(
@@ -52,7 +52,7 @@ class SimpleWidgets extends TestCase {
 
 		StyleSheet.defaultSheet.add(
 			[ "TextButton" ], {
-				padding: { l:5, t:2, r:5, b:3 },
+				padding: { l:6, t:3, r:6, b:4 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
@@ -71,7 +71,7 @@ class SimpleWidgets extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "TextButton", ":hover", ":press" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:5, t:3, r:5, b:2 },
+				padding: { l:6, t:4, r:6, b:3 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/press/",
@@ -91,7 +91,6 @@ class SimpleWidgets extends TestCase {
 					t.contained.text=c;
 					buttonClicks++;
 				} );
-*/
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// Input
@@ -117,7 +116,7 @@ class SimpleWidgets extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "Input", ":focus" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:5, t:3, r:5, b:2 },
+				padding: { l:3, t:3, r:2, b:3 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "input/focus/",
@@ -128,15 +127,18 @@ class SimpleWidgets extends TestCase {
         t.bounds.setPosition( 10, 80 );
         t.bounds.setSize( 100, 20 );
 		t.text="I feel too long for this Widget.";
-//		t.addEventListener( xinf.ul.Button.CLICK, function(e:xinf.event.Event) {
-//			} );
+
+        var t = new xinf.ul.Input( "testInput2", this );
+        t.bounds.setPosition( 10, 120 );
+        t.bounds.setSize( 100, 20 );
+		t.text="Edit me!";
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// ImageButton
-/*
+
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton" ], {
-				padding: { l:2, t:2, r:2, b:2 },
+				padding: { l:3, t:3, r:3, b:3 },
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/",
 				color: new xinf.ony.Color().fromRGBInt( 0x333333 ),
@@ -155,7 +157,7 @@ class SimpleWidgets extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton", ":hover", ":press" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:2, t:3, r:2, b:1 },
+				padding: { l:3, t:4, r:3, b:2 },
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "button/press/",
@@ -226,8 +228,8 @@ class SimpleWidgets extends TestCase {
 			} );
 		
         var t = new xinf.ul.Slider( "testSlider", this );
-		t.bounds.setPosition( 10, 120 );
-*/
+		t.bounds.setPosition( 10, 160 );
+
 		screenshotFrame1();
     }
 }

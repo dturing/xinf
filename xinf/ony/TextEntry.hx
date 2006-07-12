@@ -52,6 +52,7 @@ class TextEntry extends Pane {
 		#if neko
 		// FIXME
 			addEventListener( xinf.ony.MouseEvent.MOUSE_DOWN, _t.onMouseDown );
+			addEventListener( xinf.ony.KeyboardEvent.KEY_DOWN, _t.onKeyDown );
 		#end
     }
     
@@ -85,10 +86,12 @@ class TextEntry extends Pane {
             
 			e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
             _t = Reflect.field( e, "_"+name );
+			trace( "create textfield for "+name+": "+_t );
             
             _t.autoSize = false;
             _t.selectable = true;
 			_t.type = "input";
+			_t.border=true;
 			
 			_t._x=-1;
 			_t._y=-1;

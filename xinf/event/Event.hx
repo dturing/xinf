@@ -22,8 +22,8 @@ package xinf.event;
 
 class Event<T> {
 	public var type(default,null) : EventKind<T>;
-	public var target(default,null) :EventDispatcher;
 	public var stopped(default,null) :Bool;
+	public var target :EventDispatcher;
 	
 	public var origin:haxe.PosInfos; // FIXME if debug_events
 	
@@ -37,6 +37,8 @@ class Event<T> {
 	}
 	
 	public function toString() :String {
-		return( type.toString()+" to "+target+", from "+origin.fileName+":"+origin.lineNumber );
+		var r = type.toString()+" to "+target;
+		if( origin != null ) r+=", from "+origin.fileName+":"+origin.lineNumber;
+		return r;
 	}
 }

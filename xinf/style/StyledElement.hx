@@ -93,7 +93,6 @@ class StyledElement extends Pane {
 			child.bounds.setPosition( l+pad.l, pad.t );
 			if( !autoSize ) {
 				child.bounds.setSize( w-(pad.l+pad.r), h-(pad.t+pad.b) );
-				trace(""+this+" !autoSize: "+child.bounds);
 			}
 		}
     }

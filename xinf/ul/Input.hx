@@ -25,7 +25,7 @@ import xinf.style.StyleClassElement;
     Simple Text Input element.
 **/
 
-class Input extends StyleClassElement {
+class Input extends Widget {
     public var text(get_text,set_text):String;
     private var textE:TextEntry;
     

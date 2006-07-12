@@ -218,6 +218,12 @@ class Element extends SimpleEventDispatcher {
         #end
     }
     
+	public function focus() :Void {
+	}
+
+	public function blur() :Void {
+	}
+	
     #if flash
         private function scheduleRedraw() :Void {
             // FIXME: for now, just redraw. can prolly save a lot to buffer these and process after events!

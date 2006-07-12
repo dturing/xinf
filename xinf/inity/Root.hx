@@ -239,7 +239,7 @@ class Root extends Stage {
 		
 		var mods = SDL.GetModState();
 		// FIXME: key events are global?
-        xinf.event.Global.postEvent( new KeyboardEvent( type,
+        xinf.ony.FocusManager.handleKeyboardEvent( new KeyboardEvent( type,
 				owner, SDL.keysym_unicode_get(sym), str,
 				mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
 				mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
