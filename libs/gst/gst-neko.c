@@ -222,6 +222,59 @@ value object_connect( value obj, value v_signal_name, value data ) {
 }
 DEFINE_PRIM(object_connect,3);
 
+/* --------------------------------------------------
+    GstStructure helpers
+   -------------------------------------------------- */
+gboolean gst_structure_to_neko_value_iterate( GQuark field_id, const GValue *val, gpointer user_data ) {
+	value obj = (value)user_data;
+	value v = gvalue_to_neko( val );
+	if( v != val_null ) 
+		alloc_field( obj, val_id( g_quark_to_string(field_id) ), v);
+	return true;
+}
+
+value gst_structure_to_neko( GstStructure *struc ) {
+	value obj = alloc_object(NULL);
+	alloc_field( obj, val_id( "name" ), alloc_string( gst_structure_get_name(struc) ) );
+	gst_structure_foreach( struc, gst_structure_to_neko_value_iterate, obj );
+	return obj;
+}
+
+/* --------------------------------------------------
+    GstBus
+   -------------------------------------------------- */
+
+/* poll_bus */
+value poll_bus( value obj, value timeout ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+
+	int tout=-1;
+    if( val_is_int(timeout) ) {
+		tout = val_number(timeout);
+    }
+    
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+    
+    GstBus *bus = gst_element_get_bus( GST_ELEMENT(o) );
+	if( !bus ) {
+		error("Element has no Bus?", obj);
+		return val_null;
+	}
+	
+	GstMessage *msg = gst_bus_poll( bus, GST_MESSAGE_ANY, tout );
+	if( msg ) {
+		return( gst_structure_to_neko( msg->structure ) );
+	}
+	
+    return val_null;
+}
+DEFINE_PRIM(poll_bus,2);
+
+
 
 /* --------------------------------------------------
     GStreamer
@@ -254,7 +307,6 @@ value find_child( value obj, value n ) {
     return alloc_gobject( G_OBJECT(e) );
 }
 DEFINE_PRIM(find_child,2);
-
 
 GMutex *get_glmutex( value obj ) {
     GObject *o = val_gobject( obj );
@@ -291,6 +343,7 @@ value unlock_glmutex( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(unlock_glmutex,1);
+/*
 
 value wait_texture_available( value obj ) {
 	GCond *cond = get_glcond( obj, "texture_ready" );
@@ -313,7 +366,7 @@ value set_texture_consumed( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(set_texture_consumed,1);
-
+*/
 value produce_texture( value obj ) {
 	GCond *consumed = get_glcond( obj, "texture_consumed" );
 	GCond *ready = get_glcond( obj, "texture_ready" );
@@ -327,167 +380,7 @@ value produce_texture( value obj ) {
 }
 DEFINE_PRIM(produce_texture,1);
 
-/* locked conditions */
-/*
-DEFINE_KIND(k_Mutex);
-value alloc_mutex( GMutex *mutex ) {
-    return alloc_abstract(k_Mutex,mutex);
-}
-GMutex *val_mutex( value m ) {
-    if( !val_is_abstract(m) || !val_is_kind(m,k_Mutex) ) {
-        error("not a mutex",m);
-        return NULL;
-    }
-    return (GMutex*)val_data(m);
-}
-*/
-typedef struct _PingPong {
-    GMutex *mutex;
-    GCond *ping;
-    GCond *pong;
-    void *payload;
-} PingPong;
 
-PingPong *pingpong_new() {
-    PingPong *pp = (PingPong*)g_malloc( sizeof( PingPong ) );
-    pp->mutex = g_mutex_new();
-    pp->ping  = g_cond_new();
-    pp->pong  = g_cond_new();
-    pp->payload = NULL;
-    return pp;
-}
-
-void pingpong_free( PingPong *pp ) {
-    if( pp->mutex ) g_free( pp->mutex );
-    if( pp->ping  ) g_free( pp->ping );
-    if( pp->pong  ) g_free( pp->pong );
-    g_free( pp );
-}
-
-void pingpong_lock( PingPong *pp ) {
-    g_mutex_lock( pp->mutex );
-}
-
-void pingpong_unlock( PingPong *pp ) {
-    g_mutex_unlock( pp->mutex );
-}
-
-void pingpong_ping( PingPong *pp, void *payload ) {
-    pp->payload = payload;
-    g_cond_signal( pp->ping );
-}
-void pingpong_wait_ping( PingPong *pp, void **payload ) {
-    g_cond_wait( pp->ping, pp->mutex );
-    if( payload ) *payload = pp->payload;
-}
-void pingpong_pong( PingPong *pp ) {
-    g_cond_signal( pp->pong );
-}
-void pingpong_wait_pong( PingPong *pp ) {
-    g_cond_wait( pp->pong, pp->mutex );
-}
-
-DEFINE_KIND(k_PingPong);
-value alloc_pingpong( PingPong *pp ) {
-    return alloc_abstract(k_PingPong,pp);
-}
-PingPong *val_pingpong( value pp ) {
-    if( !val_is_abstract(pp) || !val_is_kind(pp,k_PingPong) ) {
-        error("not a ping-pong lock",pp);
-        return NULL;
-    }
-    return (PingPong*)val_data(pp);
-}
-
-
-/* handoff */
-
-void handle_handoff( GstElement *object, GstBuffer *arg0, gpointer user_data ) {
-    PingPong *pp = (PingPong*)user_data;
-    pingpong_lock(pp);
-    pingpong_ping(pp, arg0);
-//    g_message("PING");
-    pingpong_wait_pong(pp);
-    pingpong_unlock(pp);
-}
-
-value register_handoff_blocker( value obj ) {
-    GObject *o = val_gobject( obj );
-    if( !o ) return val_null;
-
-// FIXME leak?
-    PingPong *pp = pingpong_new();
-    
-    g_object_connect( o, "signal::handoff", handle_handoff, pp, NULL );
-    
-    return( alloc_pingpong(pp) );
-}
-DEFINE_PRIM(register_handoff_blocker,1);
-
-value handoff_block( value v_pp ) {
-    PingPong *pp = val_pingpong(v_pp);
-    
-    void *payload;
-    
-    pingpong_lock(pp);
-    pingpong_pong(pp);
-//    g_message("PONG");
-    pingpong_wait_ping(pp, &payload);
-    pingpong_unlock(pp);
-
-// FIXME leak?
-    return alloc_gobject( payload );
-}
-DEFINE_PRIM(handoff_block,1);
-
-
-/* GstBuffer */
-value buffer_timestamp( value obj ) {
-    GObject *o = val_gobject( obj );
-    if( !o ) return val_null;
-    
-    if( !GST_IS_BUFFER( o ) ) {
-        error("not a buffer", obj );
-        return val_null;
-    }
-    
-    return alloc_float( (double)GST_BUFFER_TIMESTAMP( GST_BUFFER(o) )/GST_SECOND );
-}
-DEFINE_PRIM( buffer_timestamp, 1 );
-
-/*
-value analyze_buffer( value obj ) {
-    GObject *o = val_gobject( obj );
-    if( !o ) return val_null;
-    
-    if( !GST_IS_BUFFER( o ) ) {
-        error("not a buffer", obj );
-        return val_null;
-    }
-    GstBuffer *buf = GST_BUFFER(o);
-    
-    // FIXME: cache keys
-    value ret = alloc_object(NULL);
-    alloc_field( ret, val_id("timestamp"), alloc_float( 
-            (double)GST_BUFFER_TIMESTAMP( buf )/GST_SECOND ) );
-    alloc_field( ret, val_id("size"), alloc_int( GST_BUFFER_SIZE( buf ) ) );
-    alloc_field( ret, val_id("data"), alloc_abstract( k_unsigned_int_p, GST_BUFFER_DATA( buf ) ) );
-    
-    GstCaps *caps = GST_BUFFER_CAPS(buf);
-    GstStructure *s = gst_caps_get_structure(caps,0);
-
-    alloc_field( ret, val_id("caps"), alloc_string( gst_structure_get_name(s) ) );
-    
-    int v;
-    if( gst_structure_get_int( s, "width", &v ) )
-        alloc_field( ret, val_id("width"), alloc_int( v ) );
-    if( gst_structure_get_int( s, "height", &v ) )
-        alloc_field( ret, val_id("height"), alloc_int( v ) );
-    
-    return ret;
-}
-DEFINE_PRIM( analyze_buffer,1 );
-*/
 /* init */
 
 #include "gstgltexturesink.h"

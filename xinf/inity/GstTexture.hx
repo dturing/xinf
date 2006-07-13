@@ -24,7 +24,6 @@ class GstTexture extends Texture {
 				sink.get("texture_width"),
 				sink.get("texture_height"),
 				sink.get("texture") );
-		sink.set_texture_consumed();
 	}
 
     override public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
