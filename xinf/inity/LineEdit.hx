@@ -34,6 +34,8 @@ class LineEdit extends Text {
     public var selBgColor:xinf.ony.Color;
     public var selFgColor:xinf.ony.Color;
 	
+	public var focus(get_focus,set_focus):Bool;
+	private var _focus:Bool;
 	private var xOffset:Float;
 	private var mouseSelAnchor:Int;
 	private var _mouseMove:Dynamic;
@@ -47,8 +49,17 @@ class LineEdit extends Text {
 		selBgColor = new xinf.ony.Color().fromRGBInt( 0x333333 );
 		selFgColor = new xinf.ony.Color().fromRGBInt( 0xeeeeee );
 
-//        xinf.event.Global.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		_focus=false;
     }
+
+	private function get_focus() :Bool {
+		return _focus;
+	}
+	private function set_focus( f:Bool ) :Bool {
+		_focus = f;
+		changed();
+		return f;
+	}
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
 		if( e.code >= 32 ) {
@@ -219,20 +230,22 @@ class LineEdit extends Text {
         GL.PushMatrix();
 			GL.Translatef( -xOffset, .0, .0 );
 
-			GL.Color4f( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
-			var x=selStart-1.5; var y=-.5; 
-			var w=selEnd-.5; var h=Math.ceil((Text._font.height*fontSize)+.5)-.5;
-			GL.Begin( GL.QUADS );
-				GL.Vertex3f( x, y, 0. );
-				GL.Vertex3f( w, y, 0. );
-				GL.Vertex3f( w, h, 0. );
-				GL.Vertex3f( x, h, 0. );
-			GL.End();
-			
+			// draw selection background/caret
+			if( focus ) {
+				GL.Color4f( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
+				var x=selStart-1.5; var y=-.5; 
+				var w=selEnd-.5; var h=Math.ceil((Text._font.height*fontSize)+.5)-.5;
+				GL.Begin( GL.QUADS );
+					GL.Vertex3f( x, y, 0. );
+					GL.Vertex3f( w, y, 0. );
+					GL.Vertex3f( w, h, 0. );
+					GL.Vertex3f( x, h, 0. );
+				GL.End();
+			}
 			
 			// setup styles for selection foreground
 			styles = new Array<StyleChange>();
-			if( sel.from != sel.to ) {
+			if( focus && sel.from != sel.to ) {
 				styles.push( { pos:Math.round(Math.min(sel.to,sel.from)), color:selFgColor } );
 				styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
 			}

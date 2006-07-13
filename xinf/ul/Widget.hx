@@ -18,6 +18,7 @@ package xinf.ul;
 import xinf.ony.Element;
 import xinf.ony.FocusManager;
 import xinf.ony.KeyboardEvent;
+import xinf.ony.MouseEvent;
 import xinf.style.StyleClassElement;
 import xinf.event.Global;
 
@@ -33,15 +34,21 @@ class Widget extends StyleClassElement {
 		
 		addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
 		addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
+		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
     }
+	
+	public function onMouseDown( e:MouseEvent ) :Void {
+		FocusManager.setFocus( this );
+	}
 	
 	override public function focus() :Void {
 		addStyleClass(":focus");
-		trace("FOCUS "+this );
+		super.focus();
 	}
 
 	override public function blur() :Void {
 		removeStyleClass(":focus");
+		super.blur();
 	}
 
 	public function handleKeyboardEvent( e:KeyboardEvent ) :Void {

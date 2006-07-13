@@ -116,6 +116,18 @@ class TextEntry extends Pane {
 	}
 	#end
 	
+	#if neko
+	override public function focus() :Void {
+		_t.focus = true;
+		super.focus();
+	}
+
+	override public function blur() :Void {
+		_t.focus = false;
+		super.blur();
+	}
+	#end
+	
     private function setText( t:String ) :String {
         #if neko
             _t.text = t;

@@ -33,11 +33,13 @@ class StyledElement extends Pane {
     private var child:Element;
 	private var style:Style;
     
+	public var scaleChild:Bool;
 	private var skin:Skin;
 	
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
 		autoSize=true;
+		scaleChild=true;
 		addEventListener( SimpleEvent.STYLE_CHANGED, reallyApplyStyle );
     }
     
@@ -89,10 +91,13 @@ class StyledElement extends Pane {
 		}
 		
 		if( child != null ) {
+			if( !autoSize && scaleChild ) {
+				child.bounds.setSize( w-(pad.l+pad.r), h-(pad.t+pad.b) );
+			}
+
 			var l = Math.floor( style.textAlign * ((w-(pad.r+pad.l))-child.bounds.width) );
 			var t = Math.floor( style.verticalAlign * ((h-(pad.t+pad.b))-child.bounds.height) );
 			child.bounds.setPosition( l+pad.l, t+pad.t );
-//				child.bounds.setSize( w-(pad.l+pad.r), h-(pad.t+pad.b) );
 		}
     }
     

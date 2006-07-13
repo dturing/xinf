@@ -44,4 +44,15 @@ class Input extends Widget {
         textE.text = t;
         return(t);
     }
-}
+
+	#if neko
+	override public function focus() :Void {
+		if( child!=null ) child.focus();
+		super.focus();
+	}
+
+	override public function blur() :Void {
+		if( child!=null ) child.blur();
+		super.blur();
+	}
+	#end}

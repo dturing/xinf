@@ -85,6 +85,7 @@ class ImageButton extends Button<xinf.ony.Image> {
 		super( name, parent );
 		var c = new xinf.ony.Image( name+"_img", this );
 		c.autoSize=true;
+		scaleChild=false;
 		if( url!=null ) c.load(url);
 		contained = c;
 	}

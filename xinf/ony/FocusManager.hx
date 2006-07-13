@@ -61,6 +61,17 @@ class FocusManager {
 		if( currentFocus >= 0 ) widgets[currentFocus].focus();
 	}
 	
+	public static function setFocus( widget:Element ) :Void {
+		for( i in 0...widgets.length ) {
+			if( widgets[i] == widget ) {
+				if( currentFocus >= 0 ) widgets[currentFocus].blur();
+				currentFocus=i;
+				widget.focus();
+				return;
+			}
+		}
+	}
+	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
 		if( widgets==null ) return;
 		if( e.type == KeyboardEvent.KEY_DOWN && e.key == "tab" ) {
