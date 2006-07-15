@@ -45,14 +45,14 @@ class Skin {
 		if( b==null ) b=t;
 		border = { l:l, t:t, r:r, b:b };
 
-		if( border.l!=0 ) images.l.load( name+"l.png" );
-		if( border.t!=0 ) images.t.load( name+"t.png" );
-		if( border.r!=0 ) images.r.load( name+"r.png" );
-		if( border.b!=0 ) images.b.load( name+"b.png" );
-		if( border.t!=0 && border.l!=0 ) images.tl.load( name+"tl.png" );
-		if( border.t!=0 && border.r!=0 ) images.tr.load( name+"tr.png" );
-		if( border.b!=0 && border.l!=0 ) images.bl.load( name+"bl.png" );
-		if( border.b!=0 && border.r!=0 ) images.br.load( name+"br.png" );
+		if( border.l!=0 ) { images.l.load( name+"l.png" ); images.l.visible=true; } else images.l.visible=false;
+		if( border.t!=0 ) { images.t.load( name+"t.png" ); images.t.visible=true; } else images.t.visible=false;
+		if( border.r!=0 ) { images.r.load( name+"r.png" ); images.r.visible=true; } else images.r.visible=false;
+		if( border.b!=0 ) { images.b.load( name+"b.png" ); images.b.visible=true; } else images.b.visible=false;
+		if( border.t!=0 && border.l!=0 ) { images.tl.load( name+"tl.png" ); images.tl.visible=true; } else images.tl.visible=false;
+		if( border.t!=0 && border.r!=0 ) { images.tr.load( name+"tr.png" ); images.tr.visible=true; } else images.tr.visible=false;
+		if( border.b!=0 && border.l!=0 ) { images.bl.load( name+"bl.png" ); images.bl.visible=true; } else images.bl.visible=false;
+		if( border.b!=0 && border.r!=0 ) { images.br.load( name+"br.png" ); images.br.visible=true; } else images.br.visible=false;
 	}
 	
 	public function reset() :Void {
