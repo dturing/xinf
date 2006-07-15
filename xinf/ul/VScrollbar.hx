@@ -20,6 +20,7 @@ import xinf.ony.Element;
 import xinf.geom.Point;
 import xinf.event.Event;
 import xinf.ony.Color;
+import xinf.ul.Button;
 
 import xinf.ony.MouseEvent;
 import xinf.ony.ScrollEvent;
@@ -29,11 +30,11 @@ import xinf.ony.GeometryEvent;
     Improvised Vertical Scrollbar element.
 **/
 
-class VScrollbar extends Pane {
-    private static var thumbSize:Float = 12;
+class VScrollbar extends xinf.style.StyleClassElement {
+    private static var thumbWidth:Float = 11;
 
     private var thumb:Pane;
-    private var bg:Pane;
+	private var thumbHeight:Float;
     private var offset:Float;
     private var _move:Dynamic;
     private var _releaseThumb:Dynamic;
@@ -41,18 +42,18 @@ class VScrollbar extends Pane {
     public function new( name:String, parent:Element ) :Void {
         super( name, parent );
         
-        bounds.setPosition( parent.bounds.width-thumbSize, 0 );
-        bounds.setSize( thumbSize, parent.bounds.height );
+		thumbHeight = 16;
+		
+        bounds.setPosition( (parent.bounds.width-thumbWidth), 0 );
+        bounds.setSize( thumbWidth, parent.bounds.height );
         
-        bg = new xinf.ony.Pane( name+"_background", this );
-        bg.bounds.setSize( thumbSize, parent.bounds.height );
-        bg.setBackgroundColor( new Color().fromRGBInt( 0xdddddd ) );
-        bg.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
+        addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
         
-        thumb = new xinf.ony.Pane( name+"_thumb", this );
-        thumb.bounds.setSize( thumbSize, thumbSize );
+        thumb = new xinf.ul.ImageButton( name+"_thumb", this, "assets/vscrollbar/thumb/center.png" );
+        thumb.bounds.setSize( thumbWidth, thumbHeight );
         thumb.setBackgroundColor( new Color().fromRGBInt( 0x999999 ) );
         thumb.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
+		thumb.autoSize = false;
 
         parent.bounds.addEventListener( GeometryEvent.SIZE_CHANGED, parentSizeChanged );
         
@@ -61,13 +62,13 @@ class VScrollbar extends Pane {
     }
 
     public function parentSizeChanged( e:GeometryEvent ) {
-//        bounds.setPosition( parent.bounds.width-thumbSize, 0 );
-        bounds.setSize( thumbSize, parent.bounds.height );
-        bg.bounds.setSize( thumbSize, parent.bounds.height );
+        bounds.setSize( thumbWidth, parent.bounds.height-2 );
     }
 
     public function clickBar( e:MouseEvent ) {
-        var o = e.y - bounds.y;
+		if( e.target != this ) return;
+    trace("clickBar");
+	    var o = e.y - bounds.y;
         var delta:Int;
         if( o > thumb.bounds.y+thumb.bounds.height ) delta = 1;
         else if( o < thumb.bounds.y ) delta = -1;
@@ -88,13 +89,13 @@ class VScrollbar extends Pane {
         if( y < 0 ) {
             offset -= y;
             y = 0;
-        } else if( y > bounds.height-thumbSize ) {
-            offset -= y-(bounds.height-thumbSize);
-            y = bounds.height-thumbSize;
+        } else if( y > bounds.height-thumbHeight ) {
+            offset -= y-(bounds.height-thumbHeight);
+            y = bounds.height-thumbHeight;
         }
-        thumb.bounds.setPosition( 0, y );
+        thumb.bounds.setPosition( 0, Math.floor(y) );
         
-        var value:Float = y/(bounds.height-thumbSize);
+        var value:Float = y/(bounds.height-thumbHeight);
         postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, this, value ) );
     }
     public function releaseThumb( e:MouseEvent ) {
@@ -104,6 +105,6 @@ class VScrollbar extends Pane {
     
     public function setScrollPosition( position:Float ) :Void {
         position = Math.max( 0, Math.min( 1, position ) );
-        thumb.bounds.setPosition( 0, position * (bounds.height-thumbSize) );
+        thumb.bounds.setPosition( 0, Math.floor(position * (bounds.height-thumbHeight)) );
     }
 }

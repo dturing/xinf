@@ -36,7 +36,7 @@ class SimpleListModel extends xinf.event.SimpleEventDispatcher, implements ListM
     public function addItem( text:String ) {
         items.push( text );
 		// FIXME: provide a way to add a lot of items with triggering only one change event.
-		postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
+		postEvent( new SimpleEvent( SimpleEvent.CHANGED, this ) );
     }
     
     public function getLength() :Int {

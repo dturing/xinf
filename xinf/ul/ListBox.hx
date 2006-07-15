@@ -23,6 +23,10 @@ import xinf.ul.VScrollbar;
 import xinf.ul.Label;
 import xinf.ul.ListModel;
 
+import xinf.ony.MouseEvent;
+import xinf.ony.ScrollEvent;
+import xinf.ony.GeometryEvent;
+
 /**
     Improvised ListBox element.
     
@@ -30,7 +34,7 @@ import xinf.ul.ListModel;
     to reassign only the ones that need to be, and move the rest.
 **/
 
-class ListBox extends Pane {
+class ListBox extends xinf.style.StyleClassElement {
     private var scrollbar:VScrollbar;
     private var children:Array<Label>;
     private var scrollPane:Pane;
@@ -43,50 +47,55 @@ class ListBox extends Pane {
     public function new( name:String, parent:Element, _model:ListModel ) :Void {
         super( name, parent );
         
+		autoSize = false;
+		
         offset = 0;
         children = new Array<Label>();
-        bounds.addEventListener( Event.SIZE_CHANGED, reLayout ); 
+        bounds.addEventListener( GeometryEvent.SIZE_CHANGED, reLayout ); 
         setBackgroundColor( new Color().fromRGBInt( 0xffffff ) );
         
-        scrollbar = new xinf.ul.VScrollbar( name+"_scroll", this );
-        scrollbar.addEventListener( Event.SCROLLED, scroll );
-
         scrollPane = new Pane( name+"_pane", this );
         scrollPane.crop = true;
-        
+//		scrollPane.bounds.setPosition( 2, 2 );
+
+        scrollbar = new xinf.ul.VScrollbar( name+"_scroll", this );
+        scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
+
         model = _model;
         model.addChangedListener( reDo );
                 
-        addEventListener( Event.SCROLL_STEP, scrollStep );
-        addEventListener( Event.SCROLL_LEAP, scrollLeap );
+        addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
+        addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
 
-        scrollPane.addEventListener( Event.MOUSE_DOWN, entryClicked );
+        scrollPane.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
+
+		setChild( scrollPane );
                 
         reLayout( null );
     }
 
-    private function reLayout( e:Event ) :Void {
+    private function reLayout( e:GeometryEvent ) :Void {
         assureChildren( Math.ceil((bounds.height / labelHeight) + 1) );
         
         // set children sizes
         var w:Float = bounds.width;
         for( child in children ) {
-            child.bounds.setSize( w, labelHeight );
+            child.bounds.setSize( w, labelHeight-2 );
         }
         
         // hide/show the scrollbar
         if( (model.getLength() * labelHeight) > bounds.height ) {
-            scrollPane.bounds.setSize( bounds.width-scrollbar.bounds.width, bounds.height );
-            scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width, 0 );
+       //     scrollPane.bounds.setSize( bounds.width-scrollbar.bounds.width, bounds.height );
+            scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
         } else {
-            scrollPane.bounds.setSize( bounds.width, bounds.height );
+       //     scrollPane.bounds.setSize( bounds.width, bounds.height );
             scrollbar.bounds.setPosition( bounds.width, 100 );
         }
 
         reDo(e);
     }
     
-    private function reDo( e:Event ) :Void {
+    private function reDo<T>( e:Event<T> ) :Void {
         var index = Math.floor(offset/labelHeight);
         var max = model.getLength();
         var y = (index*labelHeight)-offset;
@@ -116,36 +125,37 @@ class ListBox extends Pane {
         }
     }
     
-    private function scroll( e:Event ) :Void {
-        offset = ((model.getLength() * labelHeight) - bounds.height) * e.data.value;
+    private function scroll( e:ScrollEvent ) :Void {
+        offset = ((model.getLength() * labelHeight) - bounds.height) * e.value;
         reDo(null);
     }
 
-    private function scrollStep( e:Event ) :Void {
-        var factor = e.data.delta;
+    private function scrollStep( e:ScrollEvent ) :Void {
+        var factor = e.value;
         scrollBy( 3 * factor * labelHeight );
     }
 
-    private function scrollLeap( e:Event ) :Void {
-        var factor = e.data.delta;
+    private function scrollLeap( e:ScrollEvent ) :Void {
+        var factor = e.value;
         scrollBy( bounds.height * factor );
     }
     
     private function scrollBy( pixsels:Float ) :Void {
         offset += pixsels;
         if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * labelHeight) - bounds.height) )
-            offset = ((model.getLength() * labelHeight) - bounds.height);
+        if( offset > ((model.getLength() * labelHeight) - scrollPane.bounds.height) )
+            offset = ((model.getLength() * labelHeight) - scrollPane.bounds.height);
             
         scrollbar.setScrollPosition( offset / ((model.getLength() * labelHeight) - bounds.height) );
             
         reDo(null);
     }
 
-    private function entryClicked( e:Event ) :Void {
-        var y = globalToLocal( new xinf.geom.Point(e.data.x, e.data.y) ).y;
+    private function entryClicked( e:MouseEvent ) :Void {
+        var y = globalToLocal( new xinf.geom.Point(e.x, e.y) ).y;
         var i:Int = Math.floor((y+offset)/labelHeight);
-        postEvent( Event.ITEM_PICKED, { index:i } );
+		trace("Item Picked: "+i+", no event (yet) FIXME");
+   // FIXME     postEvent( Event.ITEM_PICKED, { index:i } );
     }
     
 }
