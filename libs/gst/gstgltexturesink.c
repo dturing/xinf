@@ -83,16 +83,18 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 	
 	  glPopAttrib();
 
+    GLenum err = glGetError();
+	if( err > 0 ) {
+		g_warning("OpenGL error: %i %s", err, gluErrorString(err));
+	}
+
 	g_cond_signal(gl->texture_ready);
-    g_cond_wait(gl->texture_consumed, gl->mutex);
+	GTimeVal time;
+	g_get_current_time( &time );
+	g_time_val_add( &time, 1000000 );
+    g_cond_timed_wait(gl->texture_consumed, gl->mutex, &time );
   	g_mutex_unlock( gl->mutex );
   
-
-    GLenum err = glGetError();
-  
-  if( err > 0 ) {
-	g_warning("OpenGL error: %i %s", err, gluErrorString(err));
-  }
   
   return GST_FLOW_OK;
 }
@@ -113,6 +115,7 @@ gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 	g_error("Should delete old texture");
   }
 	
+  printf("SETCAPS\n");
   g_mutex_lock(gl->mutex);
 	  GLuint tex;
 	  tex=-1;
@@ -130,6 +133,7 @@ gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 		glBindTexture( GL_TEXTURE_2D, gl->texture_id );
 	  glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, gl->texture_width, gl->texture_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
   g_mutex_unlock(gl->mutex);
+  printf("/SETCAPS\n");
 	
   return( ret );
 }

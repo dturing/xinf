@@ -308,6 +308,76 @@ value find_child( value obj, value n ) {
 }
 DEFINE_PRIM(find_child,2);
 
+value query_position( value obj ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+	
+	guint64	v;
+	GstFormat fmt = GST_FORMAT_TIME;
+	
+	if( gst_element_query_position( GST_ELEMENT(o), &fmt, &v ) ) {
+		return alloc_float( ((double)v)/GST_SECOND );
+	}
+    return val_null;
+}
+DEFINE_PRIM(query_position,1);
+
+value query_duration( value obj ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+	
+	guint64	v;
+	GstFormat fmt = GST_FORMAT_TIME;
+	
+	if( gst_element_query_duration( GST_ELEMENT(o), &fmt, &v ) ) {
+		return alloc_float( ((double)v)/GST_SECOND );
+	}
+    return val_null;
+}
+DEFINE_PRIM(query_duration,1);
+
+value seek( value obj, value t ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+	
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+	
+	gint64 time=-1;
+    if( val_is_float(t) ) {
+		time= val_number(t) * GST_SECOND;
+    }
+
+	printf("SEEK TO %lli\n", time );
+	
+	if( gst_element_seek( GST_ELEMENT(o), 1.0, GST_FORMAT_TIME,
+			GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT, 
+			GST_SEEK_TYPE_SET, time, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE ) ) {
+	printf("DONE SEEKING\n");
+		return val_true;
+	}
+	
+    printf("SEEK FAILED\n");
+	return val_false;
+}
+DEFINE_PRIM(seek,2);
+
+/* --------------------------------------------------
+    GstGLTextureSink
+   -------------------------------------------------- */
+
 GMutex *get_glmutex( value obj ) {
     GObject *o = val_gobject( obj );
     if( !o ) return NULL;
@@ -328,6 +398,7 @@ GCond *get_glcond( value obj, const char *name ) {
     g_object_get_property( o, name, &gv );
 	return( (GCond*)g_value_get_pointer(&gv) );
 }
+/*
 value lock_glmutex( value obj ) {
 	GMutex *mutex = get_glmutex(obj);
 	if( !mutex ) throw("Couldn't aquire GL mutex");
@@ -343,7 +414,6 @@ value unlock_glmutex( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(unlock_glmutex,1);
-/*
 
 value wait_texture_available( value obj ) {
 	GCond *cond = get_glcond( obj, "texture_ready" );
@@ -355,6 +425,7 @@ value wait_texture_available( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(wait_texture_available,1);
+*/
 
 value set_texture_consumed( value obj ) {
 	GCond *cond = get_glcond( obj, "texture_consumed" );
@@ -366,15 +437,16 @@ value set_texture_consumed( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(set_texture_consumed,1);
-*/
+
 value produce_texture( value obj ) {
 	GCond *consumed = get_glcond( obj, "texture_consumed" );
 	GCond *ready = get_glcond( obj, "texture_ready" );
 	GMutex *mutex = get_glmutex(obj);
 	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
+		
 	g_mutex_lock(mutex);
 	g_cond_signal( consumed );
-	g_cond_wait( ready,mutex );
+	g_cond_wait( ready, mutex );
 	g_mutex_unlock(mutex);
 	return val_true;
 }
