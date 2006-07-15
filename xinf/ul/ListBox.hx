@@ -27,6 +27,18 @@ import xinf.ony.MouseEvent;
 import xinf.ony.ScrollEvent;
 import xinf.ony.GeometryEvent;
 
+class PickEvent extends Event<PickEvent> {
+	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent>("itemPicked");
+
+	public var index:Int;
+	
+	public function new( _type:xinf.event.EventKind<PickEvent>, target:xinf.event.EventDispatcher, index:Int ) {
+		super(_type,target);
+		this.index = index;
+	}
+}
+
+
 /**
     Improvised ListBox element.
     
@@ -42,7 +54,8 @@ class ListBox extends xinf.style.StyleClassElement {
     
     private var offset:Float;
     
-    private static var labelHeight:Int = 20;
+    private static var rowH:Int = 20;
+    private static var rowPad:Int = 1;
     
     public function new( name:String, parent:Element, _model:ListModel ) :Void {
         super( name, parent );
@@ -75,16 +88,16 @@ class ListBox extends xinf.style.StyleClassElement {
     }
 
     private function reLayout( e:GeometryEvent ) :Void {
-        assureChildren( Math.ceil((bounds.height / labelHeight) + 1) );
+        assureChildren( Math.ceil((bounds.height / rowH) + 1) );
         
         // set children sizes
         var w:Float = bounds.width;
         for( child in children ) {
-            child.bounds.setSize( w, labelHeight-2 );
+            child.bounds.setSize( w, rowH-(2*rowPad) );
         }
         
         // hide/show the scrollbar
-        if( (model.getLength() * labelHeight) > bounds.height ) {
+        if( (model.getLength() * rowH) > bounds.height ) {
        //     scrollPane.bounds.setSize( bounds.width-scrollbar.bounds.width, bounds.height );
             scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
         } else {
@@ -96,9 +109,9 @@ class ListBox extends xinf.style.StyleClassElement {
     }
     
     private function reDo<T>( e:Event<T> ) :Void {
-        var index = Math.floor(offset/labelHeight);
+        var index = Math.floor(offset/rowH);
         var max = model.getLength();
-        var y = (index*labelHeight)-offset;
+        var y = (index*rowH)-offset;
         
         for( child in children ) {
             if( index >= max ) {
@@ -106,8 +119,8 @@ class ListBox extends xinf.style.StyleClassElement {
             } else {
                 child.text = model.getItemAt(index);
             }
-            child.bounds.setPosition( 0, y );
-            y+=labelHeight;
+            child.bounds.setPosition( 0, y+rowPad );
+            y+=rowH;
             index++;
         }
     }
@@ -126,13 +139,13 @@ class ListBox extends xinf.style.StyleClassElement {
     }
     
     private function scroll( e:ScrollEvent ) :Void {
-        offset = ((model.getLength() * labelHeight) - bounds.height) * e.value;
+        offset = ((model.getLength() * rowH) - scrollPane.bounds.height) * e.value;
         reDo(null);
     }
 
     private function scrollStep( e:ScrollEvent ) :Void {
         var factor = e.value;
-        scrollBy( 3 * factor * labelHeight );
+        scrollBy( 3 * factor * rowH );
     }
 
     private function scrollLeap( e:ScrollEvent ) :Void {
@@ -143,19 +156,17 @@ class ListBox extends xinf.style.StyleClassElement {
     private function scrollBy( pixsels:Float ) :Void {
         offset += pixsels;
         if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * labelHeight) - scrollPane.bounds.height) )
-            offset = ((model.getLength() * labelHeight) - scrollPane.bounds.height);
+        if( offset > ((model.getLength() * rowH) - scrollPane.bounds.height) )
+            offset = ((model.getLength() * rowH) - scrollPane.bounds.height);
             
-        scrollbar.setScrollPosition( offset / ((model.getLength() * labelHeight) - bounds.height) );
+        scrollbar.setScrollPosition( offset / ((model.getLength() * rowH) - bounds.height) );
             
         reDo(null);
     }
 
     private function entryClicked( e:MouseEvent ) :Void {
         var y = globalToLocal( new xinf.geom.Point(e.x, e.y) ).y;
-        var i:Int = Math.floor((y+offset)/labelHeight);
-		trace("Item Picked: "+i+", no event (yet) FIXME");
-   // FIXME     postEvent( Event.ITEM_PICKED, { index:i } );
+        var i:Int = Math.floor((y+offset)/rowH);
+		postEvent( new PickEvent( PickEvent.ITEM_PICKED, this, i ) );
     }
-    
 }

@@ -206,7 +206,7 @@ class Element extends SimpleEventDispatcher {
             return( _p._visible=v );
         #else js
             if( v ) {
-                _p.style.visibility="visible";
+                _p.style.visibility=null;
             } else {
                 _p.style.visibility="hidden";
             }

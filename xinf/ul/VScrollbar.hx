@@ -67,7 +67,7 @@ class VScrollbar extends xinf.style.StyleClassElement {
 
     public function clickBar( e:MouseEvent ) {
 		if( e.target != this ) return;
-    trace("clickBar");
+		
 	    var o = e.y - bounds.y;
         var delta:Int;
         if( o > thumb.bounds.y+thumb.bounds.height ) delta = 1;
@@ -96,7 +96,7 @@ class VScrollbar extends xinf.style.StyleClassElement {
         thumb.bounds.setPosition( 0, Math.floor(y) );
         
         var value:Float = y/(bounds.height-thumbHeight);
-        postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, this, value ) );
+		postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, this, value ) );
     }
     public function releaseThumb( e:MouseEvent ) {
         xinf.event.Global.removeEventListener( MouseEvent.MOUSE_MOVE, _move );
