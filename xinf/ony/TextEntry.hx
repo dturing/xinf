@@ -83,19 +83,23 @@ class TextEntry extends Pane {
         #else flash
             if( parent == null ) throw( "Flash runtime needs a parent on creation" );
             var e = parent._p.createEmptyMovieClip(name,parent._p.getNextHighestDepth());
-            
-			e.createTextField("_"+name, e.getNextHighestDepth(), 0, 0, 0, 0 );
-            _t = Reflect.field( e, "_"+name );
-			trace( "create textfield for "+name+": "+_t );
-            
+			
+			e.createTextField( name+"_t", e.getNextHighestDepth(), -1, -1, 50, 50 );
+            _t = Reflect.field( e, name+"_t" );
+			
             _t.autoSize = false;
             _t.selectable = true;
 			_t.type = "input";
-			_t.border=true;
+			_t.border=false;
 			
-			_t._x=-1;
-			_t._y=-1;
-			
+			var tListener = { 
+				onChanged: function( textfield:flash.TextField ) {
+					trace("TextField "+textfield+" changed: "+textfield.text );
+					trace("pos: "+textfield._x+"/"+textfield._y );
+				}
+			};
+			_t.addListener(tListener);
+
             var format:flash.TextFormat = new flash.TextFormat();
             format.size = 11; //*1.05;
             format.font = "Bitstream Vera Sans";
@@ -160,8 +164,8 @@ class TextEntry extends Pane {
             _t.textColor = textColor.toRGBInt();
         #end
     }
-    
-    public function setFontSize( s:Float ) :Void {
+
+	public function setFontSize( s:Float ) :Void {
         s = Math.floor(s);
         #if neko
             _t.fontSize = s;

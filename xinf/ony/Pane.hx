@@ -84,14 +84,14 @@ class Pane extends Element {
     #if flash
     private function makeMask() :flash.MovieClip {
         var clip:flash.MovieClip = _crop_mc;
-        if( clip == null ) clip = parent._p.createEmptyMovieClip( "mask", parent._p.getNextHighestDepth() );
+        if( clip == null ) clip = parent._p.createEmptyMovieClip( name+"_mask", parent._p.getNextHighestDepth() );
         
         _p.setMask( clip );
         
         var w:Int = Math.round(bounds.width);
         var h:Int = Math.round(bounds.height);
         clip.clear();
-        clip.beginFill( 0xaa0000 );
+        clip.beginFill( 0xaa00aa );
         clip.moveTo( 0, 0 );
         clip.lineTo( w, 0 );
         clip.lineTo( w, h );
