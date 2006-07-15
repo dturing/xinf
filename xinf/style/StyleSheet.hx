@@ -27,7 +27,7 @@ class ClassNameSelector extends StyleSelector {
 	}
 }
 
-class ParentSelector extends StyleSelector {
+class AncestorSelector extends StyleSelector {
 	private var selector:StyleSelector;
 
 	public function new( s:StyleSelector ) :Void {
@@ -43,6 +43,18 @@ class ParentSelector extends StyleSelector {
 			p = p.parent;
 		}
 		return false;
+	}
+}
+
+class ParentSelector extends StyleSelector {
+	private var selector:StyleSelector;
+
+	public function new( s:StyleSelector ) :Void {
+		selector=s;
+	}
+
+	override public function matches( e:Element ) :Bool {
+		return( e.parent != null && selector.matches(e.parent) );
 	}
 }
 
