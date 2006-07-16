@@ -50,7 +50,9 @@ class FocusManager {
 		if( currentFocus >= 0 ) widgets[currentFocus].blur();
 		currentFocus++;
 		if( currentFocus >= widgets.length ) currentFocus=0;
-		if( currentFocus >= 0 ) widgets[currentFocus].focus();
+		if( currentFocus >= 0 ) {
+			if( !widgets[currentFocus].focus() ) next();
+		}
 	}
 
 	public static function previous() :Void {
@@ -58,7 +60,9 @@ class FocusManager {
 		if( currentFocus >= 0 ) widgets[currentFocus].blur();
 		currentFocus--;
 		if( currentFocus < 0 ) currentFocus=widgets.length-1;
-		if( currentFocus >= 0 ) widgets[currentFocus].focus();
+		if( currentFocus >= 0 ) {
+			if( !widgets[currentFocus].focus() ) previous();
+		}
 	}
 	
 	public static function setFocus( widget:Element ) :Void {

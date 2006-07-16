@@ -16,8 +16,8 @@
 package xinf.ul;
 
 import xinf.ony.Element;
-import xinf.event.Event;
 import xinf.ony.MouseEvent;
+import xinf.ony.KeyboardEvent;
 
 import xinf.ul.Button;
 
@@ -34,8 +34,10 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	public var precision:Float;
 	public var min:Float;
 	public var max:Float;
-	public var mouseOffset:Int;
-	public var valueOffset:Float;
+	public var increment:Float;
+	
+	private var mouseOffset:Int;
+	private var valueOffset:Float;
 	
 	private var _value:Float;
 	public var value(get_value,set_value):Float;
@@ -58,7 +60,7 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	}	
     public function new( name:String, parent:Element ) :Void {
 		super( name, parent );
-		precision=1000; min=0; max=1;
+		precision=1000; min=0; max=1; increment=.1;
 	
 		setLeft( new xinf.ul.Label(name+"_lbl", this ) );
 		// FIXME: image should be part of the style.
@@ -75,6 +77,7 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 		value = .0;
 
 		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
 	
 	private function onMouseDown( e:MouseEvent ) {
@@ -113,5 +116,14 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	private function onMouseMove( e:MouseEvent ) {
 		set_normalized( (valueOffset + ((e.y-mouseOffset)/-100)) );
 		slideThumb.bounds.setPosition( 2+slideBar.bounds.x, (101-(get_normalized()*100))+slideBar.bounds.y );
+	}
+	
+	private function onKeyDown( e:KeyboardEvent ) {
+		switch( e.key ) {
+			case "up":
+				value += increment;
+			case "down":
+				value -= increment;
+		}
 	}
 }

@@ -218,7 +218,8 @@ class Element extends SimpleEventDispatcher {
         #end
     }
     
-	public function focus() :Void {
+	public function focus() :Bool {
+		return false;
 	}
 
 	public function blur() :Void {

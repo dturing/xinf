@@ -15,8 +15,8 @@
 
 package xinf.ul;
 
-import xinf.ony.Element;
 import xinf.style.StyleClassElement;
+
 import xinf.ony.GeometryEvent;
 import xinf.ony.MouseEvent;
 
@@ -24,11 +24,11 @@ import xinf.ony.MouseEvent;
     Button element.
 **/
 
-class Combo<Left:StyleClassElement,Right:StyleClassElement> extends StyleClassElement {
+class Combo<Left:StyleClassElement,Right:StyleClassElement> extends Widget {
     public var left:Left;
 	public var right:Right;
 	
-    public function new( name:String, parent:Element) :Void {
+    public function new( name:String, parent:xinf.ony.Element) :Void {
 		super( name, parent );
     }
 	

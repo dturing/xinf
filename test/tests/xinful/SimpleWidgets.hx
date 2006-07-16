@@ -116,7 +116,7 @@ class SimpleWidgets extends TestCase {
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// ImageButton
-/*
+
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton" ], {
 				padding: { l:3, t:3, r:3, b:3 },
@@ -144,10 +144,10 @@ class SimpleWidgets extends TestCase {
 				skin: "button/press/",
 				minWidth:null, textAlign:null, verticalAlign: null
 			} );
-			
+	/*		
         var t = new xinf.ul.ImageButton( "testImageButton", this, "assets/test.png" );
         t.bounds.setPosition( 100, 40 );
-*/        
+     */   
 	/////////////////////////////////////////////////////////////////////////////////
 	// Slider
 		StyleSheet.defaultSheet.add(
@@ -254,7 +254,7 @@ class SimpleWidgets extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "ListBox", ":focus" ], {
 				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-				padding: { l:3, t:3, r:2, b:3 },
+				padding: null,
 				background: new xinf.ony.Color().fromRGBInt( 0xf2f2f2 ),
 				border: { l:2, t:2, r:2, b:2 },
 				skin: "listbox/focus/",
@@ -274,22 +274,29 @@ class SimpleWidgets extends TestCase {
 			[ "Label", ":hover" ],
 			new AncestorSelector( new ClassNameSelector( ["ListBox"] ) ), 
 			{
-				padding: { l:3, t:2, r:3, b:2 },
-				border: { l:1, t:1, r:1, b:1 },
-				skin: null,
+				background: new xinf.ony.Color().fromRGBInt( 0xdddddd ),
 				color: new xinf.ony.Color().fromRGBInt( 0 ),
+				padding: null, border: null, skin: null,
+				minWidth: null,	textAlign: null, verticalAlign: null
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "Label", ":cursor" ],
+			new AncestorSelector( new ClassNameSelector( ["ListBox"] ) ), 
+			{
 				background: new xinf.ony.Color().fromRGBInt( 0xcccccc ),
-				minWidth: null,	textAlign: 0, verticalAlign: .5
+				color: new xinf.ony.Color().fromRGBInt( 0 ),
+				padding: null, border: null, skin: null,
+				minWidth: null,	textAlign: null, verticalAlign: null
 			} );
 
 		var model = new SimpleListModel();
-        for( i in 0...20 ) {
+        for( i in 0...25 ) {
             model.addItem("Item "+i);
         }
 
         var t = new xinf.ul.ListBox( "testListbox", this, model );
         t.bounds.setPosition( 150, 10 );
-        t.bounds.setSize( 100, 80 );
+        t.bounds.setSize( 100, 84 );
 
 	/////////////////////////////////////////////////////////////////////////////////
 	// Dropdown
@@ -317,7 +324,7 @@ class SimpleWidgets extends TestCase {
 			} );
 		StyleSheet.defaultSheet.add(
 			[ "Label" ],
-			new ParentSelector( new ClassNameSelector( ["Dropdown",":open"] ) ), 
+			new ParentSelector( new ClassNameSelector( ["Dropdown",":focus"] ) ), 
 			{
 				border: null, padding: null,
 				skin: "slider/box/focus/",
@@ -339,6 +346,15 @@ class SimpleWidgets extends TestCase {
 		StyleSheet.defaultSheet.add(
 			[ "ImageButton" ],
 			new ParentSelector( new ClassNameSelector( ["Dropdown",":hover"] ) ), 
+			{
+				skin: "slider/button/hover/",
+				border: null, padding: null, textAlign: null, verticalAlign: null, minWidth: 0,
+				color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
+				background: new xinf.ony.Color().fromRGBInt( 0xcccccc )
+			} );
+		StyleSheet.defaultSheet.add(
+			[ "ImageButton" ],
+			new ParentSelector( new ClassNameSelector( ["Dropdown",":focus"] ) ), 
 			{
 				skin: "slider/button/hover/",
 				border: null, padding: null, textAlign: null, verticalAlign: null, minWidth: 0,

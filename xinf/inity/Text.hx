@@ -47,7 +47,7 @@ class Text extends Box {
     }
     
     private function _setText( t:String ) : String {
-        _text = t;
+        _text = if( t==null ) "" else t;
         changed();
         return t;
     }

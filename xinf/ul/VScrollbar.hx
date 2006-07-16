@@ -59,6 +59,7 @@ class VScrollbar extends xinf.style.StyleClassElement {
         
         _move = move;
         _releaseThumb = releaseThumb;
+		updateStyles();
     }
 
     public function parentSizeChanged( e:GeometryEvent ) {

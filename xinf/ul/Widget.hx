@@ -28,22 +28,32 @@ import xinf.event.Global;
 	Takes care of Keyboard Focus.
 **/
 class Widget extends StyleClassElement {
+	public var focusable:Bool;
+
     public function new( name:String, parent:Element ) :Void {
+		focusable = true;
+		
 		super( name, parent );
 		FocusManager.registerElement(this);
 		
 		addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
 		addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
-		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
     }
 	
-	public function onMouseDown( e:MouseEvent ) :Void {
+	// FIXME: child classes have their own onMouseDown, which is not really override.
+	// is Widget the class that "highlevels" mouseevents towards onClick, onDrag etc?
+	public function onMouseDownWidget( e:MouseEvent ) :Void {
 		FocusManager.setFocus( this );
 	}
 	
-	override public function focus() :Void {
+	override public function focus() :Bool {
+		if( !focusable ) {
+			return false;
+		}
 		addStyleClass(":focus");
 		super.focus();
+		return true;
 	}
 
 	override public function blur() :Void {

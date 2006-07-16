@@ -121,9 +121,10 @@ class TextEntry extends Pane {
 	#end
 	
 	#if neko
-	override public function focus() :Void {
+	override public function focus() :Bool {
 		_t.focus = true;
 		super.focus();
+		return true;
 	}
 
 	override public function blur() :Void {

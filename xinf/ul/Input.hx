@@ -46,9 +46,9 @@ class Input extends Widget {
     }
 
 	#if neko
-	override public function focus() :Void {
+	override public function focus() :Bool {
 		if( child!=null ) child.focus();
-		super.focus();
+		return super.focus();
 	}
 
 	override public function blur() :Void {

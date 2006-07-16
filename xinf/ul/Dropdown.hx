@@ -21,7 +21,9 @@ import xinf.ul.ListModel;
 import xinf.ul.ListBox;
 
 import xinf.ony.MouseEvent;
+import xinf.ony.KeyboardEvent;
 import xinf.ony.GeometryEvent;
+import xinf.ony.ScrollEvent;
 
 /**
     Improvised Dropdown element.
@@ -39,10 +41,12 @@ class Dropdown extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
     private var menu:ListBox;
     
     private var selectedIndex:Int;
+	private var isOpen:Bool;
     
     public function new( name:String, parent:xinf.ony.Element, _model:ListModel ) :Void {
         super( name, parent );
         model = _model;
+		isOpen=false;
         
         label = new Label( name+"_lbl", this );
         label.text = model.getItemAt(selectedIndex=0);
@@ -60,7 +64,10 @@ class Dropdown extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
         menu.bounds.setSize( 100, labelHeight*5 );
 		menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
         menu.visible = false;
+		menu.focusable = false;
         
+		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
     }
 
 	private function sizeChanged( e:GeometryEvent ) :Void {
@@ -71,25 +78,59 @@ class Dropdown extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
     }
 
 	private function itemPicked( e:PickEvent ) :Void {
-        selectedIndex = e.index;
-        label.text = model.getItemAt( selectedIndex );
+		select( e.index );
 		close();
         //postEvent( Event.ITEM_PICKED, selectedIndex );
     }
     private function open() :Void {
+		menu.assureVisible( selectedIndex );
+		menu.select( selectedIndex );
         menu.visible = true;
+		isOpen=true;
 		addStyleClass(":open");
 		button.contained.load("assets/dropdown/open/button.png");
+		// FIXME: scroll to selected.
 	}
     private function close() :Void {
         menu.visible = false;
+		isOpen=false;
 		removeStyleClass(":open");
 		button.contained.load("assets/dropdown/button.png");
 	}
+	private function select( index:Int ) :Void {
+		if( index > model.getLength()-1 ) index = model.getLength()-1;
+		if( index < 0 ) index=0;
+        selectedIndex = index;
+        label.text = model.getItemAt( selectedIndex );
+	}
 	
     private function toggle<T>( e:Event<T> ) :Void {
-        if( hasStyleClass(":open") ) close();
+        if( isOpen ) close();
 		else open();
     }
     
+	private function onKeyDown( e:KeyboardEvent ) {
+		if( isOpen ) {
+			if( e.key == "escape" ) {
+				close();
+				return;
+			}
+			menu.onKeyDown(e);
+			return;
+		}
+		switch( e.key ) {
+			case "up":
+				select( selectedIndex-1 );
+			case "down":
+				select( selectedIndex+1 );
+			case "space":
+				toggle(e);
+		}
+	}
+	
+	private function onScroll( e:ScrollEvent ) {
+		if( !isOpen ) {
+			select( selectedIndex + Math.round(e.value) );
+		}
+	}
 }
