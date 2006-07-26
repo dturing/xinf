@@ -22,7 +22,6 @@ package xinf.event;
 
 class Event<T> {
 	public var type(default,null) : EventKind<T>;
-	public var stopped(default,null) :Bool;
 	public var target :EventDispatcher;
 	
 	public var origin:haxe.PosInfos; // FIXME if debug_events
@@ -30,10 +29,6 @@ class Event<T> {
 	public function new( t, target:EventDispatcher ) {
 		type = t;
 		this.target = target;
-		this.stopped = false;
-	}
-	public function stopPropagation() :Void {
-		this.stopped=true;
 	}
 	
 	public function toString() :String {

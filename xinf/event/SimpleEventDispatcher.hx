@@ -24,7 +24,7 @@ class SimpleEventDispatcher implements EventDispatcher {
 
 	public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :Void {
 		var t = type.toString();
-		var l:List<Dynamic->Void> = listeners.get( t.toString() );
+		var l = listeners.get( t.toString() );
 		if( l==null ) {
 			l = new List<Dynamic->Void>();
 			listeners.set( t, l );
@@ -46,7 +46,6 @@ class SimpleEventDispatcher implements EventDispatcher {
 		if( l != null ) {
 			for( h in l ) {
 				h(e);
-				if( e.stopped ) return;
 			}
 		}
 	}
@@ -55,9 +54,6 @@ class SimpleEventDispatcher implements EventDispatcher {
 		// FIXME if debug_events
 		e.origin = pos;
 		
-/*		if( e.type.toString() == "mouseMove" )
-			trace("EVT "+e );
-*/
 		// for now, FIXME (maybe)
 		if( e.target != null ) e.target.dispatchEvent(e);
 		else dispatchEvent(e);
