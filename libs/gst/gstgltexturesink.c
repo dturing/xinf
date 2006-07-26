@@ -37,7 +37,8 @@ static GstStaticPadTemplate gst_gltexturesink_sink_template_factory =
 enum
 {
   ARG_0,
-  ARG_TEXTURE_ID,
+  ARG_TEXTURE_FIRST_ID,
+  ARG_TEXTURE_N,
   ARG_TEXTURE_WIDTH,
   ARG_TEXTURE_HEIGHT,
   ARG_WIDTH,
@@ -73,14 +74,13 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 
 	  glPushAttrib( GL_TEXTURE_2D );
 		glEnable( GL_TEXTURE_2D );
-		glBindTexture( GL_TEXTURE_2D, gl->texture_id );
+		glBindTexture( GL_TEXTURE_2D, gl->texture_id+gl->texture_c );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 		glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 	    
 	    glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, gl->video_width, gl->video_height, 
 						GL_BGRA, GL_UNSIGNED_BYTE, GST_BUFFER_DATA(buf) );
-	
 	  glPopAttrib();
 
     GLenum err = glGetError();
@@ -95,7 +95,9 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
     g_cond_timed_wait(gl->texture_consumed, gl->mutex, &time );
   	g_mutex_unlock( gl->mutex );
   
-  
+	gl->texture_c++;
+	if( gl->texture_c >= gl->texture_n ) gl->texture_c = 0;
+
   return GST_FLOW_OK;
 }
 
@@ -103,6 +105,7 @@ static gboolean
 gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 {
   gboolean ret;
+  int i;
   GstGLTextureSink *gl;
   gl = GST_GLTEXTURESINK (sink);
 
@@ -117,21 +120,23 @@ gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 	
   printf("SETCAPS\n");
   g_mutex_lock(gl->mutex);
-	  GLuint tex;
-	  tex=-1;
-	  glGenTextures(1,&tex);
-	  gl->texture_id = tex;
+	  GLuint tex[gl->texture_n];
+	  *tex=-1;
+	  glGenTextures(gl->texture_n,tex);
+	  gl->texture_id = *tex;
 	  
-	  if( tex==-1 ) {
+	  if( *tex==-1 ) {
 		g_error("Couldn't initialize texture-- must run within a valid OpenGL context");
 	  }
 	  
 	  gl->texture_width=64; while( gl->texture_width<gl->video_width ) gl->texture_width<<=1;
 	  gl->texture_height=64; while( gl->texture_height<gl->video_height ) gl->texture_height<<=1;
 
-	  g_message("initialize tex #%i, %ix%i for image %ix%i",tex, gl->texture_width, gl->texture_height, gl->video_width, gl->video_height );
-		glBindTexture( GL_TEXTURE_2D, gl->texture_id );
-	  glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, gl->texture_width, gl->texture_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
+	  for( i=gl->texture_id; i<gl->texture_id+gl->texture_n; i++ ) {
+	  g_message("initialize tex #%i, %ix%i for image %ix%i",i, gl->texture_width, gl->texture_height, gl->video_width, gl->video_height );
+		glBindTexture( GL_TEXTURE_2D, i );
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, gl->texture_width, gl->texture_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
+	  }
   g_mutex_unlock(gl->mutex);
   printf("/SETCAPS\n");
 	
@@ -142,6 +147,8 @@ static void
 gst_gltexturesink_init (GstGLTextureSink * gltexturesink)
 {
 	gltexturesink->texture_id=-1;
+	gltexturesink->texture_n=1;
+	gltexturesink->texture_c=0;
 	gltexturesink->mutex = g_mutex_new();
 	gltexturesink->texture_ready = g_cond_new();
 	gltexturesink->texture_consumed = g_cond_new();
@@ -161,6 +168,7 @@ gst_gltexturesink_finalize (GObject * object)
   if( gltexturesink->texture_ready ) g_free( gltexturesink->texture_ready );
   if( gltexturesink->texture_consumed ) g_free( gltexturesink->texture_consumed );
 	  
+  /* FIXME free gl textures */
 	printf("GLTextureSink finalize\n");
 }
 	
@@ -189,17 +197,12 @@ gst_gltexturesink_class_init (GstGLTextureSinkClass * klass)
   gobject_class->set_property = gst_gltexturesink_set_property;
   gobject_class->get_property = gst_gltexturesink_get_property;
 
-/*  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_MUTE,
-      g_param_spec_boolean ("mute", "mute", "mute", FALSE, G_PARAM_READWRITE));
-
-  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_VOLUME,
-      g_param_spec_double ("volume", "volume", "volume",
-          0.0, VOLUME_MAX_DOUBLE, 1.0, G_PARAM_READWRITE));
-*/
-
-  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEXTURE_ID,
-      g_param_spec_int ("texture", "Texture ID", "ID of the OpenGL texture.",
+  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEXTURE_FIRST_ID,
+      g_param_spec_int ("texture", "First Texture ID", "ID of the first OpenGL texture",
           0.0, G_MAXINT, 1.0, G_PARAM_READABLE));
+  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEXTURE_N,
+      g_param_spec_int ("n", "Number of Textures", "number of OpenGL textures tu use",
+          0.0, G_MAXINT, 1.0, G_PARAM_READWRITE));
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEXTURE_WIDTH,
       g_param_spec_int ("texture_width", "Texture Width", "Width (in pixels) of the texture",
           0.0, G_MAXINT, 1.0, G_PARAM_READABLE));
@@ -236,6 +239,9 @@ gst_gltexturesink_set_property (GObject * object, guint prop_id,
   gltexturesink = GST_GLTEXTURESINK (object);
 
   switch( prop_id ) {
+	case ARG_TEXTURE_N:
+		gltexturesink->texture_n = g_value_get_int( value );
+		break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -257,8 +263,11 @@ gst_gltexturesink_get_property (GObject * object, guint prop_id, GValue * value,
     case ARG_HEIGHT:
       g_value_set_int (value, gltexturesink->video_height);
       break;
-    case ARG_TEXTURE_ID:
+    case ARG_TEXTURE_FIRST_ID:
       g_value_set_int (value, gltexturesink->texture_id);
+      break;
+    case ARG_TEXTURE_N:
+      g_value_set_int (value, gltexturesink->texture_n);
       break;
     case ARG_TEXTURE_WIDTH:
       g_value_set_int (value, gltexturesink->texture_width);

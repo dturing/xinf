@@ -24,7 +24,8 @@ typedef struct _GstGLTextureSinkClass GstGLTextureSinkClass;
 struct _GstGLTextureSink {
   GstVideoSink videosink;
 
-  guint texture_id;
+  guint texture_id, texture_n;	/* first id and number of textures - id space must be continuous */
+  guint texture_c; 				/* current offset in texture ids */
   guint video_width, video_height;     /* size of incoming video */
   guint texture_width, texture_height;     /* allocated size of texture */
   GMutex *mutex;
