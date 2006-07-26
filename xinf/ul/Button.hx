@@ -78,6 +78,12 @@ class TextButton extends Button<xinf.ony.Text> {
 		if( initialText!=null ) c.text = initialText;
 		contained = c;
 	}
+	
+	public static function createSimple( parent:Element, text:String, f:xinf.ony.MouseEvent->Void ) :TextButton {
+		var b = new TextButton( text, parent, text );
+		b.addEventListener( Button.CLICK, f );
+		return b;
+	}
 }
 
 class ImageButton extends Button<xinf.ony.Image> {
