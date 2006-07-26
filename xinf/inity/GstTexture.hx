@@ -17,17 +17,28 @@ package xinf.inity;
 
 class GstTexture extends Texture {
 	private var sink:Dynamic;
-	public function new( _sink:Dynamic ) {
+	private var firstTexture:Int;
+	private var cTexture:Int;
+	private var nTextures:Int;
+		
+	public function new( _sink:Dynamic, ?offset:Int ) {
 		sink = _sink;
+		firstTexture = sink.get("texture");
+		nTextures = sink.get("n");
+		cTexture = if( offset != null ) offset else 0;
 		super( 	sink.get("width"),
 				sink.get("height"),
 				sink.get("texture_width"),
 				sink.get("texture_height"),
-				sink.get("texture") );
+				firstTexture );
+	}
+
+	public function step() :Void {
+		cTexture = (cTexture+1)%nTextures;
+		texture = firstTexture+cTexture;
 	}
 
     override public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
-		sink.produce_texture();
 		super.render( w,h,rx,ry,rw,rh );
 	}
 }

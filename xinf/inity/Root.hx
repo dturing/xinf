@@ -29,7 +29,8 @@ class Profiler {
     private var laps:Int;
     
     private function now() :Int {
-        return 0; // FIXME
+//		trace( neko.Sys.time() );
+        return Math.round(neko.Sys.time());
 //        return CPtr.util_msec();
     }
     
@@ -41,7 +42,7 @@ class Profiler {
     
     public function check( name:String ) :Void {
         var _now:Int = now();
-    //    trace( ""+_now+"\t-"+last+"="+(_now-last) );
+       // trace( ""+_now+"\t-"+last+"="+(_now-last) );
         var acc:Int = data.get(name);
         if( acc == null ) acc = 0;
         acc += _now-last;
