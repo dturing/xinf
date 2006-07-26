@@ -120,18 +120,26 @@ class TextEntry extends Pane {
 	}
 	#end
 	
-	#if neko
 	override public function focus() :Bool {
-		_t.focus = true;
+		#if neko
+			_t.focus = true;
+		#else js
+			trace("FOCUS");
+			untyped _t.focus(); // _t is a FormElement. FIXME
+		#end
 		super.focus();
 		return true;
 	}
 
 	override public function blur() :Void {
-		_t.focus = false;
+		#if neko
+			_t.focus = false;
+		#else blur
+			trace("BLUR");
+			untyped _t.blur(); // _t is a FormElement. FIXME
+		#end
 		super.blur();
 	}
-	#end
 	
     private function setText( t:String ) :String {
         #if neko

@@ -17,6 +17,7 @@ package xinf.ony.js;
 
 import xinf.ony.Element;
 import xinf.ony.MouseEvent;
+import xinf.ony.KeyboardEvent;
 import xinf.event.EventKind;
 
 import js.Dom;
@@ -25,21 +26,59 @@ class JSEventMonitor {
     private static var rootX:Int;
     private static var rootY:Int;
     private var latestOver:Element;
+	
+	private static var keys:IntHash<String>;
 
+	private static function __init__() :Void {
+		keys = new IntHash<String>();
+		keys.set(8,"backspace");
+		keys.set(9,"tab");
+		keys.set(27,"escape");
+		keys.set(32,"space");
+		keys.set(33,"page up");
+		keys.set(34,"page down");
+		keys.set(37,"left");
+		keys.set(38,"up");
+		keys.set(39,"right");
+		keys.set(40,"down");
+	}
+	
     public function new() :Void {
         var self = this;
         js.Lib.document.onmousedown = untyped mouseDown;
         js.Lib.document.onmouseup   = untyped mouseUp;
-  //      js.Lib.document.onmouseover = untyped mouseOver;
-  //      js.Lib.document.onmouseout  = untyped mouseOut;
         js.Lib.document.onmousemove = untyped mouseMove;
         
+		untyped js.Lib.document.onkeydown = untyped keyPress;
+		untyped js.Lib.document.onkeypress = untyped function( e:js.Event ) :Bool {
+			trace("hold key "+e.keyCode );
+			return true;
+		};
+		
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {
             untyped js.Lib.window.addEventListener('DOMMouseScroll', this.mouseWheelFF, false);
         }
     }
+	
+	private function keyPress( e:js.Event ) :Bool {
+		var key:String = JSEventMonitor.keys.get(e.keyCode);
+		trace("key down: "+e.keyCode+" - "+key );
+		if( e.keyCode == 0 ) {
+			// normal char - handled by browser
+			return true;
+		} else {
+			if( key == null ) {
+				trace("unhandled key code "+e.keyCode );
+			}
+			xinf.ony.FocusManager.handleKeyboardEvent( new KeyboardEvent( 
+				KeyboardEvent.KEY_DOWN, null, 0, key,
+				untyped e.shiftKey, untyped e.altKey, untyped e.ctrlKey ) );
+			// prevent browser from handling it
+			return false;
+		}
+	}
     
     private function mouseDown( e:js.Event ) :Bool {
         return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
@@ -47,14 +86,6 @@ class JSEventMonitor {
 
     private function mouseUp( e:js.Event ) :Bool {
         return postMouseEvent( e, MouseEvent.MOUSE_UP );
-    }
-
-    private function mouseOver( e:js.Event ) :Bool {
-        return postMouseEvent( e, MouseEvent.MOUSE_OVER );
-    }
-
-    private function mouseOut( e:js.Event ) :Bool {
-        return postMouseEvent( e, MouseEvent.MOUSE_OUT );
     }
 
     private function mouseMove( e:js.Event ) :Bool {
