@@ -7,7 +7,7 @@ class Collector {
     
         // assure test directory exists
         if( !neko.FileSystem.exists( testDir ) ) {
-            neko.FileSystem.createDir( testDir );
+            neko.FileSystem.createDirectory( testDir );
         }
         if( !neko.FileSystem.isDirectory( testDir ) ) {
             throw( "test result directory '"+testDir+"' exists but is not a directory" );

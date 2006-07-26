@@ -308,6 +308,7 @@ value find_child( value obj, value n ) {
 }
 DEFINE_PRIM(find_child,2);
 
+/* queries/seek */
 value query_position( value obj ) {
     GObject *o = val_gobject( obj );
     if( !o ) return val_null;
@@ -349,7 +350,6 @@ DEFINE_PRIM(query_duration,1);
 value seek( value obj, value t ) {
     GObject *o = val_gobject( obj );
     if( !o ) return val_null;
-	
     if( !GST_IS_ELEMENT( o ) ) {
         error("not a GstElement", obj );
         return val_null;
@@ -360,19 +360,44 @@ value seek( value obj, value t ) {
 		time= val_number(t) * GST_SECOND;
     }
 
-	printf("SEEK TO %lli\n", time );
-	
 	if( gst_element_seek( GST_ELEMENT(o), 1.0, GST_FORMAT_TIME,
 			GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT, 
 			GST_SEEK_TYPE_SET, time, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE ) ) {
-	printf("DONE SEEKING\n");
 		return val_true;
 	}
 	
-    printf("SEEK FAILED\n");
 	return val_false;
 }
 DEFINE_PRIM(seek,2);
+
+/* state */
+value pipeline_pause( value obj ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+	
+	gst_element_set_state( GST_ELEMENT(o), GST_STATE_PAUSED );
+	
+	return val_true;
+}
+DEFINE_PRIM(pipeline_pause,1);
+
+value pipeline_play( value obj ) {
+    GObject *o = val_gobject( obj );
+    if( !o ) return val_null;
+    if( !GST_IS_ELEMENT( o ) ) {
+        error("not a GstElement", obj );
+        return val_null;
+    }
+	
+	gst_element_set_state( GST_ELEMENT(o), GST_STATE_PLAYING );
+	
+	return val_true;
+}
+DEFINE_PRIM(pipeline_play,1);
 
 /* --------------------------------------------------
     GstGLTextureSink

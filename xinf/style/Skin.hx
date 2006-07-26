@@ -18,7 +18,7 @@ package xinf.style;
 import xinf.ony.Image;
 import xinf.style.Style;
 
-signature SidesAndCorners<T> {
+typedef SidesAndCorners<T> = {
 	var l:T;
 	var t:T;
 	var r:T;

@@ -88,7 +88,7 @@ class CombinedSelector extends StyleSelector {
 	}
 }
 
-signature StyleRule {
+typedef StyleRule = {
 	var selector:StyleSelector;
 	var style:Style;
 }

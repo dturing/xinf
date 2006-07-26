@@ -33,6 +33,15 @@ class Pipeline extends Object {
 		return _seek( untyped this.__o, to_time );
     }
 
+	private static var _pause = neko.Lib.load("GST","pipeline_pause",1);
+    public function pause() : Bool {
+		return _pause( untyped this.__o );
+    }
+	private static var _play = neko.Lib.load("GST","pipeline_play",1);
+    public function play() : Bool {
+		return _play( untyped this.__o );
+    }
+
 	public static function main() :Void {
 		var launch = "videotestsrc ! xvimagesink";
 		trace("launch pipeline: "+launch );

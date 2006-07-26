@@ -1,13 +1,13 @@
 package xinf.style;
 
-signature Sides<T> {
+typedef Sides<T> = {
 	var l:T;
 	var t:T;
 	var r:T;
 	var b:T;
 }
 
-signature Style {
+typedef Style = {
 	var padding :Sides<Float>;
 	var background :xinf.ony.Color;
 	var border :Sides<Float>;

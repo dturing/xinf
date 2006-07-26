@@ -17,7 +17,7 @@ package xinf.ony;
 
 import Reflect;
 
-signature ApplicationParameter {
+typedef ApplicationParameter = {
 	var name:String;
 	var letter:String;
 	var type:BasicType;

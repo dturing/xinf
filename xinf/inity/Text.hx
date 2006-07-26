@@ -19,7 +19,7 @@ import xinf.inity.Font;
 import xinf.geom.Point;
 import xinf.ony.Color;
 
-signature StyleChange {
+typedef StyleChange = {
 	var pos:Int;
 	var color:Color;
 }
