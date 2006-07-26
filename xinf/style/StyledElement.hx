@@ -31,7 +31,7 @@ import xinf.ony.GeometryEvent;
 
 class StyledElement extends Pane {
     private var child:Element;
-	private var style:Style;
+	public var style:Style;
     
 	public var scaleChild:Bool;
 	private var skin:Skin;
@@ -48,6 +48,7 @@ class StyledElement extends Pane {
 	}
 	
 	private function reallyApplyStyle( e:SimpleEvent ) {
+		// FIXME: optimize-- accumulate changed
 		if( style == null ) return;
 
 		if( style.skin != null ) {

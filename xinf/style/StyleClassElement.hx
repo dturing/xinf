@@ -6,7 +6,7 @@ import xinf.ony.Element;
 import xinf.ony.MouseEvent;
 
 /**
-	FIXME: really do the :hover here?
+	FIXME: really do the :hover here? or in some InteractiveElement?
 **/
 
 class StyleClassElement extends StyledElement {

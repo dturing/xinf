@@ -1,3 +1,18 @@
+/* 
+   xinf is not flash.
+   Copyr (c) 2006, Daniel Fischer.
+ 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+																			
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   Lesser General Public License or the LICENSE file for more details.
+*/
+
 package xinf.style;
 
 import xinf.ony.Element;
@@ -125,7 +140,12 @@ class StyleSheet {
 		return styles.iterator();
 	}
 	
-	private function aggregateStyles( styles:Iterator<Style> ) :Style {
+	public function match( e:StyleClassElement ) :Style {
+		return aggregateStyles( findStyles( e ) );
+	}
+	
+
+	public static function aggregateStyles( styles:Iterator<Style> ) :Style {
 		var r = newDefaultStyle();
 		if( styles == null ) return r;
 		for( style in styles ) {
@@ -139,12 +159,7 @@ class StyleSheet {
 		return r;
 	}
 	
-	public function match( e:StyleClassElement ) :Style {
-		return aggregateStyles( findStyles( e ) );
-	}
-	
-	
-	private static function newDefaultStyle():Style {
+	public static function newDefaultStyle():Style {
 		return {
 			padding: { l:0, t:0, r:0, b:0 },
 			border: { l:0, t:0, r:0, b:0 },
