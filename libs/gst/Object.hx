@@ -20,7 +20,6 @@ class Object {
     }
 
 /* this only works on gstgltexturesink! FIXME */
-/*
 	private static var _lock_glmutex = neko.Lib.load("GST","lock_glmutex",1);
     public function lock() : Void {
         return _lock_glmutex( untyped this.__o );
@@ -29,7 +28,7 @@ class Object {
     public function unlock() : Void {
         return _unlock_glmutex( untyped this.__o );
     }
-	
+/*	
 	private static var _wait_texture_available = neko.Lib.load("GST","wait_texture_available",1);
     public function wait_texture_available() : Void {
         return _wait_texture_available( untyped this.__o );
@@ -43,4 +42,14 @@ class Object {
     public function produce_texture() : Void {
         return _produce_texture( untyped this.__o );
     }
+
+	private static var _connect = neko.Lib.load("GST","object_connect",3);
+    public function connect( signal:String, f:Dynamic ) : Void {
+        return _connect( untyped this.__o, signal, f );
+    }
+	
+	private static var _trigger_gc = neko.Lib.load("GST","trigger_gc",0);
+	public function trigger_gc() :Bool {
+		return _trigger_gc();
+	}
 }

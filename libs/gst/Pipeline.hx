@@ -15,8 +15,14 @@ class Pipeline extends Object {
     }
 
 	private static var _poll_bus = neko.Lib.load("GST","poll_bus",2);
-    public function pollBus( ?timeout:Int ) : Void {
-		return _poll_bus( untyped this.__o, timeout );
+    public function pollBus( ?timeout:Int ) : Dynamic {
+		var m = _poll_bus( untyped this.__o, timeout );
+		if( m != null ) {
+			var name:String = "";
+			untyped name.__s = m.name;
+			m.name = name;
+		}
+		return m;
     }
 
 	private static var _query_position = neko.Lib.load("GST","query_position",1);

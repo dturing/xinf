@@ -7,9 +7,9 @@
 #  include "config.h"
 #endif
 
-#include "gstgltexturesink.h"
+#include "gsttexturesink.h"
 
-static GstElementDetails gst_gltexturesink_details = {
+static GstElementDetails gst_texturesink_details = {
   "OpenGL Texture sink",
   "Sink/Video",
   "copies the incoming video to a OpenGL texture",
@@ -17,16 +17,17 @@ static GstElementDetails gst_gltexturesink_details = {
 };
 
 
-static void gst_gltexturesink_class_init (GstGLTextureSinkClass * klass);
-static void gst_gltexturesink_init (GstGLTextureSink * gltexturesink);
-static void gst_gltexturesink_base_init (gpointer g_class);
+static void gst_texturesink_class_init (GstTextureSinkClass * klass);
+static void gst_texturesink_init (GstTextureSink * texturesink);
+static void gst_texturesink_base_init (gpointer g_class);
 
 
-static GstStaticPadTemplate gst_gltexturesink_sink_template_factory =
+static GstStaticPadTemplate gst_texturesink_sink_template_factory =
     GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("video/x-raw-rgb, "
+    GST_STATIC_CAPS (
+		"video/x-raw-rgb, "
         "framerate = (fraction) [ 0, MAX ], "
         "width = (int) [ 1, MAX ], "
 		"depth = (int)24, "
@@ -48,20 +49,18 @@ enum
   ARG_TEXTURE_CONSUMED
 };
 
-GstElementClass *parent_class = NULL;
-
-static void gst_gltexturesink_finalize (GObject * object);
-static void gst_gltexturesink_set_property (GObject * object, guint prop_id,
+static void gst_texturesink_finalize (GObject * object);
+static void gst_texturesink_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec);
-static void gst_gltexturesink_get_property (GObject * object, guint prop_id,
+static void gst_texturesink_get_property (GObject * object, guint prop_id,
     GValue * value, GParamSpec * pspec);
 
 
 static GstFlowReturn
-gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
+gst_texturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 {
-  GstGLTextureSink *gl;
-  gl = GST_GLTEXTURESINK (sink);
+  GstTextureSink *gl;
+  gl = GST_TEXTURESINK (sink);
 
 //	printf("GLTextureSink show_frame (tex #%i)\n", gl->texture_id);
 	
@@ -69,11 +68,12 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 	g_error("GL Texture uninitalized");
 	return GST_FLOW_ERROR;
   }
-
+  
 	g_mutex_lock( gl->mutex );
 
 	  glPushAttrib( GL_TEXTURE_2D );
 		glEnable( GL_TEXTURE_2D );
+  g_message("set tex: %i", gl->texture_id+gl->texture_c );
 		glBindTexture( GL_TEXTURE_2D, gl->texture_id+gl->texture_c );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -87,14 +87,23 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 	if( err > 0 ) {
 		g_warning("OpenGL error: %i %s", err, gluErrorString(err));
 	}
-
+/*
 	g_cond_signal(gl->texture_ready);
 	GTimeVal time;
 	g_get_current_time( &time );
 	g_time_val_add( &time, 1000000 );
     g_cond_timed_wait(gl->texture_consumed, gl->mutex, &time );
+*/  
   	g_mutex_unlock( gl->mutex );
-  
+	
+	// post bus message
+	GstStructure *msg = gst_structure_new("texture_filled",
+		"texture_id", G_TYPE_INT, gl->texture_id+gl->texture_c,
+		NULL );
+	gst_bus_post( gst_element_get_bus(GST_ELEMENT(sink)),
+		gst_message_new_application( GST_OBJECT(sink), msg ) );
+	/* FIXME: free structure? */
+	
 	gl->texture_c++;
 	if( gl->texture_c >= gl->texture_n ) gl->texture_c = 0;
 
@@ -102,12 +111,12 @@ gst_gltexturesink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 }
 
 static gboolean
-gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
+gst_texturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 {
   gboolean ret;
   int i;
-  GstGLTextureSink *gl;
-  gl = GST_GLTEXTURESINK (sink);
+  GstTextureSink *gl;
+  gl = GST_TEXTURESINK (sink);
 
   GstStructure *structure;
   structure = gst_caps_get_structure (caps, 0);
@@ -142,45 +151,46 @@ gst_gltexturesink_setcaps (GstBaseSink * sink, GstCaps * caps)
 }
 
 static void
-gst_gltexturesink_init (GstGLTextureSink * gltexturesink)
+gst_texturesink_init (GstTextureSink * texturesink)
 {
-	gltexturesink->texture_id=-1;
-	gltexturesink->texture_n=1;
-	gltexturesink->texture_c=0;
-	gltexturesink->mutex = g_mutex_new();
-	gltexturesink->texture_ready = g_cond_new();
-	gltexturesink->texture_consumed = g_cond_new();
+	texturesink->texture_id=-1;
+	texturesink->texture_n=1;
+	texturesink->texture_c=0;
+	texturesink->mutex = g_mutex_new();
+	texturesink->texture_ready = g_cond_new();
+	texturesink->texture_consumed = g_cond_new();
 }
 
 
-/* Finalize is called only once, dispose can be called multiple times.
+/* OLD COMMENT, but i dont understand it yet, so i leave it in...
+ * Finalize is called only once, dispose can be called multiple times.
  * We use mutexes and don't reset stuff to NULL here so let's register
  * as a finalize. */
 static void
-gst_gltexturesink_finalize (GObject * object)
+gst_texturesink_finalize (GObject * object)
 {
-  GstGLTextureSink *gltexturesink;
-  gltexturesink = GST_GLTEXTURESINK (object);
+  GstTextureSink *texturesink;
+  texturesink = GST_TEXTURESINK (object);
 	
-  if( gltexturesink->mutex ) g_free( gltexturesink->mutex );
-  if( gltexturesink->texture_ready ) g_free( gltexturesink->texture_ready );
-  if( gltexturesink->texture_consumed ) g_free( gltexturesink->texture_consumed );
+  if( texturesink->mutex ) g_free( texturesink->mutex );
+  if( texturesink->texture_ready ) g_free( texturesink->texture_ready );
+  if( texturesink->texture_consumed ) g_free( texturesink->texture_consumed );
 	  
   /* FIXME free gl textures */
-	printf("GLTextureSink finalize\n");
+	printf("TextureSink finalize\n");
 }
 	
 static void
-gst_gltexturesink_base_init (gpointer g_class)
+gst_texturesink_base_init (gpointer g_class)
 {
   GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
 
-  gst_element_class_add_pad_template (element_class, gst_static_pad_template_get(&gst_gltexturesink_sink_template_factory) );
-  gst_element_class_set_details (element_class, &gst_gltexturesink_details);
+  gst_element_class_add_pad_template (element_class, gst_static_pad_template_get(&gst_texturesink_sink_template_factory) );
+  gst_element_class_set_details (element_class, &gst_texturesink_details);
 }
 
 static void
-gst_gltexturesink_class_init (GstGLTextureSinkClass * klass)
+gst_texturesink_class_init (GstTextureSinkClass * klass)
 {
   GObjectClass *gobject_class;
   GstElementClass *gstelement_class;
@@ -190,10 +200,10 @@ gst_gltexturesink_class_init (GstGLTextureSinkClass * klass)
   gstelement_class = (GstElementClass *) klass;
   gstbasesink_class = (GstBaseSinkClass *) klass;
 
-  parent_class = g_type_class_peek_parent (klass);
+  GstElementClass *parent_class = g_type_class_peek_parent (klass);
 
-  gobject_class->set_property = gst_gltexturesink_set_property;
-  gobject_class->get_property = gst_gltexturesink_get_property;
+  gobject_class->set_property = gst_texturesink_set_property;
+  gobject_class->get_property = gst_texturesink_get_property;
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEXTURE_FIRST_ID,
       g_param_spec_int ("texture", "First Texture ID", "ID of the first OpenGL texture",
@@ -223,22 +233,22 @@ gst_gltexturesink_class_init (GstGLTextureSinkClass * klass)
       g_param_spec_pointer ("texture_consumed", "TextureConsumed Condition", "will wait for this before setting a new texture image",
 		G_PARAM_READABLE));
 
-  gobject_class->finalize = gst_gltexturesink_finalize;
-  gstbasesink_class->set_caps = GST_DEBUG_FUNCPTR (gst_gltexturesink_setcaps);
-  gstbasesink_class->render = GST_DEBUG_FUNCPTR (gst_gltexturesink_show_frame);
+  gobject_class->finalize = gst_texturesink_finalize;
+  gstbasesink_class->set_caps = GST_DEBUG_FUNCPTR (gst_texturesink_setcaps);
+  gstbasesink_class->render = GST_DEBUG_FUNCPTR (gst_texturesink_show_frame);
 }
 
 static void
-gst_gltexturesink_set_property (GObject * object, guint prop_id,
+gst_texturesink_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec)
 {
-  GstGLTextureSink *gltexturesink;
-  g_return_if_fail (GST_IS_GLTEXTURESINK (object));
-  gltexturesink = GST_GLTEXTURESINK (object);
+  GstTextureSink *texturesink;
+  g_return_if_fail (GST_IS_TEXTURESINK (object));
+  texturesink = GST_TEXTURESINK (object);
 
   switch( prop_id ) {
 	case ARG_TEXTURE_N:
-		gltexturesink->texture_n = g_value_get_int( value );
+		texturesink->texture_n = g_value_get_int( value );
 		break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -247,40 +257,40 @@ gst_gltexturesink_set_property (GObject * object, guint prop_id,
 }
 
 static void
-gst_gltexturesink_get_property (GObject * object, guint prop_id, GValue * value,
+gst_texturesink_get_property (GObject * object, guint prop_id, GValue * value,
     GParamSpec * pspec)
 {
-  GstGLTextureSink *gltexturesink;
-  g_return_if_fail (GST_IS_GLTEXTURESINK (object));
-  gltexturesink = GST_GLTEXTURESINK (object);
+  GstTextureSink *texturesink;
+  g_return_if_fail (GST_IS_TEXTURESINK (object));
+  texturesink = GST_TEXTURESINK (object);
 	
   switch( prop_id ) {
     case ARG_WIDTH:
-      g_value_set_int (value, gltexturesink->video_width);
+      g_value_set_int (value, texturesink->video_width);
       break;
     case ARG_HEIGHT:
-      g_value_set_int (value, gltexturesink->video_height);
+      g_value_set_int (value, texturesink->video_height);
       break;
     case ARG_TEXTURE_FIRST_ID:
-      g_value_set_int (value, gltexturesink->texture_id);
+      g_value_set_int (value, texturesink->texture_id);
       break;
     case ARG_TEXTURE_N:
-      g_value_set_int (value, gltexturesink->texture_n);
+      g_value_set_int (value, texturesink->texture_n);
       break;
     case ARG_TEXTURE_WIDTH:
-      g_value_set_int (value, gltexturesink->texture_width);
+      g_value_set_int (value, texturesink->texture_width);
       break;
     case ARG_TEXTURE_HEIGHT:
-      g_value_set_int (value, gltexturesink->texture_height);
+      g_value_set_int (value, texturesink->texture_height);
       break;
     case ARG_MUTEX:
-      g_value_set_pointer (value, gltexturesink->mutex);
+      g_value_set_pointer (value, texturesink->mutex);
       break;
     case ARG_TEXTURE_READY:
-      g_value_set_pointer (value, gltexturesink->texture_ready);
+      g_value_set_pointer (value, texturesink->texture_ready);
       break;
     case ARG_TEXTURE_CONSUMED:
-      g_value_set_pointer (value, gltexturesink->texture_consumed);
+      g_value_set_pointer (value, texturesink->texture_consumed);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -289,24 +299,24 @@ gst_gltexturesink_get_property (GObject * object, guint prop_id, GValue * value,
 }
 
 GType
-gst_gltexturesink_get_type(void)
+gst_texturesink_get_type(void)
 {
 	static GType type = 0;
 
 	if (type == 0) {
 		static const GTypeInfo info = {
-			sizeof (GstGLTextureSinkClass),
-			(GBaseInitFunc) gst_gltexturesink_base_init,
+			sizeof (GstTextureSinkClass),
+			(GBaseInitFunc) gst_texturesink_base_init,
 			(GBaseFinalizeFunc) NULL,
-			(GClassInitFunc) gst_gltexturesink_class_init,
+			(GClassInitFunc) gst_texturesink_class_init,
 			(GClassFinalizeFunc) NULL,
 			NULL /* class_data */,
-			sizeof (GstGLTextureSink),
+			sizeof (GstTextureSink),
 			0 /* n_preallocs */,
-			(GInstanceInitFunc) gst_gltexturesink_init,
+			(GInstanceInitFunc) gst_texturesink_init,
 		};
 
-		type = g_type_register_static (GST_TYPE_VIDEO_SINK, "GstGLTextureSink", &info, (GTypeFlags)0);
+		type = g_type_register_static (GST_TYPE_VIDEO_SINK, "GstTextureSink", &info, (GTypeFlags)0);
 	}
 
 	return type;
@@ -317,7 +327,7 @@ gst_gltexturesink_get_type(void)
 static gboolean
 plugin_init (GstPlugin *plugin)
 {
-	return gst_element_register( plugin, "texturesink", GST_RANK_NONE, GST_TYPE_GLTEXTURESINK );
+	return gst_element_register( plugin, "texture", GST_RANK_NONE, GST_TYPE_TEXTURESINK );
 }
 
 #define PACKAGE "xinf"
@@ -330,5 +340,5 @@ GST_PLUGIN_DEFINE_STATIC(
 	"1",
 	"LGPL",
 	"xinf gstreamer module",
-	"http://subsignal.org/gst-gltexturesink/"
+	"http://subsignal.org/gst-texturesink/"
 );

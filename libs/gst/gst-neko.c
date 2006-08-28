@@ -1,11 +1,12 @@
 #include <neko.h>
 #include <gst/gst.h>
-//#include <cptr.h> 
+#include <cptr.h> 
  
 #define error(msg,...) \
     raise_exception( msg, __FILE__, __LINE__, __VA_ARGS__ );
 
 DEFINE_KIND(k_GObject);
+DEFINE_KIND(k_GClosure);
 
 void raise_exception( const char *msg, const char *file, int line, ... ) {
     buffer b = alloc_buffer("");
@@ -60,6 +61,8 @@ value gvalue_to_neko( const GValue *gv ) {
             return alloc_int( g_value_get_int(gv) );
         case G_TYPE_FLOAT:
             return alloc_float( g_value_get_float(gv) );
+		case G_TYPE_POINTER:
+			return cptr_wrap( g_value_get_pointer(gv), 0 );
         default:
             if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
                 return alloc_gobject( g_value_get_object(gv) );
@@ -169,10 +172,16 @@ typedef struct _NekoClosure  {
   /* extra data goes here */
 } NekoClosure;
     
+typedef struct _NekoCallback {
+	value callback;
+	GClosure *closure;
+} NekoCallback;
 
 void neko_marshal( GClosure *closure, GValue *g_result, guint nr_vals, const GValue *g_vals, gpointer invocation_hint, gpointer marshal_data ) {
     int i;
-    value f = (value)closure->data;
+g_message("HANDOFF");
+	NekoCallback *callback = (NekoCallback*)closure->data;
+    value f = callback->callback;
     value *n_vals = (value*)malloc( sizeof(value*)*nr_vals );
     value n_result = val_null;
     
@@ -180,7 +189,10 @@ void neko_marshal( GClosure *closure, GValue *g_result, guint nr_vals, const GVa
         n_vals[i] = gvalue_to_neko( &g_vals[i] );
     }
 
+	neko_vm_current();
+g_message("HANDOFF 2: %p", f);
     n_result = val_callEx( val_null, f, n_vals, nr_vals, NULL );
+g_message("HANDOFF 3");
     
     free(n_vals);
 
@@ -195,30 +207,30 @@ static void neko_closure_finalize( gpointer notify_data, GClosure *closure ) {
   /* free extra data here */
 }
 
-NekoClosure *neko_closure_new( gpointer data ) {
-  GClosure *closure;
-  NekoClosure *neko_closure;
-  
-  closure = g_closure_new_simple( sizeof(NekoClosure), data );
-  neko_closure = (NekoClosure*)closure;
+NekoCallback *neko_closure_new( value func ) {
+	NekoCallback *callback;
 
-  /* initialize extra data here */
+	callback = (NekoCallback*)alloc( sizeof(NekoCallback) );
+	callback->closure = g_closure_new_simple( sizeof(NekoClosure), callback );
+	callback->callback = func;
+	
+	/* initialize extra data here */
 
-//  g_closure_add_finalize_notifier( closure, notify_data, neko_closure_finalize );
-  g_closure_set_marshal( closure, (GClosureMarshal)neko_marshal );
-  return neko_closure;
+	//  g_closure_add_finalize_notifier( closure, notify_data, neko_closure_finalize );
+	g_closure_set_marshal( callback->closure, (GClosureMarshal)neko_marshal );
+	return callback;
 }
 
 /* object_set */
-value object_connect( value obj, value v_signal_name, value data ) {
+value object_connect( value obj, value v_signal_name, value func ) {
     GObject *o = val_gobject( obj );
     if( !o ) return val_null;
     
     const char *signal_name = haxe_string( v_signal_name );
-    NekoClosure *closure = neko_closure_new( (gpointer)data );
-    gulong id = g_signal_connect_closure( o, signal_name, (GClosure*)closure, FALSE );
+    NekoCallback *callback = neko_closure_new( func );
+    gulong id = g_signal_connect_closure( o, signal_name, (GClosure*)callback->closure, FALSE );
     
-    return val_true;
+    return alloc_abstract( k_GClosure, callback );
 }
 DEFINE_PRIM(object_connect,3);
 
@@ -265,7 +277,11 @@ value poll_bus( value obj, value timeout ) {
 		return val_null;
 	}
 	
-	GstMessage *msg = gst_bus_poll( bus, GST_MESSAGE_ANY, tout );
+	GstMessage *msg = gst_bus_poll( bus, GST_MESSAGE_EOS | GST_MESSAGE_ERROR | GST_MESSAGE_WARNING | GST_MESSAGE_INFO
+										| GST_MESSAGE_TAG | GST_MESSAGE_BUFFERING | GST_MESSAGE_STEP_DONE 
+										| GST_MESSAGE_SEGMENT_START | GST_MESSAGE_SEGMENT_DONE
+										| GST_MESSAGE_STREAM_STATUS | GST_MESSAGE_APPLICATION | GST_MESSAGE_ELEMENT
+					, tout );
 	if( msg ) {
 		return( gst_structure_to_neko( msg->structure ) );
 	}
@@ -423,23 +439,34 @@ GCond *get_glcond( value obj, const char *name ) {
     g_object_get_property( o, name, &gv );
 	return( (GCond*)g_value_get_pointer(&gv) );
 }
-/*
+
 value lock_glmutex( value obj ) {
+	GCond *consumed = get_glcond( obj, "texture_consumed" );
+	GCond *ready = get_glcond( obj, "texture_ready" );
 	GMutex *mutex = get_glmutex(obj);
-	if( !mutex ) throw("Couldn't aquire GL mutex");
-	g_mutex_lock( mutex );
+	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
+		
+	g_mutex_lock(mutex);
+	g_cond_signal( consumed );
+	g_cond_wait( ready, mutex );
+	
 	return val_true;
 }
 DEFINE_PRIM(lock_glmutex,1);
 
 value unlock_glmutex( value obj ) {
+	GCond *consumed = get_glcond( obj, "texture_consumed" );
+	GCond *ready = get_glcond( obj, "texture_ready" );
 	GMutex *mutex = get_glmutex(obj);
-	if( !mutex ) throw("Couldn't aquire GL mutex");
-	g_mutex_unlock( mutex );
+	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
+		
+	g_mutex_unlock(mutex);
+	
 	return val_true;
 }
 DEFINE_PRIM(unlock_glmutex,1);
 
+/*
 value wait_texture_available( value obj ) {
 	GCond *cond = get_glcond( obj, "texture_ready" );
 	GMutex *mutex = get_glmutex(obj);
@@ -473,6 +500,7 @@ value produce_texture( value obj ) {
 	g_cond_signal( consumed );
 	g_cond_wait( ready, mutex );
 	g_mutex_unlock(mutex);
+	
 	return val_true;
 }
 DEFINE_PRIM(produce_texture,1);
@@ -487,3 +515,11 @@ value _gst_init() {
     return val_true;
 }
 DEFINE_PRIM(_gst_init,0);
+
+
+/* trigger neko GC */
+value trigger_gc() {
+	neko_gc_major();
+	return val_true;
+}
+DEFINE_PRIM(trigger_gc,0);
