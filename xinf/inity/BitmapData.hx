@@ -48,6 +48,8 @@ class BitmapData extends Texture {
                     GL.TexSubImage2D_RGB_BYTE( texture, new Point(0,0), new Point(w,h), _d );
                 case RGBA:
                     GL.TexSubImage2D_RGBA_BYTE( texture, new Point(0,0), new Point(w,h), _d );
+                case BGRA:
+                    GL.TexSubImage2D_BGRA_BYTE( texture, new Point(0,0), new Point(w,h), _d );
                 default:
                     throw("unknown colorspace");
             }
@@ -58,6 +60,7 @@ class BitmapData extends Texture {
 		GL.PopAttrib();
 
 		super(w,h,tw,th,texture);
+		_d = null;
 	}
 	
 
@@ -108,6 +111,10 @@ class BitmapData extends Texture {
         // FIXME: we steal pixel data, but the pixbuf structure should be unref'd.
         return( new BitmapData( d, w, h, f ) );
     }
+	
+	public static function newFromMemory( data:Dynamic, w:Int, h:Int ) :BitmapData {
+		return( new BitmapData( data, w, h, BGRA ) );
+	}
     
     public static function __init__() :Void {
         GdkPixbuf.g_type_init();

@@ -18,6 +18,8 @@ package xinf.inity;
 enum ColorSpace {
     RGB;
     RGBA;
+	BGR;
+	BGRA;
 }
 
 class Texture {

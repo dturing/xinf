@@ -40,6 +40,19 @@ void glTexSubImage2D_RGBA_BYTE( unsigned int tex, value pos, value size, const u
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
+void glTexSubImage2D_BGRA_BYTE( unsigned int tex, value pos, value size, const unsigned int *data ) {
+    field f_x = val_id("x");
+    field f_y = val_id("y");
+    
+    int x = val_number( val_field( pos, f_x ) );
+    int y = val_number( val_field( pos, f_y ) );
+    int w = val_number( val_field( size, f_x ) );
+    int h = val_number( val_field( size, f_y ) );
+
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 void glTexSubImage2D_RGB_BYTE( unsigned int tex, value pos, value size, const unsigned int * data ) {
     field f_x = val_id("x");
     field f_y = val_id("y");

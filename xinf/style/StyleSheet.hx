@@ -164,7 +164,7 @@ class StyleSheet {
 			padding: { l:0, t:0, r:0, b:0 },
 			border: { l:0, t:0, r:0, b:0 },
 			color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-			background: null,
+			background: new xinf.ony.Color().fromRGBInt( 0xffffff ),
 			minWidth: null,
 			skin: null,
 			textAlign: 0, verticalAlign: 0
