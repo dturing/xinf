@@ -20,7 +20,7 @@ import Reflect;
 typedef ApplicationParameter = {
 	var name:String;
 	var letter:String;
-	var type:BasicType;
+	var type:Type;
 	var help:String;
 	var defaultValue:Dynamic;
 }

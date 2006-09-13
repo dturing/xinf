@@ -17,7 +17,7 @@ class StyleClassElement extends StyledElement {
 		styleClasses = new Array<String>();
 		
 		// add our own class to the list of style classes
-		var clNames = Reflect.getClass(this).__name__;
+		var clNames:Array<String> = untyped Type.getClass(this).__name__;
 		addStyleClass( clNames[ clNames.length-1 ] );
 
 		// :hover pseudo-class

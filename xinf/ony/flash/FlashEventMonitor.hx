@@ -19,7 +19,7 @@ import xinf.ony.Element;
 import xinf.ony.MouseEvent;
 import xinf.event.EventKind;
 
-class EventMonitor {
+class FlashEventMonitor {
     private var mouseTrackingClip:flash.MovieClip;
     private var latestOver:Element;
 

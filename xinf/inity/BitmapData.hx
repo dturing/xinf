@@ -79,7 +79,7 @@ class BitmapData extends Texture {
     public static function newFromFile( filename:String ) :BitmapData {
         var err = GdkPixbuf.gdk_pixbuf_create_error();
 		try {
-			var data = neko.File.getContent( filename );
+			var data = neko.io.File.getContent( filename );
 			return newFromStringData( data );
 		} catch( e:Dynamic ) {
 			trace("Couldn't read: "+e );

@@ -61,7 +61,7 @@ class Object {
         return true;
     }
 
-    public function postEvent<T>( e:Event<T>, pos:haxe.PosInfos ) :Void {
+    public function postEvent<T>( e:Event<T>, ?pos:haxe.PosInfos ) :Void {
         if( owner == null ) {
 //            trace("WARNING: Object "+this+" has no owner to post "+type);
 			// object likely has been deleted
@@ -137,6 +137,6 @@ class Object {
     
     
     public function toString() :String {
-        return( "<"+ Reflect.getClass(this).__name__.join(".") + " #" + _displayList + ">" );
+        return( "<"+Type.getClassName(Type.getClass(this)) + " #" + _displayList + ">" );
     }
 }

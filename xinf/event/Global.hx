@@ -35,7 +35,7 @@ class Global extends SimpleEventDispatcher {
 		global.dispatchEvent(e);
 	}
 
-	public static function postEvent<T>( e : Event<T>, pos:haxe.PosInfos ) :Void {
+	public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
 		// FIXME. global events would get delivered to root mostly, if we used postEvent...
 		e.origin = pos;
 		global.dispatchEvent(e);

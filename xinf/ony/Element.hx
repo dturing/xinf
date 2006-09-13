@@ -234,6 +234,6 @@ class Element extends SimpleEventDispatcher {
     #end
     
     public function toString() :String {
-        return( "<"+ Reflect.getClass(this).__name__.join(".") + " " + name + ">" );
+        return( "<"+ Type.getClassName(Type.getClass(this)) + " " + name + ">" );
     }
 }

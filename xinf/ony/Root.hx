@@ -54,7 +54,7 @@ class Root extends Element {
             untyped haxe_JSTrace( pos.fileName+":"+pos.lineNumber+"||"+v );
         }
     #else flash
-        private var eventMonitor:xinf.ony.flash.EventMonitor;
+        private var eventMonitor:xinf.ony.flash.FlashEventMonitor;
         
         private static function xinfHtmlTrace( v:Dynamic, pos:haxe.PosInfos ) {
             flash.Lib.fscommand("trace", pos.fileName+":"+pos.lineNumber+"||"+v.toString().split("'") );
@@ -66,7 +66,7 @@ class Root extends Element {
 		frame=0;
         #if flash
             haxe.Log.trace = xinfHtmlTrace;
-            eventMonitor = new xinf.ony.flash.EventMonitor();
+            eventMonitor = new xinf.ony.flash.FlashEventMonitor();
         #else js
             haxe.Log.trace = xinfHtmlTrace;
             eventMonitor = new xinf.ony.js.JSEventMonitor();

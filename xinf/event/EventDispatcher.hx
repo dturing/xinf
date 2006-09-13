@@ -19,6 +19,6 @@ interface EventDispatcher {
 	function addEventListener<T>( type :EventKind<T>, h :T->Void ) :Void;
 	function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool;
 	function dispatchEvent<T>( e : Event<T> ) :Void;
-	function postEvent<T>( e : Event<T>, pos:haxe.PosInfos ) :Void; // FIXME if debug_events
+	function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void; // FIXME if debug_events
 }
 

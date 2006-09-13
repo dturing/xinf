@@ -50,7 +50,7 @@ class SimpleEventDispatcher implements EventDispatcher {
 		}
 	}
 
-	public function postEvent<T>( e : Event<T>, pos:haxe.PosInfos ) :Void {
+	public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
 		// FIXME if debug_events
 		e.origin = pos;
 		

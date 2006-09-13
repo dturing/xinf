@@ -28,7 +28,7 @@ class TestServerConnection implements TestLogger {
     }    
     
     public function screenshot( testObject:Dynamic, targetEquality:Float, next:Dynamic ) :Void {
-        var testName = Reflect.getClass( testObject ).__name__.join(".");
+        var testName = Type.getClassName(Type.getClass( testObject ));
         nextFunction = next;
         
         try {
@@ -39,7 +39,7 @@ class TestServerConnection implements TestLogger {
     }
 
     public function emptiness( testObject:Dynamic ) :Void {
-        var testName = Reflect.getClass( testObject ).__name__.join(".");
+        var testName = Type.getClassName(Type.getClass( testObject ));
         try {
             cnx.Collector.result.call([ testName, testNumber++, true, 1.0, runtime ], replyReceived );
         } catch( e:Dynamic ) {
