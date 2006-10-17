@@ -23,7 +23,8 @@ typedef Primitive = js.HtmlDom
 
 class JSRenderer extends ObjectModelRenderer<Primitive> {
 	public function getRootPrimitive() :Primitive {
-		return js.Lib.document.body;
+		//return js.Lib.document.body;
+		return js.Lib.document.getElementById("xinf:root");
 	}
 
 	override public function createPrimitive() :Primitive {

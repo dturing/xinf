@@ -16,12 +16,20 @@
 package xinf.js;
 
 import xinf.erno.Runtime;
+import xinf.erno.Renderer;
+import xinf.event.FrameEvent;
 
 class JSRuntime extends Runtime {
+	private var frame:Int;
+	
 	public function createRenderer() :Renderer {
 		return new JSRenderer();
 	}
 	public function run() :Void {
-		throw("unimplemented");
+		frame=0;
+ 		untyped window.setInterval("xinf.erno.Runtime.runtime.step()",1000/25);
+   	}
+	public function step() :Void {
+		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
 	}
 }

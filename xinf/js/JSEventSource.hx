@@ -16,22 +16,12 @@
 package xinf.ony.js;
 
 import xinf.event.SimpleEventDispatcher;
-import xinf.ony.RuntimeEventSource;
 import xinf.ony.event.FrameEvent;
 
-class JSEventSource extends SimpleEventDispatcher, implements RuntimeEventSource {
-	private var frame:Int;
+class JSEventSource extends SimpleEventDispatcher {
 
 	public function new() :Void {
 		super();
-		frame=0;
 	}
 	
-	public function run() :Void {
-		untyped window.setInterval( step, 1000/25 );
-	}
-	
-	public function step() :Void {
-		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, this, frame++ ) );
-	}
 }

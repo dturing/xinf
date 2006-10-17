@@ -19,6 +19,7 @@ import xinf.erno.PenStackRenderer;
 import xinf.erno.DrawingInstruction;
 
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
+	private var lastId:Int;
 	
 	private var objects:IntHash<Primitive>;
 	private function lookup( id:Int ) :Primitive {
@@ -50,17 +51,14 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 	public function createPrimitive() :Primitive {
 		return null;
 	}
-	public function clearPrimitive( p:Primitive ) :Void {
-	}
-
-	/* API to override 
-	public function getRootPrimitive() :Primitive {
-		return null;
-	}
 	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		return null;
 	}
-	*/
+	public function clearPrimitive( p:Primitive ) :Void {
+	}
+	public function getRootPrimitive() :Primitive {
+		return null;
+	}
 
 	public function new( ?root:Primitive ) :Void {
 		super();
@@ -69,8 +67,16 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		current = root;
 		if( current == null ) current = getRootPrimitive();
 		objects.set(0,current);
+		lastId=1;
 	}
-	
+
+	public function getNextId() :Int {
+		return lastId++;
+	}
+	public function getRootId() :Int {
+		return 0;
+	}
+
 	public function draw( i:DrawingInstruction ) :Void {
 		switch( i ) {
 			case StartObject(id):
