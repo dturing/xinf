@@ -30,7 +30,9 @@ import xinf.event.ScrollEvent;
     Improvised Dropdown element.
 **/
 
-class Dropdown<T> extends Widget {
+typedef T=String
+
+class Dropdown extends Widget {
     private var model:ListModel<T>;
     private static var labelHeight:Int = 20;
     
@@ -72,10 +74,10 @@ class Dropdown<T> extends Widget {
 		button.moveTo( size.x - labelHeight, 0 );
     }
 
-	private function itemPicked( e:PickEvent ) :Void {
+	private function itemPicked( e:PickEvent<T> ) :Void {
 		select( e.index );
 		close();
-        postEvent( new PickEvent( PickEvent.ITEM_PICKED, selectedIndex) );
+        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, e.item, e.index ) );
     }
     private function open() :Void {
 		menu.assureVisible( selectedIndex );

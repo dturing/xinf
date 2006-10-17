@@ -220,7 +220,7 @@ class ListBox<T> extends Widget {
     }
 	
 	private function sendPickEvent() :Void {
-		postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(cursor) ) );
+		postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(cursor), cursor ) );
 	}
 	
 	public function getCurrentItem() :T {

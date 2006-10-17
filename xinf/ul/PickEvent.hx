@@ -21,9 +21,11 @@ class PickEvent<T> extends Event<PickEvent<T>> {
 	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
 
 	public var item:T;
+	public var index:Int;
 	
-	public function new( _type:xinf.event.EventKind<PickEvent<T>>, item:T ) {
+	public function new( _type:xinf.event.EventKind<PickEvent<T>>, item:T, index:Int ) {
 		super(_type);
 		this.item = item;
+		this.index = index;
 	}
 }
