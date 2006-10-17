@@ -15,32 +15,37 @@
 
 package xinf.ul;
 
-import xinf.ony.Pane;
-import xinf.ony.Element;
-import xinf.event.Event;
-import xinf.ony.Text;
-import xinf.style.StyleClassElement;
+import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 
 /**
     Simple Label element.
 **/
 
-class Label extends StyleClassElement {
+class Label extends Pane {
     public var text(get_text,set_text):String;
-    private var textE:Text;
+    private var _text:String;
     
-    public function new( name:String, parent:Element ) :Void {
-		super( name, parent );
-
-        textE = new xinf.ony.Text( name+"_text", this );
-		setChild( textE );
+    public function new( ?text:String ) :Void {
+		super();
+		_text = if( text==null ) "" else text;
     }
     
     private function get_text() :String {
-        return(textE.text);
+        return(_text);
     }
     private function set_text( t:String ) :String {
-        textE.text = t;
+        _text = t;
+		scheduleRedraw();
         return(t);
     }
+	
+	public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
+		g.draw( Translate(
+			style.padding.l+style.border.l,
+			style.padding.t+style.border.t ) );
+		g.draw( SetFill(style.color) );
+		g.draw( Text(text) );
+	}
 }

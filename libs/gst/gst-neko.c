@@ -62,7 +62,7 @@ value gvalue_to_neko( const GValue *gv ) {
         case G_TYPE_FLOAT:
             return alloc_float( g_value_get_float(gv) );
 		case G_TYPE_POINTER:
-			return cptr_wrap( g_value_get_pointer(gv), 0 );
+			return cptr_wrap_foreign( g_value_get_pointer(gv), 0 );
         default:
             if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
                 return alloc_gobject( g_value_get_object(gv) );

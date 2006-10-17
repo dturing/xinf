@@ -7,8 +7,8 @@ class CWrapper extends Generator {
     public function new( module:String ) {
         super(module+"_wrap.c",module);
         
-        _defines = neko.File.getContent("../gen/C.runtime");
-        _defines += neko.File.getContent(module+".runtime");
+        _defines = neko.io.File.getContent("../gen/C.runtime");
+        _defines += neko.io.File.getContent(module+".runtime");
         
         kinds = new Hash<String>();
         // these kinds are defined in the cptr library

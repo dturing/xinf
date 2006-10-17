@@ -22,18 +22,21 @@ package xinf.event;
 
 class Event<T> {
 	public var type(default,null) : EventKind<T>;
-	public var target :EventDispatcher;
 	
 	public var origin:haxe.PosInfos; // FIXME if debug_events
 	
-	public function new( t, target:EventDispatcher ) {
+	public function new( t ) {
 		type = t;
-		this.target = target;
 	}
 	
 	public function toString() :String {
-		var r = type.toString()+" to "+target;
-		if( origin != null ) r+=", from "+origin.fileName+":"+origin.lineNumber;
+		var r = ""+type;
+		if( origin != null ) r+=", from "+origin.fileName+":"+origin.lineNumber+" { ";
+		for( field in Reflect.fields(this) ) {
+			if( field != "origin" )
+				r+=field+":"+Reflect.field(this,field)+" ";
+		}
+		
 		return r;
 	}
 }

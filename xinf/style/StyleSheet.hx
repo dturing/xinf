@@ -15,12 +15,12 @@
 
 package xinf.style;
 
-import xinf.ony.Element;
+import xinf.ony.Object;
 import xinf.style.Style;
 import xinf.style.StyleClassElement;
 
 class StyleSelector {
-	public function matches( e:Element ) :Bool {
+	public function matches( e:Object ) :Bool {
 		return true;
 	}
 }
@@ -32,7 +32,7 @@ class ClassNameSelector extends StyleSelector {
 		classes = c;
 	}
 	
-	override public function matches( _e:Element ) :Bool {
+	override public function matches( _e:Object ) :Bool {
 		if( !Std.is(_e,StyleClassElement) ) return false;
 		var e:StyleClassElement = cast( _e, StyleClassElement );
 		for( c in classes ) {
@@ -49,7 +49,7 @@ class AncestorSelector extends StyleSelector {
 		selector=s;
 	}
 
-	override public function matches( e:Element ) :Bool {
+	override public function matches( e:Object ) :Bool {
 		var p = e.parent;
 		while( p != null ) {
 			if( selector.matches(p) ) {
@@ -68,7 +68,7 @@ class ParentSelector extends StyleSelector {
 		selector=s;
 	}
 
-	override public function matches( e:Element ) :Bool {
+	override public function matches( e:Object ) :Bool {
 		return( e.parent != null && selector.matches(e.parent) );
 	}
 }
@@ -80,7 +80,7 @@ class CombinedSelector extends StyleSelector {
 		selectors = s;
 	}
 	
-	override public function matches( e:Element ) :Bool {
+	override public function matches( e:Object ) :Bool {
 		for( s in selectors ) {
 			if( !s.matches( e ) ) return false;
 		}
@@ -124,18 +124,16 @@ class StyleSheet {
 	}
 	
 	private function findStyles( e:StyleClassElement ) :Iterator<Style> {
-		var primary:List<StyleRule> = null;
+		var styles = new Array<Style>();
 		var i=0;
 		var classNames = e.getStyleClasses();
-		while( i<classNames.length && primary==null ) {
-			primary = byClassName.get( classNames[i] );
-			i++;
-		}
-		if( primary==null ) return null;
-		
-		var styles = new List<Style>();
-		for( rule in primary ) {
-			if( rule.selector.matches(e) ) styles.push( rule.style );
+		for( className in classNames ) {
+			var s = byClassName.get( className );
+			if( s!=null ) {
+				for( rule in s ) {
+					if( rule.selector.matches(e) ) styles.push( rule.style );
+				}
+			}
 		}
 		return styles.iterator();
 	}
@@ -163,10 +161,10 @@ class StyleSheet {
 		return {
 			padding: { l:0, t:0, r:0, b:0 },
 			border: { l:0, t:0, r:0, b:0 },
-			color: new xinf.ony.Color().fromRGBInt( 0x000000 ),
-			background: new xinf.ony.Color().fromRGBInt( 0xffffff ),
+			size: { l:0, t:0, r:0, b:0 },
+			color: null,
+			background: null,
 			minWidth: null,
-			skin: null,
 			textAlign: 0, verticalAlign: 0
 		};
 	}

@@ -15,87 +15,86 @@
 
 package xinf.ul;
 
-import xinf.event.Event;
-import xinf.ul.Button;
 import xinf.ul.ListModel;
 import xinf.ul.ListBox;
+import xinf.ul.Popup;
 
-import xinf.ony.MouseEvent;
-import xinf.ony.KeyboardEvent;
-import xinf.ony.GeometryEvent;
-import xinf.ony.ScrollEvent;
+import xinf.ony.Root;
+
+import xinf.event.Event;
+import xinf.event.MouseEvent;
+import xinf.event.KeyboardEvent;
+import xinf.event.ScrollEvent;
 
 /**
     Improvised Dropdown element.
-    
-    TODO: currently, all child labels are reassigned. that could be optimized
-    to reassign only the ones that need to be, and move the rest.
 **/
 
-class Dropdown extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
-    private var model:ListModel;
+class Dropdown<T> extends Widget {
+    private var model:ListModel<T>;
     private static var labelHeight:Int = 20;
     
     private var label:Label;
-    private var button:ImageButton;
-    private var menu:ListBox;
+    private var button:xinf.style.StyleClassElement;
+    private var menu:ListBox<String>;
     
     private var selectedIndex:Int;
 	private var isOpen:Bool;
+	private var popup:Popup;
     
-    public function new( name:String, parent:xinf.ony.Element, _model:ListModel ) :Void {
-        super( name, parent );
+    public function new( _model:ListModel<T> ) :Void {
+        super();
         model = _model;
 		isOpen=false;
         
-        label = new Label( name+"_lbl", this );
-        label.text = model.getItemAt(selectedIndex=0);
-		setLeft( label );
+        label = new Label( model.getItemAt(selectedIndex=0) );
+		label.moveTo( 1, 1 );
+		attach( label );
         label.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
-        button = new ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
-        button.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
-		setRight( button );
-
-        bounds.addEventListener( GeometryEvent.SIZE_CHANGED, sizeChanged );
+        button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
+		button.addStyleClass("Thumb");
+		button.resize( labelHeight, labelHeight );
+        //button.
+		  addEventListener( MouseEvent.MOUSE_DOWN, toggle );
+		attach(button);
         
-        menu = new ListBox( name+"_menu", this, model );
-        menu.bounds.setPosition( 0, label.bounds.height-1 );
-        menu.bounds.setSize( 100, labelHeight*5 );
-		menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
-        menu.visible = false;
-		menu.focusable = false;
+        menu = new ListBox( model );
+        menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
+        menu.focusable = false;
         
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
     }
 
-	private function sizeChanged( e:GeometryEvent ) :Void {
-    //    button.bounds.setPosition( bounds.width - labelHeight, 0 );
-    //    label.bounds.setSize( bounds.width-labelHeight, labelHeight );
-        menu.bounds.setPosition( 0, label.bounds.height );
-        menu.bounds.setSize( bounds.width, labelHeight*5 );
+	public function resize( x:Float, y:Float ) :Void {
+		super.resize(x,y);
+		button.moveTo( size.x - labelHeight, 0 );
     }
 
 	private function itemPicked( e:PickEvent ) :Void {
 		select( e.index );
 		close();
-        //postEvent( Event.ITEM_PICKED, selectedIndex );
+        postEvent( new PickEvent( PickEvent.ITEM_PICKED, selectedIndex) );
     }
     private function open() :Void {
 		menu.assureVisible( selectedIndex );
 		menu.select( selectedIndex );
-        menu.visible = true;
+        
+		var p = localToGlobal( {x:5, y:labelHeight } );
+        menu.moveTo( p.x, p.y );
+        menu.resize( size.x-5, labelHeight*5 );
+		
+		popup = new Popup(menu,Scale);
 		isOpen=true;
 		addStyleClass(":open");
-		button.contained.load("assets/dropdown/open/button.png");
-		// FIXME: scroll to selected.
+//		button.contained.load("assets/dropdown/open/button.png");
 	}
     private function close() :Void {
-        menu.visible = false;
+        if( popup!=null ) popup.close();
 		isOpen=false;
 		removeStyleClass(":open");
-		button.contained.load("assets/dropdown/button.png");
+//		button.contained.load("assets/dropdown/button.png");
 	}
 	private function select( index:Int ) :Void {
 		if( index > model.getLength()-1 ) index = model.getLength()-1;

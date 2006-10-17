@@ -27,6 +27,7 @@ struct _GstMemorySink {
   guint nFrames, cFrame;
   void **frames;
   guint video_width, video_height;     /* size of incoming video */
+  unsigned char *data;
 };
 
 struct _GstMemorySinkClass {

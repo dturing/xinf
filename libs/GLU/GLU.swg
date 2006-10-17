@@ -20,5 +20,14 @@ typedef double		GLclampd;	/* double precision float in [0,1] */
 
 GLUtesselator *gluSimpleTesselator( void );
 void gluTessVertexSimple( GLUtesselator *tess, double *v );
+void gluTessVertexOffset( GLUtesselator *tess, double *v, int offset );
 void gluTessCubicCurve( GLUtesselator *tess, value ctrl, double *v, int n );
 void gluTessQuadraticCurve( GLUtesselator *tess, value _ctrl, double *v, int _n );
+
+void gluVerticesOffset( double *v, int offset, int n );
+
+void gluTesselatePath( GLUtesselator *tess, value _points );
+value gluEvaluateCubicToArray( value _ctrl, int _n );
+value gluEvaluateQuadraticToArray( value _ctrl, int _n );
+value gluEvaluateCubicBezier( value _ctrl, int _n, value callback );
+value gluEvaluateQuadraticBezier( value _ctrl, int _n, value callback );

@@ -3,7 +3,7 @@ package nekobind;
 class Generator {
     public var module:String;
     public var map:TypeMap;
-    public var file:neko.File;
+    public var file:neko.io.Output;
     public var exceptions:Array<String>;
     
     public var buf:String;
@@ -13,11 +13,11 @@ class Generator {
         buf = new String("");
         map = new TypeMap();
         
-        file = neko.File.write( filename, false );
+        file = neko.io.File.write( filename, false );
         exceptions = new Array<String>();
         
         try {
-            exceptions = neko.File.getContent("exceptions").split("\n");
+            exceptions = neko.io.File.getContent("exceptions").split("\n");
         } catch( e:Dynamic ) {
         }
     }
@@ -114,7 +114,7 @@ class Generator {
     public function _classDefinition( name:String, members:Array<Array<String>> ) : Void {
     }
 
-    public function typedef( newType:String, primary:String ) : Void {
+    public function typeDef( newType:String, primary:String ) : Void {
         map.addTypedef(newType,primary);
     }
     

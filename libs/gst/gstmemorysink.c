@@ -54,11 +54,13 @@ gst_memorysink_show_frame (GstBaseSink * sink, GstBuffer * buf)
   GstMemorySink *element;
   element = GST_MEMORYSINK (sink);
 
-	unsigned char *data = malloc( GST_BUFFER_SIZE(buf) );
-	memcpy( data, GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
+	if( element->data==NULL ) {
+		element->data = malloc( GST_BUFFER_SIZE(buf) );
+	}
+	memcpy( element->data, GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
 	
 	GstStructure *msg = gst_structure_new("frame",
-		"data", G_TYPE_POINTER, data,
+		"data", G_TYPE_POINTER, element->data,
 		NULL );
 	gst_bus_post( gst_element_get_bus(GST_ELEMENT(sink)),
 		gst_message_new_application( GST_OBJECT(sink), msg ) );
@@ -79,6 +81,8 @@ gst_memorysink_setcaps (GstBaseSink * sink, GstCaps * caps)
   ret = gst_structure_get_int (structure, "width", &element->video_width);
   ret &= gst_structure_get_int (structure, "height", &element->video_height);
 	
+  if( element->data ) free(element->data);
+  element->data=NULL;
 	
   return( ret );
 }
@@ -89,6 +93,7 @@ gst_memorysink_init (GstMemorySink * memorysink)
 	memorysink->nFrames=1;
 	memorysink->cFrame=0;
 	memorysink->frames=NULL;
+	memorysink->data=NULL;
 }
 
 

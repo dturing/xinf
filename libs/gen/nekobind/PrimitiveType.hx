@@ -74,6 +74,6 @@ class PrimitiveType implements IType {
     }
     
     public function toString() : String {
-        return( "["+Reflect.getClass(this).__name__.pop()+" '"+ctype+"']" );
+        return( "["+Type.getClassName(Type.getClass(this))+" '"+ctype+"']" );
     }
 }

@@ -15,29 +15,19 @@
 
 package xinf.ul;
 
-import xinf.event.Event;
-import xinf.ony.Pane;
-import xinf.ony.Element;
-import xinf.ony.Color;
+import xinf.ul.Pane;
 import xinf.ul.VScrollbar;
 import xinf.ul.Label;
 import xinf.ul.ListModel;
 
-import xinf.ony.MouseEvent;
-import xinf.ony.KeyboardEvent;
-import xinf.ony.ScrollEvent;
-import xinf.ony.GeometryEvent;
+import xinf.erno.Color;
+import xinf.erno.Renderer;
+import xinf.event.Event;
 
-class PickEvent extends Event<PickEvent> {
-	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent>("itemPicked");
-
-	public var index:Int;
-	
-	public function new( _type:xinf.event.EventKind<PickEvent>, target:xinf.event.EventDispatcher, index:Int ) {
-		super(_type,target);
-		this.index = index;
-	}
-}
+import xinf.event.MouseEvent;
+import xinf.event.KeyboardEvent;
+import xinf.event.ScrollEvent;
+import xinf.event.SimpleEvent;
 
 
 /**
@@ -47,11 +37,11 @@ class PickEvent extends Event<PickEvent> {
     to reassign only the ones that need to be, and move the rest.
 **/
 
-class ListBox extends Widget {
+class ListBox<T> extends Widget {
     private var scrollbar:VScrollbar;
-    private var children:Array<Label>;
+    private var labels:Array<Label>;
     private var scrollPane:Pane;
-    private var model:ListModel;
+    private var model:ListModel<T>;
     
     private var offset:Float;
     private var cursor:Int;
@@ -59,56 +49,71 @@ class ListBox extends Widget {
     private static var rowH:Int = 20;
     private static var rowPad:Int = 1;
     
-    public function new( name:String, parent:Element, _model:ListModel ) :Void {
-        super( name, parent );
+    public function new( _model:ListModel<T> ) :Void {
+        super();
         
-		autoSize = false;
-		
         offset = 0;
 		cursor = -1;
 		lastCursorItem = null;
-        children = new Array<Label>();
-        bounds.addEventListener( GeometryEvent.SIZE_CHANGED, reLayout ); 
-        setBackgroundColor( new Color().fromRGBInt( 0xffffff ) );
+        labels = new Array<Label>();
         
-        scrollPane = new Pane( name+"_pane", this );
-        scrollPane.crop = true;
-
-        scrollbar = new xinf.ul.VScrollbar( name+"_scroll", this );
+        scrollPane = new Pane();
+        scrollPane.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
+		attach( scrollPane );
+		
+        scrollbar = new xinf.ul.VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
-		scrollbar.visible=false;
+//		scrollbar.visible=false;
+		attach( scrollbar );
 
-        model = _model;
-        model.addChangedListener( reDo );
-                
+		setModel(_model);
+
+        assureChildren( Math.ceil((size.y/ rowH) + 1) );
+		select(0);
+		
         addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
         addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-
-        scrollPane.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
-
-		setChild( scrollPane );
-		scrollbar.visible=false;
-
-		reLayout( null );
-		select(0);
     }
+	
+	public function resize( x:Float, y:Float ) :Void {
+		super.resize(x,y);
+		reLayout( null );
+	}
 
-    private function reLayout( e:GeometryEvent ) :Void {
-        assureChildren( Math.ceil((bounds.height / rowH) + 1) );
+	public function drawContents( g:Renderer ) :Void {
+		reLayout(null);
+		super.drawContents(g);
+	}
+	
+	public function setModel( _model:ListModel<T> ) :Void {
+        model = _model;
+        model.addChangedListener( reDo );
+		cursor=0;
+		reDo(null);
+		sendPickEvent();
+	}
+	
+    private function reLayout( e:SimpleEvent ) :Void {
+        assureChildren( Math.ceil((size.y/ rowH) + 1) );
         
         // set children sizes
-        var w:Float = bounds.width;
-        for( child in children ) {
-            child.bounds.setSize( w, rowH-(2*rowPad) );
+        var w:Float = size.x;
+        for( child in labels ) {
+            child.resize( w, rowH-(2*rowPad) );
         }
+		
+		scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
+		scrollPane.crop = true;
+		scrollPane.resize( size.x, size.y );
         
         // hide/show the scrollbar
-        if( (model.getLength() * rowH) > bounds.height ) {
-            scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
-			scrollbar.visible=true;
+		scrollbar.resize( scrollbar.size.x, size.y );
+        if( (model.getLength() * rowH) > size.y ) {
+			//scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
+			//scrollbar.visible=true;
         } else {
-			scrollbar.visible=false;
+			//scrollbar.visible=false;
         }
 
         reDo(e);
@@ -119,33 +124,35 @@ class ListBox extends Widget {
         var max = model.getLength();
         var y = (index*rowH)-offset;
         
-        for( child in children ) {
+        for( child in labels ) {
             if( index >= max ) {
                 child.text = "";
             } else {
-                child.text = model.getItemAt(index);
+                child.text = model.getNameAt(index);
             }
-            child.bounds.setPosition( 0, y+rowPad );
-            y+=rowH;
+            child.moveTo( 0, y+rowPad );
+			child.scheduleRedraw();
+			y+=rowH;
             index++;
         }
     }
     
     private function assureChildren( n:Int ) :Void {
-        if( children.length < n ) {
+        if( labels.length < n ) {
             // add labels
-            for( i in 0...(n - children.length) ) {
-                var child = new Label( name+"_"+children.length, scrollPane );
-                child.autoSize = false;
-                children.push( child );
+            for( i in 0...(n - labels.length) ) {
+                var child = new Label();
+				child.resize( size.x, rowH );
+				scrollPane.attach( child );
+                labels.push( child );
             }
-        } else if( children.length > n ) {
+        } else if( labels.length > n ) {
             // remove labels: TODO
         }
     }
     
     private function scroll( e:ScrollEvent ) :Void {
-        offset = ((model.getLength() * rowH) - scrollPane.bounds.height) * e.value;
+        offset = Math.round(((model.getLength() * rowH) - scrollPane.size.y) * e.value);
         reDo(null);
 		select(cursor);
     }
@@ -158,29 +165,29 @@ class ListBox extends Widget {
 
     private function scrollLeap( e:ScrollEvent ) :Void {
         var factor = e.value;
-        scrollBy( bounds.height * factor );
+        scrollBy( size.y * factor );
 		select(cursor);
     }
     
     private function scrollBy( pixels:Float ) :Void {
         offset += pixels;
         if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * rowH) - scrollPane.bounds.height) )
-            offset = ((model.getLength() * rowH) - scrollPane.bounds.height);
+        if( offset > ((model.getLength() * rowH) - scrollPane.size.y ) )
+            offset = ((model.getLength() * rowH) - scrollPane.size.y );
             
-        scrollbar.setScrollPosition( offset / ((model.getLength() * rowH) - bounds.height) );
+        scrollbar.setScrollPosition( offset / ((model.getLength() * rowH) - size.y) );
             
         reDo(null);
     }
 
 	private function findItem( index:Int ) :Label {
 		var first = Math.floor(offset/rowH);
-		return( children[ cursor-first ] );
+		return( labels[ cursor-first ] );
 	}
 
 	public function assureVisible( index:Int ) :Void {
 		var first = Math.floor(offset/rowH);
-		var sz = Math.floor(scrollPane.bounds.height / rowH);
+		var sz = Math.floor(scrollPane.size.y / rowH);
 		var l = (first+sz)-1;
 		var ofs = offset % rowH;
 		if( index < first ) {
@@ -206,14 +213,21 @@ class ListBox extends Widget {
 	}
 
 	private function entryClicked( e:MouseEvent ) :Void {
-        var y = globalToLocal( new xinf.geom.Point(e.x, e.y) ).y;
+        var y = globalToLocal( { x:e.x, y:e.y }).y;
         var i:Int = Math.floor((y+offset)/rowH);
 		select( i );
-		postEvent( new PickEvent( PickEvent.ITEM_PICKED, this, cursor ) );
+		sendPickEvent();
     }
+	
+	private function sendPickEvent() :Void {
+		postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(cursor) ) );
+	}
+	
+	public function getCurrentItem() :T {
+		return model.getItemAt(cursor);
+	}
 
 	public function onKeyDown( e:KeyboardEvent ) {
-		if( e.target != null ) return;
 		switch( e.key ) {
 			case "up":
 				assureVisible( cursor-1 );
@@ -222,15 +236,15 @@ class ListBox extends Widget {
 				assureVisible( cursor+1 );
 				select( cursor+1 );
 			case "page up":
-				var i=cursor-Math.round(scrollPane.bounds.height/rowH);
+				var i=cursor-Math.round(scrollPane.size.y/rowH);
 				assureVisible( i );
 				select( i );
 			case "page down":
-				var i=cursor+Math.round(scrollPane.bounds.height/rowH);
+				var i=cursor+Math.round(scrollPane.size.y/rowH);
 				assureVisible( i );
 				select( i );
 			case "space":
-				postEvent( new PickEvent( PickEvent.ITEM_PICKED, this, cursor ) );
+				sendPickEvent();
 		}
 	}
 }

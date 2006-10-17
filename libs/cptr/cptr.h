@@ -22,6 +22,7 @@ typedef struct _cptr {
 
 #define VAL_Int(v) ((int)val_number(v))
 #define VAL_Float(v) ((float)val_number(v))
+#define VAL_Bool(v) ((float)val_bool(v))
 #define VAL_String(v) val_string(v)    // TODO HaXe strings direct?
 #define VAL_Dynamic(v) 0
 
@@ -43,6 +44,7 @@ typedef struct _cptr {
 
 void check_failed( const char *function, const char *file, int line, value given );
 value cptr_wrap( void *ptr, int size );
+value cptr_wrap_foreign( void *ptr, int size );
 
 /* handle kinds - convenience only, not needed for cptr */
 #define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \

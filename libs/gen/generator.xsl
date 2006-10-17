@@ -46,7 +46,7 @@ class <xsl:value-of select="$module"/>Generator {
 <xsl:template match="enum">
     <xsl:apply-templates match="enumitem"/>
 
-    <xsl:text>        gen.typedef("enum </xsl:text>
+    <xsl:text>        gen.typeDef("enum </xsl:text>
     <xsl:value-of select="@unnamed"/>
     <xsl:text>","int");
 </xsl:text>
@@ -120,7 +120,7 @@ class <xsl:value-of select="$module"/>Generator {
 </xsl:template>
 
 <xsl:template match="cdecl[@storage='typedef']">
-    <xsl:text>        gen.typedef("</xsl:text>
+    <xsl:text>        gen.typeDef("</xsl:text>
     <xsl:value-of select="@sym_name"/>
     <xsl:text>","</xsl:text>
     <xsl:value-of select="@type"/>

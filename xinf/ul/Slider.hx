@@ -15,29 +15,29 @@
 
 package xinf.ul;
 
-import xinf.ony.Element;
-import xinf.ony.MouseEvent;
-import xinf.ony.KeyboardEvent;
-
-import xinf.ul.Button;
+import xinf.ony.Object;
+import xinf.event.MouseEvent;
+import xinf.event.KeyboardEvent;
+import xinf.event.ScrollEvent;
+import xinf.ul.Drag;
+import xinf.ul.Popup;
+import xinf.ul.FocusManager;
 
 /**
     Slider (numeric entry) element.
 **/
 
-class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
-	private var _mouseUp:Dynamic;
-	private var _mouseMove:Dynamic;
-	private var slideBar:Element;
-	private var slideThumb:Element;
+class Slider extends Widget {
+	private var slideBar:Pane;
+	private var slideThumb:Pane;
+    private var label:Label;
+    private var button:xinf.style.StyleClassElement;
+	private var popup:Popup;
 	
 	public var precision:Float;
 	public var min:Float;
 	public var max:Float;
 	public var increment:Float;
-	
-	private var mouseOffset:Int;
-	private var valueOffset:Float;
 	
 	private var _value:Float;
 	public var value(get_value,set_value):Float;
@@ -45,8 +45,11 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 		return _value;
 	}
 	public function set_value( v:Float ) :Float {
-		_value = v;
-		left.text = ""+Math.floor( precision*v )/precision;
+		_value = v - (v-(Math.round(v/increment)*increment));
+		if( _value > max ) _value=max;
+		if( _value < min ) _value=min;
+		label.text = ""+Math.floor( precision*_value )/precision;
+		postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
 		return _value;
 	}
 	public function get_normalized() :Float {
@@ -54,70 +57,75 @@ class Slider extends xinf.ul.Combo<xinf.ul.Label,ImageButton> {
 	}
 	public function set_normalized( v:Float ) :Float {
 		if( v<.0 ) v=.0; else if( v>1. ) v=1.;
-		_value = min + (v*(max-min));
-		left.text = ""+Math.floor( precision*_value )/precision;
+		value = min + (v*(max-min));
+		label.text = ""+Math.floor( precision*_value )/precision;
+		postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
 		return v;
 	}	
-    public function new( name:String, parent:Element ) :Void {
-		super( name, parent );
-		precision=1000; min=0; max=1; increment=.1;
+    public function new( ?max:Float, ?min:Float, ?increment:Float ) :Void {
+		super();
+		precision=1000; this.min=0; this.max=1; this.increment=.1;
+		if( min!=null ) this.min = min;
+		if( max!=null ) this.max = max;
+		if( increment!=null ) this.increment = increment;
 	
-		setLeft( new xinf.ul.Label(name+"_lbl", this ) );
+		label = new xinf.ul.Label();
+		label.moveTo( 1, 1 );
+		attach( label );
 		// FIXME: image should be part of the style.
-		setRight( new ImageButton(name+"_btn", this, "assets/slider/icon.png" ) );
-		right.autoSize = false;
+		button = new Pane(); //new ImageButton(name+"_btn", this, "assets/slider/icon.png" ) );
+		button.addStyleClass("Thumb");
+		attach( button );
 		
-		slideBar = new xinf.ony.Image(name+"_slide", this, "assets/slider/bg.png");
-		slideBar.visible = false;
+		slideBar = new Pane();//Image(name+"_slide", this, "assets/slider/bg.png");
+		slideBar.addStyleClass("SliderBar");
 
-		slideThumb = new xinf.ony.Image(name+"_thumb", this, "assets/slider/handle.png");
-		slideThumb.bounds.setPosition( 2, 1 );
-		slideThumb.visible = false;
+		slideThumb = new Pane(); //new xinf.ony.Image(name+"_thumb", this, "assets/slider/handle.png");
+		slideThumb.moveTo( 6, 1 );
+		slideThumb.resize( 7, 2 );
+		slideThumb.addStyleClass("Thumb");
+		slideBar.attach( slideThumb );
 
 		value = .0;
 
-		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+		button.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+        addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
     }
 	
+	public function resize( x:Float, y:Float ) :Void {
+		super.resize(x,y);
+		button.resize( y, y );
+		button.moveTo( x-y, 0 );
+		
+		slideBar.resize( y, 112 );
+	}
+	
 	private function onMouseDown( e:MouseEvent ) {
-		if( _mouseUp == null ) {
-			addStyleClass( ":focus" );
-		
-			xinf.event.Global.addEventListener( 
-				MouseEvent.MOUSE_UP, _mouseUp=onMouseUp );
-			xinf.event.Global.addEventListener( 
-				MouseEvent.MOUSE_MOVE, _mouseMove=onMouseMove );
+		FocusManager.setFocus(this);
 				
-			var y = -(100-(get_normalized()*100));
-			slideBar.bounds.setPosition( right.bounds.x, y );
-			slideThumb.bounds.setPosition( 2+slideBar.bounds.x, (101-(get_normalized()*100))+slideBar.bounds.y );
-			slideBar.visible = true;
-			slideThumb.visible = true;
-			
-			mouseOffset = e.y;
-			valueOffset = get_normalized();
-		}
-	}
-	
-	private function onMouseUp( e:MouseEvent ) {
-		removeStyleClass( ":focus" );
-
-		xinf.event.Global.removeEventListener( 
-			MouseEvent.MOUSE_UP, _mouseUp );
-		xinf.event.Global.removeEventListener( 
-			MouseEvent.MOUSE_MOVE, _mouseMove );
-		_mouseUp = null;
+		var y = -(100-(get_normalized()*100));
+		var p = localToGlobal( {x:button.position.x, y:-3+y } );
+		slideBar.moveTo( p.x, p.y ); //position.x+button.position.x, -3+position.y+y );
+		slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
+		popup = new Popup(slideBar,Move);
 		
-		slideBar.visible = false;
-		slideThumb.visible = false;
+		new Drag<Float>( e, sliderMoved, sliderEnd, get_normalized() );
 	}
 
-	private function onMouseMove( e:MouseEvent ) {
-		set_normalized( (valueOffset + ((e.y-mouseOffset)/-100)) );
-		slideThumb.bounds.setPosition( 2+slideBar.bounds.x, (101-(get_normalized()*100))+slideBar.bounds.y );
+    private function scrollStep( e:ScrollEvent ) :Void {
+        value -= e.value*increment;
+    }
+
+	public function sliderMoved( x:Float, y:Float, marker:Float ) :Void {
+		set_normalized( (marker + ((y)/-100)) );
+		slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
 	}
-	
+
+	public function sliderEnd() :Void {
+		popup.close();
+	}
+			
 	private function onKeyDown( e:KeyboardEvent ) {
 		switch( e.key ) {
 			case "up":

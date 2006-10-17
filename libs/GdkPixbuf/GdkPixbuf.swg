@@ -72,6 +72,7 @@ GdkPixbuf* gdk_pixbuf_new_from_inline	(gint          data_length,
 					 gboolean      copy_pixels,
 					 GError      **error);
        
+	   
 /* Mutations */
 void       gdk_pixbuf_fill              (GdkPixbuf    *pixbuf,
                                          guint32       pixel);

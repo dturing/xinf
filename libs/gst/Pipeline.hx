@@ -52,11 +52,14 @@ class Pipeline extends Object {
 		var launch = "videotestsrc ! xvimagesink";
 		trace("launch pipeline: "+launch );
 		
-		gst.Object._init();
 		var pipeline = new Pipeline( launch );
 		
 		while( true ) {
 			neko.Sys.sleep( 1 );
 		}
 	}
+	
+    public static function __init__() :Void {
+		gst.Object._init();
+    }
 }

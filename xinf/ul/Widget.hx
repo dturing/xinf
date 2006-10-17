@@ -15,11 +15,9 @@
 
 package xinf.ul;
 
-import xinf.ony.Element;
-import xinf.ony.FocusManager;
-import xinf.ony.KeyboardEvent;
-import xinf.ony.MouseEvent;
-import xinf.style.StyleClassElement;
+import xinf.ul.FocusManager;
+import xinf.event.KeyboardEvent;
+import xinf.event.MouseEvent;
 import xinf.event.Global;
 
 
@@ -27,17 +25,14 @@ import xinf.event.Global;
     Widget base class.
 	Takes care of Keyboard Focus.
 **/
-class Widget extends StyleClassElement {
+class Widget extends Pane {
 	public var focusable:Bool;
 
-    public function new( name:String, parent:Element ) :Void {
+    public function new() :Void {
+		super();
 		focusable = true;
+		FocusManager.register(this);
 		
-		super( name, parent );
-		FocusManager.registerElement(this);
-		
-		addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
-		addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
 		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
     }
 	
@@ -47,24 +42,15 @@ class Widget extends StyleClassElement {
 		FocusManager.setFocus( this );
 	}
 	
-	override public function focus() :Bool {
+	public function focus() :Bool {
 		if( !focusable ) {
 			return false;
 		}
 		addStyleClass(":focus");
-		super.focus();
 		return true;
 	}
 
-	override public function blur() :Void {
+	public function blur() :Void {
 		removeStyleClass(":focus");
-		super.blur();
-	}
-
-	public function handleKeyboardEvent( e:KeyboardEvent ) :Void {
-		if( e.target != child && child != null ) {
-			e.target = child;
-			child.dispatchEvent( e );
-		}
 	}
 }

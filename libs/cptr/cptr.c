@@ -25,7 +25,7 @@ void kind_check_failed( const char *function, const char *file, int line, value 
 
 void cptr_finalize( value cp ) {
     CHECK_CPTR(cp);
-    cptr *p = val_data( cp );
+	cptr *p = val_data( cp );
     if( p->ptr ) free(p->ptr);
     if( p ) free(p);
 }
@@ -36,6 +36,14 @@ value cptr_wrap( void *ptr, int size ) {
     p->ptr = ptr;
     value r = alloc_abstract( k_cptr, p );
     val_gc( r, cptr_finalize );
+    return(r);
+}
+
+value cptr_wrap_foreign( void *ptr, int size ) {
+    cptr *p = (cptr*)malloc( sizeof(cptr) );
+    p->size = size;
+    p->ptr = ptr;
+    value r = alloc_abstract( k_cptr, p );
     return(r);
 }
 

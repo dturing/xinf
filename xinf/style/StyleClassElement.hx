@@ -1,40 +1,22 @@
 package xinf.style;
 
-import xinf.style.Style;
-import xinf.ony.Element;
-
-import xinf.ony.MouseEvent;
-
-/**
-	FIXME: really do the :hover here? or in some InteractiveElement?
-**/
-
-class StyleClassElement extends StyledElement {
+class StyleClassElement extends xinf.ony.Object {
+	public var style :Style;
 	private var styleClasses :Array<String>;
 	
-	public function new( name:String, parent:Element ) :Void {
-		super(name,parent);
+	public function new() :Void {
+		super();
 		styleClasses = new Array<String>();
+		style = StyleSheet.newDefaultStyle();
 		
 		// add our own class to the list of style classes
 		var clNames:Array<String> = untyped Type.getClass(this).__name__;
 		addStyleClass( clNames[ clNames.length-1 ] );
-
-		// :hover pseudo-class
-		addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
-		addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
 	}
 
-	private function onMouseOver( e:MouseEvent ) {
-		addStyleClass(":hover");
-	}
-	private function onMouseOut( e:MouseEvent ) {
-		removeStyleClass(":hover");
-	}
-		
 	public function updateStyles() :Void {
 		style = StyleSheet.defaultSheet.match( this );
-		applyStyle();
+		scheduleRedraw();
 	}
 
 	public function addStyleClass( name:String ) :Void {

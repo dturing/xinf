@@ -17,6 +17,7 @@ package xinf.event;
 
 class SimpleEventDispatcher implements EventDispatcher {
 	private var listeners :Hash<List<Dynamic->Void>>;
+	private var filters :List<Dynamic->Bool>;
 
 	public function new() :Void {
 		listeners = new Hash<List<Dynamic->Void>>();
@@ -41,13 +42,36 @@ class SimpleEventDispatcher implements EventDispatcher {
 		return false;
 	}
 
+	public function removeAllListeners<T>( type :EventKind<T> ) :Bool {
+		return( listeners.remove( type.toString() ) );
+	}
+
+	public function addEventFilter( f:Dynamic->Bool ) :Void {
+		if( filters==null ) filters=new List<Dynamic->Bool>();
+		filters.push(f);
+	}
+
 	public function dispatchEvent<T>( e : Event<T> ) :Void {
 		var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
+		var dispatched:Bool = false;
+		
+		if( filters!=null ) {
+			for( f in filters ) {
+				if( f(e)==false ) return;
+			}
+		}
+		
 		if( l != null ) {
 			for( h in l ) {
 				h(e);
+				dispatched=true;
 			}
 		}
+		/*
+		if( !dispatched ) {
+			trace("unhandled event: "+e );
+		}
+		*/
 	}
 
 	public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
@@ -55,7 +79,6 @@ class SimpleEventDispatcher implements EventDispatcher {
 		e.origin = pos;
 		
 		// for now, FIXME (maybe)
-		if( e.target != null ) e.target.dispatchEvent(e);
-		else dispatchEvent(e);
+		dispatchEvent(e);
 	}
 }

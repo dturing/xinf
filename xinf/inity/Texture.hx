@@ -15,58 +15,92 @@
 
 package xinf.inity;
 
+import xinf.erno.ImageData;
+import xinf.inity.gdk.Pixbuf;
+
+/** strictly any neko ImageData is already a texture. This class manages the texture though,
+  ImageData only stores some values for direct access by the GLGraphicsContext **/
+ 
 enum ColorSpace {
     RGB;
     RGBA;
 	BGR;
 	BGRA;
 }
-
-class Texture {
-	// texture id and size, size must be 2^n
-	private var texture:Int;
-    private var twidth:Int;
-    private var theight:Int;
-
-	// image size - what part is actually used of the texture
-    public var width(default,null):Int;
-    public var height(default,null):Int;
+ 
+class Texture extends ImageData {
+	// texture (id), twidth, theight, width and height are already defined in ImageData.
 	
-	public function new( w:Int, h:Int, tw:Int, th:Int, tex:Int ) {
-		width=w; height=h;
-		twidth=tw; theight=th;
-		texture=tex;
-	}
-
-    public function render( w:Float, h:Float, rx:Float, ry:Float, rw:Float, rh:Float ) {
-		if( texture==-1 ) return;
-//        trace("BitmapData:render "+texture+" - "+w+","+h+" // "+rx+","+ry+" "+rw+","+rh );
+	public function initialize( w:Int, h:Int ) {
+		width=w;
+		height=h;
 		
-        var tx1:Float = (rx/twidth)*w;
-        var ty1:Float = (ry/theight)*h;
-        var tx2:Float = ( (rw+rx) / twidth ) * w * (width/w);
-        var ty2:Float = ( (rh+ry) / theight ) * h * (height/h);
+        twidth = 2; while( twidth<w ) twidth<<=1;
+        theight = 2; while( theight<h ) theight<<=1;
+
+		// generate texture id
+        var t:Dynamic = CPtr.uint_alloc(1);
+        GL.GenTextures(1,t);
+        texture = CPtr.uint_get(t,0);
 
 		GL.PushAttrib( GL.ENABLE_BIT );
-			GL.Enable( GL.TEXTURE_2D );
-			GL.BindTexture( GL.TEXTURE_2D, texture );
+        GL.Enable( GL.TEXTURE_2D );
+		
+			GL.BindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
+			GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
+			GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
+			GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
+			GL.TexParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
+			GL.CreateTexture( texture, twidth, theight );
 
-			var x:Float = -.25;
-			var y:Float = -.25;
-			w+=x;
-			h+=y;
+		GL.PopAttrib();
+	}
+	
+	public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, ?cspace:ColorSpace ) :Void {
+		if( cspace==null ) cspace=BGRA;
+	
+		GL.PushAttrib( GL.ENABLE_BIT );
+        GL.Enable( GL.TEXTURE_2D );
+        GL.BindTexture( GL.TEXTURE_2D, texture );
+		
+        if( data != null ) {
+            switch( cspace ) {
+                case RGB:
+                    GL.TexSubImage2D_RGB_BYTE( texture, pos, size, data );
+                case RGBA:
+                    GL.TexSubImage2D_RGBA_BYTE( texture, pos, size, data );
+                case BGRA:
+				   GL.TexSubImage2D_BGRA_BYTE( texture, pos, size, data );
+                default:
+                    throw("unknown colorspace");
+            }
+        }
 
-			GL.Begin( GL.QUADS );
-				GL.TexCoord2f( tx1, ty1 );
-				GL.Vertex2f  (   x,   y ); 
-				GL.TexCoord2f( tx2, ty1 );
-				GL.Vertex2f  (   w,   y ); 
-				GL.TexCoord2f( tx2, ty2 );
-				GL.Vertex2f  (   w,   h ); 
-				GL.TexCoord2f( tx1, ty2 );
-				GL.Vertex2f  (   x,   h ); 
-			GL.End();
+		GL.PopAttrib();
+	}
 
-        GL.PopAttrib();
+	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
+	public static var cache:Hash<Texture> = new Hash<Texture>();
+    public static function newByName( filename:String ) :Texture {
+		var r = cache.get(filename);
+		if( r==null ) {
+			r = newFromPixbuf( Pixbuf.newFromFile(filename) );
+			cache.set(filename,r);
+		}
+		return r;
+	}
+	
+    public static function newFromPixbuf( pixbuf:Pixbuf ) :Texture {
+		var r = new Texture();
+		
+		r.initialize( pixbuf.width, pixbuf.height );
+        var cs = if( pixbuf.alpha ) RGBA else RGB;
+        var d = pixbuf.stealPixels();
+		
+		r.setData( d, {x:0, y:0}, {x:r.width,y:r.height}, cs );
+		untyped r._buf = pixbuf;
+        return r;
     }
+
+
 }

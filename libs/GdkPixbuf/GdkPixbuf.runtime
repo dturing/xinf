@@ -44,5 +44,15 @@ value gdk_pixbuf_get_error( GError **err ) {
 }
 
 unsigned int *gdk_pixbuf_get_pixels_cptr(GdkPixbuf *pixbuf) {
-    return gdk_pixbuf_get_pixels(pixbuf);
+    return (unsigned int *)gdk_pixbuf_get_pixels(pixbuf);
+}
+
+GdkPixbuf *gdk_pixbuf_new_from_rgba( const unsigned int *data, int width, int height, gboolean hasAlpha ) {
+	return gdk_pixbuf_new_from_data( (const guchar*)data, GDK_COLORSPACE_RGB,
+		hasAlpha, 8, width, height, width*(hasAlpha?4:3), NULL, NULL );
+}
+
+	   
+gboolean gdk_pixbuf_save_simple( GdkPixbuf *pixbuf, const char *filename, const char *type, GError **error ) {
+	return gdk_pixbuf_save( pixbuf, filename, type, error, NULL );
 }

@@ -19,7 +19,7 @@
     _from_array(p,from,values)
         sets p[from...] to (the neko array) values.
 */
-
+/*
 #if test
 class TestCPtr extends haxe.unit.TestCase {
     function testInt() {
@@ -110,7 +110,7 @@ class TestCPtr extends haxe.unit.TestCase {
 
     function testDouble() {
         var n:Int = 1024;
-        var ptr = CPtr.double_alloc(n);
+        var ptr:Dynamic = CPtr.double_alloc(n);
         
         for( i in 0...n ) {
             CPtr.double_set(ptr,i,i/10);
@@ -199,10 +199,16 @@ class TestCPtr extends haxe.unit.TestCase {
         assertEquals( 0x4241, CPtr.short_get(ptr,0) );
         assertEquals( 0x4443, CPtr.short_get(ptr,1) );
     }
+
+	function testVoidNull() {
+		var info:{ size:Int, address:Float } = untyped CPtr.info( CPtr.void_null );
+		assertEquals( 0, info.size );
+		assertEquals( 0., info.address );
+	}
 }
 
 #end // test
-
+*/
 class CPtr {
     public static var float_alloc      = neko.Lib.load("cptr","cptr_float_alloc",1);
     public static var float_set        = neko.Lib.load("cptr","cptr_float_set",3);
@@ -256,13 +262,13 @@ class CPtr {
     public static var as_string = neko.Lib.load("cptr","cptr_as_string",1);
     public static var from_string = neko.Lib.load("cptr","cptr_from_string",1);
     public static var info = neko.Lib.load("cptr","cptr_info",1);
-    
     #if test
         public static function main() {
     
                 var r = new haxe.unit.TestRunner();
-                r.add( new TestCPtr() );
+//                r.add( new TestCPtr() );
                 r.run();
+				
         }
     #end
 }

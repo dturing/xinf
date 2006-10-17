@@ -1,5 +1,7 @@
 package xinf.style;
 
+import xinf.erno.Color;
+
 typedef Sides<T> = {
 	var l:T;
 	var t:T;
@@ -9,10 +11,11 @@ typedef Sides<T> = {
 
 typedef Style = {
 	var padding :Sides<Float>;
-	var background :xinf.ony.Color;
 	var border :Sides<Float>;
-	var color :xinf.ony.Color;
-	var skin :String;
+	
+	var background :Color;
+	var color :Color;
+	
 	var minWidth :Float;
 	var textAlign :Float;
 	var verticalAlign :Float;

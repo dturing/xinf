@@ -48,6 +48,21 @@ void gluTessVertexSimple( GLUtesselator *tess, double *v ) {
     gluTessVertex( tess, v, (void*)v );
 }
 
+void gluTessVertexOffset( GLUtesselator *tess, double *v, int offset ) {
+	double *_v = v+offset;
+    gluTessVertex( tess, _v, (void*)_v );
+}
+
+/* FIXME: use proper GL vertex array, not this hacky crap! */
+void gluVerticesOffset( double *v, int offset, int n ) {
+	double *_v = v+offset;
+	int i;
+	for( i=0; i<n; i++ ) {
+		glVertex3dv( _v );
+		_v += 3;
+	}
+}
+
 void gluTessCubicCurve( GLUtesselator *tess, value _ctrl, double *v, int _n ) {
     unsigned int i;
     int n = _n-1;
@@ -62,8 +77,8 @@ void gluTessCubicCurve( GLUtesselator *tess, value _ctrl, double *v, int _n ) {
             { val_number( ctrl[6] ), val_number( ctrl[7] ) }
 		};
 
-    float bezierValues[3][2];
-    float stepsize = 1.0/n;
+    double bezierValues[3][2];
+    double stepsize = 1.0/n;
 
 	for( i = 0; i <= n; i++) {
         float t = ((float)i) * stepsize;
@@ -133,4 +148,228 @@ void gluTessQuadraticCurve( GLUtesselator *tess, value _ctrl, double *v, int _n 
         
         gluTessVertex( tess, _v, (void*)_v );
     }	
+}
+
+
+/* ------------------------------------------------------------- */
+/* Tesselate Array ( [x1,y1,x2,y2,...,xn,yn] */
+/* ------------------------------------------------------------- */
+/*
+void gluTesselatePath( GLUtesselator *tess, value _points ) {
+	int i, _c, _p;
+	
+	if( tess == NULL ) {
+		tess = gluNewTess();
+		gluTessCallback( tess, GLU_TESS_BEGIN, (_GLUfuncptr)glBegin );
+		gluTessCallback( tess, GLU_TESS_VERTEX, (_GLUfuncptr)glVertex3dv );
+		gluTessCallback( tess, GLU_TESS_END, (_GLUfuncptr)glEnd );
+		gluTessCallback( tess, GLU_TESS_COMBINE, (_GLUfuncptr)simple_tess_combine );
+		gluTessCallback( tess, GLU_TESS_ERROR, (_GLUfuncptr)simple_tess_error );
+	}
+
+
+	// FIXME: check array
+	
+	value *p = val_array_ptr( _points );
+	int n = val_array_size( _points )/2;
+
+	GLdouble *coords = (GLdouble*)malloc( sizeof(GLdouble)*n*3 );
+	
+	_c = 0;
+	_p = 0;
+	for( i=0; i<n; i++ ) {
+		coords[_c++] = val_number(p[_p]);
+		coords[_c++] = val_number(p[_p+1]);
+		coords[_c++] = 0.0;
+		_p+=2;
+	}
+
+	for( i=0; i<n; i++ ) {
+		printf("tess vertex: %f,%f,%f\n", coords[i*3], coords[(i*3)+1], coords[(i*3)+2] );
+        gluTessVertex( tess, &coords[i*3], (void*)&coords[i*3] );
+	}
+	
+	//free( coords ); // might be used after, for complex polygons?
+
+	printf("tess'd %i vertices\n", n );
+}
+*/
+
+/* ------------------------------------------------------------- */
+/* Evaluate to Array ( [x1,y1,x2,y2,...,xn,yn] */
+
+value gluEvaluateCubicToArray( value _ctrl, int _n ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	float controlPoints[4][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) },
+            { val_number( ctrl[6] ), val_number( ctrl[7] ) }
+		};
+
+    double bezierValues[3][2];
+    double stepsize = 1.0/n;
+
+	value result = alloc_array( n*2 );
+	value *a = val_array_ptr( result );
+
+	for( i = 0; i <= n; i++) {
+        float t = ((float)i) * stepsize;
+        float t1 = (1.0f - t);
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[2][0] = t1 * controlPoints[2][0] + t * controlPoints[3][0];
+        bezierValues[2][1] = t1 * controlPoints[2][1] + t * controlPoints[3][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+        bezierValues[1][0] = t1 * bezierValues[1][0] + t * bezierValues[2][0];
+        bezierValues[1][1] = t1 * bezierValues[1][1] + t * bezierValues[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+		
+        a[i*2] = alloc_float( bezierValues[0][0] );
+        a[(i*2)+1] = alloc_float( bezierValues[0][1] );
+    }	
+	
+	return result;
+}
+
+value gluEvaluateQuadraticToArray( value _ctrl, int _n ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	float controlPoints[3][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) }
+		};
+
+    float bezierValues[2][2];
+    float stepsize = 1.0/n;
+
+	value result = alloc_array( n*2 );
+	value *a = val_array_ptr( result );
+
+	for( i = 0; i <= n; i++) {
+        float t = ((float)i) * stepsize;
+        float t1 = (1.0f - t);
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+        a[i*2] = alloc_float( bezierValues[0][0] );
+        a[(i*2)+1] = alloc_float( bezierValues[0][1] );
+    }
+	
+	return result;
+}
+
+/* ------------------------------------------------------------- */
+/* Evaluate to Callback f( x:Float, y:Float ) */
+
+value gluEvaluateCubicBezier( value _ctrl, int _n, value callback ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	double controlPoints[4][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) },
+            { val_number( ctrl[6] ), val_number( ctrl[7] ) }
+		};
+
+    double bezierValues[3][2];
+    double stepsize = 1.0/n;
+
+	value result = alloc_array( n*2 );
+	value *a = val_array_ptr( result );
+
+	for( i = 0; i <= n; i++) {
+        double t = ((float)i) * stepsize;
+        double t1 = (1.0f - t);
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[2][0] = t1 * controlPoints[2][0] + t * controlPoints[3][0];
+        bezierValues[2][1] = t1 * controlPoints[2][1] + t * controlPoints[3][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+        bezierValues[1][0] = t1 * bezierValues[1][0] + t * bezierValues[2][0];
+        bezierValues[1][1] = t1 * bezierValues[1][1] + t * bezierValues[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+		
+		val_call2( callback, alloc_float( bezierValues[0][0] ), alloc_float( bezierValues[0][1] ) );
+    }	
+	return val_true;
+}
+
+value gluEvaluateQuadraticBezier( value _ctrl, int _n, value callback ) {
+    unsigned int i;
+    int n = _n-1;
+    
+    // FIXME: check array
+    
+    value *ctrl = val_array_ptr( _ctrl );
+	float controlPoints[3][2] = {
+            { val_number( ctrl[0] ), val_number( ctrl[1] ) },
+            { val_number( ctrl[2] ), val_number( ctrl[3] ) },
+            { val_number( ctrl[4] ), val_number( ctrl[5] ) }
+		};
+
+    float bezierValues[2][2];
+    float stepsize = 1.0/n;
+
+	value result = alloc_array( n*2 );
+	value *a = val_array_ptr( result );
+
+	for( i = 0; i <= n; i++) {
+        float t = ((float)i) * stepsize;
+        float t1 = (1.0f - t);
+        
+        bezierValues[0][0] = t1 * controlPoints[0][0] + t * controlPoints[1][0];
+        bezierValues[0][1] = t1 * controlPoints[0][1] + t * controlPoints[1][1];
+    
+        bezierValues[1][0] = t1 * controlPoints[1][0] + t * controlPoints[2][0];
+        bezierValues[1][1] = t1 * controlPoints[1][1] + t * controlPoints[2][1];
+        
+        bezierValues[0][0] = t1 * bezierValues[0][0] + t * bezierValues[1][0];
+        bezierValues[0][1] = t1 * bezierValues[0][1] + t * bezierValues[1][1];
+    
+		val_call2( callback, alloc_float( bezierValues[0][0] ), alloc_float( bezierValues[0][1] ) );
+    }
+	
+	return val_true;
 }

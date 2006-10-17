@@ -49,7 +49,7 @@ class Object {
     }
 	
 	private static var _trigger_gc = neko.Lib.load("GST","trigger_gc",0);
-	public function trigger_gc() :Bool {
+	public static function trigger_gc() :Bool {
 		return _trigger_gc();
 	}
 }
