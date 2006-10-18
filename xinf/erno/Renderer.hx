@@ -19,7 +19,7 @@ import xinf.erno.DrawingInstruction;
 
 class Renderer {
 	public function draw( i:DrawingInstruction ) :Void {
-		trace("unimplemented drawing instruction "+i);
+	//	trace("unimplemented drawing instruction "+i);
 	}
 	
 	public function drawList( instructions:Iterator<DrawingInstruction> ) :Void {

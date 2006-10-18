@@ -79,9 +79,11 @@ class FocusManager {
 	public static function setFocus( widget:Widget ) :Void {
 		for( i in 0...widgets.length ) {
 			if( widgets[i] == widget ) {
-				if( currentFocus >= 0 ) widgets[currentFocus].blur();
-				currentFocus=i;
-				widget.focus();
+				if( i != currentFocus ) {
+					if( currentFocus >= 0 ) widgets[currentFocus].blur();
+					currentFocus=i;
+					widget.focus();
+				}
 				return;
 			}
 		}

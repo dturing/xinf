@@ -17,6 +17,7 @@ package xinf.js;
 
 import xinf.event.EventKind;
 import xinf.event.MouseEvent;
+import xinf.event.ScrollEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.GeometryEvent;
 
@@ -57,13 +58,11 @@ class JSEventSource {
 			return false;
 		};
 		
-		/*
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {
             untyped js.Lib.window.addEventListener('DOMMouseScroll', this.mouseWheelFF, false);
         }
-		*/
 	}
 
 	private function keyPress( e:js.Event ) :Bool {
@@ -103,17 +102,17 @@ class JSEventSource {
     private function mouseMove( e:js.Event ) :Bool {
 		return postMouseEventTo( e, MouseEvent.MOUSE_MOVE, 0 );
     }
-/*
+
     private function mouseWheelFF( e:js.Event ) :Bool {
-        var target:Element = findTarget(e);
-        if( target!=null ) {
-			target.postEvent( new xinf.ony.ScrollEvent( 
-							xinf.ony.ScrollEvent.SCROLL_STEP, target, (untyped e.detail/3) ) );
+        var targetId:Int = findTarget(e);
+        if( targetId!=null ) {
+			runtime.postEvent( new ScrollEvent( 
+							ScrollEvent.SCROLL_STEP, (untyped e.detail/3), targetId ) );
             untyped e.preventDefault();
         }
         return false;
     }
-*/
+
     private function findTarget( e:js.Event ) :Int {
         var targetNode:js.HtmlDom = e.target;
         var targetId:Int = untyped targetNode.xinfId;
