@@ -15,6 +15,7 @@
 
 package xinf.ul;
 
+import xinf.style.StyleClassElement;
 import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 
@@ -22,7 +23,7 @@ import xinf.erno.Renderer;
     Simple Label element.
 **/
 
-class Label extends Pane {
+class Label extends StyleClassElement {
     public var text(get_text,set_text):String;
     private var _text:String;
     
@@ -42,9 +43,22 @@ class Label extends Pane {
 	
 	public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
+
 		g.draw( Translate(
-			style.padding.l+style.border.l,
-			style.padding.t+style.border.t ) );
+			position.x+style.padding.l+style.border.l,
+			position.y+style.padding.t+style.border.t ) );
+
+		if( style.background != null ) {
+			g.draw( SetFill(style.background) );
+			g.draw( SetStroke( null, 0 ) );
+			g.draw( Rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y ) );
+		}
+		if( style.border.l > 0 ) {
+			g.draw( SetFill(null) );
+			g.draw( SetStroke(style.color,style.border.l) );
+			g.draw( Rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y ) );
+		}
+		
 		g.draw( SetFill(style.color) );
 		g.draw( Text(text) );
 	}

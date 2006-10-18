@@ -40,7 +40,17 @@ class Test {
 		var dropdown = new Dropdown(model);
 		dropdown.resize( 100, 20 );
 		container.attach(dropdown);
+		
+		/*
+		var listbox = new ListBox<String>(model);
+		listbox.resize( 100, 100 );
+		container.attach(listbox);
 
+		var label = new Pane(); //Label("Hello");
+		label.resize( 100, 20 );
+		container.attach(label);
+		*/
+		
 		var slider = new Slider();
 		slider.resize( 100, 20 );
 		container.attach(slider);

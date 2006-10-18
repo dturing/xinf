@@ -134,4 +134,9 @@ class Dropdown extends Widget {
 			select( selectedIndex + Math.round(e.value) );
 		}
 	}
+	
+	public function blur() :Void {
+		super.blur();
+		close();
+	}
 }
