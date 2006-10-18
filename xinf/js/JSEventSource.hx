@@ -25,6 +25,21 @@ import js.Dom;
 class JSEventSource {
 	private var runtime:JSRuntime;
 
+	private static var keys:IntHash<String>;
+	private static function __init__() :Void {
+		keys = new IntHash<String>();
+		keys.set(8,"backspace");
+		keys.set(9,"tab");
+		keys.set(27,"escape");
+		keys.set(32,"space");
+		keys.set(33,"page up");
+		keys.set(34,"page down");
+		keys.set(37,"left");
+		keys.set(38,"up");
+		keys.set(39,"right");
+		keys.set(40,"down");
+	}
+
 	public function new( r:JSRuntime ) :Void {
 		runtime = r;
 		
@@ -34,13 +49,15 @@ class JSEventSource {
 		
 		js.Lib.document.onresize = resizeRoot;
         
-		/*
 		untyped js.Lib.document.onkeydown = untyped keyPress;
+		untyped js.Lib.document.onkeyup = untyped keyRelease;
+		
 		untyped js.Lib.document.onkeypress = untyped function( e:js.Event ) :Bool {
-			trace("hold key "+e.keyCode );
-			return true;
+		//	trace("hold key "+e.keyCode );
+			return false;
 		};
 		
+		/*
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {
@@ -48,45 +65,43 @@ class JSEventSource {
         }
 		*/
 	}
-/*
+
 	private function keyPress( e:js.Event ) :Bool {
-		var key:String = JSEventMonitor.keys.get(e.keyCode);
-		trace("key down: "+e.keyCode+" - "+key );
+		return keyEvent( e, KeyboardEvent.KEY_DOWN );
+	}
+
+	private function keyRelease( e:js.Event ) :Bool {
+		return keyEvent( e, KeyboardEvent.KEY_UP );
+	}
+	private function keyEvent( e:js.Event, type:EventKind<KeyboardEvent> ) :Bool {
+		var key:String = keys.get(e.keyCode);
 		if( e.keyCode == 0 ) {
 			// normal char - handled by browser
 			return true;
 		} else {
 			if( key == null ) {
 				trace("unhandled key code "+e.keyCode );
+				return true;
 			}
-			xinf.ony.FocusManager.handleKeyboardEvent( new KeyboardEvent( 
-				KeyboardEvent.KEY_DOWN, null, 0, key,
+			runtime.postEvent( new KeyboardEvent( 
+				type, e.keyCode, key,
 				untyped e.shiftKey, untyped e.altKey, untyped e.ctrlKey ) );
 			// prevent browser from handling it
 			return false;
 		}
 	}
- */   
+
+
     private function mouseDown( e:js.Event ) :Bool {
         return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
     }
 
     private function mouseUp( e:js.Event ) :Bool {
-        return postMouseEventTo( e, MouseEvent.MOUSE_UP, 0 );
+        return postMouseEvent( e, MouseEvent.MOUSE_UP );
     }
 
     private function mouseMove( e:js.Event ) :Bool {
-	/*
-		var target = findTarget(e);
-		if( target != latestOver ) {
-			if( latestOver!=null ) postMouseEventTo( e, MouseEvent.MOUSE_OUT, latestOver );
-			latestOver = target;
-			return postMouseEventTo( e, MouseEvent.MOUSE_OVER, target );				
-		} else
-			return postMouseEvent( e, MouseEvent.MOUSE_MOVE );
-			*/
 		return postMouseEventTo( e, MouseEvent.MOUSE_MOVE, 0 );
-//		runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_MOVE, e.
     }
 /*
     private function mouseWheelFF( e:js.Event ) :Bool {

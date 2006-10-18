@@ -59,9 +59,9 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				
 			case ClipRect(w,h):
 				current.style.overflow = "hidden";
-				current.style.width = ""+Math.round(w);
-				current.style.height = ""+Math.round(h);
-		
+				current.style.width = ""+Math.max(0,Math.round(w));
+				current.style.height = ""+Math.max(0,Math.round(h));
+				
 			case Rect(x,y,w,h):
 				var r = js.Lib.document.createElement("div");
 				r.style.position="absolute";
