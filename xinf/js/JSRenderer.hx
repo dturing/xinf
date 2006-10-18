@@ -31,6 +31,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		// create new object
 		var o = js.Lib.document.createElement("div");
 		o.style.position="absolute";
+		untyped o.xinfId = id;
 		return o;
 	}
 	
@@ -80,6 +81,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				var r = js.Lib.document.createElement("div");
 				r.style.position="absolute";
 				r.style.whiteSpace="nowrap";
+				r.style.cursor="default";
 				if( pen.fillColor != null )	r.style.color = pen.fillColor.toRGBString();
 				if( pen.fontFace != null ) r.style.fontFamily = pen.fontFace;
 				if( pen.fontSlant == Italic ) r.style.fontStyle = "italic";

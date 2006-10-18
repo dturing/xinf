@@ -21,12 +21,19 @@ import xinf.event.FrameEvent;
 
 class JSRuntime extends Runtime {
 	private var frame:Int;
+	private var _eventSource:JSEventSource;
+	
+	public function new() :Void {
+		super();
+		_eventSource = new JSEventSource(this);
+		frame=0;
+	}
 	
 	public function createRenderer() :Renderer {
 		return new JSRenderer();
 	}
 	public function run() :Void {
-		frame=0;
+		_eventSource.resizeRoot(null);
  		untyped window.setInterval("xinf.erno.Runtime.runtime.step()",1000/25);
    	}
 	public function step() :Void {
