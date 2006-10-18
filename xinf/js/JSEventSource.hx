@@ -15,8 +15,9 @@
 
 package xinf.ony.js;
 
+import xinf.event.MouseEvent;
+import xinf.event.KeyboardEvent;
 import xinf.event.SimpleEventDispatcher;
-import xinf.ony.event.FrameEvent;
 
 class JSEventSource extends SimpleEventDispatcher {
 

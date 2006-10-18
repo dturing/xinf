@@ -18,6 +18,10 @@ package xinf.erno;
 import xinf.erno.DrawingInstruction;
 import xinf.event.FrameEvent;
 
+import xinf.erno.Runtime;
+import xinf.erno.Renderer;
+import xinf.erno.Color;
+
 class Test {
 	public static function main() :Void {
 		Runtime.init();
@@ -51,7 +55,7 @@ class Test {
 				StartObject(shape),
 					SetFill( Color.WHITE ),
 					SetStroke( Color.BLACK, 1 ),
-					Translate( 0, 60 ),
+					Translate( 0, 200 ),
 					Scale( 2, 2 ),
 					StartShape,
 						StartPath( 10, 10 ),

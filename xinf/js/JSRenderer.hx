@@ -27,7 +27,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		return js.Lib.document.getElementById("xinf:root");
 	}
 
-	override public function createPrimitive() :Primitive {
+	override public function createPrimitive(id:Int) :Primitive {
 		// create new object
 		var o = js.Lib.document.createElement("div");
 		o.style.position="absolute";
@@ -39,11 +39,17 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 	}
 	
 	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
-		if( child.parentNode!=null ) throw("Object "+child+" is already attached.");
-		parent.appendChild( child );
+		if( child.parentNode!=null ) {
+			// FIXME: alternatively to just doing nothing, remove from old parent
+			// (although- 
+			// throw("Object "+child+" is already attached.");
+		} else {
+			parent.appendChild( child );
+		}
 	}
 	
 	public function draw( i:DrawingInstruction ) :Void {
+	try {
 		switch( i ) {
 				
 			case Translate(x,y):
@@ -58,8 +64,8 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 			case Rect(x,y,w,h):
 				var r = js.Lib.document.createElement("div");
 				r.style.position="absolute";
-				r.style.left = ""+Math.round(x);
-				r.style.top = ""+Math.round(y);
+				r.style.left = ""+Math.round(x - pen.strokeWidth);
+				r.style.top = ""+Math.round(y - pen.strokeWidth);
 				r.style.width = ""+Math.round(w);
 				r.style.height = ""+Math.round(h);
 				if( pen.fillColor != null ) {
@@ -84,6 +90,9 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				
 			default:
 				super.draw(i);
+		}
+		} catch( e:Dynamic ) {
+			trace("JS Render exception: "+e );
 		}
 	}
 }

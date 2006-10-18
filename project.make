@@ -1,5 +1,10 @@
 XINFROOT:=/home/dan/develop/xinf
 
+#
+# no local modifications should be neccessary beyond here 
+# (if still, i'd like to hear about it- dan_AT_xinf.org
+#
+
 LIB_PATHS:=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT FontConfig gst, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
 
 NEKO:=neko
@@ -11,11 +16,6 @@ NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs/cptr
 HAXE=haxe  -D test -cp ~/.haxe/lib/std -cp $(XINFROOT) $(foreach PATH, $(LIB_PATHS), -cp $(PATH))
 
 XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
-
-#
-# no local modifications should be neccessary beyond here 
-# (if still, i'd like to hear about it- dan_AT_xinf.org
-#
 
 RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )
@@ -42,7 +42,7 @@ BINARIES+=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
 	$(HAXE) $(HAXEFLAGS) $(HAXE_RESOURCES) -cp $(dir $*) -neko $@ -main $(notdir $(subst /,.,$*))
 
 %.js : %.hx $(XINF_SRC) $(DEPENDENCIES)
-	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(notdir $*)
+	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(subst /,., $*)
 
 %.swf : %.hx $(XINF_SRC) $(DEPENDENCIES) $(SWF_ASSETS)
 	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ $(foreach ASSET, $(SWF_ASSETS), -swf-lib $(ASSET)) -swf-header 320:240:25:ffffff --flash-strict -main $(notdir $*)

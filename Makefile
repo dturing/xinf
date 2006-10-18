@@ -30,7 +30,5 @@ inity: xinf/inity/Test.run
 gst: xinf/inity/gst/Test.run
 
 fonts: demo/inity/FontView.run
-
-euclid: xinf/euclid/Test.run
-live: xinf/live/Test.run
-
+euclid: demo/euclid/Test.run
+live: demo/live/Test.run

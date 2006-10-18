@@ -34,7 +34,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		current = lookup(id);
 		if( current == null ) {
 			// create new object
-			current = createPrimitive();
+			current = createPrimitive(id);
 			objects.set(id,current);
 		} else {
 			// clear object
@@ -48,7 +48,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		popPen();
 	}
 
-	public function createPrimitive() :Primitive {
+	public function createPrimitive(id:Int) :Primitive {
 		return null;
 	}
 	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
@@ -85,7 +85,10 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 				pop();
 			case ShowObject(id):
 				var o = lookup(id);
-				if( o==null ) throw("No Object #"+id);
+				if( o==null ) {
+					o = createPrimitive(id);
+					objects.set(id,o);
+				}
 				attachPrimitive( current, o );
 
 			default:
