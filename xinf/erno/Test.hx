@@ -24,6 +24,7 @@ import xinf.erno.Color;
 
 class Test {
 	public static function main() :Void {
+		try {
 		Runtime.init();
 		var g:Renderer = Runtime.renderer;
 		
@@ -53,7 +54,7 @@ class Test {
 				EndObject,
 				
 				StartObject(shape),
-					SetFill( Color.WHITE ),
+					SetFill( Color.BLUE ),
 					SetStroke( Color.BLACK, 1 ),
 					Translate( 0, 200 ),
 					Scale( 2, 2 ),
@@ -79,7 +80,7 @@ class Test {
 				EndObject,				
 				
 				StartObject(animInner),
-					SetFill( Color.WHITE ),
+					SetFill( Color.RED ),
 					Rect(0,0,10,10),
 				EndObject,
 				StartObject(animOuter),
@@ -93,6 +94,7 @@ class Test {
 					ShowObject(text),
 					ShowObject(animOuter),
 				EndObject
+				
 			].iterator() );
 			
 		Runtime.runtime.addEventFilter( function(e:Dynamic):Bool {
@@ -107,12 +109,13 @@ class Test {
 						Translate(80+( Math.sin(e.frame/6.)*70 ), 140 + ( Math.sin(e.frame/3)*30 ) ),
 						ShowObject(animInner),
 					EndObject,
-					ShowObject(g.getRootId())
 				].iterator() );
 				Runtime.runtime.changed();
 			} );
 			
 		Runtime.run();
-		
+		} catch( e:Dynamic ) {
+			trace("exception: "+e );
+		}
 	}
 }

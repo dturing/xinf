@@ -15,6 +15,7 @@
 
 package xinf.js;
 
+import xinf.erno.ObjectModelRenderer;
 import xinf.erno.DrawingInstruction;
 import xinf.erno.Color;
 

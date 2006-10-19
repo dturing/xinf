@@ -29,7 +29,7 @@ class Test {
 		GrayStyle.addToDefault();
 
 		var container = new xinf.ul.VBox();
-		container.moveTo( 10, 10 );
+		container.moveTo( 100, 100 );
 		root.attach(container);
 
 		var model = new SimpleListModel();

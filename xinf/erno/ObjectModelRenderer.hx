@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.js;
+package xinf.erno;
 
 import xinf.erno.PenStackRenderer;
 import xinf.erno.DrawingInstruction;

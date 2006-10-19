@@ -35,13 +35,13 @@ class Runtime extends SimpleEventDispatcher {
 			runtime = new xinf.inity.XinfinityRuntime();
 		#else js
 			runtime = new xinf.js.JSRuntime();
-		#else err
+		#else flash
+			runtime = new xinf.flash9.Flash9Runtime();
 		#end
 		
 		if( runtime==null ) throw("unable to create runtime environment");
 		
 		renderer = runtime.createRenderer();
-	//	renderer.draw( SetFont("Kassiopeia09T_09_sp60_cyr30",Roman,Normal,16) );
 		
 		return runtime;
 	}
