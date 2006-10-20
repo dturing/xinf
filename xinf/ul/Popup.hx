@@ -36,7 +36,6 @@ class Popup {
 		if( o.position.x < 0 ) o.moveTo( 0, o.position.y );
 		if( o.position.y < 0 ) o.moveTo( o.position.x, 0 );
 		
-/*
 		switch( popupMode ) {
 			case Move:
 				if( o.position.x+o.size.x >= root.size.x ) 
@@ -49,7 +48,7 @@ class Popup {
 				if( o.position.y+o.size.y >= root.size.y ) 
 					o.resize( o.size.x, root.size.y - (o.position.y+1) );
 		}
-*/		
+
 		Root.root.attach(object);
 	}
 	

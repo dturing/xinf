@@ -66,7 +66,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				var crop = new Sprite();
 				var g = crop.graphics;
 				g.beginFill( 0xff0000, 1 );
-				g.drawRect(0,0,w,h);
+				g.drawRect(1,1,w,h);
 				g.endFill();
 				current.addChild(crop);
 				current.mask = crop;
@@ -89,13 +89,14 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				if( pen.fillColor != null ) {
 					var tf = new flash.text.TextField();
 					tf.text = text;
-					//tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-					//tf.width=100; tf.height=20;
-					//tf.border=true;
+					tf.selectable = false;
+					//tf.y=-1;
+					tf.x=-1;
 					
 					var format:flash.text.TextFormat = tf.getTextFormat();
 					format.font = "vera";
 					format.color = pen.fillColor.toRGBInt();
+					format.leftMargin = 0;
 					tf.setTextFormat(format);
 					
 					current.addChild(tf);

@@ -31,10 +31,17 @@ class Flash9EventSource {
 		frame = 0;
 		
 		var stage = flash.Lib.current.stage;
-        stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown );
-        stage.addEventListener( flash.events.MouseEvent.MOUSE_UP, mouseUp );
-        stage.addEventListener( flash.events.MouseEvent.MOUSE_MOVE, mouseMove );
-		
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown, true );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_UP, mouseUp, true );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_MOVE, mouseMove, true );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown, false );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_UP, mouseUp, false );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_MOVE, mouseMove, false );
+
+        stage.addEventListener( flash.events.Event.RESIZE, rootResized );
+		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+		stage.align = flash.display.StageAlign.TOP_LEFT;
+
         flash.Lib.current.addEventListener( flash.events.Event.ENTER_FRAME, enterFrame );
 	}
 
@@ -54,12 +61,11 @@ class Flash9EventSource {
 	
 	private function findTarget( e:flash.events.Event ) :Int {
 		var s:Dynamic = e.target;
-		var t:XinfSprite = cast s;
-		while( t==null ) {
+		while( !Std.is(s,XinfSprite) ) {
 			s = s.parent;
 			if( s==null ) return 0;
-			t = cast s;
 		}
+		var t:XinfSprite = cast(s,XinfSprite);
 		return t.xinfId;
 	}
 	
@@ -73,10 +79,9 @@ class Flash9EventSource {
 		e.stopPropagation();
     }
 
-	public function rootResized() :Void {
+	public function rootResized( ?e:Dynamic ) :Void {
 		var w = flash.Lib.current.stage.stageWidth;
 		var h = flash.Lib.current.stage.stageHeight;
 		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );
-		trace("root resize "+w+"/"+h);
 	}
 }
