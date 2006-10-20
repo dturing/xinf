@@ -85,7 +85,7 @@ class SDLEventSource {
         var s = SDL.keysym_sym_get(sym);
         var name = SDL.GetKeyName(s);
         
-        var str = new String("");
+		var str = new String("");
         untyped str.__s = name;
         untyped str.length = 1;
         

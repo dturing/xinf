@@ -90,6 +90,8 @@ class FocusManager {
 	}
 	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
+		#if flash9
+		#else true
 		/* key repeat */
 		if( e.type == KeyboardEvent.KEY_DOWN ) {
 			repeat = e;
@@ -107,6 +109,7 @@ class FocusManager {
 			Runtime.removeEventListener( FrameEvent.ENTER_FRAME, timer );
 			timer = null;
 		}
+		#end
 		
 		if( widgets==null ) return;
 		

@@ -21,25 +21,12 @@ import xinf.event.ScrollEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.GeometryEvent;
 
+import xinf.erno.Keys;
+
 import js.Dom;
 
 class JSEventSource {
 	private var runtime:JSRuntime;
-
-	private static var keys:IntHash<String>;
-	private static function __init__() :Void {
-		keys = new IntHash<String>();
-		keys.set(8,"backspace");
-		keys.set(9,"tab");
-		keys.set(27,"escape");
-		keys.set(32,"space");
-		keys.set(33,"page up");
-		keys.set(34,"page down");
-		keys.set(37,"left");
-		keys.set(38,"up");
-		keys.set(39,"right");
-		keys.set(40,"down");
-	}
 
 	public function new( r:JSRuntime ) :Void {
 		runtime = r;
@@ -73,7 +60,7 @@ class JSEventSource {
 		return keyEvent( e, KeyboardEvent.KEY_UP );
 	}
 	private function keyEvent( e:js.Event, type:EventKind<KeyboardEvent> ) :Bool {
-		var key:String = keys.get(e.keyCode);
+		var key:String = Keys.get(e.keyCode);
 		if( e.keyCode == 0 ) {
 			// normal char - handled by browser
 			return true;
