@@ -45,7 +45,7 @@ BINARIES+=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
 	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -js $@ -main $(subst /,., $*)
 
 %.swf : %.hx $(XINF_SRC) $(DEPENDENCIES) $(SWF_ASSETS)
-	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ $(foreach ASSET, $(SWF_ASSETS), -swf-lib $(ASSET)) -swf-header 320:240:25:ffffff --flash-strict -main $(notdir $*)
+	$(HAXE) $(HAXEFLAGS) -cp $(dir $*) -swf $@ $(foreach ASSET, $(SWF_ASSETS), -swf-lib $(ASSET)) -swf-header 640:480:25:888888 --flash-strict -swf-lib vera.swf -swf-version 9 -main $(subst /,., $*)
 
 default: compile
 

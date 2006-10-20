@@ -72,4 +72,11 @@ class Flash9EventSource {
 		runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), 0, targetId ) );
 		e.stopPropagation();
     }
+
+	public function rootResized() :Void {
+		var w = flash.Lib.current.stage.stageWidth;
+		var h = flash.Lib.current.stage.stageHeight;
+		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );
+		trace("root resize "+w+"/"+h);
+	}
 }

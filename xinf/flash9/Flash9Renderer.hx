@@ -43,7 +43,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	}
 	
 	override public function clearPrimitive( p:Primitive ) {
-		current.graphics.clear();
+		p.graphics.clear();
+		for( i in 0...p.numChildren ) {
+			p.removeChildAt(0);
+		}
 	}
 	
 	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
@@ -58,19 +61,37 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			case Translate(x,y):
 				current.x = x;
 				current.y = y;
+				
+			case ClipRect(w,h):
+				var crop = new Sprite();
+				var g = crop.graphics;
+				g.beginFill( 0xff0000, 1 );
+				g.drawRect(0,0,w,h);
+				g.endFill();
+				current.addChild(crop);
+				current.mask = crop;
 								
 			case Rect(x,y,w,h):
-				if( pen.fillColor != null ) {
-					g.beginFill( pen.fillColor.toRGBInt() );
-					g.drawRect( x,y,w,h );
-					g.endFill();
+				if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
+				} else {
+					g.lineStyle( 0, 0, 0 );
 				}
+				if( pen.fillColor != null ) {
+					g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
+				} else {
+					g.beginFill( 0, .1 );
+				}
+				g.drawRect( x,y,w,h );
+				g.endFill();
 				
 			case Text(text):
 				if( pen.fillColor != null ) {
 					var tf = new flash.text.TextField();
 					tf.text = text;
-					tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+					//tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+					//tf.width=100; tf.height=20;
+					//tf.border=true;
 					
 					var format:flash.text.TextFormat = tf.getTextFormat();
 					format.font = "vera";

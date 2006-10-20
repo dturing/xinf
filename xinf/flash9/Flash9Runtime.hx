@@ -31,5 +31,6 @@ class Flash9Runtime extends Runtime {
 		return new Flash9Renderer();
 	}
 	public function run() :Void {
-   	}
+		_eventSource.rootResized();
+	}
 }

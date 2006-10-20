@@ -10,7 +10,12 @@ class StyleClassElement extends xinf.ony.Object {
 		style = StyleSheet.newDefaultStyle();
 		
 		// add our own class to the list of style classes
-		var clNames:Array<String> = untyped Type.getClass(this).__name__;
+		var clNames:Array<String>;
+		#if flash9
+			clNames = Type.getClassName(Type.getClass(this)).split("::");
+		#else true
+			clNames = Type.getClassName(Type.getClass(this)).split(".");
+		#end
 		addStyleClass( clNames[ clNames.length-1 ] );
 	}
 

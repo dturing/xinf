@@ -48,7 +48,7 @@ class JSEventSource {
         js.Lib.document.onmouseup   = untyped mouseUp;
         js.Lib.document.onmousemove = untyped mouseMove;
 		
-		js.Lib.document.onresize = resizeRoot;
+		js.Lib.document.onresize = rootResized;
         
 		untyped js.Lib.document.onkeydown = untyped keyPress;
 		untyped js.Lib.document.onkeyup = untyped keyRelease;
@@ -135,7 +135,7 @@ class JSEventSource {
         return e.target.nodeName=="INPUT";
     }
 
-	public function resizeRoot( e:js.Event ) :Void {
+	public function rootResized( e:js.Event ) :Void {
 		var w = js.Lib.window.innerWidth;
 		var h = js.Lib.window.innerHeight;
 		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );

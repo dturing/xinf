@@ -24,7 +24,6 @@ import xinf.erno.Color;
 
 class Test {
 	public static function main() :Void {
-		try {
 		Runtime.init();
 		var g:Renderer = Runtime.renderer;
 		
@@ -114,8 +113,5 @@ class Test {
 			} );
 			
 		Runtime.run();
-		} catch( e:Dynamic ) {
-			trace("exception: "+e );
-		}
 	}
 }

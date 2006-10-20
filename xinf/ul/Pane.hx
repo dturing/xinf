@@ -35,7 +35,6 @@ class Pane extends StyleClassElement {
     
 	public function drawContents( g:Renderer ) :Void {
 		g.draw( Translate( position.x, position.y ) );
-			
 		if( crop )
 			g.draw( ClipRect( size.x-2, size.y-2 ) );
 			

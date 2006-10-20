@@ -20,14 +20,16 @@ import xinf.ul.Button;
 import xinf.ul.GrayStyle;
 import xinf.event.MouseEvent;
 import xinf.erno.Runtime;
+import xinf.erno.Color;
 
 class Test {
 	public static function main() :Void {
+		try {
 		Runtime.init();
 		
 		var root = new xinf.ony.Root();
 		GrayStyle.addToDefault();
-
+		
 		var container = new xinf.ul.VBox();
 		container.moveTo( 100, 100 );
 		root.attach(container);
@@ -40,17 +42,7 @@ class Test {
 		var dropdown = new Dropdown(model);
 		dropdown.resize( 100, 20 );
 		container.attach(dropdown);
-		
-		/*
-		var listbox = new ListBox<String>(model);
-		listbox.resize( 100, 100 );
-		container.attach(listbox);
-
-		var label = new Pane(); //Label("Hello");
-		label.resize( 100, 20 );
-		container.attach(label);
-		*/
-		
+				
 		var slider = new Slider();
 		slider.resize( 100, 20 );
 		container.attach(slider);
@@ -60,7 +52,10 @@ class Test {
 			});
 		button.resize( 100, 20 );
 		container.attach(button);
-		
+
 		Runtime.run();
+		} catch( e:Dynamic ) {
+			trace("exception: "+e+", stack: "+haxe.Stack.exceptionStack() );
+		}
 	}
 }

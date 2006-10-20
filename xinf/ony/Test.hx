@@ -23,6 +23,7 @@ class Test {
 	private static var scanline:Object;
 	private static var root:Object;
 	public static function main() :Void {
+		try {
 		Runtime.init();
 		
 		root = new Root();
@@ -40,6 +41,9 @@ class Test {
 		root.attach( i );
 		
 		Runtime.run();
+		} catch( e:Dynamic ) {
+			trace("exception: "+e+", stack:"+haxe.Stack.exceptionStack() );
+		}
 	}
 	
 	public static function frame( e:FrameEvent ) :Void {

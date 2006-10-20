@@ -33,7 +33,7 @@ class JSRuntime extends Runtime {
 		return new JSRenderer();
 	}
 	public function run() :Void {
-		_eventSource.resizeRoot(null);
+		_eventSource.rootResized(null);
  		untyped window.setInterval("xinf.erno.Runtime.runtime.step()",1000/25);
    	}
 	public function step() :Void {
