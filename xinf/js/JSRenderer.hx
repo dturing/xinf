@@ -66,10 +66,10 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 			case Rect(x,y,w,h):
 				var r = js.Lib.document.createElement("div");
 				r.style.position="absolute";
-				r.style.left = ""+Math.round(x - pen.strokeWidth);
-				r.style.top = ""+Math.round(y - pen.strokeWidth);
-				r.style.width = ""+Math.round(w);
-				r.style.height = ""+Math.round(h);
+				r.style.left = ""+Math.round(x - (pen.strokeWidth/2));
+				r.style.top = ""+Math.round(y - (pen.strokeWidth/2));
+				r.style.width = ""+Math.round(w - pen.strokeWidth);
+				r.style.height = ""+Math.round(h - pen.strokeWidth);
 				if( pen.fillColor != null ) {
 					r.style.background = pen.fillColor.toRGBString();
 				}

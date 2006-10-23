@@ -21,6 +21,9 @@ import xinf.erno.Color;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
+import flash.display.LineScaleMode;
+import flash.display.CapsStyle;
+import flash.display.JointStyle;
 
 typedef Primitive = XinfSprite
 
@@ -73,14 +76,15 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 								
 			case Rect(x,y,w,h):
 				if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
+					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
+						false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
 				} else {
 					g.lineStyle( 0, 0, 0 );
 				}
 				if( pen.fillColor != null ) {
 					g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
 				} else {
-					g.beginFill( 0, .1 );
+					g.beginFill( 0, 0 );
 				}
 				g.drawRect( x,y,w,h );
 				g.endFill();
@@ -90,11 +94,12 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					var tf = new flash.text.TextField();
 					tf.text = text;
 					tf.selectable = false;
-					//tf.y=-1;
+					tf.y=-1;
 					tf.x=-1;
 					
 					var format:flash.text.TextFormat = tf.getTextFormat();
-					format.font = "vera";
+					format.font = "Kassiopeia09T_09_sp60_cyr30";
+					format.size = 16;
 					format.color = pen.fillColor.toRGBInt();
 					format.leftMargin = 0;
 					tf.setTextFormat(format);

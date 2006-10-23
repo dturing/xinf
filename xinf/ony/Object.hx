@@ -110,14 +110,14 @@ class Object extends SimpleEventDispatcher {
 	}
 	
 	public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
-		var q = p;
+		var q = { x:p.x, y:p.y };
 		if( parent!=null ) q = parent.globalToLocal(q);
 		q.x-=position.x;
 		q.y-=position.y;
 		return q;
 	}
 	public function localToGlobal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
-		var q = p;
+		var q = { x:p.x, y:p.y };
 		q.x+=position.x;
 		q.y+=position.y;
 		if( parent!=null ) q = parent.localToGlobal(q);

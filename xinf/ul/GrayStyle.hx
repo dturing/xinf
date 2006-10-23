@@ -99,7 +99,7 @@ class GrayStyle {
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":focus" ], {
 				padding: null,
-				border: { l:3, t:1, r:1, b:1 },
+				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0xeeeeff ),
 				background: null,
 				minWidth: null,	textAlign: null, verticalAlign: null

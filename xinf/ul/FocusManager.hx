@@ -20,6 +20,40 @@ import xinf.erno.Runtime;
 import xinf.event.KeyboardEvent;
 import xinf.event.FrameEvent;
 
+import xinf.erno.Color;
+import xinf.erno.Renderer;
+import xinf.erno.DrawingInstruction;
+import xinf.ony.Object;
+import xinf.ony.Root;
+
+/**
+	Focus Rectangle Class
+**/
+class FocusRectangle extends Object {
+	private static var color:Color = new Color().fromRGBInt(0xff0000);
+	
+	public function focusOn( target:Widget ) :Void {
+		if( target!=null ) {
+			position = target.localToGlobal( { x:0, y:0 } );
+			size = target.size; //localToGlobal( target.size );
+		} else {
+			position = null;
+			size = null;
+		}
+		scheduleRedraw();
+	}
+
+	public function drawContents( g:Renderer ) :Void {
+		if( size != null ) {
+			var th=2;
+			g.draw( SetStroke( color, th ) );
+			g.draw( SetFill( null ) );
+			g.draw( Rect( position.x-1, position.y-1, size.x+(th+1), size.y+(th+1) ) );
+		}
+	}
+}
+
+
 /**
 	Keyboard Focus manager singleton
 **/
@@ -31,12 +65,16 @@ class FocusManager {
 	private static var counter:Int;
 	private static var repeat:KeyboardEvent;
 	
+	private static var focusRect:FocusRectangle;
+	
 	public static function setup() :Void {
 		if( widgets==null ) {
 			widgets = new Array<Widget>();
 			currentFocus=-1;
 			Runtime.addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
 			Runtime.addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
+			focusRect = new FocusRectangle();
+			Root.root.attach( focusRect );
 		}
 	}
 	
@@ -64,6 +102,7 @@ class FocusManager {
 		if( currentFocus >= 0 ) {
 			if( !widgets[currentFocus].focus() ) next();
 		}
+		focusRect.focusOn(widgets[currentFocus]);
 	}
 
 	public static function previous() :Void {
@@ -74,6 +113,7 @@ class FocusManager {
 		if( currentFocus >= 0 ) {
 			if( !widgets[currentFocus].focus() ) previous();
 		}
+		focusRect.focusOn(widgets[currentFocus]);
 	}
 	
 	public static function setFocus( widget:Widget ) :Void {
@@ -84,6 +124,7 @@ class FocusManager {
 					currentFocus=i;
 					widget.focus();
 				}
+				focusRect.focusOn(widget);
 				return;
 			}
 		}
