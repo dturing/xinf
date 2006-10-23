@@ -52,14 +52,13 @@ class Dropdown extends Widget {
         label = new Label( model.getItemAt(selectedIndex=0) );
 		label.moveTo( 1, 1 );
 		attach( label );
-        label.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
         button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
 		button.addStyleClass("Thumb");
 		button.resize( labelHeight, labelHeight );
-        //button.
-		  addEventListener( MouseEvent.MOUSE_DOWN, toggle );
-		attach(button);
+        attach(button);
+        
+		addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
         menu = new ListBox( model );
         menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
@@ -106,6 +105,7 @@ class Dropdown extends Widget {
 	}
 	
     private function toggle<T>( e:Event<T> ) :Void {
+	trace("toggle - "+isOpen );
         if( isOpen ) close();
 		else open();
     }

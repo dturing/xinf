@@ -14,35 +14,26 @@
 */
 
 package xinf.ony;
+import xinf.erno.Runtime;
 
-import xinf.event.FrameEvent;
-import xinf.erno.Color;
-
-class Test extends Application {
-	private static var scanline:Object;
+class Application {
+	public var root(default,null):Root;
+	public var runtime(default,null):Runtime;
 	
 	public function new() :Void {
-		super();
-		
-		scanline = new Rectangle( Color.WHITE );
-		scanline.resize( 30, 240 ); 
-		scanline.moveTo( 10, 10 );
-		
-		root.attach( scanline );
-		
-		runtime.addEventListener( FrameEvent.ENTER_FRAME, frame );
-		
-		var i = new Image("/alpha/images/testbild/testbild2320.png");
-		i.moveTo( 10, 10 );
-		root.attach( i );
-	}
+		Runtime.init();
+		runtime = Runtime.runtime;
+		root = new Root();
 	
-	public function frame( e:FrameEvent ) :Void {
-		var x = ((Math.sin( (e.frame/50.)*Math.PI )+1)/2)*(root.size.x-scanline.size.x);
-		scanline.moveTo( x, scanline.position.y );
+/*
+		#if neko
+			trace( "neko commandline args: "+neko.Sys.args() );
+			neko.Sys.exit(0);
+		#end
+*/
 	}
 
-	public static function main() :Void {
-		new Test().run();
+	public function run() :Void {
+		Runtime.run();
 	}
 }

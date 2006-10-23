@@ -19,6 +19,7 @@ import xinf.ul.Widget;
 import xinf.erno.Runtime;
 import xinf.event.KeyboardEvent;
 import xinf.event.FrameEvent;
+import xinf.event.Event;
 
 import xinf.erno.Color;
 import xinf.erno.Renderer;
@@ -30,9 +31,11 @@ import xinf.ony.Root;
 	Focus Rectangle Class
 **/
 class FocusRectangle extends Object {
-	private static var color:Color = new Color().fromRGBInt(0xff0000);
+	private static var color:Color = new Color().fromRGBInt(0xffee00);
+	private var target:Widget;
 	
 	public function focusOn( target:Widget ) :Void {
+		this.target = target;
 		if( target!=null ) {
 			position = target.localToGlobal( { x:0, y:0 } );
 			size = target.size; //localToGlobal( target.size );
@@ -48,8 +51,14 @@ class FocusRectangle extends Object {
 			var th=2;
 			g.draw( SetStroke( color, th ) );
 			g.draw( SetFill( null ) );
-			g.draw( Rect( position.x-1, position.y-1, size.x+(th+1), size.y+(th+1) ) );
+			g.draw( Rect( position.x-th, position.y-th, size.x+(th), size.y+(th) ) );
 		}
+	}
+	
+	public function dispatchEvent<T>( e : Event<T> ) :Void {
+		trace("FocusRect receives event: "+e );
+		if( target != null ) target.dispatchEvent(e);
+		else super.dispatchEvent(e);
 	}
 }
 
