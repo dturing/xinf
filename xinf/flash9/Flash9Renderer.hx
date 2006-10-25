@@ -64,7 +64,11 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			case Translate(x,y):
 				current.x = x;
 				current.y = y;
-				
+
+			case Scale(x,y):
+				current.scaleX = x;
+				current.scaleY = y;
+
 			case ClipRect(w,h):
 				var crop = new Sprite();
 				var g = crop.graphics;
@@ -98,8 +102,8 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					tf.x=-1;
 					
 					var format:flash.text.TextFormat = tf.getTextFormat();
-					format.font = "Kassiopeia09T_09_sp60_cyr30";
-					format.size = 16;
+					format.font = pen.fontFace; //"Kassiopeia09T_09_sp60_cyr30";
+					format.size = pen.fontSize;
 					format.color = pen.fillColor.toRGBInt();
 					format.leftMargin = 0;
 					tf.setTextFormat(format);
@@ -110,31 +114,33 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			case StartShape:
 				if( pen.fillColor != null ) {
 					g.beginFill( pen.fillColor.toRGBInt() );
-				} else {
-					g.beginFill( 0 );
+//				} else {
+//					g.beginFill( 0, 0 );
 				}
 				if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
 					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
 				}
 				
 			case EndShape:
-				g.endFill();
+				if( pen.fillColor != null ) {
+					g.endFill();
+				}
 				
 			case StartPath(x,y):
 				// FIXME: dunno whats the deal with the *2, but its all too small else...
-				g.moveTo(x*2,y*2);
+				g.moveTo(x,y);
 			
 			case EndPath:
-				// FIXME
+				g.moveTo(0,0);
 			
 			case Close:
 				// FIXME
 				
 			case LineTo(x,y):
-				g.lineTo(x*2,y*2);
+				g.lineTo(x,y);
 			
 			case QuadraticTo(x1,y1,x2,y2):
-				g.curveTo( x1*2,y1*2,x2*2,y2*2 );
+				g.curveTo( x1,y1,x2,y2 );
 			
 			case CubicTo(p):
 				// FIXME
