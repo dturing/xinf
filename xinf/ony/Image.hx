@@ -20,16 +20,16 @@ import xinf.erno.DrawingInstruction;
 import xinf.erno.ImageData;
 
 class Image extends Object {
-	private var name:String;
 	private var img:ImageData;
 
-	public function new( name:String ) :Void {
+	public function new( i:ImageData ) :Void {
 		super();
-		this.name=name;
-		#if neko
+		img = i;
+/*		#if neko
 			img = xinf.inity.Texture.newByName(name);
 		#else err
 		#end
+*/
 	}
 	
 	public function drawContents( g:Renderer ) :Void {

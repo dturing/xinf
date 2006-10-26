@@ -15,19 +15,16 @@
 
 package xinf.ul;
 
-import xinf.ul.ListModel;
-import xinf.ul.Button;
-import xinf.ul.GrayStyle;
 import xinf.event.MouseEvent;
-import xinf.erno.Runtime;
 import xinf.erno.Color;
+import xinf.ony.Application;
+import xinf.ul.Button;
+import xinf.ul.ListModel;
 
-class Test {
-	public static function main() :Void {
-		try {
-		Runtime.init();
+class Test extends Application {
+	public function new() :Void {
+		super();
 		
-		var root = new xinf.ony.Root();
 		GrayStyle.addToDefault();
 		
 		var container = new xinf.ul.VBox();
@@ -52,10 +49,9 @@ class Test {
 			});
 		button.resize( 100, 20 );
 		container.attach(button);
-
-		Runtime.run();
-		} catch( e:Dynamic ) {
-			trace("exception: "+e+", stack: "+haxe.Stack.exceptionStack() );
-		}
+	}
+	
+	public static function main() :Void {
+		new Test().run();
 	}
 }
