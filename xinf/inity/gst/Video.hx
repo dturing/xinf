@@ -24,13 +24,11 @@ import xinf.event.ImageLoadEvent;
 class Video extends Object {
 	public var img:ImageData;
 
-	public function new( launch:String ) :Void {
+	public function new( img:ImageData ) :Void {
 		super();
-		#if neko
-			img = new xinf.inity.gst.VideoSource(launch);
-			img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, frameAvailable );
-		#else err
-		#end
+		this.img = img;
+		img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, frameAvailable );
+//			img = new xinf.inity.gst.VideoSource(launch,w,h);
 	}
 	
 	private function frameAvailable( e:ImageLoadEvent ) :Void {

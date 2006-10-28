@@ -17,7 +17,8 @@ package xinf.inity.font;
 
 class Font {
     private static var fonts:Hash<Font> = new Hash<Font>();
-    public static function getFont( name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
+    public static function getFont( ?name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
+		if( name==null ) name="_sans";
 		if( dontCache==null ) dontCache=false;
 		if( weight==null ) weight=100;
 		if( slant==null ) slant=0;

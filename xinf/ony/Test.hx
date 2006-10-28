@@ -25,21 +25,24 @@ class Test extends Application {
 		super();
 		
 		scanline = new Rectangle( Color.WHITE );
-		scanline.resize( 30, 240 ); 
+		scanline.resize( 20, 240 ); 
 		scanline.moveTo( 10, 10 );
 		
 		root.attach( scanline );
 		
 		runtime.addEventListener( FrameEvent.ENTER_FRAME, frame );
 		
-		var i = new Image("/alpha/images/testbild/testbild2320.png");
+		#if neko
+		var i = new Image(xinf.inity.Texture.newByName("/alpha/images/testbild/testbild2320.png"));
 		i.moveTo( 10, 10 );
 		root.attach( i );
+		#end
 	}
 	
 	public function frame( e:FrameEvent ) :Void {
-		var x = ((Math.sin( (e.frame/50.)*Math.PI )+1)/2)*(root.size.x-scanline.size.x);
+		var x = ((Math.sin( (e.frame/25.)*Math.PI )+1)/2)*(root.size.x-scanline.size.x);
 		scanline.moveTo( x, scanline.position.y );
+		scanline.resize( 20, root.size.y-20 );
 	}
 
 	public static function main() :Void {

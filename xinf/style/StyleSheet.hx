@@ -106,14 +106,14 @@ class StyleSheet {
 		byClassName = new Hash<List<StyleRule>>();
 	}
 	
-	public function add( classNames:Array<String>, ?otherSelector:StyleSelector, style:Style ) {
+	public function add( classNames:Array<String>, ?otherSelector:StyleSelector, style:Dynamic ) {
 		var selector:StyleSelector = new ClassNameSelector(classNames);
 		if( otherSelector != null ) {
 			selector = new CombinedSelector( [ selector, otherSelector ] );
 		}
 		var rule = {
 			selector:selector,
-			style:style
+			style:Style.createFromObject(style)
 		};
 		var l = byClassName.get(classNames[0]);
 		if( l==null ) {
@@ -147,25 +147,16 @@ class StyleSheet {
 		var r = newDefaultStyle();
 		if( styles == null ) return r;
 		for( style in styles ) {
-			for( field in Reflect.fields(style) ) {
-				var v = Reflect.field(style, field);
-				if( v != null ) {
-					Reflect.setField( r, field, v );
-				}
-			}
+			r.setFrom(style);
 		}
 		return r;
 	}
 	
 	public static function newDefaultStyle():Style {
-		return {
+		return Style.createFromObject( {
 			padding: { l:0, t:0, r:0, b:0 },
 			border: { l:0, t:0, r:0, b:0 },
-			size: { l:0, t:0, r:0, b:0 },
-			color: null,
-			background: null,
-			minWidth: null,
-			textAlign: 0, verticalAlign: 0
-		};
+			fontFamily: "_sans"
+		} );
 	}
 }

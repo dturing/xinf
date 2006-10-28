@@ -32,5 +32,7 @@ gst: xinf/inity/gst/Test.run
 rect: demo/rectification/Test.run
 fonts: demo/inity/FontView.run
 euclid: demo/euclid/Test.run
+graph: demo/graph/Test.run
+cv: demo/cv/Test.run
 
 x11: xinf/inity/x11/Test.run

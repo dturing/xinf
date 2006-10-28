@@ -52,6 +52,10 @@ class Test extends Application {
 	}
 	
 	public static function main() :Void {
-		new Test().run();
+		try {
+			new Test().run();
+		} catch( e:Dynamic ) {
+			trace("Exception: "+e );
+		}
 	}
 }

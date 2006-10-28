@@ -134,4 +134,19 @@ class Slider extends Widget {
 				value -= increment;
 		}
 	}
-}
+	
+	public static function createControl( o:Dynamic, field:String, min:Float, max:Float, increment:Float ) :Slider {
+		var s = new Slider( max, min, increment );
+		s.addEventListener( ValueEvent.CHANGED, function( e:ValueEvent ) {
+				Reflect.setField(o,field,e.value);
+			});
+		return s;
+	}
+
+	public static function createFunctionControl( f:Float->Void, min:Float, max:Float, increment:Float ) :Slider {
+		var s = new Slider( max, min, increment );
+		s.addEventListener( ValueEvent.CHANGED, function( e:ValueEvent ) {
+				f(e.value);
+			});
+		return s;
+	}}

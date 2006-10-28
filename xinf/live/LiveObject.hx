@@ -15,7 +15,9 @@
 
 package xinf.live;
 
-class LiveObject extends xinf.ony.Object {
+import xinf.style.StyleClassElement;
+
+class LiveObject extends StyleClassElement {
 	public var name:String;
 	
 	public function new( name:String ) :Void {

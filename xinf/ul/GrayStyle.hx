@@ -24,24 +24,21 @@ class GrayStyle {
 				padding: { l:5, t:1, r:5, b:1 },
 				border: { l:0, t:0, r:0, b:0 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 75., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Pane" ], {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:0, t:0, r:0, b:0 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 75., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "VScrollbar" ], {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xaaaaaa ),
-				minWidth: 20., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xaaaaaa )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -49,16 +46,14 @@ class GrayStyle {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":cursor" ], {
 				padding: null,
 				border: null,
 				color: new Color().fromRGBInt( 0xeeeeee ),
-				background: new Color().fromRGBInt( 0x666666 ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0x666666 )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -66,8 +61,7 @@ class GrayStyle {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0x666666 ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0x666666 )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -75,16 +69,14 @@ class GrayStyle {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Slider" ], {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -92,17 +84,15 @@ class GrayStyle {
 				padding: { l:0, t:0, r:0, b:0 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 16., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":focus" ], {
 				padding: null,
-				border: { l:1, t:1, r:1, b:1 },
+				border: { l:2, t:2, r:2, b:2 },
 				color: new Color().fromRGBInt( 0xeeeeff ),
-				background: null,
-				minWidth: null,	textAlign: null, verticalAlign: null
+				background: null
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -110,8 +100,7 @@ class GrayStyle {
 				padding: { l:5, t:5, r:5, b:5 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: Color.BLACK,
-				background: null,
-				minWidth: null,	textAlign: null, verticalAlign: null
+				background: null
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -119,16 +108,14 @@ class GrayStyle {
 				padding: { l:2, t:2, r:2, b:2 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd ),
-				minWidth: 75., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xdddddd )
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":press" ], {
 				padding: { l:2, t:2, r:2, b:2 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xffffff ),
-				minWidth: 75., textAlign: .5, verticalAlign: null
+				background: new Color().fromRGBInt( 0xffffff )
 			} );
 	}
 }

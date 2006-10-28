@@ -22,25 +22,27 @@ class Test extends Application {
 
 	public function new() :Void {
 		super();
+		
+		var w=320; var h=240;
                 
         screen = new Array<XForward>();
 //        info = new Array<xinf.ony.Text>();
         for( i in 0...1 ) {
             screen[i] = new XForward(":1",i);
             screen[i].moveTo( 0, 0 );
-            screen[i].resize( 320, 240 );
+            screen[i].resize( w, h );
 			/*
             if( i>0 )
                 screen[i].bitmap.alpha = .3;
 				*/
 			root.attach( screen[i] );
             
-			/*
-            var mini = new xinf.ony.Wrapper( "mini_screen"+i, this, 
-                    new xinf.inity.Bitmap( screen[i].vfb ) );
-            mini.bounds.setPosition( w, i*h/4 );
-            mini.bounds.setSize( w/4, h/4 );
-            
+			
+            var mini = new xinf.ony.Image( screen[i].vfb );
+            mini.moveTo( w+5, i*h/4 );
+            mini.resize( w/4, h/4 );
+			root.attach( mini );
+            /*
             info[i] = new xinf.ony.Text( "info"+i, this );
             info[i].bounds.setPosition( w+(w/4)+5, i*h/4 );
             info[i].setTextColor( new xinf.ony.Color().fromRGBInt( 0xffffff ) );

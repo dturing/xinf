@@ -105,8 +105,7 @@ class Dropdown extends Widget {
 	}
 	
     private function toggle<T>( e:Event<T> ) :Void {
-	trace("toggle - "+isOpen );
-        if( isOpen ) close();
+	    if( isOpen ) close();
 		else open();
     }
     

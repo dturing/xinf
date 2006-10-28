@@ -33,6 +33,6 @@ class Image extends Object {
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
-		g.draw( Image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:img.width,h:img.height} ) );
+		g.draw( Image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} ) );
 	}
 }

@@ -5,7 +5,7 @@ XINFROOT:=/home/dan/develop/xinf
 # (if still, i'd like to hear about it- dan_AT_xinf.org
 #
 
-LIB_PATHS:=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT FontConfig gst, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
+LIB_PATHS:=$(foreach LIB, cptr GL GLU SDL GdkPixbuf X FT FontConfig gst opencv, $(XINFROOT)/libs/$(LIB)) $(XINFROOT)/libs
 
 NEKO:=neko
 NEKOPATH:=$(NEKOPATH):$(subst : ,:,$(foreach PATH,$(LIB_PATHS),$(PATH):))
@@ -15,7 +15,7 @@ NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs/cptr
 
 HAXE=haxe  -D test -cp ~/.haxe/lib/std -cp $(XINFROOT) $(foreach PATH, $(LIB_PATHS), -cp $(PATH))
 
-XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx)
+XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx) $(shell find $(XINFROOT)/demo -name \*.hx)
 
 RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )

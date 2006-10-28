@@ -43,7 +43,7 @@ class VideoSource extends Texture {
 		if( height==null ) height=240;
 		initialize( width, height );
 		
-		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, width="+width+", height="+height+" ! memorysink sync=false";
+		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, width="+width+", height="+height+", framerate=(fraction)25 ! memorysink sync=false";
 		pipeline = new Pipeline( launch );
 
 		Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
@@ -51,16 +51,22 @@ class VideoSource extends Texture {
 
 	private function step(e:FrameEvent) :Void {
 		var msg:{name:String} = pipeline.pollBus(0);
+		var data:Dynamic = null;
 		while( msg!=null ) {
 			// TODO: make this an iterator, and use a callback
 			if( msg.name == "frame" && untyped msg.data != null ) {
-				setData( untyped msg.data, {x:0,y:0}, {x:width,y:height} );
-				frameAvailable( untyped msg.data );
+				data = untyped msg.data;
 			} else {
 				trace("Unhandled GStreamer bus message: '"+msg.name );
 			}
 			
 			msg = pipeline.pollBus(0);
 		}
+		if( data != null ) frameData(data);
+	}
+	
+	private function frameData( data:Dynamic ) :Void {
+		setData( data, {x:0,y:0}, {x:width,y:height} );
+		frameAvailable( data );
 	}
 }
