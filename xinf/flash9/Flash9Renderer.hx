@@ -93,7 +93,8 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				g.drawRect( x,y,w,h );
 				g.endFill();
 				
-			case Text(text):
+			case Text(text,style):
+				// FIXME: textStyles
 				if( pen.fillColor != null ) {
 					var tf = new flash.text.TextField();
 					tf.text = text;
