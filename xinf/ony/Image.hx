@@ -18,6 +18,7 @@ package xinf.ony;
 import xinf.erno.Renderer;
 import xinf.erno.DrawingInstruction;
 import xinf.erno.ImageData;
+import xinf.event.ImageLoadEvent;
 
 class Image extends Object {
 	private var img:ImageData;
@@ -25,14 +26,17 @@ class Image extends Object {
 	public function new( i:ImageData ) :Void {
 		super();
 		img = i;
-/*		#if neko
-			img = xinf.inity.Texture.newByName(name);
-		#else err
-		#end
-*/
+		img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
+		img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
+		img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+	}
+	
+	private function dataChanged( e:ImageLoadEvent ) :Void {
+		scheduleRedraw();
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
+		if( img==null || img.width==null ) return;
 		g.draw( Image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} ) );
 	}
 }

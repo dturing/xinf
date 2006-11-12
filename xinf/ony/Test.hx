@@ -23,7 +23,7 @@ class Test extends Application {
 	
 	public function new() :Void {
 		super();
-		
+
 		scanline = new Rectangle( Color.WHITE );
 		scanline.resize( 20, 240 ); 
 		scanline.moveTo( 10, 10 );
@@ -31,10 +31,10 @@ class Test extends Application {
 		root.attach( scanline );
 		
 		runtime.addEventListener( FrameEvent.ENTER_FRAME, frame );
-		
 		#if neko
 		var i = new Image(xinf.inity.Texture.newByName("/alpha/images/testbild/testbild2320.png"));
 		i.moveTo( 10, 10 );
+		i.resize( 320, 240 );
 		root.attach( i );
 		#end
 	}

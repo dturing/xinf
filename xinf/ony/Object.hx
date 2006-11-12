@@ -67,6 +67,7 @@ class Object extends SimpleEventDispatcher {
 	public function attach( child:Object ) :Void {
 		children.push( child );
 		child.parent = this;
+	// TODO: WHY THIS?	child.resize( child.size.x, child.size.y );
 		scheduleRedraw();
 	}
 
