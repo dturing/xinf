@@ -78,7 +78,8 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				}
 				current.appendChild( r );
 				
-			case Text(text):
+			case Text(text,style):
+				// FIXME: textStyles
 				var r = js.Lib.document.createElement("div");
 				r.style.position="absolute";
 				r.style.whiteSpace="nowrap";
@@ -91,6 +92,9 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				r.innerHTML=text;
 				current.appendChild(r);
 				
+			case Native(n):
+				current.appendChild(untyped n);
+		
 			default:
 				super.draw(i);
 		}

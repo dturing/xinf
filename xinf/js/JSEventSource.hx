@@ -39,12 +39,12 @@ class JSEventSource {
         
 		untyped js.Lib.document.onkeydown = untyped keyPress;
 		untyped js.Lib.document.onkeyup = untyped keyRelease;
-		
+	/*	
 		untyped js.Lib.document.onkeypress = untyped function( e:js.Event ) :Bool {
 		//	trace("hold key "+e.keyCode );
 			return false;
 		};
-		
+		*/
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {
@@ -73,7 +73,7 @@ class JSEventSource {
 				type, e.keyCode, key,
 				untyped e.shiftKey, untyped e.altKey, untyped e.ctrlKey ) );
 			// prevent browser from handling it
-			return false;
+			return true;
 		}
 	}
 
