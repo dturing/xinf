@@ -21,6 +21,7 @@ class StyleClassElement extends xinf.ony.Object {
 
 	public function updateStyles() :Void {
 		style = StyleSheet.defaultSheet.match( this );
+		// to catch min/maxWidth/Height
 		scheduleRedraw();
 	}
 

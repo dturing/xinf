@@ -33,6 +33,7 @@ class Style {
 		try {
 			Reflect.setField(this,param,value);
 		} catch( e:Dynamic ) {
+			trace(e);
 			// do nothing, flash9 complains with a reference error for styles not defined.
 		}
 	}
