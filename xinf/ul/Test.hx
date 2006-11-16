@@ -20,6 +20,7 @@ import xinf.erno.Color;
 import xinf.ony.Application;
 import xinf.ul.Button;
 import xinf.ul.ListModel;
+import xinf.ul.LineEdit;
 
 class Test extends Application {
 	public function new() :Void {
@@ -37,17 +38,18 @@ class Test extends Application {
         }
 		
 		var dropdown = new Dropdown(model);
-		dropdown.resize( 100, 20 );
 		container.attach(dropdown);
 				
 		var slider = new Slider();
-		slider.resize( 100, 20 );
 		container.attach(slider);
-		
+
+		var edit = new LineEdit();
+		edit.text = "Edit me!";
+		container.attach(edit);
+
 		var button = TextButton.createSimple("Hello, World!", function(e:MouseEvent){
 				trace("thanks for clicking");
 			});
-		button.resize( 100, 20 );
 		container.attach(button);
 	}
 	
@@ -55,7 +57,7 @@ class Test extends Application {
 		try {
 			new Test().run();
 		} catch( e:Dynamic ) {
-			trace("Exception: "+e );
+			trace("Exception: "+e+" "+haxe.Stack.exceptionStack() );
 		}
 	}
 }

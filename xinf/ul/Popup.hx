@@ -36,19 +36,21 @@ class Popup {
 		if( o.position.x < 0 ) o.moveTo( 0, o.position.y );
 		if( o.position.y < 0 ) o.moveTo( o.position.x, 0 );
 		
-		switch( popupMode ) {
-			case Move:
-				if( o.position.x+o.size.x >= root.size.x ) 
-					o.moveTo( root.size.x - (o.size.x+1), o.position.y );
-				if( o.position.y+o.size.y >= root.size.y ) 
-					o.moveTo( o.position.x, root.size.y - (o.size.y+1) );
-			case Scale:
-				if( o.position.x+o.size.x >= root.size.x ) 
-					o.resize( root.size.x - (o.position.x+1), o.size.y );
-				if( o.position.y+o.size.y >= root.size.y ) 
-					o.resize( o.size.x, root.size.y - (o.position.y+1) );
+		if( root.size.x != 0 ) {
+			switch( popupMode ) {
+				case Move:
+					if( o.position.x+o.size.x >= root.size.x ) 
+						o.moveTo( root.size.x - (o.size.x+1), o.position.y );
+					if( o.position.y+o.size.y >= root.size.y ) 
+						o.moveTo( o.position.x, root.size.y - (o.size.y+1) );
+				case Scale:
+					if( o.position.x+o.size.x >= root.size.x ) 
+						o.resize( root.size.x - (o.position.x+1), o.size.y );
+					if( o.position.y+o.size.y >= root.size.y ) 
+						o.resize( o.size.x, root.size.y - (o.position.y+1) );
+			}
 		}
-
+		
 		Root.root.attach(object);
 	}
 	

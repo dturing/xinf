@@ -46,16 +46,16 @@ class Dropdown extends Widget {
     
     public function new( _model:ListModel<T> ) :Void {
         super();
+		
         model = _model;
 		isOpen=false;
         
-        label = new Label( model.getItemAt(selectedIndex=0) );
+        label = new Label( model.getNameAt(selectedIndex=0) );
 		label.moveTo( 1, 1 );
 		attach( label );
         
         button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
 		button.addStyleClass("Thumb");
-		button.resize( labelHeight, labelHeight );
         attach(button);
         
 		addEventListener( MouseEvent.MOUSE_DOWN, toggle );
@@ -63,7 +63,7 @@ class Dropdown extends Widget {
         menu = new ListBox( model );
         menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
         menu.focusable = false;
-        
+
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
     }
@@ -71,12 +71,12 @@ class Dropdown extends Widget {
 	public function resize( x:Float, y:Float ) :Void {
 		super.resize(x,y);
 		button.moveTo( size.x - labelHeight, 0 );
+		button.resize( labelHeight, labelHeight );
     }
 
 	private function itemPicked( e:PickEvent<T> ) :Void {
 		select( e.index );
 		close();
-        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, e.item, e.index ) );
     }
     private function open() :Void {
 		menu.assureVisible( selectedIndex );
@@ -97,11 +97,12 @@ class Dropdown extends Widget {
 		removeStyleClass(":open");
 //		button.contained.load("assets/dropdown/button.png");
 	}
-	private function select( index:Int ) :Void {
+	public function select( index:Int ) :Void {
 		if( index > model.getLength()-1 ) index = model.getLength()-1;
 		if( index < 0 ) index=0;
         selectedIndex = index;
-        label.text = model.getItemAt( selectedIndex );
+        label.text = model.getNameAt( selectedIndex );
+        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), index ) );
 	}
 	
     private function toggle<T>( e:Event<T> ) :Void {

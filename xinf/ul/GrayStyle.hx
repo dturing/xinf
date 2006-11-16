@@ -24,7 +24,8 @@ class GrayStyle {
 				padding: { l:5, t:1, r:5, b:1 },
 				border: { l:0, t:0, r:0, b:0 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd )
+				background: new Color().fromRGBInt( 0xdddddd ),
+				minHeight: 20, minWidth: 100
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Pane" ], {
@@ -66,17 +67,19 @@ class GrayStyle {
 
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Dropdown" ], {
-				padding: { l:0, t:0, r:0, b:0 },
+				padding: { l:5, t:2, r:5, b:2 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd )
+				background: new Color().fromRGBInt( 0xdddddd ),
+				minHeight: 20, minWidth: 100
 			} );
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Slider" ], {
-				padding: { l:0, t:0, r:0, b:0 },
+				padding: { l:5, t:2, r:5, b:2 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd )
+				background: new Color().fromRGBInt( 0xdddddd ),
+				minHeight: 20, minWidth: 100
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -89,10 +92,9 @@ class GrayStyle {
 
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":focus" ], {
-				padding: null,
 				border: { l:2, t:2, r:2, b:2 },
-				color: new Color().fromRGBInt( 0xeeeeff ),
-				background: null
+				color: new Color().fromRGBInt( 0x0033ff ),
+				background: new Color().fromRGBInt( 0xffffff )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
@@ -100,22 +102,35 @@ class GrayStyle {
 				padding: { l:5, t:5, r:5, b:5 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: Color.BLACK,
-				background: null
+				background: Color.rgba( 0.7, 0.7, 0.7, 0.7 )
 			} );
 
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "TextButton" ], {
-				padding: { l:2, t:2, r:2, b:2 },
+				padding: { l:5, t:2, r:5, b:2 },
 				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
-				background: new Color().fromRGBInt( 0xdddddd )
+				background: new Color().fromRGBInt( 0xdddddd ),
+				minHeight: 20, minWidth: 100
 			} );
+			
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ ":press" ], {
-				padding: { l:2, t:2, r:2, b:2 },
-				border: { l:1, t:1, r:1, b:1 },
 				color: new Color().fromRGBInt( 0 ),
 				background: new Color().fromRGBInt( 0xffffff )
+			} );
+
+		xinf.style.StyleSheet.defaultSheet.add(
+			[ "LineEdit" ], {
+				padding: { l:5, t:2, r:5, b:2 },
+				border: { l:1, t:1, r:1, b:1 },
+				color: new Color().fromRGBInt( 0 ),
+				background: new Color().fromRGBInt( 0xdddddd ),
+				minHeight: 20, minWidth: 100,
+				selectionBackground: Color.BLACK,
+				selectionForeground: Color.WHITE,
+				fontFamily: "Kassiopeia09T_09_sp60_cyr30",
+				fontSize: 16
 			} );
 	}
 }

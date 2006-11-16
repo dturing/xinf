@@ -37,6 +37,7 @@ class Button<T:Object> extends Widget {
     public function set_contained( c:T ):T {
         _contained = c;
 		attach( c );
+		c.moveTo( style.border.l, style.border.t );
 		return c;
 	}
     

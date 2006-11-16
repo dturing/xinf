@@ -33,6 +33,13 @@ class Pane extends StyleClassElement {
 		crop=false;
     }
     
+	public function resize( x:Float, y:Float ) :Void {
+		// TODO: layouters need to know size. do this differently.
+		var w = Math.max( style.get("minWidth",0), x );
+		var h = Math.max( style.get("minHeight",0), y );
+		super.resize(w,h);
+    }
+		
 	public function drawContents( g:Renderer ) :Void {
 		g.draw( Translate( position.x, position.y ) );
 		if( crop )
@@ -43,9 +50,10 @@ class Pane extends StyleClassElement {
 		g.draw( Rect( 0, 0, size.x, size.y ) );
 		
 		if( style.border.l > 0 ) {
+			var b = style.border.l/4;
 			g.draw( SetFill(null) );
 			g.draw( SetStroke(style.color,style.border.l) );
-			g.draw( Rect( 0, 0, size.x, size.y ) );
+			g.draw( Rect( -b, -b, size.x+(4*b), size.y+(4*b) ) );
 		}
 	}
 }

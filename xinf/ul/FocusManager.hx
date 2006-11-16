@@ -28,42 +28,6 @@ import xinf.ony.Object;
 import xinf.ony.Root;
 
 /**
-	Focus Rectangle Class
-**/
-class FocusRectangle extends Object {
-	private static var color:Color = new Color().fromRGBInt(0xffee00);
-	private var target:Widget;
-	
-	public function focusOn( target:Widget ) :Void {
-		this.target = target;
-		if( target!=null ) {
-			position = target.localToGlobal( { x:0, y:0 } );
-			size = target.size; //localToGlobal( target.size );
-		} else {
-			position = null;
-			size = null;
-		}
-		scheduleRedraw();
-	}
-
-	public function drawContents( g:Renderer ) :Void {
-		if( size != null ) {
-			var th=2;
-			g.draw( SetStroke( color, th ) );
-			g.draw( SetFill( null ) );
-			g.draw( Rect( position.x-th, position.y-th, size.x+(th), size.y+(th) ) );
-		}
-	}
-	
-	public function dispatchEvent<T>( e : Event<T> ) :Void {
-		trace("FocusRect receives event: "+e );
-		if( target != null ) target.dispatchEvent(e);
-		else super.dispatchEvent(e);
-	}
-}
-
-
-/**
 	Keyboard Focus manager singleton
 **/
 class FocusManager {
@@ -74,16 +38,12 @@ class FocusManager {
 	private static var counter:Int;
 	private static var repeat:KeyboardEvent;
 	
-	private static var focusRect:FocusRectangle;
-	
 	public static function setup() :Void {
 		if( widgets==null ) {
 			widgets = new Array<Widget>();
 			currentFocus=-1;
 			Runtime.addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
 			Runtime.addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
-			focusRect = new FocusRectangle();
-			Root.root.attach( focusRect );
 		}
 	}
 	
@@ -111,7 +71,6 @@ class FocusManager {
 		if( currentFocus >= 0 ) {
 			if( !widgets[currentFocus].focus() ) next();
 		}
-		focusRect.focusOn(widgets[currentFocus]);
 	}
 
 	public static function previous() :Void {
@@ -122,7 +81,6 @@ class FocusManager {
 		if( currentFocus >= 0 ) {
 			if( !widgets[currentFocus].focus() ) previous();
 		}
-		focusRect.focusOn(widgets[currentFocus]);
 	}
 	
 	public static function setFocus( widget:Widget ) :Void {
@@ -133,7 +91,6 @@ class FocusManager {
 					currentFocus=i;
 					widget.focus();
 				}
-				focusRect.focusOn(widget);
 				return;
 			}
 		}

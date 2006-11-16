@@ -45,11 +45,14 @@ class Slider extends Widget {
 		return _value;
 	}
 	public function set_value( v:Float ) :Float {
+		var old = _value;
 		_value = v - (v-(Math.round(v/increment)*increment));
 		if( _value > max ) _value=max;
 		if( _value < min ) _value=min;
-		label.text = ""+Math.floor( precision*_value )/precision;
-		postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
+		if( _value != old ) {
+			label.text = ""+Math.floor( precision*_value )/precision;
+			postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
+		}
 		return _value;
 	}
 	public function get_normalized() :Float {
@@ -58,8 +61,6 @@ class Slider extends Widget {
 	public function set_normalized( v:Float ) :Float {
 		if( v<.0 ) v=.0; else if( v>1. ) v=1.;
 		value = min + (v*(max-min));
-		label.text = ""+Math.floor( precision*_value )/precision;
-		postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
 		return v;
 	}	
     public function new( ?max:Float, ?min:Float, ?increment:Float ) :Void {
@@ -95,10 +96,10 @@ class Slider extends Widget {
 	
 	public function resize( x:Float, y:Float ) :Void {
 		super.resize(x,y);
-		button.resize( y, y );
-		button.moveTo( x-y, 0 );
+		button.resize( size.y, size.y );
+		button.moveTo( size.x-size.y, 0 );
 		
-		slideBar.resize( y, 112 );
+		slideBar.resize( size.y, 112 );
 	}
 	
 	private function onMouseDown( e:MouseEvent ) {
