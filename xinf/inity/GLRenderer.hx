@@ -22,7 +22,7 @@ import GL;
 
 class GLRenderer extends PenStackRenderer {
 	private var shape:GLPolygon;
-	private var font:xinf.inity.font.Font;
+	public var font(default,null):xinf.inity.font.Font;
 	private var root:Int;
 
 	public function new() :Void {
@@ -139,11 +139,11 @@ class GLRenderer extends PenStackRenderer {
 					GL.End();
 				}
 								
-			case Text(text):
+			case Text(text,style):
 				font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
 				if( pen.fillColor != null && font != null ) {
 					GL.Color4f( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-					font.renderText( text, pen.fontSize );
+					font.renderText( text, pen.fontSize, style );
 				}
 				
 			case Image( img, inRegion, outRegion ):

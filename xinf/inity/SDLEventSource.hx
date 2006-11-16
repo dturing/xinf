@@ -96,7 +96,8 @@ class SDLEventSource {
 		
 		// FIXME: key events are global?
         runtime.postEvent( new KeyboardEvent( type,
-				SDL.keysym_unicode_get(sym), str,
+				SDL.keysym_unicode_get(sym), 
+				str,
 				mods&(SDL.KMOD_LSHIFT|SDL.KMOD_RSHIFT) > 0,
 				mods&(SDL.KMOD_LALT|SDL.KMOD_RALT) > 0,
 				mods&(SDL.KMOD_LCTRL|SDL.KMOD_RCTRL) > 0

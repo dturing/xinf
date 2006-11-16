@@ -17,17 +17,11 @@ package xinf.inity;
 
 import xinf.erno.ImageData;
 import xinf.inity.gdk.Pixbuf;
+import xinf.inity.ColorSpace;
 
 /** strictly any neko ImageData is already a texture. This class manages the texture though,
   ImageData only stores some values for direct access by the GLGraphicsContext **/
- 
-enum ColorSpace {
-    RGB;
-    RGBA;
-	BGR;
-	BGRA;
-}
- 
+  
 class Texture extends ImageData {
 	// texture (id), twidth, theight, width and height are already defined in ImageData.
 	
@@ -65,16 +59,21 @@ class Texture extends ImageData {
 		
         if( data != null ) {
             switch( cspace ) {
+                case GRAY:
+                    GL.TexSubImage2D_GRAY_BYTE( texture, pos, size, data );
                 case RGB:
-                    GL.TexSubImage2D_RGB_BYTE( texture, pos, size, data );
+                    GL.TexSubImage2D_BYTE( texture, { pos:pos, size:size }, GL.RGB, data );
+                case BGR:
+                    GL.TexSubImage2D_BYTE( texture, { pos:pos, size:size }, GL.BGR, data );
                 case RGBA:
                     GL.TexSubImage2D_RGBA_BYTE( texture, pos, size, data );
                 case BGRA:
-				   GL.TexSubImage2D_BGRA_BYTE( texture, pos, size, data );
+					GL.TexSubImage2D_BGRA_BYTE( texture, pos, size, data );
                 default:
-                    throw("unknown colorspace");
+                    throw("unknown colorspace "+cspace );
             }
         }
+		
 
 		GL.PopAttrib();
 	}
@@ -85,6 +84,7 @@ class Texture extends ImageData {
 		var r = cache.get(filename);
 		if( r==null ) {
 			r = newFromPixbuf( Pixbuf.newFromFile(filename) );
+			trace("pixbuf: "+r);
 			cache.set(filename,r);
 		}
 		return r;
@@ -94,7 +94,7 @@ class Texture extends ImageData {
 		var r = new Texture();
 		
 		r.initialize( pixbuf.width, pixbuf.height );
-        var cs = if( pixbuf.alpha ) RGBA else RGB;
+        var cs = pixbuf.colorspace;
         var d = pixbuf.stealPixels();
 		
 		r.setData( d, {x:0, y:0}, {x:r.width,y:r.height}, cs );

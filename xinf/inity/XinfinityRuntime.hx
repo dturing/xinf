@@ -38,8 +38,8 @@ class XinfinityRuntime extends Runtime {
 		super();
 		
 		frame=0;
-		width = 720;
-		height = 480;
+		width = 320;
+		height = 240;
 		somethingChanged = true;
 	
 		initSDLGL();
@@ -106,12 +106,15 @@ class XinfinityRuntime extends Runtime {
 			throw("SDL Video Initialization failed.");
 		}
 
-		SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE , 8 );
+		SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE, 8 );
+		trace("w/h: "+ width+", "+height );
 		if( SDL.SetVideoMode( width, height, 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
 			throw("SDL SetVideoMode failed.");
 		}
 
-		GL.PixelStorei( GL.UNPACK_ALIGNMENT, 4 );
+        SDL.EnableUNICODE(1);
+
+//		GL.PixelStorei( GL.UNPACK_ALIGNMENT, 4 );
 		GL.Enable( GL.BLEND );
 		GL.BlendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 		GL.ShadeModel( GL.FLAT );
