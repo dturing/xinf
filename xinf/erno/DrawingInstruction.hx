@@ -25,6 +25,13 @@ enum FontSlant {
 	Italic;
 }
 
+typedef FontStyleChange = {
+	var pos:Int;
+	var color:Color;
+}
+
+typedef FontStyle = Array<FontStyleChange>
+
 enum DrawingInstruction {
 	StartObject( id:Int );
 	EndObject();
@@ -50,11 +57,13 @@ enum DrawingInstruction {
 	CubicTo( v:Array<Float> ); // hargl, neko! 6 parameters mess up the enum.
 	
 	Rect( x:Float, y:Float, w:Float, h:Float );
-	Text( text:String );
+	Text( text:String, ?style:FontStyle );
 	Image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } );
 	
+	Native( o:Dynamic );
 //	#if neko
 //		SetFontRenderingParameters( pixelAlign
 	// GL-Specific
 //	SetPixelSize( s:Float );
 }
+
