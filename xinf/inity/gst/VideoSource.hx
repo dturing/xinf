@@ -18,6 +18,7 @@ import gst.Pipeline;
 import xinf.inity.Texture;
 import xinf.event.FrameEvent;
 import xinf.erno.Runtime;
+import xinf.inity.ColorSpace;
 
 class VideoSource extends Texture {
 	public var pipeline(default,null):Pipeline;
@@ -43,7 +44,7 @@ class VideoSource extends Texture {
 		if( height==null ) height=240;
 		initialize( width, height );
 		
-		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, width="+width+", height="+height+", framerate=(fraction)25 ! memorysink sync=false";
+		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32, width="+width+", height="+height+", framerate=(fraction)25 ! memorysink sync=false";
 		pipeline = new Pipeline( launch );
 
 		Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
@@ -54,7 +55,8 @@ class VideoSource extends Texture {
 		var data:Dynamic = null;
 		while( msg!=null ) {
 			// TODO: make this an iterator, and use a callback
-			if( msg.name == "frame" && untyped msg.data != null ) {
+			if( msg.name == "data" && untyped msg.data != null ) {
+				untyped { trace("msg: "+msg.element+", sz "+msg.size+", buf "+msg.buffer ); }
 				data = untyped msg.data;
 			} else {
 				trace("Unhandled GStreamer bus message: '"+msg.name );
@@ -66,7 +68,7 @@ class VideoSource extends Texture {
 	}
 	
 	private function frameData( data:Dynamic ) :Void {
-		setData( data, {x:0,y:0}, {x:width,y:height} );
+		setData( data, {x:0,y:0}, {x:width,y:height}, RGBA );
 		frameAvailable( data );
 	}
 }
