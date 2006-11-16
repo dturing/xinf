@@ -15,12 +15,14 @@
 
 package xinf.inity.gdk;
 
+import xinf.inity.ColorSpace;
+
 class Pixbuf {
 	private var pixbuf:Dynamic;
 	
 	public var width(get_width,null):Int;
 	public var height(get_height,null):Int;
-	public var alpha(get_alpha,null):Bool;
+	public var colorspace(get_colorspace,null):ColorSpace;
 	
 	private function get_width():Int {
 		return GdkPixbuf.gdk_pixbuf_get_width(pixbuf);
@@ -28,8 +30,8 @@ class Pixbuf {
 	private function get_height():Int {
 		return GdkPixbuf.gdk_pixbuf_get_height(pixbuf);
 	}
-	private function get_alpha():Bool {
-		return GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf);
+	private function get_colorspace():ColorSpace {
+		return if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
 	}
 	
 	public function new() :Void {
@@ -60,7 +62,7 @@ class Pixbuf {
 		GdkPixbuf.gdk_pixbuf_save_simple( pixbuf, untyped filename.__s, untyped type.__s, err );
 		
         var msg = GdkPixbuf.gdk_pixbuf_get_error(err);
-        if( msg ) throw(msg);
+        if( msg!=null ) throw(msg);
 	}
 	
 	
