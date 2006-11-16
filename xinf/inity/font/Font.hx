@@ -15,6 +15,8 @@
 
 package xinf.inity.font;
 
+import xinf.erno.DrawingInstruction;
+
 class Font {
     private static var fonts:Hash<Font> = new Hash<Font>();
     public static function getFont( ?name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
@@ -71,8 +73,13 @@ class Font {
         return( g );
     }
 	
-	public function renderText( text:String, fontSize:Float ) :Float {
+	public function renderText( text:String, fontSize:Float, style:FontStyle ) :Float {
 		if( text == null ) text="[null]";
+		
+		var c_style=0;
+		var nextStyle:FontStyleChange = null;
+		if( style!=null ) nextStyle = style[c_style];
+		
         GL.PushMatrix();
         
         GL.Scalef( fontSize, fontSize, 1.0 );
@@ -83,6 +90,12 @@ class Font {
 		var lines=0;
 
         for( i in 0...text.length ) {
+			if( nextStyle != null && nextStyle.pos == i ) {
+				GL.Color4f( nextStyle.color.r, nextStyle.color.g, nextStyle.color.b, nextStyle.color.a );
+				c_style++;
+				nextStyle = style[c_style];
+			}
+			
             var c = text.charCodeAt(i);
             if( c == 10 ) { // \n
                 GL.PopMatrix();
