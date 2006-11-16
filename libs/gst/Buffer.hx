@@ -1,18 +1,21 @@
 package gst;
 
-class Buffer extends Object{
-	private static var _ts = neko.Lib.load("GST","buffer_timestamp",1);
-	private static var _analyze = null;// neko.Lib.load("GST","analyze_buffer",1);
+class Buffer {
+	private static var _data = neko.Lib.load("GST","gst_buffer_data",1);
+	private static var _size = neko.Lib.load("GST","gst_buffer_size",1);
+	
+	private var _b:Dynamic = null;
 
-    public function new( o : Dynamic ) {
-        super(o);
+    public function new( b : Dynamic ) {
+		_b = b;
     }
     
-    public function timestamp() : Int {
-        return _ts( untyped this.__o );
+    public function data() : Dynamic {
+        return _data( _b );
     }
-    
-    public function analyze() : Dynamic {
-    //    return _analyze( untyped this.__o );
+
+    public function size() :Int {
+        return _size( _b );
     }
+
 }

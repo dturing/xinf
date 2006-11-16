@@ -25,12 +25,15 @@ static GstStaticPadTemplate gst_memorysink_sink_template_factory =
     GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
+	GST_STATIC_CAPS_ANY
+/*	
     GST_STATIC_CAPS ("video/x-raw-rgb, "
         "framerate = (fraction) [ 0, MAX ], "
         "width = (int) [ 1, MAX ], "
 		"depth = (int)24, "
 		"bpp = (int)32, "
-        "height = (int) [ 1, MAX ] ")
+        "height = (int) [ 1, MAX ] ") 
+*/	
     );
 
 enum
@@ -58,10 +61,13 @@ gst_memorysink_show_frame (GstBaseSink * sink, GstBuffer * buf)
 	if( element->frames[c]==NULL ) {
 		element->frames[c] = (unsigned char *)malloc( GST_BUFFER_SIZE(buf) );
 	}
+	// FIXME: this is dangerous, we're not sure the buffer is big enough FIXME
 	memcpy( element->frames[c], GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
 	
-	GstStructure *msg = gst_structure_new("frame",
+	GstStructure *msg = gst_structure_new("data",
 		"data", G_TYPE_POINTER, element->frames[c],
+		"size", G_TYPE_INT, GST_BUFFER_SIZE(buf),
+		"element", G_TYPE_STRING, gst_element_get_name(element),
 		NULL );
 	gst_bus_post( gst_element_get_bus(GST_ELEMENT(sink)),
 		gst_message_new_application( GST_OBJECT(sink), msg ) );
@@ -96,9 +102,13 @@ gst_memorysink_setcaps (GstBaseSink * sink, GstCaps * caps)
 static void
 gst_memorysink_init (GstMemorySink * memorysink)
 {
+	int i;
 	memorysink->nFrames=1;
 	memorysink->cFrame=0;
 	memorysink->frames=(unsigned char**)malloc(memorysink->nFrames*sizeof(unsigned char*));
+	for( i=0; i<memorysink->nFrames; i++ ) {
+	  memorysink->frames[i] = NULL;
+	}
 }
 
 

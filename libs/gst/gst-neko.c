@@ -7,6 +7,7 @@
 
 DEFINE_KIND(k_GObject);
 DEFINE_KIND(k_GClosure);
+DEFINE_KIND(k_GstBuffer);
 
 void raise_exception( const char *msg, const char *file, int line, ... ) {
     buffer b = alloc_buffer("");
@@ -50,6 +51,47 @@ const char *haxe_string( value s ) {
     }
 }
 
+/* GstBuffer */
+
+void neko_gst_buffer_gc( value b ) {
+	GstBuffer *buf = (GstBuffer*)val_data(b);
+	gst_buffer_unref(buf);
+}
+
+value alloc_gstbuffer( GstBuffer *buf ) {
+	value b = alloc_abstract( k_GstBuffer, buf );
+	val_gc( b, neko_gst_buffer_gc );
+	return b;
+}
+
+
+GstBuffer *val_gstbuffer( value obj ) {
+    if( !val_is_abstract(obj) || !val_is_kind( obj, k_GstBuffer ) ) {
+        error("not a GstBuffer",obj);
+        return NULL;
+    }
+    GstBuffer *o = (GstBuffer*)val_data(obj);
+    if( !o ) {
+        error("GstBuffer is null",obj);
+        return NULL;
+    }
+    return o;
+}
+
+value gst_buffer_data( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	return cptr_wrap_foreign( GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
+}
+DEFINE_PRIM(gst_buffer_data,1);
+
+value gst_buffer_size( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	return alloc_int( GST_BUFFER_SIZE(buf) );
+}
+DEFINE_PRIM(gst_buffer_size,1);
+
 /* convert GValue to neko value */
 value gvalue_to_neko( const GValue *gv ) {
     switch( G_VALUE_TYPE(gv) ) {
@@ -64,7 +106,9 @@ value gvalue_to_neko( const GValue *gv ) {
 		case G_TYPE_POINTER:
 			return cptr_wrap_foreign( g_value_get_pointer(gv), 0 );
         default:
-            if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
+            if( g_type_is_a( G_VALUE_TYPE(gv), GST_TYPE_BUFFER ) ) {
+				return alloc_gstbuffer( (GstBuffer*)g_value_peek_pointer(gv) );
+            } else if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
                 return alloc_gobject( g_value_get_object(gv) );
             } else {
                 //error("cannot convert GValue to neko value.",val_null);
