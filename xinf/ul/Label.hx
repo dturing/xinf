@@ -29,7 +29,7 @@ class Label extends StyleClassElement {
     
     public function new( ?text:String ) :Void {
 		super();
-		_text = if( text==null ) "" else text;
+		_text = text;
     }
     
     private function get_text() :String {
@@ -43,6 +43,15 @@ class Label extends StyleClassElement {
 	
 	public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
+	
+		if( text == null ) return;
+	
+		var fontName = style.get("fontFamily");
+		if( fontName != null ) {
+			g.draw( SetFont( fontName, style.get("fontSlant",Roman),
+					style.get("fontWeight",Normal),
+					style.get("fontSize",12) ) );
+		}
 
 		g.draw( Translate(
 			position.x+style.padding.l+style.border.l,
