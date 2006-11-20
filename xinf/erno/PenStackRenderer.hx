@@ -50,8 +50,8 @@ class PenStackRenderer extends Renderer {
 	public function new() :Void {
 		pens = new Array<Pen>();
 		pen = new Pen();
-		pen.fontFace = "Kassiopeia09T_09_sp60_cyr30";
-		pen.fontSize = 16.0;
+		pen.fontFace = "_sans";
+		pen.fontSize = 11.0;
 		pen.fontWeight = Normal;
 		pen.fontSlant = Roman;
 	}
