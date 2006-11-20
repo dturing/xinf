@@ -55,9 +55,8 @@ class VideoSource extends Texture {
 		var data:Dynamic = null;
 		while( msg!=null ) {
 			// TODO: make this an iterator, and use a callback
-			if( msg.name == "data" && untyped msg.data != null ) {
-				untyped { trace("msg: "+msg.element+", sz "+msg.size+", buf "+msg.buffer ); }
-				data = untyped msg.data;
+			if( msg.name == "data" && untyped msg.data.data != null ) {
+				data = untyped msg.data.data;
 			} else {
 				trace("Unhandled GStreamer bus message: '"+msg.name );
 			}
