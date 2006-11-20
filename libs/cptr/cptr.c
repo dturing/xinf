@@ -3,6 +3,14 @@
 
 DEFINE_KIND( k_cptr );
 
+CPTR_LOCAL_HELPERS
+
+DEFINE_ENTRY_POINT(cptr_main);
+
+void cptr_main() {
+	neko_kind_export(k_cptr,"cptr");
+}
+
 void check_failed( const char *function, const char *file, int line, value given ) {
     buffer b = alloc_buffer("");
     val_buffer(b,given);
@@ -23,13 +31,13 @@ void kind_check_failed( const char *function, const char *file, int line, value 
     _neko_failure(buffer_to_string(b), file, line );
 }
 
+/*
 void cptr_finalize( value cp ) {
     CHECK_CPTR(cp);
 	cptr *p = val_data( cp );
     if( p->ptr ) free(p->ptr);
     if( p ) free(p);
 }
-
 value cptr_wrap( void *ptr, int size ) {
     cptr *p = (cptr*)malloc( sizeof(cptr) );
     p->size = size;
@@ -46,7 +54,7 @@ value cptr_wrap_foreign( void *ptr, int size ) {
     value r = alloc_abstract( k_cptr, p );
     return(r);
 }
-
+*/
 value cptr_alloc( int size ) {
     void *ptr = (void*)malloc( size );
     if( !ptr ) val_throw( alloc_string("out of memory"));

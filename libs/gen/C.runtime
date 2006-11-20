@@ -4,3 +4,13 @@
 #include <neko.h>
 #include "cptr.h"
 
+vkind k_cptr;
+
+CPTR_LOCAL_HELPERS
+
+DEFINE_ENTRY_POINT(my_main);
+void my_main() {
+	k_cptr = neko_kind_import("cptr");
+}
+
+

@@ -5,6 +5,10 @@ GENERATOR_XSL=$(GEN_PATH)/generator.xsl
 
 HAXEFLAGS=-cp ~/.haxe/lib/std -cp $(GEN_PATH)
 
+NEKO:=neko
+NEKO_CFLAGS=-I/usr/local/include/neko -I$(XINFROOT)/libs/cptr -fPIC
+NEKO_LIBS=-L/usr/lib -lneko
+
 TARGET_LIBS=$(foreach MOD,$(NEKOGEN_MODULES),$(MOD).ndll $(MOD)__.n)
 TARGET_CLASSES=$(foreach MOD,$(NEKOGEN_MODULES),$(MOD).hx)
 TARGETS=$(TARGET_LIBS) $(TARGET_CLASSES)
@@ -16,6 +20,8 @@ include ../../project.make
 
 # ------------------------------------------------------------
 # building actual modules
+
+default : $(BINARIES)
 
 # use swig to generate XML description of the library
 %_wrap.xml : %.swg
@@ -41,9 +47,5 @@ include ../../project.make
 %.ndll : %_wrap.c
 	gcc -shared -fPIC -o $@ $($*_CFLAGS) $(NEKO_CFLAGS) $(NEKO_LIBS) $($*_LIBS) $< 
         
-# compile neko wrapper module
-%.n : %.hx
-	haxe $(HAXE_FLAGS) -neko $*.hx $*
-
 libclean :
-	-rm $(wildcard *.xml *_wrap.c *.n *__.hx *.hx *.ndll *.so)
+	-rm $(wildcard *.xml *_wrap.c *.n *__.hx *.ndll *.so)

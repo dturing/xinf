@@ -2,10 +2,10 @@ include ../../project.make
 
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ..
 
-GST_ELEMENTS=gstgltexturesink gstmemorysink gsttexturesink gstnekobus
+GST_ELEMENTS=gstnekobus
 
-GST_LIBS=${shell pkg-config --libs gstreamer-0.10} -lgstvideo-0.10 -lGL -lGLU -L../cptr -lcptr
-GST_CFLAGS=${shell pkg-config --cflags gstreamer-0.10} -I../cptr
+GST_LIBS=${shell pkg-config --libs gstreamer-0.10} -lgstvideo-0.10 -lGL -lGLU 
+GST_CFLAGS=${shell pkg-config --cflags gstreamer-0.10}
 
 CPTR_LIBS=-L../libs 
 CPTR_FLAGS=-I../libs
