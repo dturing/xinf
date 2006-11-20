@@ -23,7 +23,7 @@ class SimpleEventDispatcher implements EventDispatcher {
 		listeners = new Hash<List<Dynamic->Void>>();
 	}
 
-	public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :Void {
+	public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
 		var t = type.toString();
 		var l = listeners.get( t.toString() );
 		if( l==null ) {
@@ -31,6 +31,7 @@ class SimpleEventDispatcher implements EventDispatcher {
 			listeners.set( t, l );
 		}
 		l.push( h );
+		return h;
 	}
 
 	public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
