@@ -1,4 +1,21 @@
+/* 
+   xinf is not flash.
+   Copyright (c) 2006, Daniel Fischer.
+ 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+																			
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   Lesser General Public License or the LICENSE file for more details.
+*/
+
 package gst;
+
+typedef GstBusMessage = { name:String, data:Dynamic }
 
 class Pipeline extends Object {
 
@@ -15,15 +32,22 @@ class Pipeline extends Object {
     }
 
 	private static var _poll_bus = neko.Lib.load("GST","poll_bus",2);
-    public function pollBus( ?timeout:Int ) : Dynamic {
+    public function pollBus( ?timeout:Int ) :GstBusMessage {
 		var m = _poll_bus( untyped this.__o, timeout );
 		if( m != null ) {
-			var name:String = "";
-			untyped name.__s = m.name;
-			m.name = name;
+			var name = new String(m.name);
+			return { name:name, data:m };
 		}
-		return m;
+		return null;
     }
+
+	public function pollAllBusMessages( f:GstBusMessage->Void ) :Void {
+		var msg:GstBusMessage = pollBus(0);
+		while( msg!=null ) {
+			f(msg);
+			msg = pollBus(0);
+		}
+	}
 
 	private static var _query_position = neko.Lib.load("GST","query_position",1);
     public function position() : Float {

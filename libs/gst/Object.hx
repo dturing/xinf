@@ -15,7 +15,7 @@ class Object {
         return _get( untyped this.__o, untyped prop.__s );
     }
     
-    public function set( prop : String, value : String ) : Void {
+    public function set( prop : String, value : Dynamic ) : Void {
         return _set( untyped this.__o, untyped prop.__s, value );
     }
 

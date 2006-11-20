@@ -55,7 +55,9 @@ const char *haxe_string( value s ) {
 
 void neko_gst_buffer_gc( value b ) {
 	GstBuffer *buf = (GstBuffer*)val_data(b);
-	gst_buffer_unref(buf);
+	if( buf!=NULL ) {
+//		gst_buffer_unref(buf);
+	}
 }
 
 value alloc_gstbuffer( GstBuffer *buf ) {
@@ -91,6 +93,14 @@ value gst_buffer_size( value b ) {
 	return alloc_int( GST_BUFFER_SIZE(buf) );
 }
 DEFINE_PRIM(gst_buffer_size,1);
+
+value gst_buffer_free( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	gst_buffer_unref(buf);
+	return val_null;
+}
+DEFINE_PRIM(gst_buffer_free,1);
 
 /* convert GValue to neko value */
 value gvalue_to_neko( const GValue *gv ) {
