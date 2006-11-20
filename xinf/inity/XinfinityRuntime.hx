@@ -107,7 +107,7 @@ class XinfinityRuntime extends Runtime {
 		}
 
 		SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE, 8 );
-		trace("w/h: "+ width+", "+height );
+		
 		if( SDL.SetVideoMode( width, height, 32, SDL.OPENGL | SDL.RESIZABLE | SDL.GL_DOUBLEBUFFER ) == 0 ) {
 			throw("SDL SetVideoMode failed.");
 		}
