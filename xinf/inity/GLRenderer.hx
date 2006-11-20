@@ -113,16 +113,32 @@ class GLRenderer extends PenStackRenderer {
 				if( pen.fillColor != null ) {
 					GL.Color4f( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
 					GL.Begin( GL.QUADS );
-						GL.Vertex3f( x-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y+h-.5, 0. );
-						GL.Vertex3f( x-.5, y+h-.5, 0. );
-						GL.Vertex3f( x-.5, y-.5, 0. );
+						GL.Vertex3f( x, y, 0. );
+						GL.Vertex3f( x+w, y, 0. );
+						GL.Vertex3f( x+w, y+h, 0. );
+						GL.Vertex3f( x, y+h, 0. );
+						GL.Vertex3f( x, y, 0. );
 					GL.End();
 				}
 				if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
 					GL.Color4f( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
 					GL.LineWidth( pen.strokeWidth );
+					GL.Begin( GL.LINE_STRIP );
+						GL.Vertex3f( x, y, 0. );
+						GL.Vertex3f( x+w, y, 0. );
+						GL.Vertex3f( x+w, y+h, 0. );
+						GL.Vertex3f( x, y+h, 0. );
+						GL.Vertex3f( x, y, 0. );
+					GL.End();
+					GL.PointSize( pen.strokeWidth );
+					GL.Begin( GL.POINTS );
+						GL.Vertex3f( x, y, 0. );
+						GL.Vertex3f( x+w, y, 0. );
+						GL.Vertex3f( x+w, y+h, 0. );
+						GL.Vertex3f( x, y+h, 0. );
+						GL.Vertex3f( x, y, 0. );
+					GL.End();
+					/*
 					GL.Begin( GL.LINE_STRIP );
 						GL.Vertex3f( x-.5, y-.5, 0. );
 						GL.Vertex3f( x+w-.5, y-.5, 0. );
@@ -137,6 +153,7 @@ class GLRenderer extends PenStackRenderer {
 						GL.Vertex3f( x+w-.5, y+h-.5, 0. );
 						GL.Vertex3f( x-.5, y+h-.5, 0. );
 					GL.End();
+					*/
 				}
 								
 			case Text(text,style):
@@ -151,8 +168,8 @@ class GLRenderer extends PenStackRenderer {
 				var ty1:Float = (inRegion.y/img.theight);
 				var tx2:Float = tx1 + (inRegion.w/img.twidth);
 				var ty2:Float = ty1 + (inRegion.h/img.theight);
-				var x:Float = outRegion.x-.25;
-				var y:Float = outRegion.y-.25;
+				var x:Float = outRegion.x;
+				var y:Float = outRegion.y;
 				var x2:Float = outRegion.w+x;
 				var y2:Float = outRegion.h+y;
 

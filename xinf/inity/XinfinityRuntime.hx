@@ -38,8 +38,8 @@ class XinfinityRuntime extends Runtime {
 		super();
 		
 		frame=0;
-		width = 320;
-		height = 240;
+		width = 1024;
+		height = 768;
 		somethingChanged = true;
 	
 		initSDLGL();
@@ -134,7 +134,7 @@ class XinfinityRuntime extends Runtime {
 		// FIXME depends on stage scale mode
 		GL.Translatef( -1., 1., 0. );
 		GL.Scalef( (2./width), (-2./height), 1. );
-//		GL.Translatef( .5, .5, 0. );
+		GL.Translatef( .5, .5, 0. );
 	}
 	
 	private function endFrame() :Void {
@@ -166,6 +166,7 @@ class XinfinityRuntime extends Runtime {
 			// FIXME depends on stage scale mode
 			GL.Translatef( -1., 1., 0. );
 			GL.Scalef( (2./width), (-2./height), 1. );
+			
 			GL.SelectBuffer( 64, selectBuffer );
 			
 			GL.GetIntegerv( GL.VIEWPORT, view );

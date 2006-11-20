@@ -74,8 +74,8 @@ class Texture extends ImageData {
             }
         }
 		
-
 		GL.PopAttrib();
+		frameAvailable( data );
 	}
 
 	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
