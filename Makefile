@@ -29,7 +29,6 @@ ul: xinf/ul/Test.run
 inity: xinf/inity/Test.run
 gst: xinf/inity/gst/Test.run
 
-rect: demo/rectification/Test.run
 fonts: demo/inity/FontView.run
 euclid: demo/euclid/Test.run
 graph: demo/graph/Test.run

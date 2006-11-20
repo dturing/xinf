@@ -15,7 +15,7 @@ NEKO_LIBS=-L/usr/lib -lneko -L$(XINFROOT)/libs/cptr
 
 HAXE=haxe  -D test -cp ~/.haxe/lib/std -cp $(XINFROOT) $(foreach PATH, $(LIB_PATHS), -cp $(PATH))
 
-XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx) $(shell find $(XINFROOT)/demo -name \*.hx)
+XINF_SRC=$(shell find $(XINFROOT)/xinf -name \*.hx) $(shell find $(XINFROOT)/demo -name \*.hx) $(shell find $(XINFROOT)/ -name \*.hx)
 
 RESOURCES=$(wildcard resources/*)
 HAXE_RESOURCES=$(foreach RES, $(RESOURCES), -resource resources/$(notdir $(RES))@$(notdir $(RES)) )

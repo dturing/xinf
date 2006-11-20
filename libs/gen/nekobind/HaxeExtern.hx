@@ -5,7 +5,6 @@ class HaxeExtern extends Generator {
 
     public function new( mod:String ) {
         super(mod+".hx",mod);
-        
         print("extern class "+module+" {\n");
     }
 
