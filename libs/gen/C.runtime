@@ -1,4 +1,5 @@
 /* this file is generated with nekobind. do not modify it direcly. */
+/*  (unless you're looking at 'C.runtime') */
 
 #define HEADER_IMPORTS
 #include <neko.h>
@@ -10,7 +11,10 @@ CPTR_LOCAL_HELPERS
 
 DEFINE_ENTRY_POINT(my_main);
 void my_main() {
-	k_cptr = neko_kind_import("cptr");
+	k_cptr = kind_import("cptr");
+	if( !k_cptr ) {
+		DEFINE_KIND(_k_cptr);
+		kind_export(_k_cptr,"cptr");
+		k_cptr = kind_import("cptr");
+	}
 }
-
-

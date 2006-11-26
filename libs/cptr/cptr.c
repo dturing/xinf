@@ -1,24 +1,20 @@
 #include "cptr.h"
 #include <memory.h>
 
-DEFINE_KIND( k_cptr );
-
 CPTR_LOCAL_HELPERS
+vkind k_cptr;
 
 DEFINE_ENTRY_POINT(cptr_main);
 
 void cptr_main() {
-	neko_kind_export(k_cptr,"cptr");
+	k_cptr = kind_import("cptr");
+	if( !k_cptr ) {
+		DEFINE_KIND(_k_cptr);
+		kind_export(_k_cptr,"cptr");
+		k_cptr = kind_import("cptr");
+	}
 }
 
-void check_failed( const char *function, const char *file, int line, value given ) {
-    buffer b = alloc_buffer("");
-    val_buffer(b,given);
-    buffer_append(b," is of invalid type for ");
-    buffer_append(b, function );
-   
-    _neko_failure(buffer_to_string(b), file, line );
-}
 
 void kind_check_failed( const char *function, const char *file, int line, value given, const char *kind ) {
     buffer b = alloc_buffer("");

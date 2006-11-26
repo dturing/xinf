@@ -40,6 +40,13 @@ value cptr_wrap_foreign( void *ptr, int size ) { \
     p->ptr = ptr; \
     value r = alloc_abstract( k_cptr, p ); \
     return(r); \
+}\
+void check_failed( const char *function, const char *file, int line, value given ) { \
+    buffer b = alloc_buffer(""); \
+    val_buffer(b,given); \
+    buffer_append(b," is of invalid type for "); \
+    buffer_append(b, function ); \
+    _neko_failure(buffer_to_string(b), file, line ); \
 }
 
 /* convenience macros */
@@ -66,9 +73,10 @@ value cptr_wrap_foreign( void *ptr, int size ) { \
 #define CHECK_Array(v) CHECK(v,array)
 #define CHECK_Dynamic(v) check_failed(__FUNCTION__,__FILE__,__LINE__,v)
 
-void check_failed( const char *function, const char *file, int line, value given );
+/*
 value cptr_wrap( void *ptr, int size );
 value cptr_wrap_foreign( void *ptr, int size );
+*/
 
 /* handle kinds - convenience only, not needed for cptr */
 #define CHECK_KIND(v,kind) if( !val_is_abstract(v) || !val_is_kind(v,kind) ) { \
