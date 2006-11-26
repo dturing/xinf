@@ -26,7 +26,7 @@ BINARIES+=$(XINF_BINARIES) $(NEKO_BINARIES) $(SWF_BINARIES) $(JS_BINARIES)
 #
 # patterns
 #
-%.n : %.hx #$(XINF_SRC)
+%.n : %.hx $(XINF_SRC)
 	$(HAXE) $(HAXEFLAGS) $(HAXE_RESOURCES) -cp $(dir $*) -neko $@ -main $(notdir $(subst /,.,$*))
 
 %.js : %.hx $(XINF_SRC)

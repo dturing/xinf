@@ -57,6 +57,7 @@ enum DrawingInstruction {
 	CubicTo( v:Array<Float> ); // hargl, neko! 6 parameters mess up the enum.
 	
 	Rect( x:Float, y:Float, w:Float, h:Float );
+	Circle( x:Float, y:Float, r:Float );
 	Text( text:String, ?style:FontStyle );
 	Image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } );
 	

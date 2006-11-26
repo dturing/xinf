@@ -49,6 +49,7 @@ class Glyph {
 		}
 
 		GL.CallList(displayList);
-        GL.Translatef( Math.round((advance*s))/s, .0, .0 );
+// fake hinting        GL.Translatef( Math.round((advance*s))/s, .0, .0 );
+        GL.Translatef( advance, .0, .0 );
 	}
 }

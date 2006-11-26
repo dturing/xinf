@@ -46,7 +46,7 @@ class Label extends StyleClassElement {
 	
 		if( text == null ) return;
 	
-		var fontName = style.get("fontFamily");
+		var fontName = style.get("fontFamily","_sans");
 		if( fontName != null ) {
 			g.draw( SetFont( fontName, style.get("fontSlant",Roman),
 					style.get("fontWeight",Normal),

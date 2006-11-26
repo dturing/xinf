@@ -24,10 +24,38 @@ class GLRenderer extends PenStackRenderer {
 	private var shape:GLPolygon;
 	public var font(default,null):xinf.inity.font.Font;
 	private var root:Int;
+	
+	private var circle_fill:Int;
+	private var circle_stroke:Int;
 
 	public function new() :Void {
 		super();
 		root = getNextId();
+		
+		var fy = 4./3.;
+		
+		circle_fill = GL.GenLists(1);
+		GL.NewList( circle_fill, GL.COMPILE );
+		GL.Begin( GL.POLYGON );
+			var n = 50;
+			var f = (Math.PI*2)/n;
+			for( i in 0...(n+1) ) {
+				GL.Vertex3f( Math.sin(f*i), Math.cos(f*i)*fy, 0. );
+			}
+		GL.End();
+		GL.EndList();
+
+		circle_stroke = GL.GenLists(1);
+		GL.NewList( circle_stroke, GL.COMPILE );
+		GL.Begin( GL.LINE_STRIP );
+			var n = 50;
+			var f = (Math.PI*2)/n;
+			for( i in 0...(n+1) ) {
+				GL.Vertex3f( Math.sin(f*i), Math.cos(f*i)*fy, 0. );
+			}
+		GL.End();
+		GL.EndList();
+
 	}
 	
 	public function getNextId() :Int {
@@ -77,7 +105,7 @@ class GLRenderer extends PenStackRenderer {
 				GL.MultMatrixf( m.asGLMatrix() );
 
 			case Scale(x,y):
-				GL.Scalef( x, y, 0. );
+				GL.Scalef( x, y, 1. );
 
 			case Rotate(a):
 				GL.Rotatef( a, 0., 0., 1. );
@@ -138,23 +166,24 @@ class GLRenderer extends PenStackRenderer {
 						GL.Vertex3f( x, y+h, 0. );
 						GL.Vertex3f( x, y, 0. );
 					GL.End();
-					/*
-					GL.Begin( GL.LINE_STRIP );
-						GL.Vertex3f( x-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y+h-.5, 0. );
-						GL.Vertex3f( x-.5, y+h-.5, 0. );
-						GL.Vertex3f( x-.5, y-.5, 0. );
-					GL.End();
-					GL.PointSize( pen.strokeWidth );
-					GL.Begin( GL.POINTS );
-						GL.Vertex3f( x-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y-.5, 0. );
-						GL.Vertex3f( x+w-.5, y+h-.5, 0. );
-						GL.Vertex3f( x-.5, y+h-.5, 0. );
-					GL.End();
-					*/
 				}
+				
+			case Circle(x,y,r):
+				GL.PushMatrix();
+				GL.Translatef( x, y, 0. );
+				GL.Scalef( r, r, 1.);
+				
+				if( pen.fillColor != null ) {
+					GL.Color4f( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+					GL.CallList(circle_fill);
+				}
+				if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
+					GL.Color4f( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
+					GL.LineWidth( pen.strokeWidth );
+					GL.CallList(circle_stroke);
+				}
+				GL.PopMatrix();
+				
 								
 			case Text(text,style):
 				font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );

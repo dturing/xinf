@@ -144,9 +144,11 @@ class GLPolygon {
 			GL.Begin( GL.LINE_STRIP );
 			GLU.VerticesOffset( coords, i, contour.path.length );
 			GL.End();
+			/*
 			GL.Begin( GL.POINTS );
 			GLU.VerticesOffset( coords, i, contour.path.length );
 			GL.End();
+			*/
 			i+=contour.path.length*3;
 		}
 	}
