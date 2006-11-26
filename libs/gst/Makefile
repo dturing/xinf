@@ -1,4 +1,4 @@
-include ../../project.make
+include ../libraries.make
 
 HAXEFLAGS=-cp /home/dan/.haxe/lib/std -cp . -cp ..
 
@@ -20,9 +20,12 @@ default : $(MOD)
 $(MOD) : gst-neko.c $(addsuffix .c, $(GST_ELEMENTS))
 	$(CC) -shared -o $@ $(ALL_FLAGS) $^
 
+clean: 
+	-rm $(MOD)
+
 test :
 	haxe $(HAXEFLAGS) -neko Pipeline.hx -main gst.Pipeline 
 	neko Pipeline.n
-	
+
 run: test
 

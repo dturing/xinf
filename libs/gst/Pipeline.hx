@@ -82,8 +82,4 @@ class Pipeline extends Object {
 			neko.Sys.sleep( 1 );
 		}
 	}
-	
-    public static function __init__() :Void {
-		gst.Object._init();
-    }
 }

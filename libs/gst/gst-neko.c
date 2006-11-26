@@ -2,6 +2,8 @@
 #include <gst/gst.h>
 #include <cptr.h> 
  
+CPTR_LOCAL_HELPERS
+
 #define error(msg,...) \
     raise_exception( msg, __FILE__, __LINE__, __VA_ARGS__ );
 
@@ -74,7 +76,7 @@ GstBuffer *val_gstbuffer( value obj ) {
     }
     GstBuffer *o = (GstBuffer*)val_data(obj);
     if( !o ) {
-        error("GstBuffer is null",obj);
+        error("GstBuffer is NULL",obj);
         return NULL;
     }
     return o;
@@ -98,6 +100,10 @@ value gst_buffer_free( value b ) {
 	GstBuffer *buf = val_gstbuffer(b);
 	if( !buf ) return val_null;
 	gst_buffer_unref(buf);
+	// assure the abstract is unusable
+	val_kind(b)=NULL;
+	// and will not be garbage-collected
+	val_gc( b, NULL );
 	return val_null;
 }
 DEFINE_PRIM(gst_buffer_free,1);
@@ -355,7 +361,9 @@ value parse_launch( value def ) {
     GError *err;
     const char *d = haxe_string( def );
 	GstElement *e = gst_parse_launch(d,&err);
+	if( !e ) return val_null;
     gst_element_set_state( e, GST_STATE_PLAYING );
+		g_message("Launch pipeline: %p\n", e );
     return alloc_gobject( G_OBJECT(e) );
 }
 DEFINE_PRIM(parse_launch,1);
@@ -469,106 +477,20 @@ value pipeline_play( value obj ) {
 }
 DEFINE_PRIM(pipeline_play,1);
 
-/* --------------------------------------------------
-    GstGLTextureSink
-   -------------------------------------------------- */
-
-GMutex *get_glmutex( value obj ) {
-    GObject *o = val_gobject( obj );
-    if( !o ) return NULL;
-
-    GValue gv;
-    memset( &gv, 0, sizeof( gv ) );
-    g_value_init( &gv, G_TYPE_POINTER );
-    g_object_get_property( o, "mutex", &gv );
-	return( (GMutex*)g_value_get_pointer(&gv) );
-}
-GCond *get_glcond( value obj, const char *name ) {
-    GObject *o = val_gobject( obj );
-    if( !o ) return NULL;
-
-    GValue gv;
-    memset( &gv, 0, sizeof( gv ) );
-    g_value_init( &gv, G_TYPE_POINTER );
-    g_object_get_property( o, name, &gv );
-	return( (GCond*)g_value_get_pointer(&gv) );
-}
-
-value lock_glmutex( value obj ) {
-	GCond *consumed = get_glcond( obj, "texture_consumed" );
-	GCond *ready = get_glcond( obj, "texture_ready" );
-	GMutex *mutex = get_glmutex(obj);
-	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
-		
-	g_mutex_lock(mutex);
-	g_cond_signal( consumed );
-	g_cond_wait( ready, mutex );
-	
-	return val_true;
-}
-DEFINE_PRIM(lock_glmutex,1);
-
-value unlock_glmutex( value obj ) {
-	GCond *consumed = get_glcond( obj, "texture_consumed" );
-	GCond *ready = get_glcond( obj, "texture_ready" );
-	GMutex *mutex = get_glmutex(obj);
-	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
-		
-	g_mutex_unlock(mutex);
-	
-	return val_true;
-}
-DEFINE_PRIM(unlock_glmutex,1);
-
-/*
-value wait_texture_available( value obj ) {
-	GCond *cond = get_glcond( obj, "texture_ready" );
-	GMutex *mutex = get_glmutex(obj);
-	if( !mutex || !cond ) throw("Couldn't aquire GL mutex/condition");
-	g_mutex_lock(mutex);
-	g_cond_wait( cond, mutex );
-	g_mutex_unlock(mutex);
-	return val_true;
-}
-DEFINE_PRIM(wait_texture_available,1);
-*/
-
-value set_texture_consumed( value obj ) {
-	GCond *cond = get_glcond( obj, "texture_consumed" );
-	GMutex *mutex = get_glmutex(obj);
-	if( !mutex || !cond ) throw("Couldn't aquire GL mutex/condition");
-	g_mutex_lock(mutex);
-	g_cond_signal( cond );
-	g_mutex_unlock(mutex);
-	return val_true;
-}
-DEFINE_PRIM(set_texture_consumed,1);
-
-value produce_texture( value obj ) {
-	GCond *consumed = get_glcond( obj, "texture_consumed" );
-	GCond *ready = get_glcond( obj, "texture_ready" );
-	GMutex *mutex = get_glmutex(obj);
-	if( !mutex || !consumed || !ready ) throw("Couldn't aquire GL mutex/conditions");
-		
-	g_mutex_lock(mutex);
-	g_cond_signal( consumed );
-	g_cond_wait( ready, mutex );
-	g_mutex_unlock(mutex);
-	
-	return val_true;
-}
-DEFINE_PRIM(produce_texture,1);
-
-
 /* init */
+DEFINE_ENTRY_POINT(neko_gst_init);
+vkind k_cptr;
+void neko_gst_init() {
+	k_cptr = kind_import("cptr");
+	if( !k_cptr ) {
+		DEFINE_KIND(_k_cptr);
+		kind_export(_k_cptr,"cptr");
+		k_cptr = kind_import("cptr");
+	}
 
-#include "gstgltexturesink.h"
-value _gst_init() {
     g_thread_init(NULL);
 	gst_init( NULL, NULL );
-    return val_true;
 }
-DEFINE_PRIM(_gst_init,0);
 
 
 /* trigger neko GC */
