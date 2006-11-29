@@ -358,12 +358,15 @@ DEFINE_PRIM(poll_bus,2);
 
 /* parse_launch */
 value parse_launch( value def ) {
-    GError *err;
+    GError *err=NULL;
     const char *d = haxe_string( def );
 	GstElement *e = gst_parse_launch(d,&err);
+	if( err ) {
+		val_throw( alloc_string( "erroneous pipeline" ));// GST_STR_NULL(err->message) ) ); // doesnt work? FIXME
+		g_error_free(err);
+	}
 	if( !e ) return val_null;
     gst_element_set_state( e, GST_STATE_PLAYING );
-		g_message("Launch pipeline: %p\n", e );
     return alloc_gobject( G_OBJECT(e) );
 }
 DEFINE_PRIM(parse_launch,1);
