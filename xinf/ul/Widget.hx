@@ -18,7 +18,6 @@ package xinf.ul;
 import xinf.ul.FocusManager;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
-import xinf.event.Global;
 
 
 /**
