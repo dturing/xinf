@@ -40,9 +40,20 @@ cfo "creating NDLL Linux folder"
 cp bin/linux/$ID.ndll $ID/ndll/Linux/$ID.ndll
 cfo "copying $ID.ndll for Linux"
 
+mkdir -p $ID/ndll/Mac
+cfo "creating NDLL Mac folder"
+cp bin/mac/$ID.ndll $ID/ndll/Mac/$ID.ndll
+cfo "copying $ID.ndll for Mac"
+
 # samples
 svn export samples/ $ID/samples/
 cfo "exporting samples from local SVN checkout"
+
+# "haxelib run" demo
+cd samples/1-*
+haxe compile.hxml
+cd ../..
+cp samples/1-*/app.n $ID/run.n
 
 zip -r $ID.zip $ID
 cfo "zipping package $ID.zip"

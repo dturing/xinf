@@ -1,13 +1,39 @@
 #include "cptr.h"
 
-CPTR_LOCAL_HELPERS;
+#include <string.h>
 
 DEFINE_KIND(k_cptr);
-DEFINE_ENTRY_POINT(cptr_main);
+
+value check_cptr( value cp, int size ) { \
+ //	vkind k_cptr = kind_import("cptr"); 
+	val_check_kind( cp, k_cptr ); \
+	if( size>0 && val_cptr_size(cp) < size ) val_throw( alloc_string("cptr overflow") ); \
+	return cp; \
+}
+
+void cptr_finalize( value cp ) { \
+    check_cptr(cp,0); \
+	cptr *p = val_data( cp ); \
+    if( p->ptr && p->free ) p->free(p->ptr); \
+    if( p ) free(p); \
+} \
+
+value alloc_cptr( void *ptr, int size, void (*free_f)(void*) ) { \
+	vkind k_cptr = kind_import("cptr"); \
+	cptr *cp = (cptr*)malloc( sizeof(cptr) ); \
+	cp->ptr=ptr; cp->size=size; cp->free=free_f; \
+	if( cp->free==NULL ) cp->free = free; \
+	value r = alloc_abstract( k_cptr, cp ); \
+	val_gc( r, cptr_finalize ); \
+	return r; \
+} 
+
 
 void cptr_main() {
 	kind_export(k_cptr,"cptr");
 }
+DEFINE_ENTRY_POINT(cptr_main);
+
 
 value cptr_void_null() {
     return alloc_cptr( NULL, 0, NULL );
@@ -22,7 +48,7 @@ DEFINE_PRIM( cptr_as_string, 1 );
 
 value cptr_from_string( value s ) {
     val_check(s,string);
-    unsigned char *str = val_string(s); // FIXME: strdup?
+    char *str = strdup(val_string(s)); // FIXME: strdup?
     int n = val_strlen(s);
     value r = alloc_cptr( str, n, free );
     return r;
@@ -139,10 +165,10 @@ DEFINE_PRIM(cptr_## ctype ##_from_array,2);
     CPTR_TO_ARRAY(ctype,hxtype ) \
     CPTR_FROM_ARRAY(ctype,hxtype )
 
-/*
+#ifdef NEKO_OSX
 typedef unsigned int uint;
 typedef unsigned short ushort;
-*/
+#endif
 
 typedef unsigned char uchar;
 

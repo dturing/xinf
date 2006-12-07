@@ -167,8 +167,10 @@ class TestCPtr extends haxe.unit.TestCase {
 
     function testAsString() {
         var ptr:Dynamic = CPtr.short_alloc(2);
-        CPtr.short_set( ptr, 0, 0x4241 );
-        CPtr.short_set( ptr, 1, 0x4443 );
+        CPtr.uchar_set( ptr, 0, 0x41 );
+        CPtr.uchar_set( ptr, 1, 0x42 );
+        CPtr.uchar_set( ptr, 2, 0x43 );
+        CPtr.uchar_set( ptr, 3, 0x44 );
         
         assertEquals( untyped "ABCD".__s, CPtr.as_string(ptr) );
     }
@@ -176,8 +178,10 @@ class TestCPtr extends haxe.unit.TestCase {
     function testFromString() {
         var ptr:Dynamic = CPtr.from_string(untyped "ABCD".__s);
         
-        assertEquals( 0x4241, CPtr.short_get(ptr,0) );
-        assertEquals( 0x4443, CPtr.short_get(ptr,1) );
+        assertEquals( 0x41, CPtr.uchar_get(ptr,0) );
+        assertEquals( 0x42, CPtr.uchar_get(ptr,1) );
+        assertEquals( 0x43, CPtr.uchar_get(ptr,2) );
+        assertEquals( 0x44, CPtr.uchar_get(ptr,3) );
     }
 
 	function testVoidNull() {
@@ -185,6 +189,8 @@ class TestCPtr extends haxe.unit.TestCase {
 		assertEquals( 0, info.size );
 		assertEquals( 0., info.address );
 	}
+	
+	// TODO: test bounds checking
 }
 
 class App {
