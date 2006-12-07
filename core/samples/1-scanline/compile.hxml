@@ -1,0 +1,10 @@
+-main App
+-lib xinf-core
+-js app.js
+
+--next
+-main App
+-lib xinf-core
+-swf app.swf
+-swf-version 9
+-swf-header 320:240:25:000000
