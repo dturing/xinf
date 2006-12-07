@@ -1,0 +1,6 @@
+-main App
+-lib xinf-core
+-lib cptr
+-lib opengl
+-cp ../../api
+-neko app.neko
