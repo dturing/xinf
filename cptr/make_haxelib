@@ -1,0 +1,48 @@
+#!/bin/sh
+
+function cfo() {
+    if [ $? != 0 ]; then
+        echo "-- Error on $1"
+        exit $?
+    else
+        echo "++ Success on $1"    
+    fi    
+}
+
+ID=cptr
+NAMESPACES=$ID
+
+if [ -e $ID.zip ]; then 
+	rm $ID.zip
+	cfo "removing previous zip package"
+fi
+
+if [ -e $ID ]; then	
+	rm -R $ID
+	cfo "removing previous package source tree"
+fi
+
+#root
+mkdir $ID
+cfo "creating source tree folder"
+cp haxelib.xml $ID
+cfo "copying haxelib xml config"
+
+# haxe api
+for NS in $NAMESPACES; do
+	svn export api/$NS $ID/$NS
+	cfo "exporting sources in $NS from local SVN checkout"
+done
+
+# ndlls
+mkdir -p $ID/ndll/Linux
+cfo "creating NDLL Linux folder"
+cp bin/linux/$ID.ndll $ID/ndll/Linux/$ID.ndll
+cfo "copying $ID.ndll for Linux"
+
+# samples
+svn export samples/ $ID/samples/
+cfo "exporting samples from local SVN checkout"
+
+zip -r $ID.zip $ID
+cfo "zipping package $ID.zip"
