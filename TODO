@@ -1,0 +1,5 @@
+dan's short-term TODO for xinf:
+ * build a nice makefile for cross-compilation for cptr
+ * same for opengl
+ * port rest of xinfinity to haxelib:
+   * freetype/fontconfig interface
