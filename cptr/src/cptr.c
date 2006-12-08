@@ -165,7 +165,7 @@ DEFINE_PRIM(cptr_## ctype ##_from_array,2);
     CPTR_TO_ARRAY(ctype,hxtype ) \
     CPTR_FROM_ARRAY(ctype,hxtype )
 
-#ifdef NEKO_OSX
+#ifndef NEKO_LINUX
 typedef unsigned int uint;
 typedef unsigned short ushort;
 #endif
