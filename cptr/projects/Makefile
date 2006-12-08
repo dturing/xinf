@@ -86,9 +86,8 @@ TEST_SAMPLE:=../samples/0-test
 haxelib : $(HAXELIB_PROJECT).zip
 	
 $(HAXELIB_PROJECT).zip: all
+	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
-	
-	-rm -rf $(HAXELIB_PROJECT)/bin $(HAXELIB_PROJECT)/$(PROJECT) $(HAXELIB_PROJECT)/samples $(HAXELIB_PROJECT).zip $(HAXELIB_PROJECT)/run.n
 	
 	# copy haxelib.xml
 	cp ../haxelib.xml $(HAXELIB_PROJECT)
