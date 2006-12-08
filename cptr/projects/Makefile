@@ -26,19 +26,28 @@ PROJECT_CFLAGS+=$(foreach SRC_PATH, $(SRC_PATHS), -I$(SRC_PATH))
 C_SRCS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.c))
 C_HEADERS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.h))
 
+ALL_FLAGS=$(NEKO_CFLAGS) $(NEKO_LIBS) $(PLATFORM_CFLAGS) $(PLATFORM_LIBS) $(PROJECT_CFLAGS) $(PROJECT_LIBS)
+
 
 # setup cross-compilation (or not)
 
 ifeq ($(NEKO_PLATFORM),Mac)
 		PATH:=$(PATH):/opt/osx/bin
-		LD:=powerpc-apple-darwin-ld
-		CC:=powerpc-apple-darwin-cpp 
 		OSX_SDK:=/opt/osx/MacOSX10.4u.sdk/
 		NEKO_CFLAGS:=-I/opt/osx/manual/include -DNEKO_OSX
 		NEKO_LIBS:=-dynamiclib -L/opt/osx/manual/lib -lneko
 		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include 
 		PLATFORM_CFLAGS+=-isysroot $(OSX_SDK) -Wl,-syslibroot,$(OSX_SDK)
-		PLATFORM_CFLAGS+=-arch i386 -arch ppc
+
+$(NDLL): $(NDLL).x86 $(NDLL).ppc
+	i686-apple-darwin-lipo -create -output $@ -arch i386 $(NDLL).x86 -arch ppc $(NDLL).ppc
+
+$(NDLL).x86: $(C_SRCS) $(C_HEADERS)
+	i686-apple-darwin-gcc -o $@ $(C_SRCS) $(ALL_FLAGS)
+
+$(NDLL).ppc: $(C_SRCS) $(C_HEADERS)
+	powerpc-apple-darwin-gcc -o $@ $(C_SRCS) $(ALL_FLAGS)
+
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		CC:=mingw32-gcc
@@ -49,15 +58,12 @@ else
 		NEKO_CFLAGS:=-fPIC -shared -DNEKO_LINUX
 		NEKO_LIBS:=-L/usr/lib -lneko -lz  -ldl
 	endif
-endif
-
-
-# this projects main target
-
-ALL_FLAGS=$(NEKO_CFLAGS) $(NEKO_LIBS) $(PLATFORM_CFLAGS) $(PLATFORM_LIBS) $(PROJECT_CFLAGS) $(PROJECT_LIBS)
 
 $(NDLL): $(C_SRCS) $(C_HEADERS)
 	$(CC) -o $@ $(C_SRCS) $(ALL_FLAGS)
+
+endif
+
 
 
 # meta-targets (not dependant on $(NEKO_PLATFORM)
