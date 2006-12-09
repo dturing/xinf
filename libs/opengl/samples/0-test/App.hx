@@ -11,7 +11,6 @@ class App {
 		var i=0;
 		GLUT.setupHandlers({
 				display:function() {
-						trace("Display");
 						i++;
 						GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
 						GL.loadIdentity();
@@ -36,7 +35,6 @@ class App {
 						GLUT.swapBuffers();
 					},
 				timer:function() {
-						trace("Timer");
 						GLUT.postRedisplay();
 					}
 			});
@@ -55,26 +53,6 @@ class App {
 
 
 		GLUT.mainLoop();
-
-	trace("quit");
-/*
-		d.makeCurrent();
-		
-		
-		for( i in 0...2000 ) {
-			d.swap();
-			
-			while( d.hasNextEvent() ) {
-				trace("Event: "+d.getNextEvent() );
-			}
-			
-			neko.Sys.sleep(1./25.);
-		}
-*/		
-		for( i in 0...2000 ) {
-			trace("step");
-			neko.Sys.sleep(1./25.);
-		}
 	}
 	
 	public static function wireCube( size:Float ) :Void {
