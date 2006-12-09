@@ -5,40 +5,52 @@ import opengl.GLUT;
 import opengl.Helper;
 
 class App {
+	public static var i=0;
+	public static function step( n:Int ) {
+		GLUT.postRedisplay();
+		GLUT.setTimer( Math.round(1000/25), step, i );
+	}
+	
+	public static function display() {
+		i++;
+		GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
+		GL.loadIdentity();
+		
+		GLU.lookAt( .0, .0, 5.,
+					.0, .0, .0,
+					.0, 1., .0  );
+		GL.scale( 1., 1., 1. );
+		
+		var r = i*5;
+		GL.rotate( r*.9124, 1., 0., 0. );
+		GL.rotate( r*.6423, 0., 1., 0. );
+		GL.rotate( r*.2352, 0., 0., 1. );
+		
+		GL.color3( 1., 0., 0. );
+		// solidCube(1.0);
+		GLUT.solidTeapot( 1 );
+
+		GL.color3( 1., 1., 1. );
+		wireCube(2.0);
+	
+		
+		GL.flush();
+		GLUT.swapBuffers();
+	}
+						
 	public static function main() {
 		GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
 		var d = GLUT.createWindow("Hello World");
-		var i=0;
-		GLUT.setupHandlers({
-				display:function() {
-						i++;
-						GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
-						GL.loadIdentity();
-						
-						GLU.lookAt( .0, .0, 5.,
-									.0, .0, .0,
-									.0, 1., .0  );
-						GL.scale( 1., 1., 1. );
-						
-						var r = i*5;
-						GL.rotate( r*.9, 1., 0., 0. );
-						GL.rotate( r*.6, 0., 1., 0. );
-						GL.rotate( r*.3, 0., 0., 1. );
-						
-						GL.color3( 1., 0., 0. );
-						solidCube(1.0);
-
-						GL.color3( 1., 1., 1. );
-						wireCube(2.0);
-						
-						GL.flush();
-						GLUT.swapBuffers();
-					},
-				timer:function() {
-						GLUT.postRedisplay();
-					}
-			});
+		
+		GLUT.setDisplay( display );
+		GLUT.setTimer( Math.round(1000/25), step, 0 );
+		
+		GLUT.setReshape( function( w:Int, h:Int ) {
+				trace("reshape: "+w+"x"+h );
+			} );
+		
 		GLUT.showWindow();
+		GLUT.postRedisplay();
 
 
 		GL.clearColor( 0, 0, 0, 0 );

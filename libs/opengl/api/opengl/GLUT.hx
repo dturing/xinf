@@ -34,16 +34,33 @@ extern class GLUT {
 	public static function init(argn:Dynamic,argv:Dynamic) :Void;
 
 	public static function initSimple() :Void;
-	public static function setupHandlers( callbacks:Dynamic ) :Void;
+	
+	public static function setDisplay( func:Dynamic ) :Void; // Void->Void
+	public static function setTimer( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
+	public static function setReshape( func:Dynamic ) :Void; // Int->Int->Void
 
 	public static function initDisplayMode( mode:Int ) :Void;
+	
 	public static function initWindowSize( width:Int, height:Int ) :Void;
-	public static function createWindow( name:String ) :Void;
+	public static function createWindow( name:String ) :Int;
 	public static function showWindow() :Void;
+	
+	public static function setWindow( window:Int ) :Void;
+	public static function positionWindow( x:Int, y:Int ) :Void;
+	public static function reshapeWindow( width:Int, height:Int ) :Void;
+	public static function fullScreen() :Void;
+	public static function hideWindow() :Void;
+	public static function iconifyWindow() :Void;
+	public static function setWindowTitle( title:String ) :Void;
+	public static function setIconTitle( title:String ) :Void;
+
 	public static function postRedisplay() :Void;
 	public static function swapBuffers() :Void;
 
 	public static function mainLoop() :Void;
+
+
+	public static function solidTeapot( size:Float ) :Void;
 
 	public static function __init__() : Void {
         untyped {
@@ -52,4 +69,11 @@ extern class GLUT {
         }
 		initSimple();
     }
+}
+
+
+typedef GLUTCallbacks = {
+	display: Void->Void,
+	timer: Void->Void,
+	reshape: Int->Int->Void
 }
