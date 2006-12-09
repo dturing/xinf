@@ -1,7 +1,5 @@
 #include "additions.h"
 
-#include <GL/gl.h>
-
 /* FIXME: use proper GL vertex array, not this hacky crap! */
 void gluVerticesOffset( int offset, int n, double *v ) {
 	double *_v = v+offset;
