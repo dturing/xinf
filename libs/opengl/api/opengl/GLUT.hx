@@ -35,9 +35,12 @@ extern class GLUT {
 
 	public static function initSimple() :Void;
 	
-	public static function setDisplay( func:Dynamic ) :Void; // Void->Void
-	public static function setTimer( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
-	public static function setReshape( func:Dynamic ) :Void; // Int->Int->Void
+	public static function setDisplayFunc( func:Dynamic ) :Void; // Void->Void
+	public static function setReshapeFunc( func:Dynamic ) :Void; // Int->Int->Void
+	public static function setKeyboardFunc( func:Dynamic ) :Void; // String->Int->Int->Void
+	public static function setMouseFunc( func:Dynamic ) :Void; // Int->Int->Int->Int->Void
+	public static function setMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
+	public static function setTimerFunc( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
 
 	public static function initDisplayMode( mode:Int ) :Void;
 	
@@ -60,8 +63,13 @@ extern class GLUT {
 	public static function mainLoop() :Void;
 
 
+	public static function wireCube( size:Float ) :Void;
+	public static function solidCube( size:Float ) :Void;
+	public static function wireTeapot( size:Float ) :Void;
 	public static function solidTeapot( size:Float ) :Void;
-
+	public static function wireOctahedron() :Void;
+	public static function solidOctahedron() :Void;
+	
 	public static function __init__() : Void {
         untyped {
         	var loader = untyped __dollar__loader;

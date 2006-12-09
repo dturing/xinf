@@ -8,7 +8,7 @@ class App {
 	public static var i=0;
 	public static function step( n:Int ) {
 		GLUT.postRedisplay();
-		GLUT.setTimer( Math.round(1000/25), step, i );
+		GLUT.setTimerFunc( Math.round(1000/25), step, i );
 	}
 	
 	public static function display() {
@@ -28,10 +28,10 @@ class App {
 		
 		GL.color3( 1., 0., 0. );
 		// solidCube(1.0);
-		GLUT.solidTeapot( 1 );
+		GLUT.solidCube( 1 );
 
 		GL.color3( 1., 1., 1. );
-		wireCube(2.0);
+		GLUT.wireCube(2.0);
 	
 		
 		GL.flush();
@@ -42,11 +42,22 @@ class App {
 		GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
 		var d = GLUT.createWindow("Hello World");
 		
-		GLUT.setDisplay( display );
-		GLUT.setTimer( Math.round(1000/25), step, 0 );
+		GLUT.setDisplayFunc( display );
+		GLUT.setTimerFunc( Math.round(1000/25), step, 0 );
 		
-		GLUT.setReshape( function( w:Int, h:Int ) {
-				trace("reshape: "+w+"x"+h );
+		GLUT.setReshapeFunc( function( w:Int, h:Int ) {
+				trace("reshape: "+w+","+h );
+			} );
+		GLUT.setMouseFunc( function( btn:Int, state:Int, x:Int, y:Int ) {
+				trace("mouse btn "+btn+" "+state+" @ "+x+","+y );
+			} );
+		GLUT.setMotionFunc( function( x:Int, y:Int ) {
+				trace("motion: "+x+","+y );
+			} );
+		GLUT.setKeyboardFunc( function( key:Int, x:Int, y:Int ) {
+				var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
+				
+				trace("key "+key+k+" @"+x+","+y );
 			} );
 		
 		GLUT.showWindow();
@@ -65,34 +76,5 @@ class App {
 
 
 		GLUT.mainLoop();
-	}
-	
-	public static function wireCube( size:Float ) :Void {
-		var V = GL.vertex3;
-		var N = GL.normal3;
-	
-		var s = size*.5;
-		
-		GL.begin( GL.LINE_LOOP ); N( 1.0, 0.0, 0.0); V( s,-s, s); V( s,-s,-s); V( s, s,-s); V( s, s, s); GL.end();
-		GL.begin( GL.LINE_LOOP ); N( 0.0, 1.0, 0.0); V( s, s, s); V( s, s,-s); V(-s, s,-s); V(-s, s, s); GL.end();
-		GL.begin( GL.LINE_LOOP ); N( 0.0, 0.0, 1.0); V( s, s, s); V(-s, s, s); V(-s,-s, s); V( s,-s, s); GL.end();
-		GL.begin( GL.LINE_LOOP ); N(-1.0, 0.0, 0.0); V(-s,-s, s); V(-s, s, s); V(-s, s,-s); V(-s,-s,-s); GL.end();
-		GL.begin( GL.LINE_LOOP ); N( 0.0,-1.0, 0.0); V(-s,-s, s); V(-s,-s,-s); V( s,-s,-s); V( s,-s, s); GL.end();
-		GL.begin( GL.LINE_LOOP ); N( 0.0, 0.0,-1.0); V(-s,-s,-s); V(-s, s,-s); V( s, s,-s); V( s,-s,-s); GL.end();
-	}
-
-	public static function solidCube( size:Float ) :Void {
-		var V = GL.vertex3;
-		var N = GL.normal3;
-	
-		var s = size*.5;
-		GL.begin( GL.QUADS );
-			N( 1.0, 0.0, 0.0); V( s,-s, s); V( s,-s,-s); V( s, s,-s); V( s, s, s);
-			N( 0.0, 1.0, 0.0); V( s, s, s); V( s, s,-s); V(-s, s,-s); V(-s, s, s);
-			N( 0.0, 0.0, 1.0); V( s, s, s); V(-s, s, s); V(-s,-s, s); V( s,-s, s);
-			N(-1.0, 0.0, 0.0); V(-s,-s, s); V(-s, s, s); V(-s, s,-s); V(-s,-s,-s);
-			N( 0.0,-1.0, 0.0); V(-s,-s, s); V(-s,-s,-s); V( s,-s,-s); V( s,-s, s);
-			N( 0.0, 0.0,-1.0); V(-s,-s,-s); V(-s, s,-s); V( s, s,-s); V( s,-s,-s);
-		GL.end();
 	}
 }
