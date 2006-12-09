@@ -117,7 +117,11 @@ class CWrapperGenerator extends Generator {
 			allGlobal = true;
 		}
 		settings.className = e.path.split(".").pop();
-		
+
+		if( settings.cHeader!=null ) {
+			print( settings.cHeader+"\n\n" );
+		}
+
 		print("/* nekobind class settings:\n   "+settings+"\n*/\n\n" );
 		print("#include <neko/neko.h>\n\n");
 
@@ -127,13 +131,17 @@ class CWrapperGenerator extends Generator {
 		print("#ifdef val_check_kind\n#undef val_check_kind\n#endif\n");
 		print("#define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure(\"argument \" #v \" is not of kind \" #k );\n");
 
+		// extern kinds for friend classes (must be in the same ndll!)
+		print("\n");
+		for( friend in friendClasses.keys() ) {
+			print("extern value check_"+friend.split(".").pop()+"( value );\n");
+			print("extern "+friendClasses.get(friend)+"* val_"+friend.split(".").pop()+"( value );\n");
+			print("extern value alloc_"+friend.split(".").pop()+"( "+friendClasses.get(friend)+"* );\n");
+		}
+		print("\n");
 
 		// cptr
 		print( Std.resource("cptr.include") );
-
-		if( settings.cHeader!=null ) {
-			print( settings.cHeader+"\n\n" );
-		}
 		
 		if( settings.cStruct != null ) {
 			var cl = settings.className;

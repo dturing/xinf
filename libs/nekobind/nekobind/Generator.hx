@@ -31,7 +31,7 @@ class Generator {
 	
 	var allGlobal:Bool;
 	var prefix:String;
-	var friendClasses:Hash<Bool>;
+	var friendClasses:Hash<String>;
 	var superClass:String;
 
 	public function new() :Void {
@@ -39,7 +39,7 @@ class Generator {
 		settings = new Settings();
 		allGlobal = false;
 		prefix = "";
-		friendClasses = new Hash<Bool>();
+		friendClasses = new Hash<String>();
 	}
 
 	function print( s:String ) {
@@ -76,8 +76,9 @@ class Generator {
 					case "Float":
 						r = _Float;
 					default:
-						if( friendClasses.get(name) ) {
-							r = new FriendClassType(name);
+						var cStruct=friendClasses.get(name);
+						if( cStruct!=null ) {
+							r = new FriendClassType(name,cStruct);
 						} else 
 							throw("unknown class: "+name );
 				}
@@ -121,8 +122,9 @@ class Generator {
 			}
 			
 			if( settings.friends != null ) {
-				for( f in settings.friends.split(",") ) {
-					friendClasses.set( StringTools.trim(f), true );
+				for( f in new String(settings.friends).split(",") ) {
+					var fc = StringTools.trim(f).split(":");
+					friendClasses.set( fc[0], fc[1] );
 				}
 			}
 		}
@@ -165,7 +167,7 @@ class Generator {
 	}
 
 	public function handleClass( e:TypeInfos, c:Class ) {
-		friendClasses.set( e.path, true );
+		friendClasses.set( e.path, settings.cStruct );
 		if( c.superClass != null ) superClass = c.superClass.path.toString();
 
 		// process fields

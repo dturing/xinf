@@ -69,11 +69,19 @@ class StringType extends TypeRep {
 
 class FriendClassType extends TypeRep {
 	var className:String;
-	public function new( className:String ) :Void {
+	var cStruct:String;
+	public function new( className:String, cStruct:String ) :Void {
 		this.className = className.split(".").pop();
-		super("abstract",className,"void*");
+		this.cStruct = cStruct;
+		super("abstract",className,cStruct+"*");
 	}
 
+	public function cCheckAssign( c:String, n:String ) :String {
+		return(
+				"check_"+className+"( "+n+" ); "
+				+cStruct+"* "+c+" = val_"+className+"("+n+");\n" );
+	}
+	
 	public function cNekoAlloc( c:String ) :String {
 		return( "alloc_abstract( k_"+className+", "+c+" )" );
 	}
