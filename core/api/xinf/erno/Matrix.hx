@@ -16,15 +16,15 @@
 package xinf.erno;
 
 class Matrix {
-	private var m00:Float;
-	private var m01:Float;
-	private var m02:Float;
-	private var m10:Float;
-	private var m11:Float;
-	private var m12:Float;
-	private var m20:Float;
-	private var m21:Float;
-	private var m22:Float;
+	public var m00:Float;
+	public var m01:Float;
+	public var m02:Float;
+	public var m10:Float;
+	public var m11:Float;
+	public var m12:Float;
+	public var m20:Float;
+	public var m21:Float;
+	public var m22:Float;
 	
 	public function new() :Void {
 	}
@@ -86,32 +86,4 @@ class Matrix {
 		m10=-s; m11=c;
 		return this;
 	}
-	
-	#if neko
-	public function asGLMatrix() :Dynamic {
-		var v = CPtr.float_alloc(16);
-		
-		CPtr.float_set(v,0,m00);
-		CPtr.float_set(v,1,m10);
-		CPtr.float_set(v,2,m20);
-		CPtr.float_set(v,3,.0);
-
-		CPtr.float_set(v,4,m01);
-		CPtr.float_set(v,5,m11);
-		CPtr.float_set(v,6,m21);
-		CPtr.float_set(v,7,.0);
-
-		CPtr.float_set(v,8,m02);
-		CPtr.float_set(v,9,m12);
-		CPtr.float_set(v,10,m22);
-		CPtr.float_set(v,11,.0);
-
-		CPtr.float_set(v,12,.0);
-		CPtr.float_set(v,13,.0);
-		CPtr.float_set(v,14,.0);
-		CPtr.float_set(v,15,1.);
-		
-		return v;
-	}				
-	#end
 }
