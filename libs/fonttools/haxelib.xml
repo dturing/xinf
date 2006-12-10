@@ -1,4 +1,4 @@
-<project name="fonttools" url="http://xinf.org/trac/NekoFontTools" license="LGPL">
+<project name="fonttools" url="http://xinf.org/trac/wiki/NekoFontTools" license="LGPL">
     <user name="dfischer"/>
     <description>Lightweight neko interface to some FreeType and FontConfig functionality.</description>
     <version name="0.0.0">Testing</version>	

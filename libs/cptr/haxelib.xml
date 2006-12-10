@@ -1,4 +1,4 @@
-<project name="cptr" url="http://xinf.org/trac/NekoCPtr" license="LGPL">
+<project name="cptr" url="http://xinf.org/trac/wiki/NekoCPtr" license="LGPL">
     <user name="dfischer"/>
     <description>Neko module for handling plain C pointers.</description>
     <version name="0.0.0">Testing</version>	
