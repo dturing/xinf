@@ -23,14 +23,17 @@ class FontReader {
     private var polygon:Array<DrawingInstruction>;
     private var scale:Float;
 
-    public function new( name:Dynamic ) {
+    public function new( ttfData:String ) {
         font = new Font();
         polygon = new Array<DrawingInstruction>();
         
-        var _f = FT.LoadFont( name, untyped "abcdefghijklmnopqrstuvwxyz".__s, 1024<<6, 1024<<6 );
+        var _font = new fonttools.Font( ttfData, 1024<<6, 1024<<6 );
+		
+		// FIXME: move this to fonttools
+		var _f = untyped _font.__f;
         scale = 1./(1024<<6);
 //        trace("Font Height: "+_f.height );
-       
+  
         for( field in [ 
             "family_name", "style_name", "file_name"
             ] ) {
@@ -46,7 +49,7 @@ class FontReader {
 			untyped __dollar__objset( font, h, untyped __dollar__objget( _f, h ) / _f.units_per_EM );
         }
         
-        FT.IterateGlyphs( _f, this );
+        _font.iterateAllGlyphs( this );
         
     }
     
@@ -62,25 +65,25 @@ class FontReader {
         }
     }
 
-    private function endGlyph( character:Int, advance:Int ) {
+    public function endGlyph( character:Int, advance:Int ) {
         var g:Glyph = new Glyph( polygon, scale*advance );
 		_add_glyph( character, g );
         polygon = new Array<DrawingInstruction>();
 	}
 
-    private function startContour( x:Int, y:Int ) {
+    public function startContour( x:Int, y:Int ) {
 		polygon.push( StartPath(scale*x,-scale*y) );
     }
 
-    private function endContour() {
+    public function endContour() {
 		polygon.push( EndPath );
     }
 
-    private function lineTo( x:Int, y:Int ) {
+    public function lineTo( x:Int, y:Int ) {
 		polygon.push( LineTo( scale*x, -scale*y ) );
     }
 
-    private function curveTo( cx:Int, cy:Int, x:Int, y:Int ) {
+    public function curveTo( cx:Int, cy:Int, x:Int, y:Int ) {
 		polygon.push( QuadraticTo( scale*cx,-scale*cy, scale*x,-scale*y ) );
     }
 }

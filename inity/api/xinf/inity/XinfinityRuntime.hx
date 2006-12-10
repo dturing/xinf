@@ -20,7 +20,7 @@ import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
 import xinf.erno.DrawingInstruction;
 import xinf.event.FrameEvent;
-// FONT import xinf.inity.font.Font;
+import xinf.inity.font.Font;
 
 import opengl.GL;
 import opengl.GLU;
@@ -76,7 +76,8 @@ class XinfinityRuntime extends Runtime {
 	
 	public function display() :Void {
 	
-		// FONT Font.cacheGlyphs();
+		// FIXME: here??
+		Font.cacheGlyphs();
 		
 		startFrame();
 		Runtime.renderer.draw( DrawingInstruction.ShowObject( Runtime.renderer.getRootId() ) );

@@ -17,32 +17,18 @@ import xinf.event.FrameEvent;
 import xinf.event.GeometryEvent;
 import xinf.erno.Color;
 import xinf.ony.Application;
-import xinf.ony.Rectangle;
+import xinf.ony.Text;
 
 class App extends Application {
-	private static var scanline:Rectangle;
+	private static var hello:Text;
 	
 	public function new() :Void {
 		super();
 
-		scanline = new Rectangle( Color.WHITE );
-		root.attach( scanline );
-		
-		trace("Hello, World!");
-		
-		runtime.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
-		runtime.addEventListener( GeometryEvent.STAGE_SCALED, onStageScaled );
+		hello = new Text( "Hello, World!", Color.WHITE );
+		root.attach( hello );
 	}
 	
-	public function onEnterFrame( e:FrameEvent ) :Void {
-		var y = (e.frame*2) % root.size.y;
-		scanline.moveTo( 0, y );
-	}
-
-	public function onStageScaled( e:GeometryEvent ) :Void {
-		scanline.resize( e.x, 5 );
-	}
-
 	public static function main() :Void {
 		new App().run();
 	}

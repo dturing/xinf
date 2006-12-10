@@ -30,11 +30,15 @@ class Font {
         font = fonts.get(name);
         if( font != null ) return font;
         
-		var file = FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
-
-		if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );
-		
-        font = new FontReader( file ).getFont();
+		var data:String;
+		if( name=="_sans" ) {
+			data = Std.resource("default-font");
+		} else {
+			var file = null; // FC FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
+			if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );
+			data = neko.io.File.getContent( file );
+		}
+        font = new FontReader( data ).getFont();
 		fonts.set( name, font );
         return font;
     }

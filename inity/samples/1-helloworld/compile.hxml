@@ -2,5 +2,7 @@
 -lib xinf-core
 -lib cptr
 -lib opengl
+-lib fonttools
 -cp ../../api
--neko app.neko
+-neko app.n
+-resource vera.ttf@default-font

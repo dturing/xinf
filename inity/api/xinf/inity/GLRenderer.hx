@@ -26,7 +26,7 @@ import cptr.CPtr;
 
 class GLRenderer extends PenStackRenderer {
 	private var shape:GLPolygon;
-	//FONT public var font(default,null):xinf.inity.font.Font;
+	public var font(default,null):xinf.inity.font.Font;
 	private var root:Int;
 	
 	private var circle_fill:Int;
@@ -190,13 +190,11 @@ class GLRenderer extends PenStackRenderer {
 				
 								
 			case Text(text,style):
-				/* FONT 
 				font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
 				if( pen.fillColor != null && font != null ) {
 					GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
 					font.renderText( text, pen.fontSize, style );
 				}
-				*/
 				
 			case Image( img, inRegion, outRegion ):
 				var tx1:Float = (inRegion.x/img.twidth);

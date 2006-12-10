@@ -20,7 +20,6 @@ import opengl.GL;
 import xinf.inity.GLPolygon;
 import xinf.erno.DrawingInstruction;
 
-// FIXME: cache in display list?
 class Glyph {
     private var polygon:Array<DrawingInstruction>;
 	private var displayList:Int;

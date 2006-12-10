@@ -134,7 +134,7 @@ class GLPolygon {
 		for( contour in shape ) {
 			tess.beginContour();
 			for( c in contour.path ) {
-				tess.vertexOffset( coords, i );
+				tess.vertexOffset( i, coords );
 				i+=3;
 			}
 			tess.endContour();
