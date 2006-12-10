@@ -46,7 +46,7 @@ class App {
 		GLUT.setTimerFunc( Math.round(1000/25), step, 0 );
 		
 		GLUT.setReshapeFunc( function( w:Int, h:Int ) {
-				trace("reshape: "+w+","+h );
+				GL.viewport( 0, 0, w, h );
 			} );
 		GLUT.setMouseFunc( function( btn:Int, state:Int, x:Int, y:Int ) {
 				trace("mouse btn "+btn+" "+state+" @ "+x+","+y );
@@ -58,6 +58,9 @@ class App {
 				var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
 				
 				trace("key "+key+k+" @"+x+","+y );
+			} );
+		GLUT.setExitFunc( function() {
+				trace("quit");
 			} );
 		
 		GLUT.showWindow();

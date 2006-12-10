@@ -33,8 +33,6 @@ value opengl_get_## functype( value _pname, value _interest ) {	\
 		for( i=0; i<interest; i++ ) { \
 			a[i] = alloc_## nekotype( buf[i] ); \
 		} \
-		printf("glget %i %s %p\n",interest,#functype,array); \
-		val_print( array ); \
 		return array; \
 	} \
 	return val_null; \

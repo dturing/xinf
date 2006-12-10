@@ -23,6 +23,7 @@ static field f_Entry;
 static field f_Visibility;
 static field f_Idle;
 static field f_Timer;
+static field f_Exit;
 value *glutCallbacks = NULL;
 
 
@@ -41,6 +42,7 @@ void glut_setup() {
 	f_Visibility = val_id("visibility");
 	f_Idle = val_id("idle");
 	f_Timer = val_id("timer");
+	f_Exit = val_id("exit");
 }
 DEFINE_ENTRY_POINT(glut_setup);
 
@@ -126,6 +128,13 @@ GLUT_WRAP_CALLBACK_INT(Timer)
 value glutSetTimerFunc( int t, value f, int v ) {
 	glut_set_callback( f_Timer, f );
 	glutTimerFunc( t, glut_wrap_Timer, v );
+}
+
+
+GLUT_WRAP_CALLBACK(Exit)
+value glutSetExitFunc( value f ) {
+	glut_set_callback( f_Exit, f );
+	atexit( glut_wrap_Exit );
 }
 
 
