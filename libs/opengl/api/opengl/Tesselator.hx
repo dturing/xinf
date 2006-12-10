@@ -25,22 +25,16 @@ extern class Tesselator {
 	public function beginContour():Void;
 	/** <nekobind><cptr name="data" type="void" null-allowed="true"/></nekobind> **/
 	public function beginPolygon( data:Void ):Void;
-	//public function TessCallback( tess:Dynamic, which:Int, CallBackFunc:Dynamic ):Void;
 	public function endContour():Void;
 	public function endPolygon():Void;
 	public function normal( valueX:Float, valueY:Float, valueZ:Float ):Void;
 	public function property( which:Int, data:Float ):Void;
-	//public static function vertex( location:Dynamic, data:Dynamic ):Void;
 	
 
 	/** <nekobind><cptr name="v" type="double" min-size="3"/></nekobind> **/
 	public function vertexSimple( v:Dynamic ):Void;
 	/** <nekobind><cptr name="v" type="double" min-size="(offset+3)"/></nekobind> **/
 	public function vertexOffset( offset:Int, v:Dynamic ):Void;
-	/*
-	public static function EvaluateCubicBezier( _ctrl:Dynamic, _n:Int, callback:Dynamic ):Dynamic;
-	public static function EvaluateQuadraticBezier( _ctrl:Dynamic, _n:Int, callback:Dynamic ):Dynamic;
-	*/
 
     public static function __init__() : Void {
         untyped {
