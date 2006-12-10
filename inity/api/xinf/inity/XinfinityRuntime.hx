@@ -19,11 +19,12 @@ import xinf.erno.Runtime;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
 import xinf.erno.DrawingInstruction;
+import xinf.event.FrameEvent;
 // FONT import xinf.inity.font.Font;
 
 import opengl.GL;
 import opengl.GLU;
-import opengl.Display;
+import opengl.GLUT;
 import cptr.CPtr;
 
 class XinfinityRuntime extends Runtime {
@@ -32,7 +33,6 @@ class XinfinityRuntime extends Runtime {
 	private var height:Int;
 	private var somethingChanged:Bool;
 	
-	private var display:Display;
 	private var _eventSource:GLEventSource;
 
     private static var selectBuffer = CPtr.uint_alloc(64);
@@ -48,8 +48,10 @@ class XinfinityRuntime extends Runtime {
 		height = 240;
 		somethingChanged = true;
 	
-		initGL();
 		_eventSource=new GLEventSource(this);
+		
+		initGL();
+		
  		addEventListener( GeometryEvent.STAGE_SCALED, resized );
 		
 		startFrame();
@@ -65,63 +67,64 @@ class XinfinityRuntime extends Runtime {
 	}
 	
 	public function run() :Void {
-		var pleaseQuit:Bool = false;
-		
-		addEventListener( SimpleEvent.QUIT, function (e:SimpleEvent) {
-			pleaseQuit = true;
-		} );
-			
-		var step = 1.0/25.0;
-		var nextT = neko.Sys.time()+step;
-		
-		while( !pleaseQuit ) {
-			// TODO: process events
-			_eventSource.processEvents();
-			
-			// FONT Font.cacheGlyphs();
-			
-			// draw the root object
-			if( somethingChanged ) {
-				startFrame();
-				Runtime.renderer.draw( DrawingInstruction.ShowObject( Runtime.renderer.getRootId() ) );
-			}
-			
-			var t = nextT - neko.Sys.time();
-			if( t>0 ) {
-				neko.Sys.sleep(t);
-			}
-			
-			if( somethingChanged ) {
-				somethingChanged = false;
-				endFrame();
-			}
-			
-			nextT += step;
-		}
+		GLUT.mainLoop();
 	}
 
 	public function changed() :Void {
 		somethingChanged = true;
 	}
 	
+	public function display() :Void {
+	
+		// FONT Font.cacheGlyphs();
+		
+		startFrame();
+		Runtime.renderer.draw( DrawingInstruction.ShowObject( Runtime.renderer.getRootId() ) );
+		somethingChanged = false;
+
+		// TODO precise timing here
+		
+		endFrame();
+	}
+
+	public function step( v:Int ) :Void {
+		GLUT.setTimerFunc( 40, step, 0 );
+		
+		// post enter_frame event
+		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
+		
+		if( somethingChanged ) {
+			GLUT.postRedisplay();
+		}
+	}
+
 	/* internal functions */
 	private function initGL() :Void {
-		display = Display.open(0,0,width,height);
-		display.makeCurrent();
-	
-		// SDL.GL_SetAttribute ( SDL.GL_ALPHA_SIZE, 8 );
+		// init GLUT Window
+		GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB ); //| GLUT.DEPTH );
+		GLUT.createWindow("Xinfinity");
 		
+		// TODO: set some kind of preferred size (style??)
+	
+		// init GLUT Callbacks
+		var self=this;
+		GLUT.setDisplayFunc( display );
+		GLUT.setTimerFunc( 40, step, 0 );
+		GLUT.setReshapeFunc( function( width:Int, height:Int ) {
+				self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
+			});
+		_eventSource.attach();
+		
+		
+		GLUT.showWindow();
+
+		// init GL parameters
 		GL.enable( GL.BLEND );
 		GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 		GL.shadeModel( GL.FLAT );
-		
-		//root.resize(width,height);
-		postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
 	}
 
 	private function startFrame() :Void {
-		display.makeCurrent();
-		
 		GL.pushMatrix();
 		GL.viewport( 0, 0, Math.round(width), Math.round(height) );
 		GL.matrixMode( GL.PROJECTION );
@@ -140,8 +143,8 @@ class XinfinityRuntime extends Runtime {
 	
 	private function endFrame() :Void {
 		GL.popMatrix();
-		
-		display.swap();
+		GL.flush();
+		GLUT.swapBuffers();
 		
 		// check for OpenGL errors
 		var e:Int = GL.getError();

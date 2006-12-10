@@ -37,10 +37,6 @@ class App extends Application {
 	public function onEnterFrame( e:FrameEvent ) :Void {
 		var y = (e.frame*2) % root.size.y;
 		scanline.moveTo( 0, y );
-		
-		trace("y: "+y+", root: "+root.size );
-		scanline.moveTo( 10, y );
-		scanline.resize( 100, 100 );
 	}
 
 	public function onStageScaled( e:GeometryEvent ) :Void {
