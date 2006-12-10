@@ -1,5 +1,0 @@
-<project name="xinfinity" url="http://xinf.org/trac/Xinfinity" license="[undecided]">
-    <user name="dfischer"/>
-    <description>a cross-platform runtime implementing xinferno using OpenGL (and maybe GStreamer, FreeType, FontConfig and GdkPixbuf).</description>
-    <version name="0.0.0">2006-12-09 Pre-Alpha</version>
-</project>
