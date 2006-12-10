@@ -1,0 +1,5 @@
+-main App
+-neko run.n
+-lib freetype
+-resource vera.ttf@default-font
+
