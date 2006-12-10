@@ -1,7 +1,7 @@
 /*
 */
 
-package freetype;
+package fonttools;
 
 
 typedef FTIterateCallbacks = {

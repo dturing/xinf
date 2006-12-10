@@ -1,5 +1,5 @@
 
-import freetype.Font;
+import fonttools.Font;
 
 class FontDumper {
 	public var dump:String;
