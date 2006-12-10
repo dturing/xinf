@@ -6,7 +6,7 @@
 #
 
 # project name
-PROJECT:=freetype
+PROJECT:=fonttools
 
 # platform default, set this to "Mac" or "Windows" (from the environment) for cross-compilation
 NEKO_PLATFORM?=Linux

@@ -25,6 +25,6 @@ class Font {
 		_IterateGlyphs( __f, callbackObject );
 	}
 
-	private static var _load = neko.Lib.load("freetype","ftLoadFont",3);
-	private static var _IterateGlyphs = neko.Lib.load("freetype","ftIterateGlyphs",2);
+	private static var _load = neko.Lib.load("fonttools","ftLoadFont",3);
+	private static var _IterateGlyphs = neko.Lib.load("fonttools","ftIterateGlyphs",2);
 }
