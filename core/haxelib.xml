@@ -1,5 +1,9 @@
 <project name="xinf-core" url="http://xinf.org/trac/XinfCore" license="LGPL">
     <user name="xinf-core"/>
     <description>xinf core module: events, xinferno rendering protocol, js/dom implementation, flash9 implementation, xinfony object model</description>
-    <version name="0.0.0">2006-11-30 Pre-Alpha</version>	
+    <version name="0.0.0">Pre-Alpha</version>
+	
+	<depends name="cptr"/>
+	<depends name="opengl"/>
+	<depends name="fonttools"/>
 </project>

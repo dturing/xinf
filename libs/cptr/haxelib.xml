@@ -1,5 +1,5 @@
-<project name="cptr" url="http://xinf.org/trac/NekoCptr" license="LGPL">
-    <user name="dan"/>
-    <description>Neko module for handling plain C pointers to primitive data.</description>
-    <version name="0.0.0">2006-11-30 Pre-Alpha</version>	
+<project name="cptr" url="http://xinf.org/trac/NekoCPtr" license="LGPL">
+    <user name="dfischer"/>
+    <description>Neko module for handling plain C pointers.</description>
+    <version name="0.0.0">Testing</version>	
 </project>

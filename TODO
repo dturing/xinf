@@ -1,4 +1,4 @@
 dan's short-term TODO for xinf:
  * port rest of xinfinity to haxelib:
-   * minimal freetype/fontconfig 
+   * minimal fontconfig 
    * minimal gstreamer

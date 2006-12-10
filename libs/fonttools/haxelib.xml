@@ -1,5 +1,5 @@
 <project name="fonttools" url="http://xinf.org/trac/NekoFontTools" license="LGPL">
-    <user name="dan"/>
+    <user name="dfischer"/>
     <description>Lightweight neko interface to some FreeType and FontConfig functionality.</description>
-    <version name="0.0.0">2006-12-xx Pre-Alpha</version>	
+    <version name="0.0.0">Testing</version>	
 </project>
