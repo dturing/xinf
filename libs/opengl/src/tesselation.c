@@ -53,7 +53,7 @@ void gluTessVertexSimple( GLUtesselator *tess, double *v ) {
     gluTessVertex( tess, v, (void*)v );
 }
 
-void gluTessVertexOffset( GLUtesselator *tess, double *v, int offset ) {
+void gluTessVertexOffset( GLUtesselator *tess, int offset, double *v ) {
 	double *_v = v+offset;
     gluTessVertex( tess, _v, (void*)_v );
 }
