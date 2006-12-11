@@ -1,6 +1,6 @@
 <project name="xinf" url="http://xinf.org/" license="LGPL">
     <user name="dfischer"/>
-    <description>xinf: events, xinferno rendering protocol, js/dom implementation, flash9 implementation, xinfinity, xinfony object model.</description>
+    <description>xinf is not flash: cross-runtime, cross-platform graphics.</description>
     <version name="0.0.0">Pre-Alpha</version>
 	
 	<depends name="cptr"/>

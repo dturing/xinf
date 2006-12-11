@@ -35,6 +35,7 @@ class Text extends Object {
 	
 	public function drawContents( g:Renderer ) :Void {
 		if( text!=null ) {
+			g.draw( Translate(position.x,position.y) );
 			g.draw( SetFill(color) );
 			g.draw( font );
 			g.draw( Text(text) );
