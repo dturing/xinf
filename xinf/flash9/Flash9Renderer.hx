@@ -103,7 +103,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					tf.x=-1;
 					
 					var format:flash.text.TextFormat = tf.getTextFormat();
-					format.font = pen.fontFace; //"Kassiopeia09T_09_sp60_cyr30";
+					format.font = pen.fontFace;
 					format.size = pen.fontSize;
 					format.color = pen.fillColor.toRGBInt();
 					format.leftMargin = 0;
@@ -128,7 +128,6 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				}
 				
 			case StartPath(x,y):
-				// FIXME: dunno whats the deal with the *2, but its all too small else...
 				g.moveTo(x,y);
 			
 			case EndPath:
