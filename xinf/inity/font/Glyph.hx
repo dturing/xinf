@@ -18,14 +18,13 @@ package xinf.inity.font;
 import opengl.GL;
 
 import xinf.inity.GLPolygon;
-import xinf.erno.DrawingInstruction;
 
 class Glyph {
-    private var polygon:Array<DrawingInstruction>;
+    private var polygon:GLPolygon;
 	private var displayList:Int;
     public var advance:Float;
     
-    public function new( p:Array<DrawingInstruction>, adv:Float ) {
+    public function new( p:GLPolygon, adv:Float ) {
 		polygon = p;
         advance = adv;
 		
@@ -33,13 +32,8 @@ class Glyph {
     }
 	
 	public function cache( pixelSize:Float ) :Void {
-		var p = new GLPolygon(pixelSize);
-		for( i in polygon ) {
-			p.append(i);
-		}
-		
 		GL.newList( displayList, GL.COMPILE );
-		p.drawFilled();
+		polygon.drawFilled();
 		GL.endList();
 	}
     

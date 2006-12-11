@@ -18,7 +18,7 @@ package xinf.inity;
 import xinf.erno.Runtime;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
-import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 import xinf.event.FrameEvent;
 import xinf.inity.font.Font;
 
@@ -80,7 +80,7 @@ class XinfinityRuntime extends Runtime {
 		Font.cacheGlyphs();
 		
 		startFrame();
-		Runtime.renderer.draw( DrawingInstruction.ShowObject( Runtime.renderer.getRootId() ) );
+		Runtime.renderer.showObject( Runtime.renderer.getRootId() );
 		somethingChanged = false;
 
 		// TODO precise timing here
@@ -224,7 +224,7 @@ class XinfinityRuntime extends Runtime {
     public function getObjectsUnderPoint( x:Float, y:Float ) : Array<Int> {
         startPick( x, height-y );
         
-		Runtime.renderer.draw( DrawingInstruction.ShowObject( Runtime.renderer.getRootId() ) );
+		Runtime.renderer.showObject( Runtime.renderer.getRootId() );
 					
         var hits:Array<Array<Int>> = endPick();
         var os = new Array<Int>();

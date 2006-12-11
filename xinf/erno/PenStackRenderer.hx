@@ -15,7 +15,7 @@
 
 package xinf.erno;
 
-import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 
 class Pen {
 	public var fillColor:Color;
@@ -43,11 +43,12 @@ class Pen {
 	}
 }
 
-class PenStackRenderer extends Renderer {
+class PenStackRenderer extends BasicRenderer {
 	private var pen:Pen;
 	private var pens:Array<Pen>;
 
 	public function new() :Void {
+		super();
 		pens = new Array<Pen>();
 		pen = new Pen();
 		pen.fontFace = "_sans";
@@ -66,21 +67,17 @@ class PenStackRenderer extends Renderer {
 		if( pen==null ) throw("Pen Stack underflow");
 	}
 	
-	public function draw( i:DrawingInstruction ) :Void {
-		switch( i ) {
-			case SetFill(c):
-				pen.fillColor=c;
-			case SetStroke(c,w):
-				pen.strokeColor=c;
-				pen.strokeWidth=w;
-			case SetFont(face,slant,weight,size):
-				pen.fontFace = face;
-				pen.fontSlant = slant;
-				pen.fontWeight = weight;
-				pen.fontSize = size;
-
-			default:
-				super.draw(i);
-		}
+	public function setFill( c:Color ) {
+		pen.fillColor=c;
+	}
+	public function setStroke( c:Color, width:Float ) {
+		pen.strokeColor=c;
+		pen.strokeWidth=width;
+	}
+	public function setFont( face:String, slant:FontSlant, weight:FontWeight, size:Float ) {
+		pen.fontFace = face;
+		pen.fontSlant = slant;
+		pen.fontWeight = weight;
+		pen.fontSize = size;
 	}
 }

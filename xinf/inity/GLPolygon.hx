@@ -21,7 +21,6 @@ import opengl.Tesselator;
 import opengl.Helper;
 import cptr.CPtr;
 
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Coord2d;
 import xinf.erno.Color;
 
@@ -50,9 +49,9 @@ class GLContour {
 	//	if( pixelSize>1. ) trace("D: "+d+", "+(Math.abs(last.y-y)+Math.abs(last.x-x)) );
 		Helper.evaluateQuadraticBezier( [ last.x, last.y, x1, y1, x, y ], d, this.lineTo );
 	}
-	public function cubicTo( a:Array<Float> ) :Void {
-		var d=Math.round(Math.max(2,Math.abs((last.y-a[4])+(last.x-a[5])) * pixelSize));
-		a.unshift(last.y); a.unshift(last.x);
+	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+		var d=Math.round(Math.max(2,Math.abs((last.y-x)+(last.x-y)) * pixelSize));
+		var a = [ last.x, last.y, x1, y1, x2, y2, x, y ];
 		Helper.evaluateCubicBezier( a, d, this.lineTo );
 	}
 
@@ -63,7 +62,7 @@ class GLContour {
 	}
 }
 
-
+// Fixme: maybe this implements some ShapeRenderer interface?
 class GLPolygon {
 	static private var tess:Tesselator;
 
@@ -78,31 +77,39 @@ class GLPolygon {
 		this.pixelSize=pixelSize;
 	}
 	
+	/* FIXME */
 	public function setPixelSize( s:Float ) :Void {
 		pixelSize = s;
 	}
-	
-	public function append( i:DrawingInstruction ) :Void {
-		switch( i ) {
-			case StartPath(x,y):
-				contour = new GLContour(x,y,pixelSize);
-			case EndPath:
-				shape.push(contour);
-				contour=null;
-				
-			case LineTo(x,y):
-				contour.lineTo(x,y);
-			case Close:
-				contour.close();
-			case QuadraticTo(x1,y1,x,y):
-				contour.quadraticTo(x1,y1,x,y);
-			case CubicTo(a):
-				contour.cubicTo(a);
-				
-			default:
-				throw( "not a shape instruction: "+i );
-		}
+
+	/* these would construct/end myself!
+	public function startShape() {
+		throw("unimplemented");
 	}
+	public function endShape() {
+		throw("unimplemented");
+	}
+	*/
+	public function startPath( x:Float, y:Float) {
+		contour = new GLContour(x,y,pixelSize);
+	}
+	public function endPath() {
+		shape.push(contour);
+		contour=null;
+	}
+	public function close() {
+		contour.close();
+	}
+	public function lineTo( x:Float, y:Float ) {
+		contour.lineTo(x,y);
+	}
+	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+		contour.quadraticTo(x1,y1,x,y);
+	}
+	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+		contour.cubicTo(x1,y1,x2,y2,x,y);
+	}
+	/* end of Renderer-like instructions */
 	
 	private function makeCPtr() :Dynamic {
 		var n:Int = 0;
@@ -146,7 +153,7 @@ class GLPolygon {
 		var i=0;
 		for( contour in shape ) {
 			GL.begin( GL.LINE_STRIP );
-				GLU.verticesOffset( coords, i, contour.path.length );
+				GLU.verticesOffset( i, contour.path.length, coords );
 			GL.end();
 			/*
 			GL.begin( GL.POINTS );

@@ -40,7 +40,7 @@ class Helper {
 
 	private static var _evaluateCubicBezier = neko.Lib.load("opengl","gluEvaluateCubicBezier", 3 );
 	public static function evaluateCubicBezier( ctrl:Array<Float>, n:Int, cb:Float->Float->Void ) :Void {
-		_evaluateCubicBezier( untyped args.__a, n, cb );
+		_evaluateCubicBezier( untyped ctrl.__a, n, cb );
 	}
 	
 	private static var _evaluateQuadraticBezier = neko.Lib.load("opengl","gluEvaluateQuadraticBezier", 3 );

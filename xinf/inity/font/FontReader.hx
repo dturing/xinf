@@ -15,17 +15,18 @@
 
 package xinf.inity.font;
 
-import xinf.erno.DrawingInstruction;
+import xinf.inity.GLPolygon;
+typedef Polygon = GLPolygon
 
 class FontReader {
     private var font:Font;
     private var glyph:Glyph;
-    private var polygon:Array<DrawingInstruction>;
+    private var polygon:Polygon;
     private var scale:Float;
 
     public function new( ttfData:String ) {
         font = new Font();
-        polygon = new Array<DrawingInstruction>();
+        polygon = new Polygon();
         
         var _font = new fonttools.Font( ttfData, 1024<<6, 1024<<6 );
 		
@@ -68,22 +69,22 @@ class FontReader {
     public function endGlyph( character:Int, advance:Int ) {
         var g:Glyph = new Glyph( polygon, scale*advance );
 		_add_glyph( character, g );
-        polygon = new Array<DrawingInstruction>();
+        polygon = new Polygon();
 	}
 
     public function startContour( x:Int, y:Int ) {
-		polygon.push( StartPath(scale*x,-scale*y) );
+		polygon.startPath(scale*x,-scale*y);
     }
 
     public function endContour() {
-		polygon.push( EndPath );
+		polygon.endPath();
     }
 
     public function lineTo( x:Int, y:Int ) {
-		polygon.push( LineTo( scale*x, -scale*y ) );
+		polygon.lineTo( scale*x, -scale*y );
     }
 
     public function curveTo( cx:Int, cy:Int, x:Int, y:Int ) {
-		polygon.push( QuadraticTo( scale*cx,-scale*cy, scale*x,-scale*y ) );
+		polygon.quadraticTo( scale*cx,-scale*cy, scale*x,-scale*y );
     }
 }

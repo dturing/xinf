@@ -16,9 +16,9 @@
 package xinf.inity;
 
 import xinf.erno.Renderer;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.PenStackRenderer;
 import xinf.erno.Matrix;
+import xinf.erno.ImageData;
 
 import opengl.GL;
 import opengl.GLU;
@@ -35,7 +35,8 @@ class GLRenderer extends PenStackRenderer {
 	public function new() :Void {
 		super();
 		root = getNextId();
-		
+
+		// FIXME: somewhat stupid initialization of "circle primitive"
 		var fy = 4./3.;
 		
 		circle_fill = GL.genLists(1);
@@ -69,167 +70,178 @@ class GLRenderer extends PenStackRenderer {
 		return root;
 	}
 	
-	public function draw( i:DrawingInstruction ) :Void {
-//		trace(i);
-		
-		if( shape != null ) {
-			switch( i ) {
-				case EndShape:
-					shape.draw( pen.fillColor, pen.strokeColor, pen.strokeWidth );
-					shape = null;
-				default:
-					shape.append(i);
-			}
-			
-			return;
-		}
-		
-		switch( i ) {
-			case StartObject(id):
-				pushPen();
-				GL.newList( id, GL.COMPILE );
-	            GL.pushName(id);
-				GL.pushMatrix();
-				GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes
-				
-			case EndObject:
-				GL.popAttrib();
-				GL.popMatrix();
-	            GL.popName();
-				GL.endList();
-				popPen();
-				
-			case ShowObject(id):
-				GL.callList( id );
-				
-			case Translate(x,y):
-				GL.translate( x, y, 0. );
-				
-			case Transform(m):
-				GL.multMatrixf( matrixForGL(m) );
 
-			case Scale(x,y):
-				GL.scale( x, y, 1. );
+	public function startObject( id:Int ) {
+		pushPen();
+		GL.newList( id, GL.COMPILE );
+		GL.pushName(id);
+		GL.pushMatrix();
+		GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes
+	}
+	public function endObject() {
+		GL.popAttrib();
+		GL.popMatrix();
+		GL.popName();
+		GL.endList();
+		popPen();
+	}
+	public function showObject( id:Int ) {
+		GL.callList( id );
+	}
 
-			case Rotate(a):
-				GL.rotate( a, 0., 0., 1. );
 
-			case ClipRect(w,h):
-				var eq:Dynamic = CPtr.double_alloc(4);
-				CPtr.double_set(eq,0,1.);
-				CPtr.double_set(eq,1,0.);
-				CPtr.double_set(eq,2,0.);
-				CPtr.double_set(eq,3,0.);
-				GL.clipPlane( GL.CLIP_PLANE0, eq );
-				GL.enable( GL.CLIP_PLANE0 );
-				CPtr.double_set(eq,0,0.);
-				CPtr.double_set(eq,1,1.);
-				GL.clipPlane( GL.CLIP_PLANE1, eq );
-				GL.enable( GL.CLIP_PLANE1 );
-				CPtr.double_set(eq,0,-1.);
-				CPtr.double_set(eq,1,0.);
-				CPtr.double_set(eq,3,w);
-				GL.clipPlane( GL.CLIP_PLANE2, eq );
-				GL.enable( GL.CLIP_PLANE2 );
-				CPtr.double_set(eq,0,0.);
-				CPtr.double_set(eq,1,-1.);
-				CPtr.double_set(eq,3,h);
-				GL.clipPlane( GL.CLIP_PLANE3, eq );
-				GL.enable( GL.CLIP_PLANE3 );
+	public function translate( x:Float, y:Float ) {
+		GL.translate( x, y, 0. );
+	}
+	public function scale( x:Float, y:Float ) {
+		GL.scale( x, y, 1. );
+	}
+	public function rotate( angle:Float ) {
+		GL.rotate( angle, 0., 0., 1. );
+	}
+	public function transform( matrix:Matrix ) {
+		GL.multMatrixf( matrixForGL(matrix) );
+	}
+	public function clipRect( w:Float, h:Float ) {
+		var eq:Dynamic = CPtr.double_alloc(4);
+		CPtr.double_set(eq,0,1.);
+		CPtr.double_set(eq,1,0.);
+		CPtr.double_set(eq,2,0.);
+		CPtr.double_set(eq,3,0.);
+		GL.clipPlane( GL.CLIP_PLANE0, eq );
+		GL.enable( GL.CLIP_PLANE0 );
+		CPtr.double_set(eq,0,0.);
+		CPtr.double_set(eq,1,1.);
+		GL.clipPlane( GL.CLIP_PLANE1, eq );
+		GL.enable( GL.CLIP_PLANE1 );
+		CPtr.double_set(eq,0,-1.);
+		CPtr.double_set(eq,1,0.);
+		CPtr.double_set(eq,3,w);
+		GL.clipPlane( GL.CLIP_PLANE2, eq );
+		GL.enable( GL.CLIP_PLANE2 );
+		CPtr.double_set(eq,0,0.);
+		CPtr.double_set(eq,1,-1.);
+		CPtr.double_set(eq,3,h);
+		GL.clipPlane( GL.CLIP_PLANE3, eq );
+		GL.enable( GL.CLIP_PLANE3 );
+	}
 
-			case StartShape:
-				if( shape != null ) throw("Can only define one path at a time");
-				shape = new GLPolygon();
-				
-			case Rect(x,y,w,h):
-				if( pen.fillColor != null ) {
-					GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-					GL.begin( GL.QUADS );
-						GL.vertex3( x, y, 0. );
-						GL.vertex3( x+w, y, 0. );
-						GL.vertex3( x+w, y+h, 0. );
-						GL.vertex3( x, y+h, 0. );
-						GL.vertex3( x, y, 0. );
-					GL.end();
-				}
-				if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
-					GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
-					GL.lineWidth( pen.strokeWidth );
-					GL.begin( GL.LINE_STRIP );
-						GL.vertex3( x, y, 0. );
-						GL.vertex3( x+w, y, 0. );
-						GL.vertex3( x+w, y+h, 0. );
-						GL.vertex3( x, y+h, 0. );
-						GL.vertex3( x, y, 0. );
-					GL.end();
-					GL.pointSize( pen.strokeWidth );
-					GL.begin( GL.POINTS );
-						GL.vertex3( x, y, 0. );
-						GL.vertex3( x+w, y, 0. );
-						GL.vertex3( x+w, y+h, 0. );
-						GL.vertex3( x, y+h, 0. );
-						GL.vertex3( x, y, 0. );
-					GL.end();
-				}
-				
-			case Circle(x,y,r):
-				GL.pushMatrix();
-				GL.translate( x, y, 0. );
-				GL.scale( r, r, 1.);
-				
-				if( pen.fillColor != null ) {
-					GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-					GL.callList(circle_fill);
-				}
-				if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
-					GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
-					GL.lineWidth( pen.strokeWidth );
-					GL.callList(circle_stroke);
-				}
-				GL.popMatrix();
-				
-								
-			case Text(text,style):
-				font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
-				if( pen.fillColor != null && font != null ) {
-					GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-					font.renderText( text, pen.fontSize, style );
-				}
-				
-			case Image( img, inRegion, outRegion ):
-				var tx1:Float = (inRegion.x/img.twidth);
-				var ty1:Float = (inRegion.y/img.theight);
-				var tx2:Float = tx1 + (inRegion.w/img.twidth);
-				var ty2:Float = ty1 + (inRegion.h/img.theight);
-				var x:Float = outRegion.x;
-				var y:Float = outRegion.y;
-				var x2:Float = outRegion.w+x;
-				var y2:Float = outRegion.h+y;
-
-				GL.color4( 1., 1., 1., 1. );
-
-				GL.pushAttrib( GL.ENABLE_BIT );
-					GL.enable( GL.TEXTURE_2D );
-					GL.bindTexture( GL.TEXTURE_2D, img.texture );
-
-					GL.begin( GL.QUADS );
-						GL.texCoord2( tx1, ty1 );
-						GL.vertex2  (   x,   y ); 
-						GL.texCoord2( tx2, ty1 );
-						GL.vertex2  (  x2,   y ); 
-						GL.texCoord2( tx2, ty2 );
-						GL.vertex2  (  x2,  y2 ); 
-						GL.texCoord2( tx1, ty2 );
-						GL.vertex2  (   x,  y2 ); 
-					GL.end();
-					
-				GL.popAttrib();
-				
-			default:
-				super.draw(i);
-		}
+	
+	public function startShape() {
+		if( shape != null ) throw("Can only define one path at a time");
+		shape = new GLPolygon();
+	}
+	public function endShape() {
+		if( shape==null ) throw("no current Polygon");
+		shape.draw( pen.fillColor, pen.strokeColor, pen.strokeWidth );
+		shape = null;
+	}
+	public function startPath( x:Float, y:Float) {
+		if( shape==null ) throw("no current Polygon");
+		shape.startPath( x, y );
+	}
+	public function endPath() {
+		shape.endPath();
+	}
+	public function close() {
+		shape.close();
+	}
+	public function lineTo( x:Float, y:Float ) {
+		shape.lineTo(x,y);
+	}
+	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+		shape.quadraticTo(x1,y1,x,y);
+	}
+	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+		shape.cubicTo(x1,y1,x2,y2,x,y);
 	}
 	
+	public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		if( pen.fillColor != null ) {
+			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+			GL.begin( GL.QUADS );
+				GL.vertex3( x, y, 0. );
+				GL.vertex3( x+w, y, 0. );
+				GL.vertex3( x+w, y+h, 0. );
+				GL.vertex3( x, y+h, 0. );
+				GL.vertex3( x, y, 0. );
+			GL.end();
+		}
+		if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
+			GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
+			GL.lineWidth( pen.strokeWidth );
+			GL.begin( GL.LINE_STRIP );
+				GL.vertex3( x, y, 0. );
+				GL.vertex3( x+w, y, 0. );
+				GL.vertex3( x+w, y+h, 0. );
+				GL.vertex3( x, y+h, 0. );
+				GL.vertex3( x, y, 0. );
+			GL.end();
+			GL.pointSize( pen.strokeWidth );
+			GL.begin( GL.POINTS );
+				GL.vertex3( x, y, 0. );
+				GL.vertex3( x+w, y, 0. );
+				GL.vertex3( x+w, y+h, 0. );
+				GL.vertex3( x, y+h, 0. );
+				GL.vertex3( x, y, 0. );
+			GL.end();
+		}
+	}
+	public function circle( x:Float, y:Float, r:Float ) {
+		GL.pushMatrix();
+		GL.translate( x, y, 0. );
+		GL.scale( r, r, 1.);
+		
+		if( pen.fillColor != null ) {
+			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+			GL.callList(circle_fill);
+		}
+		if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
+			GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
+			GL.lineWidth( pen.strokeWidth );
+			GL.callList(circle_stroke);
+		}
+		GL.popMatrix();
+	}
+	public function text( text:String, ?style:FontStyle ) {
+		font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
+		if( pen.fillColor != null && font != null ) {
+			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+			font.renderText( text, pen.fontSize, style );
+		}
+	}
+	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+		var tx1:Float = (inRegion.x/img.twidth);
+		var ty1:Float = (inRegion.y/img.theight);
+		var tx2:Float = tx1 + (inRegion.w/img.twidth);
+		var ty2:Float = ty1 + (inRegion.h/img.theight);
+		var x:Float = outRegion.x;
+		var y:Float = outRegion.y;
+		var x2:Float = outRegion.w+x;
+		var y2:Float = outRegion.h+y;
+
+		GL.color4( 1., 1., 1., 1. );
+
+		GL.pushAttrib( GL.ENABLE_BIT );
+			GL.enable( GL.TEXTURE_2D );
+			GL.bindTexture( GL.TEXTURE_2D, img.texture );
+
+			GL.begin( GL.QUADS );
+				GL.texCoord2( tx1, ty1 );
+				GL.vertex2  (   x,   y ); 
+				GL.texCoord2( tx2, ty1 );
+				GL.vertex2  (  x2,   y ); 
+				GL.texCoord2( tx2, ty2 );
+				GL.vertex2  (  x2,  y2 ); 
+				GL.texCoord2( tx1, ty2 );
+				GL.vertex2  (   x,  y2 ); 
+			GL.end();
+			
+		GL.popAttrib();
+	}
+	
+	/* helper functions */
+		
 	public static function matrixForGL( m:Matrix ) :Dynamic {
 		var v = CPtr.float_alloc(16);
 		

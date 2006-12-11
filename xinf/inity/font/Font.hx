@@ -16,7 +16,7 @@
 package xinf.inity.font;
 
 import opengl.GL;
-import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 
 class Font {
     private static var fonts:Hash<Font> = new Hash<Font>();

@@ -18,7 +18,7 @@ package xinf.erno;
 import xinf.event.SimpleEventDispatcher;
 import xinf.event.EventKind;
 import xinf.event.FrameEvent;
-import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 
 class Runtime extends SimpleEventDispatcher {
 	static public var runtime:Runtime;

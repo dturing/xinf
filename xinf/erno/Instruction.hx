@@ -15,24 +15,9 @@
 
 package xinf.erno;
 
-enum FontWeight {
-	Normal;
-	Bold;
-}
+import xinf.erno.Renderer;
 
-enum FontSlant {
-	Roman;
-	Italic;
-}
-
-typedef FontStyleChange = {
-	var pos:Int;
-	var color:Color;
-}
-
-typedef FontStyle = Array<FontStyleChange>
-
-enum DrawingInstruction {
+enum Instruction {
 	StartObject( id:Int );
 	EndObject();
 	ShowObject( id:Int );
