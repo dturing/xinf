@@ -33,6 +33,7 @@ class Font {
 		var data:String;
 		if( name=="_sans" ) {
 			data = Std.resource("default-font");
+			if( data==null ) throw("default font not found- include .TTF as resource 'default-font'");
 		} else {
 			var file = null; // FC FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
 			if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );

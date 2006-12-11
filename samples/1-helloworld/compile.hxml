@@ -1,8 +1,15 @@
 -main App
--lib xinf-core
--lib cptr
--lib opengl
--lib fonttools
--cp ../../api
--neko app.n
--resource vera.ttf@default-font
+-lib xinf
+-js app.js
+
+--next
+-main App
+-lib xinf
+-swf app.swf
+-swf-version 9
+-swf-header 320:240:25:000000
+
+--next
+-main App
+-lib xinf
+-neko run.n

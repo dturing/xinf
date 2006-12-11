@@ -1,15 +1,17 @@
+--auto-xml
+
 -main App
--lib xinf-core
+-lib xinf
 -js app.js
 
 --next
 -main App
--lib xinf-core
+-lib xinf
 -swf app.swf
 -swf-version 9
 -swf-header 320:240:25:000000
 
 --next
 -main App
--lib xinf-core
+-lib xinf
 -neko run.n
