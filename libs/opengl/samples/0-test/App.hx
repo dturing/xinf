@@ -59,6 +59,11 @@ class App {
 				
 				trace("key "+key+k+" @"+x+","+y );
 			} );
+		GLUT.setSpecialFunc( function( key:Int, x:Int, y:Int ) {
+				var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
+				
+				trace("special key "+key+k+" @"+x+","+y );
+			} );
 		GLUT.setExitFunc( function() {
 				trace("quit");
 			} );

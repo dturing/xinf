@@ -29,6 +29,28 @@ extern class GLUT {
 	public static var RGB:Int;
 	public static var DEPTH:Int;
 
+	public static var KEY_UP:Int;
+	public static var KEY_DOWN:Int;
+	public static var KEY_LEFT:Int;
+	public static var KEY_RIGHT:Int;
+	public static var KEY_PAGE_UP:Int;
+	public static var KEY_PAGE_DOWN:Int;
+	public static var KEY_HOME:Int;
+	public static var KEY_END:Int;
+	public static var KEY_INSERT:Int;
+	public static var KEY_F1:Int;
+	public static var KEY_F2:Int;
+	public static var KEY_F3:Int;
+	public static var KEY_F4:Int;
+	public static var KEY_F5:Int;
+	public static var KEY_F6:Int;
+	public static var KEY_F7:Int;
+	public static var KEY_F8:Int;
+	public static var KEY_F9:Int;
+	public static var KEY_F10:Int;
+	public static var KEY_F11:Int;
+	public static var KEY_F12:Int;
+
 	/** <nekobind><cptr name="argv" null-allowed="true" type="char*"/>
 				<cptr name="argn" null-allowed="true" type="int"/></nekobind> **/
 	public static function init(argn:Dynamic,argv:Dynamic) :Void;
@@ -38,6 +60,7 @@ extern class GLUT {
 	public static function setDisplayFunc( func:Dynamic ) :Void; // Void->Void
 	public static function setReshapeFunc( func:Dynamic ) :Void; // Int->Int->Void
 	public static function setKeyboardFunc( func:Dynamic ) :Void; // String->Int->Int->Void
+	public static function setSpecialFunc( func:Dynamic ) :Void; // Int->Int->Int->Void
 	public static function setMouseFunc( func:Dynamic ) :Void; // Int->Int->Int->Int->Void
 	public static function setMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
 	public static function setTimerFunc( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void

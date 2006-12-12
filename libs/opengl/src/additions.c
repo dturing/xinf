@@ -16,6 +16,7 @@ void gluVerticesOffset( int offset, int n, double *v ) {
 static field f_Display;
 static field f_Reshape;
 static field f_Keyboard;
+static field f_Special;
 static field f_Mouse;
 static field f_Motion;
 static field f_PassiveMotion;
@@ -35,6 +36,7 @@ void glut_setup() {
 	f_Display = val_id("display");
 	f_Reshape = val_id("reshape");
 	f_Keyboard = val_id("keyboard");
+	f_Special = val_id("special");
 	f_Mouse = val_id("mouse");
 	f_Motion = val_id("motion");
 	f_PassiveMotion = val_id("passiveMotion");
@@ -99,6 +101,13 @@ void glut_wrap_## func( int a, int b ) { \
 	val_call2( callback, alloc_int(a), alloc_int(b) ); \
 }
 
+#define GLUT_WRAP_CALLBACK_INT_INT_INT(func) \
+void glut_wrap_## func( int a, int b, int c ) { \
+	value callback = glut_get_callback( f_## func ); \
+	if( callback == val_null ) return; \
+	val_call3( callback, alloc_int(a), alloc_int(b), alloc_int(c) ); \
+}
+
 
 GLUT_WRAP_CALLBACK(Display)
 GLUT_SET_CALLBACK(Display)
@@ -113,6 +122,9 @@ void glut_wrap_Keyboard( unsigned char key, int x, int y ) { \
 }
 GLUT_SET_CALLBACK(Keyboard)
 
+GLUT_WRAP_CALLBACK_INT_INT_INT(Special)
+GLUT_SET_CALLBACK(Special)
+
 void glut_wrap_Mouse( int button, int state, int x, int y ) { 
 	value callback = glut_get_callback( f_Mouse ); 
 	if( callback == val_null ) return; 
@@ -123,6 +135,7 @@ GLUT_SET_CALLBACK(Mouse)
 
 GLUT_WRAP_CALLBACK_INT_INT(Motion)
 GLUT_SET_CALLBACK(Motion)
+
 
 GLUT_WRAP_CALLBACK_INT(Timer)
 value glutSetTimerFunc( int t, value f, int v ) {
