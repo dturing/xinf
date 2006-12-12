@@ -44,7 +44,7 @@ class RenderTest {
 				g.setFill( Color.RED );
 				g.setStroke( null, 0 );
 				g.rect(0,0,size.x,size.y);
-				trace("Exception testing "+this+": "+e );
+				trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
 			}
 		g.endObject();
 	}
@@ -116,9 +116,7 @@ class ShapeRenderTest extends RenderTest {
 		
 		g.setFill( null );
 		g.setStroke( Color.rgba( 1, 1, 1, 1 ), 2. );
-		g.startShape();
-			renderShape( g, size );
-		g.endShape();
+		renderShape( g, size );
 	}
 
 	private function renderShape( g:Renderer, size:Coord2d ) :Void {
@@ -127,28 +125,34 @@ class ShapeRenderTest extends RenderTest {
 
 class Cross extends ShapeRenderTest {
 	private function renderShape( g:Renderer, size:Coord2d ) :Void {
-		g.startPath( size.x/4, size.y/2 );
-			g.lineTo( (size.x/4)*3, size.y/2 );
-		g.endPath();
-		g.startPath( size.x/2, size.y/4 );
-			g.lineTo( size.x/2, (size.y/4)*3 );
-		g.endPath();
+		g.startShape();
+			g.startPath( size.x/4, size.y/2 );
+				g.lineTo( (size.x/4)*3, size.y/2 );
+			g.endPath();
+			g.startPath( size.x/2, size.y/4 );
+				g.lineTo( size.x/2, (size.y/4)*3 );
+			g.endPath();
+		g.endShape();
 	}
 }
 
 class Quadratic extends ShapeRenderTest {
 	private function renderShape( g:Renderer, size:Coord2d ) :Void {
-		g.startPath( size.x/8, size.y/3 );
-		g.quadraticTo( (size.x/2), size.y, (size.x/8)*7, size.y/3 );
-		g.endPath();
+		g.startShape();
+			g.startPath( size.x/8, size.y/3 );
+			g.quadraticTo( (size.x/2), size.y, (size.x/8)*7, size.y/3 );
+			g.endPath();
+		g.endShape();
 	}
 }
 
 class Cubic extends ShapeRenderTest {
 	private function renderShape( g:Renderer, size:Coord2d ) :Void {
-		g.startPath( size.x/8, size.y/2 );
-		g.cubicTo( size.x/3, 0, (size.x/3)*2, size.y, (size.x/8)*7, size.y/2 );
-		g.endPath();
+		g.startShape();
+			g.startPath( size.x/8, size.y/2 );
+			g.cubicTo( size.x/3, 0, (size.x/3)*2, size.y, (size.x/8)*7, size.y/2 );
+			g.endPath();
+		g.endShape();
 	}
 }
 
