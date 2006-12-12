@@ -37,7 +37,7 @@ class GLRenderer extends PenStackRenderer {
 		root = getNextId();
 
 		// FIXME: somewhat stupid initialization of "circle primitive"
-		var fy = 4./3.;
+		var fy = 1; //3./4.;
 		
 		circle_fill = GL.genLists(1);
 		GL.newList( circle_fill, GL.COMPILE );
@@ -203,11 +203,14 @@ class GLRenderer extends PenStackRenderer {
 		}
 		GL.popMatrix();
 	}
-	public function text( text:String, ?style:FontStyle ) {
+	public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
 		font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
 		if( pen.fillColor != null && font != null ) {
-			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-			font.renderText( text, pen.fontSize, style );
+			GL.pushMatrix();
+				GL.translate( x, y, 0 );
+				GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+				font.renderText( text, pen.fontSize, style );
+			GL.popMatrix();
 		}
 	}
 	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
