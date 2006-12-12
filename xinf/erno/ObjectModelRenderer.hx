@@ -16,7 +16,7 @@
 package xinf.erno;
 
 import xinf.erno.PenStackRenderer;
-import xinf.erno.DrawingInstruction;
+import xinf.erno.Renderer;
 
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 	private var lastId:Int;
@@ -77,22 +77,19 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		return 0;
 	}
 
-	public function draw( i:DrawingInstruction ) :Void {
-		switch( i ) {
-			case StartObject(id):
-				push(id);
-			case EndObject:
-				pop();
-			case ShowObject(id):
-				var o = lookup(id);
-				if( o==null ) {
-					o = createPrimitive(id);
-					objects.set(id,o);
-				}
-				attachPrimitive( current, o );
-
-			default:
-				super.draw(i);
+	// we implement the object part of the erno Instruction protocol
+	public function startObject( id:Int ) {
+		push(id);
+	}
+	public function endObject() {
+		pop();
+	}
+	public function showObject( id:Int ) {
+		var o = lookup(id);
+		if( o==null ) {
+			o = createPrimitive(id);
+			objects.set(id,o);
 		}
+		attachPrimitive( current, o );
 	}
 }

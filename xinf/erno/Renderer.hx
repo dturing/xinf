@@ -72,7 +72,7 @@ interface Renderer {
 	
 	function rect( x:Float, y:Float, w:Float, h:Float ) :Void;
 	function circle( x:Float, y:Float, r:Float ) :Void;
-	function text( text:String, ?style:FontStyle ) :Void;
+	function text( x:Float, y:Float, text:String, ?style:FontStyle ) :Void;
 	function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void;
 	
 	function native( o:Dynamic ) :Void;
