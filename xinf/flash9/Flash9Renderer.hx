@@ -15,9 +15,11 @@
 
 package xinf.flash9;
 
+import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Color;
+import xinf.erno.Matrix;
+import xinf.erno.ImageData;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
@@ -56,100 +58,110 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		parent.addChild( child );
 	}
 	
-	public function draw( i:DrawingInstruction ) :Void {
-		var g:Graphics = current.graphics;
+	/* our part of the drawing protocol */
+	
+	public function translate( x:Float, y:Float ) {
+		current.x = x;
+		current.y = y;
+	}
+	public function scale( x:Float, y:Float ) {
+		current.scaleX = x;
+		current.scaleY = y;
+	}
+	public function rotate( angle:Float ) {
+		throw("unimplemented");
+	}
+	public function transform( matrix:Matrix ) {
+		throw("unimplemented");
+	}
+	public function clipRect( w:Float, h:Float ) {
+		var crop = new Sprite();
+		var g = crop.graphics;
+		g.beginFill( 0xff0000, 1 );
+		g.drawRect(1,1,w,h);
+		g.endFill();
+		current.addChild(crop);
+		current.mask = crop;
+	}
+
+	public function startShape() {
+		if( pen.fillColor != null ) {
+			current.graphics.beginFill( pen.fillColor.toRGBInt() );
+		}
+		if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+			current.graphics.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
+		}
+	}
+	public function endShape() {
+		if( pen.fillColor != null ) {
+			current.graphics.endFill();
+		}
+	}
+	public function startPath( x:Float, y:Float) {
+		current.graphics.moveTo(x,y);
+	}
+	public function endPath() {
+		current.graphics.moveTo(0,0);
+	}
+	public function close() {
+		// FIXME
+	}
+	public function lineTo( x:Float, y:Float ) {
+		current.graphics.lineTo(x,y);
+	}
+	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+		current.graphics.curveTo( x1,y1,x,y );
+	}
+	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+		throw("unimplemented");
+	}
 		
-		try {
-		switch( i ) {
-			case Translate(x,y):
-				current.x = x;
-				current.y = y;
-
-			case Scale(x,y):
-				current.scaleX = x;
-				current.scaleY = y;
-
-			case ClipRect(w,h):
-				var crop = new Sprite();
-				var g = crop.graphics;
-				g.beginFill( 0xff0000, 1 );
-				g.drawRect(1,1,w,h);
-				g.endFill();
-				current.addChild(crop);
-				current.mask = crop;
-								
-			case Rect(x,y,w,h):
-				if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
-						false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
-				} else {
-					g.lineStyle( 0, 0, 0 );
-				}
-				if( pen.fillColor != null ) {
-					g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
-				} else {
-					g.beginFill( 0, 0 );
-				}
-				g.drawRect( x,y,w,h );
-				g.endFill();
-				
-			case Text(text,style):
-				// FIXME: textStyles
-				if( pen.fillColor != null ) {
-					var tf = new flash.text.TextField();
-					tf.text = text;
-					tf.selectable = false;
-					tf.y=-1;
-					tf.x=-1;
-					
-					var format:flash.text.TextFormat = tf.getTextFormat();
-					format.font = pen.fontFace;
-					format.size = pen.fontSize;
-					format.color = pen.fillColor.toRGBInt();
-					format.leftMargin = 0;
-					tf.setTextFormat(format);
-					
-					current.addChild(tf);
-				}
-				
-			case StartShape:
-				if( pen.fillColor != null ) {
-					g.beginFill( pen.fillColor.toRGBInt() );
-//				} else {
-//					g.beginFill( 0, 0 );
-				}
-				if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-					g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
-				}
-				
-			case EndShape:
-				if( pen.fillColor != null ) {
-					g.endFill();
-				}
-				
-			case StartPath(x,y):
-				g.moveTo(x,y);
-			
-			case EndPath:
-				g.moveTo(0,0);
-			
-			case Close:
-				// FIXME
-				
-			case LineTo(x,y):
-				g.lineTo(x,y);
-			
-			case QuadraticTo(x1,y1,x2,y2):
-				g.curveTo( x1,y1,x2,y2 );
-			
-			case CubicTo(p):
-				// FIXME
-				
-			default:
-				super.draw(i);
+	public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		var g = current.graphics;
+		if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+			g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
+				false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
+		} else {
+			g.lineStyle( 0, 0, 0 );
 		}
-		} catch( e:Dynamic ) {
-			trace("exc rendering "+i+": "+e );
+		if( pen.fillColor != null ) {
+			g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
+		} else {
+			g.beginFill( 0, 0 );
 		}
+		g.drawRect( x,y,w,h );
+		g.endFill();
+	}
+	
+	public function circle( x:Float, y:Float, r:Float ) {
+		throw("unimplemented");
+	}
+	
+	public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
+		// FIXME: textStyles
+		if( pen.fillColor != null ) {
+			var tf = new flash.text.TextField();
+			tf.text = text;
+			tf.selectable = false;
+			tf.y=-1;
+			tf.x=-1;
+			
+			var format:flash.text.TextFormat = tf.getTextFormat();
+			format.font = pen.fontFace;
+			format.size = pen.fontSize;
+			format.color = pen.fillColor.toRGBInt();
+			format.leftMargin = 0;
+			tf.setTextFormat(format);
+			
+			current.addChild(tf);
+		}
+	}
+	
+	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+		throw("unimplemented");
+	}
+
+	public function native( o:Dynamic ) {
+		throw("unimplemented");
 	}
 }
