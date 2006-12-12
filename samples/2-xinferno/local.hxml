@@ -17,3 +17,5 @@
 -cp ../../
 -neko run.n
 
+--next
+-cmd neko run

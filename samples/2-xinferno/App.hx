@@ -244,7 +244,11 @@ class App {
 			g.translate( ((rootSize.x-size.x)/2) + unit.x, ((rootSize.y-size.y)/2) + unit.y );
 			for( test in tests ) test.show( g );
 		g.endObject();
-	
+
+		Runtime.runtime.addEventFilter( function(e:Dynamic):Bool {
+			if( e.type != FrameEvent.ENTER_FRAME ) trace("Event: "+e);
+			return true;
+		} );
 	}
 	
 	public static function main() :Void {

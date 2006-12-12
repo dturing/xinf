@@ -13,8 +13,6 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-import xinf.event.FrameEvent;
-import xinf.event.GeometryEvent;
 import xinf.erno.Color;
 import xinf.ony.Application;
 import xinf.ony.Text;
