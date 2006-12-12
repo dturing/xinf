@@ -33,4 +33,17 @@ class KeyboardEvent extends Event<KeyboardEvent> {
 		this.altMod = if( altMod==null ) false else altMod;
 		this.ctrlMod = if( ctrlMod==null ) false else ctrlMod;
 	}
+
+	public function toString() :String {
+		// FIXME #if debug
+		var r = ""+type+"(";
+		if( shiftMod ) r+="Shift-";
+		if( altMod ) r+="Alt-";
+		if( ctrlMod ) r+="Ctrl-";
+		if( key==null ) r+="[null]";
+		else if( r.length==1 ) r+="'"+key+"'";
+		else r+=key;
+		r+=")";
+		return r;
+	}
 }

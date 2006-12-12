@@ -35,4 +35,10 @@ class MouseEvent extends Event<MouseEvent> {
 		x=_x; y=_y; button=_button;
 		this.targetId = targetId;
 	}
+	
+	public function toString() :String {
+		var r = ""+type+"("+x+","+y+", button "+button+")";
+		if( targetId != null ) r+="to #"+targetId;
+		return r;
+	}
 }
