@@ -15,9 +15,10 @@
 
 package xinf.js;
 
+import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Color;
+import xinf.erno.ImageData;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -50,56 +51,56 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		}
 	}
 	
-	public function draw( i:DrawingInstruction ) :Void {
-	try {
-		switch( i ) {
-				
-			case Translate(x,y):
-				current.style.left = ""+Math.round(x);
-				current.style.top = ""+Math.round(y);
-				
-			case ClipRect(w,h):
-				current.style.overflow = "hidden";
-				current.style.width = ""+Math.max(0,Math.round(w));
-				current.style.height = ""+Math.max(0,Math.round(h));
-				
-			case Rect(x,y,w,h):
-				var r = js.Lib.document.createElement("div");
-				r.style.position="absolute";
-				r.style.left = ""+Math.floor(x - (pen.strokeWidth/2));
-				r.style.top = ""+Math.floor(y - (pen.strokeWidth/2));
-				r.style.width = ""+Math.floor(w - (pen.strokeWidth/2));
-				r.style.height = ""+Math.floor(h - (pen.strokeWidth/2));
-				if( pen.fillColor != null ) {
-					r.style.background = pen.fillColor.toRGBString();
-				}
-				if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
-					r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
-				}
-				current.appendChild( r );
-				
-			case Text(text,style):
-				// FIXME: textStyles
-				var r = js.Lib.document.createElement("div");
-				r.style.position="absolute";
-				r.style.whiteSpace="nowrap";
-				r.style.cursor="default";
-				if( pen.fillColor != null )	r.style.color = pen.fillColor.toRGBString();
-				if( pen.fontFace != null ) r.style.fontFamily = pen.fontFace;
-				if( pen.fontSlant == Italic ) r.style.fontStyle = "italic";
-				if( pen.fontWeight == Bold ) r.style.fontWeight = "bold";
-				if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
-				r.innerHTML=text;
-				current.appendChild(r);
-				
-			case Native(n):
-				current.appendChild(untyped n);
+	public function translate( x:Float, y:Float ) {
+//		if( current.style.left != null ) throw("JS cannot translate more than once in an Object.");
+		current.style.left = ""+Math.round(x);
+		current.style.top = ""+Math.round(y);
+	}
+	public function clipRect( w:Float, h:Float ) {
+		current.style.overflow = "hidden";
+		current.style.width = ""+Math.max(0,Math.round(w));
+		current.style.height = ""+Math.max(0,Math.round(h));
+	}
 		
-			default:
-				super.draw(i);
+
+	public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		var r = js.Lib.document.createElement("div");
+		r.style.position="absolute";
+		r.style.left = ""+Math.floor(x - (pen.strokeWidth/2));
+		r.style.top = ""+Math.floor(y - (pen.strokeWidth/2));
+		r.style.width = ""+Math.floor(w - (pen.strokeWidth/2));
+		r.style.height = ""+Math.floor(h - (pen.strokeWidth/2));
+		if( pen.fillColor != null ) {
+			r.style.background = pen.fillColor.toRGBString();
 		}
-		} catch( e:Dynamic ) {
-			trace("JS Render exception: "+e );
+		if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
+			r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
 		}
+		current.appendChild( r );
+	}
+	
+	public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
+		// FIXME: textStyles
+		var r = js.Lib.document.createElement("div");
+		r.style.position="absolute";
+		r.style.whiteSpace="nowrap";
+		r.style.cursor="default";
+		if( x!=null ) r.style.left = ""+Math.round(x);
+		if( y!=null ) r.style.top = ""+Math.round(y);
+		if( pen.fillColor != null )	r.style.color = pen.fillColor.toRGBString();
+		if( pen.fontFace != null ) r.style.fontFamily = pen.fontFace;
+		if( pen.fontSlant == Italic ) r.style.fontStyle = "italic";
+		if( pen.fontWeight == Bold ) r.style.fontWeight = "bold";
+		if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
+		r.innerHTML=text;
+		current.appendChild(r);
+	}
+	
+	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+		throw("unimplemented");
+	}
+	
+	public function native( o:Dynamic ) {
+		current.appendChild(untyped n);
 	}
 }
