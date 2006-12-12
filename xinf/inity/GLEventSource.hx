@@ -25,6 +25,8 @@ import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
 
+import xinf.erno.Keys;
+
 class GLEventSource {
 	private var frame:Int;
 	private var runtime:XinfinityRuntime;
@@ -36,12 +38,19 @@ class GLEventSource {
 	
 	public function attach() :Void {
 		GLUT.setKeyboardFunc( keyPress );
+		GLUT.setSpecialFunc( specialKeyPress );
 		GLUT.setMouseFunc( mouseButton );
-		GLUT.setMotionFunc( mouseMotion);
+		GLUT.setMotionFunc( mouseMotion );
 	}
 	
 	public function keyPress( key:Int, x:Int, y:Int ) :Void {
-		var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
+		var k = Keys.get(key);
+		if( k==null ) k = String.fromCharCode(key);
+		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
+		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, key, k ) );
+	}
+	public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
+		var k = Keys.get(key);
 		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
 		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, key, k ) );
 	}
