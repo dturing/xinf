@@ -13,16 +13,17 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
-
 import xinf.event.MouseEvent;
 import xinf.erno.Color;
 import xinf.ony.Application;
 import xinf.ul.Button;
 import xinf.ul.ListModel;
 import xinf.ul.LineEdit;
+import xinf.ul.GrayStyle;
+import xinf.ul.Dropdown;
+import xinf.ul.Slider;
 
-class Test extends Application {
+class App extends Application {
 	public function new() :Void {
 		super();
 		
@@ -55,9 +56,9 @@ class Test extends Application {
 	
 	public static function main() :Void {
 		try {
-			new Test().run();
+			new App().run();
 		} catch( e:Dynamic ) {
-			trace("Exception: "+e+" "+haxe.Stack.exceptionStack() );
+			trace("Exception: "+e+"\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()) );
 		}
 	}
 }

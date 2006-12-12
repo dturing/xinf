@@ -23,7 +23,6 @@ import xinf.event.Event;
 
 import xinf.erno.Color;
 import xinf.erno.Renderer;
-import xinf.erno.DrawingInstruction;
 import xinf.ony.Object;
 import xinf.ony.Root;
 
@@ -97,6 +96,7 @@ class FocusManager {
 	}
 	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
+	trace("focusmanager: "+e );
 		#if flash9
 		#else true
 		/* key repeat */

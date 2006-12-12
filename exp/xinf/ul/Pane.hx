@@ -15,7 +15,6 @@
 
 package xinf.ul;
 
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 import xinf.erno.Coord2d;
 import xinf.style.StyleClassElement;
@@ -41,19 +40,19 @@ class Pane extends StyleClassElement {
     }
 		
 	public function drawContents( g:Renderer ) :Void {
-		g.draw( Translate( position.x, position.y ) );
+		g.translate( position.x, position.y );
 		if( crop )
-			g.draw( ClipRect( size.x-2, size.y-2 ) );
+			g.clipRect( size.x-2, size.y-2 );
 			
-		g.draw( SetFill(style.background) );
-		g.draw( SetStroke( null, 0 ) );
-		g.draw( Rect( 0, 0, size.x, size.y ) );
+		g.setFill(style.background);
+		g.setStroke( null, 0 );
+		g.rect( 0, 0, size.x, size.y );
 		
 		if( style.border.l > 0 ) {
 			var b = style.border.l/4;
-			g.draw( SetFill(null) );
-			g.draw( SetStroke(style.color,style.border.l) );
-			g.draw( Rect( -b, -b, size.x+(4*b), size.y+(4*b) ) );
+			g.setFill(null);
+			g.setStroke(style.color,style.border.l);
+			g.rect( -b, -b, size.x+(4*b), size.y+(4*b) );
 		}
 	}
 }

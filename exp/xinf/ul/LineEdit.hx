@@ -15,7 +15,6 @@
 
 package xinf.ul;
 
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 
 #if neko
@@ -24,7 +23,6 @@ import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.erno.Coord2d;
 import xinf.erno.Color;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;
 import xinf.inity.GLRenderer;
@@ -180,17 +178,17 @@ class LineEdit extends Widget {
 	public function drawContents( g:Renderer ) :Void {
 		//super.drawContents(g);
 		
-		g.draw( Translate( position.x, position.y ) );
+		g.translate( position.x, position.y );
 
-		g.draw( SetFill(style.background) );
-		g.draw( SetStroke( null, 0 ) );
-		g.draw( Rect( 0, 0, size.x, size.y ) );
+		g.setFill(style.background);
+		g.setStroke( null, 0 );
+		g.rect( 0, 0, size.x, size.y );
 		
 		if( style.border.l > 0 ) {
 			var b = style.border.l/4;
-			g.draw( SetFill(null) );
-			g.draw( SetStroke(style.color,style.border.l) );
-			g.draw( Rect( -b, -b, size.x+(4*b), size.y+(4*b) ) );
+			g.setFill(null);
+			g.setStroke(style.color,style.border.l);
+			g.rect( -b, -b, size.x+(4*b), size.y+(4*b) );
 		}
 
 
@@ -242,22 +240,22 @@ class LineEdit extends Widget {
 		var focus = hasStyleClass(":focus");
 		
 			// note: this would not work for js/flash, but LineEdit is xinfinity-only anyhow
-			g.draw( ClipRect( size.x-2, size.y-2 ) );
-			g.draw( Translate( -(xOffset-style.padding.l), style.padding.t ) );
+			g.clipRect( size.x-2, size.y-2 );
+			g.translate( -(xOffset-style.padding.l), style.padding.t );
 
 			// draw selection background/caret
 			if( focus ) {
-				g.draw( SetFill( selBgColor ) );
-				g.draw( SetStroke( null, 0 ) );
+				g.setFill( selBgColor );
+				g.setStroke( null, 0 );
 				
 				var x=selStart-1.5; var y=-.5; 
 				var w=selEnd-.5; var h=Math.ceil((font.height*fontSize)+.5)-.5;
-				g.draw( Rect( x,y,w-x,h-y ) );
+				g.rect( x,y,w-x,h-y );
 			}
 			
 			
-			g.draw( SetFill( fgColor ) );
-			g.draw( SetFont( style.get("fontFamily","_sans"), Roman, Normal, fontSize ));
+			g.setFill( fgColor );
+			g.setFont( style.get("fontFamily","_sans"), Roman, Normal, fontSize );
 			
 			// setup styles for selection foreground
 			var styles = new FontStyle();
@@ -266,7 +264,7 @@ class LineEdit extends Widget {
 				styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
 			}
 			
-			g.draw( Text( text, styles ) );
+			g.text( 0, 0, text, styles );
 			
 	}
 }

@@ -1,0 +1,7 @@
+-main App
+-lib xinf
+-cp ../../
+-neko run.n
+
+--next
+-cmd neko run

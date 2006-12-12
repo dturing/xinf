@@ -129,8 +129,8 @@ class GrayStyle {
 				minHeight: 20, minWidth: 100,
 				selectionBackground: Color.BLACK,
 				selectionForeground: Color.WHITE,
-				fontFamily: "Kassiopeia09T_09_sp60_cyr30",
-				fontSize: 16
+				fontFamily: "_sans", //"Kassiopeia09T_09_sp60_cyr30",
+				fontSize: 12
 			} );
 	}
 }

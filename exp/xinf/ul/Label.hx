@@ -16,7 +16,6 @@
 package xinf.ul;
 
 import xinf.style.StyleClassElement;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 
 /**
@@ -48,27 +47,27 @@ class Label extends StyleClassElement {
 	
 		var fontName = style.get("fontFamily","_sans");
 		if( fontName != null ) {
-			g.draw( SetFont( fontName, style.get("fontSlant",Roman),
+			g.setFont( fontName, style.get("fontSlant",Roman),
 					style.get("fontWeight",Normal),
-					style.get("fontSize",12) ) );
+					style.get("fontSize",12) );
 		}
 
-		g.draw( Translate(
+		g.translate(
 			position.x+style.padding.l+style.border.l,
-			position.y+style.padding.t+style.border.t ) );
+			position.y+style.padding.t+style.border.t );
 
 		if( style.background != null ) {
-			g.draw( SetFill(style.background) );
-			g.draw( SetStroke( null, 0 ) );
-			g.draw( Rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y ) );
+			g.setFill(style.background);
+			g.setStroke( null, 0 );
+			g.rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y );
 		}
 		if( style.border.l > 0 ) {
-			g.draw( SetFill(null) );
-			g.draw( SetStroke(style.color,style.border.l) );
-			g.draw( Rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y ) );
+			g.setFill(null);
+			g.setStroke(style.color,style.border.l);
+			g.rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y );
 		}
 		
-		g.draw( SetFill(style.color) );
-		g.draw( Text(text) );
+		g.setFill(style.color);
+		g.text(0,0,text);
 	}
 }
