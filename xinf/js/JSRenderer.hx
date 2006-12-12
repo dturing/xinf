@@ -88,7 +88,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		if( x!=null ) r.style.left = ""+Math.round(x);
 		if( y!=null ) r.style.top = ""+Math.round(y);
 		if( pen.fillColor != null )	r.style.color = pen.fillColor.toRGBString();
-		if( pen.fontFace != null ) r.style.fontFamily = pen.fontFace;
+		if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
 		if( pen.fontSlant == Italic ) r.style.fontStyle = "italic";
 		if( pen.fontWeight == Bold ) r.style.fontWeight = "bold";
 		if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
