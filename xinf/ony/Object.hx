@@ -15,7 +15,6 @@
 
 package xinf.ony;
 
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.event.Event;
@@ -93,15 +92,15 @@ class Object extends SimpleEventDispatcher {
 	}
 
 	public function draw( g:Renderer ) :Void {
-		g.draw( StartObject( _id ) );
+		g.startObject( _id );
 			drawContents(g);
 			
 			// draw children
 			for( child in children ) {
-				g.draw( ShowObject( child._id ) );
+				g.showObject( child._id );
 			}
 			
-		g.draw( EndObject );
+		g.endObject();
 	}
 	
 	public function drawContents( g:Renderer ) :Void {

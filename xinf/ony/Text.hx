@@ -16,30 +16,25 @@
 package xinf.ony;
 
 import xinf.erno.Renderer;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Color;
 
 class Text extends Object {
 	public var color:Color;
-	public var font:DrawingInstruction;
 	public var text:String;
 
-	public function new( ?text:String, ?font:DrawingInstruction, ?color:Color ) :Void {
+	public function new( ?text:String, ?color:Color ) :Void {
 		if( color==null ) color = Color.BLACK;
-		if( font==null )  font = SetFont( "_sans", Roman, Normal, 12 );
 		this.color=color;
-		this.font=font;
 		this.text=text;
 		super();
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
 		if( text!=null ) {
-			g.draw( Translate(position.x,position.y) );
-			g.draw( SetFill(color) );
-			g.draw( font );
-			g.draw( Text(text) );
+			g.translate(position.x,position.y);
+			g.setFill(color);
+			g.setFont( "_sans", Roman, Normal, 12 );
+			g.text(0,0,text);
 		}
-//		g.draw( Rect( position.x, position.y, size.x, size.y ) );
 	}
 }

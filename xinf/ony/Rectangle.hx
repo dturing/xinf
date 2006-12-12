@@ -16,7 +16,6 @@
 package xinf.ony;
 
 import xinf.erno.Renderer;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Color;
 
 class Rectangle extends Object {
@@ -28,7 +27,7 @@ class Rectangle extends Object {
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
-		g.draw( SetFill(color) );
-		g.draw( Rect( position.x, position.y, size.x, size.y ) );
+		g.setFill(color);
+		g.rect( position.x, position.y, size.x, size.y );
 	}
 }

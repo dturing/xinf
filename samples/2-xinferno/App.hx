@@ -44,7 +44,12 @@ class RenderTest {
 				g.setFill( Color.RED );
 				g.setStroke( null, 0 );
 				g.rect(0,0,size.x,size.y);
-				trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
+				try {
+					trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
+				} catch( f:Dynamic ) {
+					// getting the stack didnt work out...
+					trace("Exception testing "+this+": "+e );
+				}
 			}
 		g.endObject();
 	}
