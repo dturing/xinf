@@ -162,6 +162,6 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	}
 
 	public function native( o:Dynamic ) {
-		throw("unimplemented");
+		current.addChild(o);
 	}
 }

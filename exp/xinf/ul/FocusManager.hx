@@ -96,7 +96,6 @@ class FocusManager {
 	}
 	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
-	trace("focusmanager: "+e );
 		#if flash9
 		#else true
 		/* key repeat */

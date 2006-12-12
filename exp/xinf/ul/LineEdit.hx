@@ -309,7 +309,7 @@ class LineEdit extends Widget {
 	public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 		
-		g.draw( Native(native) );
+		g.native(native);
 	}
 }
 #end

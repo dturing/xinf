@@ -1,5 +1,8 @@
 -main App
--lib xinf
+-lib cptr
+-lib opengl
+-lib fonttools
+-cp ../../../
 -cp ../../
 -neko run.n
 
