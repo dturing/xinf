@@ -28,7 +28,7 @@ class RenderTest {
 	public function new( g:Renderer, position:Coord2d, size:Coord2d ) :Void {
 		this.position = position;
 		this.size = size;
-		id = g.getNextId();
+		id = Runtime.runtime.getNextId();
 	}
 	
 	public function show( g:Renderer ) :Void {
@@ -186,7 +186,7 @@ class Twist extends RenderTest {
 	
 	public function new( g:Renderer, position:Coord2d, size:Coord2d ) :Void {
 		super( g, position, size );
-		innerId = g.getNextId();
+		innerId = Runtime.runtime.getNextId();
 		this.g = g;
 		Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
 	}
@@ -239,11 +239,13 @@ class App {
 			
 		for( test in tests ) test.render( g );
 
-		var id=g.getNextId();
-		g.startObject(g.getRootId());
+		var id=Runtime.runtime.getNextId();
+
+		g.startNative(Runtime.runtime.getDefaultRoot());
 			g.translate( ((rootSize.x-size.x)/2) + unit.x, ((rootSize.y-size.y)/2) + unit.y );
 			for( test in tests ) test.show( g );
-		g.endObject();
+		g.endNative();
+
 
 		Runtime.runtime.addEventFilter( function(e:Dynamic):Bool {
 			if( e.type != FrameEvent.ENTER_FRAME ) trace("Event: "+e);
@@ -260,7 +262,11 @@ class App {
 
 			Runtime.run();
 		} catch(e:Dynamic) {
-			trace(e); //+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
+			try {
+				trace(e+"\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
+			} catch(f:Dynamic) {
+				trace(e);
+			}
 		}
 	}
 }
