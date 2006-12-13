@@ -3,6 +3,7 @@
 -main App
 -lib xinf
 -js app.js
+-debug
 
 --next
 -main App

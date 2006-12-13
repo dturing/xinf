@@ -1,4 +1,4 @@
-
+.PHONY: clean test haxelib default
 
 default:
 	@echo "Xinf top-level Makefile targets: "
@@ -8,17 +8,35 @@ default:
 
 
 PROJECT:=xinf
+VERSION:=0.0.0.$(shell svnversion)
+TAGLINE:=shuffled feet
 TEST_SAMPLE:=samples/0-test
 
+DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
+VERSION_NUMERIC:=$(firstword $(subst :, ,$(VERSION)))
 
-# package bitstream vera
+# generate version file
+FORCE:
 
-FONT_DIR:=support/font
-FONT:=$(FONT_DIR)/vera.n
+VERSION_STUB:=xinf/Version.hx
 
-$(FONT_DIR)/%.n : $(FONT_DIR)/%.ttf $(FONT_DIR)/Stub.hx
-	cd $(FONT_DIR); haxe -neko $*.n -resource $*.ttf@default-font Stub
+$(VERSION_STUB):support/$(notdir $(VERSION_STUB)).in FORCE
+	@sed -e "s/__VERSION__/$(VERSION)/" \
+		-e "s/__TAGLINE__/$(TAGLINE)/" \
+		-e "s/__DATE__/$(DATE)/" \
+		$< > $@
 
+
+# package resources
+
+RESOURCE_DIR:=support/resources
+RESOURCES:=$(wildcard $(RESOURCE_DIR)/*)
+RESOURCE:=support/xinf-resources.n
+
+RESOURCE_STUB:=support/Stub.hx
+
+$(RESOURCE) : $(RESOURCES) $(RESOURCE_STUB)
+	haxe -cp support/ -neko $(RESOURCE) $(foreach R,$(RESOURCES),-resource $(R)@$(notdir $(R))) Stub
 
 
 # build haxelib package
@@ -28,33 +46,29 @@ HAXELIB_PROJECT:=$(HAXELIB_ROOT)/$(PROJECT)
 
 haxelib : $(HAXELIB_PROJECT).zip
 	
-$(HAXELIB_PROJECT).zip: $(FONT) $(wildcard xinf/*/*.hx xinf/*/*/*.hx)
+$(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	
 	# copy haxelib.xml
-	cp haxelib.xml $(HAXELIB_PROJECT)
+	sed -e s/__VERSION__/$(VERSION_NUMERIC)/ support/haxelib.xml > $(HAXELIB_PROJECT)/haxelib.xml
 	
 	# copy haXe API and Samples
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 	svn export samples $(HAXELIB_PROJECT)/samples
 	
-	# package and test-install the haxelib once (we need it to compile the test)
-	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)
-	haxelib test $(HAXELIB_PROJECT).zip
-	
 	# build the "0-test" sample for haxelib run
-	cd $(TEST_SAMPLE); haxe compile.hxml;
+	cd $(TEST_SAMPLE); haxe -cp ../../ -lib cptr -lib opengl -lib fonttools -main App -neko run.n;
 	cp $(TEST_SAMPLE)/run.n $(HAXELIB_PROJECT)/
 	
-	# copy font FIXME
-	cp $(FONT) $(HAXELIB_PROJECT)/
+	# copy resource FIXME
+	cp $(RESOURCE) $(HAXELIB_PROJECT)/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Linux/
-	cp $(FONT) $(HAXELIB_PROJECT)/ndll/Linux/
+	cp $(RESOURCE) $(HAXELIB_PROJECT)/ndll/Linux/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Mac/
-	cp $(FONT) $(HAXELIB_PROJECT)/ndll/Mac/
+	cp $(RESOURCE) $(HAXELIB_PROJECT)/ndll/Mac/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Windows/
-	cp $(FONT) $(HAXELIB_PROJECT)/ndll/Windows/
+	cp $(RESOURCE) $(HAXELIB_PROJECT)/ndll/Windows/
 	
 	# create the final .zip
 	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)

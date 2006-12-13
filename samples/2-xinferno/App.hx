@@ -255,12 +255,11 @@ class App {
 	
 	public static function main() :Void {
 		try {
-			Runtime.init();
 			var g:Renderer = Runtime.renderer;
 			
 			renderTestCard( g, { x:320., y:240. } );
 
-			Runtime.run();
+			Runtime.runtime.run();
 		} catch(e:Dynamic) {
 			try {
 				trace(e+"\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );

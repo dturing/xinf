@@ -16,6 +16,7 @@
 import xinf.event.FrameEvent;
 import xinf.event.GeometryEvent;
 import xinf.erno.Color;
+import xinf.erno.Runtime;
 import xinf.ony.Application;
 import xinf.ony.Rectangle;
 import xinf.ony.Text;
@@ -36,12 +37,17 @@ class App extends Application {
 		
 		center = { x:160., y:120. };
 		extend = { x:80., y:30. };
+
+		var s ="Xinf "+xinf.Version.version+"\n"
+			  +"("+xinf.Version.built+")";
 		
-		hello = new Text( "xinf is not flash", Color.WHITE );
+		if( xinf.Version.tagline!="" ) s+="\n"+xinf.Version.tagline;
+		
+		hello = new Text( s, Color.WHITE );
 		root.attach( hello );
 		
-		runtime.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
-		runtime.addEventListener( GeometryEvent.STAGE_SCALED, onStageScale );
+		Runtime.runtime.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
+		Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, onStageScale );
 	}
 	
 	public function onEnterFrame( e:FrameEvent ) :Void {
@@ -56,7 +62,7 @@ class App extends Application {
 	public function onStageScale( e:GeometryEvent ) :Void {
 		center = { x:(e.x/2)-5, y:(e.y/2)-20 };
 		// TODO: xinf has no concept of text-widths currently, we cannot center text.
-		hello.moveTo( (e.x/2)-50, (e.y/2)+20 );
+		hello.moveTo( (e.x/2)-80, (e.y/2)+30 );
 	}
 
 	public static function main() :Void {

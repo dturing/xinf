@@ -36,11 +36,11 @@ class Font {
 			if( data==null ) {
 				// try to load bitstream vera- bundled with xinfinity
 				untyped {
-					var module = __dollar__loader.loadmodule("vera".__s,__dollar__loader);
+					var module = __dollar__loader.loadmodule("xinf-resources".__s,__dollar__loader);
 					data = module.font;
 				}
 				if( data == null ) {
-					throw("default font not found- include .TTF as resource 'default-font'");
+					throw("default font not found - include xinf-resources");
 				}
 			}
 		} else {

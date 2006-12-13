@@ -19,24 +19,19 @@ import xinf.erno.Renderer;
 import xinf.ony.Application;
 import xinf.ony.Object;
 
-#if flash
-	import flash.display.Sprite;
-	import flash.display.DisplayObject;
-	typedef Primitive = DisplayObject
-#else err
-#end
-
 class Native extends Object {
-	private var p:Primitive;
+	private var p:NativeObject;
 
-	public function new( p:Primitive ) :Void {
+	public function new( p:NativeObject ) :Void {
 		super();
 		this.p=p;
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
-		if( p!=null )
+		if( p!=null ) {
+			g.translate(position.x,position.y);
 			g.native(p);
+		}
 	}
 }
 
@@ -47,19 +42,25 @@ class App extends Application {
 	public function new() :Void {
 		super();
 		
-		var p:Primitive;
+		var p:NativeObject = null;
 		
 		#if flash
-			var s = new Sprite();
-			p=s;
+			var s = new flash.display.Sprite();
 			s.graphics.beginFill( 0xff0000, 1 );
 			s.graphics.moveTo( 10, 10 );
 			s.graphics.lineTo( 100, 10 );
 			s.graphics.lineTo( 10, 100 );
 			s.graphics.endFill();
+			p=s;
+		#else js
+			var div = js.Lib.document.createElement("div");
+			div.innerHTML="this is <b onmousedown=\"this.innerHTML = 'clicked'\">native</b> html";
+			p=div;
+		#else true
 		#end
 
 		block = new Native(p);
+		block.moveTo( 100, 100 );
 		root.attach( block );
 	}
 

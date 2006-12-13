@@ -18,13 +18,20 @@
 		</script>
 
 		<div style="position:absolute; max-height: 200px; overflow:auto; bottom: 0; background:#333;">
-			<p style="padding:10px; background:#000"> <b>JavaScript</b> | <a href="TEST-flash.html">&gt; Flash Version</a></p>
+			<p style="padding:10px; background:#000">  <a href="TEST.html">&gt; JavaScript</a> | <b>Flash</b></p>
 			<div id="haxe:trace" style="padding: 10px;"></div>
 		</div>
 		
-		<!-- FIXME: needed? -->
-		<div id="xinf:root"></div>
-
-		<script type="text/javascript" src="App.js"></script>
+        <embed src="App.swf"
+			   width="320"
+               height="240"
+               name="haxe"
+               quality="high"
+               align="middle"
+               swLiveConnect="true"
+               allowScriptAccess="sameDomain"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer"
+        />
     </body>
 </html>
