@@ -51,7 +51,7 @@ class Object extends SimpleEventDispatcher {
 	
 	public function new() :Void {
 		super();
-		_id = Runtime.renderer.getNextId(); // FIXME: can this be done differently? clearer initialization of things?
+		_id = Runtime.runtime.getNextId();
 		allObjects.set( _id, this );
 		position = { x:0., y:0. };
 		size = { x:0., y:0. };

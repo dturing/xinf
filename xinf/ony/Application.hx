@@ -20,12 +20,10 @@ class Application {
 	public var root(default,null):Root;
 	
 	public function new() :Void {
-		Runtime.initRuntime();
-		runtime = Runtime.runtime;
 		root = new Root();
 	}
 
 	public function run() :Void {
-		Runtime.run();
+		Runtime.runtime.run();
 	}
 }

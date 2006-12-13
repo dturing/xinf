@@ -20,17 +20,17 @@ import xinf.event.FrameEvent;
 import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
 import xinf.erno.Runtime;
+import xinf.erno.Renderer;
 
 class Root extends Object {
-	public static var root:Root;
+	private var root:NativeContainer;
 	
-	public function new() :Void {
-		if( root!=null ) throw("There can only be one Root.");
+	public function new( ?o:NativeContainer ) :Void {
 		super();
-		_id = Runtime.renderer.getRootId();
-		root = this;
+		root = o;
+		if( root==null ) root = Runtime.runtime.getDefaultRoot();
 		
-		Runtime.addEventListener( GeometryEvent.STAGE_SCALED, stageScaled );
+		Runtime.addEventListener( GeometryEvent.STAGE_SCALED, stageScaled ); // FIXME hmmm...
 
 		// redraw changed objects each frame
 		Runtime.addEventListener( FrameEvent.ENTER_FRAME,
@@ -42,7 +42,15 @@ class Root extends Object {
 		Runtime.addEventListener( MouseEvent.MOUSE_DOWN, dispatchToTarget );
 		Runtime.addEventListener( ScrollEvent.SCROLL_STEP, dispatchToTarget );
 	}
-	
+
+	public function draw( g:Renderer ) :Void {
+		g.startNative( root );
+			for( child in children ) {
+				g.showObject( child._id );
+			}
+		g.endNative();
+	}
+
 	private function dispatchToTarget( e:Dynamic ) :Void {
 		if( e.targetId != null ) {
 			var target = Object.findObjectById( e.targetId );
