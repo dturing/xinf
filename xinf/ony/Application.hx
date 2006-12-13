@@ -18,19 +18,11 @@ import xinf.erno.Runtime;
 
 class Application {
 	public var root(default,null):Root;
-	public var runtime(default,null):Runtime;
 	
 	public function new() :Void {
-		Runtime.init();
+		Runtime.initRuntime();
 		runtime = Runtime.runtime;
 		root = new Root();
-	
-/*
-		#if neko
-			trace( "neko commandline args: "+neko.Sys.args() );
-			neko.Sys.exit(0);
-		#end
-*/
 	}
 
 	public function run() :Void {

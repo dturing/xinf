@@ -21,25 +21,30 @@ import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
 
 class Runtime extends SimpleEventDispatcher {
-	static public var runtime:Runtime;
-	
-	public static function init() :Void {
-		runtime = Runtime.initRuntime();
-	}
-	
-	static public var renderer:Renderer;
+	static private var _runtime:Runtime;
+	static private var _renderer:Renderer;
+	static public var runtime(getRuntime,null):Runtime;
+	static public var renderer(getRenderer,null):Renderer;
 	
 	/* global functions */
-	static public function initRuntime() :Runtime {
+	static public function getRuntime() :Runtime {
+		if( _runtime==null ) initRuntime();
+		return _runtime;
+	}
+	static public function getRenderer() :Renderer {
+		if( _renderer==null ) initRuntime();
+		return _renderer;
+	}
+	static private function initRuntime() :Runtime {
 		#if neko
-			renderer = new xinf.inity.GLRenderer();
-			runtime = new xinf.inity.XinfinityRuntime();
+			_renderer = new xinf.inity.GLRenderer();
+			_runtime = new xinf.inity.XinfinityRuntime();
 		#else js
-			renderer = new xinf.js.JSRenderer();
-			runtime = new xinf.js.JSRuntime();
+			_renderer = new xinf.js.JSRenderer();
+			_runtime = new xinf.js.JSRuntime();
 		#else flash
-			renderer = new xinf.flash9.Flash9Renderer();
-			runtime = new xinf.flash9.Flash9Runtime();
+			_renderer = new xinf.flash9.Flash9Renderer();
+			_runtime = new xinf.flash9.Flash9Runtime();
 		#end
 		
 		if( runtime==null ) throw("unable to create runtime environment");
@@ -47,10 +52,6 @@ class Runtime extends SimpleEventDispatcher {
 		return runtime;
 	}
 	
-	static public function run() :Void {
-		if( runtime == null ) throw("initialize runtime first");
-		runtime.run();
-	}
 	
 	static public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :Void {
 		runtime.addEventListener(type,h);

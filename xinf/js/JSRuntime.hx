@@ -40,7 +40,7 @@ class JSRuntime extends SimpleRuntime {
 	}
 	override public function run() :Void {
 		_eventSource.rootResized(null);
- 		untyped window.setInterval("xinf.erno.Runtime.runtime.step()",1000/25);
+ 		untyped window.setInterval("xinf.erno.Runtime.getRuntime().step()",1000/25);
    	}
 	public function step() :Void {
 		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
