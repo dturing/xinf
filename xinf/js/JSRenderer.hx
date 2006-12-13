@@ -24,11 +24,8 @@ import js.Dom;
 typedef Primitive = js.HtmlDom
 
 class JSRenderer extends ObjectModelRenderer<Primitive> {
-	public function getRootPrimitive() :Primitive {
-		//return js.Lib.document.body;
-		return js.Lib.document.getElementById("xinf:root");
-	}
-
+	public static var defaultRoot:Primitive;
+	
 	override public function createPrimitive(id:Int) :Primitive {
 		// create new object
 		var o = js.Lib.document.createElement("div");
@@ -100,7 +97,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		throw("unimplemented");
 	}
 	
-	public function native( o:Dynamic ) {
-		current.appendChild(untyped n);
+	public function native( o:NativeObject ) {
+		current.appendChild(o);
 	}
 }

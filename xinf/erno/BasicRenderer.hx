@@ -21,16 +21,14 @@ class BasicRenderer implements Renderer {
 	public function new() :Void {
 	}
 
-	public function getNextId() :Int {
-		throw("unimplemented");
-		return -1;
-	}
-	public function getRootId() :Int {
-		throw("unimplemented");
-		return -1;
-	}
-
 	// erno Instruction protocol
+	
+	public function startNative( o:NativeContainer ) :Void {
+		throw("unimplemented");
+	}
+	public function endNative() :Void {
+		throw("unimplemented");
+	}
 	
 	public function startObject( id:Int ) {
 		throw("unimplemented");
@@ -106,7 +104,7 @@ class BasicRenderer implements Renderer {
 		throw("unimplemented");
 	}
 	
-	public function native( o:Dynamic ) {
+	public function native( o:NativeObject ) {
 		throw("unimplemented");
 	}
 }

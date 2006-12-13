@@ -15,11 +15,13 @@
 
 package xinf.js;
 
-import xinf.erno.Runtime;
+import xinf.erno.SimpleRuntime;
 import xinf.erno.Renderer;
 import xinf.event.FrameEvent;
 
-class JSRuntime extends Runtime {
+class JSRuntime extends SimpleRuntime {
+	public static var defaultRoot:NativeContainer;
+	
 	private var frame:Int;
 	private var _eventSource:JSEventSource;
 	
@@ -29,10 +31,14 @@ class JSRuntime extends Runtime {
 		frame=0;
 	}
 	
-	public function createRenderer() :Renderer {
-		return new JSRenderer();
+	override public function getDefaultRoot() :NativeContainer {
+		if( defaultRoot==null ) {
+			defaultRoot = js.Lib.document.createElement("div");
+			js.Lib.document.body.appendChild(defaultRoot);
+		}
+		return defaultRoot;
 	}
-	public function run() :Void {
+	override public function run() :Void {
 		_eventSource.rootResized(null);
  		untyped window.setInterval("xinf.erno.Runtime.runtime.step()",1000/25);
    	}

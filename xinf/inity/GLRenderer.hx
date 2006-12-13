@@ -27,15 +27,12 @@ import cptr.CPtr;
 class GLRenderer extends PenStackRenderer {
 	private var shape:GLPolygon;
 	public var font(default,null):xinf.inity.font.Font;
-	private var root:Int;
 	
 	private var circle_fill:Int;
 	private var circle_stroke:Int;
 
 	public function new() :Void {
 		super();
-		root = getNextId();
-
 		// FIXME: somewhat stupid initialization of "circle primitive"
 		var fy = 1; //3./4.;
 		
@@ -62,14 +59,21 @@ class GLRenderer extends PenStackRenderer {
 		GL.endList();
 
 	}
-	
-	public function getNextId() :Int {
-		return GL.genLists(1);
+
+	public function startNative( id:NativeContainer ) :Void {
+		pushPen();
+		GL.newList( id, GL.COMPILE );
+		GL.pushName(id);
+		GL.pushMatrix();
+		GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes
 	}
-	public function getRootId() :Int {
-		return root;
+	public function endNative() :Void {
+		GL.popAttrib();
+		GL.popMatrix();
+		GL.popName();
+		GL.endList();
+		popPen();
 	}
-	
 
 	public function startObject( id:Int ) {
 		pushPen();

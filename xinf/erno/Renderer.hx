@@ -15,7 +15,6 @@
 
 package xinf.erno;
 
-
 ///////////////////////////////////////////////////////////////////
 // font style
 
@@ -27,6 +26,7 @@ enum FontSlant {
 	Roman;
 	Italic;
 }
+
 
 /**
 	minimal support for changing text color (in the middle of a string).
@@ -40,13 +40,25 @@ typedef FontStyle = Array<FontStyleChange>
 
 
 
+#if flash
+	typedef NativeObject = flash.display.DisplayObject
+	typedef NativeContainer = flash.display.DisplayObjectContainer
+#else js
+	import js.Dom;
+	typedef NativeObject = js.HtmlDom
+	typedef NativeContainer = js.HtmlDom
+#else true
+	typedef NativeObject = Int
+	typedef NativeContainer = Int
+#end
+
+
+
 interface Renderer {
-
-	function getNextId() :Int;
-	function getRootId() :Int;
-
 	// erno Instruction protocol
-	
+	function startNative( o:NativeContainer ) :Void;
+	function endNative() :Void;
+
 	function startObject( id:Int ) :Void;
 	function endObject() :Void;
 	function showObject( id:Int ) :Void;
@@ -75,7 +87,7 @@ interface Renderer {
 	function text( x:Float, y:Float, text:String, ?style:FontStyle ) :Void;
 	function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void;
 	
-	function native( o:Dynamic ) :Void;
+	function native( o:NativeObject ) :Void;
 	
 	
 /* old enum-based interface (just for reference)

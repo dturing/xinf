@@ -30,16 +30,6 @@ import flash.display.JointStyle;
 typedef Primitive = XinfSprite
 
 class Flash9Renderer extends ObjectModelRenderer<Primitive> {
-	var root:Primitive;
-
-	public function getRootPrimitive() :Primitive {
-		if( root==null ) {
-			root = new Primitive();
-			flash.Lib.current.stage.addChild(root);
-		}
-		return root;
-	}
-
 	override public function createPrimitive(id:Int) :Primitive {
 		// create new object
 		var o = new Primitive();
@@ -57,7 +47,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		parent.addChild( child );
 	}
-	
+
 	/* our part of the drawing protocol */
 	
 	public function translate( x:Float, y:Float ) {
@@ -161,7 +151,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		throw("unimplemented");
 	}
 
-	public function native( o:Dynamic ) {
+	public function native( o:NativeObject ) {
 		current.addChild(o);
 	}
 }

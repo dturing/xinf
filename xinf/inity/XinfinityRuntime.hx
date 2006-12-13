@@ -32,6 +32,7 @@ class XinfinityRuntime extends Runtime {
 	private var width:Int;
 	private var height:Int;
 	private var somethingChanged:Bool;
+	private var root:Int;
 	
 	private var _eventSource:GLEventSource;
 
@@ -51,26 +52,34 @@ class XinfinityRuntime extends Runtime {
 		_eventSource=new GLEventSource(this);
 		
 		initGL();
+		root = getNextId();
 		
  		addEventListener( GeometryEvent.STAGE_SCALED, resized );
 		
 		startFrame();
-
 	}
-	
+
+	function renderRoot() :Void {
+		Runtime.renderer.showObject( root );
+	}
+
 	function resized( e:GeometryEvent ) :Void {
 		width = Math.round(e.x); height=Math.round(e.y);
 	}
 
-	public function createRenderer() :xinf.erno.Renderer {
-		return new GLRenderer();
+	override public function getNextId() :Int {
+		return GL.genLists(1);
 	}
-	
-	public function run() :Void {
+
+	override public function getDefaultRoot() :NativeContainer {
+		return root;
+	}
+
+	override public function run() :Void {
 		GLUT.mainLoop();
 	}
 
-	public function changed() :Void {
+	override public function changed() :Void {
 		somethingChanged = true;
 	}
 	
@@ -80,7 +89,8 @@ class XinfinityRuntime extends Runtime {
 		Font.cacheGlyphs();
 		
 		startFrame();
-		Runtime.renderer.showObject( Runtime.renderer.getRootId() );
+		
+		renderRoot();
 		somethingChanged = false;
 
 		// TODO precise timing here
@@ -223,8 +233,8 @@ class XinfinityRuntime extends Runtime {
     
     public function getObjectsUnderPoint( x:Float, y:Float ) : Array<Int> {
         startPick( x, height-y );
-        
-		Runtime.renderer.showObject( Runtime.renderer.getRootId() );
+
+		renderRoot();
 					
         var hits:Array<Array<Int>> = endPick();
         var os = new Array<Int>();

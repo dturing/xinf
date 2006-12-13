@@ -32,17 +32,18 @@ class Runtime extends SimpleEventDispatcher {
 	/* global functions */
 	static public function initRuntime() :Runtime {
 		#if neko
+			renderer = new xinf.inity.GLRenderer();
 			runtime = new xinf.inity.XinfinityRuntime();
 		#else js
+			renderer = new xinf.js.JSRenderer();
 			runtime = new xinf.js.JSRuntime();
 		#else flash
+			renderer = new xinf.flash9.Flash9Renderer();
 			runtime = new xinf.flash9.Flash9Runtime();
 		#end
 		
 		if( runtime==null ) throw("unable to create runtime environment");
-		
-		renderer = runtime.createRenderer();
-		
+
 		return runtime;
 	}
 	
@@ -62,8 +63,13 @@ class Runtime extends SimpleEventDispatcher {
 	}
 
 	/* API to override */
-	public function createRenderer() :Renderer {
-		throw("unimplemented"); return null;
+	public function getNextId() :Int {
+		throw("unimplemented");
+		return -1;
+	}
+	public function getDefaultRoot() :NativeContainer {
+		throw("unimplemented");
+		return null;
 	}
 	public function run() :Void {
 		throw("unimplemented");

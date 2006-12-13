@@ -13,29 +13,22 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.flash9;
+package xinf.erno;
 
-import xinf.erno.SimpleRuntime;
-import xinf.erno.Renderer;
+import xinf.event.SimpleEventDispatcher;
+import xinf.event.EventKind;
 import xinf.event.FrameEvent;
+import xinf.erno.Renderer;
 
-class Flash9Runtime extends SimpleRuntime {
-	public static var defaultRoot:NativeContainer;
+class SimpleRuntime extends Runtime {
+	private var nextId:Int;
 	
-	private var _eventSource:Flash9EventSource;
-
 	public function new() :Void {
 		super();
-		_eventSource = new Flash9EventSource(this);
+		nextId=1;
 	}
-	override public function getDefaultRoot() :NativeContainer {
-		if( defaultRoot==null ) {
-			defaultRoot = new XinfSprite();
-			flash.Lib.current.stage.addChild(defaultRoot);
-		}
-		return defaultRoot;
-	}
-	override public function run() :Void {
-		_eventSource.rootResized();
+	
+	override public function getNextId() :Int {
+		return nextId++;
 	}
 }

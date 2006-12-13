@@ -19,17 +19,49 @@ import xinf.erno.PenStackRenderer;
 import xinf.erno.Renderer;
 
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
-	private var lastId:Int;
-	
 	private var objects:IntHash<Primitive>;
 	private function lookup( id:Int ) :Primitive {
 		return objects.get(id);
 	}
 	
 	private var current:Primitive;
-	private var stack:Array<Primitive>;
-	private function push( id:Int ) :Void {
-		stack.push( current );
+
+	/* API to override */
+	public function createPrimitive(id:Int) :Primitive {
+		return null;
+	}
+	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
+		return null;
+	}
+	public function clearPrimitive( p:Primitive ) :Void {
+	}
+	public function getDefaultRoot() :Primitive {
+		return null;
+	}
+
+	/* public API */
+	public function new() :Void {
+		super();
+		objects = new IntHash<Primitive>();
+		objects.set(0,current);
+	}
+
+	// we implement the root and object parts of the erno Instruction protocol
+	public function startNative( o:NativeContainer ) :Void {
+		// TODO #if debug, check if current is set
+
+		// FIXME cast unneccessary if type parameter (Primitive) was constrained to NativeContainer
+		// causes problem in haxe: "Should implement by using an interface or a class". 
+		// see ml 2006-12-13.
+		current=cast(o);
+		pushPen();
+	}
+	public function endNative() :Void {
+		current=null;
+	}
+
+	public function startObject( id:Int ) {
+		// TODO #if debug, check if current is set
 		// see if there already is an object with that id.
 		current = lookup(id);
 		if( current == null ) {
@@ -42,47 +74,9 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		}
 		pushPen();
 	}
-	private function pop() :Void {
-		current = stack.pop();
-		if( current == null ) throw("Object Stack Underflow");
-		popPen();
-	}
-
-	public function createPrimitive(id:Int) :Primitive {
-		return null;
-	}
-	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
-		return null;
-	}
-	public function clearPrimitive( p:Primitive ) :Void {
-	}
-	public function getRootPrimitive() :Primitive {
-		return null;
-	}
-
-	public function new( ?root:Primitive ) :Void {
-		super();
-		stack = new Array<Primitive>();
-		objects = new IntHash<Primitive>();
-		current = root;
-		if( current == null ) current = getRootPrimitive();
-		objects.set(0,current);
-		lastId=1;
-	}
-
-	public function getNextId() :Int {
-		return lastId++;
-	}
-	public function getRootId() :Int {
-		return 0;
-	}
-
-	// we implement the object part of the erno Instruction protocol
-	public function startObject( id:Int ) {
-		push(id);
-	}
 	public function endObject() {
-		pop();
+		current = null;
+		popPen();
 	}
 	public function showObject( id:Int ) {
 		var o = lookup(id);
