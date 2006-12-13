@@ -16,9 +16,6 @@
 package xinf.ony;
 
 import xinf.event.GeometryEvent;
-import xinf.event.FrameEvent;
-import xinf.event.MouseEvent;
-import xinf.event.ScrollEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 
@@ -31,16 +28,6 @@ class Root extends Object {
 		if( root==null ) root = Runtime.runtime.getDefaultRoot();
 		
 		Runtime.addEventListener( GeometryEvent.STAGE_SCALED, stageScaled ); // FIXME hmmm...
-
-		// redraw changed objects each frame
-		Runtime.addEventListener( FrameEvent.ENTER_FRAME,
-			function( e:FrameEvent ) {
-				Object.redrawChanged( Runtime.renderer );
-			} );
-			
-		// dispatch some events to targets (xinferno only knows about IDs, not Objects 
-		Runtime.addEventListener( MouseEvent.MOUSE_DOWN, dispatchToTarget );
-		Runtime.addEventListener( ScrollEvent.SCROLL_STEP, dispatchToTarget );
 	}
 
 	public function draw( g:Renderer ) :Void {
@@ -49,13 +36,6 @@ class Root extends Object {
 				g.showObject( child._id );
 			}
 		g.endNative();
-	}
-
-	private function dispatchToTarget( e:Dynamic ) :Void {
-		if( e.targetId != null ) {
-			var target = Object.findObjectById( e.targetId );
-			if( target != null ) target.postEvent( e );
-		}
 	}
 	
 	private function stageScaled( e:GeometryEvent ) :Void {

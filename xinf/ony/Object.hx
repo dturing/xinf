@@ -21,27 +21,15 @@ import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
 
 class Object extends SimpleEventDispatcher {
-	private static var changedObjects:IntHash<Object> = new IntHash<Object>();
-	public static function redrawChanged( g:Renderer ) :Void {
-		var ch = changedObjects;
-		changedObjects = new IntHash<Object>();
-		var somethingChanged:Bool = false;
-		for( id in ch.keys() ) {
-			ch.get(id).draw( g );
-			somethingChanged = true;
+	private static var _manager:Manager;
+	public static var manager(getManager,null):Manager;
+	public static function getManager() :Manager {
+		if( _manager == null ) {
+			_manager = new Manager();
 		}
-		if( somethingChanged ) Runtime.runtime.changed();
-	}
-	private static var allObjects:IntHash<Object> = new IntHash<Object>();
-	public static function findObjectById( id:Int ) :Object {
-		return allObjects.get(id);
+		return _manager;
 	}
 
-	public static function drawAll( g:Renderer ) :Void {
-		for( id in allObjects.keys() ) {
-			allObjects.get(id).draw(g);
-		}
-	}
 
 	public var _id:Int;
 	private var children:Array<Object>;
@@ -51,16 +39,19 @@ class Object extends SimpleEventDispatcher {
 	
 	public function new() :Void {
 		super();
+		
 		_id = Runtime.runtime.getNextId();
-		allObjects.set( _id, this );
+		manager.register( _id, this );
+		
 		position = { x:0., y:0. };
 		size = { x:0., y:0. };
 		children = new Array<Object>();
+		
 		scheduleRedraw();
 	}
 	
 	public function destroy() :Void {
-		allObjects.remove(_id);
+		manager.unregister(_id);
 	}
 	
 	public function attach( child:Object ) :Void {
@@ -107,7 +98,7 @@ class Object extends SimpleEventDispatcher {
 	}
 	
 	public function scheduleRedraw() :Void {
-		changedObjects.set( _id, this );
+		manager.objectChanged( _id, this );
 	}
 	
 	public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
