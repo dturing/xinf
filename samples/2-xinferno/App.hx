@@ -174,8 +174,8 @@ class Info extends RenderTest {
 		g.rect(0,0,size.x,size.y);
 
 		g.setFill( Color.rgba( 1,1,1,1 ) );
-		g.setFont( "_sans", Roman, Normal, size.y/2. );
-		g.text( 0, size.y/4, "xinferno 0.0.0" );
+		g.setFont( "_sans", Roman, Normal, size.y/2.5 );
+		g.text( 0, size.y/4, "xinferno\n"+xinf.Version.version );
 	}
 }
 

@@ -9,7 +9,7 @@ default:
 
 PROJECT:=xinf
 VERSION:=0.0.0.$(shell svnversion)
-TAGLINE:=shuffled feet
+TAGLINE:=
 TEST_SAMPLE:=samples/0-test
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
