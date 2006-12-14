@@ -41,6 +41,7 @@ class GLEventSource {
 		GLUT.setSpecialFunc( specialKeyPress );
 		GLUT.setMouseFunc( mouseButton );
 		GLUT.setMotionFunc( mouseMotion );
+		GLUT.setPassiveMotionFunc( mouseMotion );
 	}
 	
 	public function keyPress( key:Int, x:Int, y:Int ) :Void {
