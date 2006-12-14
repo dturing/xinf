@@ -63,6 +63,7 @@ extern class GLUT {
 	public static function setSpecialFunc( func:Dynamic ) :Void; // Int->Int->Int->Void
 	public static function setMouseFunc( func:Dynamic ) :Void; // Int->Int->Int->Int->Void
 	public static function setMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
+	public static function setPassiveMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
 	public static function setTimerFunc( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
 	public static function setExitFunc( func:Dynamic ) :Void; // Void->Void, is really GNU atexit.
 

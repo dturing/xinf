@@ -136,6 +136,9 @@ GLUT_SET_CALLBACK(Mouse)
 GLUT_WRAP_CALLBACK_INT_INT(Motion)
 GLUT_SET_CALLBACK(Motion)
 
+GLUT_WRAP_CALLBACK_INT_INT(PassiveMotion)
+GLUT_SET_CALLBACK(PassiveMotion)
+
 
 GLUT_WRAP_CALLBACK_INT(Timer)
 value glutSetTimerFunc( int t, value f, int v ) {

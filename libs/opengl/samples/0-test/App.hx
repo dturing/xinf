@@ -54,6 +54,9 @@ class App {
 		GLUT.setMotionFunc( function( x:Int, y:Int ) {
 				trace("motion: "+x+","+y );
 			} );
+		GLUT.setPassiveMotionFunc( function( x:Int, y:Int ) {
+				trace("passive motion: "+x+","+y );
+			} );
 		GLUT.setKeyboardFunc( function( key:Int, x:Int, y:Int ) {
 				var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
 				
