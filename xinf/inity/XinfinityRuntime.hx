@@ -143,7 +143,7 @@ class XinfinityRuntime extends Runtime {
 		GL.matrixMode( GL.MODELVIEW );
 		GL.loadIdentity();
 
-		GL.clearColor( .5, .5, .5, .5 );
+		GL.clearColor( 0,0,0,0 );
 		GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
 			
 		// FIXME depends on stage scale mode

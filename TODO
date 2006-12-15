@@ -1,4 +1,12 @@
 dan's short-term TODO for xinf:
+ * direct transforms (esp. translate)
+   Renderer.transform() becomes .setTransform()
+ * elaborate Transform (Identity,Translation,Matrix.. maybe an enum?) to optimize GLObject
+ * js alpha
+ * mouseOver/Out, ScrollWheel - crossruntime
+	
  * port rest of xinfinity to haxelib:
+   * clipping (glViewport?)
+   * pixelSize
    * minimal fontconfig 
    * minimal gstreamer
