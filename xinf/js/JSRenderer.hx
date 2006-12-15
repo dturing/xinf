@@ -19,7 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
-import xinf.erno.Matrix;
+import xinf.geom.Matrix;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom

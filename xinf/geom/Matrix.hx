@@ -13,9 +13,9 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.erno;
+package xinf.geom;
 
-import xinf.erno.Types;
+import xinf.geom.Types;
 
 class Matrix {
 	public var m00:Float;
@@ -33,14 +33,14 @@ class Matrix {
 		m10=m.m10; m11=m.m11; m12=m.m12;
 	}
 	
-	public function apply( p:Coord2d ) :Coord2d {
+	public function apply( p:TPoint ) :TPoint {
 		return {
 			x: (p.x*m00) + (p.y*m10) + m02,
 			y: (p.x*m01) + (p.y*m11) + m12
 			};
 	}
 
-	public function applyInverse( p:Coord2d ) :Coord2d {
+	public function applyInverse( p:TPoint ) :TPoint {
 		// FIXME: this only applys translation!
 		return {
 			x: p.x - m02,

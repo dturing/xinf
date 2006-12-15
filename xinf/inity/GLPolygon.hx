@@ -21,16 +21,16 @@ import opengl.Tesselator;
 import opengl.Helper;
 import cptr.CPtr;
 
-import xinf.erno.Types;
+import xinf.geom.Types;
 import xinf.erno.Color;
 
 class GLContour {
-	private var last:Coord2d;
+	private var last:TPoint;
 	private var pixelSize:Float;
-	public var path:Array<Coord2d>;
+	public var path:Array<TPoint>;
 	
 	public function new( x:Float, y:Float, pixelSize:Float ) :Void {
-		path = new Array<Coord2d>();
+		path = new Array<TPoint>();
 		path.push( last = { x:x, y:y } );
 		if( pixelSize==null ) pixelSize=1.;
 		this.pixelSize=pixelSize;

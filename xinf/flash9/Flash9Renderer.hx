@@ -18,8 +18,8 @@ package xinf.flash9;
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
-import xinf.erno.Matrix;
 import xinf.erno.ImageData;
+import xinf.geom.Matrix;
 
 import flash.display.Sprite;
 import flash.display.Graphics;

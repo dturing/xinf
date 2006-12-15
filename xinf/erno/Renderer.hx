@@ -15,6 +15,9 @@
 
 package xinf.erno;
 
+import xinf.geom.Types;
+import xinf.geom.Matrix;
+
 ///////////////////////////////////////////////////////////////////
 // font style
 

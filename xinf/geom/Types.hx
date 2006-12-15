@@ -13,10 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.erno;
-
-// TODO: convert all Coord2d to TPoint.
-typedef Coord2d = { x:Float, y:Float }
+package xinf.geom;
 
 /*
 	TODO: parameterize all geometry (Int/Float)

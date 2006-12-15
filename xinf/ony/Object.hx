@@ -17,7 +17,7 @@ package xinf.ony;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.erno.Matrix;
+import xinf.geom.Matrix;
 import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
 

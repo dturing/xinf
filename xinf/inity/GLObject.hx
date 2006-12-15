@@ -15,9 +15,9 @@
 
 package xinf.inity;
 
-import xinf.erno.Types;
+import xinf.geom.Types;
 import xinf.geom.Rectangle;
-import xinf.erno.Matrix;
+import xinf.geom.Matrix;
 import opengl.GL;
 
 typedef Transform = Matrix // might be extended with more lightweight Translation/TransScale

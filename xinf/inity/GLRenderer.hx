@@ -17,7 +17,7 @@ package xinf.inity;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.erno.Matrix;
+import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 
 import opengl.GL;

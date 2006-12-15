@@ -1,6 +1,6 @@
 package xinf.geom;
 
-import xinf.erno.Types;
+import xinf.geom.Types;
 
 class Rectangle {
 	public var l:Float;

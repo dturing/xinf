@@ -16,6 +16,7 @@
 package xinf.erno;
 
 import xinf.erno.Renderer;
+import xinf.geom.Matrix;
 
 class BasicRenderer implements Renderer {
 	public function new() :Void {
