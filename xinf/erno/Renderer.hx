@@ -17,30 +17,7 @@ package xinf.erno;
 
 import xinf.geom.Types;
 import xinf.geom.Matrix;
-
-///////////////////////////////////////////////////////////////////
-// font style
-
-enum FontWeight {
-	Normal;
-	Bold;
-}
-enum FontSlant {
-	Roman;
-	Italic;
-}
-
-
-/**
-	minimal support for changing text color (in the middle of a string).
-	currently only supported by inity.
-**/
-typedef FontStyleChange = {
-	var pos:Int;
-	var color:Color;
-}
-typedef FontStyle = Array<FontStyleChange>
-
+import xinf.erno.FontStyle;
 
 
 #if flash

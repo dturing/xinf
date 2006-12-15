@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
+import xinf.erno.FontStyle;
 import xinf.geom.Matrix;
 
 import flash.display.Sprite;

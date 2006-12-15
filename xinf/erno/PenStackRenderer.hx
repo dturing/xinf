@@ -16,6 +16,7 @@
 package xinf.erno;
 
 import xinf.erno.Renderer;
+import xinf.erno.FontStyle;
 
 class Pen {
 	public var fillColor:Color;

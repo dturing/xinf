@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.geom.Matrix;
 import xinf.erno.ImageData;
+import xinf.erno.FontStyle;
 
 import opengl.GL;
 import opengl.GLU;
