@@ -17,6 +17,7 @@ package xinf.ony;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
+import xinf.erno.Matrix;
 import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
 
@@ -34,6 +35,8 @@ class Object extends SimpleEventDispatcher {
 	public var _id:Int;
 	private var children:Array<Object>;
 	public var parent:Object;
+	
+	private var transform:Matrix;
 	public var position(default,null):{x:Float,y:Float};
 	public var size(default,null):{x:Float,y:Float};
 	
@@ -43,6 +46,7 @@ class Object extends SimpleEventDispatcher {
 		_id = Runtime.runtime.getNextId();
 		manager.register( _id, this );
 		
+		transform = new Matrix().setIdentity();
 		position = { x:0., y:0. };
 		size = { x:0., y:0. };
 		children = new Array<Object>();
@@ -84,6 +88,11 @@ class Object extends SimpleEventDispatcher {
 
 	public function draw( g:Renderer ) :Void {
 		g.startObject( _id );
+			
+			// FIXME
+			transform.setTranslation( position.x, position.y );
+			g.transform( transform );
+			
 			drawContents(g);
 			
 			// draw children

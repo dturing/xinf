@@ -21,7 +21,7 @@ import opengl.Tesselator;
 import opengl.Helper;
 import cptr.CPtr;
 
-import xinf.erno.Coord2d;
+import xinf.erno.Types;
 import xinf.erno.Color;
 
 class GLContour {

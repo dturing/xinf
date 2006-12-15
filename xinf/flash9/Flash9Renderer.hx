@@ -62,7 +62,9 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		throw("unimplemented");
 	}
 	public function transform( matrix:Matrix ) {
-		throw("unimplemented");
+		// FIXME: this is only translation
+		current.x = matrix.m02;
+		current.y = matrix.m12;
 	}
 	public function clipRect( w:Float, h:Float ) {
 		var crop = new Sprite();

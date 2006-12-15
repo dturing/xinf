@@ -15,4 +15,21 @@
 
 package xinf.erno;
 
+// TODO: convert all Coord2d to TPoint.
 typedef Coord2d = { x:Float, y:Float }
+
+/*
+	TODO: parameterize all geometry (Int/Float)
+*/
+
+typedef TPoint = {
+	var x:Float;
+	var y:Float;
+}
+
+typedef TRectangle = {
+	var l:Float;
+	var t:Float;
+	var r:Float;
+	var b:Float;
+}

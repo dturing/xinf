@@ -15,6 +15,8 @@
 
 package xinf.erno;
 
+import xinf.erno.Types;
+
 class Matrix {
 	public var m00:Float;
 	public var m01:Float;
@@ -22,9 +24,6 @@ class Matrix {
 	public var m10:Float;
 	public var m11:Float;
 	public var m12:Float;
-	public var m20:Float;
-	public var m21:Float;
-	public var m22:Float;
 	
 	public function new() :Void {
 	}
@@ -32,30 +31,44 @@ class Matrix {
 	public function set( m:Matrix ) :Void {
 		m00=m.m00; m01=m.m01; m02=m.m02;
 		m10=m.m10; m11=m.m11; m12=m.m12;
-		m20=m.m20; m21=m.m21; m22=m.m22;
 	}
 	
 	public function apply( p:Coord2d ) :Coord2d {
 		return {
-			x: (p.x*m00) + (p.y*m10) + m20,
-			y: (p.x*m01) + (p.y*m11) + m21
+			x: (p.x*m00) + (p.y*m10) + m02,
+			y: (p.x*m01) + (p.y*m11) + m12
 			};
 	}
-	
+
+	public function applyInverse( p:Coord2d ) :Coord2d {
+		// FIXME: this only applys translation!
+		return {
+			x: p.x - m02,
+			y: p.y - m12
+			};
+	}
+	// TODO: geom.TRectangle
+	public function transformBBox( r:{l:Float,t:Float,r:Float,b:Float}) :{l:Float,t:Float,r:Float,b:Float} {
+		var tl = apply( {x:r.l,y:r.t} );
+		var br = apply( {x:r.r,y:r.b} );
+		return {
+			l: Math.min(tl.x,br.x),
+			t: Math.min(tl.y,br.y),
+			r: Math.max(tl.x,br.x), 
+			b: Math.max(tl.y,br.y)
+			};
+	}
+
 	public function multiply( m:Matrix ) :Matrix {
 		var o:Matrix=new Matrix();
 		
-		o.m00 = (m00*m.m00) + (m01*m.m10) + (m02*m.m20);
-		o.m01 = (m00*m.m01) + (m01*m.m11) + (m02*m.m21);
-		o.m02 = (m00*m.m02) + (m01*m.m12) + (m02*m.m22);
+		o.m00 = (m00*m.m00) + (m01*m.m10);
+		o.m01 = (m00*m.m01) + (m01*m.m11);
+		o.m02 = (m00*m.m02) + (m01*m.m12);
 
-		o.m10 = (m10*m.m00) + (m11*m.m10) + (m12*m.m20);
-		o.m11 = (m10*m.m01) + (m11*m.m11) + (m12*m.m21);
-		o.m12 = (m10*m.m02) + (m11*m.m12) + (m12*m.m22);
-
-		o.m20 = (m20*m.m00) + (m21*m.m10) + (m22*m.m20);
-		o.m21 = (m20*m.m01) + (m21*m.m11) + (m22*m.m21);
-		o.m22 = (m20*m.m02) + (m21*m.m12) + (m22*m.m22);
+		o.m10 = (m10*m.m00) + (m11*m.m10);
+		o.m11 = (m10*m.m01) + (m11*m.m11);
+		o.m12 = (m10*m.m02) + (m11*m.m12);
 		
 		return o;
 	}
@@ -63,13 +76,12 @@ class Matrix {
 	public function setIdentity() :Matrix {
 		m00=1; m01=0; m02=0;
 		m10=0; m11=1; m12=0;
-		m20=0; m21=0; m22=1;
 		return this;
 	}
 	
 	public function setTranslation( x:Float, y:Float ) :Matrix {
-		m20 = x;
-		m21 = y;
+		m02 = x;
+		m12 = y;
 		return this;
 	}
 	

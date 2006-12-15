@@ -31,7 +31,6 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		return null;
 	}
 	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
-		return null;
 	}
 	public function clearPrimitive( p:Primitive ) :Void {
 	}
@@ -52,7 +51,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 
 		// FIXME cast unneccessary if type parameter (Primitive) was constrained to NativeContainer
 		// causes problem in haxe: "Should implement by using an interface or a class". 
-		// see ml 2006-12-13.
+		// see ml 2006-12-13. (fixed on cvs)
 		current=cast(o);
 		pushPen();
 	}

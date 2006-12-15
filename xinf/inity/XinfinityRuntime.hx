@@ -15,11 +15,11 @@
 
 package xinf.inity;
 
-import xinf.erno.Runtime;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
-import xinf.erno.Renderer;
 import xinf.event.FrameEvent;
+import xinf.erno.Runtime;
+import xinf.erno.Renderer;
 import xinf.inity.font.Font;
 
 import opengl.GL;
@@ -32,7 +32,7 @@ class XinfinityRuntime extends Runtime {
 	private var width:Int;
 	private var height:Int;
 	private var somethingChanged:Bool;
-	private var root:Int;
+	private var root:GLObject;
 	
 	private var _eventSource:GLEventSource;
 
@@ -52,7 +52,7 @@ class XinfinityRuntime extends Runtime {
 		_eventSource=new GLEventSource(this);
 		
 		initGL();
-		root = getNextId();
+		root = new GLObject( getNextId() );
 		
  		addEventListener( GeometryEvent.STAGE_SCALED, resized );
 		
@@ -60,7 +60,7 @@ class XinfinityRuntime extends Runtime {
 	}
 
 	function renderRoot() :Void {
-		Runtime.renderer.showObject( root );
+		Runtime.renderer.showObject( root.id );
 	}
 
 	function resized( e:GeometryEvent ) :Void {
@@ -165,9 +165,22 @@ class XinfinityRuntime extends Runtime {
 	}
 	
     /* ------------------------------------------------------
-       HitTest Functions
+       HitTest Functions 
+	   -- GL_SELECT render mode is seldom accellerated,
+	      sometimes doesnt work. trying my luck with own lightweight
+		 object model.
        ------------------------------------------------------ */
+	   
+	public function findIdAt( x:Float, y:Float ) :Int {
+		var found = new Array<GLObject>();
+		root.hit( {x:x,y:y}, found );
+//		trace("findId("+x+","+y+"): "+found);
+		if( found.length>0 )
+			return found.pop().id;
+		else return -1;
+	}
 
+/*
     public function startPick( x:Float, y:Float ) : Void {
 		GL.viewport( 0, 0, Math.round(width), Math.round(height) );
 		GL.matrixMode( GL.PROJECTION );
@@ -238,7 +251,7 @@ class XinfinityRuntime extends Runtime {
 					
         var hits:Array<Array<Int>> = endPick();
         var os = new Array<Int>();
-		
+		trace("getObjectsUnderPoint("+x+","+y+"): "+hits );
         for( hit in hits ) {
 			os.push( hit.pop() );
         }
@@ -249,4 +262,5 @@ class XinfinityRuntime extends Runtime {
 	public function findIdAt( x:Float, y:Float ) :Int {
 		return getObjectsUnderPoint( x, y ).pop();
 	}
+	*/
 }

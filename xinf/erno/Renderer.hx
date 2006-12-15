@@ -48,8 +48,11 @@ typedef FontStyle = Array<FontStyleChange>
 	typedef NativeObject = js.HtmlDom
 	typedef NativeContainer = js.HtmlDom
 #else true
-	typedef NativeObject = Int
-	typedef NativeContainer = Int
+	//FIXME
+	import xinf.inity.GLRenderer;
+	
+	typedef NativeObject = xinf.inity.GLObject
+	typedef NativeContainer = xinf.inity.GLObject
 #end
 
 

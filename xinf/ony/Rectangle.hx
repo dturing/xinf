@@ -28,6 +28,6 @@ class Rectangle extends Object {
 	
 	public function drawContents( g:Renderer ) :Void {
 		g.setFill(color);
-		g.rect( position.x, position.y, size.x, size.y );
+		g.rect( 0, 0, size.x, size.y );
 	}
 }

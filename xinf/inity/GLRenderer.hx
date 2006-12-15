@@ -16,7 +16,7 @@
 package xinf.inity;
 
 import xinf.erno.Renderer;
-import xinf.erno.PenStackRenderer;
+import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Matrix;
 import xinf.erno.ImageData;
 
@@ -24,7 +24,10 @@ import opengl.GL;
 import opengl.GLU;
 import cptr.CPtr;
 
-class GLRenderer extends PenStackRenderer {
+
+typedef Primitive = GLObject
+
+class GLRenderer extends ObjectModelRenderer<Primitive> {
 	private var shape:GLPolygon;
 	public var font(default,null):xinf.inity.font.Font;
 	
@@ -59,52 +62,62 @@ class GLRenderer extends PenStackRenderer {
 		GL.endList();
 
 	}
+	
+	// erno.ObjectModelRenderer API
+	override public function createPrimitive(id:Int) :Primitive {
+		return new GLObject(id);
+	}
+	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
+		if( parent==null ) return;
+		parent.addChild(child);
+	}
+	override public function clearPrimitive( p:Primitive ) :Void {
+		p.clear();
+	}
+	
+	
+	// erno.Renderer API
 
-	public function startNative( id:NativeContainer ) :Void {
-		pushPen();
-		GL.newList( id, GL.COMPILE );
-		GL.pushName(id);
-		GL.pushMatrix();
-		GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes
+	public function startNative( o:NativeContainer ) :Void {
+		super.startNative(o);
+		o.start();
 	}
 	public function endNative() :Void {
-		GL.popAttrib();
-		GL.popMatrix();
-		GL.popName();
-		GL.endList();
-		popPen();
+		current.end();
+		super.endNative();
 	}
 
 	public function startObject( id:Int ) {
+		super.startObject(id);
 		pushPen();
-		GL.newList( id, GL.COMPILE );
-		GL.pushName(id);
-		GL.pushMatrix();
-		GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes
+		current.start();
 	}
 	public function endObject() {
-		GL.popAttrib();
-		GL.popMatrix();
-		GL.popName();
-		GL.endList();
+		current.end();
 		popPen();
+		super.endObject();
 	}
 	public function showObject( id:Int ) {
+		super.showObject(id);
 		GL.callList( id );
 	}
 
 
 	public function translate( x:Float, y:Float ) {
-		GL.translate( x, y, 0. );
+		//GL.translate( x, y, 0. );
+		current.transform.setTranslation(x,y);
 	}
 	public function scale( x:Float, y:Float ) {
-		GL.scale( x, y, 1. );
+		//GL.scale( x, y, 1. );
+		current.transform.setScale(x,y);
 	}
 	public function rotate( angle:Float ) {
-		GL.rotate( angle, 0., 0., 1. );
+		//GL.rotate( angle, 0., 0., 1. );
+		current.transform.setRotation(angle);
 	}
 	public function transform( matrix:Matrix ) {
-		GL.multMatrixf( matrixForGL(matrix) );
+		//GL.multMatrixf( matrixForGL(matrix) );
+		current.setTransform( matrix );
 	}
 	public function clipRect( w:Float, h:Float ) {
 		var eq:Dynamic = CPtr.double_alloc(4);
@@ -161,6 +174,8 @@ class GLRenderer extends PenStackRenderer {
 	}
 	
 	public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
+		
 		if( pen.fillColor != null ) {
 			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
 			GL.begin( GL.QUADS );
@@ -254,21 +269,21 @@ class GLRenderer extends PenStackRenderer {
 		
 		CPtr.float_set(v,0,m.m00);
 		CPtr.float_set(v,1,m.m10);
-		CPtr.float_set(v,2,m.m20);
+		CPtr.float_set(v,2,.0);
 		CPtr.float_set(v,3,.0);
 
 		CPtr.float_set(v,4,m.m01);
 		CPtr.float_set(v,5,m.m11);
-		CPtr.float_set(v,6,m.m21);
+		CPtr.float_set(v,6,.0);
 		CPtr.float_set(v,7,.0);
 
-		CPtr.float_set(v,8,m.m02);
-		CPtr.float_set(v,9,m.m12);
-		CPtr.float_set(v,10,m.m22);
+		CPtr.float_set(v,8,.0);
+		CPtr.float_set(v,9,.0);
+		CPtr.float_set(v,10,1.);
 		CPtr.float_set(v,11,.0);
 
-		CPtr.float_set(v,12,.0);
-		CPtr.float_set(v,13,.0);
+		CPtr.float_set(v,12,m.m02);
+		CPtr.float_set(v,13,m.m12);
 		CPtr.float_set(v,14,.0);
 		CPtr.float_set(v,15,1.);
 		

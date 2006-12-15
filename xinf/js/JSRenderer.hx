@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
+import xinf.erno.Matrix;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -48,6 +49,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		}
 	}
 	
+	public function transform( matrix:Matrix ) {
+		// FIXME (maybe): regards only translation
+		current.style.left = ""+Math.round(matrix.m02);
+		current.style.top = ""+Math.round(matrix.m12);
+	}
 	public function translate( x:Float, y:Float ) {
 //		if( current.style.left != null ) throw("JS cannot translate more than once in an Object.");
 		current.style.left = ""+Math.round(x);
