@@ -50,23 +50,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	}
 
 	/* our part of the drawing protocol */
-	
-	public function translate( x:Float, y:Float ) {
-		current.x = x;
-		current.y = y;
-	}
-	public function scale( x:Float, y:Float ) {
-		current.scaleX = x;
-		current.scaleY = y;
-	}
-	public function rotate( angle:Float ) {
-		throw("unimplemented");
-	}
-	public function setTransform( id:Int, t:Transform ) {
-		var current = lookup(id);
+	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 		// FIXME: this is only translation
-		current.x = t.m02;
-		current.y = t.m12;
+		p.x = t.m02;
+		p.y = t.m12;
 	}
 	public function clipRect( w:Float, h:Float ) {
 		var crop = new Sprite();

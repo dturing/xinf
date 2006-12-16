@@ -8,12 +8,12 @@ default:
 
 
 PROJECT:=xinf
-VERSION:=0.0.0.$(shell svnversion)
+VERSION:=0.0.0
 TAGLINE:=
 TEST_SAMPLE:=samples/0-test
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
-VERSION_NUMERIC:=$(firstword $(subst :, ,$(VERSION)))
+REVISION:=$(shell svnversion)
 
 # generate version file
 FORCE:
@@ -22,6 +22,7 @@ VERSION_STUB:=xinf/Version.hx
 
 $(VERSION_STUB):support/$(notdir $(VERSION_STUB)).in FORCE
 	@sed -e "s/__VERSION__/$(VERSION)/" \
+		-e "s/__REVISION__/$(REVISION)/" \
 		-e "s/__TAGLINE__/$(TAGLINE)/" \
 		-e "s/__DATE__/$(DATE)/" \
 		$< > $@
@@ -51,7 +52,7 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 	mkdir -p $(HAXELIB_PROJECT)
 	
 	# copy haxelib.xml
-	sed -e s/__VERSION__/$(VERSION_NUMERIC)/ support/haxelib.xml > $(HAXELIB_PROJECT)/haxelib.xml
+	sed -e s/__VERSION__/$(VERSION)/ support/haxelib.xml > $(HAXELIB_PROJECT)/haxelib.xml
 	
 	# copy haXe API and Samples
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)

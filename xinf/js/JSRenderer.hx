@@ -20,7 +20,7 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
-import xinf.geom.Matrix;
+import xinf.geom.Transform;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -49,20 +49,19 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 			parent.appendChild( child );
 		}
 	}
-	
-	public function setTransform( id:Int, matrix:Matrix ) {
+	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 		// FIXME (maybe): regards only translation
-		var current = lookup(id);
-		current.style.left = ""+Math.round(matrix.m02);
-		current.style.top = ""+Math.round(matrix.m12);
+		p.style.left = ""+Math.round(t.m02);
+		p.style.top = ""+Math.round(t.m12);
 	}
+	
+	
 	public function clipRect( w:Float, h:Float ) {
 		current.style.overflow = "hidden";
 		current.style.width = ""+Math.max(0,Math.round(w));
 		current.style.height = ""+Math.max(0,Math.round(h));
 	}
-		
-
+	
 	public function rect( x:Float, y:Float, w:Float, h:Float ) {
 		var r = js.Lib.document.createElement("div");
 		r.style.position="absolute";

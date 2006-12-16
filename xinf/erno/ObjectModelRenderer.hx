@@ -17,6 +17,7 @@ package xinf.erno;
 
 import xinf.erno.PenStackRenderer;
 import xinf.erno.Renderer;
+import xinf.geom.Transform;
 
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 	private var objects:IntHash<Primitive>;
@@ -33,6 +34,8 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 	}
 	public function clearPrimitive( p:Primitive ) :Void {
+	}
+	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 	}
 	public function getDefaultRoot() :Primitive {
 		return null;
@@ -84,5 +87,13 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 			objects.set(id,o);
 		}
 		attachPrimitive( current, o );
+	}
+	public function setTransform( id:Int, transform:Transform ) {
+		var o = lookup(id);
+		if( o==null ) {
+			o = createPrimitive(id);
+			objects.set(id,o);
+		}
+		setPrimitiveTransform( o, transform );
 	}
 }

@@ -38,7 +38,7 @@ class App extends Application {
 		center = { x:160., y:120. };
 		extend = { x:80., y:30. };
 
-		var s ="Xinf "+xinf.Version.version+"\n"
+		var s ="Xinf "+xinf.Version.version+" ["+xinf.Version.revision+"]\n"
 			  +"("+xinf.Version.built+")";
 		
 		if( xinf.Version.tagline!="" ) s+="\n"+xinf.Version.tagline;

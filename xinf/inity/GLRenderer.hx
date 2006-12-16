@@ -17,6 +17,7 @@ package xinf.inity;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
+import xinf.geom.Transform;
 import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
@@ -75,6 +76,9 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 	override public function clearPrimitive( p:Primitive ) :Void {
 		p.clear();
 	}
+	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
+		p.setTransform( t );
+	}
 	
 	
 	// erno.Renderer API
@@ -104,10 +108,6 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 	}
 
 
-	public function setTransform( id:Int, matrix:Matrix ) {
-		var current = lookup(id);
-		current.setTransform( matrix );
-	}
 	public function clipRect( w:Float, h:Float ) {
 		var eq:Dynamic = CPtr.double_alloc(4);
 		CPtr.double_set(eq,0,1.);

@@ -18,14 +18,15 @@ import xinf.event.FrameEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
-import xinf.erno.Coord2d;
+import xinf.geom.Types;
+import xinf.geom.Matrix;
 
 class RenderTest {
-	private var position:Coord2d;
-	private var size:Coord2d;
+	private var position:TPoint;
+	private var size:TPoint;
 	private var id:Int;
 	
-	public function new( g:Renderer, position:Coord2d, size:Coord2d ) :Void {
+	public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
 		this.position = position;
 		this.size = size;
 		id = Runtime.runtime.getNextId();
@@ -36,8 +37,9 @@ class RenderTest {
 	}
 	
 	public function render( g:Renderer ) :Void {
+		g.setTransform( id, new Matrix().setIdentity().setTranslation(
+							position.x, position.y ));
 		g.startObject(id);
-			g.translate( position.x, position.y );
 			try {
 				renderContents(g,size);
 			} catch( e:Dynamic ) {
@@ -54,7 +56,7 @@ class RenderTest {
 		g.endObject();
 	}
 	
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		throw("unimplemented render test: "+this );
 	}
 	
@@ -75,7 +77,7 @@ class ColorStripes extends RenderTest {
 			Color.rgba(0,0,0,1)
 			];
 			
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		var x=0.;
 		var unit=size.x/colors.length;
 		for( c in colors ) {
@@ -87,7 +89,7 @@ class ColorStripes extends RenderTest {
 }
 
 class GrayStripes extends RenderTest {
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		var unit=size.x/8;
 		for( i in 0...8 ) {
 			var c=(i+1)/10;
@@ -98,7 +100,7 @@ class GrayStripes extends RenderTest {
 }
 
 class AlphaStripes extends RenderTest {
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		var unit=size.x/8;
 		for( i in 0...4 ) {
 			var c=1-((i+1)/5);
@@ -114,7 +116,7 @@ class AlphaStripes extends RenderTest {
 }
 
 class ShapeRenderTest extends RenderTest {
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		g.setFill( Color.rgba( 0, 0, 0, 1 ) );
 		g.setStroke( null, 0 );
 		g.rect( 0, 0, size.x, size.y );
@@ -124,12 +126,12 @@ class ShapeRenderTest extends RenderTest {
 		renderShape( g, size );
 	}
 
-	private function renderShape( g:Renderer, size:Coord2d ) :Void {
+	private function renderShape( g:Renderer, size:TPoint ) :Void {
 	}
 }
 
 class Cross extends ShapeRenderTest {
-	private function renderShape( g:Renderer, size:Coord2d ) :Void {
+	private function renderShape( g:Renderer, size:TPoint ) :Void {
 		g.startShape();
 			g.startPath( size.x/4, size.y/2 );
 				g.lineTo( (size.x/4)*3, size.y/2 );
@@ -142,7 +144,7 @@ class Cross extends ShapeRenderTest {
 }
 
 class Quadratic extends ShapeRenderTest {
-	private function renderShape( g:Renderer, size:Coord2d ) :Void {
+	private function renderShape( g:Renderer, size:TPoint ) :Void {
 		g.startShape();
 			g.startPath( size.x/8, size.y/3 );
 			g.quadraticTo( (size.x/2), size.y, (size.x/8)*7, size.y/3 );
@@ -152,7 +154,7 @@ class Quadratic extends ShapeRenderTest {
 }
 
 class Cubic extends ShapeRenderTest {
-	private function renderShape( g:Renderer, size:Coord2d ) :Void {
+	private function renderShape( g:Renderer, size:TPoint ) :Void {
 		g.startShape();
 			g.startPath( size.x/8, size.y/2 );
 			g.cubicTo( size.x/3, 0, (size.x/3)*2, size.y, (size.x/8)*7, size.y/2 );
@@ -162,19 +164,19 @@ class Cubic extends ShapeRenderTest {
 }
 
 class Circle extends ShapeRenderTest {
-	private function renderShape( g:Renderer, size:Coord2d ) :Void {
+	private function renderShape( g:Renderer, size:TPoint ) :Void {
 		g.circle( size.x/2, size.y/2, size.y/4 );
 	}
 }
 
 class Info extends RenderTest {
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		g.setFill( Color.rgba( 0, 0, 0, 1 ) );
 		g.setStroke( null, 0 );
 		g.rect(0,0,size.x,size.y);
 
 		g.setFill( Color.rgba( 1,1,1,1 ) );
-		g.setFont( "_sans", Roman, Normal, size.y/2.5 );
+		//g.setFont( "_sans", Roman, Normal, size.y/2.5 );
 		g.text( 0, size.y/4, "xinferno\n"+xinf.Version.version );
 	}
 }
@@ -184,7 +186,7 @@ class Twist extends RenderTest {
 	var innerId:Int;
 	var g:Renderer;
 	
-	public function new( g:Renderer, position:Coord2d, size:Coord2d ) :Void {
+	public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
 		super( g, position, size );
 		innerId = Runtime.runtime.getNextId();
 		this.g = g;
@@ -205,7 +207,7 @@ class Twist extends RenderTest {
 		Runtime.runtime.changed();
 	}
 	
-	private function renderContents( g:Renderer, size:Coord2d ) :Void {
+	private function renderContents( g:Renderer, size:TPoint ) :Void {
 		g.setFill( Color.rgba( 0, 0, 0, 1 ) );
 		g.rect( 0, 0, size.x, size.y );
 		g.showObject(innerId);
@@ -214,7 +216,7 @@ class Twist extends RenderTest {
 }
 
 class App {
-	public static function renderTestCard( g:Renderer, size:Coord2d ) {
+	public static function renderTestCard( g:Renderer, size:TPoint ) {
 		var rootSize = size;
 		if( size.x>size.y ) {
 			size.x = (size.y/3)*4;
@@ -240,10 +242,17 @@ class App {
 		for( test in tests ) test.render( g );
 
 		var id=Runtime.runtime.getNextId();
+trace("main: "+id );
+		g.startObject(id);
+			for( test in tests ) test.show( g );
+		g.endObject();
+		g.setTransform( id,	new Matrix().setIdentity().setTranslation(
+					((rootSize.x-size.x)/2) + unit.x, 
+					((rootSize.y-size.y)/2) + unit.y )
+					);
 
 		g.startNative(Runtime.runtime.getDefaultRoot());
-			g.translate( ((rootSize.x-size.x)/2) + unit.x, ((rootSize.y-size.y)/2) + unit.y );
-			for( test in tests ) test.show( g );
+			g.showObject(id);
 		g.endNative();
 
 
