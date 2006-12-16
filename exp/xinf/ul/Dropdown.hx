@@ -86,7 +86,7 @@ class Dropdown extends Widget {
         menu.moveTo( p.x, p.y );
         menu.resize( size.x-5, labelHeight*5 );
 		
-		popup = new Popup(menu,Scale);
+		popup = new Popup(this,menu,Scale);
 		isOpen=true;
 		addStyleClass(":open");
 //		button.contained.load("assets/dropdown/open/button.png");

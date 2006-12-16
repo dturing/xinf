@@ -242,7 +242,7 @@ class App {
 		for( test in tests ) test.render( g );
 
 		var id=Runtime.runtime.getNextId();
-trace("main: "+id );
+		
 		g.startObject(id);
 			for( test in tests ) test.show( g );
 		g.endObject();

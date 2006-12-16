@@ -21,8 +21,9 @@ import xinf.erno.Renderer;
 import xinf.event.Event;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
-import xinf.erno.Coord2d;
+import xinf.geom.Types;
 import xinf.erno.Color;
+import xinf.erno.FontStyle;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;
 import xinf.inity.GLRenderer;
@@ -53,7 +54,7 @@ class LineEdit extends Widget {
     }
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
-		if( e.code >= 32 ) {
+		if( e.code >= 32 && e.code < 127 ) {
 			switch( e.code ) {
 				case 127: // Del
 					if( sel.from==sel.to ) {
@@ -96,13 +97,13 @@ class LineEdit extends Widget {
     }
 
 	public function onMouseDown( e:MouseEvent ) :Void {
-		var p:Coord2d = globalToLocal( {x:e.x, y:e.y } );
+		var p = globalToLocal( {x:e.x, y:e.y } );
 		p.x += (xOffset-style.padding.l);
 		moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
 		new Drag<Float>( e, dragSelect, null, e.x );
 	}
     public function dragSelect( x:Float, y:Float, marker:Float ) {
-		var p:Coord2d = globalToLocal( {x:x+marker, y:y } );
+		var p = globalToLocal( {x:x+marker, y:y } );
 		p.x += (xOffset-style.padding.l);
 		moveCursor( findIndex(p), true );
 	}
@@ -155,7 +156,7 @@ class LineEdit extends Widget {
 		return p;
 	}
 
-	public function findIndex( p:Coord2d ) :Int {
+	public function findIndex( p:TPoint ) :Int {
 		if( font==null ) throw("Font unknown as yet");
 		var fontSize:Float = style.get("fontSize",11);
 		
@@ -178,8 +179,6 @@ class LineEdit extends Widget {
 	public function drawContents( g:Renderer ) :Void {
 		//super.drawContents(g);
 		
-		g.translate( position.x, position.y );
-
 		g.setFill(style.background);
 		g.setStroke( null, 0 );
 		g.rect( 0, 0, size.x, size.y );
@@ -241,7 +240,9 @@ class LineEdit extends Widget {
 		
 			// note: this would not work for js/flash, but LineEdit is xinfinity-only anyhow
 			g.clipRect( size.x-2, size.y-2 );
-			g.translate( -(xOffset-style.padding.l), style.padding.t );
+			
+			var xofs=-(xOffset-style.padding.l);
+			var yofs=style.padding.t;
 
 			// draw selection background/caret
 			if( focus ) {
@@ -250,7 +251,7 @@ class LineEdit extends Widget {
 				
 				var x=selStart-1.5; var y=-.5; 
 				var w=selEnd-.5; var h=Math.ceil((font.height*fontSize)+.5)-.5;
-				g.rect( x,y,w-x,h-y );
+				g.rect( xofs+x, xofs+y, w-x,h-y );
 			}
 			
 			
@@ -264,7 +265,7 @@ class LineEdit extends Widget {
 				styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
 			}
 			
-			g.text( 0, 0, text, styles );
+			g.text( xofs, yofs, text, styles );
 			
 	}
 }

@@ -26,11 +26,15 @@ enum PopupMode {
 
 class Popup {
 	var object:Object;
+	var root:Object;
 	
-	public function new( o:Object, ?popupMode:PopupMode ) :Void {
+	public function new( parent:Object, o:Object, ?popupMode:PopupMode ) :Void {
 		object = o;
-		var root = Root.root;
-	
+		root = parent;
+		while( root.parent!=null ) {
+			root=root.parent;
+		}
+		
 		if( popupMode == null ) popupMode = Move;
 		
 		if( o.position.x < 0 ) o.moveTo( 0, o.position.y );
@@ -50,11 +54,10 @@ class Popup {
 						o.resize( o.size.x, root.size.y - (o.position.y+1) );
 			}
 		}
-		
-		Root.root.attach(object);
+		root.attach(object);
 	}
 	
 	public function close() :Void {
-		Root.root.detach(object);
+		root.detach(object);
 	}
 }

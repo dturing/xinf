@@ -29,7 +29,6 @@ class Native extends Object {
 	
 	public function drawContents( g:Renderer ) :Void {
 		if( p!=null ) {
-			g.translate(position.x,position.y);
 			g.native(p);
 		}
 	}

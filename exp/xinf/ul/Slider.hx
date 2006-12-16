@@ -104,12 +104,13 @@ class Slider extends Widget {
 	
 	private function onMouseDown( e:MouseEvent ) {
 		FocusManager.setFocus(this);
-				
+		
 		var y = -(100-(get_normalized()*100));
 		var p = localToGlobal( {x:button.position.x, y:-3+y } );
 		slideBar.moveTo( p.x, p.y ); //position.x+button.position.x, -3+position.y+y );
 		slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
-		popup = new Popup(slideBar,Move);
+		
+		popup = new Popup(this,slideBar,Move);
 		
 		new Drag<Float>( e, sliderMoved, sliderEnd, get_normalized() );
 	}

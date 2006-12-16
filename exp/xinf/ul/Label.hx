@@ -17,6 +17,7 @@ package xinf.ul;
 
 import xinf.style.StyleClassElement;
 import xinf.erno.Renderer;
+import xinf.erno.FontStyle;
 
 /**
     Simple Label element.
@@ -52,22 +53,18 @@ class Label extends StyleClassElement {
 					style.get("fontSize",12) );
 		}
 
-		g.translate(
-			position.x+style.padding.l+style.border.l,
-			position.y+style.padding.t+style.border.t );
-
 		if( style.background != null ) {
 			g.setFill(style.background);
 			g.setStroke( null, 0 );
-			g.rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y );
+			g.rect( 0, 0, size.x, size.y );
 		}
 		if( style.border.l > 0 ) {
 			g.setFill(null);
 			g.setStroke(style.color,style.border.l);
-			g.rect( -(style.padding.l+style.border.l), style.padding.t+style.border.t, size.x, size.y );
+			g.rect( 0, 0, size.x, size.y );
 		}
 		
 		g.setFill(style.color);
-		g.text(0,0,text);
+		g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
 	}
 }

@@ -16,7 +16,6 @@
 package xinf.ul;
 
 import xinf.erno.Renderer;
-import xinf.erno.Coord2d;
 import xinf.style.StyleClassElement;
 
 /**
@@ -40,7 +39,6 @@ class Pane extends StyleClassElement {
     }
 		
 	public function drawContents( g:Renderer ) :Void {
-		g.translate( position.x, position.y );
 		if( crop )
 			g.clipRect( size.x-2, size.y-2 );
 			

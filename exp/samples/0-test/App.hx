@@ -33,6 +33,7 @@ class App extends Application {
 		container.moveTo( 100, 100 );
 		root.attach(container);
 
+
 		var model = new SimpleListModel();
         for( i in 0...25 ) {
             model.addItem("Item "+i);
@@ -40,10 +41,10 @@ class App extends Application {
 		
 		var dropdown = new Dropdown(model);
 		container.attach(dropdown);
-				
+
 		var slider = new Slider();
 		container.attach(slider);
-
+		
 		var edit = new LineEdit();
 		edit.text = "Edit me!";
 		container.attach(edit);
