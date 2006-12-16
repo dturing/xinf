@@ -8,7 +8,7 @@ default:
 
 
 PROJECT:=xinf
-VERSION:=0.0.0
+VERSION:=0.0.1
 TAGLINE:=
 TEST_SAMPLE:=samples/0-test
 
