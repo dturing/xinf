@@ -103,7 +103,7 @@ class Object extends SimpleEventDispatcher {
 			}
 			
 		g.endObject();
-//		reTransform(g);
+		reTransform(g);
 	}
 	
 	public function drawContents( g:Renderer ) :Void {

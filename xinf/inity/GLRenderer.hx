@@ -167,13 +167,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		
 		if( pen.fillColor != null ) {
 			GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-			GL.begin( GL.QUADS );
-				GL.vertex3( x, y, 0. );
-				GL.vertex3( x+w, y, 0. );
-				GL.vertex3( x+w, y+h, 0. );
-				GL.vertex3( x, y+h, 0. );
-				GL.vertex3( x, y, 0. );
-			GL.end();
+			GL.rect( x, y, x+w, y+h );
 		}
 		if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
 			GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
@@ -185,6 +179,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 				GL.vertex3( x, y+h, 0. );
 				GL.vertex3( x, y, 0. );
 			GL.end();
+			/*
 			GL.pointSize( pen.strokeWidth );
 			GL.begin( GL.POINTS );
 				GL.vertex3( x, y, 0. );
@@ -193,6 +188,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 				GL.vertex3( x, y+h, 0. );
 				GL.vertex3( x, y, 0. );
 			GL.end();
+			*/
 		}
 	}
 	public function circle( x:Float, y:Float, r:Float ) {
