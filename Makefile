@@ -27,6 +27,20 @@ $(VERSION_STUB):support/$(notdir $(VERSION_STUB)).in FORCE
 		-e "s/__DATE__/$(DATE)/" \
 		$< > $@
 
+# make docs
+XINF_SOURCES:=$(wildcard $(PROJECT)/*.hx $(PROJECT)/*/*.hx $(PROJECT)/*/*/*.hx)
+DOC_DIR:=doc
+
+.PHONY: doc
+$(DOC_DIR)/doc.n.xml : $(XINF_SOURCES)
+	cd $(DOC_DIR); haxe --auto-xml \
+		-lib opengl -lib cptr -lib fonttools -neko doc.n -cp ../ xinf.ImportAll \
+#		--next -js doc.js -cp ../ xinf.ImportAll \
+#		--next -swf-version 9 -swf doc.swf -cp ../ xinf.ImportAll
+	
+doc : $(DOC_DIR)/doc.n.xml
+	cd $(DOC_DIR); haxedoc doc.n.xml -f xinf -f ony
+
 
 # package resources
 

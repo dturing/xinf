@@ -88,12 +88,12 @@ class Color {
         return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
     }
 
-    /** Returns a CSS-like string describing the color, in the form "rgb(<r>,<g>,<b>)". Values will be between 0 and 255.  **/
+    /** Returns a CSS-like string describing the color, in the form "rgb(r,g,b)". Values will be between 0 and 255.  **/
     public function toRGBString() : String {
         return("rgb("+Math.round(r*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")");
     }
 
-    /** Returns a CSS-like hexadecimal string describing the color, in the form "#<r><g><b>)". Values will be between 0 and 255.  **/
+    /** Returns a CSS-like hexadecimal string describing the color, in the form "#rrggbb". Values will be between 0 and 255.  **/
     public function toHexString() : String {
         return("#"+intToString(Math.round(r*0xff),16,2)
 				+intToString(Math.round(g*0xff),16,2)

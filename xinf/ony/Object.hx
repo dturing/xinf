@@ -21,6 +21,21 @@ import xinf.geom.Matrix;
 import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
 
+/**
+	A xinf.ony.Object is a basic Element in the xinfony display
+	hierarchy.
+	<p>
+		An Object has a position and size that you can set with [moveTo()] and [resize()], 
+		or query at [position] and [size]. It also maintains a list of children
+		that you can manipulate with [attach()] and [detach()].
+	</p>
+	<p>
+		You will often (maybe indirectly) derive from Object, and override the [drawContents()]
+		method to draw something. Beware that you need to [destroy()] your Object's to free
+		associated resources.
+	</p>
+**/
+
 class Object extends SimpleEventDispatcher {
 	private static var _manager:Manager;
 	public static var manager(getManager,null):Manager;
@@ -32,14 +47,33 @@ class Object extends SimpleEventDispatcher {
 	}
 
 
-	public var _id:Int;
-	private var children:Array<Object>;
-	public var parent:Object;
+	/** Unique (to the runtime environment) ID of this object. Will be set in the constructor. **/
+	public var _id(default,null):Int;
 	
-	private var transform:Matrix;
+	/** Other Object that contains this Object, if any. **/
+	public var parent(default,null):Object;
+	
+	/** Current position of this Object in parent's coordinates.
+		Set with moveTo(). **/
 	public var position(default,null):{x:Float,y:Float};
-	public var size(default,null):{x:Float,y:Float};
 	
+	/** The Objects' size, in local's coordinates. 
+		Set with resize().
+		On XinfInity, the object's size defines it's area that is active
+		to MOUSE_DOWN events. Other objects might use the size for
+		layout or drawing. Size is here because it's convenient,
+		it has no direct impact on Object's behaviour.
+	**/
+	public var size(default,null):{x:Float,y:Float};
+
+	private var transform:Matrix;
+	private var children:Array<Object>;
+	
+
+	/** Object constructor.<br/>
+		A simple Object will not display anything by itself,
+		but can be used as a container object to group other Objects.
+	**/
 	public function new() :Void {
 		super();
 		
@@ -52,13 +86,27 @@ class Object extends SimpleEventDispatcher {
 		children = new Array<Object>();
 		
 		scheduleRedraw();
-//		scheduleTransform();
 	}
 	
+	/** Object destructor.<br/>
+		You must call this function if you want to get rid of this object and free
+		all associated memory. (Yes, is garbage-collected, but we need some
+		trigger to free all associated objects in the runtime. This is it.)
+	**/
 	public function destroy() :Void {
+		// FIXME: we dont actually need the Manager's allObject list so much,
+		// but what about deleting our associated Sprite/Div/GLObject?
+		// also: detach from parent
 		manager.unregister(_id);
 	}
 	
+	/** attach (add) a child Object.<br/>
+		Add 'child' to this object's list of children, inserts
+		the child into the display hierarchy, similar to addChild in Flash 
+		or appendChild in JavaScript/DOM.
+		The new child will be added at the end of the list, so it will appear
+		in front of all current children.
+	**/
 	public function attach( child:Object ) :Void {
 		children.push( child );
 		child.parent = this;
@@ -67,10 +115,8 @@ class Object extends SimpleEventDispatcher {
 		scheduleRedraw();
 	}
 
-	public function attachMany( c:Array<Object> ) :Void {
-		children = children.concat( c );
-	}
-
+	/** detach (remove) a child Object<br/>
+		Removes 'child' from this object's list of children. **/
 	public function detach( child:Object ) :Void {
 		children.remove( child );
 		child.parent = null;
@@ -88,7 +134,6 @@ class Object extends SimpleEventDispatcher {
 	}
 
 	public function reTransform( g:Renderer ) :Void {
-//	trace("retransform: "+this+" - "+position );
 		transform.setTranslation( position.x, position.y );
 		g.setTransform( _id, transform );
 	}

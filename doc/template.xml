@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>Xinf API Documentation</title>
+
+<script type="text/javascript">
+<!--
+	function toggle(id) {
+		var e = document.getElementById(id);
+		e.isopen = !e.isopen;
+		e.style.display = e.isopen?"block":"none";
+		return false;
+	}
+-->
+</script>
+
+<style type="text/css">
+body {
+	font-family: sans-serif;
+}
+
+.document {
+	margin : 10px auto 5px auto;
+}
+
+.title {
+	font-size: 15;
+	font-weight: bold;
+}
+
+ul.entry {
+	list-style-type: square;
+	font-weight : bold;
+	margin-left : 5px;
+	padding-left : 15px;
+}
+
+li {
+	margin-left : 0px;
+	padding-left : 0px;
+}
+
+.package_content {
+	display : none;
+}
+
+a {
+	color : #090;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a:hover {
+	color : #090;
+	text-decoration : underline;
+}
+
+a.package {
+	color : black;
+}
+
+.index {
+	margin-left : 10px;
+}
+
+.kwd {
+	color : #090;
+}
+
+.classname {
+	font-size : 30;
+	font-weight : bold;
+	margin-left : 10px;
+	margin-bottom : 20px;
+	margin-top : 10px;
+}
+
+.classdoc {
+	margin-top : 10px;
+	margin-left : 20px;
+	margin-right : 20px;
+}
+
+.importmod, .extends, .implements, .typedef, .platforms {
+	margin-left: 20px;
+	color : #777;
+}
+
+dd {
+	margin : 0 20 20 40;
+	font-size : 12pt;
+	color : #444;
+}
+
+dt {
+	margin-left : 10px;
+	margin-bottom : 5px;
+	text-align : left;
+	font-size : 10pt;
+	font-family: monospace;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="document">
+<div class="title">Xinf API Documentation</div>
+
+<data/>
+
+</div>
+
+</body>
+</html>
