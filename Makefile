@@ -71,6 +71,7 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 	# copy haXe API and Samples
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 	svn export samples $(HAXELIB_PROJECT)/samples
+	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
 	
 	# build the "0-test" sample for haxelib run
 	cd $(TEST_SAMPLE); haxe -cp ../../ -lib cptr -lib opengl -lib fonttools -main App -neko run.n;
