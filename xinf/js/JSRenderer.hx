@@ -50,15 +50,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 		}
 	}
 	
-	public function transform( matrix:Matrix ) {
+	public function setTransform( id:Int, matrix:Matrix ) {
 		// FIXME (maybe): regards only translation
+		var current = lookup(id);
 		current.style.left = ""+Math.round(matrix.m02);
 		current.style.top = ""+Math.round(matrix.m12);
-	}
-	public function translate( x:Float, y:Float ) {
-//		if( current.style.left != null ) throw("JS cannot translate more than once in an Object.");
-		current.style.left = ""+Math.round(x);
-		current.style.top = ""+Math.round(y);
 	}
 	public function clipRect( w:Float, h:Float ) {
 		current.style.overflow = "hidden";

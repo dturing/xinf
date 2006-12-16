@@ -17,12 +17,8 @@ package xinf.inity;
 
 import xinf.geom.Types;
 import xinf.geom.Rectangle;
-import xinf.geom.Matrix;
+import xinf.geom.Transform;
 import opengl.GL;
-
-typedef Transform = Matrix // might be extended with more lightweight Translation/TransScale
-							// might be good to do a IdentityTransform that just returns on apply,
-							//  and get rid of the if(transform==null) checks below.
 
 class GLObject {
 	// TODO: maybe we can avoid caching some of this?
@@ -38,7 +34,7 @@ class GLObject {
 	
 	public function new( id:Int ) :Void {
 		this.id = id;
-		this.transform = new Matrix().setIdentity();
+		this.transform = new Transform().setIdentity();
 		this.boundingBox = null;
 		this.inner = GL.genLists(1);
 	}
@@ -46,6 +42,7 @@ class GLObject {
 	public function setTransform( transform:Transform ) :Void {
 		this.transform = transform;
 		transformedBBox = null;
+		redoTransform();
 	}
 	
 	public function redoTransform() :Void {
@@ -55,6 +52,7 @@ class GLObject {
 		
 			if( transform!=null )
 				GL.multMatrixf( GLRenderer.matrixForGL(transform) );
+				
 			GL.callList( inner );
 			
 		GL.popAttrib();

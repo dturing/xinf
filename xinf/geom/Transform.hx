@@ -13,28 +13,18 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.geom;
 
-import xinf.erno.Renderer;
-import xinf.erno.Color;
-import xinf.erno.FontStyle;
+import xinf.geom.Types;
 
-class Text extends Object {
-	public var color:Color;
-	public var text:String;
+// might be extended with more lightweight Translation/TransScale
+	// might be good to do a IdentityTransform that just returns on apply,
+	//  and get rid of the if(transform==null) checks below.
 
-	public function new( ?text:String, ?color:Color ) :Void {
-		if( color==null ) color = Color.BLACK;
-		this.color=color;
-		this.text=text;
-		super();
-	}
-	
-	public function drawContents( g:Renderer ) :Void {
-		if( text!=null ) {
-			g.setFill(color);
-			g.setFont( "_sans", Roman, Normal, 12 );
-			g.text(0,0,text);
-		}
-	}
+typedef Transform = Matrix
+/*{
+	apply:TPoint->TPoint,
+	applyInverse:TPoint->TPoint,
+	tx:Int,	ty:Int // for speedy access if translation is the only interesting thing.
 }
+*/

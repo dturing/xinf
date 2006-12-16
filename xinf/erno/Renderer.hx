@@ -16,7 +16,7 @@
 package xinf.erno;
 
 import xinf.geom.Types;
-import xinf.geom.Matrix;
+import xinf.geom.Transform;
 import xinf.erno.FontStyle;
 
 
@@ -28,9 +28,6 @@ import xinf.erno.FontStyle;
 	typedef NativeObject = js.HtmlDom
 	typedef NativeContainer = js.HtmlDom
 #else true
-	//FIXME
-	import xinf.inity.GLRenderer;
-	
 	typedef NativeObject = xinf.inity.GLObject
 	typedef NativeContainer = xinf.inity.GLObject
 #end
@@ -46,10 +43,7 @@ interface Renderer {
 	function endObject() :Void;
 	function showObject( id:Int ) :Void;
 
-	function translate( x:Float, y:Float ) :Void;
-	function scale( x:Float, y:Float ) :Void;
-	function rotate( angle:Float ) :Void;
-	function transform( matrix:Matrix ) :Void;
+	function setTransform( id:Int, transform:Transform ) :Void;
 	function clipRect( w:Float, h:Float ) :Void;
 
 	function setFill( c:Color ) :Void;

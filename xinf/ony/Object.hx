@@ -52,6 +52,7 @@ class Object extends SimpleEventDispatcher {
 		children = new Array<Object>();
 		
 		scheduleRedraw();
+//		scheduleTransform();
 	}
 	
 	public function destroy() :Void {
@@ -78,7 +79,7 @@ class Object extends SimpleEventDispatcher {
 
 	public function moveTo( x:Float, y:Float ) :Void {
 		position = { x:x, y:y };
-		scheduleRedraw();
+		scheduleTransform();
 	}
 
 	public function resize( x:Float, y:Float ) :Void {
@@ -86,13 +87,14 @@ class Object extends SimpleEventDispatcher {
 		scheduleRedraw();
 	}
 
+	public function reTransform( g:Renderer ) :Void {
+//	trace("retransform: "+this+" - "+position );
+		transform.setTranslation( position.x, position.y );
+		g.setTransform( _id, transform );
+	}
+	
 	public function draw( g:Renderer ) :Void {
 		g.startObject( _id );
-			
-			// FIXME
-			transform.setTranslation( position.x, position.y );
-			g.transform( transform );
-			
 			drawContents(g);
 			
 			// draw children
@@ -101,6 +103,7 @@ class Object extends SimpleEventDispatcher {
 			}
 			
 		g.endObject();
+//		reTransform(g);
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
@@ -108,6 +111,9 @@ class Object extends SimpleEventDispatcher {
 	
 	public function scheduleRedraw() :Void {
 		manager.objectChanged( _id, this );
+	}
+	public function scheduleTransform() :Void {
+		manager.objectMoved( _id, this );
 	}
 	
 	public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {

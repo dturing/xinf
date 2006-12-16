@@ -42,16 +42,7 @@ class BasicRenderer implements Renderer {
 		throw("unimplemented");
 	}
 
-	public function translate( x:Float, y:Float ) {
-		throw("unimplemented");
-	}
-	public function scale( x:Float, y:Float ) {
-		throw("unimplemented");
-	}
-	public function rotate( angle:Float ) {
-		throw("unimplemented");
-	}
-	public function transform( matrix:Matrix ) {
+	public function setTransform( id:Int, transform:Matrix ) {
 		throw("unimplemented");
 	}
 	public function clipRect( w:Float, h:Float ) {

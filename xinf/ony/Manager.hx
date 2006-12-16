@@ -24,10 +24,12 @@ import xinf.event.ScrollEvent;
 class Manager {
 	private var objects:IntHash<Object>;
 	private var changed:IntHash<Object>;
+	private var moved:IntHash<Object>;
 
 	public function new() :Void {
 		objects = new IntHash<Object>();
 		changed = new IntHash<Object>();
+		moved   = new IntHash<Object>();
 
 		// redraw changed objects each frame
 		Runtime.addEventListener( FrameEvent.ENTER_FRAME,
@@ -58,17 +60,29 @@ class Manager {
 	public function objectChanged( id:Int, o:Object ) :Void {
 		changed.set(id,o);
 	}
-	
+
+	public function objectMoved( id:Int, o:Object ) :Void {
+		moved.set(id,o);
+	}
+
 	public function redrawChanged( e:FrameEvent ) :Void {
+		var somethingChanged:Bool = false;
+		var g:Renderer = Runtime.renderer;
+		
 		var ch = changed;
 		changed = new IntHash<Object>();
-		var somethingChanged:Bool = false;
-		
-		var g:Renderer = Runtime.renderer;
 		for( id in ch.keys() ) {
 			ch.get(id).draw( g );
 			somethingChanged = true;
 		}
+
+		var ch = moved;
+		moved = new IntHash<Object>();
+		for( id in ch.keys() ) {
+			ch.get(id).reTransform( g );
+			somethingChanged = true;
+		}
+
 		if( somethingChanged ) Runtime.runtime.changed();
 	}
 	

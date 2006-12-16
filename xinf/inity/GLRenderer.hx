@@ -104,20 +104,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 	}
 
 
-	public function translate( x:Float, y:Float ) {
-		//GL.translate( x, y, 0. );
-		current.transform.setTranslation(x,y);
-	}
-	public function scale( x:Float, y:Float ) {
-		//GL.scale( x, y, 1. );
-		current.transform.setScale(x,y);
-	}
-	public function rotate( angle:Float ) {
-		//GL.rotate( angle, 0., 0., 1. );
-		current.transform.setRotation(angle);
-	}
-	public function transform( matrix:Matrix ) {
-		//GL.multMatrixf( matrixForGL(matrix) );
+	public function setTransform( id:Int, matrix:Matrix ) {
+		var current = lookup(id);
 		current.setTransform( matrix );
 	}
 	public function clipRect( w:Float, h:Float ) {

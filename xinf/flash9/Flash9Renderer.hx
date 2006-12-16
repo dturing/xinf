@@ -20,7 +20,7 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
-import xinf.geom.Matrix;
+import xinf.geom.Transform;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
@@ -62,10 +62,11 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	public function rotate( angle:Float ) {
 		throw("unimplemented");
 	}
-	public function transform( matrix:Matrix ) {
+	public function setTransform( id:Int, t:Transform ) {
+		var current = lookup(id);
 		// FIXME: this is only translation
-		current.x = matrix.m02;
-		current.y = matrix.m12;
+		current.x = t.m02;
+		current.y = t.m12;
 	}
 	public function clipRect( w:Float, h:Float ) {
 		var crop = new Sprite();
