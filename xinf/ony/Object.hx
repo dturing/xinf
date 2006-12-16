@@ -38,8 +38,8 @@ import xinf.event.SimpleEventDispatcher;
 
 class Object extends SimpleEventDispatcher {
 	private static var _manager:Manager;
-	public static var manager(getManager,null):Manager;
-	public static function getManager() :Manager {
+	private static var manager(getManager,null):Manager;
+	private static function getManager() :Manager {
 		if( _manager == null ) {
 			_manager = new Manager();
 		}
@@ -53,12 +53,12 @@ class Object extends SimpleEventDispatcher {
 	/** Other Object that contains this Object, if any. **/
 	public var parent(default,null):Object;
 	
-	/** Current position of this Object in parent's coordinates.
-		Set with moveTo(). **/
+	/** Current position of this Object in parent's coordinates<br/>
+		Set with [moveTo()]. **/
 	public var position(default,null):{x:Float,y:Float};
 	
-	/** The Objects' size, in local's coordinates. 
-		Set with resize().
+	/** The Objects' size, in local's coordinates<br/>
+		Set with [resize()].
 		On XinfInity, the object's size defines it's area that is active
 		to MOUSE_DOWN events. Other objects might use the size for
 		layout or drawing. Size is here because it's convenient,
@@ -70,7 +70,7 @@ class Object extends SimpleEventDispatcher {
 	private var children:Array<Object>;
 	
 
-	/** Object constructor.<br/>
+	/** Object constructor<br/>
 		A simple Object will not display anything by itself,
 		but can be used as a container object to group other Objects.
 	**/
@@ -88,7 +88,7 @@ class Object extends SimpleEventDispatcher {
 		scheduleRedraw();
 	}
 	
-	/** Object destructor.<br/>
+	/** Object destructor<br/>
 		You must call this function if you want to get rid of this object and free
 		all associated memory. (Yes, is garbage-collected, but we need some
 		trigger to free all associated objects in the runtime. This is it.)
@@ -100,7 +100,7 @@ class Object extends SimpleEventDispatcher {
 		manager.unregister(_id);
 	}
 	
-	/** attach (add) a child Object.<br/>
+	/** attach (add) a child Object<br/>
 		Add 'child' to this object's list of children, inserts
 		the child into the display hierarchy, similar to addChild in Flash 
 		or appendChild in JavaScript/DOM.
@@ -123,21 +123,35 @@ class Object extends SimpleEventDispatcher {
 		scheduleRedraw();
 	}
 
+	/** move this Object to a new 2D position<br/>
+		Schedules a [reTransform()]. Moving Objects should be pretty
+		efficient on all runtimes. **/
 	public function moveTo( x:Float, y:Float ) :Void {
 		position = { x:x, y:y };
 		scheduleTransform();
 	}
 
+	/** resize this Object<br/>
+		Sets new [size] and schedules a re-[draw()] of the Object.
+		**/
 	public function resize( x:Float, y:Float ) :Void {
 		size = { x:x, y:y };
 		scheduleRedraw();
 	}
 
+	/** apply new transformation (position/size)<br/>
+		This is an internal function, you should usually not care about it.
+		**/
 	public function reTransform( g:Renderer ) :Void {
 		transform.setTranslation( position.x, position.y );
 		g.setTransform( _id, transform );
 	}
 	
+	/** draw the Object to the given [Renderer]<br/>
+		You should usually neither call nor override this function,
+		instead, schedule a redraw with [scheduleRedraw()] and 
+		override [drawContents()] to draw stuff.
+		**/
 	public function draw( g:Renderer ) :Void {
 		g.startObject( _id );
 			drawContents(g);
@@ -151,16 +165,36 @@ class Object extends SimpleEventDispatcher {
 		reTransform(g);
 	}
 	
+	/** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
+		You can override this method, and use the [Renderer]'s functions to draw things.
+		Everything you do will be in the Object's local coordinate space.
+		The default implementation does nothing, so it is safe to not call super.drawContents()
+		(unless you are deriving from Object indirectly via some other Class that requires
+		you to call it).
+		**/
 	public function drawContents( g:Renderer ) :Void {
 	}
-	
+
+	/** schedule this Object for redrawing<br/>
+		The Object will (on JavaScript: <i>should</i>) be redrawn before the next frame is shown to the user.
+		Call this function whenever your Object needs to redraw itself because it's (immediate) content changed
+		- there's no need to call it if anything changes about it's children. 
+	**/
 	public function scheduleRedraw() :Void {
 		manager.objectChanged( _id, this );
 	}
+	/**	schedule this Object for redefining it's transformation<br/>
+		You should usually not need to call this yourself, the Object will be automatically scheduled
+		when you modify it's transformation (currently, the only way to do this is [moveTo()].
+	**/
 	public function scheduleTransform() :Void {
 		manager.objectMoved( _id, this );
 	}
-	
+
+	/** convert the given point from global to local coordinates<br/>
+		FIXME: this function is currently implemented half-heartedly, and will
+		only work for translation.
+	**/
 	public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
 		var q = { x:p.x, y:p.y };
 		if( parent!=null ) q = parent.globalToLocal(q);
@@ -168,6 +202,10 @@ class Object extends SimpleEventDispatcher {
 		q.y-=position.y;
 		return q;
 	}
+	/** convert the given point from local to global coordinates<br/>
+		FIXME: this function is currently implemented half-heartedly, and will
+		only work for translation.
+	**/
 	public function localToGlobal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
 		var q = { x:p.x, y:p.y };
 		q.x+=position.x;
@@ -175,7 +213,12 @@ class Object extends SimpleEventDispatcher {
 		if( parent!=null ) q = parent.localToGlobal(q);
 		return q;
 	}
-
+	
+	
+	/** dispatch the given Event<br/>
+		tries to dispatch the given Event to any registered listeners.
+		If no handler is found, 'bubble' the Event - i.e., pass it up to our parent.
+	**/
 	public function dispatchEvent<T>( e : Event<T> ) :Void {
 		var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
 		var dispatched:Bool = false;
