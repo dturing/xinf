@@ -24,8 +24,10 @@ class ImageData extends SimpleEventDispatcher {
 		public var texture:Int;
 		public var twidth:Int;
 		public var theight:Int;
-	#else err
-		// js will use URL, flash dunno yet (asset id? movieclip to clone?)
+	#else js
+		public var url:String;
+	#else flash9
+		public var bitmap:flash.display.Bitmap;
 	#end
 
     public var width(default,null):Int; // maybe not public?
@@ -39,5 +41,23 @@ class ImageData extends SimpleEventDispatcher {
 	}
 	private function loaded( ?data:Dynamic, ?pos:haxe.PosInfos ) :Void {
 		postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ), pos );
+	}
+	
+	public static function load( url:String ) :ImageData {
+	trace("should load: "+url );
+		#if neko
+			throw("no images in xinferno yet");
+			return null;
+		#else js
+			return( new xinf.js.JSImageData(url) );
+		#else flash
+			if( StringTools.startsWith( url, "asset://" ) ) {
+				throw("Cannot load images from assets yet.");
+			} else {
+				return( new xinf.flash9.ExternalImageData(url) );
+			}
+			return null;
+		#else err
+		#end
 	}
 }

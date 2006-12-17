@@ -13,29 +13,36 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
-
+import xinf.event.FrameEvent;
+import xinf.event.GeometryEvent;
 import xinf.erno.Renderer;
 import xinf.erno.ImageData;
-import xinf.event.ImageLoadEvent;
+import xinf.ony.Application;
+import xinf.ony.Object;
+import xinf.ony.Image;
 
-class Image extends Object {
-	private var img:ImageData;
+class App extends Application {
+	private static var block:Object;
 
-	public function new( i:ImageData ) :Void {
+	public function new() :Void {
 		super();
-		img = i;
-		img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-		img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-		img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+
+		try {
+			var i:ImageData = ImageData.load("http://xinf.org/img/xinf.gif");
+			
+			block = new Image(i);
+			block.moveTo( 100, 100 );
+			root.attach( block );
+		} catch(e:Dynamic) {
+			trace("Exception: "+e );
+		}
 	}
-	
-	private function dataChanged( e:ImageLoadEvent ) :Void {
-		scheduleRedraw();
-	}
-	
-	public function drawContents( g:Renderer ) :Void {
-		if( img==null ) return;
-		g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} );
+
+	public static function main() :Void {
+		try {
+			new App().run();
+		} catch(e:Dynamic) {
+			trace("Exception: "+e+": "+haxe.Stack.toString(haxe.Stack.exceptionStack()) );
+		}
 	}
 }

@@ -139,7 +139,8 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	}
 	
 	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
-		throw("unimplemented");
+		if( img.bitmap != null )
+			current.addChild( img.bitmap );
 	}
 
 	public function native( o:NativeObject ) {

@@ -166,7 +166,7 @@ class Object extends SimpleEventDispatcher {
 	}
 	
 	/** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
-		You can override this method, and use the [Renderer]'s functions to draw things.
+		You can override this method, and call the [Renderer]'s methods to draw things.
 		Everything you do will be in the Object's local coordinate space.
 		The default implementation does nothing, so it is safe to not call super.drawContents()
 		(unless you are deriving from Object indirectly via some other Class that requires

@@ -1,0 +1,11 @@
+-cp ../../
+-main App
+-D htmltrace
+-swf-version 9
+-swf-header 320:240:25:000000
+-swf App.swf
+
+--next
+-cp ../../
+-main App
+-js App.js

@@ -13,29 +13,27 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.flash9;
 
-import xinf.erno.Renderer;
 import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
+import flash.display.Loader;
+import flash.display.Bitmap;
+import flash.events.Event;
+import flash.net.URLRequest;
 
-class Image extends Object {
-	private var img:ImageData;
-
-	public function new( i:ImageData ) :Void {
+class ExternalImageData extends ImageData {
+	private var loader:Loader;
+	
+	public function new( url:String ) :Void {
 		super();
-		img = i;
-		img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-		img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-		img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+		loader = new Loader();
+		loader.load( new URLRequest(url) );
+		loader.contentLoaderInfo.addEventListener( Event.COMPLETE, img_loaded );
 	}
 	
-	private function dataChanged( e:ImageLoadEvent ) :Void {
-		scheduleRedraw();
-	}
-	
-	public function drawContents( g:Renderer ) :Void {
-		if( img==null ) return;
-		g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} );
+	private function img_loaded( e:flash.events.Event ) :Void {
+		bitmap = cast(loader.content,Bitmap);
+		postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ) );
 	}
 }

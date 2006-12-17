@@ -27,6 +27,13 @@ class Flash9Runtime extends SimpleRuntime {
 	public function new() :Void {
 		super();
 		_eventSource = new Flash9EventSource(this);
+		
+		#if htmltrace
+			// setup trace to javascript
+			haxe.Log.trace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
+				flash.external.ExternalInterface.call("trace",v,pos);
+			}
+		#end
 	}
 	override public function getDefaultRoot() :NativeContainer {
 		if( defaultRoot==null ) {

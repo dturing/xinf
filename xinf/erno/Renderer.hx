@@ -33,12 +33,17 @@ import xinf.erno.FontStyle;
 #end
 
 
-
+/**
+	A xinferno Renderer describes the drawing protocol used within all of xinf.
+	<p>
+		You will likely be confronted with it mostly when overriding [xinf.ony.Object.drawContents()],
+		where you will be given a Renderer to use for drawing your stuff. In that case, the 
+		Renderer will already be set to the right context, and you shouldn't use the [*Object()] or 
+		[setTransform()] methods. Instead, you can start right away with setting color and font,
+		defining shapes, or drawing primitives.
+	</p>
+**/
 interface Renderer {
-	// erno Instruction protocol
-	function startNative( o:NativeContainer ) :Void;
-	function endNative() :Void;
-
 	function startObject( id:Int ) :Void;
 	function endObject() :Void;
 	function showObject( id:Int ) :Void;
@@ -64,18 +69,8 @@ interface Renderer {
 	function text( x:Float, y:Float, text:String, ?style:FontStyle ) :Void;
 	function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void;
 	
+	function startNative( o:NativeContainer ) :Void;
+	function endNative() :Void;
+	
 	function native( o:NativeObject ) :Void;
-	
-	
-/* old enum-based interface (just for reference)
-	public function draw( i:DrawingInstruction ) :Void {
-	//	trace("unimplemented drawing instruction "+i);
-	}
-	
-	public function drawList( instructions:Iterator<DrawingInstruction> ) :Void {
-		for( i in instructions ) {
-			draw( i );
-		}
-	}
-*/
 }

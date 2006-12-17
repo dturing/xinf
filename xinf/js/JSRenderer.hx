@@ -96,7 +96,9 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 	}
 	
 	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
-		throw("unimplemented");
+		var r:Image = cast(js.Lib.document.createElement("img"));
+		r.src = img.url;
+		current.appendChild(r);
 	}
 	
 	public function native( o:NativeObject ) {
