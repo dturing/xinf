@@ -111,7 +111,7 @@ class Color {
 	}
 
 	/** creates a new Color object from the given values for red, green and blue. alpha will be 1 (opaque) **/
-	public static function rgba(r:Float,g:Float,b:Float) :Color {
+	public static function rgb(r:Float,g:Float,b:Float) :Color {
 		return new Color().fromRGBA(r,g,b,1.0);
 	}
 
