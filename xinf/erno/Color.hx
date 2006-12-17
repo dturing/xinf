@@ -55,9 +55,10 @@ class Color {
         0.0 is transparent, 1.0 opaque. **/
     public var a:Float;
 
-    /** Constructor. Initializes to (0,0,0,0). **/
+    /** Constructor. Initializes to (.5,.5,.5,.5). **/
     public function new() {
-        r = g = b = a = .0;
+        r = b = 0.0;
+		g = a = 1.0;
     }
     
     /** Sets the R, G and B components from an integer (like 0x00ff00 for green) **/
@@ -104,10 +105,16 @@ class Color {
         return("("+r+","+g+","+b+","+a+")");
     }
 	
+	/** creates a new Color object from the given values for red, green, blue and alpha **/
 	public static function rgba(r:Float,g:Float,b:Float,a:Float) :Color {
 		return new Color().fromRGBA(r,g,b,a);
 	}
-	
+
+	/** creates a new Color object from the given values for red, green and blue. alpha will be 1 (opaque) **/
+	public static function rgba(r:Float,g:Float,b:Float) :Color {
+		return new Color().fromRGBA(r,g,b,1.0);
+	}
+
 	public static var BLACK:Color = new Color().fromRGBInt(0);
 	public static var WHITE:Color = new Color().fromRGBInt(0xffffff);
 	public static var RED:Color = new Color().fromRGBInt(0xff0000);
