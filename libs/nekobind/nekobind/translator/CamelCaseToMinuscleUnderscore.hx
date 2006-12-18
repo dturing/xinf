@@ -27,13 +27,18 @@ class CamelCaseToMinuscleUnderscore extends Translator {
     public function translate( src:String ) :String {
         var dst = new StringBuf();
         var l = src.toLowerCase();
+        var lastWasCapital:Bool = false;
         for( i in 0...src.length ) {
             var c = src.charAt(i);
             if( l.charAt(i) != c ) {
-                dst.add("_");
+                if( !lastWasCapital )
+                    dst.add("_");
                 dst.add( l.charAt(i) );
-            } else
+                lastWasCapital=true;
+            } else {
                 dst.add(c);
+                lastWasCapital=false;
+            }
         }
         return dst.toString();
     }
