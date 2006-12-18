@@ -20,6 +20,7 @@ package xinf.event;
 	in position or size of some Element.
 **/
 class GeometryEvent extends Event<GeometryEvent> {
+	
 	static public var STAGE_SCALED     = new EventKind<GeometryEvent>("stageScaled");
 	
 	public var x:Float; // x coordinate of position or width
@@ -33,4 +34,5 @@ class GeometryEvent extends Event<GeometryEvent> {
 	public function toString() :String {
 		return( ""+type+"("+x+","+y+")" );
 	}
+	
 }

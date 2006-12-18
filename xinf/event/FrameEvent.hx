@@ -20,6 +20,7 @@ import xinf.event.Event;
 import xinf.event.EventDispatcher;
 
 class FrameEvent extends Event<FrameEvent> {
+	
 	static public var ENTER_FRAME = new EventKind<FrameEvent>("enterFrame");
 
 	public var frame:Int;
@@ -28,4 +29,5 @@ class FrameEvent extends Event<FrameEvent> {
 		super(_type);
 		this.frame = frame;
 	}
+	
 }

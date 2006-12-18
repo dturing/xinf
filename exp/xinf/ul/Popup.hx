@@ -25,6 +25,7 @@ enum PopupMode {
 }
 
 class Popup {
+	
 	var object:Object;
 	var root:Object;
 	
@@ -60,4 +61,5 @@ class Popup {
 	public function close() :Void {
 		root.detach(object);
 	}
+	
 }

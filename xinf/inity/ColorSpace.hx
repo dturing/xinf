@@ -25,6 +25,7 @@ enum ColorSpace {
 }
 
 class ColorSpaceTools {
+	
 	public static function defaultBytesPerRow( cs:ColorSpace, width:Int ) :Int {
 		return
 			switch( cs ) {
@@ -42,4 +43,5 @@ class ColorSpaceTools {
 					return (d*Math.ceil(c/8)*width);
 			}
 	}
+	
 }

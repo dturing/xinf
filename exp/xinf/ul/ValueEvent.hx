@@ -18,6 +18,7 @@ package xinf.ul;
 import xinf.event.Event;
 
 class ValueEvent extends Event<ValueEvent> {
+	
 	static public var CHANGED = new xinf.event.EventKind<ValueEvent>("valueChanged");
 
 	public var value:Float;
@@ -26,4 +27,5 @@ class ValueEvent extends Event<ValueEvent> {
 		super(_type);
 		this.value = value;
 	}
+	
 }

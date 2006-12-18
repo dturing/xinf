@@ -20,6 +20,7 @@ import opengl.GL;
 import xinf.inity.GLPolygon;
 
 class Glyph {
+	
     private var polygon:GLPolygon;
 	private var displayList:Int;
     public var advance:Float;
@@ -47,4 +48,5 @@ class Glyph {
 // fake hinting        GL.translate( Math.round((advance*s))/s, .0, .0 );
         GL.translate( advance, .0, .0 );
 	}
+	
 }

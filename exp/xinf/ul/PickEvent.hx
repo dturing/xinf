@@ -18,6 +18,7 @@ package xinf.ul;
 import xinf.event.Event;
 
 class PickEvent<T> extends Event<PickEvent<T>> {
+	
 	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
 
 	public var item:T;
@@ -28,4 +29,5 @@ class PickEvent<T> extends Event<PickEvent<T>> {
 		this.item = item;
 		this.index = index;
 	}
+	
 }

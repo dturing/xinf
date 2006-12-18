@@ -20,6 +20,7 @@ import xinf.erno.Color;
 import xinf.erno.FontStyle;
 
 class Text extends Object {
+	
 	public var color:Color;
 	public var text:String;
 
@@ -37,4 +38,5 @@ class Text extends Object {
 			g.text(0,0,text);
 		}
 	}
+	
 }

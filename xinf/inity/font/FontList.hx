@@ -21,6 +21,7 @@ typedef Style = {
 }
 
 class FontList {
+	
 	public var list:Hash<Hash<Style>>;
 	
 	public function new() :Void {
@@ -53,4 +54,5 @@ class FontList {
 		
 		return Font.getFont( familyName, s.weight, s.slant );
 	}
+	
 }

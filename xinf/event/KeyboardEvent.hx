@@ -16,6 +16,7 @@
 package xinf.event;
 
 class KeyboardEvent extends Event<KeyboardEvent> {
+	
 	static public var KEY_DOWN = new EventKind<KeyboardEvent>("keyDown");
 	static public var KEY_UP   = new EventKind<KeyboardEvent>("keyUp");
 
@@ -46,4 +47,5 @@ class KeyboardEvent extends Event<KeyboardEvent> {
 		r+=")";
 		return r;
 	}
+	
 }

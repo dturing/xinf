@@ -19,6 +19,7 @@ import xinf.inity.GLPolygon;
 typedef Polygon = GLPolygon
 
 class FontReader {
+	
     private var font:Font;
     private var glyph:Glyph;
     private var polygon:Polygon;
@@ -87,4 +88,5 @@ class FontReader {
     public function curveTo( cx:Int, cy:Int, x:Int, y:Int ) {
 		polygon.quadraticTo( scale*cx,-scale*cy, scale*x,-scale*y );
     }
+    
 }

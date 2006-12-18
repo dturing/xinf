@@ -19,6 +19,7 @@ import xinf.event.MouseEvent;
 import xinf.erno.Runtime;
 
 class Drag<T> {
+	
 	private var _mouseMove:MouseEvent->Void;
 	private var _mouseUp:MouseEvent->Void;
 	
@@ -49,4 +50,5 @@ class Drag<T> {
 		Runtime.removeAllListeners(MouseEvent.MOUSE_UP);
 		if( end != null ) end();
 	}
+	
 }

@@ -21,6 +21,7 @@ import xinf.geom.Transform;
 import opengl.GL;
 
 class GLObject {
+	
 	// TODO: maybe we can avoid caching some of this?
 	public var parent:GLObject; // needed only for (unimplemented) getGlobalTransform()
 	public var children:Array<GLObject>;
@@ -69,12 +70,12 @@ class GLObject {
 		child.update();
 	//	if( child.boundingBox != null ) mergeBBox( child.boundingBox );
 	}
+	
 	public function clear() :Void {
 		children = null;
 		transformedBBox = boundingBox = null;
 	}
 	
-
 	public function mergeBBox( bbox:TRectangle ) :Void {
 		if( boundingBox==null ) boundingBox = new Rectangle(bbox);
 		else boundingBox.merge(bbox);
@@ -84,10 +85,12 @@ class GLObject {
 	public function start() :Void {
 		GL.newList( inner, GL.COMPILE );
 	}
+	
 	public function end() :Void {
 		GL.endList();
 		redoTransform();
 	}	
+	
 	public function update() :Void {
 	
 		if( parent != null && boundingBox!=null ) {
@@ -130,4 +133,5 @@ class GLObject {
 	public function toString() :String {
 		return("#"+id);
 	}
+	
 }

@@ -18,6 +18,7 @@ package xinf.erno;
 import xinf.erno.Renderer;
 
 enum Instruction {
+	
 	StartObject( id:Int );
 	EndObject();
 	ShowObject( id:Int );
@@ -51,5 +52,6 @@ enum Instruction {
 //		SetFontRenderingParameters( pixelAlign
 	// GL-Specific
 //	SetPixelSize( s:Float );
+
 }
 

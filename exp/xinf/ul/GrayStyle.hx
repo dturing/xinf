@@ -18,7 +18,9 @@ package xinf.ul;
 import xinf.erno.Color;
 
 class GrayStyle {
+	
 	public static function addToDefault() :Void {
+		
 		xinf.style.StyleSheet.defaultSheet.add(
 			[ "Label" ], {
 				padding: { l:5, t:1, r:5, b:1 },
@@ -133,4 +135,5 @@ class GrayStyle {
 				fontSize: 12
 			} );
 	}
+	
 }

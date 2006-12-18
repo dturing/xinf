@@ -4,7 +4,10 @@
 -lib fonttools
 -cp ../../../
 -cp ../../
--neko run.n
+-swf-version 9
+-swf App.swf
 
---next
--cmd neko run
+#-neko run.n
+
+#--next
+#-cmd neko run

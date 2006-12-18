@@ -20,7 +20,9 @@ import xinf.erno.Renderer;
 import xinf.geom.Transform;
 
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
+	
 	private var objects:IntHash<Primitive>;
+	
 	private function lookup( id:Int ) :Primitive {
 		return objects.get(id);
 	}
@@ -31,12 +33,16 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 	public function createPrimitive(id:Int) :Primitive {
 		return null;
 	}
+	
 	public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 	}
+	
 	public function clearPrimitive( p:Primitive ) :Void {
 	}
+	
 	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 	}
+	
 	public function getDefaultRoot() :Primitive {
 		return null;
 	}
@@ -58,6 +64,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		current=cast(o);
 		pushPen();
 	}
+	
 	public function endNative() :Void {
 		current=null;
 	}
@@ -76,10 +83,12 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		}
 		pushPen();
 	}
+	
 	public function endObject() {
 		current = null;
 		popPen();
 	}
+	
 	public function showObject( id:Int ) {
 		var o = lookup(id);
 		if( o==null ) {
@@ -88,6 +97,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		}
 		attachPrimitive( current, o );
 	}
+	
 	public function setTransform( id:Int, transform:Transform ) {
 		var o = lookup(id);
 		if( o==null ) {
@@ -96,4 +106,5 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
 		}
 		setPrimitiveTransform( o, transform );
 	}
+	
 }

@@ -21,6 +21,7 @@ import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
 
 class Runtime extends SimpleEventDispatcher {
+	
 	static private var _runtime:Runtime;
 	static private var _renderer:Renderer;
 	static public var runtime(getRuntime,null):Runtime;
@@ -31,10 +32,12 @@ class Runtime extends SimpleEventDispatcher {
 		if( _runtime==null ) initRuntime();
 		return _runtime;
 	}
+	
 	static public function getRenderer() :Renderer {
 		if( _renderer==null ) initRuntime();
 		return _renderer;
 	}
+	
 	static private function initRuntime() :Runtime {
 		#if neko
 			_renderer = new xinf.inity.GLRenderer();
@@ -52,13 +55,14 @@ class Runtime extends SimpleEventDispatcher {
 		return runtime;
 	}
 	
-	
 	static public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :Void {
 		runtime.addEventListener(type,h);
 	}
+	
 	static public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
 		return runtime.removeEventListener(type,h);
 	}
+	
 	static public function removeAllListeners<T>( type :EventKind<T> ) :Bool {
 		return runtime.removeAllListeners(type);
 	}
@@ -68,13 +72,16 @@ class Runtime extends SimpleEventDispatcher {
 		throw("unimplemented");
 		return -1;
 	}
+	
 	public function getDefaultRoot() :NativeContainer {
 		throw("unimplemented");
 		return null;
 	}
+	
 	public function run() :Void {
 		throw("unimplemented");
 	}
+	
 	public function changed() :Void {
 	}
 	

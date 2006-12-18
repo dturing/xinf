@@ -23,6 +23,7 @@ import xinf.event.EventDispatcher;
 	
 **/
 class ImageLoadEvent extends Event<ImageLoadEvent> {
+	
 	static public var PART_LOADED = new EventKind<ImageLoadEvent>("imagePartLoaded");
 	static public var LOADED = new EventKind<ImageLoadEvent>("imageLoaded");
 	static public var FRAME_AVAILABLE = new EventKind<ImageLoadEvent>("imageFrameAvailable");
@@ -35,4 +36,5 @@ class ImageLoadEvent extends Event<ImageLoadEvent> {
 		this.image = image;
 		this.data = data;
 	}
+	
 }

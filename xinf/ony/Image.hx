@@ -20,6 +20,7 @@ import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 
 class Image extends Object {
+	
 	private var img:ImageData;
 
 	public function new( i:ImageData ) :Void {
@@ -38,4 +39,5 @@ class Image extends Object {
 		if( img==null ) return;
 		g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} );
 	}
+	
 }

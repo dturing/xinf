@@ -28,6 +28,7 @@ import opengl.GLUT;
 import cptr.CPtr;
 
 class XinfinityRuntime extends Runtime {
+	
 	private var frame:Int;
 	private var width:Int;
 	private var height:Int;
@@ -263,4 +264,5 @@ class XinfinityRuntime extends Runtime {
 		return getObjectsUnderPoint( x, y ).pop();
 	}
 	*/
+	
 }

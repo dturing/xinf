@@ -18,6 +18,7 @@ package xinf.geom;
 import xinf.geom.Types;
 
 class Matrix {
+	
 	public var m00:Float;
 	public var m01:Float;
 	public var m02:Float;
@@ -47,6 +48,7 @@ class Matrix {
 			y: p.y - m12
 			};
 	}
+	
 	// TODO: geom.TRectangle
 	public function transformBBox( r:{l:Float,t:Float,r:Float,b:Float}) :{l:Float,t:Float,r:Float,b:Float} {
 		var tl = apply( {x:r.l,y:r.t} );
@@ -98,4 +100,5 @@ class Matrix {
 		m10=-s; m11=c;
 		return this;
 	}
+	
 }

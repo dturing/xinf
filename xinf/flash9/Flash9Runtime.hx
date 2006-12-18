@@ -20,6 +20,7 @@ import xinf.erno.Renderer;
 import xinf.event.FrameEvent;
 
 class Flash9Runtime extends SimpleRuntime {
+	
 	public static var defaultRoot:NativeContainer;
 	
 	private var _eventSource:Flash9EventSource;
@@ -35,6 +36,7 @@ class Flash9Runtime extends SimpleRuntime {
 			}
 		#end
 	}
+	
 	override public function getDefaultRoot() :NativeContainer {
 		if( defaultRoot==null ) {
 			defaultRoot = new XinfSprite();
@@ -42,7 +44,9 @@ class Flash9Runtime extends SimpleRuntime {
 		}
 		return defaultRoot;
 	}
+	
 	override public function run() :Void {
 		_eventSource.rootResized();
 	}
+	
 }

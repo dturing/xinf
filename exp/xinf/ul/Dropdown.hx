@@ -33,6 +33,7 @@ import xinf.event.ScrollEvent;
 typedef T=String
 
 class Dropdown extends Widget {
+	
     private var model:ListModel<T>;
     private static var labelHeight:Int = 20;
     
@@ -78,6 +79,7 @@ class Dropdown extends Widget {
 		select( e.index );
 		close();
     }
+    
     private function open() :Void {
 		menu.assureVisible( selectedIndex );
 		menu.select( selectedIndex );
@@ -91,12 +93,14 @@ class Dropdown extends Widget {
 		addStyleClass(":open");
 //		button.contained.load("assets/dropdown/open/button.png");
 	}
+	
     private function close() :Void {
         if( popup!=null ) popup.close();
 		isOpen=false;
 		removeStyleClass(":open");
 //		button.contained.load("assets/dropdown/button.png");
 	}
+	
 	public function select( index:Int ) :Void {
 		if( index > model.getLength()-1 ) index = model.getLength()-1;
 		if( index < 0 ) index=0;
@@ -139,4 +143,5 @@ class Dropdown extends Widget {
 		super.blur();
 		close();
 	}
+	
 }

@@ -28,6 +28,7 @@ import xinf.ul.FocusManager;
 **/
 
 class Slider extends Widget {
+	
 	private var slideBar:Pane;
 	private var slideThumb:Pane;
     private var label:Label;
@@ -41,9 +42,11 @@ class Slider extends Widget {
 	
 	private var _value:Float;
 	public var value(get_value,set_value):Float;
+	
 	public function get_value() :Float {
 		return _value;
 	}
+	
 	public function set_value( v:Float ) :Float {
 		var old = _value;
 		_value = v - (v-(Math.round(v/increment)*increment));
@@ -55,14 +58,17 @@ class Slider extends Widget {
 		}
 		return _value;
 	}
+	
 	public function get_normalized() :Float {
 		return (_value-min)/(max-min);
 	}
+	
 	public function set_normalized( v:Float ) :Float {
 		if( v<.0 ) v=.0; else if( v>1. ) v=1.;
 		value = min + (v*(max-min));
 		return v;
-	}	
+	}
+	
     public function new( ?max:Float, ?min:Float, ?increment:Float ) :Void {
 		super();
 		precision=1000; this.min=0; this.max=1; this.increment=.1;
@@ -151,4 +157,6 @@ class Slider extends Widget {
 				f(e.value);
 			});
 		return s;
-	}}
+	}
+	
+}

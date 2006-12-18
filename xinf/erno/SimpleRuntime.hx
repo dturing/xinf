@@ -21,6 +21,7 @@ import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
 
 class SimpleRuntime extends Runtime {
+	
 	private var nextId:Int;
 	
 	public function new() :Void {
@@ -31,4 +32,5 @@ class SimpleRuntime extends Runtime {
 	override public function getNextId() :Int {
 		return nextId++;
 	}
+	
 }

@@ -28,6 +28,7 @@ import xinf.event.GeometryEvent;
 import xinf.erno.Keys;
 
 class GLEventSource {
+	
 	private var frame:Int;
 	private var runtime:XinfinityRuntime;
 
@@ -50,6 +51,7 @@ class GLEventSource {
 		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
 		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, key, k ) );
 	}
+	
 	public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
 		var k = Keys.get(key);
 		runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
@@ -86,4 +88,5 @@ class GLEventSource {
 	public function toString() :String {
 		return("GLEventSource");
 	}
+	
 }

@@ -31,6 +31,7 @@ import flash.display.JointStyle;
 typedef Primitive = XinfSprite
 
 class Flash9Renderer extends ObjectModelRenderer<Primitive> {
+	
 	override public function createPrimitive(id:Int) :Primitive {
 		// create new object
 		var o = new Primitive();
@@ -55,6 +56,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		p.x = t.m02;
 		p.y = t.m12;
 	}
+	
 	public function clipRect( w:Float, h:Float ) {
 		var crop = new Sprite();
 		var g = crop.graphics;
@@ -73,26 +75,33 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			current.graphics.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
 		}
 	}
+	
 	public function endShape() {
 		if( pen.fillColor != null ) {
 			current.graphics.endFill();
 		}
 	}
+	
 	public function startPath( x:Float, y:Float) {
 		current.graphics.moveTo(x,y);
 	}
+	
 	public function endPath() {
 		current.graphics.moveTo(0,0);
 	}
+	
 	public function close() {
 		// FIXME
 	}
+	
 	public function lineTo( x:Float, y:Float ) {
 		current.graphics.lineTo(x,y);
 	}
+	
 	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
 		current.graphics.curveTo( x1,y1,x,y );
 	}
+	
 	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		throw("unimplemented");
 	}
@@ -146,4 +155,5 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	public function native( o:NativeObject ) {
 		current.addChild(o);
 	}
+	
 }

@@ -21,8 +21,8 @@ package xinf.event;
 **/
 
 class Event<T> {
-	public var type(default,null) : EventKind<T>;
 	
+	public var type(default,null) : EventKind<T>;
 	public var origin:haxe.PosInfos; // FIXME if debug_events
 	
 	public function new( t ) {
@@ -41,4 +41,5 @@ class Event<T> {
 		
 		return r;
 	}
+	
 }

@@ -19,6 +19,7 @@ package xinf.event;
 	SimpleEvent is an Event that carries no further data.
 **/
 class SimpleEvent extends Event<SimpleEvent> {
+	
 /** quit application **/
 	static public var QUIT = new EventKind<SimpleEvent>("quit");
 
@@ -28,4 +29,5 @@ class SimpleEvent extends Event<SimpleEvent> {
 	public function new( _type:EventKind<SimpleEvent> ) {
 		super(_type);
 	}
+	
 }

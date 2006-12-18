@@ -15,9 +15,10 @@
 
 package xinf.erno;
 
-
 class Keys {
+	
 	private static var keys:IntHash<String>;
+	
 	private static function __init__() :Void {
 		keys = new IntHash<String>();
 		
@@ -46,4 +47,5 @@ class Keys {
 	public static function get( code:Int ) :String {
 		return( keys.get(code) );
 	}
+	
 }

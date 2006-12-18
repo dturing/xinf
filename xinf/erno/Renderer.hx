@@ -19,7 +19,6 @@ import xinf.geom.Types;
 import xinf.geom.Transform;
 import xinf.erno.FontStyle;
 
-
 #if flash
 	typedef NativeObject = flash.display.DisplayObject
 	typedef NativeContainer = flash.display.DisplayObjectContainer
@@ -44,6 +43,7 @@ import xinf.erno.FontStyle;
 	</p>
 **/
 interface Renderer {
+	
 	function startObject( id:Int ) :Void;
 	function endObject() :Void;
 	function showObject( id:Int ) :Void;
@@ -73,4 +73,5 @@ interface Renderer {
 	function endNative() :Void;
 	
 	function native( o:NativeObject ) :Void;
+
 }

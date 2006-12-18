@@ -24,6 +24,7 @@ import xinf.erno.FontStyle;
 **/
 
 class Label extends StyleClassElement {
+	
     public var text(get_text,set_text):String;
     private var _text:String;
     
@@ -35,6 +36,7 @@ class Label extends StyleClassElement {
     private function get_text() :String {
         return(_text);
     }
+    
     private function set_text( t:String ) :String {
         _text = t;
 		scheduleRedraw();
@@ -67,4 +69,5 @@ class Label extends StyleClassElement {
 		g.setFill(style.color);
 		g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
 	}
+	
 }

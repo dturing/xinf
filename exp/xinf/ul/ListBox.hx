@@ -29,7 +29,6 @@ import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 
-
 /**
     Improvised ListBox element.
     
@@ -38,6 +37,7 @@ import xinf.event.SimpleEvent;
 **/
 
 class ListBox<T> extends Widget {
+	
     private var scrollbar:VScrollbar;
     private var labels:Array<Label>;
     private var scrollPane:Pane;
@@ -247,4 +247,5 @@ class ListBox<T> extends Widget {
 				sendPickEvent();
 		}
 	}
+	
 }

@@ -20,6 +20,7 @@ import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 
 class Root extends Object {
+	
 	private var root:NativeContainer;
 	
 	public function new( ?o:NativeContainer ) :Void {
@@ -32,13 +33,14 @@ class Root extends Object {
 
 	public function draw( g:Renderer ) :Void {
 		g.startNative( root );
-			for( child in children ) {
-				g.showObject( child._id );
-			}
+		for( child in children ) {
+			g.showObject( child._id );
+		}
 		g.endNative();
 	}
 	
 	private function stageScaled( e:GeometryEvent ) :Void {
 		resize(e.x,e.y);
 	}
+	
 }

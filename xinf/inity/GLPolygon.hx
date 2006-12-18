@@ -25,6 +25,7 @@ import xinf.geom.Types;
 import xinf.erno.Color;
 
 class GLContour {
+	
 	private var last:TPoint;
 	private var pixelSize:Float;
 	public var path:Array<TPoint>;
@@ -49,6 +50,7 @@ class GLContour {
 	//	if( pixelSize>1. ) trace("D: "+d+", "+(Math.abs(last.y-y)+Math.abs(last.x-x)) );
 		Helper.evaluateQuadraticBezier( [ last.x, last.y, x1, y1, x, y ], d, this.lineTo );
 	}
+	
 	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		var d=Math.round(Math.max(2,Math.abs((last.y-x)+(last.x-y)) * pixelSize));
 		var a = [ last.x, last.y, x1, y1, x2, y2, x, y ];
@@ -60,10 +62,12 @@ class GLContour {
 			path.push( { x:a[i*2], y:a[(i*2)+1] } );
 		}
 	}
+	
 }
 
 // Fixme: maybe this implements some ShapeRenderer interface?
 class GLPolygon {
+	
 	static private var tess:Tesselator;
 
 	private var shape:Array<GLContour>;
@@ -90,25 +94,32 @@ class GLPolygon {
 		throw("unimplemented");
 	}
 	*/
+	
 	public function startPath( x:Float, y:Float) {
 		contour = new GLContour(x,y,pixelSize);
 	}
+	
 	public function endPath() {
 		shape.push(contour);
 		contour=null;
 	}
+	
 	public function close() {
 		contour.close();
 	}
+	
 	public function lineTo( x:Float, y:Float ) {
 		contour.lineTo(x,y);
 	}
+	
 	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
 		contour.quadraticTo(x1,y1,x,y);
 	}
+	
 	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		contour.cubicTo(x1,y1,x2,y2,x,y);
 	}
+	
 	/* end of Renderer-like instructions */
 	
 	private function makeCPtr() :Dynamic {
@@ -186,4 +197,5 @@ class GLPolygon {
 		var coords = makeCPtr();
 		drawTesselated( coords );
 	}
+	
 }

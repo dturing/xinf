@@ -16,6 +16,7 @@
 package xinf.ul;
 
 class NameListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
+	
     private var names:Array<String>;
     private var items:Array<T>;
     
@@ -52,4 +53,5 @@ class NameListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
     public function removeChangedListener( f:SimpleEvent -> Void ) :Void {
         removeEventListener( SimpleEvent.CHANGED, f );
     }
+    
 }

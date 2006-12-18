@@ -16,6 +16,7 @@
 package xinf.event;
 
 class SimpleEventDispatcher implements EventDispatcher {
+	
 	private var listeners :Hash<List<Dynamic->Void>>;
 	private var filters :List<Dynamic->Bool>;
 
@@ -82,4 +83,5 @@ class SimpleEventDispatcher implements EventDispatcher {
 		// for now, FIXME (maybe)
 		dispatchEvent(e);
 	}
+	
 }

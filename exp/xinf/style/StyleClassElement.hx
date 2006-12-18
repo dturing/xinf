@@ -1,6 +1,7 @@
 package xinf.style;
 
 class StyleClassElement extends xinf.ony.Object {
+	
 	public var style :Style;
 	private var styleClasses :Array<String>;
 	
@@ -45,4 +46,5 @@ class StyleClassElement extends xinf.ony.Object {
 	public function getStyleClasses() :Array<String> {
 		return styleClasses;
 	}
+	
 }

@@ -37,15 +37,16 @@ import xinf.event.SimpleEventDispatcher;
 **/
 
 class Object extends SimpleEventDispatcher {
+	
 	private static var _manager:Manager;
 	private static var manager(getManager,null):Manager;
+	
 	private static function getManager() :Manager {
 		if( _manager == null ) {
 			_manager = new Manager();
 		}
 		return _manager;
 	}
-
 
 	/** Unique (to the runtime environment) ID of this object. Will be set in the constructor. **/
 	public var _id(default,null):Int;
@@ -67,8 +68,7 @@ class Object extends SimpleEventDispatcher {
 	public var size(default,null):{x:Float,y:Float};
 
 	private var transform:Matrix;
-	private var children:Array<Object>;
-	
+	private var children:Array<Object>;	
 
 	/** Object constructor<br/>
 		A simple Object will not display anything by itself,
@@ -183,6 +183,7 @@ class Object extends SimpleEventDispatcher {
 	public function scheduleRedraw() :Void {
 		manager.objectChanged( _id, this );
 	}
+	
 	/**	schedule this Object for redefining it's transformation<br/>
 		You should usually not need to call this yourself, the Object will be automatically scheduled
 		when you modify it's transformation (currently, the only way to do this is [moveTo()].
@@ -202,6 +203,7 @@ class Object extends SimpleEventDispatcher {
 		q.y-=position.y;
 		return q;
 	}
+	
 	/** convert the given point from local to global coordinates<br/>
 		FIXME: this function is currently implemented half-heartedly, and will
 		only work for translation.
@@ -213,7 +215,6 @@ class Object extends SimpleEventDispatcher {
 		if( parent!=null ) q = parent.localToGlobal(q);
 		return q;
 	}
-	
 	
 	/** dispatch the given Event<br/>
 		tries to dispatch the given Event to any registered listeners.
@@ -236,4 +237,5 @@ class Object extends SimpleEventDispatcher {
 	public function toString() :String {
 		return( Type.getClassName( Type.getClass(this) )+"["+_id+"]" );
 	}
+	
 }

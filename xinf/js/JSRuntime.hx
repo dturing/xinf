@@ -20,8 +20,8 @@ import xinf.erno.Renderer;
 import xinf.event.FrameEvent;
 
 class JSRuntime extends SimpleRuntime {
-	public static var defaultRoot:NativeContainer;
 	
+	public static var defaultRoot:NativeContainer;
 	private var frame:Int;
 	private var _eventSource:JSEventSource;
 	
@@ -38,11 +38,14 @@ class JSRuntime extends SimpleRuntime {
 		}
 		return defaultRoot;
 	}
+	
 	override public function run() :Void {
 		_eventSource.rootResized(null);
  		untyped window.setInterval("xinf.erno.Runtime.getRuntime().step()",1000/25);
    	}
+   	
 	public function step() :Void {
 		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
 	}
+	
 }

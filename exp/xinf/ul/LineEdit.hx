@@ -37,6 +37,7 @@ import xinf.inity.GLRenderer;
 **/
 
 class LineEdit extends Widget {
+	
 	private var sel :{ from:Int, to:Int };
 	public var text :String;
 	
@@ -102,6 +103,7 @@ class LineEdit extends Widget {
 		moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
 		new Drag<Float>( e, dragSelect, null, e.x );
 	}
+	
     public function dragSelect( x:Float, y:Float, marker:Float ) {
 		var p = globalToLocal( {x:x+marker, y:y } );
 		p.x += (xOffset-style.padding.l);
@@ -147,6 +149,7 @@ class LineEdit extends Widget {
 		p++;
 		return p;
 	}
+	
 	public function findRightWordBoundary() :Int {
 		var p:Int=sel.to;
 		while( text.charCodeAt(p)==32 ) p++;
@@ -272,6 +275,7 @@ class LineEdit extends Widget {
 
 #else true
 class LineEdit extends Widget {
+	
 	public var text(get_text,set_text) :String;
 	private var _text :String;
 
@@ -280,6 +284,7 @@ class LineEdit extends Widget {
 	private function get_text() :String {
 		return _text;
 	}
+	
 	private function set_text(t:String) :String {
 		return _text=t;
 	}
@@ -312,5 +317,6 @@ class LineEdit extends Widget {
 		
 		g.native(native);
 	}
+	
 }
 #end

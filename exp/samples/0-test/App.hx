@@ -24,6 +24,7 @@ import xinf.ul.Dropdown;
 import xinf.ul.Slider;
 
 class App extends Application {
+	
 	public function new() :Void {
 		super();
 		

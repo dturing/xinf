@@ -27,13 +27,16 @@ import xinf.event.EventKind;
 **/
 
 class Button<T:Object> extends Widget {
+	
 	public static var CLICK = new EventKind<MouseEvent>("buttonClick");
 
 	public var contained(get_contained,set_contained):T;
 	private var _contained:T;
+	
 	public function get_contained():T {
 		return _contained;
 	}
+	
     public function set_contained( c:T ):T {
         _contained = c;
 		attach( c );
@@ -63,9 +66,11 @@ class Button<T:Object> extends Widget {
 		Runtime.removeEventListener( MouseEvent.MOUSE_UP,
 			_mouseUp );
 	}
+	
 }
 
 class TextButton extends Button<xinf.ul.Label> {
+	
 	public function new( ?initialText:String ) :Void {
 		super();
 		var c = new xinf.ul.Label();
@@ -79,7 +84,9 @@ class TextButton extends Button<xinf.ul.Label> {
 		b.addEventListener( Button.CLICK, f );
 		return b;
 	}
+	
 }
+
 /*
 class ImageButton extends Button<xinf.ony.Image> {
 	public function new( name:String, parent:Element, ?url:String ) :Void {

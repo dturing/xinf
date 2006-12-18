@@ -19,12 +19,12 @@ import xinf.ul.FocusManager;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 
-
 /**
     Widget base class.
 	Takes care of Keyboard Focus.
 **/
 class Widget extends Pane {
+	
 	public var focusable:Bool;
 
     public function new() :Void {
@@ -52,4 +52,5 @@ class Widget extends Pane {
 	public function blur() :Void {
 		removeStyleClass(":focus");
 	}
+	
 }

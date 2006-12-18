@@ -36,9 +36,11 @@ class ImageData extends SimpleEventDispatcher {
 	public function frameAvailable( ?data:Dynamic, ?pos:haxe.PosInfos ) :Void {
 		postEvent( new ImageLoadEvent( ImageLoadEvent.FRAME_AVAILABLE, this, data ), pos );
 	}
+	
 	private function partLoaded( ?pos:haxe.PosInfos ) :Void {
 		postEvent( new ImageLoadEvent( ImageLoadEvent.PART_LOADED, this ), pos );
 	}
+	
 	private function loaded( ?data:Dynamic, ?pos:haxe.PosInfos ) :Void {
 		postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ), pos );
 	}
@@ -60,4 +62,5 @@ class ImageData extends SimpleEventDispatcher {
 		#else err
 		#end
 	}
+
 }

@@ -53,4 +53,5 @@ class Pane extends StyleClassElement {
 			g.rect( -b, -b, size.x+(4*b), size.y+(4*b) );
 		}
 	}
+	
 }

@@ -21,11 +21,15 @@ package xinf.event;
 	and a unique string identifier.
 **/
 class EventKind<T> {
+	
 	public var name(default,null) :String;
+	
 	public function new( name:String ) {
 		this.name = name;
 	}
+	
 	public function toString() {
 		return name;
 	}
+	
 }

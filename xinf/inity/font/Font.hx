@@ -20,7 +20,9 @@ import xinf.erno.Renderer;
 import xinf.erno.FontStyle;
 
 class Font {
+	
     private static var fonts:Hash<Font> = new Hash<Font>();
+    
     public static function getFont( ?name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
 		if( name==null ) name="_sans";
 		if( dontCache==null ) dontCache=false;
@@ -55,6 +57,7 @@ class Font {
     }
 	
 	private static var glyphsToCache:Array<Glyph> = new Array<Glyph>();
+	
 	public static function cacheGlyphs() :Void {
 		var g:Glyph;
 		while( (g = glyphsToCache.shift())!=null ) {
@@ -64,6 +67,7 @@ class Font {
 			g.cache(50.0);
 		}
 	}
+	
 	public static function cacheGlyph( g:Glyph ) :Void {
 		glyphsToCache.push(g);
 	}
@@ -132,5 +136,6 @@ class Font {
 		
 		return 0; // FIXME: return string width?
 	}
+	
 }
 

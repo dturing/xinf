@@ -30,6 +30,7 @@ import xinf.ony.Root;
 	Keyboard Focus manager singleton
 **/
 class FocusManager {
+	
 	private static var widgets:Array<Widget>;
 	private static var currentFocus:Int;
 	
@@ -129,4 +130,5 @@ class FocusManager {
 			widgets[currentFocus].dispatchEvent(e);
 		}
 	}
+	
 }

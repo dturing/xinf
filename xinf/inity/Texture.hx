@@ -80,6 +80,7 @@ class Texture extends ImageData {
 
 	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
 	public static var cache:Hash<Texture> = new Hash<Texture>();
+	
     public static function newByName( filename:String ) :Texture {
 		var r = cache.get(filename);
 		if( r==null ) {
@@ -101,6 +102,5 @@ class Texture extends ImageData {
 		untyped r._buf = pixbuf;
         return r;
     }
-
 
 }

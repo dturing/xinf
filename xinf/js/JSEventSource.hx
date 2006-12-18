@@ -26,6 +26,7 @@ import xinf.erno.Keys;
 import js.Dom;
 
 class JSEventSource {
+	
 	private var runtime:JSRuntime;
 
 	public function new( r:JSRuntime ) :Void {
@@ -59,6 +60,7 @@ class JSEventSource {
 	private function keyRelease( e:js.Event ) :Bool {
 		return keyEvent( e, KeyboardEvent.KEY_UP );
 	}
+	
 	private function keyEvent( e:js.Event, type:EventKind<KeyboardEvent> ) :Bool {
 		var key:String = Keys.get(e.keyCode);
 		if( e.keyCode == 0 ) {
@@ -76,7 +78,6 @@ class JSEventSource {
 			return true;
 		}
 	}
-
 
     private function mouseDown( e:js.Event ) :Bool {
         return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
@@ -127,4 +128,5 @@ class JSEventSource {
 		var h = js.Lib.window.innerHeight;
 		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );
 	}
+	
 }

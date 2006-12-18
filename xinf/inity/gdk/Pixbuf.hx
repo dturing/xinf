@@ -18,6 +18,7 @@ package xinf.inity.gdk;
 import xinf.inity.ColorSpace;
 
 class Pixbuf {
+	
 	private var pixbuf:Dynamic;
 	
 	public var width(get_width,null):Int;
@@ -27,9 +28,11 @@ class Pixbuf {
 	private function get_width():Int {
 		return GdkPixbuf.gdk_pixbuf_get_width(pixbuf);
 	}
+	
 	private function get_height():Int {
 		return GdkPixbuf.gdk_pixbuf_get_height(pixbuf);
 	}
+	
 	private function get_colorspace():ColorSpace {
 		return if( GdkPixbuf.gdk_pixbuf_get_has_alpha(pixbuf) ) RGBA else RGB;
 	}
@@ -82,4 +85,5 @@ class Pixbuf {
 	public static function __init__() :Void {
         GdkPixbuf.g_type_init();
     }
+    
 }

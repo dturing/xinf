@@ -30,6 +30,7 @@ import cptr.CPtr;
 typedef Primitive = GLObject
 
 class GLRenderer extends ObjectModelRenderer<Primitive> {
+	
 	private var shape:GLPolygon;
 	public var font(default,null):xinf.inity.font.Font;
 	
@@ -69,17 +70,19 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 	override public function createPrimitive(id:Int) :Primitive {
 		return new GLObject(id);
 	}
+	
 	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		if( parent==null ) return;
 		parent.addChild(child);
 	}
+	
 	override public function clearPrimitive( p:Primitive ) :Void {
 		p.clear();
 	}
+	
 	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 		p.setTransform( t );
 	}
-	
 	
 	// erno.Renderer API
 
@@ -97,16 +100,17 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		pushPen();
 		current.start();
 	}
+	
 	public function endObject() {
 		current.end();
 		popPen();
 		super.endObject();
 	}
+	
 	public function showObject( id:Int ) {
 		super.showObject(id);
 		GL.callList( id );
 	}
-
 
 	public function clipRect( w:Float, h:Float ) {
 		var eq:Dynamic = CPtr.double_alloc(4);
@@ -131,33 +135,39 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		GL.clipPlane( GL.CLIP_PLANE3, eq );
 		GL.enable( GL.CLIP_PLANE3 );
 	}
-
 	
 	public function startShape() {
 		if( shape != null ) throw("Can only define one path at a time");
 		shape = new GLPolygon();
 	}
+	
 	public function endShape() {
 		if( shape==null ) throw("no current Polygon");
 		shape.draw( pen.fillColor, pen.strokeColor, pen.strokeWidth );
 		shape = null;
 	}
+	
 	public function startPath( x:Float, y:Float) {
 		if( shape==null ) throw("no current Polygon");
 		shape.startPath( x, y );
 	}
+	
 	public function endPath() {
 		shape.endPath();
 	}
+	
 	public function close() {
 		shape.close();
 	}
+	
 	public function lineTo( x:Float, y:Float ) {
 		shape.lineTo(x,y);
 	}
+	
 	public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
 		shape.quadraticTo(x1,y1,x,y);
 	}
+	
 	public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		shape.cubicTo(x1,y1,x2,y2,x,y);
 	}
@@ -191,6 +201,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 			*/
 		}
 	}
+	
 	public function circle( x:Float, y:Float, r:Float ) {
 		GL.pushMatrix();
 		GL.translate( x, y, 0. );
@@ -207,6 +218,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		}
 		GL.popMatrix();
 	}
+	
 	public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
 		font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
 		if( pen.fillColor != null && font != null ) {
@@ -217,6 +229,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 			GL.popMatrix();
 		}
 	}
+	
 	public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
 		var tx1:Float = (inRegion.x/img.twidth);
 		var ty1:Float = (inRegion.y/img.theight);
@@ -274,4 +287,5 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		
 		return v;
 	}
+	
 }

@@ -15,11 +15,11 @@
 
 package xinf.erno;
 
-
 enum FontWeight {
 	Normal;
 	Bold;
 }
+
 enum FontSlant {
 	Roman;
 	Italic;

@@ -28,6 +28,7 @@ import xinf.event.ScrollEvent;
 **/
 
 class VScrollbar extends Pane {
+	
     private var thumb:Pane;
 	private var thumbHeight:Float;
     
@@ -60,6 +61,7 @@ class VScrollbar extends Pane {
     public function clickThumb( e:MouseEvent ) {
 		new Drag<Float>( e, move, null, thumb.position.y );
     }
+    
     public function move( x:Float, y:Float, marker:Float ) {
 		var y:Float = marker+y;
         if( y < 0 ) {
@@ -80,4 +82,5 @@ class VScrollbar extends Pane {
         thumb.position.y = Math.floor(position * (size.y-thumbHeight));
 		thumb.scheduleRedraw();
     }
+    
 }

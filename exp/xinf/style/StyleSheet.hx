@@ -20,12 +20,15 @@ import xinf.style.Style;
 import xinf.style.StyleClassElement;
 
 class StyleSelector {
+	
 	public function matches( e:Object ) :Bool {
 		return true;
 	}
+	
 }
 
 class ClassNameSelector extends StyleSelector {
+	
 	var classes:Array<String>;
 
 	public function new( c:Array<String> ) :Void {
@@ -40,9 +43,11 @@ class ClassNameSelector extends StyleSelector {
 		}
 		return true;
 	}
+	
 }
 
 class AncestorSelector extends StyleSelector {
+	
 	private var selector:StyleSelector;
 
 	public function new( s:StyleSelector ) :Void {
@@ -59,9 +64,11 @@ class AncestorSelector extends StyleSelector {
 		}
 		return false;
 	}
+	
 }
 
 class ParentSelector extends StyleSelector {
+	
 	private var selector:StyleSelector;
 
 	public function new( s:StyleSelector ) :Void {
@@ -71,9 +78,11 @@ class ParentSelector extends StyleSelector {
 	override public function matches( e:Object ) :Bool {
 		return( e.parent != null && selector.matches(e.parent) );
 	}
+	
 }
 
 class CombinedSelector extends StyleSelector {
+	
 	private var selectors:Array<StyleSelector>;
 
 	public function new( s:Array<StyleSelector> ) :Void {
@@ -86,6 +95,7 @@ class CombinedSelector extends StyleSelector {
 		}
 		return true;
 	}
+	
 }
 
 typedef StyleRule = {
@@ -94,14 +104,17 @@ typedef StyleRule = {
 }
 
 class StyleSheet {
+	
 	public static var defaultStyle:Style;
 	public static var defaultSheet:StyleSheet;
+	
 	public static function __init__() :Void {
 		defaultStyle = newDefaultStyle();
 		defaultSheet = new StyleSheet();
 	}
 	
 	private var byClassName :Hash<List<StyleRule>>;
+	
 	public function new() :Void {
 		byClassName = new Hash<List<StyleRule>>();
 	}
@@ -141,7 +154,6 @@ class StyleSheet {
 	public function match( e:StyleClassElement ) :Style {
 		return aggregateStyles( findStyles( e ) );
 	}
-	
 
 	public static function aggregateStyles( styles:Iterator<Style> ) :Style {
 		var r = newDefaultStyle();
@@ -159,4 +171,5 @@ class StyleSheet {
 			fontFamily: "_sans"
 		} );
 	}
+	
 }

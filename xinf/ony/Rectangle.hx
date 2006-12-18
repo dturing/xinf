@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Color;
 
 class Rectangle extends Object {
+	
 	private var color:Color;
 
 	public function new( ?color:Color ) :Void {
@@ -30,4 +31,5 @@ class Rectangle extends Object {
 		g.setFill(color);
 		g.rect( 0, 0, size.x, size.y );
 	}
+	
 }

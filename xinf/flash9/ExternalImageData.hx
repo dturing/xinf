@@ -23,6 +23,7 @@ import flash.events.Event;
 import flash.net.URLRequest;
 
 class ExternalImageData extends ImageData {
+	
 	private var loader:Loader;
 	
 	public function new( url:String ) :Void {
@@ -36,4 +37,5 @@ class ExternalImageData extends ImageData {
 		bitmap = cast(loader.content,Bitmap);
 		postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ) );
 	}
+	
 }

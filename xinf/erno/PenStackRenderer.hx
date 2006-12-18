@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.FontStyle;
 
 class Pen {
+	
 	public var fillColor:Color;
 	public var strokeColor:Color;
 	public var strokeWidth:Float;
@@ -42,9 +43,11 @@ class Pen {
 		p.fontSize = fontSize;
 		return p;
 	}
+	
 }
 
 class PenStackRenderer extends BasicRenderer {
+	
 	private var pen:Pen;
 	private var pens:Array<Pen>;
 
@@ -71,14 +74,17 @@ class PenStackRenderer extends BasicRenderer {
 	public function setFill( c:Color ) {
 		pen.fillColor=c;
 	}
+	
 	public function setStroke( c:Color, width:Float ) {
 		pen.strokeColor=c;
 		pen.strokeWidth=width;
 	}
+	
 	public function setFont( face:String, slant:FontSlant, weight:FontWeight, size:Float ) {
 		pen.fontFace = face;
 		pen.fontSlant = slant;
 		pen.fontWeight = weight;
 		pen.fontSize = size;
 	}
+	
 }

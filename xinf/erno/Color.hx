@@ -19,6 +19,7 @@ package xinf.erno;
     Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).
 **/
 class Color {
+	
 	/* fixme: place somewhere else */
 	public static function intToString( v:Int, ?radix:Int, ?l:Int ) :String {
 		var glyphs="0123456789abcdef";
@@ -120,4 +121,5 @@ class Color {
 	public static var RED:Color = new Color().fromRGBInt(0xff0000);
 	public static var GREEN:Color = new Color().fromRGBInt(0x00ff00);
 	public static var BLUE:Color = new Color().fromRGBInt(0x0000ff);
+	
 }

@@ -19,6 +19,7 @@ package xinf.event;
 	
 **/
 class ScrollEvent extends Event<ScrollEvent> {
+	
 	static public var SCROLL_STEP = new EventKind<ScrollEvent>("scrollStep");
 	static public var SCROLL_LEAP = new EventKind<ScrollEvent>("scrollLeap");
 	static public var SCROLL_TO   = new EventKind<ScrollEvent>("scrollTo");
@@ -31,4 +32,5 @@ class ScrollEvent extends Event<ScrollEvent> {
 		this.value = value;
 		this.targetId = targetId;
 	}
+	
 }

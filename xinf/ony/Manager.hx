@@ -22,6 +22,7 @@ import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
 
 class Manager {
+	
 	private var objects:IntHash<Object>;
 	private var changed:IntHash<Object>;
 	private var moved:IntHash<Object>;
@@ -89,4 +90,5 @@ class Manager {
 	private function find( id:Int ) :Object {
 		return objects.get(id);
 	}
+	
 }

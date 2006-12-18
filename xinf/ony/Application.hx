@@ -17,6 +17,7 @@ package xinf.ony;
 import xinf.erno.Runtime;
 
 class Application {
+	
 	public var root(default,null):Root;
 	
 	public function new() :Void {
@@ -26,4 +27,5 @@ class Application {
 	public function run() :Void {
 		Runtime.runtime.run();
 	}
+	
 }

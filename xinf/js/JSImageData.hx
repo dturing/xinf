@@ -20,6 +20,7 @@ import xinf.event.ImageLoadEvent;
 import js.Dom;
 
 class JSImageData extends ImageData {
+	
 	private var img:js.Image;
 	
 	public function new( url:String ) :Void {
@@ -33,4 +34,5 @@ class JSImageData extends ImageData {
 	private function js_loaded( e:Event ) :Void {
 		postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ) );
 	}
+	
 }

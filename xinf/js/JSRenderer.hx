@@ -26,6 +26,7 @@ import js.Dom;
 typedef Primitive = js.HtmlDom
 
 class JSRenderer extends ObjectModelRenderer<Primitive> {
+	
 	public static var defaultRoot:Primitive;
 	
 	override public function createPrimitive(id:Int) :Primitive {
@@ -49,12 +50,12 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 			parent.appendChild( child );
 		}
 	}
+	
 	public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
 		// FIXME (maybe): regards only translation
 		p.style.left = ""+Math.round(t.m02);
 		p.style.top = ""+Math.round(t.m12);
 	}
-	
 	
 	public function clipRect( w:Float, h:Float ) {
 		current.style.overflow = "hidden";
@@ -104,4 +105,5 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 	public function native( o:NativeObject ) {
 		current.appendChild(o);
 	}
+	
 }

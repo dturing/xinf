@@ -19,6 +19,7 @@ package xinf.event;
 	
 **/
 class MouseEvent extends Event<MouseEvent> {
+	
 	static public var MOUSE_DOWN = new EventKind<MouseEvent>("mouseDown");
 	static public var MOUSE_UP   = new EventKind<MouseEvent>("mouseUp");
 	static public var MOUSE_MOVE = new EventKind<MouseEvent>("mouseMove");
@@ -41,4 +42,5 @@ class MouseEvent extends Event<MouseEvent> {
 		if( targetId != null ) r+="to #"+targetId;
 		return r;
 	}
+	
 }

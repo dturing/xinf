@@ -10,6 +10,7 @@ typedef Sides<T> = {
 }
 
 class Style {
+	
 	public var padding :Sides<Float>;
 	public var border :Sides<Float>;
 	public var background :Color;
@@ -29,7 +30,7 @@ class Style {
 	
 	public function set( param:String, value:Dynamic ) :Void {
 		params.set(param,value);
-	if( value==null ) return;
+		if( value==null ) return;
 		try {
 			Reflect.setField(this,param,value);
 		} catch( e:Dynamic ) {
@@ -67,4 +68,5 @@ class Style {
 		s +="}";
 		return s;
 	}
+	
 }

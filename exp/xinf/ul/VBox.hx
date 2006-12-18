@@ -22,6 +22,7 @@ import xinf.ony.Object;
 **/
 
 class VBox extends Pane {
+	
 	public var padding:Float;
 
     public function new() :Void {

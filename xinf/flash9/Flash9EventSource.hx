@@ -25,6 +25,7 @@ import xinf.event.FrameEvent;
 import xinf.erno.Keys;
 
 class Flash9EventSource {
+	
 	private var runtime:Flash9Runtime;
 	private var frame:Int;
 	
@@ -71,9 +72,11 @@ class Flash9EventSource {
 	private function mouseDown( e:flash.events.MouseEvent ) :Void {
         return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
     }
+    
     private function mouseUp( e:flash.events.MouseEvent ) :Void {
         return postMouseEvent( e, MouseEvent.MOUSE_UP );
     }
+    
     private function mouseMove( e:flash.events.MouseEvent ) :Void {
         return postMouseEvent( e, MouseEvent.MOUSE_MOVE );
     }
@@ -92,9 +95,11 @@ class Flash9EventSource {
 			e.stopPropagation();
 		}
     }
+    
 	private function keyDown( e:flash.events.KeyboardEvent ) :Void {
         return postKeyboardEvent( e, KeyboardEvent.KEY_DOWN );
     }
+    
 	private function keyUp( e:flash.events.KeyboardEvent ) :Void {
         return postKeyboardEvent( e, KeyboardEvent.KEY_UP );
     }
@@ -103,10 +108,10 @@ class Flash9EventSource {
 		runtime.postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
 	}
 	
-
 	public function rootResized( ?e:Dynamic ) :Void {
 		var w = flash.Lib.current.stage.stageWidth;
 		var h = flash.Lib.current.stage.stageHeight;
 		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );
 	}
+	
 }

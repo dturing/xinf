@@ -20,14 +20,17 @@ import xinf.event.SimpleEvent;
 import xinf.event.SimpleEventDispatcher;
 
 interface ListModel<T> {
+	
     function getLength() :Int;
     function getItemAt( index:Int ) :T;
     function getNameAt( index:Int ) :String;
     function addChangedListener( f:SimpleEvent -> Void ) :Void;
     function removeChangedListener( f:SimpleEvent -> Void ) :Void;
+    
 }
 
 class SimpleListModel extends SimpleEventDispatcher, implements ListModel<String> {
+	
     private var items:Array<String>;
     
     public function new() :Void {
@@ -68,4 +71,5 @@ class SimpleListModel extends SimpleEventDispatcher, implements ListModel<String
 				return 0;
 			} );
 	}
+	
 }
