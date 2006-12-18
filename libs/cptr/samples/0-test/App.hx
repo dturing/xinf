@@ -184,19 +184,19 @@ class TestCPtr extends haxe.unit.TestCase {
         assertEquals( 0x44, CPtr.uchar_get(ptr,3) );
     }
 
-	function testVoidNull() {
-		var info:{ size:Int, address:Float } = untyped CPtr.info( CPtr.void_null );
-		assertEquals( 0, info.size );
-		assertEquals( 0., info.address );
-	}
-	
-	// TODO: test bounds checking
+    function testVoidNull() {
+        var info:{ size:Int, address:Float } = untyped CPtr.info( CPtr.void_null );
+        assertEquals( 0, info.size );
+        assertEquals( 0., info.address );
+    }
+    
+    // TODO: test bounds checking
 }
 
 class App {
-	public static function main() {
-		var r = new haxe.unit.TestRunner();
-		r.add( new TestCPtr() );
-		r.run();
-	}
+    public static function main() {
+        var r = new haxe.unit.TestRunner();
+        r.add( new TestCPtr() );
+        r.run();
+    }
 }

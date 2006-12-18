@@ -6,10 +6,10 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
@@ -20,58 +20,58 @@ import xinf.erno.Renderer;
 import xinf.erno.FontStyle;
 
 class Font {
-	
+    
     private static var fonts:Hash<Font> = new Hash<Font>();
     
     public static function getFont( ?name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
-		if( name==null ) name="_sans";
-		if( dontCache==null ) dontCache=false;
-		if( weight==null ) weight=100;
-		if( slant==null ) slant=0;
-		
+        if( name==null ) name="_sans";
+        if( dontCache==null ) dontCache=false;
+        if( weight==null ) weight=100;
+        if( slant==null ) slant=0;
+        
         var font:Font;
         font = fonts.get(name);
         if( font != null ) return font;
         
-		var data:String;
-		if( name=="_sans" ) {
-			data = Std.resource("default-font");
-			if( data==null ) {
-				// try to load bitstream vera- bundled with xinfinity
-				untyped {
-					var module = __dollar__loader.loadmodule("xinf-resources".__s,__dollar__loader);
-					data = module.font;
-				}
-				if( data == null ) {
-					throw("default font not found - include xinf-resources");
-				}
-			}
-		} else {
-			var file = null; // FC FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
-			if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );
-			data = neko.io.File.getContent( file );
-		}
+        var data:String;
+        if( name=="_sans" ) {
+            data = Std.resource("default-font");
+            if( data==null ) {
+                // try to load bitstream vera- bundled with xinfinity
+                untyped {
+                    var module = __dollar__loader.loadmodule("xinf-resources".__s,__dollar__loader);
+                    data = module.font;
+                }
+                if( data == null ) {
+                    throw("default font not found - include xinf-resources");
+                }
+            }
+        } else {
+            var file = null; // FC FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
+            if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );
+            data = neko.io.File.getContent( file );
+        }
         font = new FontReader( data ).getFont();
-		fonts.set( name, font );
+        fonts.set( name, font );
         return font;
     }
-	
-	private static var glyphsToCache:Array<Glyph> = new Array<Glyph>();
-	
-	public static function cacheGlyphs() :Void {
-		var g:Glyph;
-		while( (g = glyphsToCache.shift())!=null ) {
-		// FIXME: this should depend on actual pixel size..
-		//		  50 is quite too much for 20pt, but too little for 1000. 
-		//		  GLPolygon has some pixelSize sh*t.
-			g.cache(50.0);
-		}
-	}
-	
-	public static function cacheGlyph( g:Glyph ) :Void {
-		glyphsToCache.push(g);
-	}
-	
+    
+    private static var glyphsToCache:Array<Glyph> = new Array<Glyph>();
+    
+    public static function cacheGlyphs() :Void {
+        var g:Glyph;
+        while( (g = glyphsToCache.shift())!=null ) {
+        // FIXME: this should depend on actual pixel size..
+        //          50 is quite too much for 20pt, but too little for 1000. 
+        //          GLPolygon has some pixelSize sh*t.
+            g.cache(50.0);
+        }
+    }
+    
+    public static function cacheGlyph( g:Glyph ) :Void {
+        glyphsToCache.push(g);
+    }
+    
     private var glyphs:Array<Glyph>;
     
     public var family_name(default,null):String;
@@ -92,30 +92,30 @@ class Font {
         var g:Glyph = glyphs[character];
         return( g );
     }
-	
-	public function renderText( text:String, fontSize:Float, style:FontStyle ) :Float {
-		if( text == null ) text="[null]";
-		
-		var c_style=0;
-		var nextStyle:FontStyleChange = null;
-		if( style!=null ) nextStyle = style[c_style];
-		
+    
+    public function renderText( text:String, fontSize:Float, style:FontStyle ) :Float {
+        if( text == null ) text="[null]";
+        
+        var c_style=0;
+        var nextStyle:FontStyleChange = null;
+        if( style!=null ) nextStyle = style[c_style];
+        
         GL.pushMatrix();
         
         GL.scale( fontSize, fontSize, 1.0 );
         GL.translate( .0, ascender, .0 );
 
-		GL.pushMatrix(); // for lines.
+        GL.pushMatrix(); // for lines.
 
-		var lines=0;
+        var lines=0;
 
         for( i in 0...text.length ) {
-			if( nextStyle != null && nextStyle.pos == i ) {
-				GL.color4( nextStyle.color.r, nextStyle.color.g, nextStyle.color.b, nextStyle.color.a );
-				c_style++;
-				nextStyle = style[c_style];
-			}
-			
+            if( nextStyle != null && nextStyle.pos == i ) {
+                GL.color4( nextStyle.color.r, nextStyle.color.g, nextStyle.color.b, nextStyle.color.a );
+                c_style++;
+                nextStyle = style[c_style];
+            }
+            
             var c = text.charCodeAt(i);
             if( c == 10 ) { // \n
                 GL.popMatrix();
@@ -133,9 +133,9 @@ class Font {
         GL.popMatrix();
 
         GL.popMatrix();
-		
-		return 0; // FIXME: return string width?
-	}
-	
+        
+        return 0; // FIXME: return string width?
+    }
+    
 }
 

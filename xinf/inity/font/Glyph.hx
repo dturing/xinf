@@ -6,10 +6,10 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
@@ -20,33 +20,33 @@ import opengl.GL;
 import xinf.inity.GLPolygon;
 
 class Glyph {
-	
+    
     private var polygon:GLPolygon;
-	private var displayList:Int;
+    private var displayList:Int;
     public var advance:Float;
     
     public function new( p:GLPolygon, adv:Float ) {
-		polygon = p;
+        polygon = p;
         advance = adv;
-		
-//		cache(1.0);
+        
+//        cache(1.0);
     }
-	
-	public function cache( pixelSize:Float ) :Void {
-		GL.newList( displayList, GL.COMPILE );
-		polygon.drawFilled();
-		GL.endList();
-	}
+    
+    public function cache( pixelSize:Float ) :Void {
+        GL.newList( displayList, GL.COMPILE );
+        polygon.drawFilled();
+        GL.endList();
+    }
     
     public function render( s:Float ) {
-		if( displayList==null ) {
-			displayList = GL.genLists(1);
-			Font.cacheGlyph(this);
-		}
+        if( displayList==null ) {
+            displayList = GL.genLists(1);
+            Font.cacheGlyph(this);
+        }
 
-		GL.callList(displayList);
+        GL.callList(displayList);
 // fake hinting        GL.translate( Math.round((advance*s))/s, .0, .0 );
         GL.translate( advance, .0, .0 );
-	}
-	
+    }
+    
 }

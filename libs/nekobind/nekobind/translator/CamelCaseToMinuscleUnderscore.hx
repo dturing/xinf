@@ -20,21 +20,21 @@
 package nekobind.translator;
 
 class CamelCaseToMinuscleUnderscore extends Translator {
-	public function new() :Void {
-		// this constructor is needed!
-		super();
-	}
-	public function translate( src:String ) :String {
-		var dst = new StringBuf();
-		var l = src.toLowerCase();
-		for( i in 0...src.length ) {
-			var c = src.charAt(i);
-			if( l.charAt(i) != c ) {
-				dst.add("_");
-				dst.add( l.charAt(i) );
-			} else
-				dst.add(c);
-		}
-		return dst.toString();
-	}
+    public function new() :Void {
+        // this constructor is needed!
+        super();
+    }
+    public function translate( src:String ) :String {
+        var dst = new StringBuf();
+        var l = src.toLowerCase();
+        for( i in 0...src.length ) {
+            var c = src.charAt(i);
+            if( l.charAt(i) != c ) {
+                dst.add("_");
+                dst.add( l.charAt(i) );
+            } else
+                dst.add(c);
+        }
+        return dst.toString();
+    }
 }

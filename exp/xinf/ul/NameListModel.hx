@@ -6,17 +6,17 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
 package xinf.ul;
 
 class NameListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
-	
+    
     private var names:Array<String>;
     private var items:Array<T>;
     
@@ -28,10 +28,10 @@ class NameListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
     
     public function addItem( name:String, value:T ) {
         items.push( value );
-		names.push( name );
-		
-		// FIXME: provide a way to add a lot of items with triggering only one change event.
-		postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
+        names.push( name );
+        
+        // FIXME: provide a way to add a lot of items with triggering only one change event.
+        postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
     }
     
     public function getLength() :Int {

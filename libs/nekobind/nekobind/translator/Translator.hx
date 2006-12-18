@@ -23,22 +23,22 @@ import nekobind.translator.CamelCaseToMinuscleUnderscore;
 import nekobind.translator.Capitalize;
 
 class Translator {
-	public function new() :Void {
-	}
-	
-	public function translate( src:String ) :String {
-		return src;
-	}
-	
-	public static function getTranslator( name:String ) :Translator {
-		var r:Translator;
-		try {
-			var c = Type.resolveClass( "nekobind.translator."+name );
-			r = Reflect.createInstance( c, [ ] );
-		} catch( e:Dynamic ) {
-			throw("// WARNING: cannot instantiate translator '"+name+"': "+e);
-		}
-		if( r==null ) r = new Translator();
-		return r;
-	}
+    public function new() :Void {
+    }
+    
+    public function translate( src:String ) :String {
+        return src;
+    }
+    
+    public static function getTranslator( name:String ) :Translator {
+        var r:Translator;
+        try {
+            var c = Type.resolveClass( "nekobind.translator."+name );
+            r = Reflect.createInstance( c, [ ] );
+        } catch( e:Dynamic ) {
+            throw("// WARNING: cannot instantiate translator '"+name+"': "+e);
+        }
+        if( r==null ) r = new Translator();
+        return r;
+    }
 }

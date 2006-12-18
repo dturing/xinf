@@ -21,10 +21,10 @@ package nekobind;
 import nekobind.type.TypeRep;
 
 class Settings implements Dynamic<String> {
-	public var argTypes:Hash<TypeRep>;
-	public var isStatic:Bool;
-	public function new() {
-		argTypes = new Hash<TypeRep>();
-		isStatic = false;
-	}
+    public var argTypes:Hash<TypeRep>;
+    public var isStatic:Bool;
+    public function new() {
+        argTypes = new Hash<TypeRep>();
+        isStatic = false;
+    }
 }

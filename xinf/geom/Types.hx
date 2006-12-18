@@ -6,27 +6,27 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
 package xinf.geom;
 
 /*
-	TODO: parameterize all geometry (Int/Float)
+    TODO: parameterize all geometry (Int/Float)
 */
 
 typedef TPoint = {
-	var x:Float;
-	var y:Float;
+    var x:Float;
+    var y:Float;
 }
 
 typedef TRectangle = {
-	var l:Float;
-	var t:Float;
-	var r:Float;
-	var b:Float;
+    var l:Float;
+    var t:Float;
+    var r:Float;
+    var b:Float;
 }

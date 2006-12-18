@@ -6,21 +6,21 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
 package xinf.event;
 
 interface EventDispatcher {
-	
-	function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void;
-	function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool;
-	function dispatchEvent<T>( e : Event<T> ) :Void;
-	function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void;
-	
+    
+    function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void;
+    function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool;
+    function dispatchEvent<T>( e : Event<T> ) :Void;
+    function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void;
+    
 }
 

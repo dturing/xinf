@@ -6,10 +6,10 @@
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-																			
+                                                                            
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
    Lesser General Public License or the LICENSE file for more details.
 */
 
@@ -28,9 +28,9 @@ import xinf.event.ScrollEvent;
 **/
 
 class VScrollbar extends Pane {
-	
+    
     private var thumb:Pane;
-	private var thumbHeight:Float;
+    private var thumbHeight:Float;
     
     public function new() :Void {
         super();
@@ -38,18 +38,18 @@ class VScrollbar extends Pane {
         addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
         
         thumb = new xinf.ul.Pane();
-		thumb.addStyleClass("Thumb");
+        thumb.addStyleClass("Thumb");
         thumb.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
-		thumb.size={x:12.,y:12.};
-		attach(thumb);
-		
-		thumbHeight = thumb.size.y;
-		
-		size={x:12.,y:20.};
+        thumb.size={x:12.,y:12.};
+        attach(thumb);
+        
+        thumbHeight = thumb.size.y;
+        
+        size={x:12.,y:20.};
     }
 
     public function clickBar( e:MouseEvent ) {
-	    var y = globalToLocal( { x:e.x, y:e.y }).y;
+        var y = globalToLocal( { x:e.x, y:e.y }).y;
         
         var delta:Int;
         if( y > thumb.position.y+thumb.size.y ) delta = 1;
@@ -59,11 +59,11 @@ class VScrollbar extends Pane {
     }
         
     public function clickThumb( e:MouseEvent ) {
-		new Drag<Float>( e, move, null, thumb.position.y );
+        new Drag<Float>( e, move, null, thumb.position.y );
     }
     
     public function move( x:Float, y:Float, marker:Float ) {
-		var y:Float = marker+y;
+        var y:Float = marker+y;
         if( y < 0 ) {
             y = 0;
         } else if( y > size.y-thumbHeight ) {
@@ -72,15 +72,15 @@ class VScrollbar extends Pane {
         thumb.position.y = Math.floor(y);
         
         var value:Float = y/(size.y-thumbHeight);
-		postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, value ) );
-		
-		thumb.scheduleRedraw();
+        postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, value ) );
+        
+        thumb.scheduleRedraw();
     }
     
     public function setScrollPosition( position:Float ) :Void {
         position = Math.max( 0, Math.min( 1, position ) );
         thumb.position.y = Math.floor(position * (size.y-thumbHeight));
-		thumb.scheduleRedraw();
+        thumb.scheduleRedraw();
     }
     
 }
