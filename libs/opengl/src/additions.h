@@ -30,6 +30,9 @@
 #define __ADDITIONS_H
 
 void gluVerticesOffset( int offset, int n, double *v );
-void glutInitSimple();
+
+void glTexSubImage2D_RGBA_BYTE( unsigned int tex, int x, int y, int width, int height, const unsigned int *data );
+
+
 
 #endif //__ADDITIONS_H

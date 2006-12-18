@@ -54,8 +54,6 @@ extern class GLUT {
     /** <nekobind><cptr name="argv" null-allowed="true" type="char*"/>
                 <cptr name="argn" null-allowed="true" type="int"/></nekobind> **/
     public static function init(argn:Dynamic,argv:Dynamic) :Void;
-
-    public static function initSimple() :Void;
     
     public static function setDisplayFunc( func:Dynamic ) :Void; // Void->Void
     public static function setReshapeFunc( func:Dynamic ) :Void; // Int->Int->Void
@@ -100,7 +98,6 @@ extern class GLUT {
             var loader = untyped __dollar__loader;
             GLUT = loader.loadmodule("opengl".__s,loader).GLUT__impl;
         }
-        initSimple();
     }
 }
 

@@ -878,22 +878,31 @@ extern class GL {
     public static function getTexLevelParameterfv( target:Int, level:Int, pname:Int, params:Float ):Void;
 
     public static function texImage1D( target:Int, level:Int, internalFormat:Int, width:Int, border:Int, format:Int, type:Int, pixels:Void ):Void;
-    public static function texImage2D( target:Int, level:Int, internalFormat:Int, width:Int, height:Int, border:Int, format:Int, type:Int, pixels:Void ):Void;
     public static function getTexImage( target:Int, level:Int, format:Int, type:Int, pixels:Void ):Void;
 */
+
+    /** <nekobind><cptr name="pixels" type="GLvoid" null-allowed="true"/></nekobind> **/
+    public static function texImage2D( target:Int, level:Int, internalFormat:Int, width:Int, height:Int, border:Int, format:Int, type:Int, pixels:Dynamic ):Void;
 
     /** <nekobind><cptr name="textures" type="GLuint" min-size="n"/></nekobind> **/
     public static function genTextures( n:Int, textures:Dynamic ):Void;
     
     public static function bindTexture( target:Int, texture:Int ):Void;
     public static function isTexture( texture:Int ):Int;
+
+    /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
+    public static function texSubImageRGBA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+
+    /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*3)"/></nekobind> **/
+    public static function texSubImageRGB( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+
 /*    
     public static function deleteTextures( n:Int, textures:Int ):Void;
     public static function prioritizeTextures( n:Int, textures:Int, priorities:Float ):Void;
     public static function areTexturesResident( n:Int, textures:Int, residences:String ):Int;
     
-    public static function texSubImage1D( target:Int, level:Int, xoffset:Int, width:Int, format:Int, type:Int, pixels:Void ):Void;
     public static function texSubImage2D( target:Int, level:Int, xoffset:Int, yoffset:Int, width:Int, height:Int, format:Int, type:Int, pixels:Void ):Void;
+    public static function texSubImage1D( target:Int, level:Int, xoffset:Int, width:Int, format:Int, type:Int, pixels:Void ):Void;
     public static function copyTexImage1D( target:Int, level:Int, internalformat:Int, x:Int, y:Int, width:Int, border:Int ):Void;
     public static function copyTexImage2D( target:Int, level:Int, internalformat:Int, x:Int, y:Int, width:Int, height:Int, border:Int ):Void;
     public static function copyTexSubImage1D( target:Int, level:Int, xoffset:Int, x:Int, y:Int, width:Int ):Void;

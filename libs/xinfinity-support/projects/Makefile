@@ -6,10 +6,13 @@
 #
 
 # project name
-PROJECT:=fonttools
+PROJECT:=xinfinity-support
+BINDING_CLASSES:=Pixbuf
 
 # platform default, set this to "Mac" or "Windows" (from the environment) for cross-compilation
 NEKO_PLATFORM?=Linux
+
+# project cflags and libs
 
 ifeq ($(NEKO_PLATFORM),Mac)
 		PROJECT_CFLAGS:=-I/opt/osx/MacOSX10.4u.sdk/usr/X11R6/include/ -I/opt/osx/MacOSX10.4u.sdk/usr/X11R6/include/freetype2
@@ -19,25 +22,37 @@ else
 		PROJECT_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/freetype2
 		PROJECT_LIBS:=/opt/mingw/lib/libfreetype.dll.a
 	else
-		PROJECT_CFLAGS:=${shell freetype-config --cflags}
-		PROJECT_LIBS:=${shell freetype-config --libs}
+		PROJECT_CFLAGS:=${shell freetype-config --cflags} ${shell pkg-config --cflags gdk-pixbuf-2.0}
+		PROJECT_LIBS:=${shell freetype-config --libs} ${shell pkg-config --libs gdk-pixbuf-2.0}
 	endif
 endif
 
 
+####################################################
 ## NO CHANGES BEYOND HERE (?)
 
+API_PATH:=../api
 BIN_PATH:=../bin
 SRC_PATHS:=../src ../src/$(NEKO_PLATFORM)
 NDLL:=$(BIN_PATH)/$(NEKO_PLATFORM)/$(PROJECT).ndll
+
+TARGETS:=$(NDLL)
 
 PROJECT_CFLAGS+=$(foreach SRC_PATH, $(SRC_PATHS), -I$(SRC_PATH))
 C_SRCS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.c))
 C_HEADERS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.h))
 
-ALL_FLAGS=$(NEKO_CFLAGS) $(NEKO_LIBS) $(PLATFORM_CFLAGS) $(PLATFORM_LIBS) $(PROJECT_CFLAGS) $(PROJECT_LIBS)
+# c sources are generated and compiled into the ndll
+BINDING_C_SRCS:=$(foreach CLASS, $(BINDING_CLASSES), bind_$(CLASS).c)
+C_SRCS+=$(BINDING_C_SRCS)
+
+ifdef BINDING_CLASSES
+	# add the implementation neko module to TARGETS
+	TARGETS+=$(BIN_PATH)/$(PROJECT).n
+endif
 
 
+####################################################
 # setup cross-compilation (or not)
 
 ifeq ($(NEKO_PLATFORM),Mac)
@@ -47,6 +62,8 @@ ifeq ($(NEKO_PLATFORM),Mac)
 		NEKO_LIBS:=-dynamiclib -L/opt/osx/manual/lib -lneko
 		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include 
 		PLATFORM_CFLAGS+=-isysroot $(OSX_SDK) -Wl,-syslibroot,$(OSX_SDK)
+
+default: $(TARGETS)
 
 $(NDLL): $(NDLL).x86 $(NDLL).ppc
 	i686-apple-darwin-lipo -create -output $@ -arch i386 $(NDLL).x86 -arch ppc $(NDLL).ppc
@@ -68,6 +85,8 @@ else
 		NEKO_LIBS:=-L/usr/lib -lneko -lz  -ldl
 	endif
 
+default: $(TARGETS)
+
 $(NDLL): $(C_SRCS) $(C_HEADERS)
 	$(CC) -o $@ $(C_SRCS) $(ALL_FLAGS)
 
@@ -75,6 +94,42 @@ endif
 
 
 
+
+ALL_FLAGS=$(NEKO_CFLAGS) $(NEKO_LIBS) $(PLATFORM_CFLAGS) $(PLATFORM_LIBS) $(PROJECT_CFLAGS) $(PROJECT_LIBS)
+
+
+####################################################
+# nekobind binding generation
+
+# rule to generate a c binding class with nekobind
+bind_%.c : ../api/xinf/support/%.hx $(PROJECT).xml
+	nekobind -c $(PROJECT).xml xinf.support.$* > $@
+
+# rule to generate a haxe implementation class with nekobind
+%__impl.hx : ../api/xinf/support/%.hx $(PROJECT).xml
+	nekobind -i $(PROJECT).xml xinf.support.$* > $@
+
+
+# the interface is defined in API_PATH/xinf/support/*.hx
+BINDING_HX:=$(foreach CLASS, $(BINDING_CLASSES), $(API_PATH)/xinf/support/$(CLASS).hx)
+
+# we use haxe to generate a type .xml
+$(PROJECT).xml $(PROJECT)-tmp.n: $(BINDING_HX)
+	haxe -neko $(PROJECT)-tmp.n -xml $@ -cp $(API_PATH) $(foreach CLASS, $(BINDING_CLASSES), xinf.support.$(CLASS))
+
+
+# haxe "implementation classes" (loading the neko module and implement the defined interface)
+BINDING_HX_IMPL:=$(foreach CLASS, $(BINDING_CLASSES), $(CLASS)__impl.hx)
+
+
+# the neko implementation module
+$(BIN_PATH)/$(PROJECT).n: $(BINDING_HX_IMPL)
+	haxe -neko $@ $(BINDING_HX_IMPL)
+
+
+
+
+####################################################
 # meta-targets (not dependant on $(NEKO_PLATFORM)
 
 all:
@@ -84,8 +139,10 @@ all:
 	
 clean:
 	-@rm $(BIN_PATH)/Mac/* $(BIN_PATH)/Windows/* $(BIN_PATH)/Linux/*
+	-@rm $(PROJECT)-tmp.n $(PROJECT).xml $(foreach CLASS,$(BINDING_CLASSES),bind_$(CLASS).c $(CLASS)__impl.hx)
 
 
+####################################################
 # build haxelib package
 
 HAXELIB_ROOT:=../haxelib
@@ -94,7 +151,7 @@ TEST_SAMPLE:=../samples/0-test
 
 haxelib : $(HAXELIB_PROJECT).zip
 	
-$(HAXELIB_PROJECT).zip: all
+$(HAXELIB_PROJECT).zip: $(NDLL)
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	
@@ -105,12 +162,18 @@ $(HAXELIB_PROJECT).zip: all
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Linux
 	cp ../bin/Linux/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Linux/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Mac
-	cp ../bin/Mac/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Mac/
+	#cp ../bin/Mac/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Mac/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Windows
-	cp ../bin/Windows/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Windows/
+	#cp ../bin/Windows/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Windows/
+	
+	# copy neko impl module
+	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Linux/
+	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Mac/
+	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Windows/
 	
 	# copy haXe API and Samples
-	svn export ../api/$(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
+    # FIXME: svn export
+	cp -r ../api/xinf $(HAXELIB_PROJECT)/xinf
 	svn export ../samples $(HAXELIB_PROJECT)/samples
 	
 	# package and test-install the haxelib once (we need it to compile the test)

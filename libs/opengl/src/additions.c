@@ -10,6 +10,16 @@ void gluVerticesOffset( int offset, int n, double *v ) {
 	}
 }
 
+void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
+void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 
 #define MAX_WINDOWS 32
 
@@ -45,6 +55,11 @@ void glut_setup() {
 	f_Idle = val_id("idle");
 	f_Timer = val_id("timer");
 	f_Exit = val_id("exit");
+    
+    
+	char *argv[] = { "", NULL };
+	int argn=1;
+	glutInit(&argn,argv);
 }
 DEFINE_ENTRY_POINT(glut_setup);
 
@@ -151,11 +166,4 @@ GLUT_WRAP_CALLBACK(Exit)
 value glutSetExitFunc( value f ) {
 	glut_set_callback( f_Exit, f );
 	atexit( glut_wrap_Exit );
-}
-
-
-void glutInitSimple() {
-	char *argv[] = { "", NULL };
-	int argn=1;
-	glutInit(&argn,argv);
 }
