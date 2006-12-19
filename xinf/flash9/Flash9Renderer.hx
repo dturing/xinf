@@ -148,8 +148,31 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
-        if( img.bitmap != null )
-            current.addChild( img.bitmap );
+        /* this works, but i feel it's not the most efficient way.
+            if you can think of a better one, please submit a patch.
+            else, we should at least make an exception for the default case ("natural" image size)*/
+    
+        var wf = outRegion.w/inRegion.w;
+        var hf = outRegion.h/inRegion.h;
+
+        var r:flash.display.Bitmap = img.bitmap;
+        r.x = (-inRegion.x*wf)+outRegion.x;
+        r.y = (-inRegion.y*hf)+outRegion.y;
+        r.width = img.width * wf;
+        r.height = img.height * hf;
+
+        var wrap = new Sprite();
+        var crop = new Sprite();
+        var g = crop.graphics;
+        g.beginFill( 0xff0000, 1 );
+        g.drawRect(0,0,outRegion.w,outRegion.h);
+        g.endFill();
+        wrap.addChild(crop);
+        wrap.mask = crop;
+        
+        wrap.addChild( r );
+
+        current.addChild( wrap );
     }
 
     public function native( o:NativeObject ) {

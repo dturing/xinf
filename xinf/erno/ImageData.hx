@@ -48,8 +48,7 @@ class ImageData extends SimpleEventDispatcher {
     public static function load( url:String ) :ImageData {
     trace("should load: "+url );
         #if neko
-            throw("no images in xinferno yet");
-            return null;
+            return( xinf.inity.Texture.newByName( url ) );
         #else js
             return( new xinf.js.JSImageData(url) );
         #else flash

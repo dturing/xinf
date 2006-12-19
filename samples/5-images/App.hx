@@ -28,13 +28,14 @@ class App extends Application {
         super();
 
         try {
-            var i:ImageData = ImageData.load("http://xinf.org/img/xinf.gif");
+            var i:ImageData = ImageData.load("http://y/xinf-tmp/xinf.png");
             
             block = new Image(i);
             block.moveTo( 100, 100 );
+            block.resize( 100, 61 );
             root.attach( block );
         } catch(e:Dynamic) {
-            trace("Exception: "+e );
+            trace("Exception: "+e+"\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
         }
     }
 

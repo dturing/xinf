@@ -1,5 +1,14 @@
 -cp ../../
 -main App
+-neko run.n
+-resource xinf.png@xinf.png
+-lib xinfinity-support
+-lib cptr
+-lib opengl
+
+--next
+-cp ../../
+-main App
 -D htmltrace
 -swf-version 9
 -swf-header 320:240:25:000000

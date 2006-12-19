@@ -29,7 +29,7 @@ class FontReader {
         font = new Font();
         polygon = new Polygon();
         
-        var _font = new fonttools.Font( ttfData, 1024<<6, 1024<<6 );
+        var _font = new xinf.support.Font( ttfData, 1024<<6, 1024<<6 );
         
         // FIXME: move this to fonttools
         var _f = untyped _font.__f;

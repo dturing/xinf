@@ -32,6 +32,7 @@ class JSImageData extends ImageData {
     }
     
     private function js_loaded( e:Event ) :Void {
+        width = img.width; height=img.height;
         postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ) );
     }
     

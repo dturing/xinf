@@ -97,9 +97,27 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+        var wf = outRegion.w/inRegion.w;
+        var hf = outRegion.h/inRegion.h;
+
         var r:Image = cast(js.Lib.document.createElement("img"));
         r.src = img.url;
-        current.appendChild(r);
+        r.style.position = "absolute";
+        r.style.left = ""+Math.round(-inRegion.x*wf);
+        r.style.top = ""+Math.round(-inRegion.y*hf);
+        r.style.width = ""+Math.round( img.width * wf );
+        r.style.height = ""+Math.round( img.height * hf );
+        
+        var wrap = js.Lib.document.createElement("div");
+        wrap.style.position = "absolute";
+        wrap.style.overflow = "hidden";
+        wrap.style.left = ""+Math.round(outRegion.x);
+        wrap.style.top = ""+Math.round(outRegion.y);
+        wrap.style.width = ""+Math.round(outRegion.w);
+        wrap.style.height = ""+Math.round(outRegion.h);
+        
+        wrap.appendChild(r);
+        current.appendChild(wrap);
     }
     
     public function native( o:NativeObject ) {
