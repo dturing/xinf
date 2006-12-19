@@ -92,9 +92,7 @@ class Texture extends ImageData {
                     case "resource":
                         data = Std.resource(u[1]);
                     case "http":
-                        var req = new xinf.inity.http.HttpRequest();
-                        var reply = req.request( new xinf.inity.http.URL( url ) );
-                        data = reply.data;
+                        data = haxe.Http.request(url);
                     default:
                         throw("unhandled protocol for image loading: "+u[0] );
                 }
