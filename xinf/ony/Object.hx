@@ -94,8 +94,7 @@ class Object extends SimpleEventDispatcher {
         trigger to free all associated objects in the runtime. This is it.)
     **/
     public function destroy() :Void {
-        // FIXME: we dont actually need the Manager's allObject list so much,
-        // but what about deleting our associated Sprite/Div/GLObject?
+        // how about deleting our associated Sprite/Div/GLObject?
         // also: detach from parent
         manager.unregister(_id);
     }

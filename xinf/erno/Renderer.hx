@@ -33,7 +33,7 @@ import xinf.erno.FontStyle;
 
 
 /**
-    A xinferno Renderer describes the drawing protocol used within all of xinf.
+    The xinferno Renderer interface describes the drawing protocol used within all of xinf.
     <p>
         You will likely be confronted with it mostly when overriding [xinf.ony.Object.drawContents()],
         where you will be given a Renderer to use for drawing your stuff. In that case, the 
