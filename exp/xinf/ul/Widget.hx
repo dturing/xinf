@@ -37,7 +37,7 @@ class Widget extends Pane {
     
     // FIXME: child classes have their own onMouseDown, which is not really override.
     // is Widget the class that "highlevels" mouseevents towards onClick, onDrag etc?
-    public function onMouseDownWidget( e:MouseEvent ) :Void {
+    private function onMouseDownWidget( e:MouseEvent ) :Void {
         FocusManager.setFocus( this );
     }
     

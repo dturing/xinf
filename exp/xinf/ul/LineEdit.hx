@@ -97,7 +97,7 @@ class LineEdit extends Widget {
         scheduleRedraw();
     }
 
-    public function onMouseDown( e:MouseEvent ) :Void {
+    private function onMouseDown( e:MouseEvent ) :Void {
         var p = globalToLocal( {x:e.x, y:e.y } );
         p.x += (xOffset-style.padding.l);
         moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
