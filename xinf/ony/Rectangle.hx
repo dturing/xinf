@@ -18,6 +18,10 @@ package xinf.ony;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
+/**
+    Rectangle is a simple Xinfony Object that represents a (guess!)
+    Rectangle. It will probably go away.
+**/
 class Rectangle extends Object {
     
     private var color:Color;

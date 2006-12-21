@@ -19,6 +19,26 @@ import xinf.erno.PenStackRenderer;
 import xinf.erno.Renderer;
 import xinf.geom.Transform;
 
+/**
+    The ObjectModelRenderer class implements some functionality for
+    Renderers that use an object-model based engine (which is currently
+    true for all available renderers).
+    <p>
+        It implements the <i>object parts</i> of the <a href="Renderer">Renderer</a>
+        interface, keeps a global IntHash mapping Xinferno IDs to NativeObjects (here,
+        these are called '[Primitive]'s. The type parameter is in fact required to be
+        the same as [NativeObject]. FIXME: clean this up a little!
+    </p>
+    <p>
+        Deriving classes should ignore the [startObject], [endObject], [startNative],
+        [endNative], [showObject] and [setTransform] functions of the Renderer interface
+        (i.e., not implement them), and instead implement the [createPrimitive],
+        [attachPrimitive], [clearPrimitive] and [setPrimitiveTransform] functions
+        declared here. The default implementations of those do nothing. Deriving classes
+        can access the private member [current] to get access to the NativeObject currently
+        being (re-)defined.
+    </p>
+**/
 class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     
     private var objects:IntHash<Primitive>;
@@ -29,29 +49,42 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     
     private var current:Primitive;
 
-    /* API to override */
+    /**
+        to be overridden by deriving classes, 
+        this function returns a newly
+        allocated native object associated to the given ID.
+    **/
     public function createPrimitive(id:Int) :Primitive {
         return null;
     }
     
+    /**
+        to be overridden by deriving classes, 
+        attach the [child] to the [parent] object,
+        i.e., insert it, addChild, however you want to call it.
+    **/
     public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
     }
     
+    /**
+        to be overridden by deriving classes, 
+        clear the given object (remove all its children, clear an
+        eventually existing graphics context).
+    **/
     public function clearPrimitive( p:Primitive ) :Void {
     }
     
+    /**
+        to be overridden by deriving classes, 
+        set the transformation of the given object to the given Transform.
+    **/
     public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
     }
     
-    public function getDefaultRoot() :Primitive {
-        return null;
-    }
-
     /* public API */
     public function new() :Void {
         super();
         objects = new IntHash<Primitive>();
-        objects.set(0,current);
     }
 
     // we implement the root and object parts of the erno Instruction protocol

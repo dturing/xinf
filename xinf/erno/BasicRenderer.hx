@@ -19,6 +19,10 @@ import xinf.erno.Renderer;
 import xinf.geom.Matrix;
 import xinf.erno.FontStyle;
 
+/**
+    BasicRenderer is Renderer that implements all functions
+    of the <a href="Renderer">Renderer</a> interface to throw exceptions.
+**/
 class BasicRenderer implements Renderer {
     
     public function new() :Void {

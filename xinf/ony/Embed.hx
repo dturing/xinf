@@ -16,30 +16,34 @@
 package xinf.ony;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
-import xinf.erno.FontStyle;
 
 /**
-    A simple Xinfony Object displaying a string of text.
+    A Root-like Object, embeds a Xinfony display hierarchy
+    into a Runtime-native Object.
 **/
-class Text extends Object {
+class Embed extends Object {
     
-    public var color:Color;
-    public var text:String;
-
-    public function new( ?text:String, ?color:Color ) :Void {
-        if( color==null ) color = Color.BLACK;
-        this.color=color;
-        this.text=text;
+    private var root:NativeContainer;
+    
+    /**
+        Constructor. Pass in a NativeContainer (a DisplayObjectContainer
+        for Flash, a HtmlDom for JS, or a GLObject for Xinfinity); this Object
+        will aquire it and use it as the root for this display hierarchy.
+    **/
+    public function new( o:NativeContainer ) :Void {
         super();
+        root = o;
     }
-    
-    public function drawContents( g:Renderer ) :Void {
-        if( text!=null ) {
-            g.setFill(color);
-            g.setFont( "_sans", Roman, Normal, 12 );
-            g.text(0,0,text);
+
+    /**
+        redraws the Object. This redefines the contents of the NativeContainer
+        you passed to the constructor.
+    **/
+    public function draw( g:Renderer ) :Void {
+        g.startNative( root );
+        for( child in children ) {
+            g.showObject( child._id );
         }
+        g.endNative();
     }
-    
 }

@@ -15,6 +15,11 @@
 
 package xinf.erno;
 
+/**
+    The Keys class provides a single global function ([get]) to 
+    convert a runtime-specific numeric key code to a
+    xinferno-standard key string.
+**/
 class Keys {
     
     private static var keys:IntHash<String>;

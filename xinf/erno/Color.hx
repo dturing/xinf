@@ -21,7 +21,7 @@ package xinf.erno;
 class Color {
     
     /* fixme: place somewhere else */
-    public static function intToString( v:Int, ?radix:Int, ?l:Int ) :String {
+    private static function intToString( v:Int, ?radix:Int, ?l:Int ) :String {
         var glyphs="0123456789abcdef";
         var r:String="";
         if( radix==null ) radix=10;
@@ -71,14 +71,14 @@ class Color {
         return this;
     }
 
-    /** Sets the R, G, and B components from individual 0-1 floats, a is 1 **/
+    /** Sets the R, G, B and A components from individual 0-1 floats **/
     public function fromRGBA( r:Float, g:Float, b:Float, a:Float ) :Color {
         this.r=r; this.g=g; this.b=b;
         this.a=a;
         return this;
     }
 
-    /** Sets the R, G, B and A components from individual 0-1 floats **/
+    /** Sets the R, G, and B components from individual 0-1 floats, a is 1 **/
     public function fromRGB( r:Float, g:Float, b:Float, a:Float ) :Color {
         this.r=r; this.g=g; this.b=b;
         this.a=1;

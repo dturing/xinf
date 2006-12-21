@@ -19,6 +19,13 @@ import xinf.erno.Renderer;
 import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 
+/**
+    An Image. You have to create an <a href="../erno/ImageData">ImageData</a> object
+    to pass into the constructor. The Image will be redrawn as soon as the ImageData
+    is completely loaded. The complete image is displayed in the rectangle defined by
+    [Object.size]. If the size is not set, it will default to the original image size.
+    (you can draw parts of an image if you override the drawContents method).
+**/
 class Image extends Object {
     
     private var img:ImageData;
@@ -32,14 +39,16 @@ class Image extends Object {
     }
     
     private function dataChanged( e:ImageLoadEvent ) :Void {
+        if( size.x==0 && size.y==0 ) {
+            size.x = img.width;
+            size.y = img.height;
+        }
         scheduleRedraw();
     }
     
     public function drawContents( g:Renderer ) :Void {
         if( img==null ) return;
-        trace("DRAW, w:"+img.width+", h:"+img.height+", w:"+size.x+", h:"+size.y );
-//        g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:0,y:0,w:size.x,h:size.y} );
-        g.image( img, {x:img.width/4,y:img.height/4,w:img.width/2,h:img.height/2}, {x:0,y:0,w:size.x,h:size.y} );
+        g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:0,y:0,w:size.x,h:size.y} );
      }
     
 }

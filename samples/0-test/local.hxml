@@ -13,7 +13,7 @@
 -main App
 -lib cptr
 -lib opengl
--lib fonttools
+-lib xinfinity-support
 -cp ../../
 -neko run.n
 

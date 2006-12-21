@@ -17,6 +17,10 @@ package xinf.erno;
 
 import xinf.erno.Renderer;
 
+/**
+    this Enum defines the <a href="Renderer">Renderer</a> interface
+    as enum values. It is currently unused, but will be reborn someday.
+**/
 enum Instruction {
     
     StartObject( id:Int );
@@ -48,10 +52,5 @@ enum Instruction {
     Image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } );
     
     Native( o:Dynamic );
-//    #if neko
-//        SetFontRenderingParameters( pixelAlign
-    // GL-Specific
-//    SetPixelSize( s:Float );
-
 }
 
