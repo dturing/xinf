@@ -1,13 +1,7 @@
 -main App
 -lib cptr
 -lib opengl
--lib fonttools
+-lib xinfinity-support
 -cp ../../../
 -cp ../../
--swf-version 9
--swf App.swf
-
-#-neko run.n
-
-#--next
-#-cmd neko run
+-neko run.n

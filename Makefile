@@ -34,7 +34,7 @@ DOC_DIR:=doc
 .PHONY: doc
 $(DOC_DIR)/doc.n.xml : $(XINF_SOURCES)
 	cd $(DOC_DIR); haxe --auto-xml \
-		-lib opengl -lib cptr -lib fonttools -neko doc.n -cp ../ xinf.ImportAll \
+		-lib opengl -lib cptr -lib xinfinity-support -neko doc.n -cp ../ xinf.ImportAll \
 #		--next -js doc.js -cp ../ xinf.ImportAll \
 #		--next -swf-version 9 -swf doc.swf -cp ../ xinf.ImportAll
 	
