@@ -16,22 +16,27 @@
 
 <style type="text/css">
 body {
-	font-family: sans-serif;
-}
-
-.document {
-	margin : 10px auto 5px auto;
+	font-family: Bitstream Vera Sans, Helvetica, Arial, sans-serif;
 }
 
 .title {
-	font-size: 15;
-	font-weight: bold;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.title img {
+    position: relative;
+    left: -118;
+}
+
+.document {
+	margin-left: 130px;
+    margin-top: 20px;
 }
 
 ul.entry {
 	list-style-type: square;
 	font-weight : bold;
-	margin-left : 5px;
 	padding-left : 15px;
 }
 
@@ -60,25 +65,23 @@ a.package {
 }
 
 .index {
-	margin-left : 10px;
+	margin-top : 20px;
 }
 
 .kwd {
-	color : #090;
+	color : #666;
 }
 
 .classname {
-	font-size : 30;
-	font-weight : bold;
-	margin-left : 10px;
-	margin-bottom : 20px;
-	margin-top : 10px;
+	font-size : 24;
+	margin-bottom : 10px;
+	margin-top : 20px;
 }
 
 .classdoc {
 	margin-top : 10px;
-	margin-left : 20px;
 	margin-right : 20px;
+	color : #444;
 }
 
 .importmod, .extends, .implements, .typedef, .platforms {
@@ -87,16 +90,17 @@ a.package {
 }
 
 dd {
-	margin : 0 20 20 40;
-	font-size : 12pt;
+	margin-left : 20px;
+	margin-right : 20px;
+	margin-bottom : 15px;
 	color : #444;
 }
 
 dt {
-	margin-left : 10px;
+    margin-top: 10px;
+	margin-left : 0px;
 	margin-bottom : 5px;
 	text-align : left;
-	font-size : 10pt;
 	font-family: monospace;
 }
 
@@ -106,8 +110,13 @@ dt {
 
 <body>
 
+
 <div class="document">
-<div class="title">Xinf API Documentation</div>
+
+<div class="title">
+    <img src="http://xinf.org/img/header.gif"/><br/>
+    API Reference (including haXe standard library)
+</div>
 
 <data/>
 

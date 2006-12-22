@@ -20,8 +20,10 @@ import xinf.geom.Matrix;
 import xinf.erno.FontStyle;
 
 /**
-    BasicRenderer is Renderer that implements all functions
-    of the <a href="Renderer">Renderer</a> interface to throw exceptions.
+    BasicRenderer implements all functions
+    of the <a href="Renderer.html">Renderer</a> interface to throw exceptions.
+    It is used as a base class for other renderers (some, like JSRenderer,
+    throw exceptions for functions that they cannot satisfy, like startShape()).
 **/
 class BasicRenderer implements Renderer {
     

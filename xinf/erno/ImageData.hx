@@ -20,10 +20,10 @@ import xinf.event.ImageLoadEvent;
 
 /**
     ImageData represents the data of a bitmap image. It can be passed to a
-    <a href="Renderer">Renderer</a>'s [image()] function to draw (part of) an image.
+    <a href="Renderer.html">Renderer</a>'s [image()] function to draw (part of) an image.
     <p>
         ImageData is also a SimpleEventDispatcher and dispatches
-        <a href="../event/ImageLoadEvent">ImageLoadEvents</a>
+        <a href="../event/ImageLoadEvent.html">ImageLoadEvents</a>
     </p>
 **/
 class ImageData extends SimpleEventDispatcher {

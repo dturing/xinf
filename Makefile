@@ -39,7 +39,8 @@ $(DOC_DIR)/doc.n.xml : $(XINF_SOURCES)
 #		--next -swf-version 9 -swf doc.swf -cp ../ xinf.ImportAll
 	
 doc : $(DOC_DIR)/doc.n.xml
-	cd $(DOC_DIR); haxedoc doc.n.xml -f xinf -f ony
+	cd $(DOC_DIR); haxedoc doc.n.xml
+#    -f xinf -f ony
 
 
 # package resources

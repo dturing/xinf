@@ -18,7 +18,7 @@ package xinf.erno;
 import xinf.erno.Renderer;
 
 /**
-    this Enum defines the <a href="Renderer">Renderer</a> interface
+    this Enum defines the <a href="Renderer.html">Renderer</a> interface
     as enum values. It is currently unused, but will be reborn someday.
 **/
 enum Instruction {

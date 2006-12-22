@@ -19,6 +19,20 @@ package xinf.erno;
     The Keys class provides a single global function ([get]) to 
     convert a runtime-specific numeric key code to a
     xinferno-standard key string.
+    <br/>
+    "Well-known" Keys are:
+    <ul>
+        <li>backspace</li>
+        <li>tab</li>
+        <li>escape</li>
+        <li>space</li>
+        <li>page up</li>
+        <li>page down</li>
+        <li>left</li>
+        <li>up</li>
+        <li>right</li>
+        <li>down</li>
+    </ul>
 **/
 class Keys {
     

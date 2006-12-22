@@ -20,7 +20,7 @@ import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 
 /**
-    An Image. You have to create an <a href="../erno/ImageData">ImageData</a> object
+    An Image. You have to create an <a href="../erno/ImageData.html">ImageData</a> object
     to pass into the constructor. The Image will be redrawn as soon as the ImageData
     is completely loaded. The complete image is displayed in the rectangle defined by
     [Object.size]. If the size is not set, it will default to the original image size.

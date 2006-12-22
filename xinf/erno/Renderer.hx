@@ -27,7 +27,38 @@ import xinf.erno.FontStyle;
     typedef NativeObject = js.HtmlDom
     typedef NativeContainer = js.HtmlDom
 #else true
+    /**
+        NativeObject is a typedef that is defined depending on the runtime you compile for.
+        <ul>
+            <li>for Xinfinity, it is = <a href="../inity/GLObject.html">xinf.inity.GLObject</a></li>
+            <li>for Flash, it is = <a href="../../flash/display/DisplayObject.html">flash.display.DisplayObject</a></li>
+            <li>for JavaScript, it is = <a href="../../js/HtmlDom.html">js.HtmlDom</a></li>
+        </ul>
+        
+        It is used to embed native objects into xinf content, 
+        similar to <a href="NativeContainer.html">NativeContainer</a>
+        
+        <br/><br/>
+        
+        (ignore the following, I haven't figured how to patch haxedoc to accept this construct).
+    **/
     typedef NativeObject = xinf.inity.GLObject
+    
+    /**
+        NativeContainer is a typedef that is defined depending on the runtime you compile for.
+        <ul>
+            <li>for Xinfinity, it is = <a href="../inity/GLObject.html">xinf.inity.GLObject</a></li>
+            <li>for Flash, it is = <a href="../../flash/display/DisplayObjectContainer.html">flash.display.DisplayObjectContainer</a></li>
+            <li>for JavaScript, it is = <a href="../../js/HtmlDom.html">js.HtmlDom</a></li>
+        </ul>
+        
+        It is used to embed xinf content into native objects, 
+        similar to <a href="NativeObject.html">NativeObject</a>
+        
+        <br/><br/>
+        
+        (ignore the following, I haven't figured how to patch haxedoc to accept this construct).
+    **/
     typedef NativeContainer = xinf.inity.GLObject
 #end
 
@@ -45,7 +76,7 @@ import xinf.erno.FontStyle;
         <b>Warning:</b>
         This documentation describes how the renderers <i>should</i> behave, it currently cannot
         be guaranteed that everything works as specified on every renderer. Also, at least the
-        <a href="../js/JSRenderer">JavaScript renderer</a> will ignore shape instructions
+        <a href="../js/JSRenderer.html">JavaScript renderer</a> will ignore shape instructions
         and transformations other than translation (movement).
     </p>
 **/
@@ -54,7 +85,7 @@ interface Renderer {
     /**
         Start an object definition. Must be matched with a corresponding endObject().
         You can define only one object at a time. The ID must be globally unique, and
-        should be acquired with <a href="Runtime">Runtime</a>.getNextId().
+        should be acquired with <a href="Runtime.html">Runtime</a>.getNextId().
         If no object with the ID exists, it will be created. If it does exist,
         it will be cleared. Until a matching endObject() is called, the object
         is the "current object".
@@ -174,14 +205,14 @@ interface Renderer {
     /**
         Draws a string of text at coordinates ([x],[y]) within the current object,
         using the current font style (family, weight, slant and size) and the
-        current fill color. You can optionally pass in a <a href="FontStyle">FontStyle</a>
+        current fill color. You can optionally pass in a <a href="FontStyle.html">FontStyle</a>
         for changing the font color in the middle of the string. The string may contain
         '\n's to span multiple lines.
     **/
     function text( x:Float, y:Float, text:String, ?style:FontStyle ) :Void;
     
     /**
-        Draw the specified [inRegion] of the given <a href="ImageData">ImageData</a> 
+        Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 
         object to the given [outRegion]. 
         FIXME: make inRegion/outRegion optional, potentially swap (so that one can leave
         away only inRegion).
@@ -189,12 +220,12 @@ interface Renderer {
     function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void;
     
     /**
-        Start redefining the contents of the given <a href="NativeContainer">NativeContainer</a>.
+        Start redefining the contents of the given <a href="NativeContainer.html">NativeContainer</a>.
         Similar to [startObject()], this clears the given container, and must be matched
         by a corresponding [endNative()]. [startNative]/[endNative] allow you to use a
         Xinferno Renderer to fill a runtime-specific graphic object.
         <br/><b>Note:</b> this functionality is experimental, and might well change.
-        You should probably stick to using <a href="../ony/Embed">xinf.ony.Embed</a>
+        You should probably stick to using <a href="../ony/Embed.html">xinf.ony.Embed</a>
         to place your xinf content within native structures meanwhile.
     **/
     function startNative( o:NativeContainer ) :Void;
@@ -205,11 +236,11 @@ interface Renderer {
     function endNative() :Void;
 
     /**
-        Add the given <a href="NativeObject">NativeObject</a> to the current object.
+        Add the given <a href="NativeObject.html">NativeObject</a> to the current object.
         This allows you to embed native content (i.e., arbitrary DisplayObjects in Flash,
         or arbitrary HTML content for JavaScript) within xinferno content.
         <br/><b>Note:</b> this functionality is experimental, and might well change.
-        You should probably stick to using <a href="../ony/Native">xinf.ony.Native</a>
+        You should probably stick to using <a href="../ony/Native.html">xinf.ony.Native</a>
         to place your native structures within xinf content meanwhile.
     **/
     function native( o:NativeObject ) :Void;

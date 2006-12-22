@@ -24,7 +24,7 @@ import xinf.geom.Transform;
     Renderers that use an object-model based engine (which is currently
     true for all available renderers).
     <p>
-        It implements the <i>object parts</i> of the <a href="Renderer">Renderer</a>
+        It implements the <i>object parts</i> of the <a href="Renderer.html">Renderer</a>
         interface, keeps a global IntHash mapping Xinferno IDs to NativeObjects (here,
         these are called '[Primitive]'s. The type parameter is in fact required to be
         the same as [NativeObject]. FIXME: clean this up a little!

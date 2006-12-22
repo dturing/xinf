@@ -22,27 +22,26 @@ import xinf.erno.Renderer;
 
 /**
     The Runtime class has static functions to request the global
-    Runtime instance (a singleton) and it's associated <a href="Renderer">Renderer</a>.
+    Runtime instance (a singleton) and it's associated <a href="Renderer.html">Renderer</a>.
     <p>
         The Runtime represents the runtime environment (Flash, JavaScript, Xinfinity), 
-        i.e., there is only one global runtime object for a running Xinf application, 
-        an instance of a class deriving from xinf.ony.Runtime. The specific runtimes
-        should not implement any specific functionality, instead implement some
-        functions defined here.
+        there is only one global runtime object for a running Xinf application, 
+        an instance of a class deriving from xinf.erno.Runtime. The specific runtimes
+        implement some 'abstract' functions defined here in their individual ways.
     </p>
     <p>
         The Runtime singleton (Runtime.runtime) is an EventDispatcher that dispatches
         all global low-level user-interface events. In Xinfony, some of these are
-        listened for and dispatched to the corresponding target object (see the
-        <a href="../ony/Manager">Manager</a> class). For other events, you will
-        have to register at the runtime (in particular, this regards MOUSE_UP,
-        MOUSE_MOVED, KEY_UP, KEY_DOWN and STAGE_SCALED). You can register
-        listeners either at the [Runtime.runtime] member or using the static
-        addEventListener function.
+        listened for and dispatched to the corresponding target object (see
+        <a href="../ony/Manager.html">xinf.ony.Manager</a>). 
+        For other events, you will have to register at the runtime (in particular, 
+        this regards MOUSE_UP, MOUSE_MOVED, KEY_UP, KEY_DOWN and STAGE_SCALED). 
+        You can register listeners either at the [Runtime.runtime] member or 
+        using the static [addEventListener] function.
     </p>
     <p>
         The Runtime is initialized automatically when you instantate an
-        <a href="../ony/Application">xinf.ony.Application</a> object, or do anything
+        <a href="../ony/Application.html">xinf.ony.Application</a> object, or do anything
         with Runtime.runtime. Only if you want to use Xinferno directly you
         should probably care about initialization once at the beginning of your
         application.
@@ -111,9 +110,9 @@ class Runtime extends SimpleEventDispatcher {
     }
     
     /**
-        to be overridden by deriving classes to return a newly allocated numeric ID
-        for use with <a href="Renderer">xinf.erno.Renderer</a>. The default
-        implementation will throw an exception.
+        return a newly allocated numeric ID
+        for use with <a href="Renderer.html">xinf.erno.Renderer</a>. 
+        The default implementation will throw an exception.
     **/
     public function getNextId() :Int {
         throw("unimplemented");
@@ -121,8 +120,7 @@ class Runtime extends SimpleEventDispatcher {
     }
     
     /**
-        to be overridden by deriving classes to return the runtime's default
-        Root <a href="NativeContainer">NativeContainer</a>.
+        return the runtime's default Root <a href="NativeContainer.html">NativeContainer</a>.
         The default implementation will throw an exception.
     **/
     public function getDefaultRoot() :NativeContainer {
@@ -131,11 +129,12 @@ class Runtime extends SimpleEventDispatcher {
     }
     
     /**
-        to be overridden by deriving classes to start the runtime main loop
-        if such exists. From your application, you should call Runtime.runtime.run()
-        once, at the end of your main() (<a href="../ony/Application">xinf.ony.Application</a>.run()
-        does this for you). The function might return instantly, when the application quits,
+        start the runtime main loop if such exists. 
+        From your application, you should call Runtime.runtime.run() once, at the end of your main() 
+        (<a href="../ony/Application.html">xinf.ony.Application</a>.run() does this for you). 
+        The function might return instantly, when the application quits,
         or never, depending on the runtime environment.
+        The default implementation will throw an exception.
     **/
     public function run() :Void {
         throw("unimplemented");
@@ -145,6 +144,7 @@ class Runtime extends SimpleEventDispatcher {
         signal to the Runtime that some content in the display hierarchy has changed.
         This will trigger re-rendering of the default Root object. There is no need
         to ever call this if you use Xinfony (the Manager will take care of this).
+        The default implementation does nothing.
     **/
     public function changed() :Void {
     }

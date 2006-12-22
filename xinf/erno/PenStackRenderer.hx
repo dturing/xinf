@@ -20,7 +20,7 @@ import xinf.erno.FontStyle;
 
 /**
     A Pen structure keeps the style with which to draw graphic objects
-    for a <a href="PenStackRenderer">PenStackRenderer</a>. There should
+    for a <a href="PenStackRenderer.html">PenStackRenderer</a>. There should
     be no need to use this structure, except if you implement
     your own Renderer that derives from PenStackRenderer.
 **/
@@ -50,12 +50,12 @@ class Pen {
     public var fontFace:String;
     
     /**
-        the current <a href="FontSlant">font slant</a> ([Roman] or [Italic])
+        the current font slant ([Roman] or [Italic])
     **/
     public var fontSlant:FontSlant;
     
     /**
-        the current <a href="FontWeight">font weight</a> ([Normal] or [Bold])
+        the current font weight> ([Normal] or [Bold])
     **/
     public var fontWeight:FontWeight;
 
@@ -93,8 +93,8 @@ class Pen {
 
 /**
     A PenStackRenderer implements the <i>style part</i> of the 
-    <a href="Renderer">Renderer</a> interface ([setFill], [setStroke] and [setFont]),
-    maintaining a stack of <a href="Pen">Pen</a> structures.
+    <a href="Renderer.html">Renderer</a> interface ([setFill], [setStroke] and [setFont]),
+    maintaining a stack of <a href="Pen.html">Pen</a> structures.
     <p>
         Renderers deriving from this should use [pushPen] and [popPen] at the begin
         and end of an object definition. They can access the current Pen from the [pen]

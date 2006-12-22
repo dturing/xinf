@@ -27,14 +27,14 @@ import xinf.event.ScrollEvent;
     It keeps a list (actually an IntHash) of all Objects,
     keeps track of changes to their contents or transformation
     and re-draws and re-transforms those that changed, once for each frame
-    and using <a href="../erno/Runtime">Runtime</a>'s global renderer.
+    and using <a href="../erno/Runtime.html">Runtime</a>'s global renderer.
     <p></p>
     It also dispatches MouseEvent.MOUSE_DOWN and ScrollEvent.SCROLL_STEP to the
     Object whose ID is given in the Event (xinf.erno only knows about IDs, and
     has no reference to the actual object).
     </p>
     <p>
-    All public functions on Manager are for use from <a href="Object">Object</a>,
+    All public functions on Manager are for use from <a href="Object.html">Object</a>,
     there should be no need to "manually" register any object.
     Use Object.scheduleRedraw() to mark an object as changed.
     </p>
