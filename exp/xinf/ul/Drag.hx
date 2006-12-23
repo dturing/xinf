@@ -35,10 +35,8 @@ class Drag<T> {
         this.move=move;
         this.marker=marker;
         
-        _mouseMove=onMouseMove;
-        _mouseUp=onMouseUp;
-        Runtime.runtime.addEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
-        Runtime.runtime.addEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        _mouseMove=Runtime.runtime.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+        _mouseUp=Runtime.runtime.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
     }
     
     private function onMouseMove( e:MouseEvent ) {
@@ -46,8 +44,8 @@ class Drag<T> {
     }
     
     private function onMouseUp( e:MouseEvent ) {
-        Runtime.removeAllListeners(MouseEvent.MOUSE_MOVE);
-        Runtime.removeAllListeners(MouseEvent.MOUSE_UP);
+        Runtime.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+        Runtime.removeEventListener( MouseEvent.MOUSE_UP, onMouseUp );
         if( end != null ) end();
     }
     
