@@ -12,6 +12,12 @@ typedef FTIterateCallbacks = {
 }
 
 class Font {
+    private static function __init__() : Void {
+        DLLLoader.addLibToPath("xinfinity-support");
+        _load = neko.Lib.load("xinfinity-support","ftLoadFont",3);
+        _iterateGlyphs = neko.Lib.load("xinfinity-support","ftIterateGlyphs",2);
+    }
+
 	private var __f:Void;
 	
 	public function new( filename:String, ?width:Int, ?height:Int ) {
@@ -21,9 +27,9 @@ class Font {
 	}
 
 	public function iterateAllGlyphs( callbackObject:FTIterateCallbacks ) :Void {
-		_IterateGlyphs( __f, callbackObject );
+		_iterateGlyphs( __f, callbackObject );
 	}
 
-	private static var _load = neko.Lib.load("xinfinity-support","ftLoadFont",3);
-	private static var _IterateGlyphs = neko.Lib.load("xinfinity-support","ftIterateGlyphs",2);
+	private static var _load;
+	private static var _iterateGlyphs;
 }

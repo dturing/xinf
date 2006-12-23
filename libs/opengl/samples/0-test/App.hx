@@ -2,7 +2,6 @@
 import opengl.GL;
 import opengl.GLU;
 import opengl.GLUT;
-import opengl.Helper;
 
 class App {
     public static var i=0;

@@ -47,4 +47,8 @@ class Helper {
     public static function evaluateQuadraticBezier( ctrl:Array<Float>, n:Int, cb:Float->Float->Void ) :Void {
         _evaluateQuadraticBezier( untyped ctrl.__a, n, cb );
     }
+    
+    public static function __init__() : Void {
+        DLLLoader.addLibToPath("opengl");
+    }
 }

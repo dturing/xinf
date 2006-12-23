@@ -43,6 +43,10 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
 	GError *err = NULL;
 	gdk_pixbuf_loader_write( loader, data, length, &err );
+	if( err!=NULL ) {
+		val_throw( alloc_string(err->message) );
+	}
+    
 	gdk_pixbuf_loader_close( loader, &err );
 	if( err!=NULL ) {
 		val_throw( alloc_string("unable to decompress image") );

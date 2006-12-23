@@ -94,16 +94,10 @@ extern class GLUT {
     public static function solidOctahedron() :Void;
     
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("opengl");
         untyped {
             var loader = untyped __dollar__loader;
             GLUT = loader.loadmodule("opengl".__s,loader).GLUT__impl;
         }
     }
-}
-
-
-typedef GLUTCallbacks = {
-    display: Void->Void,
-    timer: Void->Void,
-    reshape: Int->Int->Void
 }

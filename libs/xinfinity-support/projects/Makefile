@@ -19,8 +19,8 @@ ifeq ($(NEKO_PLATFORM),Mac)
 		PROJECT_LIBS:=/opt/osx/MacOSX10.4u.sdk/usr/X11R6/lib/libfreetype.a
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
-		PROJECT_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/freetype2
-		PROJECT_LIBS:=/opt/mingw/lib/libfreetype.dll.a
+		PROJECT_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/freetype2 -I/opt/mingw/include/gtk-2.0 -I/opt/mingw/include/glib-2.0 -I/opt/mingw/lib/glib-2.0/include
+		PROJECT_LIBS:=-lfreetype -lgobject-2.0 -lgdk_pixbuf-2.0
 	else
 		PROJECT_CFLAGS:=${shell freetype-config --cflags} ${shell pkg-config --cflags gdk-pixbuf-2.0}
 		PROJECT_LIBS:=${shell freetype-config --libs} ${shell pkg-config --libs gdk-pixbuf-2.0}
@@ -138,7 +138,7 @@ all:
 	NEKO_PLATFORM=Windows make
 	
 clean:
-	-@rm $(BIN_PATH)/Mac/* $(BIN_PATH)/Windows/* $(BIN_PATH)/Linux/*
+	-@rm $(BIN_PATH)/Mac/*.ndll $(BIN_PATH)/Windows/*.ndll $(BIN_PATH)/Linux/*.ndll
 	-@rm $(PROJECT)-tmp.n $(PROJECT).xml $(foreach CLASS,$(BINDING_CLASSES),bind_$(CLASS).c $(CLASS)__impl.hx)
 
 
@@ -164,7 +164,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Mac
 	#cp ../bin/Mac/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Mac/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Windows
-	#cp ../bin/Windows/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Windows/
+	cp -r ../bin/Windows/* $(HAXELIB_PROJECT)/ndll/Windows/
 	
 	# copy neko impl module
 	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Linux/
@@ -172,8 +172,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Windows/
 	
 	# copy haXe API and Samples
-    # FIXME: svn export
-	cp -r ../api/xinf $(HAXELIB_PROJECT)/xinf
+	svn export ../api/xinf $(HAXELIB_PROJECT)/xinf
 	svn export ../samples $(HAXELIB_PROJECT)/samples
 	
 	# package and test-install the haxelib once (we need it to compile the test)

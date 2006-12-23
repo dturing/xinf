@@ -260,6 +260,7 @@ extern class GLU {
     
     
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("opengl");
         untyped {
             var loader = untyped __dollar__loader;
             GLU = loader.loadmodule("opengl".__s,loader).GLU__impl;

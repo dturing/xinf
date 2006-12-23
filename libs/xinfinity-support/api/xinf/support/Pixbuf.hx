@@ -32,6 +32,7 @@ extern class Pixbuf {
 	public static function newFromCompressedData( data:Dynamic ) :Pixbuf;
 	
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("xinfinity-support");
         untyped {
             var loader = untyped __dollar__loader;
             Pixbuf = loader.loadmodule("xinfinity-support".__s,loader).Pixbuf__impl;

@@ -1320,6 +1320,7 @@ extern class GL {
     public static function Map1d_01( target:Int, stride:Int, order:Int, points:Float ):Void;
 */
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("opengl");
         untyped {
             var loader = untyped __dollar__loader;
             GL = loader.loadmodule("opengl".__s,loader).GL__impl;

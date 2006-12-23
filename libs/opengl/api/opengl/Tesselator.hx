@@ -37,6 +37,7 @@ extern class Tesselator {
     public function vertexOffset( offset:Int, v:Dynamic ):Void;
 
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("opengl");
         untyped {
             var loader = untyped __dollar__loader;
             Tesselator = loader.loadmodule("opengl".__s,loader).Tesselator__impl;
