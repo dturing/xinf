@@ -241,7 +241,6 @@ class LineEdit extends Widget {
         var selFgColor = style.get("selectionForeground",Color.WHITE);
         var focus = hasStyleClass(":focus");
         
-            // note: this would not work for js/flash, but LineEdit is xinfinity-only anyhow
             g.clipRect( size.x-2, size.y-2 );
             
             var xofs=-(xOffset-style.padding.l);
@@ -254,7 +253,7 @@ class LineEdit extends Widget {
                 
                 var x=selStart-1.5; var y=-.5; 
                 var w=selEnd-.5; var h=Math.ceil((font.height*fontSize)+.5)-.5;
-                g.rect( xofs+x, xofs+y, w-x,h-y );
+                g.rect( xofs+x, yofs+y, w-x,h-y );
             }
             
             
