@@ -67,7 +67,6 @@ class Object extends SimpleEventDispatcher {
     **/
     public var size(default,null):{x:Float,y:Float};
 
-    private var transform:Matrix;
     private var children:Array<Object>;    
 
     /** Object constructor<br/>
@@ -80,7 +79,6 @@ class Object extends SimpleEventDispatcher {
         _id = Runtime.runtime.getNextId();
         manager.register( _id, this );
         
-        transform = new Matrix().setIdentity();
         position = { x:0., y:0. };
         size = { x:0., y:0. };
         children = new Array<Object>();
@@ -138,12 +136,11 @@ class Object extends SimpleEventDispatcher {
         scheduleRedraw();
     }
 
-    /** apply new transformation (position/size)<br/>
+    /** apply new transformation (position)<br/>
         This is an internal function, you should usually not care about it.
         **/
     public function reTransform( g:Renderer ) :Void {
-        transform.setTranslation( position.x, position.y );
-        g.setTransform( _id, transform );
+        g.setTranslation( _id, position.x, position.y );
     }
     
     /** draw the Object to the given [Renderer]<br/>

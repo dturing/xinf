@@ -36,8 +36,9 @@ class Text extends Object {
     
     public function drawContents( g:Renderer ) :Void {
         if( text!=null ) {
-            g.setFill(color);
-            g.setFont( "_sans", Roman, Normal, 12 );
+            trace("TEXT, renderer: "+g );
+            g.setFill( color.r, color.g, color.b, color.a );
+            g.setFont( "_sans", false, false, 12 );
             g.text(0,0,text);
         }
     }
