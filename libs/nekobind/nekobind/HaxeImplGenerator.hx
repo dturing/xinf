@@ -30,7 +30,9 @@ class HaxeImplGenerator extends Generator {
                 
         if( f.name == "new" ) {
             // special case: new
-            print("\tpublic function new() :Void { }\n\n");
+            print("\tpublic function new() :Void { ");
+            if( superClass != null ) print("super();");
+            print(" }\n\n");
             return;
         }
         
@@ -171,8 +173,8 @@ class HaxeImplGenerator extends Generator {
         
         print("class "+settings.className+"__impl ");
         
-        if( settings.superClass != null )
-            print(" extends "+settings.superClass+" " );
+        if( c.superClass != null )
+            print(" extends "+c.superClass.path+" " );
         
         print( "{\n" );
 
