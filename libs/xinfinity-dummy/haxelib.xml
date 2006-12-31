@@ -1,0 +1,5 @@
+<project name="xinfinity-dummy" url="http://xinf.org/trac/wiki/XinfInity" license="LGPL">
+    <user name="dfischer"/>
+    <description>'dummy' Xinferno renderer</description>
+    <version name="0.0.0">Testing</version>	
+</project>
