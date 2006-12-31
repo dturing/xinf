@@ -15,10 +15,6 @@
 
 package xinf.erno;
 
-import xinf.geom.Types;
-import xinf.geom.Transform;
-import xinf.erno.FontStyle;
-
 #if flash
     typedef NativeObject = flash.display.DisplayObject
     typedef NativeContainer = flash.display.DisplayObjectContainer
@@ -42,7 +38,7 @@ import xinf.erno.FontStyle;
         
         (ignore the following, I haven't figured how to patch haxedoc to accept this construct).
     **/
-    typedef NativeObject = xinf.inity.GLObject
+    typedef NativeObject = Dynamic
     
     /**
         NativeContainer is a typedef that is defined depending on the runtime you compile for.
@@ -59,7 +55,7 @@ import xinf.erno.FontStyle;
         
         (ignore the following, I haven't figured how to patch haxedoc to accept this construct).
     **/
-    typedef NativeContainer = xinf.inity.GLObject
+    typedef NativeContainer = Dynamic
 #end
 
 
@@ -106,8 +102,13 @@ interface Renderer {
     /**
         (Re-)Set the transformation of the object with the specified ID.
     **/
-    function setTransform( id:Int, transform:Transform ) :Void;
-    
+    function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void;
+
+    /**
+        (Re-)Set the translation of the object with the specified ID.
+    **/
+    function setTranslation( id:Int, x:Float, y:Float ) :Void;
+
     /**
         Set the clipping rectangle (mask) of the current object. If this
         is never called within an object definition, contents will not be
@@ -119,21 +120,21 @@ interface Renderer {
         Set the fill color for following drawing operations. If you specify [null],
         or leave away the argument, shapes won't be filled.
     **/
-    function setFill( c:Color ) :Void;
+    function setFill( r:Float, g:Float, b:Float, a:Float ) :Void;
     
     /**
         Set the stroke (line) color and width (thickness) for following drawing operations. 
         If you specify [null] for c,
         [0] or [null] for width or leave away the arguments, shapes' contours won't be stroked.
     **/
-    function setStroke( c:Color, width:Float ) :Void;
+    function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) :Void;
     
     /**
         Set the font and font style for following calls to [text()]. 
         [face] can be a comma-separated list of official font family names or the
         standard "_sans".
     **/
-    function setFont( face:String, slant:FontSlant, weight:FontWeight, size:Float ) :Void;
+    function setFont( face:String, italic:Bool, bold:Bool, size:Float ) :Void;
 
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially
@@ -209,7 +210,7 @@ interface Renderer {
         for changing the font color in the middle of the string. The string may contain
         '\n's to span multiple lines.
     **/
-    function text( x:Float, y:Float, text:String, ?style:FontStyle ) :Void;
+    function text( x:Float, y:Float, text:String ) :Void;
     
     /**
         Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 

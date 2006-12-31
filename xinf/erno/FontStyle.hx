@@ -15,16 +15,6 @@
 
 package xinf.erno;
 
-enum FontWeight {
-    Normal;
-    Bold;
-}
-
-enum FontSlant {
-    Roman;
-    Italic;
-}
-
 typedef FontStyleChange = {
     var pos:Int;
     var color:Color;

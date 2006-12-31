@@ -50,14 +50,14 @@ class Pen {
     public var fontFace:String;
     
     /**
-        the current font slant ([Roman] or [Italic])
+        wether the current font should be italic
     **/
-    public var fontSlant:FontSlant;
+    public var fontItalic:Bool;
     
     /**
-        the current font weight> ([Normal] or [Bold])
+        wether the current font should be bold
     **/
-    public var fontWeight:FontWeight;
+    public var fontBold:Bool;
 
     /**
         the current font size, in units of the current coordinate system.
@@ -70,8 +70,7 @@ class Pen {
     public function new() :Void {
         fontFace = "_sans";
         fontSize = 11.0;
-        fontWeight = Normal;
-        fontSlant = Roman;
+        fontItalic = fontBold = false;
     }
     
     /**
@@ -83,8 +82,8 @@ class Pen {
         p.strokeColor = strokeColor;
         p.strokeWidth = strokeWidth;
         p.fontFace = fontFace;
-        p.fontSlant = fontSlant;
-        p.fontWeight = fontWeight;
+        p.fontItalic = fontItalic;
+        p.fontBold = fontBold;
         p.fontSize = fontSize;
         return p;
     }
@@ -135,27 +134,27 @@ class PenStackRenderer extends BasicRenderer {
         the implementation of the Renderer setFill method, sets the fillColor of the
         current pen.
     **/
-    public function setFill( c:Color ) {
-        pen.fillColor=c;
+    public function setFill( r:Float, g:Float, b:Float, a:Float ) {
+        pen.fillColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
     }
     
     /**
         the implementation of the Renderer setStroke method, sets the strokeColor and
         strokeWidth of the current pen.
     **/
-    public function setStroke( c:Color, width:Float ) {
-        pen.strokeColor=c;
-        pen.strokeWidth=width;
+    public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
+        pen.strokeColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
+        pen.strokeWidth = width;
     }
     
     /**
         the implementation of the Renderer setFont method, sets the fontFace,
         fontSlant, fontWeight and fontSize of the current pen.
     **/
-    public function setFont( face:String, slant:FontSlant, weight:FontWeight, size:Float ) {
+    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
         pen.fontFace = face;
-        pen.fontSlant = slant;
-        pen.fontWeight = weight;
+        pen.fontItalic = italic;
+        pen.fontBold = bold;
         pen.fontSize = size;
     }
     

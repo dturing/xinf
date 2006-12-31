@@ -78,7 +78,40 @@ class Runtime extends SimpleEventDispatcher {
     
     static private function initRuntime() :Runtime {
         #if neko
-            _renderer = new xinf.inity.GLRenderer();
+            // dynamically load renderer
+            if( true ) {
+                _renderer = new xinf.inity.GLRenderer();
+            } else {
+                var name = "xinfinity-gl0";
+                try {
+                    var haxeLibPath = switch( neko.Sys.systemName() ) {
+                        case "Windows":
+                            neko.Sys.getEnv("HAXEPATH")+"\\lib\\";
+                        default:
+                            neko.io.File.getContent( neko.Sys.getEnv("HOME")+"/.haxelib" );
+                        }
+                    
+                    var libPath = haxeLibPath+"/"+name+"/";
+                    var version = neko.io.File.getContent( libPath+".current" );
+                    libPath += version.split(".").join(",")+"/ndll/"+neko.Sys.systemName()+"/";
+                    
+                    // at least for windoze: add libPath to PATH, for loading DLLs
+                    //neko.Sys.putEnv("PATH",neko.Sys.getEnv("PATH")+":"+libPath );
+                    
+                    // (try to) load the module
+                    var rClass:Dynamic;
+                    var loader = neko.vm.Loader.local();
+                    loader.addPath( libPath );
+                    rClass = loader.loadModule(name).getExports().get("Renderer__impl");
+                    
+                    if( rClass==null ) throw("module does not export Renderer__impl");
+                    
+                    _renderer = rClass.createRenderer(320,240);
+                    trace("Loaded Renderer "+name+" "+version );
+                } catch(e:Dynamic) {
+                    throw("unable to load Xinfinity Renderer '"+name+"': "+e );
+                }
+            }
             _runtime = new xinf.inity.XinfinityRuntime();
         #else js
             _renderer = new xinf.js.JSRenderer();

@@ -29,99 +29,107 @@ class BasicRenderer implements Renderer {
     
     public function new() :Void {
     }
+    
+    private function unimplemented( ?func:String ) :Void {
+        throw("unimplemented: "+func );
+    }
 
     // erno Instruction protocol
     
     public function startNative( o:NativeContainer ) :Void {
-        throw("unimplemented");
+        unimplemented("startNative");
     }
     
     public function endNative() :Void {
-        throw("unimplemented");
+        unimplemented("endNative");
     }
     
     public function startObject( id:Int ) {
-        throw("unimplemented");
+        unimplemented("startObject");
     }
     
     public function endObject() {
-        throw("unimplemented");
+        unimplemented("endObject");
     }
     
     public function showObject( id:Int ) {
-        throw("unimplemented");
+        unimplemented("showObject");
     }
 
-    public function setTransform( id:Int, transform:Matrix ) {
-        throw("unimplemented");
+    public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+        unimplemented("setTransform");
+    }
+    
+    public function setTranslation( id:Int, x:Float, y:Float ) :Void {
+        unimplemented("setTranslation");
     }
     
     public function clipRect( w:Float, h:Float ) {
-        throw("unimplemented");
+        unimplemented("clipRect");
     }
 
-    public function setFill( c:Color ) {
-        throw("unimplemented");
+    public function setFill( r:Float, g:Float, b:Float, a:Float ) {
+        unimplemented("setFill");
     }
     
-    public function setStroke( c:Color, width:Float ) {
-        throw("unimplemented");
+    public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
+        unimplemented("setStroke");
     }
     
-    public function setFont( face:String, slant:FontSlant, weight:FontWeight, size:Float ) {
-        throw("unimplemented");
+    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
+        unimplemented("setFont");
     }
 
     public function startShape() {
-        throw("unimplemented");
+        unimplemented("startShape");
     }
     
     public function endShape() {
-        throw("unimplemented");
+        unimplemented("endShape");
     }
     
     public function startPath( x:Float, y:Float) {
-        throw("unimplemented");
+        unimplemented("startPath");
     }
     
     public function endPath() {
-        throw("unimplemented");
+        unimplemented("endPath");
     }
     
     public function close() {
-        throw("unimplemented");
+        unimplemented("close");
     }
     
     public function lineTo( x:Float, y:Float ) {
-        throw("unimplemented");
+        unimplemented("lineTo");
     }
     
     public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
-        throw("unimplemented");
+        unimplemented("quadraticTo");
     }
     
     public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
-        throw("unimplemented");
+        unimplemented("cubicTo");
     }
 
     public function rect( x:Float, y:Float, w:Float, h:Float ) {
-        throw("unimplemented");
+        unimplemented("rect");
     }
     
     public function circle( x:Float, y:Float, r:Float ) {
-        throw("unimplemented");
+        unimplemented("circle");
     }
     
-    public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
-        throw("unimplemented");
+    public function text( x:Float, y:Float, text:String ) {
+        unimplemented("text");
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
-        throw("unimplemented");
+        unimplemented("image");
     }
     
     public function native( o:NativeObject ) {
-        throw("unimplemented");
+        unimplemented("native");
     }
     
 }

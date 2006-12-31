@@ -17,7 +17,6 @@ package xinf.erno;
 
 import xinf.erno.PenStackRenderer;
 import xinf.erno.Renderer;
-import xinf.geom.Transform;
 
 /**
     The ObjectModelRenderer class implements some functionality for
@@ -76,11 +75,18 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     
     /**
         to be overridden by deriving classes, 
-        set the transformation of the given object to the given Transform.
+        set the transformation of the given object to the given Matrix.
     **/
-    public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
+    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
     }
-    
+
+    /**
+        to be overridden by deriving classes, 
+        set the translation of the given object to the given Position.
+    **/
+    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    }
+
     /* public API */
     public function new() :Void {
         super();
@@ -131,13 +137,22 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
         attachPrimitive( current, o );
     }
     
-    public function setTransform( id:Int, transform:Transform ) {
+    public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
         var o = lookup(id);
         if( o==null ) {
             o = createPrimitive(id);
             objects.set(id,o);
         }
-        setPrimitiveTransform( o, transform );
+        setPrimitiveTransform( o, x, y, a, b, c, d );
     }
-    
+
+    public function setTranslation( id:Int, x:Float, y:Float ) {
+        var o = lookup(id);
+        if( o==null ) {
+            o = createPrimitive(id);
+            objects.set(id,o);
+        }
+        setPrimitiveTranslation( o, x, y );
+    }
+
 }
