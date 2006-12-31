@@ -18,7 +18,7 @@ all : $(BINARIES)
 	haxe $(HAXEFLAGS) -main $* -js $*.js
 
 %.n : %.hx $(SOURCES)
-	haxe $(HAXEFLAGS) -lib opengl -lib cptr -lib fonttools -main $* -neko $*.n
+	haxe $(HAXEFLAGS) -lib opengl -lib cptr -lib xinfinity-support -main $* -neko $*.n
 
 clean:
 	-@rm $(BINARIES)

@@ -37,14 +37,13 @@ class RenderTest {
     }
     
     public function render( g:Renderer ) :Void {
-        g.setTransform( id, new Matrix().setIdentity().setTranslation(
-                            position.x, position.y ));
+        g.setTranslation( id, position.x, position.y );
         g.startObject(id);
             try {
                 renderContents(g,size);
             } catch( e:Dynamic ) {
-                g.setFill( Color.RED );
-                g.setStroke( null, 0 );
+                g.setFill( 1,0,0,1 );
+                g.setStroke( 0,0,0,0, 0 );
                 g.rect(0,0,size.x,size.y);
                 try {
                     trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
@@ -55,7 +54,26 @@ class RenderTest {
             }
         g.endObject();
     }
-    
+
+    public function renderDirect( g:Renderer ) :Void {
+        g.startObject(id);
+        g.setTranslation( id, position.x, position.y );
+            try {
+                renderContents(g,size);
+            } catch( e:Dynamic ) {
+                g.setFill( 1,0,0,1 );
+                g.setStroke( 0,0,0,0, 0 );
+                g.rect(0,0,size.x,size.y);
+                try {
+                    trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
+                } catch( f:Dynamic ) {
+                    // getting the stack didnt work out...
+                    trace("Exception testing "+this+": "+e );
+                }
+            }
+        g.endObject();
+    }
+
     private function renderContents( g:Renderer, size:TPoint ) :Void {
         throw("unimplemented render test: "+this );
     }
@@ -81,7 +99,7 @@ class ColorStripes extends RenderTest {
         var x=0.;
         var unit=size.x/colors.length;
         for( c in colors ) {
-            g.setFill( c );
+            g.setFill( c.r, c.g, c.b, c.a );
             g.rect( x, 0, unit, size.y );
             x+=unit;
         }
@@ -93,7 +111,7 @@ class GrayStripes extends RenderTest {
         var unit=size.x/8;
         for( i in 0...8 ) {
             var c=(i+1)/10;
-            g.setFill( Color.rgba( c, c, c, 1 ) );
+            g.setFill( c, c, c, 1 );
             g.rect( i*unit, 0, unit, size.y );
         }
     }
@@ -104,12 +122,12 @@ class AlphaStripes extends RenderTest {
         var unit=size.x/8;
         for( i in 0...4 ) {
             var c=1-((i+1)/5);
-            g.setFill( Color.rgba( 0, 0, 0, c ) );
+            g.setFill( 0, 0, 0, c );
             g.rect( i*unit, 0, unit, size.y );
         }
         for( i in 0...4 ) {
             var c=(i+1)/5;
-            g.setFill( Color.rgba( 1, 1, 1, c ) );
+            g.setFill( 1, 1, 1, c );
             g.rect( (4*unit)+(i*unit), 0, unit, size.y );
         }
     }
@@ -117,12 +135,12 @@ class AlphaStripes extends RenderTest {
 
 class ShapeRenderTest extends RenderTest {
     private function renderContents( g:Renderer, size:TPoint ) :Void {
-        g.setFill( Color.rgba( 0, 0, 0, 1 ) );
-        g.setStroke( null, 0 );
+        g.setFill( 0, 0, 0, 1 );
+        g.setStroke( 0, 0, 0, 0, 0 );
         g.rect( 0, 0, size.x, size.y );
         
-        g.setFill( null );
-        g.setStroke( Color.rgba( 1, 1, 1, 1 ), 2. );
+        g.setFill( 0,0,0,0 );
+        g.setStroke( 1, 1, 1, 1, 2. );
         renderShape( g, size );
     }
 
@@ -171,12 +189,11 @@ class Circle extends ShapeRenderTest {
 
 class Info extends RenderTest {
     private function renderContents( g:Renderer, size:TPoint ) :Void {
-        g.setFill( Color.rgba( 0, 0, 0, 1 ) );
-        g.setStroke( null, 0 );
+        g.setFill( 0, 0, 0, 1 );
+        g.setStroke( 0, 0, 0, 0, 0 );
         g.rect(0,0,size.x,size.y);
 
-        g.setFill( Color.rgba( 1,1,1,1 ) );
-        //g.setFont( "_sans", Roman, Normal, size.y/2.5 );
+        g.setFill( 1,1,1,1 );
         g.text( 0, size.y/4, "xinferno\n"+xinf.Version.version );
     }
 }
@@ -189,6 +206,7 @@ class Twist extends RenderTest {
     public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
         super( g, position, size );
         innerId = Runtime.runtime.getNextId();
+        g.setTranslation(innerId,0,0);
         this.g = g;
         Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
     }
@@ -199,7 +217,7 @@ class Twist extends RenderTest {
         var center = { x:(size.x/2)-(s/2), y:(size.y/2)-(s/2) };
         var extent = { x:size.x/4, y:size.y/4 };
         g.startObject(innerId);
-            g.setFill( Color.rgba( 1, 1, 1, 1 ) );
+            g.setFill( 1, 1, 1, 1 );
             g.rect(    center.x + (Math.cos(n/2)*extent.x), 
                     center.y + (Math.sin(n)*extent.y),
                     s, s );
@@ -208,7 +226,7 @@ class Twist extends RenderTest {
     }
     
     private function renderContents( g:Renderer, size:TPoint ) :Void {
-        g.setFill( Color.rgba( 0, 0, 0, 1 ) );
+        g.setFill( 0, 0, 0, 1 );
         g.rect( 0, 0, size.x, size.y );
         g.showObject(innerId);
     }
@@ -226,30 +244,26 @@ class App {
         var unit={ x:size.x/10, y:size.y/10 };
 
         var tests = [
+            new Cross( g, {x:0.,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new ColorStripes( g, {x:0.,y:0.}, {x:unit.x*8,y:unit.y*5} ),
             new GrayStripes( g, {x:0.,y:unit.y*5}, {x:unit.x*8,y:unit.y} ),
             new AlphaStripes( g, {x:0.,y:unit.y*6}, {x:unit.x*8,y:unit.y} ),
             
-            new Cross( g, {x:0.,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Quadratic( g, {x:unit.x,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Cubic( g, {x:unit.x*2,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Circle( g, {x:unit.x*3,y:unit.y*7}, {x:unit.x,y:unit.y} ),
-            
             new Twist( g, {x:unit.x*4,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Info( g, {x:unit.x*5,y:unit.y*7}, {x:unit.x*3,y:unit.y} ),
             ];
             
-        for( test in tests ) test.render( g );
-
         var id=Runtime.runtime.getNextId();
         
+        g.setTranslation( id, ((rootSize.x-size.x)/2) + unit.x, ((rootSize.y-size.y)/2) + unit.y );
         g.startObject(id);
             for( test in tests ) test.show( g );
         g.endObject();
-        g.setTransform( id,    new Matrix().setIdentity().setTranslation(
-                    ((rootSize.x-size.x)/2) + unit.x, 
-                    ((rootSize.y-size.y)/2) + unit.y )
-                    );
+
+        for( test in tests ) test.render( g );
 
         g.startNative(Runtime.runtime.getDefaultRoot());
             g.showObject(id);
@@ -269,6 +283,11 @@ class App {
             renderTestCard( g, { x:320., y:240. } );
 
             Runtime.runtime.run();
+        
+        /* direct renderer -- use .renderDirect, above
+            renderTestCard( g, { x:320., y:240. } );
+        //    untyped g.writeToPNG("/tmp/test.png");
+        */
         } catch(e:Dynamic) {
             try {
                 trace(e+"\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
