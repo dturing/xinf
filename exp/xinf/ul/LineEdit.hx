@@ -180,16 +180,17 @@ class LineEdit extends Widget {
     }
 
     public function drawContents( g:Renderer ) :Void {
-        //super.drawContents(g);
+        //super.drawContents(g); FIXME: why not. the code below doubles Pane(?)
         
-        g.setFill(style.background);
-        g.setStroke( null, 0 );
+        g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
+        
+        g.setStroke( 0,0,0,0,0 );
         g.rect( 0, 0, size.x, size.y );
         
         if( style.border.l > 0 ) {
             var b = style.border.l/4;
-            g.setFill(null);
-            g.setStroke(style.color,style.border.l);
+            g.setFill(0,0,0,0);
+            g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
             g.rect( -b, -b, size.x+(4*b), size.y+(4*b) );
         }
 
@@ -236,9 +237,9 @@ class LineEdit extends Widget {
         if( xOffset<0 ) xOffset=0;
         
         
-        var fgColor = style.get("textColor",Color.BLACK);
-        var selBgColor = style.get("selectionBackground",Color.BLACK);
-        var selFgColor = style.get("selectionForeground",Color.WHITE);
+        var fgColor:Color = style.get("textColor",Color.BLACK);
+        var selBgColor:Color = style.get("selectionBackground",Color.BLACK);
+        var selFgColor:Color = style.get("selectionForeground",Color.WHITE);
         var focus = hasStyleClass(":focus");
         
             g.clipRect( size.x-2, size.y-2 );
@@ -248,8 +249,8 @@ class LineEdit extends Widget {
 
             // draw selection background/caret
             if( focus ) {
-                g.setFill( selBgColor );
-                g.setStroke( null, 0 );
+                g.setFill( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
+                g.setStroke( 0,0,0,0,0 );
                 
                 var x=selStart-1.5; var y=-.5; 
                 var w=selEnd-.5; var h=Math.ceil((font.height*fontSize)+.5)-.5;
@@ -257,8 +258,8 @@ class LineEdit extends Widget {
             }
             
             
-            g.setFill( fgColor );
-            g.setFont( style.get("fontFamily","_sans"), Roman, Normal, fontSize );
+            g.setFill( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
+            g.setFont( style.get("fontFamily","_sans"), false, false, fontSize );
             
             // setup styles for selection foreground
             var styles = new FontStyle();
@@ -267,7 +268,7 @@ class LineEdit extends Widget {
                 styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
             }
             
-            g.text( xofs, yofs, text, styles );
+            g.text( xofs, yofs, text ); // FIXME, styles );
             
     }
 }
