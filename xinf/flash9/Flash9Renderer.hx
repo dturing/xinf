@@ -128,7 +128,20 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
     
     public function circle( x:Float, y:Float, r:Float ) {
-        throw("unimplemented");
+        var g = current.graphics;
+        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+            g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
+                false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
+        } else {
+            g.lineStyle( 0, 0, 0 );
+        }
+        if( pen.fillColor != null ) {
+            g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
+        } else {
+            g.beginFill( 0, 0 );
+        }
+        g.drawCircle( x,y,r );
+        g.endFill();
     }
     
     public function text( x:Float, y:Float, text:String ) {
