@@ -38,6 +38,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 
     public function new() :Void {
         super();
+        
         // FIXME: somewhat stupid initialization of "circle primitive"
         var fy = 1; //3./4.;
         

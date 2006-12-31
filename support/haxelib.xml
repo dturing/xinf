@@ -5,5 +5,5 @@
 	
 	<depends name="cptr"/>
 	<depends name="opengl"/>
-	<depends name="fonttools"/>
+	<depends name="xinfinity-support"/>
 </project>

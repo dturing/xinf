@@ -78,6 +78,7 @@ class Runtime extends SimpleEventDispatcher {
     
     static private function initRuntime() :Runtime {
         #if neko
+            _runtime = new xinf.inity.XinfinityRuntime();
             // dynamically load renderer
             if( true ) {
                 _renderer = new xinf.inity.GLRenderer();
@@ -112,7 +113,6 @@ class Runtime extends SimpleEventDispatcher {
                     throw("unable to load Xinfinity Renderer '"+name+"': "+e );
                 }
             }
-            _runtime = new xinf.inity.XinfinityRuntime();
         #else js
             _renderer = new xinf.js.JSRenderer();
             _runtime = new xinf.js.JSRuntime();
