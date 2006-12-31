@@ -20,7 +20,6 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
-import xinf.geom.Transform;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -51,12 +50,17 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
+    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         // FIXME (maybe): regards only translation
-        p.style.left = ""+Math.round(t.m02);
-        p.style.top = ""+Math.round(t.m12);
+        p.style.left = ""+Math.round(x);
+        p.style.top = ""+Math.round(y);
     }
-    
+
+    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+        p.style.left = ""+Math.round(x);
+        p.style.top = ""+Math.round(y);
+    }
+
     public function clipRect( w:Float, h:Float ) {
         current.style.overflow = "hidden";
         current.style.width = ""+Math.max(0,Math.round(w));
@@ -79,8 +83,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild( r );
     }
     
-    public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
-        // FIXME: textStyles
+    public function text( x:Float, y:Float, text:String ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.whiteSpace="nowrap";
@@ -89,10 +92,10 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         if( y!=null ) r.style.top = ""+Math.round(y);
         if( pen.fillColor != null )    r.style.color = pen.fillColor.toRGBString();
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
-        if( pen.fontSlant == Italic ) r.style.fontStyle = "italic";
-        if( pen.fontWeight == Bold ) r.style.fontWeight = "bold";
+        if( pen.fontItalic ) r.style.fontStyle = "italic";
+        if( pen.fontBold ) r.style.fontWeight = "bold";
         if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
-        r.innerHTML=text;
+        r.innerHTML=text.split("\n").join("<br/>"); // FIXME: doesnt work?
         current.appendChild(r);
     }
     

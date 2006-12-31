@@ -20,7 +20,6 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
-import xinf.geom.Transform;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
@@ -51,12 +50,17 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
 
     /* our part of the drawing protocol */
-    public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
+    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         // FIXME: this is only translation
-        p.x = t.m02;
-        p.y = t.m12;
+        p.x = x;
+        p.y = y;
     }
-    
+
+    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+        p.x = x;
+        p.y = y;
+    }
+
     public function clipRect( w:Float, h:Float ) {
         var crop = new Sprite();
         var g = crop.graphics;
@@ -127,7 +131,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         throw("unimplemented");
     }
     
-    public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
+    public function text( x:Float, y:Float, text:String ) {
         // FIXME: textStyles
         if( pen.fillColor != null ) {
             var tf = new flash.text.TextField();
@@ -136,6 +140,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             tf.y=-1;
             tf.x=-1;
             
+            // TODO: bold/italic
             var format:flash.text.TextFormat = tf.getTextFormat();
             format.font = pen.fontFace;
             format.size = pen.fontSize;
