@@ -17,7 +17,6 @@ package xinf.inity;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.geom.Transform;
 import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.FontStyle;
@@ -80,10 +79,18 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         p.clear();
     }
     
-    public function setPrimitiveTransform( p:Primitive, t:Transform ) :Void {
-        p.setTransform( t );
+    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+        var m:Matrix = new Matrix();
+        m.m00=a; m.m01=b; m.m02=x;
+        m.m10=c; m.m11=d; m.m12=y;
+        p.setTransform( m );
     }
-    
+
+    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+        var m:Matrix = new Matrix().setIdentity().setTranslation(x,y);
+        p.setTransform( m );
+    }
+
     // erno.Renderer API
 
     public function startNative( o:NativeContainer ) :Void {
@@ -219,13 +226,13 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         GL.popMatrix();
     }
     
-    public function text( x:Float, y:Float, text:String, ?style:FontStyle ) {
+    public function text( x:Float, y:Float, text:String ) {
         font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
         if( pen.fillColor != null && font != null ) {
             GL.pushMatrix();
                 GL.translate( x, y, 0 );
                 GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-                font.renderText( text, pen.fontSize, style );
+                font.renderText( text, pen.fontSize, null );
             GL.popMatrix();
         }
     }

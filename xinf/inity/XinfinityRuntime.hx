@@ -69,7 +69,7 @@ class XinfinityRuntime extends Runtime {
     }
 
     override public function getNextId() :Int {
-        return GL.genLists(1);
+        return GL.genLists(2);
     }
 
     override public function getDefaultRoot() :NativeContainer {
@@ -167,11 +167,8 @@ class XinfinityRuntime extends Runtime {
     
     /* ------------------------------------------------------
        HitTest Functions 
-       -- GL_SELECT render mode is seldom accellerated,
-          sometimes doesnt work. trying my luck with own lightweight
-         object model.
        ------------------------------------------------------ */
-       
+/*       
     public function findIdAt( x:Float, y:Float ) :Int {
         var found = new Array<GLObject>();
         root.hit( {x:x,y:y}, found );
@@ -180,8 +177,8 @@ class XinfinityRuntime extends Runtime {
             return found.pop().id;
         else return -1;
     }
+*/
 
-/*
     public function startPick( x:Float, y:Float ) : Void {
         GL.viewport( 0, 0, Math.round(width), Math.round(height) );
         GL.matrixMode( GL.PROJECTION );
@@ -191,34 +188,37 @@ class XinfinityRuntime extends Runtime {
 
             GL.clearColor( .5, .5, .5, .5 );
             GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
-                
+          
             // FIXME depends on stage scale mode
             GL.translate( -1., 1., 0. );
             GL.scale( (2./width), (-2./height), 1. );
-            
+
             GL.selectBuffer( 64, selectBuffer );
             
-            var v:Array<Int> = opengl.Helper.getInts( GL.VIEWPORT, 2 );
+            var v:Array<Int> = opengl.Helper.getInts( GL.VIEWPORT, 4 );
             CPtr.int_set( view, 0, v[0] );
             CPtr.int_set( view, 1, v[1] );
+            CPtr.int_set( view, 2, v[2] );
+            CPtr.int_set( view, 3, v[3] );
             
             GL.renderMode( GL.SELECT );
             GL.initNames();
 
             GL.matrixMode( GL.PROJECTION );
-            GL.pushMatrix();
                 
+            GL.pushMatrix();
                 GL.loadIdentity();
                 GLU.pickMatrix( x, y, 1.0, 1.0, view );
-                GL.matrixMode( GL.MODELVIEW );
-                
+            
+            GL.matrixMode( GL.MODELVIEW );
+
                 GL.disable( GL.BLEND );
     }
     
     public function endPick() : Array<Array<Int>> {
         GL.matrixMode( GL.PROJECTION );
         GL.popMatrix();
-        
+
         var n_hits = GL.renderMode( GL.RENDER );
         
         // process the GL SelectBuffer into a simple array of arrays of names.
@@ -252,7 +252,6 @@ class XinfinityRuntime extends Runtime {
                     
         var hits:Array<Array<Int>> = endPick();
         var os = new Array<Int>();
-        trace("getObjectsUnderPoint("+x+","+y+"): "+hits );
         for( hit in hits ) {
             os.push( hit.pop() );
         }
@@ -263,6 +262,4 @@ class XinfinityRuntime extends Runtime {
     public function findIdAt( x:Float, y:Float ) :Int {
         return getObjectsUnderPoint( x, y ).pop();
     }
-    */
-    
 }

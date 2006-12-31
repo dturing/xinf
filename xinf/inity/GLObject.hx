@@ -17,7 +17,7 @@ package xinf.inity;
 
 import xinf.geom.Types;
 import xinf.geom.Rectangle;
-import xinf.geom.Transform;
+import xinf.geom.Matrix;
 import opengl.GL;
 
 class GLObject {
@@ -27,7 +27,7 @@ class GLObject {
     public var children:Array<GLObject>;
     
     private var boundingBox:Rectangle; // untransformed
-    public var transform:Transform; // FIXME: make private, access only from GLRenderer
+    public var transform:Matrix; // FIXME: make private, access only from GLRenderer
     private var transformedBBox:Rectangle;
     
     public var id:Int;
@@ -35,12 +35,12 @@ class GLObject {
     
     public function new( id:Int ) :Void {
         this.id = id;
-        this.transform = new Transform().setIdentity();
+        this.transform = new Matrix().setIdentity();
         this.boundingBox = null;
         this.inner = GL.genLists(1);
     }
 
-    public function setTransform( transform:Transform ) :Void {
+    public function setTransform( transform:Matrix ) :Void {
         this.transform = transform;
         transformedBBox = null;
         redoTransform();
@@ -48,6 +48,7 @@ class GLObject {
     
     public function redoTransform() :Void {
         GL.newList( id, GL.COMPILE );
+        GL.pushName(id);
         GL.pushMatrix();
         GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes FIXME: still needed?
         
@@ -58,6 +59,7 @@ class GLObject {
             
         GL.popAttrib();
         GL.popMatrix();
+        GL.popName();
         GL.endList();
         
         update();
