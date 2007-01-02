@@ -16,7 +16,8 @@
 import xinf.ony.Application;
 import xinf.event.MouseEvent;
 import xinf.ul.GrayStyle;
-import xinf.ul.Button;
+import xinf.ul.RadioButton;
+import xinf.ul.CheckBox;
 
 class App extends Application {
     
