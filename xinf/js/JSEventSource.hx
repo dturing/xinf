@@ -45,7 +45,7 @@ class JSEventSource {
         //    trace("hold key "+e.keyCode );
             return false;
         };
-        */
+      */  
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {

@@ -36,10 +36,9 @@ class SimpleEventDispatcher implements EventDispatcher {
     }
 
     public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
-        var t = type.toString();
-        var l:List<Dynamic->Void> = listeners.get( t.toString() );
+        var l:List<Dynamic->Void> = listeners.get( type.toString() );
         if( l!=null ) {
-            return l.remove(h);
+            return( l.remove(h) );
         }
         return false;
     }

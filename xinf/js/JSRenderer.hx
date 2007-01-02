@@ -26,8 +26,6 @@ typedef Primitive = js.HtmlDom
 
 class JSRenderer extends ObjectModelRenderer<Primitive> {
     
-    public static var defaultRoot:Primitive;
-    
     override public function createPrimitive(id:Int) :Primitive {
         // create new object
         var o = js.Lib.document.createElement("div");
@@ -70,10 +68,10 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
     public function rect( x:Float, y:Float, w:Float, h:Float ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
-        r.style.left = ""+Math.floor(x - (pen.strokeWidth/2));
-        r.style.top = ""+Math.floor(y - (pen.strokeWidth/2));
-        r.style.width = ""+Math.floor(w - (pen.strokeWidth/2));
-        r.style.height = ""+Math.floor(h - (pen.strokeWidth/2));
+        r.style.left = ""+Math.round(x);
+        r.style.top = ""+Math.round(y);
+        r.style.width = ""+Math.round(w);
+        r.style.height = ""+Math.round(h);
         if( pen.fillColor != null ) {
             r.style.background = pen.fillColor.toRGBString();
         }
