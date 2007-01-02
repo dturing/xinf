@@ -169,28 +169,24 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         /* this works, but i feel it's not the most efficient way.
             if you can think of a better one, please submit a patch.
             else, we should at least make an exception for the default case ("natural" image size)*/
-    
-        var wf = outRegion.w/inRegion.w;
-        var hf = outRegion.h/inRegion.h;
-
-        var r:flash.display.Bitmap = img.bitmap;
-        r.x = (-inRegion.x*wf)+outRegion.x;
-        r.y = (-inRegion.y*hf)+outRegion.y;
-        r.width = img.width * wf;
-        r.height = img.height * hf;
-
-        var wrap = new Sprite();
-        var crop = new Sprite();
-        var g = crop.graphics;
-        g.beginFill( 0xff0000, 1 );
-        g.drawRect(0,0,outRegion.w,outRegion.h);
-        g.endFill();
-        wrap.addChild(crop);
-        wrap.mask = crop;
-        
-        wrap.addChild( r );
-
-        current.addChild( wrap );
+            
+         var bm : flash.display.Bitmap;
+         if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
+         	bm = new flash.display.Bitmap( img.bitmapData );
+         } else {
+         	var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
+         	bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
+         	bm = new flash.display.Bitmap( bd );
+         }
+         
+     	current.addChild( bm );
+     	
+     	if( (outRegion != null)  && (outRegion != inRegion) ) {
+	     	bm.width = outRegion.w;
+    	 	bm.height = outRegion.h;
+     		bm.x = outRegion.x;
+     		bm.y = outRegion.y;
+     	}
     }
 
     public function native( o:NativeObject ) {

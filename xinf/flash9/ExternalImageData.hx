@@ -34,8 +34,8 @@ class ExternalImageData extends ImageData {
     }
     
     private function img_loaded( e:flash.events.Event ) :Void {
-        bitmap = cast(loader.content,Bitmap);
-        width = Math.round(bitmap.width); height = Math.round(bitmap.height);
+        bitmapData = (cast(loader.content,Bitmap)).bitmapData;
+        width = Math.round(bitmapData.width); height = Math.round(bitmapData.height);
         postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, this ) );
     }
     

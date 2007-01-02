@@ -15,11 +15,35 @@
 
 import xinf.event.FrameEvent;
 import xinf.event.GeometryEvent;
+import xinf.event.ImageLoadEvent;
 import xinf.erno.Renderer;
 import xinf.erno.ImageData;
 import xinf.ony.Application;
 import xinf.ony.Object;
 import xinf.ony.Image;
+
+class ImagePart extends Object {
+    
+    private var img:ImageData;
+
+    public function new( i:ImageData ) :Void {
+        super();
+        img = i;
+        img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+    }
+    
+    private function dataChanged( e:ImageLoadEvent ) :Void {
+        scheduleRedraw();
+    }
+    
+    public function drawContents( g:Renderer ) :Void {
+        if( img==null ) return;
+        g.image( img, {x:img.width/4,y:img.height/4,w:img.width/2,h:img.height/2}, 
+                        {x:0,y:0,w:size.x,h:size.y} );
+    }
+    
+}
+
 
 class App extends Application {
     private static var block:Object;
@@ -31,9 +55,14 @@ class App extends Application {
             var i:ImageData = ImageData.load("http://y/xinf-tmp/xinf.png");
             
             block = new Image(i);
-            block.moveTo( 100, 100 );
+            block.moveTo( 100, 50 );
             block.resize( 100, 61 );
             root.attach( block );
+            
+            var part = new ImagePart(i);
+            part.moveTo( 100, 150 );
+            part.resize( 100, 61 );
+            root.attach( part );
         } catch(e:Dynamic) {
             trace("Exception: "+e+"\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
         }

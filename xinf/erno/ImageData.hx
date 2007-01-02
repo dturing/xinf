@@ -47,7 +47,7 @@ class ImageData extends SimpleEventDispatcher {
     #else js
         public var url(default,null):String;
     #else flash9
-        public var bitmap(default,null):flash.display.Bitmap;
+        public var bitmapData(default,null):flash.display.BitmapData;
     #end
 
     /**
@@ -103,5 +103,10 @@ class ImageData extends SimpleEventDispatcher {
         #else err
         #end
     }
-
+	
+    #if flash9
+	public static function getRegion( image:ImageData, region:{ x:Float, y:Float, w:Float, h:Float } ) :ImageData {
+			return( new xinf.flash9.ImageDataRegion( image, region ) );
+	}
+    #end
 }
