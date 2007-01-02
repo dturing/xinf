@@ -34,7 +34,6 @@ class App extends Application {
         container.moveTo( 100, 100 );
         root.attach(container);
 
-
         var model = new SimpleListModel();
         for( i in 0...25 ) {
             model.addItem("Item "+i);
@@ -42,7 +41,7 @@ class App extends Application {
         
         var dropdown = new Dropdown(model);
         container.attach(dropdown);
-
+        
         var slider = new Slider();
         container.attach(slider);
         
@@ -60,7 +59,11 @@ class App extends Application {
         try {
             new App().run();
         } catch( e:Dynamic ) {
-            trace("Exception: "+e+"\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()) );
+            try {
+                trace("Exception: "+e+"\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()) );
+            } catch( f:Dynamic ) {
+                trace("Exception tracing exception: "+e+" /// "+f );
+            }
         }
     }
 }
