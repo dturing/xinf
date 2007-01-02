@@ -14,7 +14,7 @@
 -lib cptr
 -lib opengl
 -lib xinfinity-support
--lib xinfinity-gl
+-lib xinfinity-gl0
 -cp ../../
 -neko run.n
 

@@ -15,7 +15,7 @@
 
 package xinf.ul;
 
-import xinf.event.MouseEvent;
+import xinf.event.SimpleEvent;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
@@ -70,9 +70,9 @@ class RadioButton extends CheckBox, implements ISelectable {
 		}
     }
 	
-	public static function createSimple( grp:RadioButtonGroup, text:String, dat:Dynamic, f:MouseEvent->Void ) :RadioButton {
+	public static function createSimple( grp:RadioButtonGroup, text:String, dat:Dynamic, f:SimpleEvent->Void ) :RadioButton {
         var b = new RadioButton( grp, text, dat );
-        b.addEventListener( Button.CLICK, f );
+        b.addEventListener( Button.PRESS, f );
         return b;
     }
     

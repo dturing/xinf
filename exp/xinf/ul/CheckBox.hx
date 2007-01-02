@@ -15,7 +15,7 @@
 
 package xinf.ul;
 
-import xinf.event.MouseEvent;
+import xinf.event.SimpleEvent;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
@@ -40,6 +40,7 @@ class CheckBox extends Button<xinf.ul.Label> {
 		var c = new xinf.ul.Label();
 		if( initialText!=null ) c.text = initialText;
         contained = c;
+        addEventListener( Button.PRESS, onPress );
 	}
 	
 	public function resize( x:Float, y:Float ) :Void {
@@ -56,13 +57,12 @@ class CheckBox extends Button<xinf.ul.Label> {
         }
     }
     
-    private function onMouseDown( e:MouseEvent ) {
+    private function onPress( e:SimpleEvent ) {
     	if( ! selected ) {
     		selected = true;
     	} else if( toggle ) {
     		selected = false;
     	}
-    	super.onMouseDown( e );
     }
     
     public function drawContents( g:Renderer ) :Void {
@@ -106,9 +106,9 @@ class CheckBox extends Button<xinf.ul.Label> {
     	}
     }
    
-    public static function createSimple( text:String, f:MouseEvent->Void ) :CheckBox {
+    public static function createSimple( text:String, f:SimpleEvent->Void ) :CheckBox {
         var b = new CheckBox( text );
-        b.addEventListener( Button.CLICK, f );
+        b.addEventListener( Button.PRESS, f );
         return b;
     }
     

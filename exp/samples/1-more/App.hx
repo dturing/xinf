@@ -33,29 +33,43 @@ class App extends Application {
         //container.style.border = {l:25, t:25, r:25, b:25};
         root.attach(container);
 
-        var chx1 = CheckBox.createSimple("There was a bug", function(e:MouseEvent){
+        var chx1 = CheckBox.createSimple("There was a bug", function(e){
             trace("called tick..");
         });
         container.attach(chx1);
-        
+
+
         var rbGroup = new xinf.ul.RadioButtonGroup();
         rbGroup.maxSelections = 2;
         
-        var rb1 = RadioButton.createSimple(rbGroup, "Bird", "tweeter", function(e:MouseEvent){
+        var rb1 = RadioButton.createSimple(rbGroup, "Bird", "tweeter", function(e){
             trace("radio1");
         });
         container.attach(rb1);
         
-        var rb2 = RadioButton.createSimple(rbGroup, "Dog", "woofer", function(e:MouseEvent){
+        var rb2 = RadioButton.createSimple(rbGroup, "Dog", "woofer", function(e){
             trace("radio2");
         });
         container.attach(rb2);
         
-        var rb3 = RadioButton.createSimple(rbGroup, "Cod", "coder", function(e:MouseEvent){
+        var rb3 = RadioButton.createSimple(rbGroup, "Cod", "coder", function(e){
             trace("radio3");
         });
         container.attach(rb3);
-       
+
+
+        var rbGroup2 = new xinf.ul.RadioButtonGroup();
+        rbGroup2.maxSelections = 1;
+        
+        var rb4 = RadioButton.createSimple(rbGroup2, "Foo", "footer", function(e){
+            trace("radio4");
+        });
+        container.attach(rb4);
+        
+        var rb5 = RadioButton.createSimple(rbGroup2, "Bar", "barter", function(e){
+            trace("radio5");
+        });
+        container.attach(rb5);
     }
     
     public static function main() :Void {

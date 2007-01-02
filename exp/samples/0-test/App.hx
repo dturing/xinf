@@ -49,7 +49,7 @@ class App extends Application {
         edit.text = "Edit me!";
         container.attach(edit);
 
-        var button = TextButton.createSimple("Hello, World!", function(e:MouseEvent){
+        var button = TextButton.createSimple("Hello, World!", function(e){
                 trace("thanks for clicking");
             });
         container.attach(button);

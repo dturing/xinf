@@ -19,6 +19,8 @@ import xinf.ony.Object;
 import xinf.erno.Runtime;
 
 import xinf.event.MouseEvent;
+import xinf.event.KeyboardEvent;
+import xinf.event.SimpleEvent;
 import xinf.event.EventKind;
 
 import xinf.erno.Renderer;
@@ -30,7 +32,7 @@ import xinf.erno.Color;
 
 class Button<T:Object> extends Widget {
     
-    public static var CLICK = new EventKind<MouseEvent>("buttonClick");
+    public static var PRESS = new EventKind<SimpleEvent>("buttonPress");
 
     public var contained(get_contained,set_contained):T;
     private var _contained:T;
@@ -52,6 +54,7 @@ class Button<T:Object> extends Widget {
     public function new() :Void {
         super();
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+        addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
     private function onMouseDown( e:MouseEvent ) {
@@ -62,13 +65,19 @@ class Button<T:Object> extends Widget {
     
     private function onMouseUp( e:MouseEvent ) {
         if( this._id==e.targetId || this.contained._id==e.targetId )  // FIXME
-            postEvent( new MouseEvent( Button.CLICK, e.x, e.y ) );
+            postEvent( new SimpleEvent( Button.PRESS ) );
         
         removeStyleClass(":press");
         Runtime.removeEventListener( MouseEvent.MOUSE_UP,
             _mouseUp );
     }
     
+    private function onKeyDown( e:KeyboardEvent ) {
+        switch( e.key ) {
+            case "space":
+                postEvent( new SimpleEvent( Button.PRESS ) );
+        }
+    }
 }
 
 class TextButton extends Button<xinf.ul.Label> {
@@ -80,9 +89,9 @@ class TextButton extends Button<xinf.ul.Label> {
         contained = c;
     }
     
-    public static function createSimple( text:String, f:MouseEvent->Void ) :TextButton {
+    public static function createSimple( text:String, f:SimpleEvent->Void ) :TextButton {
         var b = new TextButton( text );
-        b.addEventListener( Button.CLICK, f );
+        b.addEventListener( Button.PRESS, f );
         return b;
     }
     
