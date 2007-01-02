@@ -80,7 +80,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         }
         current.appendChild( r );
     }
-    
+
+    public function circle( x:Float, y:Float, r:Float ) {
+        rect( x-r, y-r, r*2, r*2 );
+    }
+
     public function text( x:Float, y:Float, text:String ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";

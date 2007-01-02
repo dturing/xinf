@@ -150,6 +150,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             var tf = new flash.text.TextField();
             tf.text = text;
             tf.selectable = false;
+            tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
             tf.y=-1;
             tf.x=-1;
             
