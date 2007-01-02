@@ -26,7 +26,7 @@ class GrayStyle {
                 padding: { l:5, t:1, r:5, b:1 },
                 border: { l:0, t:0, r:0, b:0 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd ),
+                background: Color.rgba(0,0,0,0),
                 minHeight: 20, minWidth: 100
             } );
         xinf.style.StyleSheet.defaultSheet.add(
@@ -120,7 +120,7 @@ class GrayStyle {
                 padding: { l:5, t:2, r:5, b:2 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd ),
+                background: Color.rgba(1,1,1,0.3),
                 minHeight: 20, minWidth: 200, selectorWidth: 12
             } ); 
         xinf.style.StyleSheet.defaultSheet.add(
@@ -128,7 +128,7 @@ class GrayStyle {
                 padding: { l:5, t:2, r:5, b:2 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd ),
+                background: Color.rgba(1,1,1,0.3),
                 minHeight: 20, minWidth: 200, selectorWidth: 12
             } );   
         xinf.style.StyleSheet.defaultSheet.add(

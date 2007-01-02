@@ -38,7 +38,6 @@ class CheckBox extends Button<xinf.ul.Label> {
 		toggle = true;
 		crop = true;
 		var c = new xinf.ul.Label();
-		c.style.background.a = 0.0;
 		if( initialText!=null ) c.text = initialText;
         contained = c;
 	}
@@ -52,7 +51,6 @@ class CheckBox extends Button<xinf.ul.Label> {
         var labelH:Float = h - style.padding.t - style.padding.b;
 
         if( labelW != contained.size.x ) {
-        	//zb: TODO label sizes correctly, but text can't fill the width - investigate
         	contained.resize( labelW, labelH );
         	contained.moveTo( size.x - style.padding.r - contained.size.x, (size.y - contained.size.y) / 2);
         }
@@ -88,16 +86,23 @@ class CheckBox extends Button<xinf.ul.Label> {
     	
     	//zb: TODO fix focus color appearing where tick should be in selectColor
     	if( selected ) {
-            g.setFill(0,0,0,0);
             var c = style.get("selectColor", new Color().fromRGBInt(0));
-            g.setStroke(c.r,c.g,c.b,c.a,1);
             
-            g.startShape();
-	    	g.startPath( style.padding.l + w/5, style.padding.t + w*3/5 );
-	    	g.lineTo( style.padding.l + w/2, style.padding.t + w*9/10 );
-	    	g.lineTo( style.padding.l + w*9/10, style.padding.t + w/5 );
-	    	g.endPath();
-            g.endShape();
+            #if js
+                g.setFill(c.r,c.g,c.b,c.a);
+                g.setStroke(0,0,0,0,0);
+                g.rect( style.padding.l+(w/2), (size.y-(w/2))/2, w/2, w/2 );
+            #else true
+                g.setFill(0,0,0,0);
+                g.setStroke(c.r,c.g,c.b,c.a,1);
+
+                g.startShape();
+                g.startPath( style.padding.l + w/5, style.padding.t + w*3/5 );
+                g.lineTo( style.padding.l + w/2, style.padding.t + w*9/10 );
+                g.lineTo( style.padding.l + w*9/10, style.padding.t + w/5 );
+                g.endPath();
+                g.endShape();
+            #end
     	}
     }
    

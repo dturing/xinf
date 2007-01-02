@@ -27,7 +27,7 @@ class App extends Application {
         GrayStyle.addToDefault();
 
         var container = new xinf.ul.VBox();
-        container.moveTo( 400, 100 );
+        container.moveTo( 200, 100 );
         //zb: TODO uncomment both to see current border behaviour
         //container.style.padding = {l:0, t:0, r:0, b:0};
         //container.style.border = {l:25, t:25, r:25, b:25};
