@@ -35,7 +35,6 @@ typedef T=String
 class Dropdown extends Widget {
     
     private var model:ListModel<T>;
-    private static var labelHeight:Int = 20;
     
     private var label:Label;
     private var button:xinf.style.StyleClassElement;
@@ -71,8 +70,8 @@ class Dropdown extends Widget {
 
     override public function resize( x:Float, y:Float ) :Void {
         super.resize(x,y);
-        button.moveTo( size.x - labelHeight, 0 );
-        button.resize( labelHeight, labelHeight );
+        button.moveTo( size.x - size.y, 0 );
+        button.resize( size.y, size.y );
     }
 
     private function itemPicked( e:PickEvent<T> ) :Void {
@@ -84,9 +83,9 @@ class Dropdown extends Widget {
         menu.assureVisible( selectedIndex );
         menu.select( selectedIndex );
         
-        var p = localToGlobal( {x:5, y:labelHeight } );
+        var p = localToGlobal( {x:5, y:size.y } );
         menu.moveTo( p.x, p.y );
-        menu.resize( size.x-5, labelHeight*5 );
+        menu.resize( size.x-5, size.y*5 );
         
         popup = new Popup(this,menu,Scale);
         isOpen=true;

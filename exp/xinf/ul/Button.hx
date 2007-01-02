@@ -76,7 +76,6 @@ class TextButton extends Button<xinf.ul.Label> {
     public function new( ?initialText:String ) :Void {
         super();
         var c = new xinf.ul.Label();
-        //attach(c);
         if( initialText!=null ) c.text = initialText;
         contained = c;
     }

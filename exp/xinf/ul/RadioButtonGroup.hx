@@ -96,5 +96,5 @@ class RadioButtonGroup extends SelectableGroup<RadioButton> {
 	public function new() {
 		super();
 	}
-		
+    
 }
