@@ -18,10 +18,10 @@ package xinf.ul;
 import xinf.ony.Object;
 
 /**
-    Simple Vertical Box packing element.
+    Simple Horizontal Box packing element.
 **/
 
-class VBox extends Pane {
+class HBox extends Pane {
     
     public var padding:Float;
 
@@ -34,33 +34,15 @@ class VBox extends Pane {
         var pad = style.padding;
         if( pad==null ) pad = { l:0., t:0., r:0., b:0. };
         
-        var y:Float = pad.t;
-        var w:Float = 0;
+        var y:Float = 0;
+        var w:Float = pad.l;
         for( child in children ) {
-            child.moveTo( pad.l, y );
-            y+=child.size.y+pad.b;
-            w = Math.max( w, child.size.x );
+            child.moveTo( w, pad.t );
+            w+=child.size.x+pad.r;
+            y = Math.max( y, child.size.y );
         }
-        size = { x:w+pad.l+pad.r, y:y };
+        size = { x:w, y:y+pad.t+pad.b };
         
-        /*
-        zb: TODO see xinf.ul.Pane for comments
-        
-        var pad = style.padding;
-        if( pad==null ) pad = { l:0., t:0., r:0., b:0. };
-        
-        var border = style.border;
-        if( border==null ) border = { l:0., t:0., r:0., b:0. };
-        
-        var y:Float = border.t+pad.t;
-        var w:Float = 0;
-        for( child in children ) {
-            child.moveTo( border.l+pad.l, y );
-            y+=child.size.y+pad.b;
-            w = Math.max( w, child.size.x );
-        }
-        size = { x:w+pad.l+pad.r+border.l+border.r, y:y+border.b };
-        */
     }
     
     public function attach( child:Object ) :Void {

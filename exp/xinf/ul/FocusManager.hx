@@ -83,6 +83,10 @@ class FocusManager {
         }
     }
     
+    public static function isFocussed( widget:Widget ) :Bool {
+        return( widgets[currentFocus] == widget );
+    }
+    
     public static function setFocus( widget:Widget ) :Void {
         for( i in 0...widgets.length ) {
             if( widgets[i] == widget ) {

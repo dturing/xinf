@@ -64,12 +64,12 @@ class Dropdown extends Widget {
         menu = new ListBox( model );
         menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
         menu.focusable = false;
-
+        
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
         addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
     }
 
-    public function resize( x:Float, y:Float ) :Void {
+    override public function resize( x:Float, y:Float ) :Void {
         super.resize(x,y);
         button.moveTo( size.x - labelHeight, 0 );
         button.resize( labelHeight, labelHeight );
@@ -143,5 +143,4 @@ class Dropdown extends Widget {
         super.blur();
         close();
     }
-    
 }

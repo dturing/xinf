@@ -40,7 +40,7 @@ class Pane extends StyleClassElement {
         
     public function drawContents( g:Renderer ) :Void {
         if( crop )
-            g.clipRect( size.x-2, size.y-2 );
+            g.clipRect( size.x, size.y );
 
         // FIXME: code doubled from ul.Label
         if( style.background != null ) {
@@ -52,7 +52,6 @@ class Pane extends StyleClassElement {
             g.setFill(0,0,0,0);
             g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
             g.rect( 0, 0, size.x, size.y );
-        }
+        } 
      }
-    
 }

@@ -273,50 +273,105 @@ class LineEdit extends Widget {
     }
 }
 
-#else true
-class LineEdit extends Widget {
-    
-    public var text(get_text,set_text) :String;
-    private var _text :String;
+#else flash
 
-    var native:Dynamic;
+class LineEdit extends Widget {
+    public var text(get_text,set_text) :String;
+    private var _t:flash.text.TextField;
 
     private function get_text() :String {
-        return _text;
+        return _t.text;
     }
     
     private function set_text(t:String) :String {
-        return _text=t;
+        _t.text = t;
+        return t;
     }
 
     public function new() :Void {
         super();
-        _text = "foo";
-        #if js
-            var _t = js.Lib.document.createElement("input");
-            native = _t;
-            untyped _t.value = _text;
-            _t.style.overflow = "hidden";
-            _t.style.whiteSpace = "nowrap";
-            _t.style.fontFamily = style.get("fontFamily","sans");
-            _t.style.fontSize = style.get("fontSize",10);
-            _t.style.paddingTop = 0;
-            _t.style.paddingBottom = 0;
-            _t.style.paddingLeft = 0;
-            _t.style.paddingRight = 0;
-            _t.style.lineHeight = "110%";
-            _t.style.background = "#f00"; //"transparent";
-            _t.style.border = "none";
-            _t.style.position="absolute";
-            //_t.style.top = "-10";
-        #end
+        _t = new flash.text.TextField();
+        _t.type = "input";
+
+        var format:flash.text.TextFormat = _t.getTextFormat();
+        format.font = style.get("fontFamily","_sans");
+        format.size = style.get("fontSize",10);
+        format.color = style.color.toRGBInt();
+        format.leftMargin = 0;
+        _t.setTextFormat(format);
     }
 
     public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
-        
-        g.native(native);
+        g.native(_t);
     }
     
+}
+
+#else js 
+
+import js.Dom;
+
+class LineEdit extends Widget {
+    public var text(get_text,set_text) :String;
+    private var _t:js.FormElement;
+
+    private function get_text() :String {
+        return _t.value;
+    }
+    
+    private function set_text(t:String) :String {
+        _t.value = t;
+        return t;
+    }
+
+    public function new() :Void {
+        super();
+        _t = cast( js.Lib.document.createElement("input") );
+        _t.style.overflow = "hidden";
+        _t.style.whiteSpace = "nowrap";
+        _t.style.fontFamily = style.get("fontFamily","Arial");
+        _t.style.fontSize = style.get("fontSize",10);
+        _t.style.paddingTop = 2;
+        _t.style.paddingBottom = 2;
+        _t.style.paddingLeft = 2;
+        _t.style.paddingRight = 2;
+        _t.style.lineHeight = "110%";
+        _t.style.background = "#f00"; //"transparent";
+        _t.style.border = "none";
+        _t.style.position="absolute";
+        //_t.style.top = "-10";
+    }
+
+    override public function resize( x:Float, y:Float ) :Void {
+        super.resize(x,y);
+        _t.style.width = ""+Math.round(size.x);
+        _t.style.height = ""+Math.round(size.y);
+    }
+
+/*
+    override public function focus() :Bool {
+        if( super.focus() ) {
+            _t.focus();
+            return true;
+        }
+        return false;
+    }
+
+    override public function blur() :Void {
+        super.blur();
+        _t.blur();
+    }
+*/
+    public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+        g.native(_t);
+        
+        if( FocusManager.isFocussed(this) ) {
+            _t.focus();
+        } else {
+            _t.blur();
+        }
+    }
 }
 #end

@@ -16,11 +16,13 @@
 package xinf.ul;
 
 import xinf.ony.Object;
-import xinf.ul.Pane;
 import xinf.erno.Runtime;
 
 import xinf.event.MouseEvent;
 import xinf.event.EventKind;
+
+import xinf.erno.Renderer;
+import xinf.erno.Color;
 
 /**
     Button element.
@@ -74,7 +76,7 @@ class TextButton extends Button<xinf.ul.Label> {
     public function new( ?initialText:String ) :Void {
         super();
         var c = new xinf.ul.Label();
-        attach(c);
+        //attach(c);
         if( initialText!=null ) c.text = initialText;
         contained = c;
     }

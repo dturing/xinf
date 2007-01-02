@@ -20,8 +20,8 @@ import xinf.erno.Runtime;
 
 class Drag<T> {
     
-    private var _mouseMove:MouseEvent->Void;
-    private var _mouseUp:MouseEvent->Void;
+    private var _mouseMove:Dynamic;
+    private var _mouseUp:Dynamic;
     
     private var end:Void->Void;
     private var move:Float->Float->T->Void;
@@ -35,8 +35,8 @@ class Drag<T> {
         this.move=move;
         this.marker=marker;
         
-        _mouseMove=Runtime.runtime.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
-        _mouseUp=Runtime.runtime.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+        _mouseMove  = Runtime.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+        _mouseUp    = Runtime.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
     }
     
     private function onMouseMove( e:MouseEvent ) {
@@ -44,8 +44,8 @@ class Drag<T> {
     }
     
     private function onMouseUp( e:MouseEvent ) {
-        Runtime.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
-        Runtime.removeEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+        Runtime.removeEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
+        Runtime.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
         if( end != null ) end();
     }
     
