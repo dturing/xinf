@@ -42,7 +42,7 @@ class Pane extends StyleClassElement {
         if( crop )
             g.clipRect( size.x, size.y );
 
-        // FIXME: code doubled from ul.Label
+        // FIXME: code doubled in ul.Label
         if( style.background != null ) {
             g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
             g.setStroke( 0,0,0,0,0 );

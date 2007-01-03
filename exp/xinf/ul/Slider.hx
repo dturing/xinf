@@ -54,7 +54,7 @@ class Slider extends Widget {
         if( _value < min ) _value=min;
         if( _value != old ) {
             label.text = ""+Math.floor( precision*_value )/precision;
-            postEvent( new ValueEvent( ValueEvent.CHANGED, _value ) );
+            postEvent( new ValueEvent<Float>( ValueEvent.VALUE, _value ) );
         }
         return _value;
     }
@@ -145,7 +145,7 @@ class Slider extends Widget {
     
     public static function createControl( o:Dynamic, field:String, min:Float, max:Float, increment:Float ) :Slider {
         var s = new Slider( max, min, increment );
-        s.addEventListener( ValueEvent.CHANGED, function( e:ValueEvent ) {
+        s.addEventListener( ValueEvent.VALUE, function( e ) {
                 Reflect.setField(o,field,e.value);
             });
         return s;
@@ -153,7 +153,7 @@ class Slider extends Widget {
 
     public static function createFunctionControl( f:Float->Void, min:Float, max:Float, increment:Float ) :Slider {
         var s = new Slider( max, min, increment );
-        s.addEventListener( ValueEvent.CHANGED, function( e:ValueEvent ) {
+        s.addEventListener( ValueEvent.VALUE, function( e ) {
                 f(e.value);
             });
         return s;

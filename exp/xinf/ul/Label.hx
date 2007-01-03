@@ -23,7 +23,7 @@ import xinf.erno.FontStyle;
     Simple Label element.
 **/
 
-class Label extends StyleClassElement {
+class Label extends Pane {
     
     public var text(get_text,set_text):String;
     private var _text:String;
@@ -46,7 +46,7 @@ class Label extends StyleClassElement {
     public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
     
-        if( text == null ) return;
+        if( text == null || style.color == null ) return;
     
         var fontName = style.get("fontFamily","_sans");
         if( fontName != null ) {
@@ -54,21 +54,8 @@ class Label extends StyleClassElement {
                     style.get("fontWeight",false),
                     style.get("fontSize",12) );
         }
-
-        // FIXME: code doubled from ul.Label
-        if( style.background != null ) {
-            g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
-            g.setStroke( 0,0,0,0,0 );
-            g.rect( 0, 0, size.x, size.y );
-        }
-        if( style.border.l > 0 ) {
-            g.setFill(0,0,0,0);
-            g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
-            g.rect( 0, 0, size.x, size.y );
-        }
         
         g.setFill( style.color.r, style.color.g, style.color.b, style.color.a );
         g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
     }
-    
 }

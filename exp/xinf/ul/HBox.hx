@@ -34,14 +34,14 @@ class HBox extends Pane {
         var pad = style.padding;
         if( pad==null ) pad = { l:0., t:0., r:0., b:0. };
         
-        var y:Float = 0;
-        var w:Float = pad.l;
+        var x:Float = pad.l;
+        var h:Float = 0;
         for( child in children ) {
-            child.moveTo( w, pad.t );
-            w+=child.size.x+pad.r;
-            y = Math.max( y, child.size.y );
+            child.moveTo( x, pad.t );
+            x+=child.size.x+pad.r;
+            h = Math.max( h, child.size.y );
         }
-        size = { x:w, y:y+pad.t+pad.b };
+        size = { x:x, y:h+pad.l+pad.r };
         
     }
     

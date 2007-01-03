@@ -19,17 +19,14 @@ import xinf.event.SimpleEvent;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
-class RadioButton extends CheckBox, implements ISelectable {
+class RadioButton<Value> extends CheckBox<Value>, implements ISelectable {
 	
-	public var data(default,default) :Dynamic;
-	public var group(default,default) :RadioButtonGroup;
+	public var group(default,default) :RadioButtonGroup<Value>;
 
-	public function new( grp:RadioButtonGroup, ?label:String, ?dat:Dynamic ) :Void {
-		super( label );
+	public function new( grp:RadioButtonGroup<Value>, ?label:String, ?value:Value ) :Void {
+		super( label, value );
 		group = grp;
-		data = dat;
 		selected = false;
-		toggle = true;
 		group.addInstance(this);
 	}
 	
@@ -48,30 +45,23 @@ class RadioButton extends CheckBox, implements ISelectable {
         var sizeR:Float = Math.min( size.x, size.y ) / 2;
         var r:Float = style.get("selectorWidth", 12) / 2;
 
-        if( style.background != null ) {
-            g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
-            g.setStroke( 0,0,0,0,0 );
-            g.circle( sizeR, sizeR, r );
-        }
-
-    	if( style.border.l > 0 ) {
-            var b = style.border.l/4;
-            g.setFill(0,0,0,0);
-            g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
-            g.circle( sizeR, sizeR, r+b );
-        }
+        setStyleFill( g, "background" );
+        setStyleStroke( g, style.border.l, "color" );
+        g.circle( sizeR, sizeR, r );
 		
 		if( selected ) {
-            var c = style.get("selectColor", new Color().fromRGBInt(0));
-            g.setStroke(c.r,c.g,c.b,c.a,1);
-	    	c = style.get("selectBackgroundColor", new Color().fromRGBInt(0));
-            g.setFill(c.r,c.g,c.b,c.a);
+            setStyleStroke( g, 1, "selectColor" );
+            setStyleFill( g, "selectBackgroundColor" );
 	    	g.circle( sizeR, sizeR, r/2 );
 		}
+
+        setStyleFont(g);
+        setStyleFill(g,"color");
+        g.text(style.padding.l+(sizeR*2)+style.padding.l,style.padding.t,text);
     }
 	
-	public static function createSimple( grp:RadioButtonGroup, text:String, dat:Dynamic, f:SimpleEvent->Void ) :RadioButton {
-        var b = new RadioButton( grp, text, dat );
+	public static function createSimple( grp:RadioButtonGroup<Value>, text:String, f:ValueEvent<Value>->Void, value:Value ) :RadioButton<Value> {
+        var b = new RadioButton( grp, text, value );
         b.addEventListener( Button.PRESS, f );
         return b;
     }

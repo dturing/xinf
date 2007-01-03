@@ -23,7 +23,7 @@ class GrayStyle {
         
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Label" ], {
-                padding: { l:5, t:1, r:5, b:1 },
+                padding: { l:0, t:1, r:0, b:1 },
                 border: { l:0, t:0, r:0, b:0 },
                 color: new Color().fromRGBInt( 0 ),
                 background: Color.rgba(0,0,0,0),
@@ -88,12 +88,6 @@ class GrayStyle {
                 background: new Color().fromRGBInt( 0xdddddd )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ ":focus" ], {
-                border: { l:2, t:2, r:2, b:2 },
-                color: new Color().fromRGBInt( 0x0033ff ),
-                background: new Color().fromRGBInt( 0xffffff )
-            } );
-        xinf.style.StyleSheet.defaultSheet.add(
             [ "VBox" ], {
                 padding: { l:5, t:5, r:5, b:5 },
                 border: { l:1, t:1, r:1, b:1 },
@@ -108,7 +102,7 @@ class GrayStyle {
                 background: Color.rgba( 0.7, 0.7, 0.7, 0.7 ),
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ "TextButton" ], {
+            [ "Button" ], {
                 padding: { l:5, t:2, r:5, b:2 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
@@ -148,10 +142,16 @@ class GrayStyle {
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xdddddd ),
                 minHeight: 20, minWidth: 100,
-                selectionBackground: Color.BLACK,
+                selectionBackground: Color.rgba(0,0,0,.5),
                 selectionForeground: Color.WHITE,
                 fontFamily: "_sans", //"Kassiopeia09T_09_sp60_cyr30",
                 fontSize: 12
+            } );
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ ":focus" ], {
+                border: { l:2, t:2, r:2, b:2 },
+                color: new Color().fromRGBInt( 0x0033ff ),
+                background: new Color().fromRGBInt( 0xffffff )
             } );
     }
     

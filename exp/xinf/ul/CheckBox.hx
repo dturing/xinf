@@ -19,9 +19,8 @@ import xinf.event.SimpleEvent;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
-class CheckBox extends Button<xinf.ul.Label> {
+class CheckBox<Value> extends Button<Value> {
 	
-	public var toggle(default,default) :Bool;
 	public var selected(default,setSelected) :Bool;
 	
 	private function setSelected( sel:Bool ) {
@@ -32,17 +31,13 @@ class CheckBox extends Button<xinf.ul.Label> {
 		return sel;
 	}
 	
-	public function new( ?initialText:String ) :Void {
-		super();
+	public function new( ?initialText:String, ?value:Value ) :Void {
+		super( initialText, value );
 		selected = false;
-		toggle = true;
 		crop = true;
-		var c = new xinf.ul.Label();
-		if( initialText!=null ) c.text = initialText;
-        contained = c;
-        addEventListener( Button.PRESS, onPress );
+		addEventListener( Button.PRESS, onPress );
 	}
-	
+/*	
 	public function resize( x:Float, y:Float ) :Void {
 		super.resize( x, y );
 		var w:Float = Math.max( style.get("minWidth",0), x );
@@ -50,19 +45,10 @@ class CheckBox extends Button<xinf.ul.Label> {
         var selectorW:Float = Math.min( style.get("selectorWidth", 12), Math.min( w, h ) );
         var labelW:Float = w - style.padding.l - (2 * style.padding.r) - selectorW;
         var labelH:Float = h - style.padding.t - style.padding.b;
-
-        if( labelW != contained.size.x ) {
-        	contained.resize( labelW, labelH );
-        	contained.moveTo( size.x - style.padding.r - contained.size.x, (size.y - contained.size.y) / 2);
-        }
     }
-    
-    private function onPress( e:SimpleEvent ) {
-    	if( ! selected ) {
-    		selected = true;
-    	} else if( toggle ) {
-    		selected = false;
-    	}
+*/    
+    private function onPress( e:ValueEvent<Value> ) {
+        selected = !selected;
     }
     
     public function drawContents( g:Renderer ) :Void {
@@ -71,30 +57,22 @@ class CheckBox extends Button<xinf.ul.Label> {
             
         var sizeW:Float = Math.min( size.x, size.y );
         var w:Float = Math.min( style.get("selectorWidth", 10), sizeW );
-        if( style.background != null ) {
-            g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
-            g.setStroke( 0,0,0,0,0 );
-            g.rect( style.padding.l, (size.y-w)/2, w, w );
-        }
-    	
-    	if( style.border.l > 0 ) {
-            var b = style.border.l/4;
-            g.setFill(0,0,0,0);
-            g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
-            g.rect( style.padding.l-b, (size.y-w)/2-b, w+(2*b), w+(2*b) );
-        }
-    	
+        
+        setStyleFill( g, "background" );
+        setStyleStroke( g, style.border.l, "color" );
+        g.rect( style.padding.l, (size.y-w)/2, w, w );
+        
     	//zb: TODO fix focus color appearing where tick should be in selectColor
     	if( selected ) {
             var c = style.get("selectColor", new Color().fromRGBInt(0));
             
             #if js
-                g.setFill(c.r,c.g,c.b,c.a);
-                g.setStroke(0,0,0,0,0);
+                setStyleStroke( g, 1, "selectBackgroundColor" );
+                setStyleFill( g, "selectColor" );
                 g.rect( style.padding.l+(w/2), (size.y-(w/2))/2, w/2, w/2 );
             #else true
-                g.setFill(0,0,0,0);
-                g.setStroke(c.r,c.g,c.b,c.a,1);
+                setStyleStroke( g, 1, "selectColor" );
+                g.setFill( 0,0,0,0 );
 
                 g.startShape();
                 g.startPath( style.padding.l + w/5, style.padding.t + w*3/5 );
@@ -104,10 +82,14 @@ class CheckBox extends Button<xinf.ul.Label> {
                 g.endShape();
             #end
     	}
+
+        setStyleFont(g);
+        setStyleFill(g,"color");
+        g.text(style.padding.l+sizeW+style.padding.l,style.padding.t,text);
     }
    
-    public static function createSimple( text:String, f:SimpleEvent->Void ) :CheckBox {
-        var b = new CheckBox( text );
+    public static function createSimple( text:String, f:ValueEvent<Value>->Void, ?value:Value ) :CheckBox<Value> {
+        var b = new CheckBox<Value>( text, value );
         b.addEventListener( Button.PRESS, f );
         return b;
     }

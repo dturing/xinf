@@ -17,13 +17,13 @@ package xinf.ul;
 
 import xinf.event.Event;
 
-class ValueEvent extends Event<ValueEvent> {
+class ValueEvent<Value> extends Event<ValueEvent<Value>> {
     
-    static public var CHANGED = new xinf.event.EventKind<ValueEvent>("valueChanged");
+    static public var VALUE = new xinf.event.EventKind<ValueEvent<Value>>("value");
 
-    public var value:Float;
+    public var value:Value;
     
-    public function new( _type:xinf.event.EventKind<ValueEvent>, value:Float ) {
+    public function new( _type:xinf.event.EventKind<ValueEvent<Value>>, value:Value ) {
         super(_type);
         this.value = value;
     }

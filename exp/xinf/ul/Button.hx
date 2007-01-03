@@ -30,82 +30,75 @@ import xinf.erno.Color;
     Button element.
 **/
 
-class Button<T:Object> extends Widget {
+class Button<Value> extends Widget {
     
-    public static var PRESS = new EventKind<SimpleEvent>("buttonPress");
+    public static var PRESS = new EventKind<ValueEvent<Value>>("buttonPress");
 
-    public var contained(get_contained,set_contained):T;
-    private var _contained:T;
-    
-    public function get_contained():T {
-        return _contained;
+    public var text(get_text,set_text):String;
+    var value:Value;
+    var _mouseUp:Dynamic;
+
+    function get_text() :String {
+        return(text);
     }
     
-    public function set_contained( c:T ):T {
-        _contained = c;
-        attach( c );
-        c.moveTo( style.border.l, style.border.t );
-        return c;
+    function set_text( t:String ) :String {
+        text = t;
+        scheduleRedraw();
+        return(t);
     }
-    
-    private var _mouseUp:Dynamic;
-    private var _localMouseUp:Dynamic;
-    
-    public function new() :Void {
+
+    public function new( ?text:String, ?value:Value ) :Void {
         super();
+        this.text = text;
+        this.value = value;
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
-    private function onMouseDown( e:MouseEvent ) {
+    function onMouseDown( e:MouseEvent ) {
         addStyleClass(":press");
         Runtime.addEventListener( MouseEvent.MOUSE_UP,
             _mouseUp=onMouseUp );
     }
     
-    private function onMouseUp( e:MouseEvent ) {
-        if( this._id==e.targetId || this.contained._id==e.targetId )  // FIXME
-            postEvent( new SimpleEvent( Button.PRESS ) );
+    function onMouseUp( e:MouseEvent ) {
+        if( this._id==e.targetId )
+            postEvent( new ValueEvent( Button.PRESS, value ) );
         
         removeStyleClass(":press");
-        Runtime.removeEventListener( MouseEvent.MOUSE_UP,
-            _mouseUp );
+        Runtime.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
     }
     
-    private function onKeyDown( e:KeyboardEvent ) {
+    function onKeyDown( e:KeyboardEvent ) {
         switch( e.key ) {
             case "space":
-                postEvent( new SimpleEvent( Button.PRESS ) );
+                postEvent( new ValueEvent( Button.PRESS, value ) );
         }
     }
-}
 
-class TextButton extends Button<xinf.ul.Label> {
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
     
-    public function new( ?initialText:String ) :Void {
-        super();
-        var c = new xinf.ul.Label();
-        if( initialText!=null ) c.text = initialText;
-        contained = c;
+        if( text == null || style.color == null ) return;
+    
+        var fontName = style.get("fontFamily","_sans");
+        if( fontName != null ) {
+            g.setFont( fontName, style.get("fontSlant",false),
+                    style.get("fontWeight",false),
+                    style.get("fontSize",12) );
+        }
+        
+        g.setFill( style.color.r, style.color.g, style.color.b, style.color.a );
+        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
     }
-    
-    public static function createSimple( text:String, f:SimpleEvent->Void ) :TextButton {
-        var b = new TextButton( text );
-        b.addEventListener( Button.PRESS, f );
+
+    public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {
+        var b = new Button<Value>( text, value );
+        b.addEventListener( Button.PRESS, function( e ) {
+                f(e.value);
+            } );
         return b;
     }
     
 }
-
-/*
-class ImageButton extends Button<xinf.ony.Image> {
-    public function new( name:String, parent:Element, ?url:String ) :Void {
-        super( name, parent );
-        var c = new xinf.ony.Image( name+"_img", this );
-        c.autoSize=true;
-        scaleChild=false;
-        if( url!=null ) c.load(url);
-        contained = c;
-    }
-}
-*/
