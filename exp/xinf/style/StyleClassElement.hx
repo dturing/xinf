@@ -1,8 +1,7 @@
 package xinf.style;
 
-class StyleClassElement extends xinf.ony.Object {
+class StyleClassElement extends StyleElement {
     
-    public var style :Style;
     private var styleClasses :Array<String>;
     
     public function new() :Void {
