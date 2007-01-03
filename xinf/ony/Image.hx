@@ -33,6 +33,10 @@ class Image extends Object {
     public function new( i:ImageData ) :Void {
         super();
         img = i;
+        if( img.width!=null ) {
+            size.x = img.width;
+            size.y = img.height;
+        }
         img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
         img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
         img.addEventListener( ImageLoadEvent.LOADED, dataChanged );

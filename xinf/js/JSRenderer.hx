@@ -70,13 +70,16 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.position="absolute";
         r.style.left = ""+Math.round(x);
         r.style.top = ""+Math.round(y);
-        r.style.width = ""+Math.round(w);
-        r.style.height = ""+Math.round(h);
         if( pen.fillColor != null ) {
             r.style.background = pen.fillColor.toRGBString();
         }
         if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
             r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
+            r.style.width = ""+Math.round(w+1-(pen.strokeWidth*2));
+            r.style.height = ""+Math.round(h+1-(pen.strokeWidth*2));
+        } else {
+            r.style.width = ""+Math.round(w);
+            r.style.height = ""+Math.round(h);
         }
         current.appendChild( r );
     }

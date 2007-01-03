@@ -190,6 +190,13 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
             GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
             GL.lineWidth( pen.strokeWidth );
+            
+            x+=pen.strokeWidth/2;
+            y+=pen.strokeWidth/2;
+            if( pen.strokeWidth>1 ) {
+                w-=pen.strokeWidth/2;
+                h-=pen.strokeWidth/2;
+            }
             GL.begin( GL.LINE_STRIP );
                 GL.vertex3( x, y, 0. );
                 GL.vertex3( x+w, y, 0. );

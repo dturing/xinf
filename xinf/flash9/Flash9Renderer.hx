@@ -123,7 +123,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         } else {
             g.beginFill( 0, 0 );
         }
-        g.drawRect( x,y,w,h );
+        g.drawRect( x+(pen.strokeWidth/2),y+(pen.strokeWidth/2),1+w-pen.strokeWidth,1+h-pen.strokeWidth );
         g.endFill();
     }
     
@@ -151,8 +151,8 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             tf.text = text;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-            tf.y=-1;
-            tf.x=-1;
+            tf.y=y;
+            tf.x=x;
             
             // TODO: bold/italic
             var format:flash.text.TextFormat = tf.getTextFormat();
