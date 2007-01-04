@@ -40,7 +40,6 @@ class ListBox<T> extends Widget {
     
     private var scrollbar:VScrollbar;
     private var labels:Array<Label>;
-    private var scrollPane:Pane;
     private var model:ListModel<T>;
     
     private var offset:Float;
@@ -52,14 +51,12 @@ class ListBox<T> extends Widget {
     public function new( _model:ListModel<T> ) :Void {
         super();
         
+        crop=true;
+
         offset = 0;
         cursor = -1;
         lastCursorItem = null;
         labels = new Array<Label>();
-        
-        scrollPane = new Pane();
-        scrollPane.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
-        attach( scrollPane );
         
         scrollbar = new xinf.ul.VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
@@ -71,6 +68,7 @@ class ListBox<T> extends Widget {
         assureChildren( Math.ceil((size.y/ rowH) + 1) );
         select(0);
         
+        addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
         addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
         addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
@@ -95,34 +93,32 @@ class ListBox<T> extends Widget {
     }
     
     private function reLayout( e:SimpleEvent ) :Void {
-        assureChildren( Math.ceil((size.y/ rowH) + 1) );
+        assureChildren( Math.ceil((size.y/rowH) + 1) );
         
         // set children sizes
-        var w:Float = size.x;
+        var w:Float = size.x-(style.padding.l+style.padding.r+scrollbar.size.x);
         for( child in labels ) {
             child.resize( w, rowH-(2*rowPad) );
         }
         
-        scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
-        scrollPane.crop = true;
-        scrollPane.resize( size.x, size.y );
-        
+        scrollbar.moveTo( (size.x-(style.border.r-1))-scrollbar.size.x, style.border.t-1 );
+        scrollbar.resize( scrollbar.size.x, size.y-(style.border.t+style.border.b-2) );
+/*            
         // hide/show the scrollbar
-        scrollbar.resize( scrollbar.size.x, size.y );
         if( (model.getLength() * rowH) > size.y ) {
             //scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
             //scrollbar.visible=true;
         } else {
             //scrollbar.visible=false;
         }
-
+*/
         reDo(e);
     }
     
     private function reDo<T>( e:Event<T> ) :Void {
         var index = Math.floor(offset/rowH);
         var max = model.getLength();
-        var y = (index*rowH)-offset;
+        var y = ((index*rowH)-offset)+style.padding.t;
         
         for( child in labels ) {
             if( index >= max ) {
@@ -130,8 +126,7 @@ class ListBox<T> extends Widget {
             } else {
                 child.text = model.getNameAt(index);
             }
-            child.moveTo( 0, y+rowPad );
-            child.scheduleRedraw();
+            child.moveTo( style.padding.l, y+rowPad );
             y+=rowH;
             index++;
         }
@@ -142,8 +137,9 @@ class ListBox<T> extends Widget {
             // add labels
             for( i in 0...(n - labels.length) ) {
                 var child = new Label();
-                child.resize( size.x, rowH );
-                scrollPane.attach( child );
+                child.resize( size.x-(style.padding.l+style.padding.r)-(scrollbar.size.x), rowH );
+                child.addStyleClass("ListItem");
+                attach( child );
                 labels.push( child );
             }
         } else if( labels.length > n ) {
@@ -152,7 +148,7 @@ class ListBox<T> extends Widget {
     }
     
     private function scroll( e:ScrollEvent ) :Void {
-        offset = Math.round(((model.getLength() * rowH) - scrollPane.size.y) * e.value);
+        offset = Math.round(((model.getLength() * rowH) - size.y) * e.value);
         reDo(null);
         select(cursor);
     }
@@ -172,8 +168,8 @@ class ListBox<T> extends Widget {
     private function scrollBy( pixels:Float ) :Void {
         offset += pixels;
         if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * rowH) - scrollPane.size.y ) )
-            offset = ((model.getLength() * rowH) - scrollPane.size.y );
+        if( offset > ((model.getLength() * rowH) - size.y ) )
+            offset = ((model.getLength() * rowH) - size.y );
             
         scrollbar.setScrollPosition( offset / ((model.getLength() * rowH) - size.y) );
             
@@ -187,7 +183,7 @@ class ListBox<T> extends Widget {
 
     public function assureVisible( index:Int ) :Void {
         var first = Math.floor(offset/rowH);
-        var sz = Math.floor(scrollPane.size.y / rowH);
+        var sz = Math.floor(size.y / rowH);
         var l = (first+sz)-1;
         var ofs = offset % rowH;
         if( index < first ) {
@@ -236,11 +232,11 @@ class ListBox<T> extends Widget {
                 assureVisible( cursor+1 );
                 select( cursor+1 );
             case "page up":
-                var i=cursor-Math.round(scrollPane.size.y/rowH);
+                var i=cursor-Math.round(size.y/rowH);
                 assureVisible( i );
                 select( i );
             case "page down":
-                var i=cursor+Math.round(scrollPane.size.y/rowH);
+                var i=cursor+Math.round(size.y/rowH);
                 assureVisible( i );
                 select( i );
             case "space":
