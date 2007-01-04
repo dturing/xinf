@@ -80,16 +80,8 @@ class Button<Value> extends Widget {
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
     
-        if( text == null || style.color == null ) return;
-    
-        var fontName = style.get("fontFamily","_sans");
-        if( fontName != null ) {
-            g.setFont( fontName, style.get("fontSlant",false),
-                    style.get("fontWeight",false),
-                    style.get("fontSize",12) );
-        }
-        
-        g.setFill( style.color.r, style.color.g, style.color.b, style.color.a );
+        setStyleFont( g );
+        setStyleFill( g, "color" );
         g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
     }
 

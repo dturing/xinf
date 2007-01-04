@@ -81,7 +81,7 @@ class Dropdown extends Widget {
     
     private function open() :Void {
         menu.assureVisible( selectedIndex );
-        menu.select( selectedIndex );
+        menu.setCursor( selectedIndex );
         
         var p = localToGlobal( {x:5, y:size.y } );
         menu.moveTo( p.x, p.y );

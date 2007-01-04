@@ -112,8 +112,9 @@ class Slider extends Widget {
         FocusManager.setFocus(this);
         
         var y = -(100-(get_normalized()*100));
-        var p = localToGlobal( {x:button.position.x, y:-3+y } );
-        slideBar.moveTo( p.x, p.y ); //position.x+button.position.x, -3+position.y+y );
+        var p = localToGlobal( {x:button.position.x, y:y } );
+        trace("e: "+e.y+", p: "+p.y );
+        slideBar.moveTo( p.x, p.y+(e.y-p.y) ); //position.x+button.position.x, -3+position.y+y );
         slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
         
         popup = new Popup(this,slideBar,Move);

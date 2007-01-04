@@ -15,233 +15,120 @@
 
 package xinf.ul;
 
-import xinf.ul.Pane;
-import xinf.ul.VScrollbar;
-import xinf.ul.Label;
-import xinf.ul.ListModel;
-
-import xinf.erno.Color;
-import xinf.erno.Renderer;
-import xinf.event.Event;
-
 import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 
-/**
-    Improvised ListBox element.
-    
-    TODO: currently, all child labels are reassigned. that could be optimized
-    to reassign only the ones that need to be, and move the rest.
-**/
+import xinf.ul.RoundRobin;
 
 class ListBox<T> extends Widget {
+    var model:ListModel<T>;
+    var rr:RoundRobin<T>;
+    var scrollbar:VScrollbar;
+    var cursor:Int;
+    var lastCursorItem:Label;
     
-    private var scrollbar:VScrollbar;
-    private var labels:Array<Label>;
-    private var model:ListModel<T>;
-    
-    private var offset:Float;
-    private var cursor:Int;
-    private var lastCursorItem:Label;
-    private static var rowH:Int = 20;
-    private static var rowPad:Int = 1;
-    
-    public function new( _model:ListModel<T> ) :Void {
+    public function new( model:ListModel<T>, ?createItem:Void->Item<T> ) :Void {
         super();
-        
+        this.model = model;
         crop=true;
 
-        offset = 0;
-        cursor = -1;
-        lastCursorItem = null;
-        labels = new Array<Label>();
-        
+        rr = new RoundRobin<T>( model, createItem );
+        attach( rr );
+
         scrollbar = new xinf.ul.VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
 //        scrollbar.visible=false;
         attach( scrollbar );
 
-        setModel(_model);
-
-        assureChildren( Math.ceil((size.y/ rowH) + 1) );
-        select(0);
-        
         addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
         addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
         addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+        
+        setCursor(-2);
     }
     
-    public function resize( x:Float, y:Float ) :Void {
-        super.resize(x,y);
-        reLayout( null );
+    override public function resize( x:Float, y:Float ) :Void {
+        super.resize( x, y );
+
+        scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
+        scrollbar.resize( scrollbar.size.x, size.y );
+    
+        rr.resize( x, y );
     }
 
-    public function drawContents( g:Renderer ) :Void {
-        reLayout(null);
-        super.drawContents(g);
-    }
-    
-    public function setModel( _model:ListModel<T> ) :Void {
-        model = _model;
-        model.addChangedListener( reDo );
-        cursor=0;
-        reDo(null);
-        sendPickEvent();
-    }
-    
-    private function reLayout( e:SimpleEvent ) :Void {
-        assureChildren( Math.ceil((size.y/rowH) + 1) );
-        
-        // set children sizes
-        var w:Float = size.x-(style.padding.l+style.padding.r+scrollbar.size.x);
-        for( child in labels ) {
-            child.resize( w, rowH-(2*rowPad) );
-        }
-        
-        scrollbar.moveTo( (size.x-(style.border.r-1))-scrollbar.size.x, style.border.t-1 );
-        scrollbar.resize( scrollbar.size.x, size.y-(style.border.t+style.border.b-2) );
-/*            
-        // hide/show the scrollbar
-        if( (model.getLength() * rowH) > size.y ) {
-            //scrollbar.bounds.setPosition( bounds.width-scrollbar.bounds.width-1, 1 );
-            //scrollbar.visible=true;
-        } else {
-            //scrollbar.visible=false;
-        }
-*/
-        reDo(e);
-    }
-    
-    private function reDo<T>( e:Event<T> ) :Void {
-        var index = Math.floor(offset/rowH);
-        var max = model.getLength();
-        var y = ((index*rowH)-offset)+style.padding.t;
-        
-        for( child in labels ) {
-            if( index >= max ) {
-                child.text = "";
-            } else {
-                child.text = model.getNameAt(index);
-            }
-            child.moveTo( style.padding.l, y+rowPad );
-            y+=rowH;
-            index++;
-        }
-    }
-    
-    private function assureChildren( n:Int ) :Void {
-        if( labels.length < n ) {
-            // add labels
-            for( i in 0...(n - labels.length) ) {
-                var child = new Label();
-                child.resize( size.x-(style.padding.l+style.padding.r)-(scrollbar.size.x), rowH );
-                child.addStyleClass("ListItem");
-                attach( child );
-                labels.push( child );
-            }
-        } else if( labels.length > n ) {
-            // remove labels: TODO
-        }
-    }
-    
-    private function scroll( e:ScrollEvent ) :Void {
-        offset = Math.round(((model.getLength() * rowH) - size.y) * e.value);
-        reDo(null);
-        select(cursor);
+    function scrollBy( value:Float ) {
+        rr.scrollBy( value );
+        scrollbar.setScrollPosition( rr.getPositionNormalized() );
+        setCursor(cursor);
     }
 
-    private function scrollStep( e:ScrollEvent ) :Void {
+    function scroll( e:ScrollEvent ) :Void {
+        rr.scrollToNormalized( e.value );
+        setCursor(cursor);
+    }
+
+    function scrollStep( e:ScrollEvent ) :Void {
         var factor = e.value;
-        scrollBy( 3 * factor * rowH );
-        select(cursor);
+        scrollBy( 1.5 * factor ); //* rowH );
     }
 
-    private function scrollLeap( e:ScrollEvent ) :Void {
+    function scrollLeap( e:ScrollEvent ) :Void {
         var factor = e.value;
         scrollBy( size.y * factor );
-        select(cursor);
     }
     
-    private function scrollBy( pixels:Float ) :Void {
-        offset += pixels;
-        if( offset < 0 ) offset = 0;
-        if( offset > ((model.getLength() * rowH) - size.y ) )
-            offset = ((model.getLength() * rowH) - size.y );
-            
-        scrollbar.setScrollPosition( offset / ((model.getLength() * rowH) - size.y) );
-            
-        reDo(null);
-    }
-
-    private function findItem( index:Int ) :Label {
-        var first = Math.floor(offset/rowH);
-        return( labels[ cursor-first ] );
-    }
-
-    public function assureVisible( index:Int ) :Void {
-        var first = Math.floor(offset/rowH);
-        var sz = Math.floor(size.y / rowH);
-        var l = (first+sz)-1;
-        var ofs = offset % rowH;
-        if( index < first ) {
-            scrollBy( ((index-first)*rowH)-ofs );
-        } else if( index > l ) {
-            scrollBy( ((l-index)*-rowH)-ofs );
-        }
-    }
-
-    public function select( index:Int ) :Void {
-        if( lastCursorItem!=null ) {
-            lastCursorItem.removeStyleClass( ":cursor" );
-        }
-    
-        cursor = index;
-        if( cursor > model.getLength()-1 ) cursor = model.getLength()-1;
-        if( cursor < 0 ) cursor=0;
-
-        var item = findItem( cursor );
-        if( item != null )
-            item.addStyleClass( ":cursor" );
-        lastCursorItem = item;
-    }
-
-    private function entryClicked( e:MouseEvent ) :Void {
+    function entryClicked( e:MouseEvent ) :Void {
         var y = globalToLocal( { x:e.x, y:e.y }).y;
-        var i:Int = Math.floor((y+offset)/rowH);
-        select( i );
+        var i = rr.indexAt( y );
+        setCursor( i );
         sendPickEvent();
     }
-    
-    private function sendPickEvent() :Void {
+
+    function sendPickEvent() :Void {
         postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(cursor), cursor ) );
-    }
-    
-    public function getCurrentItem() :T {
-        return model.getItemAt(cursor);
     }
 
     public function onKeyDown( e:KeyboardEvent ) {
         switch( e.key ) {
             case "up":
-                assureVisible( cursor-1 );
-                select( cursor-1 );
+                rr.assureVisible( cursor-1 );
+                setCursor( cursor-1 );
             case "down":
-                assureVisible( cursor+1 );
-                select( cursor+1 );
+                rr.assureVisible( cursor+1 );
+                setCursor( cursor+1 );
             case "page up":
-                var i=cursor-Math.round(size.y/rowH);
-                assureVisible( i );
-                select( i );
+                var i=cursor-rr.getPageSize();
+                rr.assureVisible( i );
+                setCursor( i );
             case "page down":
-                var i=cursor+Math.round(size.y/rowH);
-                assureVisible( i );
-                select( i );
+                var i=cursor+rr.getPageSize();
+                rr.assureVisible( i );
+                setCursor( i );
             case "space":
                 sendPickEvent();
         }
+        scrollbar.setScrollPosition( rr.getPositionNormalized() );
     }
     
+    public function setCursor( index:Int ) :Void {
+        if( lastCursorItem!=null ) {
+            lastCursorItem.removeStyleClass( ":cursor" );
+        }
+        cursor = index;
+        if( cursor==-2 ) return;
+        if( cursor >= model.getLength() ) cursor = model.getLength()-1;
+        if( cursor < 0 ) cursor=0;
+
+        var item = rr.getItem( cursor );
+        if( item != null ) item.addStyleClass( ":cursor" );
+        lastCursorItem = item;
+    }
+
+    public function assureVisible( i:Int ) :Void {
+        rr.assureVisible(i);
+        setCursor(i);
+    }
 }

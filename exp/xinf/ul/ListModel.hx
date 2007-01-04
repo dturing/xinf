@@ -29,31 +29,37 @@ interface ListModel<T> {
     
 }
 
-class SimpleListModel extends SimpleEventDispatcher, implements ListModel<String> {
+class SimpleListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
     
-    private var items:Array<String>;
+    private var items:Array<T>;
     
     public function new() :Void {
         super();
-        items = new Array<String>();
+        items = new Array<T>();
     }
     
-    public function addItem( text:String ) {
-        items.push( text );
-        // FIXME: provide a way to add a lot of items with triggering only one change event.
+    public function addItem( item:T ) :Void {
+        items.push( item );
         postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
     }
-    
+
+    public function addItems( items:Array<T> ) :Void {
+        for( item in items ) {
+            this.items.push( item );
+        }
+        postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
+    }
+
     public function getLength() :Int {
         return items.length;
     }
     
-    public function getItemAt( index:Int ) :String {
+    public function getItemAt( index:Int ) :T {
         return items[index];
     }
 
     public function getNameAt( index:Int ) :String {
-        return items[index];
+        return ""+items[index];
     }
 
     public function addChangedListener( f:SimpleEvent -> Void ) :Void {
@@ -64,12 +70,13 @@ class SimpleListModel extends SimpleEventDispatcher, implements ListModel<String
         removeEventListener( SimpleEvent.CHANGED, f );
     }
     
-    public function sort() :Void {
-        items.sort( function( a:String, b:String ) :Int {
-                if( a>b ) return 1;
-                if( b>a ) return -1;
-                return 0;
-            } );
+    public function sort( f:T->T->Int ) :Void {
+        items.sort( f );
     }
     
+    public static function create<T>( items:Array<T> ) :SimpleListModel<T> {
+        var r = new SimpleListModel<T>();
+        r.addItems(items);
+        return r;
+    }
 }

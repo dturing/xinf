@@ -27,7 +27,7 @@ class GrayStyle {
                 border: { l:0, t:0, r:0, b:0 },
                 color: new Color().fromRGBInt( 0 ),
                 background: Color.rgba(0,0,0,0),
-                minHeight: 20, minWidth: 100
+                minHeight: 20, minWidth: 50
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Pane" ], {
@@ -45,18 +45,23 @@ class GrayStyle {
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "ListBox" ], {
-                padding: { l:0, t:0, r:0, b:0 },
+                padding: { l:2, t:1, r:2, b:1 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xdddddd )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ ":cursor" ], {
-                padding: null,
-                border: null,
-                color: new Color().fromRGBInt( 0xeeeeee ),
-                background: new Color().fromRGBInt( 0x666666 )
+            [ "Item" ], {
+                padding: { l:5, t:1, r:5, b:1 },
+                color: new Color().fromRGBInt( 0x555555 ),
+                minHeight: null, minWidth:null
             } );
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ ":cursor" ], {
+                color: new Color().fromRGBInt( 0 ),
+                background: new Color().fromRGBInt( 0x888888 )
+            } );
+            
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Thumb" ], {
                 padding: { l:0, t:0, r:0, b:0 },
@@ -142,9 +147,9 @@ class GrayStyle {
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xdddddd ),
                 minHeight: 20, minWidth: 100,
-                selectionBackground: Color.rgba(0,0,0,.5),
+                selectionBackground: Color.rgba(0,0,0,.4),
                 selectionForeground: Color.WHITE,
-                fontFamily: "_sans", //"Kassiopeia09T_09_sp60_cyr30",
+                fontFamily: "_sans",
                 fontSize: 12
             } );
         xinf.style.StyleSheet.defaultSheet.add(

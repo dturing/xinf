@@ -56,6 +56,7 @@ class LineEdit extends Widget {
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
         if( e.code >= 32 && e.code < 127 ) {
+        trace("non-control code: "+e.code );
             switch( e.code ) {
                 case 127: // Del
                     if( sel.from==sel.to ) {
@@ -66,6 +67,7 @@ class LineEdit extends Widget {
                     replaceSelection( Std.chr(e.code) );
             }
         } else {
+        trace("key: "+e.key );
             switch( e.key ) {
                 case "backspace":
                     if( sel.to==sel.from ) sel.from=sel.to-1;
@@ -332,6 +334,7 @@ class LineEdit extends Widget {
         _t.style.whiteSpace = "nowrap";
         _t.style.fontFamily = style.get("fontFamily","Arial");
         _t.style.fontSize = style.get("fontSize",10);
+        // FIXME: bold/italic
         _t.style.paddingTop = 2;
         _t.style.paddingBottom = 2;
         _t.style.paddingLeft = 2;
