@@ -65,7 +65,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         var crop = new Sprite();
         var g = crop.graphics;
         g.beginFill( 0xff0000, 1 );
-        g.drawRect(1,1,w,h);
+        g.drawRect(0,0,w+1,h+1);
         g.endFill();
         current.addChild(crop);
         current.mask = crop;

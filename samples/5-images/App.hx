@@ -56,7 +56,6 @@ class App extends Application {
             
             block = new Image(i);
             block.moveTo( 100, 50 );
-            block.resize( 100, 61 );
             root.attach( block );
             
             var part = new ImagePart(i);

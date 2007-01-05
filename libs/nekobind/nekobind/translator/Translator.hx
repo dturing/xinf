@@ -34,7 +34,7 @@ class Translator {
         var r:Translator;
         try {
             var c = Type.resolveClass( "nekobind.translator."+name );
-            r = Reflect.createInstance( c, [ ] );
+            r = Type.createInstance( c, [ ] );
         } catch( e:Dynamic ) {
             throw("// WARNING: cannot instantiate translator '"+name+"': "+e);
         }

@@ -125,6 +125,9 @@ class XinfinityRuntime extends Runtime {
         GLUT.setReshapeFunc( function( width:Int, height:Int ) {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
             });
+        GLUT.setVisibilityFunc( function( state:Int ) {
+                if( state>0 ) self.changed();
+            });
         _eventSource.attach();
         
         

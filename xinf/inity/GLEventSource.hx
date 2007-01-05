@@ -54,8 +54,8 @@ class GLEventSource {
     
     public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
         var k = Keys.get(key);
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, key, k ) );
+        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, 0, k ) );
+        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, 0, k ) );
     }
 
     public function mouseButton( button:Int, state:Int, x:Int, y:Int ) :Void {
@@ -66,7 +66,6 @@ class GLEventSource {
             if( state==1 ) {
                 var delta:Int = -1; // up;
                 if( button==5 ) delta = 1; // down
-                
                 runtime.postEvent( new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, target ));
             }
             return;

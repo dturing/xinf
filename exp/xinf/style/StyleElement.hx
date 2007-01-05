@@ -6,6 +6,8 @@ import xinf.erno.Color;
 class StyleElement extends xinf.ony.Object {
     
     public var style :Style;
+    public var innerSize(default,null):{x:Float,y:Float};
+    public var innerPos(default,null):{x:Float,y:Float};
     
     public function new() :Void {
         super();
@@ -35,5 +37,16 @@ class StyleElement extends xinf.ony.Object {
                     style.get("fontWeight",false),
                     style.get("fontSize",12) );
         }
+    }
+    
+    override public function resize( x:Float, y:Float ) :Void {
+        super.resize( x, y );
+        
+        innerSize = {
+            x:x - (style.padding.l+style.padding.r),
+            y:y - (style.padding.t+style.padding.b) };
+        innerPos = {
+            x:style.padding.l,
+            y:style.padding.t };
     }
 }
