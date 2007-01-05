@@ -56,6 +56,12 @@ class App {
         GLUT.setPassiveMotionFunc( function( x:Int, y:Int ) {
                 trace("passive motion: "+x+","+y );
             } );
+        GLUT.setEntryFunc( function( state:Int ) {
+                trace("entry: "+state );
+            } );
+        GLUT.setVisibilityFunc( function( state:Int ) {
+                trace("window visibility: "+state );
+            } );
         GLUT.setKeyboardFunc( function( key:Int, x:Int, y:Int ) {
                 var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
                 

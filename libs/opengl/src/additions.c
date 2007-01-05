@@ -154,6 +154,11 @@ GLUT_SET_CALLBACK(Motion)
 GLUT_WRAP_CALLBACK_INT_INT(PassiveMotion)
 GLUT_SET_CALLBACK(PassiveMotion)
 
+GLUT_WRAP_CALLBACK_INT(Entry)
+GLUT_SET_CALLBACK(Entry)
+
+GLUT_WRAP_CALLBACK_INT(Visibility)
+GLUT_SET_CALLBACK(Visibility)
 
 GLUT_WRAP_CALLBACK_INT(Timer)
 value glutSetTimerFunc( int t, value f, int v ) {
