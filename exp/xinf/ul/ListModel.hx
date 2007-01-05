@@ -15,59 +15,35 @@
 
 package xinf.ul;
 
-import xinf.event.Event;
-import xinf.event.SimpleEvent;
-import xinf.event.SimpleEventDispatcher;
-
 interface ListModel<T> {
-    
     function getLength() :Int;
     function getItemAt( index:Int ) :T;
-    function getNameAt( index:Int ) :String;
-    function addChangedListener( f:SimpleEvent -> Void ) :Void;
-    function removeChangedListener( f:SimpleEvent -> Void ) :Void;
-    
 }
 
-class SimpleListModel<T> extends SimpleEventDispatcher, implements ListModel<T> {
+class SimpleListModel<T> implements ListModel<T> {
     
     private var items:Array<T>;
     
     public function new() :Void {
-        super();
         items = new Array<T>();
     }
     
     public function addItem( item:T ) :Void {
         items.push( item );
-        postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
     }
 
     public function addItems( items:Array<T> ) :Void {
         for( item in items ) {
             this.items.push( item );
         }
-        postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
     }
 
     public function getLength() :Int {
         return items.length;
     }
-    
+
     public function getItemAt( index:Int ) :T {
         return items[index];
-    }
-
-    public function getNameAt( index:Int ) :String {
-        return ""+items[index];
-    }
-
-    public function addChangedListener( f:SimpleEvent -> Void ) :Void {
-        addEventListener( SimpleEvent.CHANGED, f );
-    }
-    
-    public function removeChangedListener( f:SimpleEvent -> Void ) :Void {
-        removeEventListener( SimpleEvent.CHANGED, f );
     }
     
     public function sort( f:T->T->Int ) :Void {

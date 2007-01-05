@@ -43,6 +43,7 @@ class GrayStyle {
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xaaaaaa )
             } );
+            
         xinf.style.StyleSheet.defaultSheet.add(
             [ "ListBox" ], {
                 padding: { l:2, t:1, r:2, b:1 },
@@ -51,7 +52,7 @@ class GrayStyle {
                 background: new Color().fromRGBInt( 0xdddddd )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ "Item" ], {
+            [ "ListItem" ], {
                 padding: { l:5, t:1, r:5, b:1 },
                 color: new Color().fromRGBInt( 0x555555 ),
                 minHeight: null, minWidth:null
@@ -60,6 +61,19 @@ class GrayStyle {
             [ ":cursor" ], {
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0x888888 )
+            } );
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "TreeView" ], {
+                padding: { l:2, t:1, r:2, b:1 },
+                border: { l:1, t:1, r:1, b:1 },
+                color: new Color().fromRGBInt( 0 ),
+                background: new Color().fromRGBInt( 0xdddddd )
+            } );
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "TreeItem" ], {
+                padding: { l:5, t:1, r:5, b:1 },
+                color: new Color().fromRGBInt( 0x555555 ),
+                minHeight: null, minWidth:null
             } );
             
         xinf.style.StyleSheet.defaultSheet.add(

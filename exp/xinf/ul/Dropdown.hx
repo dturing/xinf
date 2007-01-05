@@ -50,7 +50,7 @@ class Dropdown extends Widget {
         model = _model;
         isOpen=false;
         
-        label = new Label( model.getNameAt(selectedIndex=0) );
+        label = new Label( ""+model.getItemAt(selectedIndex=0) );
         label.moveTo( 1, 1 );
         attach( label );
         
@@ -104,7 +104,7 @@ class Dropdown extends Widget {
         if( index > model.getLength()-1 ) index = model.getLength()-1;
         if( index < 0 ) index=0;
         selectedIndex = index;
-        label.text = model.getNameAt( selectedIndex );
+        label.text = ""+model.getItemAt( selectedIndex );
         postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), index ) );
     }
     

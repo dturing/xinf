@@ -39,7 +39,7 @@ class Pane extends StyleClassElement {
     }
         
     public function drawContents( g:Renderer ) :Void {
-        if( crop )
+        if( crop ) // TODO: clip only inner.. how, i dont know.
             g.clipRect( size.x, size.y );
 
         setStyleFill( g, "background" );

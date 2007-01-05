@@ -22,19 +22,43 @@ import xinf.event.SimpleEvent;
 
 import xinf.ul.RoundRobin;
 
+class ListItem<T> extends Label, implements Settable<T> {
+    var value:T;
+    
+    public function new( ?value:T ) :Void {
+        super( ""+value );
+        this.value = value;
+    }
+    
+    public function set( ?value:T ) :Void {
+        this.value = value;
+        this.text = if( value==null ) "" else ""+value;
+    }
+    
+    public function attachTo( parent:xinf.ony.Object ) :Void {
+        parent.attach(this);
+    }
+}
+
 class ListBox<T> extends Widget {
     var model:ListModel<T>;
-    var rr:RoundRobin<T>;
+    var rr:RoundRobin<T,Settable<T>>;
     var scrollbar:VScrollbar;
     var cursor:Int;
-    var lastCursorItem:Label;
+    var lastCursorItem:Settable<T>;
     
-    public function new( model:ListModel<T>, ?createItem:Void->Item<T> ) :Void {
+    public function new( model:ListModel<T>, ?createItem:Void->Settable<T> ) :Void {
         super();
         this.model = model;
         crop=true;
+        
+        if( createItem==null ) {
+            createItem = function() :Settable<T> {
+                return new ListItem<T>();
+            }
+        }
 
-        rr = new RoundRobin<T>( model, createItem );
+        rr = new RoundRobin<T,Settable<T>>( model, createItem );
         attach( rr );
 
         scrollbar = new xinf.ul.VScrollbar();
@@ -56,12 +80,12 @@ class ListBox<T> extends Widget {
         scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
         scrollbar.resize( scrollbar.size.x, size.y );
     
-        rr.resize( x, y );
+        rr.resize( innerSize.x-scrollbar.size.x, innerSize.y );
     }
 
     function scrollBy( value:Float ) {
         rr.scrollBy( value );
-        scrollbar.setScrollPosition( rr.getPositionNormalized() );
+        updateScrollbar();
         setCursor(cursor);
     }
 
@@ -110,7 +134,7 @@ class ListBox<T> extends Widget {
             case "space":
                 sendPickEvent();
         }
-        scrollbar.setScrollPosition( rr.getPositionNormalized() );
+        updateScrollbar();
     }
     
     public function setCursor( index:Int ) :Void {
@@ -123,10 +147,14 @@ class ListBox<T> extends Widget {
         if( cursor < 0 ) cursor=0;
 
         var item = rr.getItem( cursor );
-        if( item != null ) item.addStyleClass( ":cursor" );
+        if( item != null ) item.addStyleClass(":cursor");
         lastCursorItem = item;
     }
-
+    
+    public function updateScrollbar() :Void {
+        scrollbar.setScrollPosition( rr.getPositionNormalized() );
+    }
+    
     public function assureVisible( i:Int ) :Void {
         rr.assureVisible(i);
         setCursor(i);

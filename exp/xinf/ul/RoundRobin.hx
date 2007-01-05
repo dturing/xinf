@@ -1,19 +1,15 @@
 
 package xinf.ul;
 
+interface Settable<T> {
+    function set( ?value:T ) :Void;
+    function attachTo( parent:xinf.ony.Object ) :Void;
 
-class Item<T> extends Label {
-    var value:T;
-    
-    public function new( ?value:T ) :Void {
-        super( ""+value );
-        this.value = value;
-    }
-    
-    public function set( ?value:T ) :Void {
-        this.value = value;
-        this.text = if( value==null ) "" else ""+value;
-    }
+    function moveTo( x:Float, y:Float ) :Void;
+    function resize( x:Float, y:Float ) :Void;
+
+    function addStyleClass( name:String ) :Void;
+    function removeStyleClass( name:String ) :Void;
 }
 
 /*
@@ -28,29 +24,36 @@ class Item<T> extends Label {
     |_6   
 
   n:5
+  
+  rrsize (n) is 
 */
 
-class RoundRobin<T> extends Pane {
+/**
+    RoundRobin maintains a short list of Items (which must implement Settable<T>) 
+    to display a long list of values (of type T).
+**/
+
+class RoundRobin<T,Item:Settable<T>> extends Pane {
 
     var model:ListModel<T>;
-    var createItem:Void->Item<T>;
+    var createItem:Void->Item;
     
     var n:Int;              // number of slots
-    var rr:Array<Item<T>>;  // the round-robin array
+    var rr:Array<Item>;     // the round-robin array
     var rrofs:Int;
     var rrstart:Int;
     
     var unit:Float;         // size of one unit (row height)
     var cOffset:Float;      // current negative offset in rows
     
-    public function new( model:ListModel<T>, ?createItem:Void->Item<T>, ?unit:Float ) :Void {
+    public function new( model:ListModel<T>, createItem:Void->Item, ?unit:Float ) :Void {
         super();
         
         this.model = model;
         this.createItem = createItem;
         
         n = 0;
-        rr = new Array<Item<T>>();
+        rr = new Array<Item>();
         rrofs = 0;
         rrstart = 0;
         
@@ -69,9 +72,8 @@ class RoundRobin<T> extends Pane {
         var n = Math.ceil( total/unit )+1;
         if( n != this.n ) {
             for( i in this.n...n ) {
-                var item = if( createItem==null ) new Item<T>();
-                           else createItem();
-                attach( item );
+                var item = createItem();
+                item.attachTo(this);
                 rr.push( item );
             }
             // TODO: remove superfluous items in rr
@@ -86,7 +88,7 @@ class RoundRobin<T> extends Pane {
         redoAll();
     }
 
-    function redoAll() :Void {
+    public function redoAll() :Void {
         rrstart = Math.floor( cOffset ); // FIXME: spare
         rrofs = 0;
         
@@ -165,7 +167,7 @@ class RoundRobin<T> extends Pane {
         return( n-1 );
     }
 
-    public function getItem( index:Int ) :Item<T> {
+    public function getItem( index:Int ) :Item {
         var i = Math.floor( index-rrstart );
         if( i<0 || i>=n ) return null;
         return( rr[ (i+rrofs)%n ] );
