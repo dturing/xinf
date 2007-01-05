@@ -16,8 +16,15 @@
 import xinf.ony.Application;
 import xinf.event.MouseEvent;
 import xinf.ul.GrayStyle;
-import xinf.ul.RadioButton;
-import xinf.ul.CheckBox;
+import xinf.ul.RoundRobin;
+import xinf.ul.Label;
+import xinf.ul.Pane;
+import xinf.ul.ListModel;
+import xinf.ul.Widget;
+import xinf.ul.ListBox;
+
+import xinf.ul.TreeModel;
+import xinf.ul.TreeView;
 
 class App extends Application {
     
@@ -26,50 +33,59 @@ class App extends Application {
         
         GrayStyle.addToDefault();
 
-        var container = new xinf.ul.VBox();
-        container.moveTo( 200, 100 );
-        //zb: TODO uncomment both to see current border behaviour
-        //container.style.padding = {l:0, t:0, r:0, b:0};
-        //container.style.border = {l:25, t:25, r:25, b:25};
+        var container = new xinf.ul.HBox();
+        container.moveTo( 100, 100 );
         root.attach(container);
 
-        var chx1 = CheckBox.createSimple("There was a bug", function(e){
-            trace("called tick..");
-        });
-        container.attach(chx1);
+        var model = new SimpleListModel<String>();
+        for( i in 0...100 ) {
+            model.addItem("Item #"+i);
+        }
+        
+        var list = new ListBox( model );
+        list.resize( 100, 100 );
+        container.attach(list);
+        
+        
+        var foo = new SimpleNode( "Fruit" );
+        foo.addSimple("Apple");
+        foo.addSimple("Cherry");
+        
+        var exotic = new SimpleNode( "Exotic" );
+        exotic.addSimple("Mango");
+        exotic.addSimple("Banana");
+        exotic.addSimple("Kiwi");
+        exotic.addSimple("Ananas");
 
+        foo.addChild( exotic );
+        
+        var bar = new SimpleNode( "Vegetable" );
+        bar.addSimple("Tomato");
+        bar.addSimple("Potato");
+        bar.addSimple("Radish");
 
-        var rbGroup = new xinf.ul.RadioButtonGroup();
-        rbGroup.maxSelections = 2;
-        
-        var rb1 = RadioButton.createSimple(rbGroup, "Bird", "tweeter", function(e){
-            trace("radio1");
-        });
-        container.attach(rb1);
-        
-        var rb2 = RadioButton.createSimple(rbGroup, "Dog", "woofer", function(e){
-            trace("radio2");
-        });
-        container.attach(rb2);
-        
-        var rb3 = RadioButton.createSimple(rbGroup, "Cod", "coder", function(e){
-            trace("radio3");
-        });
-        container.attach(rb3);
+        var meat = new SimpleNode( "Meat" );
+        meat.addSimple("Beef");
+        meat.addSimple("Pork");
+        meat.addSimple("Chicken");
+        meat.addSimple("Fish");
 
+        var baz = new SimpleNode( "Nut" );
+        baz.addSimple("Cashew");
+        baz.addSimple("Pecan");
+        baz.addSimple("Almond");
+        baz.addSimple("Peanut");
+        baz.addSimple("Walnut");
 
-        var rbGroup2 = new xinf.ul.RadioButtonGroup();
-        rbGroup2.maxSelections = 1;
+        var tree = new SimpleNode( "Root" );
+        tree.addChild(foo);
+        tree.addChild(bar);
+        tree.addChild(meat);
+        tree.addChild(baz);
         
-        var rb4 = RadioButton.createSimple(rbGroup2, "Foo", "footer", function(e){
-            trace("radio4");
-        });
-        container.attach(rb4);
-        
-        var rb5 = RadioButton.createSimple(rbGroup2, "Bar", "barter", function(e){
-            trace("radio5");
-        });
-        container.attach(rb5);
+        var v = new TreeView( tree );
+        v.resize( 100, 100 );
+        container.attach( v );
     }
     
     public static function main() :Void {

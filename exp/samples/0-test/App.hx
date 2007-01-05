@@ -16,12 +16,16 @@
 import xinf.event.MouseEvent;
 import xinf.erno.Color;
 import xinf.ony.Application;
+import xinf.ul.Label;
 import xinf.ul.Button;
 import xinf.ul.ListModel;
+import xinf.ul.ListBox;
 import xinf.ul.LineEdit;
 import xinf.ul.GrayStyle;
 import xinf.ul.Dropdown;
 import xinf.ul.Slider;
+import xinf.ul.RadioButton;
+import xinf.ul.CheckBox;
 
 class App extends Application {
     
@@ -30,29 +34,78 @@ class App extends Application {
         
         GrayStyle.addToDefault();
         
+        var top = new xinf.ul.HBox();
+        top.moveTo( 20, 20 );
+        
         var container = new xinf.ul.VBox();
-        container.moveTo( 100, 100 );
-        root.attach(container);
+        top.attach(container);
 
-        var model = new SimpleListModel();
-        for( i in 0...25 ) {
-            model.addItem("Item "+i);
-        }
-        
-        var dropdown = new Dropdown(model);
-        container.attach(dropdown);
-        
-        var slider = new Slider();
-        container.attach(slider);
-        
-        var edit = new LineEdit();
-        edit.text = "Edit me!";
-        container.attach(edit);
+            var label = new Label("Hello, World!");
+            container.attach(label);
 
-        var button = TextButton.createSimple("Hello, World!", function(e){
-                trace("thanks for clicking");
+            var button:Button<String>;
+            var msgs = [ "Thank you","Thank You","Thanks a lot","Thanks","","","Thanks, really.",
+                        "That's enough.","Stop, please.","Stop!","Aaargh!" ];
+            var msg = 0;
+            button = Button.createSimple("Click me!", function(v) {
+                    button.text = msgs[msg];
+                    if( msg < msgs.length-1 ) msg++;
+                    trace("Button Value: "+v );
+                }, "Hello" );
+            container.attach(button);
+            
+            container.attach( Button.createSimple("Me, too!", function(e) {
+                    trace("clicked, yoohooo");
+                } ));
+            
+            var edit = new LineEdit();
+            edit.text = "Edit me!";
+            container.attach(edit);
+
+            var slider = new Slider();
+            container.attach(slider);
+
+
+        container = new xinf.ul.VBox();
+        top.attach( container );
+        
+            var model = SimpleListModel.create(
+                [ "foo", "bar", "baz", "fnord", "qux", "quux", "qasi" ] );
+
+            var listbox = new ListBox<String>( model );
+            listbox.resize( 100, 100 );
+            container.attach( listbox );
+
+            var dropdown = new Dropdown(model);
+            container.attach(dropdown);
+
+
+        container = new xinf.ul.VBox();
+        top.attach( container );
+
+            var chx1 = CheckBox.createSimple("There was a bug", function(e){
+                trace("called tick..");
             });
-        container.attach(button);
+            container.attach(chx1);
+
+
+            var rbGroup = new xinf.ul.RadioButtonGroup();
+            rbGroup.maxSelections = 2;
+            
+            var traceRadio = function(e:xinf.ul.ValueEvent<String>){
+                trace("Radio Button: "+e.value );
+            }
+            
+            var rb1 = RadioButton.createSimple(rbGroup, "Bird", traceRadio, "tweeter");
+            container.attach(rb1);
+            
+            var rb2 = RadioButton.createSimple(rbGroup, "Dog", traceRadio, "woofer");
+            container.attach(rb2);
+            
+            var rb3 = RadioButton.createSimple(rbGroup, "Cod", traceRadio, "coder");
+            container.attach(rb3);
+
+        root.attach(top);
     }
     
     public static function main() :Void {
