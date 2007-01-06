@@ -63,7 +63,7 @@ class RoundRobin<T,Item:Settable<T>> extends Pane {
     }
 
     override public function resize( x:Float, y:Float ) :Void {
-        setup( y, x );
+        setup( x, y );
         super.resize( x, unit*model.getLength() );
     }
     
@@ -128,7 +128,7 @@ class RoundRobin<T,Item:Settable<T>> extends Pane {
     }
     
     public function scrollToNormalized( offset:Float ) :Void {
-        scrollTo( offset * (model.getLength()-(n-1)) );
+        scrollBy( (offset * (model.getLength()-(n-1))) - cOffset );
     }
 
     public function assureVisible( index:Int ) :Void {
@@ -138,6 +138,8 @@ class RoundRobin<T,Item:Settable<T>> extends Pane {
         } else if( index >= l ) {
             scrollBy( (index-l)+1 );
         }
+        var ofs = Math.max( 0, Math.min( (model.getLength()-(n-1)), cOffset ) );
+        if( ofs != cOffset ) scrollBy( cOffset-ofs );
     }
 
     public function scrollBy( offset:Float ) :Void {
@@ -165,6 +167,10 @@ class RoundRobin<T,Item:Settable<T>> extends Pane {
     
     public function getPageSize() :Int {
         return( n-1 );
+    }
+
+    public function allVisible() :Bool {
+        return( n > model.getLength() );
     }
 
     public function getItem( index:Int ) :Item {

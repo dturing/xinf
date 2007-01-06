@@ -17,6 +17,7 @@ package xinf.ul;
 
 import xinf.ul.RoundRobin;
 import xinf.ul.TreeModel;
+import xinf.erno.Renderer;
 
 typedef TreeItemData<T> = {
     depth:Int,
@@ -28,12 +29,13 @@ class TreeIterator<T> {
     var quitDepth:Int;
     public var depth(default,null):Int;
     
-    public function new( node:Node<T>, ?d:Int ) {
+    public function new( node:Node<T>, d:Int ) {
         this._next = node;
         
-        if( d==null ) {
+        if( d==-1 ) {
             // skip root
             quitDepth = depth = -1;
+            if( node==null ) return;
             node.open=true;
             next();
         } else {
@@ -77,7 +79,7 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
 
     public function new( root:Node<T> ) {
         items = new Array<TreeItemData<T>>();
-        var it = new TreeIterator(root);
+        var it = new TreeIterator(root,-1);
         for( item in it ) {
             items.push( item );
         }
@@ -97,11 +99,11 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
             item.node.open=false;
             
             var i=0;
-            var it = new TreeIterator( item.node.firstChild );
+            var it = new TreeIterator( item.node.firstChild, item.depth+1 );
             for( item in it ) {
                 i++;
             }
-            i++;
+            //i++;
             var drop = items.splice( index+1, i );
             r=-i;
             
@@ -124,6 +126,7 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
 
 class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
     var value:T;
+    var node:Node<T>;
     
     public function new( ?value:T ) :Void {
         super( ""+value );
@@ -138,11 +141,46 @@ class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
         }
         value = d.node.getValue();
         text = value+" |"+d.depth;
-        moveTo( 10*d.depth, position.y );
+        node = d.node;
+        moveTo( 15*(d.depth+1), position.y );
     }
     
     public function attachTo( parent:xinf.ony.Object ) :Void {
         parent.attach(this);
+    }
+    
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+    
+        setStyleFont( g );
+        setStyleFill( g, "color" );
+        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
+        
+        if( node!=null && node.firstChild != null ) {
+            var h = size.y/3;
+            #if js
+            g.rect( -h, h, h, h );
+            #else true
+            setStyleStroke( g, 1, "color" );
+            if( !node.open ) {
+                g.startShape();
+                    g.startPath( -h, h );
+                    g.lineTo( 0, h*1.5 );
+                    g.lineTo( -h, h*2 );
+                    g.close();
+                    g.endPath();
+                g.endShape();
+            } else {
+                g.startShape();
+                    g.startPath( -h, h );
+                    g.lineTo( 0, h );
+                    g.lineTo( -h/2, h*2 );
+                    g.close();
+                    g.endPath();
+                g.endShape();
+            }
+            #end
+        }
     }
 }
 
@@ -162,8 +200,9 @@ class TreeView<T> extends ListBox<TreeItemData<T>> {
     
     function itemPicked( e:PickEvent<TreeItemData<T>> ) :Void {
         listModel.toggle( e.index, e.item );
-        rr.assureVisible( e.index );
+        assureVisible( e.index );
         rr.redoAll();
         updateScrollbar();
+        setCursor(cursor);
     }
 }
