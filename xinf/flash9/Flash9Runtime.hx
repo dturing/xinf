@@ -32,8 +32,9 @@ class Flash9Runtime extends SimpleRuntime {
         #if htmltrace
             // setup trace to javascript
             haxe.Log.trace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
-                flash.external.ExternalInterface.call("trace",v,pos);
+                flash.external.ExternalInterface.call("haxeTrace",v,pos);
             }
+            flash.external.ExternalInterface.call("haxeTrace","hello");
         #end
     }
     
