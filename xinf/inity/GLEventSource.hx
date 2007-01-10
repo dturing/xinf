@@ -19,6 +19,7 @@ import opengl.GLUT;
 
 import xinf.event.SimpleEventDispatcher;
 import xinf.event.Event;
+import xinf.event.EventKind;
 import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
@@ -31,6 +32,7 @@ class GLEventSource {
     
     private var frame:Int;
     private var runtime:XinfinityRuntime;
+    private var currentOver:Int;
 
     public function new( runtime:XinfinityRuntime ) :Void {
         frame=0;
@@ -42,7 +44,7 @@ class GLEventSource {
         GLUT.setSpecialFunc( specialKeyPress );
         GLUT.setMouseFunc( mouseButton );
         GLUT.setMotionFunc( mouseMotion );
-        // FIXME: tmp disabled: GLUT.setPassiveMotionFunc( mouseMotion );
+        GLUT.setPassiveMotionFunc( mouseMotion );
     }
     
     public function keyPress( key:Int, x:Int, y:Int ) :Void {
@@ -78,10 +80,20 @@ class GLEventSource {
         }
     }
 
+    private function postMouseEventTo( x:Int, y:Int, type:EventKind<MouseEvent>, targetId:Int ) :Void {
+        runtime.postEvent( new MouseEvent( type, x, y, 0, targetId ) );
+    }
+    
     public function mouseMotion( x:Int, y:Int ) :Void {
-        var target:Int = runtime.findIdAt(x,y);
-        
-        runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_MOVE, x, y, -1, target ) );
+        var targetId:Int = runtime.findIdAt(x,y);
+        if( targetId != currentOver ) {
+            if( currentOver!=null ) {
+                postMouseEventTo( x, y, MouseEvent.MOUSE_OUT, currentOver );
+            }
+            postMouseEventTo( x, y, MouseEvent.MOUSE_OVER, targetId );
+            currentOver = targetId;
+        } else 
+            postMouseEventTo( x, y, MouseEvent.MOUSE_MOVE, targetId );
     }
  
     public function toString() :String {

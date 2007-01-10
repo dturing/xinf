@@ -82,6 +82,7 @@ class XinfinityRuntime extends Runtime {
 
     override public function changed() :Void {
         somethingChanged = true;
+            GLUT.postRedisplay();
     }
     
     public function display() :Void {
@@ -91,12 +92,13 @@ class XinfinityRuntime extends Runtime {
         
         startFrame();
         
-        renderRoot();
         somethingChanged = false;
+        renderRoot();
 
         // TODO precise timing here
         
         endFrame();
+
     }
 
     public function step( v:Int ) :Void {
@@ -126,7 +128,10 @@ class XinfinityRuntime extends Runtime {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
             });
         GLUT.setVisibilityFunc( function( state:Int ) {
-                if( state>0 ) self.changed();
+//                if( state>0 ) self.changed();
+            });
+        GLUT.setEntryFunc( function( state:Int ) {
+                self.changed();
             });
         _eventSource.attach();
         
@@ -189,9 +194,6 @@ class XinfinityRuntime extends Runtime {
         GL.matrixMode( GL.MODELVIEW );
         GL.loadIdentity();
 
-            GL.clearColor( .5, .5, .5, .5 );
-            GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
-          
             // FIXME depends on stage scale mode
             GL.translate( -1., 1., 0. );
             GL.scale( (2./width), (-2./height), 1. );
