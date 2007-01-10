@@ -28,6 +28,7 @@ import js.Dom;
 class JSEventSource {
     
     private var runtime:JSRuntime;
+    private var currentOver:Int;
 
     public function new( r:JSRuntime ) :Void {
         runtime = r;
@@ -88,7 +89,16 @@ class JSEventSource {
     }
 
     private function mouseMove( e:js.Event ) :Bool {
-        return postMouseEventTo( e, MouseEvent.MOUSE_MOVE, 0 );
+        var targetId:Int = findTarget(e);
+        if( targetId != currentOver ) {
+            if( currentOver!=null ) {
+                postMouseEventTo( e, MouseEvent.MOUSE_OUT, currentOver );
+            }
+            postMouseEventTo( e, MouseEvent.MOUSE_OVER, targetId );
+            currentOver = targetId;
+        } else 
+            postMouseEventTo( e, MouseEvent.MOUSE_MOVE, targetId );
+        return true;
     }
 
     private function mouseWheelFF( e:js.Event ) :Bool {

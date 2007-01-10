@@ -95,13 +95,17 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.cursor="default";
         if( x!=null ) r.style.left = ""+Math.round(x);
         if( y!=null ) r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null )    r.style.color = pen.fillColor.toRGBString();
+        if( pen.fillColor != null ) r.style.color = pen.fillColor.toRGBString();
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
         if( pen.fontItalic ) r.style.fontStyle = "italic";
         if( pen.fontBold ) r.style.fontWeight = "bold";
         if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
         r.innerHTML=text.split("\n").join("<br/>"); // FIXME: doesnt work?
         current.appendChild(r);
+
+        // if the object is already attached, we can query the text width right away here.
+        // at least in ff bon echo.
+        // trace("--------"+r.offsetWidth );
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
