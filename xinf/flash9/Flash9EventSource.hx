@@ -28,6 +28,7 @@ class Flash9EventSource {
     
     private var runtime:Flash9Runtime;
     private var frame:Int;
+    private var currentOver:Int;
     
     public function new( r:Flash9Runtime ) :Void {
         runtime = r;
@@ -78,7 +79,15 @@ class Flash9EventSource {
     }
     
     private function mouseMove( e:flash.events.MouseEvent ) :Void {
-        return postMouseEvent( e, MouseEvent.MOUSE_MOVE );
+        var targetId:Int = findTarget(e);
+        if( targetId != currentOver ) {
+            if( currentOver!=null ) {
+                postMouseEventTo( e, MouseEvent.MOUSE_OUT, currentOver );
+            }
+            postMouseEventTo( e, MouseEvent.MOUSE_OVER, targetId );
+            currentOver = targetId;
+        } else 
+            postMouseEventTo( e, MouseEvent.MOUSE_MOVE, targetId );
     }
 
     private function postKeyboardEvent( e:flash.events.KeyboardEvent, type:EventKind<KeyboardEvent> ) :Void {
