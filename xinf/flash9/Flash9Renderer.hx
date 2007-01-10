@@ -117,6 +117,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
                 false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
         } else {
             g.lineStyle( 0, 0, 0 );
+            pen.strokeWidth=0;
         }
         if( pen.fillColor != null ) {
             g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
