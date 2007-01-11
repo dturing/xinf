@@ -3,7 +3,7 @@ package xinf.style;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
-class StyleElement extends xinf.ony.Object {
+class StyleElement extends xinf.ul.Component {
     
     public var style :Style;
     public var innerSize(default,null):{x:Float,y:Float};
