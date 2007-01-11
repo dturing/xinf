@@ -209,8 +209,11 @@ interface Renderer {
         current fill color. You can optionally pass in a <a href="FontStyle.html">FontStyle</a>
         for changing the font color in the middle of the string. The string may contain
         '\n's to span multiple lines.
+        
+        If you pass a function into [sizeKnown], it will be called with the text's
+        extensions (width and height) once those are known (usually immediately).
     **/
-    function text( x:Float, y:Float, text:String ) :Void;
+    function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) :Void;
     
     /**
         Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 

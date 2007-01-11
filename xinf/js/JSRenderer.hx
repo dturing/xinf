@@ -88,7 +88,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         rect( x-r, y-r, r*2, r*2 );
     }
 
-    public function text( x:Float, y:Float, text:String ) {
+    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.whiteSpace="nowrap";
@@ -106,6 +106,12 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         // if the object is already attached, we can query the text width right away here.
         // at least in ff bon echo.
         // trace("--------"+r.offsetWidth );
+        if( sizeKnown!=null && text!="" ) {
+            if( r.offsetHeight==0 ) {
+                throw("JS doesn't know the text's size yet (FIXME: defer)");
+            }
+            sizeKnown( r.offsetWidth, r.offsetHeight );
+        }
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {

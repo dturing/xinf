@@ -234,13 +234,14 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         GL.popMatrix();
     }
     
-    public function text( x:Float, y:Float, text:String ) {
+    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
         font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
         if( pen.fillColor != null && font != null ) {
             GL.pushMatrix();
                 GL.translate( x, y, 0 );
                 GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-                font.renderText( text, pen.fontSize, null );
+                var r = font.renderText( text, pen.fontSize, null );
+                if( sizeKnown!=null ) sizeKnown( r.x, r.y );
             GL.popMatrix();
         }
     }

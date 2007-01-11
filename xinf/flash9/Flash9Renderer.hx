@@ -145,7 +145,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         g.endFill();
     }
     
-    public function text( x:Float, y:Float, text:String ) {
+    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
         // FIXME: textStyles
         if( pen.fillColor != null ) {
             var tf = new flash.text.TextField();
@@ -164,6 +164,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             tf.setTextFormat(format);
             
             current.addChild(tf);
+            
+            if( sizeKnown!=null ) {
+                sizeKnown( tf.width, tf.height );
+            }
         }
     }
     

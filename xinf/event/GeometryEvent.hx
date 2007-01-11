@@ -22,6 +22,7 @@ package xinf.event;
 class GeometryEvent extends Event<GeometryEvent> {
     
     static public var STAGE_SCALED     = new EventKind<GeometryEvent>("stageScaled");
+    static public var SIZE_CHANGED     = new EventKind<GeometryEvent>("sizeChanged");
     
     public var x:Float; // x coordinate of position or width
     public var y:Float; // y coordinate of position or height

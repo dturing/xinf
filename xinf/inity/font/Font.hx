@@ -93,10 +93,11 @@ class Font {
         return( g );
     }
     
-    public function renderText( text:String, fontSize:Float, style:FontStyle ) :Float {
+    public function renderText( text:String, fontSize:Float, style:FontStyle ) :{x:Float,y:Float} {
         if( text == null ) text="[null]";
         
         var c_style=0;
+        var r = { x:.0, y:.0 };
         var nextStyle:FontStyleChange = null;
         if( style!=null ) nextStyle = style[c_style];
         
@@ -108,6 +109,9 @@ class Font {
         GL.pushMatrix(); // for lines.
 
         var lines=0;
+        var lineHeight = Math.round(height*fontSize)/fontSize;
+        var maxW=0.;
+        var w=0.;
 
         for( i in 0...text.length ) {
             if( nextStyle != null && nextStyle.pos == i ) {
@@ -118,23 +122,26 @@ class Font {
             
             var c = text.charCodeAt(i);
             if( c == 10 ) { // \n
+                if( w>maxW ) maxW = w;
+                w=0;
                 GL.popMatrix();
                 GL.pushMatrix();
                 lines++;
-                GL.translate( .0, Math.round(height*fontSize)/fontSize, .0 );
+                GL.translate( .0, lineHeight, .0 );
             } else {
                 var g = getGlyph(c);
                 if( g != null ) {
-                    g.render(fontSize);
+                    w += g.render(fontSize)*fontSize;
                 }
             }
         }
+        if( w>maxW ) maxW=w;
 
         GL.popMatrix();
 
         GL.popMatrix();
-        
-        return 0; // FIXME: return string width?
+
+        return { x:maxW, y:(lines+1)*(lineHeight*fontSize) };
     }
     
 }

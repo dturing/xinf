@@ -34,7 +34,6 @@ class Flash9Runtime extends SimpleRuntime {
             haxe.Log.trace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
                 flash.external.ExternalInterface.call("haxeTrace",v,pos);
             }
-            flash.external.ExternalInterface.call("haxeTrace","hello");
         #end
     }
     

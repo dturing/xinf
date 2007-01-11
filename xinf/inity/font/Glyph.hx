@@ -38,7 +38,7 @@ class Glyph {
         GL.endList();
     }
     
-    public function render( s:Float ) {
+    public function render( s:Float ) :Float {
         if( displayList==null ) {
             displayList = GL.genLists(1);
             Font.cacheGlyph(this);
@@ -47,6 +47,7 @@ class Glyph {
         GL.callList(displayList);
 // fake hinting        GL.translate( Math.round((advance*s))/s, .0, .0 );
         GL.translate( advance, .0, .0 );
+        return( advance );
     }
     
 }
