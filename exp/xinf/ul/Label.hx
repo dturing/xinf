@@ -28,19 +28,23 @@ class Label extends Pane {
     public var text(get_text,set_text):String;
     private var _text:String;
     
-    public function new( ?text:String ) :Void {
+    function new( ?text:String ) :Void {
         super();
         _text = text;
     }
     
-    private function get_text() :String {
+    function get_text() :String {
         return(_text);
     }
     
-    private function set_text( t:String ) :String {
+    function set_text( t:String ) :String {
         _text = t;
         scheduleRedraw();
         return(t);
+    }
+    
+    function onTextSizeChanged( w:Float, h:Float ) :Void {
+        if( w!=size.x || h!=size.y ) resize(w,h);
     }
     
     override public function drawContents( g:Renderer ) :Void {
@@ -48,6 +52,6 @@ class Label extends Pane {
     
         setStyleFont( g );
         setStyleFill( g, "color" );
-        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
+        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text,onTextSizeChanged);
     }
 }
