@@ -26,8 +26,7 @@ import xinf.event.SimpleEventDispatcher;
     hierarchy.
     <p>
         An Object has a position and size that you can set with [moveTo()] and [resize()], 
-        or query at [position] and [size]. It also maintains a list of children
-        that you can manipulate with [attach()] and [detach()].
+        or query at [position] and [size].
     </p>
     <p>
         You will often (maybe indirectly) derive from Object, and override the [drawContents()]
@@ -52,7 +51,7 @@ class Object extends SimpleEventDispatcher {
     public var _id(default,null):Int;
     
     /** Other Object that contains this Object, if any. **/
-    public var parent(default,null):Object;
+    public var parent:Object;
     
     /** Current position of this Object in parent's coordinates<br/>
         Set with [moveTo()]. **/
@@ -67,11 +66,8 @@ class Object extends SimpleEventDispatcher {
     **/
     public var size(default,null):{x:Float,y:Float};
 
-    private var children:Array<Object>;    
-
     /** Object constructor<br/>
-        A simple Object will not display anything by itself,
-        but can be used as a container object to group other Objects.
+        A simple Object will not display anything by itself.
     **/
     public function new() :Void {
         super();
@@ -81,7 +77,6 @@ class Object extends SimpleEventDispatcher {
         
         position = { x:0., y:0. };
         size = { x:0., y:0. };
-        children = new Array<Object>();
         
         scheduleRedraw();
     }
@@ -95,29 +90,6 @@ class Object extends SimpleEventDispatcher {
         // how about deleting our associated Sprite/Div/GLObject?
         // also: detach from parent
         manager.unregister(_id);
-    }
-    
-    /** attach (add) a child Object<br/>
-        Add 'child' to this object's list of children, inserts
-        the child into the display hierarchy, similar to addChild in Flash 
-        or appendChild in JavaScript/DOM.
-        The new child will be added at the end of the list, so it will appear
-        in front of all current children.
-    **/
-    public function attach( child:Object ) :Void {
-        children.push( child );
-        child.parent = this;
-    // TODO: see Pane::resize    
-        child.resize( child.size.x, child.size.y );
-        scheduleRedraw();
-    }
-
-    /** detach (remove) a child Object<br/>
-        Removes 'child' from this object's list of children. **/
-    public function detach( child:Object ) :Void {
-        children.remove( child );
-        child.parent = null;
-        scheduleRedraw();
     }
 
     /** move this Object to a new 2D position<br/>
@@ -151,12 +123,6 @@ class Object extends SimpleEventDispatcher {
     public function draw( g:Renderer ) :Void {
         g.startObject( _id );
             drawContents(g);
-            
-            // draw children
-            for( child in children ) {
-                g.showObject( child._id );
-            }
-            
         g.endObject();
         reTransform(g);
     }

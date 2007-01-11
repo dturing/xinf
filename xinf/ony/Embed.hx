@@ -21,7 +21,7 @@ import xinf.erno.Renderer;
     A Root-like Object, embeds a Xinfony display hierarchy
     into a Runtime-native Object.
 **/
-class Embed extends Object {
+class Embed extends Container<Object> {
     
     private var root:NativeContainer;
     

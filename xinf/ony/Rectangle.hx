@@ -27,6 +27,7 @@ class Rectangle extends Object {
     private var color:Color;
 
     public function new( ?color:Color ) :Void {
+        if( color==null ) color=Color.WHITE;
         this.color=color;
         super();
     }
