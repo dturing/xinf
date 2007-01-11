@@ -51,7 +51,7 @@ class Container<Child:Object> extends Object {
     **/
     public function attach( child:Child ) :Void {
         children.push( child );
-        child.parent = this;
+        child.parent = cast(this);
     // TODO: see Pane::resize    
         child.resize( child.size.x, child.size.y );
         scheduleRedraw();

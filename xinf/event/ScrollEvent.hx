@@ -33,4 +33,9 @@ class ScrollEvent extends Event<ScrollEvent> {
         this.targetId = targetId;
     }
     
+    public function toString() :String {
+        var r = ""+type+"("+value+")";
+        if( targetId != null ) r+="to #"+targetId;
+        return r;
+    }
 }

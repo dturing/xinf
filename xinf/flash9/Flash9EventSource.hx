@@ -38,6 +38,7 @@ class Flash9EventSource {
         stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown, false );
         stage.addEventListener( flash.events.MouseEvent.MOUSE_UP, mouseUp, false );
         stage.addEventListener( flash.events.MouseEvent.MOUSE_MOVE, mouseMove, false );
+        stage.addEventListener( flash.events.MouseEvent.MOUSE_WHEEL, mouseWheel, false );
 
         stage.addEventListener( flash.events.KeyboardEvent.KEY_DOWN, keyDown, false );
         stage.addEventListener( flash.events.KeyboardEvent.KEY_UP, keyUp, false );
@@ -88,6 +89,12 @@ class Flash9EventSource {
             currentOver = targetId;
         } else 
             postMouseEventTo( e, MouseEvent.MOUSE_MOVE, targetId );
+    }
+    
+    public function mouseWheel( e:flash.events.MouseEvent ) :Void {
+        var targetId:Int = findTarget(e);
+        runtime.postEvent( new ScrollEvent( ScrollEvent.SCROLL_STEP, -e.delta, targetId ) );
+        e.stopPropagation();
     }
 
     private function postKeyboardEvent( e:flash.events.KeyboardEvent, type:EventKind<KeyboardEvent> ) :Void {

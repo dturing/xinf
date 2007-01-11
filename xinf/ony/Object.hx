@@ -51,7 +51,7 @@ class Object extends SimpleEventDispatcher {
     public var _id(default,null):Int;
     
     /** Other Object that contains this Object, if any. **/
-    public var parent:Object;
+    public var parent:Container<Object>;
     
     /** Current position of this Object in parent's coordinates<br/>
         Set with [moveTo()]. **/

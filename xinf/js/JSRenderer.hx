@@ -72,6 +72,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.top = ""+Math.round(y);
         if( pen.fillColor != null ) {
             r.style.background = pen.fillColor.toRGBString();
+            untyped r.style.opacity = pen.fillColor.a;
         }
         if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
             r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
@@ -95,7 +96,10 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.cursor="default";
         if( x!=null ) r.style.left = ""+Math.round(x);
         if( y!=null ) r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null ) r.style.color = pen.fillColor.toRGBString();
+        if( pen.fillColor != null ) {
+            r.style.color = pen.fillColor.toRGBString();
+            untyped r.style.opacity = pen.fillColor.a;
+        }
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
         if( pen.fontItalic ) r.style.fontStyle = "italic";
         if( pen.fontBold ) r.style.fontWeight = "bold";
