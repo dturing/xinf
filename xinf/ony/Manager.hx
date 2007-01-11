@@ -56,6 +56,8 @@ class Manager {
 
         // dispatch some events to targets (xinferno only knows about IDs, not Objects 
         Runtime.addEventListener( MouseEvent.MOUSE_DOWN, dispatchToTarget );
+        Runtime.addEventListener( MouseEvent.MOUSE_OVER, dispatchToTarget );
+        Runtime.addEventListener( MouseEvent.MOUSE_OUT, dispatchToTarget );
         Runtime.addEventListener( ScrollEvent.SCROLL_STEP, dispatchToTarget );
     }
 
