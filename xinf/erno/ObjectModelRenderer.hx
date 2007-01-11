@@ -43,7 +43,12 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     private var objects:IntHash<Primitive>;
     
     private function lookup( id:Int ) :Primitive {
-        return objects.get(id);
+        var o = objects.get(id);
+        if( o==null ) {
+            o = createPrimitive(id);
+            objects.set(id,o);
+        }
+        return o;
     }
     
     private var current:Primitive;
@@ -131,28 +136,16 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     
     public function showObject( id:Int ) {
         var o = lookup(id);
-        if( o==null ) {
-            o = createPrimitive(id);
-            objects.set(id,o);
-        }
         attachPrimitive( current, o );
     }
     
     public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
         var o = lookup(id);
-        if( o==null ) {
-            o = createPrimitive(id);
-            objects.set(id,o);
-        }
         setPrimitiveTransform( o, x, y, a, b, c, d );
     }
 
     public function setTranslation( id:Int, x:Float, y:Float ) {
         var o = lookup(id);
-        if( o==null ) {
-            o = createPrimitive(id);
-            objects.set(id,o);
-        }
         setPrimitiveTranslation( o, x, y );
     }
 
