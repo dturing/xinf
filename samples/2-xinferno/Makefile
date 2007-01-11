@@ -1,5 +1,5 @@
 
-HAXEFLAGS:=-cp ../../
+HAXEFLAGS:=-cp ../../ -debug -D htmltrace
 SOURCES:=$(wildcard ../../*.hx ../../*/*.hx ../../*/*/*.hx)
 
 APP:=App
@@ -12,7 +12,7 @@ test : $(APP).n
 all : $(BINARIES)
 
 %.swf : %.hx $(SOURCES)
-	haxe $(HAXEFLAGS) -main $* -swf-version 9 -swf-header 320:240:25:000000 -swf $*.swf
+	haxe $(HAXEFLAGS) --flash-strict -D htmltrace -debug -main $* -swf-version 9 -swf-header 320:240:25:000000 -swf $*.swf
 
 %.js : %.hx $(SOURCES)
 	haxe $(HAXEFLAGS) -main $* -js $*.js

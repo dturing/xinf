@@ -5,15 +5,13 @@
 	<body style="background:#000000;font-family:sans;margin:0;" text="#aaaaaa" link="#eeeeee" vlink="#eeeeee">
 
 		<script language="JavaScript">
-			function haxe_DoFSCommand( command, args ) {
-				if( command == "trace" ) {
-					var a = args.split("||");
-					var div = document.createElement("div");
-					div.appendChild( document.createTextNode( a[1] ) );
-					div.setAttribute("title",a[0]);
-					document.getElementById("haxe:trace").appendChild(div);
-					div.scrollIntoView();
-				}
+			function haxeTrace( msg, posInfos ) {
+                var div = document.createElement("div");
+                div.appendChild( document.createTextNode( msg ) );
+					div.setAttribute("title",posInfos.fileName+":"+posInfos.lineNumber);
+                document.getElementById("haxe:trace").appendChild(div);
+                div.scrollIntoView();
+            
 			}
 		</script>
 

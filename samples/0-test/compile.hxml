@@ -1,13 +1,11 @@
---auto-xml
-
 -main App
 -lib xinf
--js app.js
+-js App.js
 
 --next
 -main App
 -lib xinf
--swf app.swf
+-swf App.swf
 -swf-version 9
 -swf-header 320:240:25:000000
 

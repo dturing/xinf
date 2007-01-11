@@ -49,7 +49,7 @@ class RenderTest {
                     trace("Exception testing "+this+": "+e+"\n Stack Trace:\n"+haxe.Stack.toString( haxe.Stack.exceptionStack() ) );
                 } catch( f:Dynamic ) {
                     // getting the stack didnt work out...
-                    trace("Exception testing "+this+": "+e );
+                    trace("Exception testing "+this+": "+e+", "+f );
                 }
             }
         g.endObject();
@@ -187,18 +187,6 @@ class Circle extends ShapeRenderTest {
     }
 }
 
-class Info extends RenderTest {
-    private function renderContents( g:Renderer, size:TPoint ) :Void {
-        g.setFill( 0, 0, 0, 1 );
-        g.setStroke( 0, 0, 0, 0, 0 );
-        g.rect(0,0,size.x,size.y);
-
-        g.setFill( 1,1,1,1 );
-        g.text( 0, size.y/4, "xinferno\n"+xinf.Version.version );
-    }
-}
-
-
 class Twist extends RenderTest {
     var innerId:Int;
     var g:Renderer;
@@ -229,6 +217,46 @@ class Twist extends RenderTest {
         g.setFill( 0, 0, 0, 1 );
         g.rect( 0, 0, size.x, size.y );
         g.showObject(innerId);
+    }
+
+}
+
+class Info extends RenderTest {
+    var g:Renderer;
+    var l:Dynamic;
+    var textSize:{x:Float,y:Float};
+    
+    public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
+        super( g, position, size );
+        this.g = g;
+    }
+
+    private function onSizeKnown( w:Float, h:Float) :Void {
+        textSize={x:w,y:h};
+        l = Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
+    }
+    private function step( e:FrameEvent ) :Void {
+        render(g);
+        Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
+    }
+    
+    private function renderContents( g:Renderer, size:TPoint ) :Void {
+        g.setFill( 0, 0, 0, 1 );
+        g.rect( 0, 0, size.x, size.y );
+        
+        if( textSize==null ) {
+            g.setFill( 1, 1, 1, 1 );
+            g.text( 0, 0, "xinferno "+xinf.Version.version, onSizeKnown );
+        } else {
+            var ofs = { x:(size.x-textSize.x)/2, y:(size.y-textSize.y)/2 };
+        
+            g.setStroke( 1, 0, 0, 1, 1 );
+            g.setFill( 0, 0, 0, 0 );
+            g.rect( ofs.x, ofs.y, textSize.x, textSize.y );
+            
+            g.setFill( 1, 1, 1, 1 );
+            g.text( ofs.x, ofs.y, "xinferno "+xinf.Version.version );
+        }
     }
 
 }
