@@ -1,0 +1,20 @@
+-main App
+-cp ../../../
+-cp ../../
+-swf-version 9
+-swf App.swf
+
+--next
+-main App
+-cp ../../../
+-cp ../../
+-js App.js
+
+--next
+-main App
+-cp ../../
+-cp ../../../
+-lib cptr
+-lib xinfinity-support
+-lib opengl
+-neko run.n
