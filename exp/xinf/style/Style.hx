@@ -34,8 +34,9 @@ class Style {
         try {
             Reflect.setField(this,param,value);
         } catch( e:Dynamic ) {
-            trace(e);
             // do nothing, flash9 complains with a reference error for styles not defined.
+            // FIXME: f9dynamic or sth?
+            //trace("Could not set style param '"+param+"': "+e);
         }
     }
     

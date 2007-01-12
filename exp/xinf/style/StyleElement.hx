@@ -3,7 +3,7 @@ package xinf.style;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 
-class StyleElement extends xinf.ul.Component {
+class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
     
     public var style :Style;
     public var innerSize(default,null):{x:Float,y:Float};
@@ -48,5 +48,9 @@ class StyleElement extends xinf.ul.Component {
         innerPos = {
             x:style.padding.l,
             y:style.padding.t };
+    }
+    public function resizeInner( x:Float, y:Float ) :Void {
+        resize( x + style.padding.l+style.padding.r + style.border.l+style.border.r, 
+                y + style.padding.t+style.padding.b + style.border.t+style.border.b );
     }
 }
