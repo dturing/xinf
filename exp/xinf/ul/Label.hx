@@ -15,7 +15,6 @@
 
 package xinf.ul;
 
-import xinf.style.StyleClassElement;
 import xinf.erno.Renderer;
 import xinf.erno.FontStyle;
 
@@ -26,11 +25,13 @@ import xinf.erno.FontStyle;
 class Label extends Pane {
     
     public var text(get_text,set_text):String;
-    private var _text:String;
+    var _text:String;
+    var textSize:{x:Float,y:Float};
     
-    function new( ?text:String ) :Void {
+    public function new( ?text:String ) :Void {
         super();
         _text = text;
+        textSize = {x:0,y:0};
     }
     
     function get_text() :String {
@@ -44,7 +45,13 @@ class Label extends Pane {
     }
     
     function onTextSizeChanged( w:Float, h:Float ) :Void {
-        if( w!=size.x || h!=size.y ) resize(w,h);
+        if( w!=textSize.x || h!=textSize.y ) {
+        trace("text size of label "+text+" changed from "+textSize+" to w "+w );
+            textSize = { x:w, y:h };
+            resizeInner( w, h );
+            //resize(w,h);
+            postResizeEvent();
+        }
     }
     
     override public function drawContents( g:Renderer ) :Void {
@@ -52,6 +59,6 @@ class Label extends Pane {
     
         setStyleFont( g );
         setStyleFill( g, "color" );
-        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text,onTextSizeChanged);
+        g.text(innerPos.x,innerPos.y,text,onTextSizeChanged);
     }
 }

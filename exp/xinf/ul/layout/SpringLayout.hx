@@ -53,9 +53,9 @@ class DeferredSpring extends SimpleSpring {
 }
 
 class WidthSpring extends SimpleSpring {
-    var c:Object;
+    var c:Component;
     
-    public function new( component:Object ) :Void {
+    public function new( component:Component ) :Void {
         super();
         c = component;
     }
@@ -74,9 +74,6 @@ class WidthSpring extends SimpleSpring {
 }
 
 class HeightSpring extends WidthSpring {
-    public function new( component:Object ) :Void {
-        super(component);
-    }
     override public function getPref() :Float {
         return c.size.y;
     }
@@ -84,6 +81,40 @@ class HeightSpring extends WidthSpring {
         return("H("+c+":"+c.size.y+")");
     }
 }
+
+class LeftSpring extends WidthSpring {
+    override public function getPref() :Float {
+        return c.style.padding.l + c.style.border.l;
+    }
+    override public function toString() :String {
+        return("l("+c+":"+getPref()+")");
+    }
+}
+class TopSpring extends WidthSpring {
+    override public function getPref() :Float {
+        return c.style.padding.t + c.style.border.t;
+    }
+    override public function toString() :String {
+        return("t("+c+":"+getPref()+")");
+    }
+}
+class RightSpring extends WidthSpring {
+    override public function getPref() :Float {
+        return c.style.padding.r + c.style.border.r;
+    }
+    override public function toString() :String {
+        return("r("+c+":"+getPref()+")");
+    }
+}
+class BottomSpring extends WidthSpring {
+    override public function getPref() :Float {
+        return c.style.padding.b + c.style.border.b;
+    }
+    override public function toString() :String {
+        return("b("+c+":"+getPref()+")");
+    }
+}
+
 
 class SpringLayout implements Layout {
     var index:IntHash<Constraints>;
@@ -97,11 +128,12 @@ class SpringLayout implements Layout {
     }
     
     public function getConstraints( o:Object ) :Constraints {
+        var comp = cast(o,Component);
         var c:Constraints = index.get( o._id );
         if( c==null ) {
             c = new Constraints();
-            c.setWidth( new WidthSpring(o) );
-            c.setHeight( new HeightSpring(o) );
+            c.setWidth( new WidthSpring(comp) );
+            c.setHeight( new HeightSpring(comp) );
             c.setX( Spring.constant(0) );
             c.setY( Spring.constant(0) );
             index.set( o._id, c );

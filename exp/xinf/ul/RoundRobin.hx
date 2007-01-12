@@ -3,7 +3,7 @@ package xinf.ul;
 
 interface Settable<T> {
     function set( ?value:T ) :Void;
-    function attachTo( parent:xinf.ony.Object ) :Void;
+    function attachTo( parent:xinf.ony.Container<xinf.ony.Object> ) :Void;
 
     function moveTo( x:Float, y:Float ) :Void;
     function resize( x:Float, y:Float ) :Void;

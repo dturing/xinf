@@ -20,7 +20,9 @@ import xinf.ony.Container;
 import xinf.ul.layout.Layout;
 import xinf.event.GeometryEvent;
 
-class Component extends Container<Object> {
+class Component extends xinf.style.StyleClassElement {
+    var __parentSizeListener:Dynamic;
+    var relayoutNeeded:Bool;
 /*
     public function getPreferredSize() :{x:Float,y:Float} {
         return( size );
@@ -33,11 +35,18 @@ class Component extends Container<Object> {
     }
 */    
     public var layout:Layout;
+    public function new() {
+        super();
+        relayoutNeeded = true;
+    }
     
     public function add( c:Component ) :Void {
         super.attach(c);
+        var l = c.addEventListener( GeometryEvent.SIZE_CHANGED, onChildResize );
+        c.__parentSizeListener = l;
     }
     public function remove( c:Component ) :Void {
+        c.removeEventListener( GeometryEvent.SIZE_CHANGED, c.__parentSizeListener );
         super.detach(c);
     }
     
@@ -48,12 +57,19 @@ class Component extends Container<Object> {
         return children.iterator();
     }
     
-    override public function resize( x:Float, y:Float ) :Void {
-        if( x!=size.x || y!=size.y ) {
-            super.resize(x,y);
-            trace(""+this+"::Resized");
-//            postEvent( new GeometryEvent( GeometryEvent.SIZE_CHANGED, x, y ) );
+    function postResizeEvent() :Void {
+        relayoutNeeded = true;
+        postEvent( new GeometryEvent( GeometryEvent.SIZE_CHANGED, size.x, size.y ) );
+    }
+    function onChildResize( e:GeometryEvent ) :Void {
+        var oldSize = size;
+        if( layout!=null && relayoutNeeded ) {
+        trace("relayout "+this );
+            layout.layoutContainer( this );
+            relayoutNeeded=false;
         }
-//        if( layout!=null ) layout.layoutContainer( this );
+        if( size != oldSize ) {
+            postResizeEvent();
+        }
     }
 }

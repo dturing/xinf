@@ -18,6 +18,7 @@ package xinf.ul;
 import xinf.event.MouseEvent;
 import xinf.ony.Root;
 import xinf.ony.Object;
+import xinf.ony.Container;
 
 enum PopupMode {
     Move;
@@ -27,9 +28,9 @@ enum PopupMode {
 class Popup {
     
     var object:Object;
-    var root:Object;
+    var root:Container<Object>;
     
-    public function new( parent:Object, o:Object, ?popupMode:PopupMode ) :Void {
+    public function new( parent:Container<Object>, o:Object, ?popupMode:PopupMode ) :Void {
         object = o;
         root = parent;
         while( root.parent!=null ) {

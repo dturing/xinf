@@ -1,17 +1,21 @@
 package xinf.ul.layout;
 
 import xinf.ul.Component;
+import xinf.ul.layout.SpringLayout;
 
 class SpringUtilities {
     public static function makeGrid( parent:Component, layout:SpringLayout,
-        rows:Int, cols:Int, initialX:Float, initialY:Float, xPad:Float, yPad:Float ) {
+        cols:Int, rows:Int, xPad:Float, yPad:Float ) {
         
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
-        var initialXSpring = Spring.constant(initialX);
-        var initialYSpring = Spring.constant(initialY);
+        var initialXSpring = new LeftSpring(parent);
+        var initialYSpring = new TopSpring(parent);
         var max = rows * cols;
-        
+
+        // assure we have enough components
+        if( parent.getComponent(max-1) == null ) throw("Grid requires "+rows+"x"+cols+" children to be attached.");
+
         // Springs for assuring all cells have same size
         var maxWidth = layout.getConstraints(parent.getComponent(0)).getWidth();
         var maxHeight = layout.getConstraints(parent.getComponent(0)).getHeight();
@@ -54,18 +58,18 @@ class SpringUtilities {
         
         // parent's size
         var pCons = layout.getConstraints(parent);
-        pCons.setEast( Spring.sum( xPadSpring, lastCons.getEast() ) );
-        pCons.setSouth( Spring.sum( yPadSpring, lastCons.getSouth() ) );
+        pCons.setEast( Spring.sum( new RightSpring(parent), lastCons.getEast() ) );
+        pCons.setSouth( Spring.sum( new BottomSpring(parent), lastCons.getSouth() ) );
     }
 
     public static function makeCompactGrid( parent:Component, layout:SpringLayout,
-        rows:Int, cols:Int, initialX:Float, initialY:Float, xPad:Float, yPad:Float ) {
+        cols:Int, rows:Int, xPad:Float, yPad:Float ) {
         
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
         
         // Springs for assuring all cells in a column have same width
-        var x = Spring.constant(initialX);
+        var x:Spring = new LeftSpring(parent);
         for( c in 0...cols ) {
             var width = Spring.constant(0);
             for( r in 0...rows ) {
@@ -82,7 +86,7 @@ class SpringUtilities {
         }
 
         // Springs for assuring all cells in a row have same height
-        var y = Spring.constant(initialY);
+        var y:Spring = new TopSpring(parent);
         for( r in 0...rows ) {
             var height = Spring.constant(0);
             for( c in 0...cols ) {
