@@ -45,11 +45,10 @@ class DeferredSpring extends SimpleSpring {
     }
     public function getValue() :Float {
         _value = resolve().getValue();
-        if( _value == Spring.UNSET ) _value = getPref();
         return _value;
     }
     public function toString() :String {
-        return(" >#"+o._id+"."+edge+":"+resolve()+" ");
+        return(""+o._id+edge+":"+resolve());
     }
 }
 
@@ -70,7 +69,7 @@ class WidthSpring extends SimpleSpring {
         return Spring.MAX;
     }
     public function toString() :String {
-        return("Width("+c+")");
+        return("W("+c+":"+c.size.y+")");
     }
 }
 
@@ -82,11 +81,11 @@ class HeightSpring extends WidthSpring {
         return c.size.y;
     }
     override public function toString() :String {
-        return("Height("+c+")");
+        return("H("+c+":"+c.size.y+")");
     }
 }
 
-class SpringLayout {
+class SpringLayout implements Layout {
     var index:IntHash<Constraints>;
     
     public function new() :Void {
@@ -116,11 +115,11 @@ class SpringLayout {
         c.setY( Spring.constant(0) );
       //  c.setWidth( Spring.constant(p.size.x) );
       //  c.setHeight( Spring.constant(p.size.y) );
-        trace("initContainer "+p+" east: "+c.getEast() );
+    //    trace("initContainer "+p+" east: "+c.getEast() );
         if( c.getEast() == null )
-            c.setEast( Spring.constant(0,0,Spring.MAX) );
+            c.setEast( Spring.constant(0) );
         if( c.getSouth() == null )
-            c.setSouth( Spring.constant(0,0,Spring.MAX) );
+            c.setSouth( Spring.constant(0) );
         return c;
     }
     
@@ -135,13 +134,14 @@ class SpringLayout {
         
         for( c in p.children ) {
             var constraints = getConstraints(c);
+            //trace("child: "+constraints );
             
             var x = constraints.getX().getValue();
             var y = constraints.getY().getValue();
             var width = constraints.getWidth().getValue();
             var height = constraints.getHeight().getValue();
             
-            //trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height+":\n\t"+constraints );
+            //trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height );
             c.moveTo(x,y);
             c.resize(width,height);
         }
@@ -150,7 +150,7 @@ class SpringLayout {
         var y = cs.getY().getValue();
         var width = cs.getWidth().getValue();
         var height = cs.getHeight().getValue();
-        trace("Layout Self "+p+": "+x+","+y+"-"+width+"x"+height );
+        //trace("Layout Self "+p+": "+x+","+y+"-"+width+"x"+height );
         //p.moveTo(x,y);
         p.resize(width,height); 
     }

@@ -97,7 +97,7 @@ class ConstantSpring extends SimpleSpring {
     public function toString() :String {
         var s=if( _value==Spring.UNSET ) "" else ":"+_value;
         if( _min==_pref && _min==_max ) 
-            return("Const("+_pref+s+")");
+            return("const"+_pref+s);
         return("Const("+_min+","+_pref+","+_max+s+")");
     }
 }
@@ -172,7 +172,7 @@ class SumSpring extends BinarySpring {
         return a+b;
     }
     public function toString() :String {
-        return("Sum("+a+","+b+")");
+        return("sum( "+a+", "+b+" )");
     }
 }
 
@@ -184,6 +184,6 @@ class MaxSpring extends BinarySpring {
         return Math.max(a,b);
     }
     public function toString() :String {
-        return("Max("+a+","+b+")");
+        return("max( "+a+", "+b+" )");
     }
 }
