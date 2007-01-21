@@ -22,8 +22,8 @@ else
 		PROJECT_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/freetype2 -I/opt/mingw/include/gtk-2.0 -I/opt/mingw/include/glib-2.0 -I/opt/mingw/lib/glib-2.0/include
 		PROJECT_LIBS:=-lfreetype -lgobject-2.0 -lgdk_pixbuf-2.0
 	else
-		PROJECT_CFLAGS:=${shell freetype-config --cflags} ${shell pkg-config --cflags gdk-pixbuf-2.0}
-		PROJECT_LIBS:=${shell freetype-config --libs} ${shell pkg-config --libs gdk-pixbuf-2.0}
+		PROJECT_CFLAGS:=${shell freetype-config --cflags} ${shell pkg-config --cflags fontconfig} ${shell pkg-config --cflags gdk-pixbuf-2.0}
+		PROJECT_LIBS:=${shell freetype-config --libs} ${shell pkg-config --libs fontconfig} ${shell pkg-config --libs gdk-pixbuf-2.0}
 	endif
 endif
 
@@ -162,9 +162,9 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Linux
 	cp ../bin/Linux/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Linux/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Mac
-	#cp ../bin/Mac/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Mac/
+	-cp ../bin/Mac/$(PROJECT).ndll $(HAXELIB_PROJECT)/ndll/Mac/
 	mkdir -p $(HAXELIB_PROJECT)/ndll/Windows
-	cp -r ../bin/Windows/* $(HAXELIB_PROJECT)/ndll/Windows/
+	-cp -r ../bin/Windows/* $(HAXELIB_PROJECT)/ndll/Windows/
 	
 	# copy neko impl module
 	-cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/Linux/
