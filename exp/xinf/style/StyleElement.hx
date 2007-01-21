@@ -2,6 +2,7 @@ package xinf.style;
 
 import xinf.erno.Renderer;
 import xinf.erno.Color;
+import xinf.erno.TextFormat;
 
 class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
     
@@ -12,6 +13,16 @@ class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
     public function new() :Void {
         super();
         style = StyleSheet.newDefaultStyle();
+    }
+    
+
+    public function applyStyle( s:Style ) {
+        style = s;
+        
+        // resize to same inner size, in case padding has changed
+        if( innerSize!=null ) resizeInner(innerSize.x,innerSize.y);
+        
+        scheduleRedraw();
     }
     
     public function setStyleStroke( g:Renderer, width:Float, colorProperty:String, ?colorFallback:Color ) :Void {
@@ -30,21 +41,16 @@ class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
             g.setFill( 0,0,0,0 );
     }
 
-    public function setStyleFont( g:Renderer ) :Void {
-        var fontName = style.get("fontFamily","_sans");
-        if( fontName != null ) {
-            g.setFont( fontName, style.get("fontSlant",false),
-                    style.get("fontWeight",false),
-                    style.get("fontSize",12) );
-        }
+    public function getStyleTextFormat() :TextFormat {
+        return style.get("font",TextFormat.getDefault() );
     }
     
     override public function resize( x:Float, y:Float ) :Void {
         super.resize( x, y );
         
         innerSize = {
-            x:x - (style.padding.l+style.padding.r),
-            y:y - (style.padding.t+style.padding.b) };
+            x:x - (style.padding.l+style.padding.r+style.border.l+style.border.r),
+            y:y - (style.padding.t+style.padding.b+style.border.t+style.border.b) };
         innerPos = {
             x:style.padding.l,
             y:style.padding.t };

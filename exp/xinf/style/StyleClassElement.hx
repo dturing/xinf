@@ -20,11 +20,10 @@ class StyleClassElement extends StyleElement {
     }
 
     public function updateStyles() :Void {
-        style = StyleSheet.defaultSheet.match( this );
-        // to catch min/maxWidth/Height
-        scheduleRedraw();
+        var s = StyleSheet.defaultSheet.match( this );
+        if( s!=style ) applyStyle(s);
     }
-
+    
     public function addStyleClass( name:String ) :Void {
         styleClasses.push( name );
         updateStyles();
