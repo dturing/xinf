@@ -19,7 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.geom.Matrix;
 import xinf.erno.ImageData;
-import xinf.erno.FontStyle;
+import xinf.erno.TextFormat;
 
 import opengl.GL;
 import opengl.GLU;
@@ -31,7 +31,6 @@ typedef Primitive = GLObject
 class GLRenderer extends ObjectModelRenderer<Primitive> {
     
     private var shape:GLPolygon;
-    public var font(default,null):xinf.inity.font.Font;
     
     private var circle_fill:Int;
     private var circle_stroke:Int;
@@ -234,14 +233,14 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         GL.popMatrix();
     }
     
-    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
-        font = xinf.inity.font.Font.getFont( pen.fontFace ); //+" "+slant+" "+weight );
+    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+        format.assureLoaded();
+        var font = format.font;
         if( pen.fillColor != null && font != null ) {
             GL.pushMatrix();
                 GL.translate( x, y, 0 );
                 GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-                var r = font.renderText( text, pen.fontSize, null );
-                if( sizeKnown!=null ) sizeKnown( r.x, r.y );
+                font.renderText( text, format.size, null );
             GL.popMatrix();
         }
     }

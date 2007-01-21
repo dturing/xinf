@@ -49,5 +49,4 @@ class Glyph {
         GL.translate( advance, .0, .0 );
         return( advance );
     }
-    
 }

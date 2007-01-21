@@ -26,7 +26,7 @@ class FontList {
     
     public function new() :Void {
         list = new Hash<Hash<Style>>();
-        FontConfig.fc_allFonts( addFont );
+        xinf.support.Font.listFonts( addFont );
         //print();
     }
     

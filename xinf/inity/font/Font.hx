@@ -46,9 +46,9 @@ class Font {
                     throw("default font not found - include xinf-resources");
                 }
             }
-        } else {
-            var file = null; // FC FontConfig.fc_findFont(untyped name.__s,weight,slant,12.0);
-            if( file==null || file==untyped "".__s ) throw("Unable to load font "+name+": "+file );
+        } else if( name!=null ) {
+            var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
+            if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
             data = neko.io.File.getContent( file );
         }
         font = new FontReader( data ).getFont();
@@ -93,9 +93,34 @@ class Font {
         return( g );
     }
     
-    public function renderText( text:String, fontSize:Float, style:FontStyle ) :{x:Float,y:Float} {
+    public function textSize( text:String, fontSize:Float ) :{x:Float,y:Float} {
+        var lines=0;
+        var lineHeight = Math.round(height*fontSize)/fontSize;
+        var w=0.0;
+        var maxW=0.0;
+        for( i in 0...text.length ) {
+            var c = text.charCodeAt(i);
+            if( c == 10 ) { // \n
+                if( w>maxW ) maxW = w;
+                w=0;
+                lines++;
+                GL.translate( .0, lineHeight*lines, .0 );
+            } else {
+                var g = getGlyph(c);
+                if( g != null ) {
+                    w += g.advance;
+                }
+            }
+        }
+        if( w>maxW ) maxW=w;
+        maxW*=fontSize;
+        return { x:maxW, y:(lines+1)*(lineHeight*fontSize) };
+    }
+    
+    public function renderText( text:String, fontSize:Float, style:FontStyle ) :Void {
         if( text == null ) text="[null]";
         
+        var lines=0;
         var c_style=0;
         var r = { x:.0, y:.0 };
         var nextStyle:FontStyleChange = null;
@@ -108,10 +133,7 @@ class Font {
 
         GL.pushMatrix(); // for lines.
 
-        var lines=0;
         var lineHeight = Math.round(height*fontSize)/fontSize;
-        var maxW=0.;
-        var w=0.;
 
         for( i in 0...text.length ) {
             if( nextStyle != null && nextStyle.pos == i ) {
@@ -122,27 +144,24 @@ class Font {
             
             var c = text.charCodeAt(i);
             if( c == 10 ) { // \n
-                if( w>maxW ) maxW = w;
-                w=0;
                 GL.popMatrix();
                 GL.pushMatrix();
                 lines++;
-                GL.translate( .0, lineHeight, .0 );
+                GL.translate( .0, lineHeight*lines, .0 );
             } else {
                 var g = getGlyph(c);
                 if( g != null ) {
-                    w += g.render(fontSize)*fontSize;
+                    g.render(fontSize)*fontSize;
                 }
             }
         }
-        if( w>maxW ) maxW=w;
-
         GL.popMatrix();
 
         GL.popMatrix();
-
-        return { x:maxW, y:(lines+1)*(lineHeight*fontSize) };
     }
-    
+
+    public function toString() :String {
+        return("[Font: "+family_name+"]");
+    }
 }
 
