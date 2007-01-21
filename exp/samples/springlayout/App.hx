@@ -19,70 +19,102 @@ import xinf.ony.Application;
 import xinf.ul.Pane;
 import xinf.ul.Label;
 
-import xinf.ul.layout.SpringLayout;
-import xinf.ul.layout.Constraints;
-import xinf.ul.layout.Spring;
-import xinf.ul.layout.SpringUtilities;
+import xinf.value.Value;
+import xinf.ul.layout.ComponentValue;
 
 class Test extends Label {
     
     public function new( t:String ) :Void {
         super( t );
-        text = _id+" "+text;
+        text = "#"+t;
+        addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
+        addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
     }
     
+    public function onMouseOver( e:MouseEvent ) {
+        text+="::over";
+        addStyleClass(":over");
+    }
+    public function onMouseOut( e:MouseEvent ) {
+        text=text.split("::")[0];
+        removeStyleClass(":over");
+    }
+    public function toString() :String {
+        return( "#"+_id );
+    }
 }
 
 class App extends Application {
     
     public function new() :Void {
         super();
+
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Test" ], {
-                padding: { l:0, t:0, r:0, b:0 },
+                padding: { l:5, t:5, r:5, b:3 },
+                border: { l:1, t:1, r:1, b:1 },
+                color: Color.rgba(1,1,1,.5),
+                background: Color.rgba(1,1,1,.3),
+            });
+            
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "Grid" ], {
+                padding: { l:5, t:5, r:5, b:3 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,.5),
                 background: Color.rgba(1,0,0,.5),
-            } );
+            });
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "CompactGrid" ], {
+                padding: { l:5, t:5, r:5, b:3 },
+                border: { l:1, t:1, r:1, b:1 },
+                color: Color.rgba(1,1,1,.5),
+                background: Color.rgba(0,1,0,.5),
+            });
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "base" ], {
+                padding: { l:5, t:5, r:5, b:3 },
+                border: { l:1, t:1, r:1, b:1 },
+                color: Color.rgba(1,1,1,0),
+                background: Color.rgba(0,0,1,.3),
+                minWidth:100, minHeight:100,
+            });
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ ":over" ], {
+                padding: { l:5, t:5, r:5, b:3 },
+                color: Color.rgba(1,1,1,1),
+                background: Color.rgba(1,1,1,.4),
+            });
         
-        var c = new Test("base");
-        c.resize(100,100);
+        var c = new Label("base");
+        c.addStyleClass("base");
         c.moveTo(10,10);
-        
-        var p1 = new Test("one");
-        //p1.resize(70,20);
-
-        var p2 = new Test("twoonetwo");
-        //p2.resize(50,50);
-/*
-        for( t in ["two","three","four","five","six","seven","eight","nine"] ) {
+  //      c.resize( 200, 200 );
+        root.attach(c);
+/*        
+        var c2 = new CompactGrid(3,3);
+        for( t in ["1", "two","three, tri, drei","4","five\n.5","six","7\nor\nso","eight","nine"] ) {
             var p = new Test(t);
             p.resize(20,15);
-            c.attach(p);
+            c2.add(p);
         }
+        c.add(c2);
 */
-        var l = new SpringLayout();
+
+        var c3 = new Test("c3");
+        c3.addStyleClass("base");
+        var x:Value = Value.sum( c3.constraints.getX(), Value.constant(10) );
+        for( t in ["one","two","three","four","five","six","seven","eight","nine","ten"] ) {
+            var p = new Test(t);
+       //     trace("x constraint:" +p.constraints.getX());
+       //     trace("Test("+t+").constraints: "+p.constraints);
+            p.constraints.getX().set( new ComponentXSetter( p, x ) );
+            x = p.constraints.getEast();
+            c3.attach(p);
+        }
+        c3.constraints.getEast().set(x);
+        c.attach(c3);
         
-        var pad = Spring.constant(15);
-        l.putConstraint( West, p1, pad, West, c );
-        l.putConstraint( North, p1, pad, North, c );
-        l.putConstraint( West, p2, pad, East, p1 );
-        l.putConstraint( North, p2, pad, South, p1 );
-        l.putConstraint( East, c, pad, East, p2 );
-        l.putConstraint( South, c, pad, South, p2 );
-        
-        l.getConstraints( p1 ).setWidth( 
-            Spring.max(
-                new WidthSpring(p1),
-                l.getConstraints( p2 ).getWidth()
-            ) );
-        
-        //SpringUtilities.makeCompactGrid( c, l, 3, 3, 5, 20, 5, 5 );
-            
-        c.attach(p2);
-        c.attach(p1);
-        l.layoutContainer( c );
-        root.attach(c);
     }
     
     public static function main() :Void {
@@ -90,7 +122,11 @@ class App extends Application {
             new App().run();
         } catch( e:Dynamic ) {
             try {
-                trace("Exception: "+e+"\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()) );
+                var stack = haxe.Stack.exceptionStack();
+                var s = if( stack != null ) {
+                            haxe.Stack.toString(stack);
+                        } else "[could not get stack]";
+                trace("Exception: "+e+"\n"+s );
             } catch( f:Dynamic ) {
                 trace("Exception tracing exception: "+e+" /// "+f );
             }
