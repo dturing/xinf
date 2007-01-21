@@ -19,7 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
-import xinf.erno.FontStyle;
+import xinf.erno.TextFormat;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
@@ -145,29 +145,29 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         g.endFill();
     }
     
-    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
+    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+        format.assureLoaded();
+        
         // FIXME: textStyles
         if( pen.fillColor != null ) {
+            format.format.color = pen.fillColor.toRGBInt();
             var tf = new flash.text.TextField();
-            tf.text = text;
+            tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
             tf.y=y;
             tf.x=x;
-            
+            tf.text = text;
+/*
             // TODO: bold/italic
             var format:flash.text.TextFormat = tf.getTextFormat();
             format.font = pen.fontFace;
             format.size = pen.fontSize;
             format.color = pen.fillColor.toRGBInt();
             format.leftMargin = 0;
-            tf.setTextFormat(format);
+        */
             
             current.addChild(tf);
-            
-            if( sizeKnown!=null ) {
-                sizeKnown( tf.width, tf.height );
-            }
         }
     }
     
