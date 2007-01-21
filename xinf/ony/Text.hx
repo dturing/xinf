@@ -17,7 +17,7 @@ package xinf.ony;
 
 import xinf.erno.Renderer;
 import xinf.erno.Color;
-import xinf.erno.FontStyle;
+import xinf.erno.TextFormat;
 
 /**
     A simple Xinfony Object displaying a string of text.
@@ -25,21 +25,52 @@ import xinf.erno.FontStyle;
 class Text extends Object {
     
     public var color:Color;
-    public var text:String;
-
+    public var text(default,setText):String;
+    public var format(default,setFormat):TextFormat;
+    public var autoSize(default,setAutoSize):Bool;
+    
     public function new( ?text:String, ?color:Color ) :Void {
         if( color==null ) color = Color.BLACK;
         this.color=color;
         this.text=text;
+        this.format=TextFormat.getDefault();
         super();
+    }
+    
+    function setText( t:String ) :String {
+        this.text = t;
+        calcSize();
+        return text;
+    }
+
+    function setFormat( format:TextFormat ) :TextFormat {
+        this.format = format;
+        calcSize();
+        return format;
+    }
+
+    function setAutoSize( a:Bool ) :Bool {
+        this.autoSize = a;
+        calcSize();
+        return a;
+    }
+
+    public function calcSize() :Void {
+        if( autoSize ) {
+            var s = format.textSize( text );
+            if( s.x!=size.x || s.y!=size.y ) {
+                resize( s.x, s.y );
+            }
+//            trace("calc font size for text '"+text+"': "+s.x+"/"+s.y );
+        }
     }
     
     public function drawContents( g:Renderer ) :Void {
         if( text!=null ) {
-            trace("TEXT, renderer: "+g );
+            g.setFill( 1,0,0,.5 );
+            g.rect( 0, 0, size.x, size.y );
             g.setFill( color.r, color.g, color.b, color.a );
-            g.setFont( "_sans", false, false, 12 );
-            g.text(0,0,text);
+            g.text(0,0,text,format);
         }
     }
     
