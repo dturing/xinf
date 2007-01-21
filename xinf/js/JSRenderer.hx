@@ -19,7 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
-import xinf.erno.FontStyle;
+import xinf.erno.TextFormat;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -89,7 +89,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         rect( x-r, y-r, r*2, r*2 );
     }
 
-    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
+    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.whiteSpace="nowrap";
@@ -100,22 +100,15 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
             r.style.color = pen.fillColor.toRGBString();
             untyped r.style.opacity = pen.fillColor.a;
         }
+        /*
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
         if( pen.fontItalic ) r.style.fontStyle = "italic";
         if( pen.fontBold ) r.style.fontWeight = "bold";
         if( pen.fontSize != null ) r.style.fontSize = ""+pen.fontSize+"px";
-        r.innerHTML=text.split("\n").join("<br/>"); // FIXME: doesnt work?
+        */
+        format.apply(r);
+        r.innerHTML=text.split("\n").join("<br/>");
         current.appendChild(r);
-
-        // if the object is already attached, we can query the text width right away here.
-        // at least in ff bon echo.
-        // trace("--------"+r.offsetWidth );
-        if( sizeKnown!=null && text!="" ) {
-            if( r.offsetHeight==0 ) {
-                throw("JS doesn't know the text's size yet (FIXME: defer)");
-            }
-            sizeKnown( r.offsetWidth, r.offsetHeight );
-        }
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
