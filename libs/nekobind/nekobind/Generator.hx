@@ -124,6 +124,7 @@ class Generator {
             if( settings.friends != null ) {
                 for( f in new String(settings.friends).split(",") ) {
                     var fc = StringTools.trim(f).split(":");
+                    if( fc.length != 2 ) throw("Friends class definitions need 'HaxeClass:CStruct' syntax: '"+f+"' doesn't match");
                     friendClasses.set( fc[0], fc[1] );
                 }
             }

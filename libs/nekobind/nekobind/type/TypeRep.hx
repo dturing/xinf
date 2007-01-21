@@ -83,7 +83,7 @@ class FriendClassType extends TypeRep {
     }
     
     public function cNekoAlloc( c:String ) :String {
-        return( "alloc_abstract( k_"+className+", "+c+" )" );
+        return( "alloc_"+className+"( "+c+" )" );
     }
 }
 
