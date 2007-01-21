@@ -182,4 +182,9 @@ class RoundRobin<T,Item:Settable<T>> extends Pane {
     public function indexAt( offset:Float ) :Int {
         return Math.floor( (offset/unit)+cOffset );
     }
+
+    public function setModel( m:ListModel<T> ) :Void {
+        model = m;
+        redoAll();
+    }
 }

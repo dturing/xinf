@@ -159,4 +159,12 @@ class ListBox<T> extends Widget {
         rr.assureVisible(i);
         setCursor(i);
     }
+    
+    public function getCurrentItem() :T {
+        return model.getItemAt(cursor);
+    }
+    
+    public function setModel( m:ListModel<T> ) :Void {
+        rr.setModel(m);
+    }
 }
