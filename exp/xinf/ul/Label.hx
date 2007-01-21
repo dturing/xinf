@@ -16,7 +16,7 @@
 package xinf.ul;
 
 import xinf.erno.Renderer;
-import xinf.erno.FontStyle;
+import xinf.style.Style;
 
 /**
     Simple Label element.
@@ -26,12 +26,10 @@ class Label extends Pane {
     
     public var text(get_text,set_text):String;
     var _text:String;
-    var textSize:{x:Float,y:Float};
     
     public function new( ?text:String ) :Void {
         super();
         _text = text;
-        textSize = {x:0,y:0};
     }
     
     function get_text() :String {
@@ -39,26 +37,33 @@ class Label extends Pane {
     }
     
     function set_text( t:String ) :String {
-        _text = t;
-        scheduleRedraw();
+        if( t != _text ) {
+            _text = t;
+            var s = getStyleTextFormat().textSize(t);
+            if( innerSize==null || s.x!=innerSize.x || s.y != innerSize.y ) {
+                resizeInner( s.x, s.y );
+            }
+            scheduleRedraw();
+        }
         return(t);
     }
-    
-    function onTextSizeChanged( w:Float, h:Float ) :Void {
-        if( w!=textSize.x || h!=textSize.y ) {
-        trace("text size of label "+text+" changed from "+textSize+" to w "+w );
-            textSize = { x:w, y:h };
-            resizeInner( w, h );
-            //resize(w,h);
-            postResizeEvent();
+
+    override public function applyStyle( s:Style ) {
+        var oldFont = getStyleTextFormat();
+        super.applyStyle(s);
+        var font = getStyleTextFormat();
+        if( text != null && font!=oldFont ) {
+            var s = font.textSize(_text);
+            if( innerSize==null || s.x!=innerSize.x || s.y != innerSize.y ) {
+                resizeInner( s.x, s.y );
+            }
         }
     }
-    
+
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
     
-        setStyleFont( g );
         setStyleFill( g, "color" );
-        g.text(innerPos.x,innerPos.y,text,onTextSizeChanged);
+        g.text(innerPos.x,innerPos.y,text,getStyleTextFormat());
     }
 }
