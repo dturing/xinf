@@ -120,7 +120,7 @@ class BasicRenderer implements Renderer {
         unimplemented("circle");
     }
     
-    public function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) {
+    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         unimplemented("text");
     }
     

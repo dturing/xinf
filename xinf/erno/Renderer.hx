@@ -130,13 +130,6 @@ interface Renderer {
     function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) :Void;
     
     /**
-        Set the font and font style for following calls to [text()]. 
-        [face] can be a comma-separated list of official font family names or the
-        standard "_sans".
-    **/
-    function setFont( face:String, italic:Bool, bold:Bool, size:Float ) :Void;
-
-    /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially
         overlapping.
         Every [startShape] must be matched with a [endShape], within a shape definition only calls
@@ -209,11 +202,8 @@ interface Renderer {
         current fill color. You can optionally pass in a <a href="FontStyle.html">FontStyle</a>
         for changing the font color in the middle of the string. The string may contain
         '\n's to span multiple lines.
-        
-        If you pass a function into [sizeKnown], it will be called with the text's
-        extensions (width and height) once those are known (usually immediately).
     **/
-    function text( x:Float, y:Float, text:String, ?sizeKnown:Float->Float->Void ) :Void;
+    function text( x:Float, y:Float, text:String, format:TextFormat ) :Void;
     
     /**
         Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 
