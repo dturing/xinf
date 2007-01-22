@@ -27,7 +27,7 @@ class Component extends xinf.style.StyleClassElement {
     public function getConstraints() :LayoutConstraints {
         if( constraints==null ) {
             constraints = new LayoutConstraints(    
-                Value.constant(0), Value.constant(0),
+                new ComponentX(this), new ComponentY(this),
                 new ComponentWidth(this), new ComponentHeight(this) );
         }
         return constraints;

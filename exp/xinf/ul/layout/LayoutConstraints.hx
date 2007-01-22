@@ -25,22 +25,25 @@ enum Edge {
 }
 
 class LayoutConstraints {
-    var x:Value;
-    var y:Value;
-    var width:Value;
-    var height:Value;
-    var east:Value;
-    var south:Value;
+    var x:Slot;
+    var y:Slot;
+    var width:Slot;
+    var height:Slot;
+    var east:Slot;
+    var south:Slot;
     
-    public function new( ?x:Value, ?y:Value, ?width:Value, ?height:Value ) :Void {
-        this.x=new Slot(x);
-        this.y=new Slot(y);
-        this.width=new Slot();
-        this.height=new Slot();
+    public function new( ?x:Slot, ?y:Slot, ?width:Slot, ?height:Slot ) :Void {
+        this.x = if(x!=null) x else new Slot();
+        this.y = if(y!=null) y else new Slot();
+        this.width = if(width!=null) width else new Slot();
+        this.height = if(height!=null) height else new Slot();
+
         east=new Slot();
         south=new Slot();
-        if( width!=null ) setWidth(width);
-        if( height!=null ) setHeight(height);
+        if( width!=null )
+            east.set( Value.sum(x,width) );
+        if( height!=null ) 
+            south.set( Value.sum(y,height) );
     }
 
     public function getConstraint( edge:Edge ) {
@@ -58,14 +61,14 @@ class LayoutConstraints {
             );
     }
 
-    public function getX() :Value { return x; }
-    public function getY() :Value { return y; }
-    public function getWidth() :Value { return width; }
-    public function getHeight() :Value { return height; }
-    public function getEast() :Value { return east; }
-    public function getSouth() :Value { return south; }
+    public function getX() :Slot { return x; }
+    public function getY() :Slot { return y; }
+    public function getWidth() :Slot { return width; }
+    public function getHeight() :Slot { return height; }
+    public function getEast() :Slot { return east; }
+    public function getSouth() :Slot { return south; }
     
-    public function setConstraint( edge:Edge, s:Value ) {
+    public function setConstraint( edge:Edge, s:Slot ) {
         switch( edge ) {
             case West:
                 setX(s);
@@ -103,13 +106,14 @@ class LayoutConstraints {
 
     public function setEast( s:Value ) :Value {
         east.set(s);
-        width.set( Value.sum(x,Value.minus(east)) );
+        width.set( Value.sum(east,Value.minus(x)) );
+        trace("set East, width now "+width );
         return east;
     }
 
     public function setSouth( s:Value ) :Value {
         south.set(s);
-        height.set( Value.sum(y,Value.minus(south)) );
+        height.set( Value.sum(south,Value.minus(y)) );
         return south;
     }
     

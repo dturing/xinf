@@ -21,14 +21,15 @@ import xinf.ul.Label;
 
 import xinf.value.Value;
 import xinf.ul.layout.ComponentValue;
+import xinf.ul.layout.HorizontalBox;
 
 class Test extends Label {
     
     public function new( t:String ) :Void {
         super( t );
-        text = "#"+t;
         addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
         addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
+        addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
     }
     
     public function onMouseOver( e:MouseEvent ) {
@@ -39,8 +40,11 @@ class Test extends Label {
         text=text.split("::")[0];
         removeStyleClass(":over");
     }
+    public function onMouseDown( e:MouseEvent ) {
+        text+="\npressed";
+    }
     public function toString() :String {
-        return( "#"+_id );
+        return( "\""+text+"\""  );
     }
 }
 
@@ -76,8 +80,7 @@ class App extends Application {
                 padding: { l:5, t:5, r:5, b:3 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,0),
-                background: Color.rgba(0,0,1,.3),
-                minWidth:100, minHeight:100,
+                background: Color.rgba(1,0,0,.5),
             });
         xinf.style.StyleSheet.defaultSheet.add(
             [ ":over" ], {
@@ -85,36 +88,42 @@ class App extends Application {
                 color: Color.rgba(1,1,1,1),
                 background: Color.rgba(1,1,1,.4),
             });
-        
-        var c = new Label("base");
-        c.addStyleClass("base");
-        c.moveTo(10,10);
-  //      c.resize( 200, 200 );
-        root.attach(c);
-/*        
-        var c2 = new CompactGrid(3,3);
-        for( t in ["1", "two","three, tri, drei","4","five\n.5","six","7\nor\nso","eight","nine"] ) {
-            var p = new Test(t);
-            p.resize(20,15);
-            c2.add(p);
-        }
-        c.add(c2);
-*/
+            
+/*
+        var xPadding = Value.constant(5);
+        var yPadding = Value.constant(5);
 
-        var c3 = new Test("c3");
+        var c3 = new Pane();
+        c3.moveTo( 20, 20 );
+        c3.resize( 30, 30 );
         c3.addStyleClass("base");
-        var x:Value = Value.sum( c3.constraints.getX(), Value.constant(10) );
-        for( t in ["one","two","three","four","five","six","seven","eight","nine","ten"] ) {
+        var x:Value = xPadding;
+        var y:Value = yPadding;
+        for( t in ["one","two","three"] ) { //,"four","five","six","seven","eight","nine","ten"] ) {
             var p = new Test(t);
-       //     trace("x constraint:" +p.constraints.getX());
-       //     trace("Test("+t+").constraints: "+p.constraints);
-            p.constraints.getX().set( new ComponentXSetter( p, x ) );
-            x = p.constraints.getEast();
+            p.constraints.setX( x );
+            p.constraints.setY( y );
+//            trace("Test("+t+").constraints: "+p.constraints);
+            x = Value.sum( xPadding, p.constraints.getEast() );
+            y = Value.sum( yPadding, p.constraints.getSouth() );
             c3.attach(p);
         }
-        c3.constraints.getEast().set(x);
-        c.attach(c3);
-        
+        c3.constraints.setWidth( x );
+        c3.constraints.setHeight( y );
+        trace("base constraints: "+c3.constraints );
+        root.attach(c3);
+*/
+        var c = new HorizontalBox();
+        c.resize( 10, 2 );
+        c.addStyleClass("base");
+        var align=0.;
+        for( t in ["one","two","three"] ) { //,"four","five","six","seven","eight","nine","ten"] ) {
+            var p = new Test(t);
+            c.add(p,align);
+            align+=.5;
+        }
+        c.moveTo( 20, 20 );
+        root.attach(c);
     }
     
     public static function main() :Void {

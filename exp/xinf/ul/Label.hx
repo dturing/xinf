@@ -29,7 +29,7 @@ class Label extends Pane {
     
     public function new( ?text:String ) :Void {
         super();
-        _text = text;
+        this.text = text;
     }
     
     function get_text() :String {

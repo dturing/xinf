@@ -16,6 +16,7 @@ class Value {
         return( "GenericValue of class "+Type.getClassName(Type.getClass(this)) );
     }
     public function set( ?v:Value ) :Void {
+        throw("cannot set() a Value, must be a Slot");
         return;
     }
     
@@ -42,14 +43,17 @@ class Value {
     }
     
     
-    public static function sum( a:Value, b:Value ) :Value {
+    public static function sum( a:Value, b:Value ) :Expression {
         return new Sum(a,b);
     }
-    public static function max( a:Value, b:Value ) :Value {
+    public static function max( ?a:Value, ?b:Value ) :Expression {
         return new Max(a,b);
     }
     public static function minus( a:Value ) :Value {
         return new Negative(a);
+    }
+    public static function scale( f:Float, a:Value ) :Value {
+        return new Scale(f,a);
     }
     public static function constant( a:Float ) :Value {
         return new SimpleValue(a);
@@ -69,6 +73,7 @@ class SimpleValue extends Value {
         return _v=v;
     }
     public function set( ?v:Value ) :Void {
+        throw("cannot set() a SimpleValue, must be a Slot");
         if(v!=null) setValue( v.value );
     }
     public function toString() :String {
@@ -94,11 +99,42 @@ class Slot extends Value {
         updateClients( newValue, oldValue );
     }
     public function set( ?v:Value ) :Void {
+//        trace("set "+this+" to < "+v );
         if( v!=_v ) {
             if( _v!=null ) _v.removeClient( this );
             _v = v;
             if( _v!=null ) _v.addClient( this );
 //            if( v!=null ) updateClients( v.value ); //if( _v!=null ) operandChanged( v );
+        }
+    }
+    public function toString() :String {
+        return( "<"+_v );
+    }
+}
+
+class Link extends Value {
+    var _v:Value;
+    public function new( ?v:Value ) :Void {
+        _v=v;
+        if( _v!=null ) addClient( _v );
+    }
+    public function getValue() :Float {
+        if( _v==null ) throw("unset Link: "+this);
+        return _v.getValue();
+    }
+    public function setValue( v:Float ) :Float {
+        if( _v==null ) throw("unset Link: "+this);
+        return _v.setValue(v);
+    }
+    public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
+        updateClients( newValue, oldValue );
+    }
+    public function set( ?v:Value ) :Void {
+        trace("set "+this+" to > "+v );
+        if( v!=_v ) {
+            if( _v!=null ) removeClient( _v );
+            _v = v;
+            if( _v!=null ) addClient( _v );
         }
     }
     public function toString() :String {
@@ -115,6 +151,21 @@ class Negative extends Slot {
     }
     public function setValue( v:Float ) :Float {
         return -super.setValue( -v );
+    }
+}
+
+class Scale extends Slot {
+    var factor:Float;
+    
+    public function new( f:Float, ?v:Value ) :Void {
+        factor=f;
+        super(v);
+    }
+    public function getValue() :Float {
+        return factor * super.getValue();
+    }
+    public function setValue( v:Float ) :Float {
+        return factor * super.setValue( v/factor );
     }
 }
 
@@ -162,6 +213,7 @@ class Expression extends SimpleValue {
         operands.add(o);
         o.addClient(this);
         _v = null; // causes recalc
+        updateClients();
     }
     public function toString() :String {
         var name = Type.getClassName( Type.getClass(this) ).split(".").pop();
@@ -171,7 +223,7 @@ class Expression extends SimpleValue {
                 r += o.next().toString();
                 if( o.hasNext() ) r+=", ";
             }
-        r+=" )"; //="+value;
+        r+=" ):"+value+"";
         return r;
     }
 }
@@ -205,9 +257,9 @@ class Max extends Expression {
         for( o in operands ) {
             max = Math.max( o.value, max );
         }
-        setValue(max);
         return max;
     }
+    /*
     override public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
         if( newValue!=null && _v!=null && newValue > _v ) {
 //            trace(""+this+" changed to new max "+_v );
@@ -217,4 +269,5 @@ class Max extends Expression {
             super.operandChanged(d,newValue,oldValue);
         }
     }
+    */
 }

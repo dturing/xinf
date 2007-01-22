@@ -18,15 +18,35 @@ package xinf.ul.layout;
 import xinf.value.Value;
 import xinf.ul.Component;
 
-class ComponentValue extends Value {
+class ComponentValue extends Slot {
     var c:Component;
     
     public function new( c:Component ) {
+        super();
         this.c=c;
+    }
+    public function getValue() :Float {
+        return null;
     }
     public function setValue( v:Float ) :Float {
         throw( ""+this+" is constant" );
         return getValue();
+    }
+    public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
+        setComponentValue(d.value);
+    //    trace("ComponentValue operand changed: "+d+", now: "+d.value );
+        super.operandChanged( d, newValue, oldValue );
+    }
+    public function set( ?v:Value ) :Void {
+        super.set(v);
+        if( v!=null ) setComponentValue( v.value );
+    }
+    
+    function setComponentValue( v:Float ) :Void {
+    }
+
+    public function toString() :String {
+        return( "("+c+":"+_v+":"+getValue()+" )" );
     }
 }
 
@@ -34,12 +54,11 @@ class ComponentWidth extends ComponentValue {
     public function getValue() :Float {
         return c.size.x;
     }
-    public function setValue( v:Float ) :Float {
-        updateClients( c.size.x );
-        return c.size.x;
+    function setComponentValue( v:Float ) :Void {
+        c.resize( v, c.size.y );
     }
     public function toString() :String {
-        return( "W("+c+":"+c.size.x+")" );
+        return( "W"+super.toString() );
     }
 }
 
@@ -47,12 +66,11 @@ class ComponentHeight extends ComponentValue {
     public function getValue() :Float {
         return c.size.y;
     }
-    public function setValue( v:Float ) :Float {
-        updateClients( c.size.y );
-        return c.size.y;
+    function setComponentValue( v:Float ) :Void {
+        c.resize( c.size.x, v );
     }
     public function toString() :String {
-        return( "H("+c+")" );
+        return( "H"+super.toString() );
     }
 }
 
@@ -60,15 +78,26 @@ class ComponentX extends ComponentValue {
     public function getValue() :Float {
         return c.position.x;
     }
-    public function setValue( v:Float ) :Float {
+    function setComponentValue( v:Float ) :Void {
         c.moveTo( v, c.position.y );
-        return c.position.x;
     }
     public function toString() :String {
-        return( "X("+c+")" );
+        return( "X"+super.toString() );
     }
 }
 
+class ComponentY extends ComponentValue {
+    public function getValue() :Float {
+        return c.position.y;
+    }
+    function setComponentValue( v:Float ) :Void {
+        c.moveTo( c.position.x, v );
+    }
+    public function toString() :String {
+        return( "y"+super.toString() );
+    }
+}
+/*
 class ComponentSlot extends Slot {
     var c:Component;
     
@@ -81,7 +110,6 @@ class ComponentSlot extends Slot {
         return getValue();
     }
 }
-
 class ComponentXSetter extends ComponentSlot {
     public function new( c:Component, ?v:Value ) {
         super(c,v);
@@ -108,3 +136,4 @@ class ComponentXSetter extends ComponentSlot {
         return( "X("+c+")="+_v );
     }
 }
+*/

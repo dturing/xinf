@@ -52,8 +52,8 @@ class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
             x:x - (style.padding.l+style.padding.r+style.border.l+style.border.r),
             y:y - (style.padding.t+style.padding.b+style.border.t+style.border.b) };
         innerPos = {
-            x:style.padding.l,
-            y:style.padding.t };
+            x:style.padding.l+style.border.l,
+            y:style.padding.t+style.border.t };
     }
     public function resizeInner( x:Float, y:Float ) :Void {
         resize( x + style.padding.l+style.padding.r + style.border.l+style.border.r, 
