@@ -12,9 +12,28 @@ VERSION:=0.0.1
 TAGLINE:=
 TEST_SAMPLE:=samples/0-test
 
+LIBS:=cptr opengl xinfinity-support
+NEKO_PLATFORMS:=Linux Mac Windows
+
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
 REVISION:=$(shell svnversion)
 
+#######################################################
+# build libs
+
+.PHONY : libs
+
+libs:
+	$(foreach LIB, $(LIBS), $(MAKE) -C libs/$(LIB);)
+
+libs-clean:
+	$(foreach LIB, $(LIBS), $(MAKE) -C libs/$(LIB) clean;)
+
+libs-all:
+	$(foreach LIB, $(LIBS), $(MAKE) -C libs/$(LIB) all;)
+
+
+#######################################################
 # generate version file
 FORCE:
 
@@ -27,6 +46,7 @@ $(VERSION_STUB):support/$(notdir $(VERSION_STUB)).in FORCE
 		-e "s/__DATE__/$(DATE)/" \
 		$< > $@
 
+#######################################################
 # make docs
 XINF_SOURCES:=$(wildcard $(PROJECT)/*.hx $(PROJECT)/*/*.hx $(PROJECT)/*/*/*.hx)
 DOC_DIR:=doc
@@ -43,6 +63,7 @@ doc : $(DOC_DIR)/doc.n.xml
 #    -f xinf -f ony
 
 
+#######################################################
 # package resources
 
 RESOURCE_DIR:=support/resources
@@ -55,6 +76,7 @@ $(RESOURCE) : $(RESOURCES) $(RESOURCE_STUB)
 	haxe -cp support/ -neko $(RESOURCE) $(foreach R,$(RESOURCES),-resource $(R)@$(notdir $(R))) Stub
 
 
+#######################################################
 # build haxelib package
 
 HAXELIB_ROOT:=support/haxelib-build
@@ -62,7 +84,7 @@ HAXELIB_PROJECT:=$(HAXELIB_ROOT)/$(PROJECT)
 
 haxelib : $(HAXELIB_PROJECT).zip
 	
-$(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
+$(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB) libs
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	
@@ -74,9 +96,21 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 	svn export samples $(HAXELIB_PROJECT)/samples
 	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
 	
+	# copy libs
+	mkdir $(HAXELIB_PROJECT)/ndll
+	$(foreach PLATFORM, $(NEKO_PLATFORMS), mkdir $(HAXELIB_PROJECT)/ndll/$(PLATFORM); )
+	$(foreach LIB, $(LIBS), \
+		$(foreach API, $(wildcard libs/$(LIB)/api/*), \
+			svn --force export $(API) $(HAXELIB_PROJECT)/$(notdir $(API)); )\
+		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
+			cp libs/$(LIB)/bin/$(LIB).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp libs/$(LIB)/bin/$(PLATFORM)/$(LIB).ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+		))
+		
+	
 	# build the "0-test" sample for haxelib run
-	cd $(TEST_SAMPLE); haxe -cp ../../ -lib cptr -lib opengl -lib xinfinity-support -main App -neko run.n;
-	cp $(TEST_SAMPLE)/run.n $(HAXELIB_PROJECT)/
+	#cd $(TEST_SAMPLE); haxe -cp ../../ -lib xinf -main App -neko run.n;
+	#cp $(TEST_SAMPLE)/run.n $(HAXELIB_PROJECT)/
 	
 	# copy resource FIXME
 	cp $(RESOURCE) $(HAXELIB_PROJECT)/
@@ -93,6 +127,8 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 test: haxelib
 	haxelib test $(HAXELIB_PROJECT).zip
 	haxelib run $(PROJECT)
-	
+
+#######################################################
+
 clean:
 	-rm -rf $(HAXELIB_ROOT)

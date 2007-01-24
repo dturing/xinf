@@ -1,5 +1,0 @@
-<project name="xinfinity-support" url="http://xinf.org/trac/wiki/XinfLibs" license="LGPL">
-    <user name="dfischer"/>
-    <description>Support libraries for the Xinfinity runtime: wraps some functions of FreeType, FontConfig and GdkPixbuf</description>
-    <version name="0.0.0">Testing</version>	
-</project>
