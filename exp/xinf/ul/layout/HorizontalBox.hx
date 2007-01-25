@@ -20,42 +20,42 @@ import xinf.ul.Pane;
 import xinf.value.Value;
 import xinf.style.Style;
 
-class HorizontalBox extends Pane {
+class HorizontalBox extends LayoutContainer {
     public static var ALIGN_TOP:Float = null;
     public static var ALIGN_MIDDLE:Float = 0.5;
     public static var ALIGN_BOTTOM:Float = 1.0;
 
-    var xPadding:Value;
-    var yPadding:Value;
     var currentX:Value;
     var maxHeight:Expression;
 
     public function new() :Void {
-        xPadding = Value.constant(0);
-        yPadding = Value.constant(0);
-        currentX = xPadding;
-        maxHeight = Value.max();
         super();
-        constraints.setHeight( Value.sum( Value.scale(2,yPadding), maxHeight ));
+        currentX = pad.t;
+        maxHeight = Value.max();
+        constraints.setHeight( Value.sum( pad.t, pad.b, maxHeight ));
+    }
+
+    public function align( c:Component, align:Float ) :Void {
+        if( align!=null ) {
+            c.constraints.setY( Value.sum( pad.t, Value.scale( align,
+                Value.sum( maxHeight, Value.minus( c.constraints.getHeight() ) ) )));
+        } else {
+            c.constraints.setY( pad.t );
+        }
     }
     
-    override public function applyStyle( s:Style ) :Void {
-        super.applyStyle(s);
-        xPadding.value = s.padding.l;
-        yPadding.value = s.padding.t;
-    }
-    
-    public function add( c:Component, ?align:Float ) :Void {
+    public function add( c:Component, align:Float ) :Void {
         attach( c );
+        this.align( c, align );
+    }
+    
+    override public function attach( c:Component ) :Void {
+        super.attach( c );
         c.constraints.setX( currentX );
-        currentX = Value.sum( c.constraints.getEast(), xPadding );
+        c.constraints.setY( pad.t );
+        currentX = Value.sum( c.constraints.getEast(), spacing.h );
         constraints.setWidth( currentX );
         
         maxHeight.addOperand( c.constraints.getHeight() );
-        
-        if( align!=null ) {
-            c.constraints.setY( Value.sum( yPadding, Value.scale( align,
-                Value.sum( maxHeight, Value.minus( c.constraints.getHeight() ) ) )));
-        }
     }
 }

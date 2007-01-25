@@ -26,10 +26,20 @@ class ComponentValue extends Slot {
         this.c=c;
     }
     public function getValue() :Float {
-        return null;
+        if( _v != null ) {
+            return super.getValue();
+        }
+        return getComponentValue();
     }
     public function setValue( v:Float ) :Float {
-        throw( ""+this+" is constant" );
+        if( _v==null ) {
+            // slot is empty: propagate the change
+            trace( ""+this+" empty, prop change to "+v );
+            updateClients(v);
+        } else {
+            trace( ""+this+" filled, ignore change to "+v );
+            // slot is filled: ignore setting.
+        }
         return getValue();
     }
     public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
@@ -44,6 +54,9 @@ class ComponentValue extends Slot {
     
     function setComponentValue( v:Float ) :Void {
     }
+    function getComponentValue() :Float {
+        return null;
+    }
 
     public function toString() :String {
         return( "("+c+":"+_v+":"+getValue()+" )" );
@@ -51,7 +64,7 @@ class ComponentValue extends Slot {
 }
 
 class ComponentWidth extends ComponentValue {
-    public function getValue() :Float {
+    function getComponentValue() :Float {
         return c.size.x;
     }
     function setComponentValue( v:Float ) :Void {
@@ -63,7 +76,7 @@ class ComponentWidth extends ComponentValue {
 }
 
 class ComponentHeight extends ComponentValue {
-    public function getValue() :Float {
+    function getComponentValue() :Float {
         return c.size.y;
     }
     function setComponentValue( v:Float ) :Void {
@@ -75,7 +88,7 @@ class ComponentHeight extends ComponentValue {
 }
 
 class ComponentX extends ComponentValue {
-    public function getValue() :Float {
+    function getComponentValue() :Float {
         return c.position.x;
     }
     function setComponentValue( v:Float ) :Void {
@@ -87,7 +100,7 @@ class ComponentX extends ComponentValue {
 }
 
 class ComponentY extends ComponentValue {
-    public function getValue() :Float {
+    function getComponentValue() :Float {
         return c.position.y;
     }
     function setComponentValue( v:Float ) :Void {
