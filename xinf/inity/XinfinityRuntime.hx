@@ -131,6 +131,7 @@ class XinfinityRuntime extends Runtime {
             });
         GLUT.setEntryFunc( function( state:Int ) {
                 self.changed();
+                GLUT.postRedisplay();
             });
         _eventSource.attach();
         
