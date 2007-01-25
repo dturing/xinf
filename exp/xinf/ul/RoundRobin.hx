@@ -33,7 +33,7 @@ interface Settable<T> {
     to display a long list of values (of type T).
 **/
 
-class RoundRobin<T,Item:Settable<T>> extends Pane {
+class RoundRobin<T,Item:Settable<T>> extends xinf.ony.Container<xinf.ony.Object> {
 
     var model:ListModel<T>;
     var createItem:Void->Item;

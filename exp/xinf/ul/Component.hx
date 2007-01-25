@@ -39,14 +39,14 @@ class Component extends xinf.style.StyleClassElement {
     
     public function resize( x:Float, y:Float ) :Void {
         var old = {x:size.x,y:size.y};
-        super.resize(x,y);
         if( constraints!=null ) {
             if( x!=old.x ) {   
-                constraints.getWidth().updateClients(x);
+                constraints.getWidth().setValue(x);
             }
             if( y!=old.y ) {   
                 constraints.getHeight().updateClients(y);
             }
         }
+        super.resize(x,y);
     }
 }

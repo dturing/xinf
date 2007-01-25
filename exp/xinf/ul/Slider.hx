@@ -29,7 +29,7 @@ import xinf.ul.FocusManager;
 
 class Slider extends Widget {
     
-    private var slideBar:Pane;
+    private var slideBar:ComponentContainer<xinf.ony.Object>;
     private var slideThumb:Pane;
     private var label:Label;
     private var button:xinf.style.StyleClassElement;
@@ -84,7 +84,7 @@ class Slider extends Widget {
         button.addStyleClass("Thumb");
         attach( button );
         
-        slideBar = new Pane();//Image(name+"_slide", this, "assets/slider/bg.png");
+        slideBar = new ComponentContainer<xinf.ony.Object>();//Image(name+"_slide", this, "assets/slider/bg.png");
         slideBar.addStyleClass("SliderBar");
 
         slideThumb = new Pane(); //new xinf.ony.Image(name+"_thumb", this, "assets/slider/handle.png");

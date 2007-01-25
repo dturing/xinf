@@ -27,7 +27,7 @@ import xinf.event.ScrollEvent;
     Improvised Vertical Scrollbar element.
 **/
 
-class VScrollbar extends Pane {
+class VScrollbar extends ComponentContainer<Component> {
     
     private var thumb:Pane;
     private var thumbHeight:Float;

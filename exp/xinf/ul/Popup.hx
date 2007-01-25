@@ -30,9 +30,9 @@ class Popup {
     var object:Object;
     var root:Container<Object>;
     
-    public function new( parent:Container<Object>, o:Object, ?popupMode:PopupMode ) :Void {
+    public function new( parent:Object, o:Object, ?popupMode:PopupMode ) :Void {
         object = o;
-        root = parent;
+        root = parent.parent;
         while( root.parent!=null ) {
             root=root.parent;
         }
