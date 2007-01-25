@@ -4,7 +4,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Color;
 import xinf.erno.TextFormat;
 
-class StyleElement extends xinf.ony.Container<xinf.ony.Object> {
+class StyleElement extends xinf.ony.Object {
     
     public var style :Style;
     public var innerSize(default,null):{x:Float,y:Float};

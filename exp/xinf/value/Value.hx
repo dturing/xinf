@@ -2,6 +2,15 @@
 package xinf.value;
 
 class Value {
+    #if debug
+        public static var counter:Int = 0;
+        public static function dumpCounter() :Void {
+            if( counter>0 ) {
+                trace(""+counter+" Value changes propagated" );
+                counter=0;
+            }
+        }
+    #end
     public static var UNSET:Float = null;
     
     public var value(getValue,setValue):Float;
@@ -33,6 +42,9 @@ class Value {
     }
     public function updateClients( ?newValue:Float, ?oldValue:Float ) :Void {
         if( clients==null ) return;
+        #if debug
+            counter+=clients.length;
+        #end
 //        trace("update clients of "+this+": "+clients );
         for( c in clients ) {
             c.operandChanged( this, newValue, oldValue );
@@ -43,11 +55,11 @@ class Value {
     }
     
     
-    public static function sum( a:Value, b:Value ) :Expression {
-        return new Sum(a,b);
+    public static function sum( ?a:Value, ?b:Value, ?c:Value ) :Expression {
+        return new Sum([a,b,c]);
     }
     public static function max( ?a:Value, ?b:Value ) :Expression {
-        return new Max(a,b);
+        return new Max([a,b]);
     }
     public static function minus( a:Value ) :Value {
         return new Negative(a);
@@ -69,7 +81,9 @@ class SimpleValue extends Value {
         return _v;
     }
     public function setValue( v:Float ) :Float {
-        if( v!=_v ) updateClients( v, _v );
+        var old=_v;
+        _v = v;
+        if( v!=old ) updateClients( old, v );
         return _v=v;
     }
     public function set( ?v:Value ) :Void {
@@ -96,6 +110,7 @@ class Slot extends Value {
         return _v.setValue(v);
     }
     public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
+        if( newValue!=null && newValue==oldValue ) return;
         updateClients( newValue, oldValue );
     }
     public function set( ?v:Value ) :Void {
@@ -111,7 +126,7 @@ class Slot extends Value {
         return( "<"+_v );
     }
 }
-
+/*
 class Link extends Value {
     var _v:Value;
     public function new( ?v:Value ) :Void {
@@ -141,7 +156,7 @@ class Link extends Value {
         return( ">"+_v );
     }
 }
-
+*/
 class Negative extends Slot {
     public function new( ?v:Value ) :Void {
         super(v);
@@ -168,7 +183,7 @@ class Scale extends Slot {
         return factor * super.setValue( v/factor );
     }
 }
-
+/*
 class Terminal extends Slot {
     var f:Float->Void;
     public function new( f:Float->Void, ?v:Value ) {
@@ -180,20 +195,18 @@ class Terminal extends Slot {
         return super.setValue(v);
     }
 }
-
+*/
 class Expression extends SimpleValue {
     var operands:List<Value>;
     
-    public function new( ?o:Value, ?p:Value ) {
+    public function new( o:Array<Value> ) {
         super();
         operands = new List<Value>();
-        if( o!=null ) {
-            operands.add(o);
-            o.addClient(this);
-        }
-        if( p!=null ) {
-            operands.add(p);
-            p.addClient(this);
+        for( op in o ) {
+            if( op!=null ) {
+                operands.add(op);
+                op.addClient(this);
+            }
         }
     }
     
@@ -205,6 +218,10 @@ class Expression extends SimpleValue {
         updateClients();
     }
 
+    public function setValue( v:Float ) :Float {
+        throw("Cannot set Expression value");
+        return _v;
+    }
     public function getValue() :Float {
         if( _v==null ) _v = recalc();
         return _v;
@@ -241,8 +258,10 @@ class Sum extends Expression {
     /*
     override public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
         if( newValue!=null && oldValue!=null && _v!=null ) {
-//            trace(""+this+" changed by "+(newValue-oldValue) );
+            trace(""+this+" changed by "+(newValue-oldValue) );
+            var old = _v;
             setValue( _v + (newValue-oldValue) );
+            updateClients(_v,old);
         } else {
 //            trace(""+this+" changed absolutely" );
             super.operandChanged(d,newValue,oldValue);
@@ -262,8 +281,9 @@ class Max extends Expression {
     /*
     override public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
         if( newValue!=null && _v!=null && newValue > _v ) {
-//            trace(""+this+" changed to new max "+_v );
+    //        trace(""+this+" changed to new max "+_v );
             setValue( newValue );
+            updateClients(newValue);
         } else {
 //            trace(""+this+" changed absolutely" );
             super.operandChanged(d,newValue,oldValue);
