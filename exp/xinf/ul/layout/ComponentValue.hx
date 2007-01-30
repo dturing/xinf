@@ -21,8 +21,8 @@ import xinf.ul.Component;
 class ComponentValue extends Slot {
     var c:Component;
     
-    public function new( c:Component ) {
-        super();
+    public function new( c:Component, ?value:Value ) {
+        super(value);
         this.c=c;
     }
     public function getValue() :Float {
@@ -45,7 +45,7 @@ class ComponentValue extends Slot {
     public function operandChanged( d:Value, ?newValue:Float, ?oldValue:Float ) :Void {
         setComponentValue(d.value);
     //    trace("ComponentValue operand changed: "+d+", now: "+d.value );
-        super.operandChanged( d, newValue, oldValue );
+        super.operandChanged( d, getComponentValue(), oldValue );
     }
     public function set( ?v:Value ) :Void {
         super.set(v);
@@ -68,7 +68,7 @@ class ComponentWidth extends ComponentValue {
         return c.size.x;
     }
     function setComponentValue( v:Float ) :Void {
-        c.resize( v, c.size.y );
+        c.resize( Math.max(c.style.get("minWidth",0),v), c.size.y );
     }
     public function toString() :String {
         return( "W"+super.toString() );
@@ -80,7 +80,8 @@ class ComponentHeight extends ComponentValue {
         return c.size.y;
     }
     function setComponentValue( v:Float ) :Void {
-        c.resize( c.size.x, v );
+        c.resize( c.size.x, Math.max(c.style.get("minHeight",0),v) );
+//        c.resize( c.size.x, v );
     }
     public function toString() :String {
         return( "H"+super.toString() );

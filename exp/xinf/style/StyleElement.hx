@@ -13,6 +13,8 @@ class StyleElement extends xinf.ony.Object {
     public function new() :Void {
         super();
         style = StyleSheet.newDefaultStyle();
+        innerPos={x:0,y:0};
+        innerSize={x:0,y:0};
     }
     
 

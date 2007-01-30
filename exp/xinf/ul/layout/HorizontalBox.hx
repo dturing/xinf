@@ -44,9 +44,9 @@ class HorizontalBox extends LayoutContainer {
         }
     }
     
-    public function add( c:Component, align:Float ) :Void {
+    public function add( c:Component, ?a:Float ) :Void {
         attach( c );
-        this.align( c, align );
+        if( a!=null ) this.align( c, a );
     }
     
     override public function attach( c:Component ) :Void {

@@ -40,9 +40,8 @@ class Label extends Pane {
         if( t != _text ) {
             _text = t;
             var s = getStyleTextFormat().textSize(t);
-            if( innerSize==null || s.x!=innerSize.x || s.y != innerSize.y ) {
-                resizeInner( s.x, s.y );
-            }
+            preferredSize.width.value = s.x;
+            preferredSize.height.value = s.y;
             scheduleRedraw();
         }
         return(t);
@@ -54,9 +53,8 @@ class Label extends Pane {
         var font = getStyleTextFormat();
         if( text != null && font!=oldFont ) {
             var s = font.textSize(_text);
-            if( innerSize==null || s.x!=innerSize.x || s.y != innerSize.y ) {
-                resizeInner( s.x, s.y );
-            }
+            preferredSize.width.value = s.x;
+            preferredSize.height.value = s.y;
         }
     }
 
