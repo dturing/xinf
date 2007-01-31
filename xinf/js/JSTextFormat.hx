@@ -43,7 +43,7 @@ class JSTextFormat extends xinf.erno.TextFormat {
         assureLoaded();
         apply( measure ); // FIXME: move to load(), for flash also (assigning the format to measure)?
         measure.innerHTML = text.split("\n").join("<br/>");
-        return {x:measure.offsetWidth,y:measure.offsetHeight};
+        return {x:1.*measure.offsetWidth,y:1.*measure.offsetHeight};
     }
 
     public function load() :Void {

@@ -90,20 +90,20 @@ class Manager {
         var somethingChanged:Bool = false;
         var g:Renderer = Runtime.renderer;
         
-        var ch = changed;
-        changed = new IntHash<Object>();
-        for( id in ch.keys() ) {
-            ch.get(id).draw( g );
-            somethingChanged = true;
-        }
-
         var ch = moved;
         moved = new IntHash<Object>();
         for( id in ch.keys() ) {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
-
+        
+        var ch = changed;
+        changed = new IntHash<Object>();
+        for( id in ch.keys() ) {
+            ch.get(id).draw( g );
+            somethingChanged = true;
+        }
+        
         if( somethingChanged ) Runtime.runtime.changed();
     }
     
