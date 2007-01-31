@@ -21,7 +21,7 @@ import xinf.ony.Object;
     Simple Vertical Box packing element.
 **/
 
-class VBox extends ComponentContainer<xinf.ony.Object> {
+class VBox extends ComponentContainer {
     
     public var padding:Float;
 

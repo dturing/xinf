@@ -22,7 +22,7 @@ import xinf.style.StyleClassElement;
     Simple Pane element.
 **/
 
-class Pane extends Component {
+class Pane extends ComponentContainer {
     
     public var crop:Bool;
     
@@ -30,14 +30,7 @@ class Pane extends Component {
         super();
         crop=false;
     }
-    
-    public function resize( x:Float, y:Float ) :Void {
-        // TODO: layouters need to know size. do this differently.
-//        var w = Math.max( style.get("minWidth",0), x );
-//        var h = Math.max( style.get("minHeight",0), y );
-        super.resize(x,y);
-    }
-        
+            
     public function drawContents( g:Renderer ) :Void {
         if( crop ) // TODO: clip only inner.. how, i dont know.
             g.clipRect( size.x, size.y );

@@ -39,9 +39,7 @@ class Label extends Pane {
     function set_text( t:String ) :String {
         if( t != _text ) {
             _text = t;
-            var s = getStyleTextFormat().textSize(t);
-            preferredSize.width.value = s.x;
-            preferredSize.height.value = s.y;
+            setPrefSize( getStyleTextFormat().textSize(t) );
             scheduleRedraw();
         }
         return(t);
@@ -52,9 +50,7 @@ class Label extends Pane {
         super.applyStyle(s);
         var font = getStyleTextFormat();
         if( text != null && font!=oldFont ) {
-            var s = font.textSize(_text);
-            preferredSize.width.value = s.x;
-            preferredSize.height.value = s.y;
+            setPrefSize( font.textSize(_text) );
         }
     }
 
@@ -62,6 +58,6 @@ class Label extends Pane {
         super.drawContents(g);
     
         setStyleFill( g, "color" );
-        g.text(innerPos.x,innerPos.y,text,getStyleTextFormat());
+        g.text( style.padding.l, style.padding.t, text, getStyleTextFormat() );
     }
 }

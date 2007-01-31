@@ -80,7 +80,8 @@ class ListBox<T> extends Widget {
         scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
         scrollbar.resize( scrollbar.size.x, size.y );
     
-        rr.resize( innerSize.x-scrollbar.size.x, innerSize.y );
+        // FIXME: border, padding?
+        rr.resize( size.x-scrollbar.size.x, innerSize.y );
     }
 
     function scrollBy( value:Float ) {

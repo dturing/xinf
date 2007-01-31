@@ -23,7 +23,7 @@ import xinf.event.MouseEvent;
     Widget base class.
     Takes care of Keyboard Focus.
 **/
-class Widget extends ComponentContainer<xinf.ony.Object> {
+class Widget extends ComponentContainer {
     
     public var focusable:Bool;
 

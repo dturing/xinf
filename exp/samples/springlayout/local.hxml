@@ -12,12 +12,11 @@
 -cp ../../../
 -cp ../../
 -js App.js
+-D debug
 
 --next
 -main App
 -cp ../../
--cp ../../../
--lib cptr
--lib xinfinity-support
--lib opengl
+-lib xinf
+-D debug
 -neko run.n

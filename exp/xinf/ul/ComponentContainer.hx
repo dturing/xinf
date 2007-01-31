@@ -16,26 +16,63 @@
 package xinf.ul;
 
 import xinf.erno.Renderer;
+import xinf.ul.layout.Layout;
+import xinf.event.GeometryEvent;
 
-class ComponentContainer<Child:xinf.ony.Object> extends Pane {
+class ComponentContainer extends Component {
+    var relayoutNeeded:Bool;
+    public var layout:Layout;
     
-    public var children(default,null):Array<Child>;    
+    public var children(default,null):Array<Component>;    
 
     public function new() :Void {
         super();
-        children = new Array<Child>();
+        children = new Array<Component>();
+        relayoutNeeded = true;
     }
     
-    public function attach( child:Child ) :Void {
+    public function attach( child:Component ) :Void {
         children.push( child );
         child.parent = cast(this);
+        relayoutNeeded = true;
+        var l = child.addEventListener( GeometryEvent.PREF_SIZE_CHANGED, onComponentResize );
+        untyped child.__parentSizeListener = l;
         scheduleRedraw();
     }
 
-    public function detach( child:Child ) :Void {
+    public function detach( child:Component ) :Void {
         children.remove( child );
         child.parent = null;
+        child.removeEventListener( GeometryEvent.PREF_SIZE_CHANGED, untyped child.__parentSizeListener );
         scheduleRedraw();
+    }
+
+    function onComponentResize( e:GeometryEvent ) :Void {
+        relayoutNeeded=true;
+        scheduleTransform();
+    }
+    
+    function relayout() :Void {
+        if( relayoutNeeded ) {
+            var oldSize = size;
+            layout.layoutContainer( this );
+            relayoutNeeded = false;
+/*            if( size != oldSize ) {
+                postResizeEvent();
+            }
+*/        }
+    }
+    
+    public function getComponent( index:Int ) :Component {
+        return children[index];
+    }
+    public function getComponents() :Iterator<Component> {
+        return children.iterator();
+    }
+
+    public function reTransform( g:Renderer ) :Void {
+        if( layout!=null && relayoutNeeded ) relayout();
+        super.reTransform( g );
     }
 
     override public function draw( g:Renderer ) :Void {

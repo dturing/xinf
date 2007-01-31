@@ -19,17 +19,27 @@ import xinf.ony.Application;
 import xinf.ul.Pane;
 import xinf.ul.Label;
 
-import xinf.value.Value;
-import xinf.ul.layout.ComponentValue;
-import xinf.ul.layout.HorizontalBox;
+import xinf.ul.layout.SpringLayout;
+import xinf.ul.layout.Constraints;
+import xinf.ul.layout.Spring;
+import xinf.ul.layout.SpringUtilities;
+
+import xinf.erno.Runtime;
+import xinf.event.FrameEvent;
 
 class Test extends Label {
-    
     public function new( t:String ) :Void {
         super( t );
         addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
         addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+    }
+
+    override public function moveTo( x:Float, y:Float ) :Void {
+        super.moveTo(x,y);
+    }
+    override public function drawContents( g:xinf.erno.Renderer ) :Void {
+        super.drawContents( g );
     }
     
     public function onMouseOver( e:MouseEvent ) {
@@ -55,7 +65,7 @@ class App extends Application {
 
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Test" ], {
-                padding: { l:5, t:5, r:5, b:3 },
+                padding: { l:5, t:5, r:5, b:5 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,.5),
                 background: Color.rgba(1,1,1,.3),
@@ -63,67 +73,81 @@ class App extends Application {
             
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Grid" ], {
-                padding: { l:5, t:5, r:5, b:3 },
+                padding: { l:5, t:5, r:5, b:5 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,.5),
                 background: Color.rgba(1,0,0,.5),
             });
         xinf.style.StyleSheet.defaultSheet.add(
             [ "CompactGrid" ], {
-                padding: { l:5, t:5, r:5, b:3 },
+                padding: { l:5, t:5, r:5, b:5 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,.5),
                 background: Color.rgba(0,1,0,.5),
             });
         xinf.style.StyleSheet.defaultSheet.add(
             [ "base" ], {
-                padding: { l:5, t:5, r:5, b:3 },
+                padding: { l:5, t:5, r:5, b:5 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,0),
                 background: Color.rgba(1,0,0,.5),
             });
         xinf.style.StyleSheet.defaultSheet.add(
             [ ":over" ], {
-                padding: { l:5, t:5, r:5, b:3 },
+                padding: { l:5, t:5, r:5, b:5 },
                 color: Color.rgba(1,1,1,1),
                 background: Color.rgba(1,1,1,.4),
             });
             
-/*
-        var xPadding = Value.constant(5);
-        var yPadding = Value.constant(5);
-
-        var c3 = new Pane();
-        c3.moveTo( 20, 20 );
-        c3.resize( 30, 30 );
-        c3.addStyleClass("base");
-        var x:Value = xPadding;
-        var y:Value = yPadding;
-        for( t in ["one","two","three"] ) { //,"four","five","six","seven","eight","nine","ten"] ) {
-            var p = new Test(t);
-            p.constraints.setX( x );
-            p.constraints.setY( y );
-//            trace("Test("+t+").constraints: "+p.constraints);
-            x = Value.sum( xPadding, p.constraints.getEast() );
-            y = Value.sum( yPadding, p.constraints.getSouth() );
-            c3.attach(p);
-        }
-        c3.constraints.setWidth( x );
-        c3.constraints.setHeight( y );
-        trace("base constraints: "+c3.constraints );
-        root.attach(c3);
-*/
-        var c = new HorizontalBox();
-        c.resize( 10, 2 );
+        var c = new Pane();
         c.addStyleClass("base");
-        var align=0.;
-        for( t in ["one","two","three"] ) { //,"four","five","six","seven","eight","nine","ten"] ) {
+        c.resize(100,100);
+        c.moveTo(10,10);
+        
+        var p1 = new Test("one");
+        //p1.resize(70,20);
+
+        var p2 = new Test("twoonetwo");
+        //p2.resize(50,50);
+/*
+        for( t in ["two","three","four","five","six","seven","eight","nine"] ) {
             var p = new Test(t);
-            c.add(p,align);
-            align+=.5;
+            p.resize(20,15);
+            c.attach(p);
         }
-        c.moveTo( 20, 20 );
+*/
+
+        var l = new SpringLayout();
+        c.layout = l;
+        
+        var pad = Spring.constant(1);
+        l.putConstraint( West, p1, pad, West, c );
+        l.putConstraint( North, p1, pad, North, c );
+        l.putConstraint( West, p2, pad, East, p1 );
+        l.putConstraint( North, p2, pad, South, p1 );
+        l.putConstraint( East, c, pad, East, p2 );
+        l.putConstraint( South, c, pad, South, p2 );
+
+        /*
+        l.getConstraints( p1 ).setWidth( 
+            Spring.max(
+                new WidthSpring(p1),
+                l.getConstraints( p2 ).getWidth()
+            ) );
+        */
+        //SpringUtilities.makeCompactGrid( c, l, 3, 3, 5, 20, 5, 5 );
+            
+        c.attach(p2);
+        c.attach(p1);
+        
         root.attach(c);
+
+        
+        #if debug
+            xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function( e ) {
+                    xinf.value.Value.dumpCounter();
+                } );
+        #end
     }
     
     public static function main() :Void {

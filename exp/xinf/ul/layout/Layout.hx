@@ -17,20 +17,7 @@ package xinf.ul.layout;
 
 import xinf.ul.Component;
 import xinf.ul.ComponentContainer;
-import xinf.ul.Pane;
-import xinf.value.Value;
 
-class LayoutContainer extends ComponentContainer<Component> {
-    var spacing :{ h:Value, v:Value };
-    
-    public function new() :Void {
-        spacing = {
-            h:Value.constant(3),
-            v:Value.constant(3)
-            };
-        super();
-    }
-    
-    public function layout() :Void {
-    }
+interface Layout {
+    function layoutContainer( p:ComponentContainer ) :Void;
 }

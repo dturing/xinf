@@ -16,59 +16,51 @@
 package xinf.ul;
 
 import xinf.ony.Object;
-import xinf.ony.Container;
-import xinf.ul.layout.LayoutConstraints;
-import xinf.ul.layout.ComponentValue;
-import xinf.value.Value;
 import xinf.style.Style;
 import xinf.event.GeometryEvent;
 
 class Component extends xinf.style.StyleClassElement {
-    var pad :{ l:Value, t:Value, r:Value, b:Value };
-    var preferredSize :{ width:Value, height:Value };
-    
-    public var constraints(getConstraints,null):LayoutConstraints;
-    public function getConstraints() :LayoutConstraints {
-        if( constraints==null ) {
-            constraints = new LayoutConstraints(    
-                new ComponentX(this), new ComponentY(this),
-                new ComponentWidth(this,Value.sum(preferredSize.width,pad.l,pad.r)), 
-                new ComponentHeight(this,Value.sum(preferredSize.height,pad.l,pad.r)) );
-        }
-        return constraints;
-    }
-    
-    public function new() {
-        preferredSize = {
-            width:Value.constant(0),
-            height:Value.constant(0)
-            };
-        pad = { 
-            l:Value.constant(0),
-            t:Value.constant(0),
-            r:Value.constant(0),
-            b:Value.constant(0) };
+    public var prefSize(getPrefSize,null):{x:Float,y:Float};
+    var _prefSize:{x:Float,y:Float};
+
+    public function new() :Void {
         super();
+        _prefSize = { x:.0, y:.0 };
     }
 
-    override public function applyStyle( s:Style ) :Void {
-        super.applyStyle(s);
-        pad.l.value = s.padding.l+s.border.l;
-        pad.t.value = s.padding.t+s.border.t;
-        pad.r.value = s.padding.r+s.border.r;
-        pad.b.value = s.padding.b+s.border.b;
+    public function getPrefSize() :{x:Float,y:Float} {
+        return( _prefSize );
     }
-
-    public function resize( x:Float, y:Float ) :Void {
-        var old = {x:size.x,y:size.y};
-        super.resize(x,y);
-        if( constraints!=null ) {
-            if( x!=old.x ) {   
-                constraints.getWidth().setValue(x);
-            }
-            if( y!=old.y ) {   
-                constraints.getHeight().setValue(y);
-            }
+    
+    public function setPrefSize( s:{x:Float,y:Float} ) :{x:Float,y:Float} {
+        if( _prefSize==null || s.x!=_prefSize.x || s.y!=_prefSize.y ) {
+            _prefSize = s;
+            postEvent( new GeometryEvent( GeometryEvent.PREF_SIZE_CHANGED, size.x, size.y ) );
         }
+        return( _prefSize );
     }
+
+    /* maybe...
+    public function getMinimumSize() :{x:Float,y:Float} {
+        return( {x:0.,y:0.} );
+    }
+    public function getMaximumSize() :{x:Float,y:Float} {
+        return( {x:Math.POSITIVE_INFINITY,y:Math.POSITIVE_INFINITY} );
+    }
+    override public function resize( x:Float, y:Float ) :Void {
+        super.resize( x, y );
+        
+        innerSize = {
+            x:x - (style.padding.l+style.padding.r+style.border.l+style.border.r),
+            y:y - (style.padding.t+style.padding.b+style.border.t+style.border.b) };
+        innerPos = {
+            x:style.padding.l+style.border.l,
+            y:style.padding.t+style.border.t };
+    }
+    public function resizeInner( x:Float, y:Float ) :Void {
+        resize( x + style.padding.l+style.padding.r + style.border.l+style.border.r, 
+                y + style.padding.t+style.padding.b + style.border.t+style.border.b );
+    }
+    */
+
 }
