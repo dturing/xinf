@@ -130,16 +130,15 @@ class SpringLayout implements Layout {
         return new DeferredSpring( this, edge, o );
     }
     
-    public function getConstraints( o:Object ) :Constraints {
-        var comp = cast(o,Component);
-        var c:Constraints = index.get( o._id );
+    public function getConstraints( comp:Component ) :Constraints {
+        var c:Constraints = index.get( comp._id );
         if( c==null ) {
             c = new Constraints();
             c.setWidth( new WidthSpring(comp) );
             c.setHeight( new HeightSpring(comp) );
             c.setX( Spring.constant(0) );
             c.setY( Spring.constant(0) );
-            index.set( o._id, c );
+            index.set( comp._id, c );
         }
         return c;
     }
@@ -186,8 +185,6 @@ class SpringLayout implements Layout {
         var y = cs.getY().getValue();
         var width = cs.getWidth().getValue();
         var height = cs.getHeight().getValue();
-        //trace("Layout Self "+p+": "+x+","+y+"-"+width+"x"+height );
-        //p.moveTo(x,y);
         p.setPrefSize({x:width,y:height});
     }
     

@@ -5,8 +5,10 @@ import xinf.ul.ComponentContainer;
 import xinf.ul.layout.SpringLayout;
 
 class SpringUtilities {
-    public static function makeGrid( parent:ComponentContainer, layout:SpringLayout,
+    public static function makeGrid( parent:ComponentContainer,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
+        var layout = new SpringLayout();
+        parent.layout = layout;
         
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
@@ -63,8 +65,10 @@ class SpringUtilities {
         pCons.setSouth( Spring.sum( new BottomSpring(parent), lastCons.getSouth() ) );
     }
 
-    public static function makeCompactGrid( parent:ComponentContainer, layout:SpringLayout,
+    public static function makeCompactGrid( parent:ComponentContainer,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
+        var layout = new SpringLayout();
+        parent.layout = layout;
         
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
@@ -74,12 +78,16 @@ class SpringUtilities {
         for( c in 0...cols ) {
             var width = Spring.constant(0);
             for( r in 0...rows ) {
-                var cons = layout.getConstraints( parent.getComponent( (r*cols)+c ) );
+                var comp = parent.getComponent( (r*cols)+c );
+                if( comp==null ) throw("Container does not contain enough components for "+cols+"x"+rows+", only "+parent.children.length );
+                var cons = layout.getConstraints( comp );
                 width = Spring.max( width,
                         cons.getWidth() );
             }
             for( r in 0...rows ) {
-                var cons = layout.getConstraints( parent.getComponent( (r*cols)+c ) );
+                var comp = parent.getComponent( (r*cols)+c );
+                if( comp==null ) throw("Container does not contain enough components for "+cols+"x"+rows );
+                var cons = layout.getConstraints( comp );
                 cons.setX(x);
                 cons.setWidth(width);
             }
