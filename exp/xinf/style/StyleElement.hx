@@ -15,12 +15,10 @@ class StyleElement extends xinf.ony.Object {
     
 
     public function applyStyle( s:Style ) {
-        style = s;
-        
-        // resize to same inner size, in case padding has changed
-// FIXME        if( innerSize!=null ) resizeInner(innerSize.x,innerSize.y);
-        
-        scheduleRedraw();
+        if( s!=style ) {
+            style = s;
+            scheduleRedraw();
+        }
     }
     
     public function setStyleStroke( g:Renderer, width:Float, colorProperty:String, ?colorFallback:Color ) :Void {
@@ -41,5 +39,16 @@ class StyleElement extends xinf.ony.Object {
 
     public function getStyleTextFormat() :TextFormat {
         return style.get("font",TextFormat.getDefault() );
+    }
+    
+    public function removePadding( t:{x:Float,y:Float} ) :{x:Float,y:Float} {
+        if( style==null ) return t;
+        return({ x: t.x - (style.padding.l+style.padding.r + style.border.l+style.border.r),
+                 y: t.y - (style.padding.t+style.padding.b + style.border.t+style.border.b) });
+    }
+    public function addPadding( t:{x:Float,y:Float} ) :{x:Float,y:Float} {
+        if( style==null ) return t;
+        return({ x: t.x + (style.padding.l+style.padding.r + style.border.l+style.border.r), 
+                 y: t.y + (style.padding.t+style.padding.b + style.border.t+style.border.b) });
     }
 }
