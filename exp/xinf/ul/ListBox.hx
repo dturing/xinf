@@ -23,6 +23,7 @@ import xinf.event.SimpleEvent;
 import xinf.ul.RoundRobin;
 
 class ListItem<T> extends Label, implements Settable<T> {
+
     var value:T;
     
     public function new( ?value:T ) :Void {
@@ -35,12 +36,14 @@ class ListItem<T> extends Label, implements Settable<T> {
         this.text = if( value==null ) "" else ""+value;
     }
     
-    public function attachTo( parent:xinf.ony.Container<xinf.ony.Object> ) :Void {
+    public function attachTo( parent:ComponentContainer ) :Void {
         parent.attach(this);
     }
 }
 
+
 class ListBox<T> extends Widget {
+
     var model:ListModel<T>;
     var rr:RoundRobin<T,Settable<T>>;
     var scrollbar:VScrollbar;
@@ -50,8 +53,6 @@ class ListBox<T> extends Widget {
     public function new( model:ListModel<T>, ?createItem:Void->Settable<T> ) :Void {
         super();
         this.model = model;
-        crop=true;
-        
         if( createItem==null ) {
             createItem = function() :Settable<T> {
                 return new ListItem<T>();
@@ -81,7 +82,7 @@ class ListBox<T> extends Widget {
         scrollbar.resize( scrollbar.size.x, size.y );
     
         // FIXME: border, padding?
-        rr.resize( size.x-scrollbar.size.x, innerSize.y );
+        rr.resize( size.x-scrollbar.size.x, style.padding.t );
     }
 
     function scrollBy( value:Float ) {
@@ -106,7 +107,7 @@ class ListBox<T> extends Widget {
     }
     
     function entryClicked( e:MouseEvent ) :Void {
-        var y = globalToLocal( { x:e.x, y:e.y }).y;
+        var y = globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
         var i = rr.indexAt( y );
         setCursor( i );
         sendPickEvent();

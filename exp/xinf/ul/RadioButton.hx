@@ -39,9 +39,6 @@ class RadioButton<Value> extends CheckBox<Value>, implements ISelectable {
 	}
 	
 	public function drawContents( g:Renderer ) :Void {
-    	if( crop )
-        	g.clipRect( size.x-2, size.y-2 );
-            
         var sizeR:Float = Math.min( size.x, size.y ) / 2;
         var r:Float = style.get("selectorWidth", 12) / 2;
 
@@ -55,9 +52,8 @@ class RadioButton<Value> extends CheckBox<Value>, implements ISelectable {
 	    	g.circle( sizeR, sizeR, r/2 );
 		}
 
-        setStyleFont(g);
         setStyleFill(g,"color");
-        g.text(style.padding.l+(sizeR*2)+style.padding.l,style.padding.t,text);
+        g.text(style.padding.l+(sizeR*2)+style.padding.l,style.padding.t,text,getStyleTextFormat());
     }
 	
 	public static function createSimple( grp:RadioButtonGroup<Value>, text:String, f:ValueEvent<Value>->Void, value:Value ) :RadioButton<Value> {

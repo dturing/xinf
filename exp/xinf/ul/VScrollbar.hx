@@ -40,7 +40,7 @@ class VScrollbar extends ComponentContainer {
         thumb = new xinf.ul.Pane();
         thumb.addStyleClass("Thumb");
         thumb.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
-        thumb.size={x:12.,y:12.};
+        thumb.resize(12,12);
         attach(thumb);
         
         thumbHeight = thumb.size.y;
@@ -49,7 +49,7 @@ class VScrollbar extends ComponentContainer {
     }
 
     public function clickBar( e:MouseEvent ) {
-        var y = globalToLocal( { x:e.x, y:e.y }).y;
+        var y = globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
         
         var delta:Int;
         if( y > thumb.position.y+thumb.size.y ) delta = 1;

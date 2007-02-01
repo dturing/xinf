@@ -3,7 +3,7 @@ package xinf.ul;
 
 interface Settable<T> {
     function set( ?value:T ) :Void;
-    function attachTo( parent:xinf.ony.Container<xinf.ony.Object> ) :Void;
+    function attachTo( parent:ComponentContainer ) :Void;
 
     function moveTo( x:Float, y:Float ) :Void;
     function resize( x:Float, y:Float ) :Void;
@@ -24,8 +24,6 @@ interface Settable<T> {
     |_6   
 
   n:5
-  
-  rrsize (n) is 
 */
 
 /**
@@ -33,7 +31,7 @@ interface Settable<T> {
     to display a long list of values (of type T).
 **/
 
-class RoundRobin<T,Item:Settable<T>> extends xinf.ony.Container<xinf.ony.Object> {
+class RoundRobin<T,Item:Settable<T>> extends ComponentContainer {
 
     var model:ListModel<T>;
     var createItem:Void->Item;

@@ -65,7 +65,9 @@ class WidthSpring extends SimpleSpring {
     }
     public function getPref() :Float {
         // FIXME: border?
-        return c.prefSize.x+(c.style.padding.l+c.style.padding.r);
+        return Math.max(
+                c.prefSize.x+(c.style.padding.l+c.style.padding.r),
+                c.style.get("minWidth",0.) );
     }
     public function getMax() :Float {
         return Spring.MAX;
@@ -78,7 +80,9 @@ class WidthSpring extends SimpleSpring {
 class HeightSpring extends WidthSpring {
     override public function getPref() :Float {
         // FIXME: border?
-        return c.prefSize.y+(c.style.padding.t+c.style.padding.b);
+        return Math.max(
+                c.prefSize.y+(c.style.padding.t+c.style.padding.b),
+                c.style.get("minHeight",0.) );
     }
     override public function toString() :String {
         return("H("+c+":"+getPref()+")");

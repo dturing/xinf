@@ -20,24 +20,33 @@ import xinf.style.Style;
 import xinf.event.GeometryEvent;
 
 class Component extends xinf.style.StyleClassElement {
+    public var __parentSizeListener:Dynamic;
+
     public var prefSize(getPrefSize,null):{x:Float,y:Float};
     var _prefSize:{x:Float,y:Float};
 
     public function new() :Void {
-        super();
         _prefSize = { x:.0, y:.0 };
+        super();
     }
 
     public function getPrefSize() :{x:Float,y:Float} {
         return( _prefSize );
     }
     
-    public function setPrefSize( s:{x:Float,y:Float} ) :{x:Float,y:Float} {
+    public function setPrefSize( n:{x:Float,y:Float} ) :{x:Float,y:Float} {
+        var s = addPadding(n);
         if( _prefSize==null || s.x!=_prefSize.x || s.y!=_prefSize.y ) {
             _prefSize = s;
             postEvent( new GeometryEvent( GeometryEvent.PREF_SIZE_CHANGED, size.x, size.y ) );
         }
         return( _prefSize );
+    }
+
+    override public function applyStyle( s:Style ) {
+        var p = removePadding( _prefSize );
+        super.applyStyle(s);
+        setPrefSize( p );
     }
 
     /* maybe...

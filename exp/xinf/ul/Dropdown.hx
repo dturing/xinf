@@ -37,7 +37,7 @@ class Dropdown extends Widget {
     private var model:ListModel<T>;
     
     private var label:Label;
-    private var button:xinf.style.StyleClassElement;
+    private var button:Component;
     private var menu:ListBox<String>;
     
     private var selectedIndex:Int;
@@ -83,7 +83,7 @@ class Dropdown extends Widget {
         menu.assureVisible( selectedIndex );
         menu.setCursor( selectedIndex );
         
-        var p = localToGlobal( {x:5, y:size.y } );
+        var p = localToGlobal( {x:5., y:size.y } );
         menu.moveTo( p.x, p.y );
         menu.resize( size.x-5, size.y*5 );
         

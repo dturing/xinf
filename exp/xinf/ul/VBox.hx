@@ -29,7 +29,7 @@ class VBox extends ComponentContainer {
         super();
     }
     
-    public function relayout() :Void {
+    public function dolayout() :Void {
     	
         var pad = style.padding;
         if( pad==null ) pad = { l:0., t:0., r:0., b:0. };
@@ -63,14 +63,14 @@ class VBox extends ComponentContainer {
         */
     }
     
-    public function attach( child:Object ) :Void {
+    public function attach( child:Component ) :Void {
         super.attach(child);
-        relayout();
+        dolayout();
     }
     
     public function resize( x:Float, y:Float ) :Void {
         super.resize(x,y);
-        relayout();
+        dolayout();
     }
     
 }

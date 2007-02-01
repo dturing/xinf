@@ -100,7 +100,7 @@ class LineEdit extends Widget {
     }
 
     private function onMouseDown( e:MouseEvent ) :Void {
-        var p = globalToLocal( {x:e.x, y:e.y } );
+        var p = globalToLocal( {x:1.*e.x, y:1.*e.y } );
         p.x += (xOffset-style.padding.l);
         moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
         new Drag<Float>( e, dragSelect, null, e.x );
@@ -197,11 +197,11 @@ class LineEdit extends Widget {
         }
 
 
-        var fontSize:Float = style.get("fontSize",11);
-            
-        var gl = cast(g,GLRenderer);
-        font = gl.font;
-        
+        var format = getStyleTextFormat();
+        var selStart = format.textSize( text.substr(0,sel.from) ).x;
+        var selEnd = selStart + format.textSize( text.substr(sel.from,sel.to-sel.from) ).x;
+        var textSize = format.textSize( text );
+        /*
         // calc selection background
         var selStart:Float = 0;
         var selEnd:Float = 0;
@@ -218,6 +218,7 @@ class LineEdit extends Widget {
                 }
             }
         }
+        */
 
         
         // "ScrollIntoView" - FIXME you can do better, no?
@@ -229,11 +230,11 @@ class LineEdit extends Widget {
         if( c > size.x-d ) {
             xOffset += c - (size.x-d);
         }
-        if( xOffset != 0 && (x-xOffset) < size.x-d ) {
-            if( x < size.x-d ) {
+        if( xOffset != 0 && (textSize.x-xOffset) < size.x-d ) {
+            if( textSize.x < size.x-d ) {
                 xOffset=0;
             } else {
-                xOffset -= ((size.x-d) - (x-xOffset));
+                xOffset -= ((size.x-d) - (textSize.x-xOffset));
             }
         }
         if( xOffset<0 ) xOffset=0;
@@ -255,13 +256,10 @@ class LineEdit extends Widget {
                 g.setStroke( 0,0,0,0,0 );
                 
                 var x=selStart-1.5; var y=-.5; 
-                var w=selEnd-.5; var h=Math.ceil((font.height*fontSize)+.5)-.5;
+                var w=selEnd-.5; var h=Math.ceil(textSize.y+.5)-.5;
                 g.rect( xofs+x, yofs+y, w-x,h-y );
             }
             
-            
-            g.setFill( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
-            g.setFont( style.get("fontFamily","_sans"), false, false, fontSize );
             
             // setup styles for selection foreground
             var styles = new FontStyle();
@@ -270,7 +268,8 @@ class LineEdit extends Widget {
                 styles.push( { pos:Math.round(Math.max(sel.to,sel.from)), color:fgColor } );
             }
             
-            g.text( xofs, yofs, text ); // FIXME, styles );
+            g.setFill( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
+            g.text( xofs, yofs, text, format ); // FIXME, styles );
             
     }
 }

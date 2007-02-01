@@ -34,7 +34,6 @@ class CheckBox<Value> extends Button<Value> {
 	public function new( ?initialText:String, ?value:Value ) :Void {
 		super( initialText, value );
 		selected = false;
-		crop = true;
 		addEventListener( Button.PRESS, onPress );
 	}
 /*	
@@ -52,9 +51,6 @@ class CheckBox<Value> extends Button<Value> {
     }
     
     public function drawContents( g:Renderer ) :Void {
-    	if( crop )
-        	g.clipRect( size.x-2, size.y-2 );
-            
         var sizeW:Float = Math.min( size.x, size.y );
         var w:Float = Math.min( style.get("selectorWidth", 10), sizeW );
         
@@ -83,9 +79,8 @@ class CheckBox<Value> extends Button<Value> {
             #end
     	}
 
-        setStyleFont(g);
         setStyleFill(g,"color");
-        g.text(style.padding.l+sizeW+style.padding.l,style.padding.t,text);
+        g.text(style.padding.l+sizeW+style.padding.l,style.padding.t,text,getStyleTextFormat());
     }
    
     public static function createSimple( text:String, f:ValueEvent<Value>->Void, ?value:Value ) :CheckBox<Value> {

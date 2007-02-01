@@ -36,14 +36,14 @@ class ComponentContainer extends Component {
         child.parent = cast(this);
         relayoutNeeded = true;
         var l = child.addEventListener( GeometryEvent.PREF_SIZE_CHANGED, onComponentResize );
-        untyped child.__parentSizeListener = l;
+        child.__parentSizeListener = l;
         scheduleRedraw();
     }
 
     public function detach( child:Component ) :Void {
         children.remove( child );
         child.parent = null;
-        child.removeEventListener( GeometryEvent.PREF_SIZE_CHANGED, untyped child.__parentSizeListener );
+        child.removeEventListener( GeometryEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
         scheduleRedraw();
     }
 

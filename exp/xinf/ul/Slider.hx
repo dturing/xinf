@@ -32,7 +32,7 @@ class Slider extends Widget {
     private var slideBar:ComponentContainer;
     private var slideThumb:Pane;
     private var label:Label;
-    private var button:xinf.style.StyleClassElement;
+    private var button:Component;
     private var popup:Popup;
     
     public var precision:Float;

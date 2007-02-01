@@ -80,9 +80,8 @@ class Button<Value> extends Widget {
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
     
-        setStyleFont( g );
         setStyleFill( g, "color" );
-        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
+        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text,getStyleTextFormat());
     }
 
     public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {

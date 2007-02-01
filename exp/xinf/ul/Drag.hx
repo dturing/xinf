@@ -30,7 +30,7 @@ class Drag<T> {
     private var offset:{ x:Float, y:Float };
     
     public function new( e:MouseEvent, ?move:Float->Float->T->Void, ?end:Void->Void, ?marker:T ) :Void {
-        offset = { x:e.x, y:e.y };
+        offset = { x:1.*e.x, y:1.*e.y };
         this.end=end;
         this.move=move;
         this.marker=marker;
