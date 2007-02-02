@@ -96,16 +96,20 @@ class Object extends SimpleEventDispatcher {
         Schedules a [reTransform()]. Moving Objects should be pretty
         efficient on all runtimes. **/
     public function moveTo( x:Float, y:Float ) :Void {
-        position = { x:x, y:y };
-        scheduleTransform();
+        if( x!=position.x || y!=position.y ) {
+            position = { x:x, y:y };
+            scheduleTransform();
+        }
     }
 
     /** resize this Object<br/>
         Sets new [size] and schedules a re-[draw()] of the Object.
         **/
     public function resize( x:Float, y:Float ) :Void {
-        size = { x:x, y:y };
-        scheduleRedraw();
+        if( x!=size.x || y!=size.y ) {
+            size = { x:x, y:y };
+            scheduleRedraw();
+        }
     }
 
     /** apply new transformation (position)<br/>
