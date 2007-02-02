@@ -11,7 +11,7 @@ class DLLLoader {
             
             switch( neko.Sys.systemName() ) {
                 case "Windows":
-                    var libPath = neko.Sys.getEnv("HAXEPATH")+"\\lib\\"+lib;
+                    var libPath = neko.Sys.getEnv("HAXEPATH")+"\\lib\\xinf";
                     var version = neko.io.File.getContent( libPath+"\\.current" );
                     version = version.split(".").join(",");
                     libPath += "\\"+version+"\\ndll\\Windows";

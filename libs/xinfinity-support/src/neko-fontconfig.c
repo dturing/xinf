@@ -60,7 +60,7 @@ value fcFindFont( value _familyName, value _weight, value _slant, value _size ) 
     
 	FcPattern *pattern;
     
-	pattern = FcNameParse( familyName );
+	pattern = FcNameParse( (FcChar8*)familyName );
 
 	FcDefaultSubstitute( pattern );
 	FcConfigSubstitute( FcConfigGetCurrent(), pattern, FcMatchPattern );
@@ -79,7 +79,7 @@ value fcFindFont( value _familyName, value _weight, value _slant, value _size ) 
 	    FcPatternGetInteger( pattern, FC_INDEX, 0, &id ) != FcResultMatch ) {
 		val_throw(alloc_string("Could not load font"));
 	}
-	value ret = alloc_string(temp);
+	value ret = alloc_string((const char *)temp);
 	
 	FcPatternDestroy( pattern );
 	FcPatternDestroy( match );
@@ -113,7 +113,7 @@ value fcListFonts( value v_add ) {
 	//		FcPatternPrint( font );
 	
 			value arg[4] = {
-				alloc_string(familyName), alloc_string(style),
+				alloc_string((const char *)familyName), alloc_string((const char *)style),
 				alloc_int(weight), alloc_int(slant)
 			};
 			

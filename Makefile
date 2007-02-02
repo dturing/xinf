@@ -102,6 +102,7 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 	$(foreach LIB, $(LIBS), \
 		$(foreach API, $(wildcard libs/$(LIB)/api/*), \
 			svn --force export $(API) $(HAXELIB_PROJECT)/$(notdir $(API)); )\
+		cp libs/$(LIB)/bin/Windows/*.dll $(HAXELIB_PROJECT)/ndll/Windows/; \
 		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
 			cp libs/$(LIB)/bin/$(LIB).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 			cp libs/$(LIB)/bin/$(PLATFORM)/$(LIB).ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \

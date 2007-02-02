@@ -18,6 +18,7 @@ import xinf.event.FrameEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
+import xinf.erno.TextFormat;
 import xinf.geom.Types;
 import xinf.geom.Matrix;
 
@@ -246,7 +247,7 @@ class Info extends RenderTest {
         
         if( textSize==null ) {
             g.setFill( 1, 1, 1, 1 );
-            g.text( 0, 0, "xinferno "+xinf.Version.version, onSizeKnown );
+            g.text( 0, 0, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
         } else {
             var ofs = { x:(size.x-textSize.x)/2, y:(size.y-textSize.y)/2 };
         
@@ -255,7 +256,7 @@ class Info extends RenderTest {
             g.rect( ofs.x, ofs.y, textSize.x, textSize.y );
             
             g.setFill( 1, 1, 1, 1 );
-            g.text( ofs.x, ofs.y, "xinferno "+xinf.Version.version );
+            g.text( ofs.x, ofs.y, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
         }
     }
 
@@ -305,13 +306,13 @@ class App {
     }
     
     public static function main() :Void {
+    
         try {
             var g:Renderer = Runtime.renderer;
             
             renderTestCard( g, { x:320., y:240. } );
 
             Runtime.runtime.run();
-        
         /* direct renderer -- use .renderDirect, above
             renderTestCard( g, { x:320., y:240. } );
         //    untyped g.writeToPNG("/tmp/test.png");

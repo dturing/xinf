@@ -19,7 +19,7 @@ ifeq ($(NEKO_PLATFORM),Mac)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/freetype2 -I/opt/mingw/include/gtk-2.0 -I/opt/mingw/include/glib-2.0 -I/opt/mingw/lib/glib-2.0/include
-		PROJECT_LIBS:=-lfreetype -lgobject-2.0 -lgdk_pixbuf-2.0
+		PROJECT_LIBS:=-lfreetype -lfontconfig -lgobject-2.0 -lgdk_pixbuf-2.0
 	else
 		PROJECT_CFLAGS:=${shell freetype-config --cflags} ${shell pkg-config --cflags fontconfig} ${shell pkg-config --cflags gdk-pixbuf-2.0}
 		PROJECT_LIBS:=${shell freetype-config --libs} ${shell pkg-config --libs fontconfig} ${shell pkg-config --libs gdk-pixbuf-2.0}

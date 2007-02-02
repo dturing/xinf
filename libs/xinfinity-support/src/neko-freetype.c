@@ -111,7 +111,7 @@ void importGlyphPoints( FT_Vector *points, int n, value callbacks, field lineTo,
         val_ocallN( callbacks, curveTo, arg, 4 );
 	} else if( n>=2	) {
 		if( cubic ) {
-			fprintf(stderr,"ERROR: cubic beziers in fonts are not yet implemented.\n");
+			// printf(stderr,"ERROR: cubic beziers in fonts are not yet implemented.\n");
 		} else {
 			int x1, y1, x2, y2, midx, midy;
 			for( i=0; i<n-1; i++ ) { 
@@ -142,11 +142,13 @@ value ftIterateGlyphs( value font, value callbacks ) {
     if( !val_is_object(callbacks) ) {
         ft_failure_v("not a callback function object: ", callbacks );
     }
+// printf("A\n");
     field endGlyph = val_id("endGlyph");
     field startContour = val_id("startContour");
     field endContour = val_id("endContour");
     field lineTo = val_id("lineTo");
     field curveTo = val_id("curveTo");
+// printf("B\n");
     
     if( !val_is_object(font) ) {
         ft_failure_v("not a freetype font face: ", font );
@@ -156,6 +158,7 @@ value ftIterateGlyphs( value font, value callbacks ) {
         ft_failure_v("not a freetype font face: ", font );
     }
     FT_Face *face = val_data( __f );
+// printf("C\n");
 
 	FT_UInt glyph_index;
 	FT_ULong character;
@@ -165,6 +168,8 @@ value ftIterateGlyphs( value font, value callbacks ) {
     field f_advance = val_id("advance");
     
     character = FT_Get_First_Char( *face, &glyph_index );
+
+// printf("D\n");
     while( character != 0 ) {
         if( FT_Load_Glyph( *face, glyph_index, FT_LOAD_NO_BITMAP ) ) {
             // ignore (TODO report?)
@@ -175,6 +180,7 @@ value ftIterateGlyphs( value font, value callbacks ) {
 		    int start = 0, end, contour, p;
 		    char control, cubic;
 		    int n,i;
+// printf("  1\n");
 		    for( contour = 0; contour < outline->n_contours; contour++ ) {
 			    end = outline->contours[contour];
 			    n=0;
@@ -216,11 +222,16 @@ value ftIterateGlyphs( value font, value callbacks ) {
                 val_ocall0( callbacks, endContour );
 		    }
 
+// printf("  2\n");
             val_ocall2( callbacks, endGlyph, alloc_int( character ), alloc_int( (*face)->glyph->advance.x ) );
+// printf("  3\n");
         }
+// printf("  E\n");
         character = FT_Get_Next_Char( *face, character, &glyph_index );
+// printf("  F\n");
     }
     
+// printf("  Goo\n");
     return val_true;
 }
 DEFINE_PRIM(ftIterateGlyphs,2);

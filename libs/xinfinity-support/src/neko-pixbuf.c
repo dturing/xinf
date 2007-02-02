@@ -3,6 +3,7 @@
 #include <neko/neko.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct _cptr {
     int size;
