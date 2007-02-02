@@ -113,12 +113,10 @@ class JSEventSource {
 
     private function findTarget( e:js.Event ) :Int {
         var targetNode:js.HtmlDom = e.target;
-        var targetId:Int = untyped targetNode.xinfId;
-        while( targetId == null && targetNode.parentNode != null ) {
+        while( untyped targetNode.xinfId == null && targetNode.parentNode != null ) {
             targetNode = targetNode.parentNode;
-            if( targetNode != null ) targetId = untyped targetNode.xinfId;
         }
-        return targetId;
+        return untyped targetNode.xinfId;
     }
     
     private function postMouseEvent( e:js.Event, type:EventKind<MouseEvent> ) :Bool {
