@@ -145,16 +145,15 @@ class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
         moveTo( 15*(d.depth+1), position.y );
     }
     
-    public function attachTo( parent:xinf.ony.Object ) :Void {
+    public function attachTo( parent:ComponentContainer ) :Void {
         parent.attach(this);
     }
     
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
     
-        setStyleFont( g );
         setStyleFill( g, "color" );
-        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text);
+        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text,getStyleTextFormat());
         
         if( node!=null && node.firstChild != null ) {
             var h = size.y/3;

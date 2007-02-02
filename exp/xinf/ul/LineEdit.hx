@@ -162,8 +162,10 @@ class LineEdit extends Widget {
     }
 
     public function findIndex( p:TPoint ) :Int {
+        var format = getStyleTextFormat();
+        var font = format.font;
         if( font==null ) throw("Font unknown as yet");
-        var fontSize:Float = style.get("fontSize",11);
+        var fontSize:Float = format.size;
         
         var x:Float=0;
         var i:Int=0;

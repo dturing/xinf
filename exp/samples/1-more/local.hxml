@@ -1,20 +1,17 @@
 -main App
--cp ../../../
+-lib xinf
 -cp ../../
 -swf-version 9
 -swf App.swf
 
 --next
 -main App
--cp ../../../
+-lib xinf
 -cp ../../
 -js App.js
 
 --next
 -main App
 -cp ../../
--cp ../../../
--lib cptr
--lib xinfinity-support
--lib opengl
+-lib xinf
 -neko run.n

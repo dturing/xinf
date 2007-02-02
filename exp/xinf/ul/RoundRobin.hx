@@ -57,7 +57,7 @@ class RoundRobin<T,Item:Settable<T>> extends ComponentContainer {
         
         this.unit = if( unit==null ) 20 else unit;
         cOffset = 0;
-        
+
     }
 
     override public function resize( x:Float, y:Float ) :Void {

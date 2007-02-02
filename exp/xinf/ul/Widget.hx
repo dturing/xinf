@@ -23,7 +23,7 @@ import xinf.event.MouseEvent;
     Widget base class.
     Takes care of Keyboard Focus.
 **/
-class Widget extends ComponentContainer {
+class Widget extends Pane {
     
     public var focusable:Bool;
 

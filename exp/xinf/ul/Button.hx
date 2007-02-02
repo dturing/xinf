@@ -43,14 +43,17 @@ class Button<Value> extends Widget {
     }
     
     function set_text( t:String ) :String {
-        text = t;
-        scheduleRedraw();
+        if( t != text ) {
+            text = t;
+            setPrefSize( getStyleTextFormat().textSize(t) );
+            scheduleRedraw();
+        }
         return(t);
     }
 
     public function new( ?text:String, ?value:Value ) :Void {
         super();
-        this.text = text;
+        this.set_text(text);
         this.value = value;
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );

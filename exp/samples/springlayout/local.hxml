@@ -2,7 +2,7 @@
 -cp ../../../
 -cp ../../
 -swf-version 9
--swf-header 320:240:25:000000
+-swf-header 320:240:25:aaaaaa
 -swf App.swf
 -D htmltrace
 -debug

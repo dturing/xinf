@@ -57,10 +57,7 @@ class ComponentContainer extends Component {
             var oldSize = size;
             layout.layoutContainer( this );
             relayoutNeeded = false;
-/*            if( size != oldSize ) {
-                postResizeEvent();
-            }
-*/        }
+        }
     }
     
     public function getComponent( index:Int ) :Component {

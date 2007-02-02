@@ -26,6 +26,10 @@ import xinf.ul.Dropdown;
 import xinf.ul.Slider;
 import xinf.ul.RadioButton;
 import xinf.ul.CheckBox;
+import xinf.ul.Pane;
+
+import xinf.ul.ComponentContainer;
+import xinf.ul.layout.FlowLayout;
 
 class App extends Application {
     
@@ -34,10 +38,12 @@ class App extends Application {
         
         GrayStyle.addToDefault();
         
-        var top = new xinf.ul.HBox();
+        var top = new xinf.ul.RootComponent();
+        top.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
         top.moveTo( 20, 20 );
         
-        var container = new xinf.ul.VBox();
+        var container = new Pane();
+        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
         top.attach(container);
 
             var label = new Label("Hello, World!");
@@ -66,22 +72,24 @@ class App extends Application {
             container.attach(slider);
 
 
-        container = new xinf.ul.VBox();
-        top.attach( container );
+        var container = new Pane();
+        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
+        top.attach(container);
         
             var model = SimpleListModel.create(
                 [ "foo", "bar", "baz", "fnord", "qux", "quux", "qasi" ] );
 
             var listbox = new ListBox<String>( model );
-            listbox.resize( 100, 100 );
+            listbox.setPrefSize( {x:100.,y:100.} );
             container.attach( listbox );
 
             var dropdown = new Dropdown(model);
             container.attach(dropdown);
 
 
-        container = new xinf.ul.VBox();
-        top.attach( container );
+        var container = new Pane();
+        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
+        top.attach(container);
 
             var chx1 = CheckBox.createSimple("There was a bug", function(e){
                 trace("called tick..");

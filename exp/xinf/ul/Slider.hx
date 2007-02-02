@@ -84,7 +84,7 @@ class Slider extends Widget {
         button.addStyleClass("Thumb");
         attach( button );
         
-        slideBar = new ComponentContainer();//Image(name+"_slide", this, "assets/slider/bg.png");
+        slideBar = new Pane();//Image(name+"_slide", this, "assets/slider/bg.png");
         slideBar.addStyleClass("SliderBar");
 
         slideThumb = new Pane(); //new xinf.ony.Image(name+"_thumb", this, "assets/slider/handle.png");
@@ -113,9 +113,10 @@ class Slider extends Widget {
         
         var y = -(100-(get_normalized()*100));
         var p = localToGlobal( {x:button.position.x, y:y } );
-        trace("e: "+e.y+", p: "+p.y );
-        slideBar.moveTo( p.x, p.y+(e.y-p.y) ); //position.x+button.position.x, -3+position.y+y );
-        slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
+        var t = (104-(get_normalized()*100));
+        trace("e: "+e.y+", p: "+p.y+", t:"+t );
+        slideThumb.moveTo( 6, t );
+        slideBar.moveTo( p.x, (p.y-(100-t)) ); //position.x+button.position.x, -3+position.y+y );
         
         popup = new Popup(this,slideBar,Move);
         

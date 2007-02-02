@@ -31,31 +31,40 @@ class GrayStyle {
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Pane" ], {
-                padding: { l:0, t:0, r:0, b:0 },
+                padding: { l:5, t:5, r:5, b:5 },
                 border: { l:0, t:0, r:0, b:0 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd )
+                background: new Color().fromRGBInt( 0xbbbbbb )
+            } );
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "RoundRobin" ], {
+                padding: { l:5, t:5, r:5, b:5 },
+                border: { l:2, t:2, r:2, b:2 },
+                color: new Color().fromRGBInt( 0xff0000 ),
+                background: new Color().fromRGBInt( 0xffaaaa )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "VScrollbar" ], {
                 padding: { l:0, t:0, r:0, b:0 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xaaaaaa )
+                background: new Color().fromRGBInt( 0xaaaaaa ),
+                minWidth:20, minHeight:40
             } );
             
         xinf.style.StyleSheet.defaultSheet.add(
             [ "ListBox" ], {
-                padding: { l:2, t:1, r:2, b:1 },
+                padding: { l:5, t:2, r:5, b:2 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd )
+                background: new Color().fromRGBInt( 0xdddddd ),
+                minWidth:100, minHeight:60
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "ListItem" ], {
                 padding: { l:5, t:1, r:5, b:1 },
                 color: new Color().fromRGBInt( 0x555555 ),
-                minHeight: null, minWidth:null
+                minHeight: 20, minWidth:100
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ ":cursor" ], {
@@ -67,13 +76,14 @@ class GrayStyle {
                 padding: { l:2, t:1, r:2, b:1 },
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0xdddddd )
+                background: new Color().fromRGBInt( 0xdddddd ),
+                minWidth:100, minHeight:60
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "TreeItem" ], {
                 padding: { l:5, t:1, r:5, b:1 },
                 color: new Color().fromRGBInt( 0x555555 ),
-                minHeight: null, minWidth:null
+                minHeight: 20, minWidth:100
             } );
             
         xinf.style.StyleSheet.defaultSheet.add(
@@ -103,22 +113,9 @@ class GrayStyle {
             [ "SliderBar" ], {
                 padding: { l:0, t:0, r:0, b:0 },
                 border: { l:1, t:1, r:1, b:1 },
+                minWidth: 20,
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xdddddd )
-            } );
-        xinf.style.StyleSheet.defaultSheet.add(
-            [ "VBox" ], {
-                padding: { l:5, t:5, r:5, b:5 },
-                border: { l:1, t:1, r:1, b:1 },
-                color: Color.BLACK,
-                background: Color.rgba( 0.7, 0.7, 0.7, 0.7 ),
-            } );
-		xinf.style.StyleSheet.defaultSheet.add(
-            [ "HBox" ], {
-                padding: { l:5, t:5, r:5, b:5 },
-				border: { l:1, t:1, r:1, b:1 },
-                color: Color.BLACK,
-                background: Color.rgba( 0.7, 0.7, 0.7, 0.7 ),
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Button" ], {
@@ -134,7 +131,7 @@ class GrayStyle {
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
                 background: Color.rgba(1,1,1,0.3),
-                minHeight: 20, minWidth: 200, selectorWidth: 12
+                minHeight: 20, minWidth: 100, selectorWidth: 12
             } ); 
         xinf.style.StyleSheet.defaultSheet.add(
             [ "CheckBox" ], {
@@ -142,7 +139,7 @@ class GrayStyle {
                 border: { l:1, t:1, r:1, b:1 },
                 color: new Color().fromRGBInt( 0 ),
                 background: Color.rgba(1,1,1,0.3),
-                minHeight: 20, minWidth: 200, selectorWidth: 12
+                minHeight: 20, minWidth: 100, selectorWidth: 12
             } );   
         xinf.style.StyleSheet.defaultSheet.add(
             [ ":press" ], {
@@ -169,6 +166,7 @@ class GrayStyle {
         xinf.style.StyleSheet.defaultSheet.add(
             [ ":focus" ], {
                 border: { l:2, t:2, r:2, b:2 },
+                padding: { l:4, t:1, r:4, b:1 },
                 color: new Color().fromRGBInt( 0x0033ff ),
                 background: new Color().fromRGBInt( 0xffffff )
             } );

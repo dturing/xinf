@@ -15,23 +15,22 @@
 
 package xinf.ul;
 
-import xinf.event.GeometryEvent;
-import xinf.erno.Runtime;
+import xinf.ul.TreeModel;
 
-class RootComponent extends Pane {
-    public function new() :Void {
-        super();
-        Runtime.addEventListener( GeometryEvent.STAGE_SCALED, stageScaled );
-    }
-
-    public function setPrefSize( s:{x:Float,y:Float} ) :{x:Float,y:Float} {
-        super.setPrefSize( s );
-        return _prefSize;
-    }
+class FileSystemNode extends SimpleNode<String> {
     
-    function stageScaled( e:GeometryEvent ) :Void {
-        resize( e.x, e.y );
-        relayoutNeeded=true;
-        scheduleTransform();
+    public function new( path:String ) :Void {
+        super( string );
+    }
+    public function setOpen( o:Bool ) :Bool {
+        open=o;
+        if( open && firstChild==null ) {
+            // if dir, load contents
+        }
+        return open;
+    }
+
+    public function getValue() :T {
+        return value;
     }
 }

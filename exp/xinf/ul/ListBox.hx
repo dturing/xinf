@@ -60,6 +60,7 @@ class ListBox<T> extends Widget {
         }
 
         rr = new RoundRobin<T,Settable<T>>( model, createItem );
+        rr.moveTo( style.padding.l, style.padding.t );
         attach( rr );
 
         scrollbar = new xinf.ul.VScrollbar();
@@ -82,7 +83,8 @@ class ListBox<T> extends Widget {
         scrollbar.resize( scrollbar.size.x, size.y );
     
         // FIXME: border, padding?
-        rr.resize( size.x-scrollbar.size.x, style.padding.t );
+        var rrs = removePadding( size );
+        rr.resize( rrs.x-scrollbar.size.x, rrs.y );
     }
 
     function scrollBy( value:Float ) {

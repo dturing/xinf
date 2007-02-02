@@ -25,6 +25,8 @@ import xinf.ul.ListBox;
 
 import xinf.ul.TreeModel;
 import xinf.ul.TreeView;
+import xinf.ul.ComponentContainer;
+import xinf.ul.layout.FlowLayout;
 
 class App extends Application {
     
@@ -33,8 +35,8 @@ class App extends Application {
         
         GrayStyle.addToDefault();
 
-        var container = new xinf.ul.HBox();
-        container.moveTo( 100, 100 );
+        var container = new Pane();
+        container.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
         root.attach(container);
 
         var model = new SimpleListModel<String>();

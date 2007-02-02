@@ -51,4 +51,10 @@ class StyleElement extends xinf.ony.Object {
         return({ x: t.x + (style.padding.l+style.padding.r + style.border.l+style.border.r), 
                  y: t.y + (style.padding.t+style.padding.b + style.border.t+style.border.b) });
     }
+    public function clampSize( t:{x:Float,y:Float} ) :{x:Float,y:Float} {
+        if( style==null ) return t;
+        return({ x: Math.max( style.get("minWidth",0), Math.min( style.get("maxWidth", Math.POSITIVE_INFINITY), t.x )),
+                 y: Math.max( style.get("minHeight",0), Math.min( style.get("maxHeight", Math.POSITIVE_INFINITY), t.y )) });
+        
+    }
 }
