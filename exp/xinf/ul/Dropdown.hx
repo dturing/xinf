@@ -51,7 +51,7 @@ class Dropdown extends Widget {
         isOpen=false;
         
         label = new Label( ""+model.getItemAt(selectedIndex=0) );
-        label.moveTo( 1, 1 );
+        label.moveTo( style.padding.l, style.padding.t ); // FIXME
         attach( label );
         
         button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );

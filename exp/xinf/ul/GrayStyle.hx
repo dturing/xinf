@@ -37,11 +37,11 @@ class GrayStyle {
                 background: new Color().fromRGBInt( 0xbbbbbb )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ "RoundRobin" ], {
-                padding: { l:5, t:5, r:5, b:5 },
-                border: { l:2, t:2, r:2, b:2 },
-                color: new Color().fromRGBInt( 0xff0000 ),
-                background: new Color().fromRGBInt( 0xffaaaa )
+            [ "RootContainer" ], {
+                padding: { l:15, t:15, r:15, b:15 },
+                border: { l:0, t:0, r:0, b:0 },
+                color: Color.BLACK,
+                background: new Color().fromRGBInt( 0x666666 )
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "VScrollbar" ], {
@@ -51,7 +51,15 @@ class GrayStyle {
                 background: new Color().fromRGBInt( 0xaaaaaa ),
                 minWidth:20, minHeight:40
             } );
-            
+            /*
+        xinf.style.StyleSheet.defaultSheet.add(
+            [ "RoundRobin" ], {
+                padding: { l:5, t:5, r:5, b:5 },
+                border: { l:2, t:2, r:2, b:2 },
+                color: new Color().fromRGBInt( 0xff0000 ),
+                background: new Color().fromRGBInt( 0xffaaaa )
+            } );
+            */
         xinf.style.StyleSheet.defaultSheet.add(
             [ "ListBox" ], {
                 padding: { l:5, t:2, r:5, b:2 },

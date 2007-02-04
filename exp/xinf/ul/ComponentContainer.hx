@@ -75,13 +75,14 @@ class ComponentContainer extends Component {
     override public function draw( g:Renderer ) :Void {
         g.startObject( _id );
             drawContents(g);
-            
-            // draw children
-            for( child in children ) {
-                g.showObject( child._id );
-            }
-            
+            drawChildren(g);
         g.endObject();
         reTransform(g);
+    }
+    
+    public function drawChildren( g:Renderer ) :Void {
+        for( child in children ) {
+            g.showObject( child._id );
+        }
     }
 }

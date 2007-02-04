@@ -94,7 +94,6 @@ class FlowLayout implements Layout {
             var p = positions.shift();
             var cshift = ( max - o.B( c.size ) ) * o.alignB( c.style );
             var q = o.get( o.A(p)+ashift, o.B(p)+bshift+cshift );
-            
             c.moveTo( q.x, q.y );
         }
 

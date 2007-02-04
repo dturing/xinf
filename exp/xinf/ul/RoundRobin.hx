@@ -121,7 +121,7 @@ class RoundRobin<T,Item:Settable<T>> extends ComponentContainer {
 
     public function scrollTo( offset:Float ) :Void {
         cOffset = offset;
-        moveTo( 0, -(cOffset*unit) );
+        moveTo( position.x, -(cOffset*unit) );
         redoAll();
     }
     
@@ -149,7 +149,7 @@ class RoundRobin<T,Item:Settable<T>> extends ComponentContainer {
         } else {
             // some items will remain the same. do the robin.
             cOffset = ofs;
-            moveTo( 0, -(cOffset*unit) );
+            moveTo( position.x, -(cOffset*unit) );
             while( (rrstart+1) < ofs ) {
                 shiftDown();
             }

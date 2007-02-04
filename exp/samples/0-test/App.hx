@@ -50,12 +50,17 @@ class App extends Application {
             container.attach(label);
 
             var button:Button<String>;
-            var msgs = [ "Thank you","Thank You","Thanks a lot","Thanks","","","Thanks, really.",
-                        "That's enough.","Stop, please.","Stop!","Aaargh!" ];
+            var msgs = [ "Thank you","Thank You","Thanks a lot","Thanks","","Thanks, really." ];
+            var stop = [ "That's enough.","Stop, please.","Stop!","Aaargh!",
+                         "Please!", "Stop it!", "I can't stand it.", "Noo!", "Please stop clicking me!!", "Stop!!" ];
             var msg = 0;
             button = Button.createSimple("Click me!", function(v) {
-                    button.text = msgs[msg];
-                    if( msg < msgs.length-1 ) msg++;
+                    if( msg >= msgs.length ) {
+                        button.text = stop[ Std.random(stop.length)];
+                    } else {
+                        button.text = msgs[msg];
+                        msg++;
+                    }
                     trace("Button Value: "+v );
                 }, "Hello" );
             container.attach(button);

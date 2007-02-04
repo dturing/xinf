@@ -46,6 +46,7 @@ class ListBox<T> extends Widget {
 
     var model:ListModel<T>;
     var rr:RoundRobin<T,Settable<T>>;
+    var cropper:Crop;
     var scrollbar:VScrollbar;
     var cursor:Int;
     var lastCursorItem:Settable<T>;
@@ -59,9 +60,11 @@ class ListBox<T> extends Widget {
             }
         }
 
+        cropper = new Crop();
+        attach(cropper);
+        
         rr = new RoundRobin<T,Settable<T>>( model, createItem );
-        rr.moveTo( style.padding.l, style.padding.t );
-        attach( rr );
+        cropper.attach( rr );
 
         scrollbar = new xinf.ul.VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
@@ -84,7 +87,10 @@ class ListBox<T> extends Widget {
     
         // FIXME: border, padding?
         var rrs = removePadding( size );
-        rr.resize( rrs.x-scrollbar.size.x, rrs.y );
+        rrs.x-=scrollbar.size.x;
+        cropper.resize( rrs.x, rrs.y );
+        cropper.moveTo( style.padding.l+style.border.l, style.padding.t+style.border.t ); //FIXME
+        rr.resize( rrs.x, rrs.y );
     }
 
     function scrollBy( value:Float ) {

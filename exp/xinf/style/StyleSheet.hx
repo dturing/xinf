@@ -168,7 +168,6 @@ class StyleSheet {
         return Style.createFromObject( {
             padding: { l:0, t:0, r:0, b:0 },
             border: { l:0, t:0, r:0, b:0 },
-            fontFamily: "_sans"
         } );
     }
     

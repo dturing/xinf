@@ -77,7 +77,7 @@ class Slider extends Widget {
         if( increment!=null ) this.increment = increment;
     
         label = new xinf.ul.Label();
-        label.moveTo( 1, 1 );
+        label.moveTo( style.padding.l, style.padding.t ); // FIXME
         attach( label );
         // FIXME: image should be part of the style.
         button = new Pane(); //new ImageButton(name+"_btn", this, "assets/slider/icon.png" ) );
