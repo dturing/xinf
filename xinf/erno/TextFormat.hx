@@ -33,6 +33,7 @@ class TextFormat {
     function setFamily( family:String ) :String {
         this.family = family;
         dirty=true;
+        trace("set family: "+family );
         return family;
     }
 
@@ -55,9 +56,9 @@ class TextFormat {
     }
     
     
-    // constructor
-    public function new( ?family:String,  ?size:Float, ?bold:Bool, ?italic:Bool ) :Void {
-        if( family==null ) family="_sans";
+    // constructor (private, use create())
+    function new( ?family:String,  ?size:Float, ?bold:Bool, ?italic:Bool ) :Void {
+        if( family==null ) family="_sans"; //"_sans";
         if( size==null ) size=12.0;
         if( bold==null ) bold=false;
         if( italic==null ) italic=false;
@@ -86,6 +87,7 @@ class TextFormat {
     */
 
     public function load() :Void {
+        dirty=false;
     }
     
     
@@ -100,7 +102,7 @@ class TextFormat {
     #end
     
     // Factory
-    public static function create(?family:String,  ?size:Float, ?bold:Bool, ?italic:Bool) :TextFormat {
+    public static function create( ?family:String, ?size:Float, ?bold:Bool, ?italic:Bool) :TextFormat {
         #if neko
             return new xinf.inity.font.XTextFormat(family,size,bold,italic);
         #else flash
