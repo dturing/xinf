@@ -34,6 +34,8 @@ class Text extends Object {
         this.color=color;
         this.text=text;
         this.format=TextFormat.getDefault();
+        //format.size = 12;
+        //format.family = "_sans";
         super();
     }
     
@@ -67,8 +69,8 @@ class Text extends Object {
     
     public function drawContents( g:Renderer ) :Void {
         if( text!=null ) {
-            g.setFill( 1,0,0,.5 );
-            g.rect( 0, 0, size.x, size.y );
+            g.setFill( 1,1,1,.5 );
+            g.rect( 0, 0, 500, 500 ); //size.x, size.y );
             g.setFill( color.r, color.g, color.b, color.a );
             g.text(0,0,text,format);
         }
