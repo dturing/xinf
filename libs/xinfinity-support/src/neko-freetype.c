@@ -30,6 +30,20 @@
 #define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure("argument " #v " is not of kind " #k );
 
 
+typedef struct _cptr {
+    int size;
+    void *ptr;
+	void (*free)(void*);
+} cptr;
+
+#define val_cptr_size(cp) (((cptr*)val_data(cp))->size)
+#define val_cptr(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
+#define val_cptr_check_size(cp,type,s) if( val_cptr_size(cp)<s*sizeof(type) ) failure("cptr " #cp " is not large enough to hold " #s " " #type "s" );
+
+// defined in neko-pixbuf, FIXME
+void cptr_finalize( value cp );
+value alloc_cptr( void *ptr, int size, void (*free_f)(void*) );
+
 static FT_Library ft_library;
 
 void ft_failure_2s( const char *one, const char *two ) {
@@ -137,6 +151,46 @@ void importGlyphPoints( FT_Vector *points, int n, value callbacks, field lineTo,
 	} else {
 	}
 }
+
+value ftRenderGlyph( value font, value _index ) {
+    if( !val_is_object(font) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    value __f = val_field( font, val_id("__f") );
+    if( __f == NULL || !val_is_abstract( __f ) || !val_is_kind( __f, k_ft_face ) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    FT_Face *face = val_data( __f );
+    
+    val_check(_index,number);
+    int index = FT_Get_Char_Index( *face, val_number(_index) );
+    
+    int err = FT_Load_Glyph( *face, index, FT_LOAD_NO_BITMAP );
+    if( err ) { 
+        val_throw(alloc_string("Could not load requested Glyph"));
+        return( val_null );
+    }
+    FT_GlyphSlot glyph = (*face)->glyph;
+    
+    err = FT_Render_Glyph( glyph, FT_RENDER_MODE_NORMAL );
+    if( err || glyph->format != ft_glyph_format_bitmap ) {
+        val_throw(alloc_string("Could not render requested Glyph"));
+    }
+    
+    FT_Bitmap bitmap = glyph->bitmap;
+
+    value ret = alloc_object(NULL);
+    alloc_field( ret, val_id("width"), alloc_int(bitmap.width) );
+    alloc_field( ret, val_id("height"), alloc_int(bitmap.rows) );
+    char *data = (char*)malloc( bitmap.width*bitmap.rows );
+    memcpy( data, bitmap.buffer, bitmap.width*bitmap.rows );
+    alloc_field( ret, val_id("bitmap"), alloc_cptr(data,bitmap.width*bitmap.rows,free) );
+    alloc_field( ret, val_id("x"), alloc_int(glyph->metrics.horiBearingX) );
+    alloc_field( ret, val_id("y"), alloc_int(glyph->metrics.horiBearingY) );
+    
+    return ret;
+}
+DEFINE_PRIM(ftRenderGlyph,2);
 
 value ftIterateGlyphs( value font, value callbacks ) {
     if( !val_is_object(callbacks) ) {

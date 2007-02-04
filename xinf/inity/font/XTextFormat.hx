@@ -16,13 +16,18 @@
 package xinf.inity.font;
 
 class XTextFormat extends xinf.erno.TextFormat {
-    
+
+    public function new( ?family:String,  ?size:Float, ?bold:Bool, ?italic:Bool ) :Void {
+        super( family, size, bold, italic );
+    }
+
     public function textSize( text:String ) :{ x:Float, y:Float } {
         assureLoaded();
         return font.textSize( text, size );
     }
 
     public function load() :Void {
+        super.load();
         font = Font.getFont( family ); // FIXME: bold, italic?
     }
     

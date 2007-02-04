@@ -236,6 +236,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         format.assureLoaded();
         var font = format.font;
+        if( font==null ) trace("NULL font");
         if( pen.fillColor != null && font != null ) {
             GL.pushMatrix();
                 GL.translate( x, y, 0 );

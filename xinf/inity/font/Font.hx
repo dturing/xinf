@@ -72,7 +72,7 @@ class Font {
         glyphsToCache.push(g);
     }
     
-    private var glyphs:Array<Glyph>;
+    private var glyphs:IntHash<Glyph>;
     
     public var family_name(default,null):String;
     public var style_name(default,null):String;
@@ -84,13 +84,20 @@ class Font {
     public var units_per_EM(default,null):Float;
     
     public function new() {
-        glyphs = new Array<Glyph>();
-        untyped glyphs.__resize(0xff);
+        glyphs = new IntHash<Glyph>();
     }
     
     public function getGlyph( character:Int ) :Glyph {
-        var g:Glyph = glyphs[character];
+        var g:Glyph = glyphs.get(character);
         return( g );
+    }
+
+    public function getGlyphs() :IntHash<Glyph> {
+        return glyphs;
+    }
+    
+    public function addGlyph( character:Int, g:Glyph ) :Void {
+        glyphs.set(character,g);
     }
     
     public function textSize( text:String, fontSize:Float ) :{x:Float,y:Float} {

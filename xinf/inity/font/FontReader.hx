@@ -29,12 +29,14 @@ class FontReader {
         font = new Font();
         polygon = new Polygon();
         
-        var _font = new xinf.support.Font( ttfData, 1024<<6, 1024<<6 );
+        var s = 12;
+        var sc = s<<6; //(1024<<6);
+        
+        var _font = new xinf.support.Font( ttfData, sc, sc );//1024<<6, 1024<<6 );
         
         // FIXME: move this to fonttools
         var _f = untyped _font.__f;
-        scale = 1./(1024<<6);
-//        trace("Font Height: "+_f.height );
+        scale = 1./(sc);
   
         for( field in [ 
             "family_name", "style_name", "file_name"
@@ -52,7 +54,11 @@ class FontReader {
         }
         
         _font.iterateAllGlyphs( this );
-        
+        var glyphs = font.getGlyphs();
+        for( char in glyphs.keys() ) {
+            var bitmap = _font.renderGlyph(char);
+            glyphs.get(char).setBitmap( bitmap, s );
+        }
     }
     
     public function getFont() : Font {
@@ -61,7 +67,7 @@ class FontReader {
     
     private function _add_glyph( character:Int, g:Glyph ) {
         if( character > 0 && character < 0xff ) {
-            untyped font.glyphs.__a[character] = g;
+            font.addGlyph(character, g);
         } else {
             // non-ascii chars currently ignored
         }

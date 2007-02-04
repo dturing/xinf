@@ -158,7 +158,7 @@ class XinfinityRuntime extends Runtime {
         // FIXME depends on stage scale mode
         GL.translate( -1., 1., 0. );
         GL.scale( (2./width), (-2./height), 1. );
-        GL.translate( .5, .5, 0. );
+      //  GL.translate( .5, .5, 0. );
     }
     
     private function endFrame() :Void {

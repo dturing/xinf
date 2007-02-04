@@ -20,6 +20,18 @@ void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsig
         GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
+void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
+    glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
+    glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
+    
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+    
+    glPopClientAttrib();    
+}
+
 
 #define MAX_WINDOWS 32
 
