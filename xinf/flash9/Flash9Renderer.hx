@@ -152,20 +152,14 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         if( pen.fillColor != null ) {
             format.format.color = pen.fillColor.toRGBInt();
             var tf = new flash.text.TextField();
+            tf.alpha = pen.fillColor.a;
+            tf.embedFonts = true;
             tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
             tf.y=y;
             tf.x=x;
             tf.text = text;
-/*
-            // TODO: bold/italic
-            var format:flash.text.TextFormat = tf.getTextFormat();
-            format.font = pen.fontFace;
-            format.size = pen.fontSize;
-            format.color = pen.fillColor.toRGBInt();
-            format.leftMargin = 0;
-        */
             
             current.addChild(tf);
         }
