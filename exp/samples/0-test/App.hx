@@ -28,7 +28,7 @@ import xinf.ul.RadioButton;
 import xinf.ul.CheckBox;
 import xinf.ul.Pane;
 
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 import xinf.ul.layout.FlowLayout;
 
 class App extends Application {

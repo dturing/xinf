@@ -19,7 +19,7 @@ import xinf.erno.Renderer;
 import xinf.ul.layout.Layout;
 import xinf.event.GeometryEvent;
 
-class ComponentContainer extends Component {
+class Container extends Component {
     var relayoutNeeded:Bool;
     public var layout:Layout;
     

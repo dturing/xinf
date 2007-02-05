@@ -16,7 +16,7 @@
 package xinf.ul.layout;
 
 import xinf.ul.Component;
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 import xinf.style.Style;
 
 class Orientation {
@@ -68,7 +68,7 @@ class FlowLayout implements Layout {
         this.o = o;
     }
     
-    public function layoutContainer( parent:ComponentContainer ) {
+    public function layoutContainer( parent:Container ) {
         var first = o.firstA(parent.style.padding);
         var acc = first;
         var bPad = o.firstB(parent.style.padding);

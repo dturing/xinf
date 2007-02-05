@@ -1,11 +1,11 @@
 package xinf.ul.layout;
 
 import xinf.ul.Component;
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 import xinf.ul.layout.SpringLayout;
 
 class SpringUtilities {
-    public static function makeGrid( parent:ComponentContainer,
+    public static function makeGrid( parent:Container,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
         var layout = new SpringLayout();
         parent.layout = layout;
@@ -65,7 +65,7 @@ class SpringUtilities {
         pCons.setSouth( Spring.sum( new BottomSpring(parent), lastCons.getSouth() ) );
     }
 
-    public static function makeCompactGrid( parent:ComponentContainer,
+    public static function makeCompactGrid( parent:Container,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
         var layout = new SpringLayout();
         parent.layout = layout;

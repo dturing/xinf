@@ -17,7 +17,7 @@ package xinf.ul.layout;
 
 import xinf.ony.Object;
 import xinf.ul.Component;
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 import xinf.ul.layout.Spring;
 import xinf.ul.layout.Constraints;
 
@@ -155,7 +155,7 @@ class SpringLayout implements Layout {
         return c;
     }
     
-    public function layoutContainer( p:ComponentContainer ) {
+    public function layoutContainer( p:Container ) {
         var cs = initContainer( p );
         cs.dropCalcResult();
         

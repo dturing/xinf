@@ -22,7 +22,7 @@ import xinf.style.StyleClassElement;
     Simple Pane element.
 **/
 
-class Pane extends ComponentContainer {
+class Pane extends Container {
     
     public var crop:Bool;
     

@@ -16,8 +16,8 @@
 package xinf.ul.layout;
 
 import xinf.ul.Component;
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 
 interface Layout {
-    function layoutContainer( p:ComponentContainer ) :Void;
+    function layoutContainer( p:Container ) :Void;
 }

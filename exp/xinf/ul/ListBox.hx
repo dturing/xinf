@@ -36,7 +36,7 @@ class ListItem<T> extends Label, implements Settable<T> {
         this.text = if( value==null ) "" else ""+value;
     }
     
-    public function attachTo( parent:ComponentContainer ) :Void {
+    public function attachTo( parent:Container ) :Void {
         parent.attach(this);
     }
 }

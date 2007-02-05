@@ -145,7 +145,7 @@ class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
         moveTo( 15*(d.depth+1), position.y );
     }
     
-    public function attachTo( parent:ComponentContainer ) :Void {
+    public function attachTo( parent:Container ) :Void {
         parent.attach(this);
     }
     

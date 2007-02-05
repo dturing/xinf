@@ -29,7 +29,7 @@ import xinf.ul.FocusManager;
 
 class Slider extends Widget {
     
-    private var slideBar:ComponentContainer;
+    private var slideBar:Container;
     private var slideThumb:Pane;
     private var label:Label;
     private var button:Component;
