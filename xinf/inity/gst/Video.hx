@@ -17,7 +17,6 @@ package xinf.inity.gst;
 
 import xinf.ony.Object;
 import xinf.erno.ImageData;
-import xinf.erno.DrawingInstruction;
 import xinf.erno.Renderer;
 import xinf.event.ImageLoadEvent;
 
@@ -36,6 +35,6 @@ class Video extends Object {
     }
     
     public function drawContents( g:Renderer ) :Void {
-        g.draw( Image( img, {x:0,y:0,w:img.width,h:img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} ) );
+        g.image( img, {x:0.,y:0.,w:1.*img.width,h:1.*img.height}, {x:position.x,y:position.y,w:size.x,h:size.y} );
     }
 }
