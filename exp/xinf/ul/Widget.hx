@@ -33,6 +33,7 @@ class Widget extends Pane {
         FocusManager.register(this);
         
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
+        addStyleClass("Pane");
     }
     
     // FIXME: child classes have their own onMouseDown, which is not really override.

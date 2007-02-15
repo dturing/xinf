@@ -1,3 +1,18 @@
+/* 
+   xinf is not flash.
+   Copyright (c) 2006, Daniel Fischer.
+ 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+                                                                            
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
+   Lesser General Public License or the LICENSE file for more details.
+*/
+
 package xinf.ul.layout;
 
 import xinf.ul.Component;
@@ -5,11 +20,8 @@ import xinf.ul.Container;
 import xinf.ul.layout.SpringLayout;
 
 class SpringUtilities {
-    public static function makeGrid( parent:Container,
+    public static function makeGrid( parent:Container, layout:SpringLayout,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
-        var layout = new SpringLayout();
-        parent.layout = layout;
-        
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
         var initialXSpring = new LeftSpring(parent);
@@ -63,13 +75,12 @@ class SpringUtilities {
         var pCons = layout.getConstraints(parent);
         pCons.setEast( Spring.sum( new RightSpring(parent), lastCons.getEast() ) );
         pCons.setSouth( Spring.sum( new BottomSpring(parent), lastCons.getSouth() ) );
+        
+        return layout;
     }
 
-    public static function makeCompactGrid( parent:Container,
+    public static function makeCompactGrid( parent:Container, layout:SpringLayout,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
-        var layout = new SpringLayout();
-        parent.layout = layout;
-        
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
         
@@ -112,6 +123,9 @@ class SpringUtilities {
         
         // parent's size
         var pCons = layout.getConstraints(parent);
-        pCons.setEast( x );
-        pCons.setSouth( y );
-    }}
+        pCons.setWidth( Spring.sum( Spring.sum( x, new RightSpring(parent) ), Spring.minus(xPadSpring) ) );
+        pCons.setHeight( Spring.sum( Spring.sum( y, new BottomSpring(parent) ), Spring.minus(yPadSpring) ) );
+        
+        return layout;
+    }
+}

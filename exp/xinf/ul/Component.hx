@@ -38,7 +38,7 @@ class Component extends xinf.style.StyleClassElement {
         var s = addPadding(n);
         if( _prefSize==null || s.x!=_prefSize.x || s.y!=_prefSize.y ) {
             _prefSize = s;
-            postEvent( new GeometryEvent( GeometryEvent.PREF_SIZE_CHANGED, size.x, size.y ) );
+            postEvent( new ComponentSizeEvent( ComponentSizeEvent.PREF_SIZE_CHANGED, _prefSize.x, _prefSize.y, this ) );
         }
         return( _prefSize );
     }

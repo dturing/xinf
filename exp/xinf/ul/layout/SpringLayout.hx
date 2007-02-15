@@ -116,7 +116,9 @@ class BottomSpring extends WidthSpring {
     }
 }
 
-
+/*
+    FIXME: derive from ConstrainedLayout<(Spring)Constraints>
+*/
 class SpringLayout implements Layout {
     var index:IntHash<Constraints>;
     
@@ -173,7 +175,7 @@ class SpringLayout implements Layout {
             var width = constraints.getWidth().getValue();
             var height = constraints.getHeight().getValue();
             
-            //trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height );
+        //    trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height );
             if( c.position.x!=x || c.position.y!=y ) c.moveTo(x,y);
             if( c.size.x!=width || c.size.y!=height ) c.resize(width,height);
 
@@ -183,7 +185,7 @@ class SpringLayout implements Layout {
         var y = cs.getY().getValue();
         var width = cs.getWidth().getValue();
         var height = cs.getHeight().getValue();
-        p.setPrefSize({x:width,y:height});
+        p.setPrefSize( p.removePadding( {x:width,y:height} ));
     }
     
     public function putConstraint( e1:Edge, c1:Component, ?s:Spring, 

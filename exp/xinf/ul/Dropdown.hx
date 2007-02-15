@@ -25,6 +25,7 @@ import xinf.event.Event;
 import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
+import xinf.ul.layout.BorderLayout;
 
 /**
     Improvised Dropdown element.
@@ -47,16 +48,20 @@ class Dropdown extends Widget {
     public function new( _model:ListModel<T> ) :Void {
         super();
         
+        var layout = new BorderLayout();
+        this.layout = layout;
+        
         model = _model;
         isOpen=false;
         
         label = new Label( ""+model.getItemAt(selectedIndex=0) );
-        label.moveTo( style.padding.l, style.padding.t ); // FIXME
         attach( label );
+        layout.setConstraint( label, Center );
         
         button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
         button.addStyleClass("Thumb");
         attach(button);
+        layout.setConstraint( button, East );
         
         addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
@@ -68,28 +73,23 @@ class Dropdown extends Widget {
         addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
     }
 
-    override public function resize( x:Float, y:Float ) :Void {
-        super.resize(x,y);
-        button.moveTo( size.x - size.y, 0 );
-        button.resize( size.y, size.y );
-    }
-
     private function itemPicked( e:PickEvent<T> ) :Void {
         select( e.index );
         close();
     }
     
     private function open() :Void {
-        menu.assureVisible( selectedIndex );
-        menu.setCursor( selectedIndex );
-        
-        var p = localToGlobal( {x:5., y:size.y } );
+        addStyleClass(":open");
+
+        var p = localToGlobal( {x:5., y:size.y-(style.border.b) } );
         menu.moveTo( p.x, p.y );
         menu.resize( size.x-5, size.y*5 );
         
+        menu.assureVisible( selectedIndex );
+        menu.setCursor( selectedIndex );
+
         popup = new Popup(this,menu,Scale);
         isOpen=true;
-        addStyleClass(":open");
 //        button.contained.load("assets/dropdown/open/button.png");
     }
     

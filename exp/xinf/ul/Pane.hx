@@ -24,19 +24,34 @@ import xinf.style.StyleClassElement;
 
 class Pane extends Container {
     
-    public var crop:Bool;
-    
     public function new() :Void {
         super();
-        crop=false;
     }
-            
-    public function drawContents( g:Renderer ) :Void {
-        if( crop ) // TODO: clip only inner.. how, i dont know.
-            g.clipRect( size.x, size.y );
 
-        setStyleFill( g, "background" );
-        setStyleStroke( g, style.border.l, "color" );
-        g.rect( 0, 0, size.x, size.y );
-     }
+    override public function draw( g:Renderer ) :Void {
+        g.startObject( _id );
+        
+            var skin:xinf.style.Skin = style.get("skin",null);
+            if( skin!=null ) {
+                skin.drawBackground( g, size, style.border );
+            } else {
+                setStyleFill( g, "background" );
+                g.setStroke( 0,0,0,0,0 );
+                g.rect( 0, 0, size.x, size.y );
+            }
+            
+            drawContents(g);
+            drawChildren(g);
+            
+            if( skin!=null ) {
+                skin.drawBorder( g, size, style.border );
+            } else {
+                g.setFill(0,0,0,0);
+                setStyleStroke( g, style.border.l, "color" );
+                g.rect( 0, 0, size.x, size.y );
+            }
+
+        g.endObject();
+        reTransform(g);
+    }
 }

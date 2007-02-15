@@ -101,14 +101,14 @@ class LineEdit extends Widget {
 
     private function onMouseDown( e:MouseEvent ) :Void {
         var p = globalToLocal( {x:1.*e.x, y:1.*e.y } );
-        p.x += (xOffset-style.padding.l);
+        p.x += (xOffset-(style.padding.l+style.border.l));
         moveCursor( findIndex(p), false ); // FIXME e.shiftMod );
         new Drag<Float>( e, dragSelect, null, e.x );
     }
     
     public function dragSelect( x:Float, y:Float, marker:Float ) {
         var p = globalToLocal( {x:x+marker, y:y } );
-        p.x += (xOffset-style.padding.l);
+        p.x += (xOffset-(style.padding.l+style.border.l));
         moveCursor( findIndex(p), true );
     }
     
@@ -184,43 +184,16 @@ class LineEdit extends Widget {
     }
 
     public function drawContents( g:Renderer ) :Void {
-        //super.drawContents(g); FIXME: why not. the code below doubles Pane(?)
-        
-        g.setFill( style.background.r, style.background.g, style.background.b, style.background.a );
-        
-        g.setStroke( 0,0,0,0,0 );
-        g.rect( 0, 0, size.x, size.y );
-        
-        if( style.border.l > 0 ) {
-            var b = style.border.l/4;
-            g.setFill(0,0,0,0);
-            g.setStroke(style.color.r,style.color.g,style.color.b,style.color.a,style.border.l);
-            g.rect( -b, -b, size.x+(4*b), size.y+(4*b) );
-        }
-
+        super.drawContents(g); 
 
         var format = getStyleTextFormat();
         var selStart = format.textSize( text.substr(0,sel.from) ).x;
-        var selEnd = selStart + format.textSize( text.substr(sel.from,sel.to-sel.from) ).x;
+        var selEnd = selStart + 
+                            if( sel.from>sel.to )
+                                -format.textSize( text.substr(sel.to,sel.from-sel.to) ).x;
+                            else
+                                format.textSize( text.substr(sel.from,sel.to-sel.from) ).x;
         var textSize = format.textSize( text );
-        /*
-        // calc selection background
-        var selStart:Float = 0;
-        var selEnd:Float = 0;
-        var x:Float=0;
-        var s:Float=fontSize;
-        for( i in 0...text.length+1 ) {
-            if( i==sel.from ) selStart = x;
-            if( i==sel.to ) selEnd = x;
-            
-            if( i<text.length ) {
-                var g = font.getGlyph(text.charCodeAt(i));
-                if( g != null ) {
-                    x += Math.round((g.advance*s));
-                }
-            }
-        }
-        */
 
         
         // "ScrollIntoView" - FIXME you can do better, no?
@@ -243,22 +216,29 @@ class LineEdit extends Widget {
         
         
         var fgColor:Color = style.get("textColor",Color.BLACK);
-        var selBgColor:Color = style.get("selectionBackground",Color.BLACK);
-        var selFgColor:Color = style.get("selectionForeground",Color.WHITE);
+        var selBgColor:Color = style.get("selectBackground",Color.BLACK);
+        var selFgColor:Color = style.get("selectColor",Color.WHITE);
         var focus = hasStyleClass(":focus");
         
-            g.clipRect( size.x-2, size.y-2 );
+            //g.clipRect( size.x-2, size.y-2 ); FIXME: crop with a Crop?!
             
-            var xofs=-(xOffset-style.padding.l);
-            var yofs=style.padding.t;
+            var xofs=-(xOffset-(style.padding.l+style.border.l));
+            var yofs=style.padding.t+style.border.t;
 
             // draw selection background/caret
             if( focus ) {
-                g.setFill( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
-                g.setStroke( 0,0,0,0,0 );
                 
                 var x=selStart-1.5; var y=-.5; 
                 var w=selEnd-.5; var h=Math.ceil(textSize.y+.5)-.5;
+
+                g.setStroke( 0,0,0,0,0 );
+                if( selEnd != selStart ) {
+                    g.setFill( selBgColor.r, selBgColor.g, selBgColor.b, selBgColor.a );
+                } else {
+                    // just caret
+                    g.setFill( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
+                }
+                trace("w: "+(w-x) );
                 g.rect( xofs+x, yofs+y, w-x,h-y );
             }
             

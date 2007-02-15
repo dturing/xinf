@@ -85,7 +85,6 @@ class ListBox<T> extends Widget {
         scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
         scrollbar.resize( scrollbar.size.x, size.y );
     
-        // FIXME: border, padding?
         var rrs = removePadding( size );
         rrs.x-=scrollbar.size.x;
         cropper.resize( rrs.x, rrs.y );

@@ -35,26 +35,34 @@ class Container extends Component {
         children.push( child );
         child.parent = cast(this);
         relayoutNeeded = true;
-        var l = child.addEventListener( GeometryEvent.PREF_SIZE_CHANGED, onComponentResize );
+        var l = child.addEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, onComponentResize );
         child.__parentSizeListener = l;
+        child.updateStyles();
         scheduleRedraw();
+        scheduleTransform();
     }
 
     public function detach( child:Component ) :Void {
         children.remove( child );
         child.parent = null;
-        child.removeEventListener( GeometryEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
+        child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
         scheduleRedraw();
+        scheduleTransform();
     }
 
-    function onComponentResize( e:GeometryEvent ) :Void {
-        relayoutNeeded=true;
-        scheduleTransform();
+    function onComponentResize( e:ComponentSizeEvent ) :Void {
+        if( layout==null ) {
+            e.component.resize( e.x, e.y );
+        } else {
+            relayoutNeeded=true;
+            scheduleTransform();
+        }
     }
     
     function relayout() :Void {
         if( relayoutNeeded ) {
             var oldSize = size;
+            trace("relayout "+this);
             layout.layoutContainer( this );
             relayoutNeeded = false;
         }
@@ -83,6 +91,14 @@ class Container extends Component {
     public function drawChildren( g:Renderer ) :Void {
         for( child in children ) {
             g.showObject( child._id );
+        }
+    }
+    
+    override public function updateStyles() :Void {
+        super.updateStyles();
+        if( children==null ) return;
+        for( child in children ) {
+            child.updateStyles();
         }
     }
 }

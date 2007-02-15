@@ -56,8 +56,7 @@ class Label extends Pane {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
-    
         setStyleFill( g, "color" );
-        g.text( style.padding.l, style.padding.t, text, getStyleTextFormat() );
+        g.text( leftOffsetAligned(prefSize.x,style.get("hAlign",0.)), topOffsetAligned(prefSize.y,style.get("vAlign",0.)), text, getStyleTextFormat() );
     }
 }

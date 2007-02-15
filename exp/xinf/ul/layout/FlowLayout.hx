@@ -57,9 +57,10 @@ class Horizontal extends Orientation {
 class FlowLayout implements Layout {
     public static var VERTICAL:Orientation = new Vertical();
     public static var HORIZONTAL:Orientation = new Horizontal();
+    public static var Horizontal3:FlowLayout = new FlowLayout( FlowLayout.HORIZONTAL, 3 );
     
-    var pad:Float;
-    var o:Orientation;
+    public var pad:Float; // FIXME: no way to trigger relayout...
+    public var o:Orientation;
     
     public function new( ?o:Orientation, ?pad:Float ) :Void {
         if( pad==null ) pad=0;
@@ -69,9 +70,9 @@ class FlowLayout implements Layout {
     }
     
     public function layoutContainer( parent:Container ) {
-        var first = o.firstA(parent.style.padding);
+        var first = o.firstA(parent.style.padding) + o.firstA(parent.style.border);
         var acc = first;
-        var bPad = o.firstB(parent.style.padding);
+        var bPad = o.firstB(parent.style.padding) + o.firstB(parent.style.border);
         var max = 0.;
         var positions = new Array<{x:Float,y:Float}>();
         
@@ -84,7 +85,7 @@ class FlowLayout implements Layout {
             acc += o.A(c.size) + pad;
             max = Math.max( o.B(c.size), max );
         }
-        var total = acc-first;
+        var total = acc-(first+pad);
     
         // parent alignment
         var s = parent.removePadding(parent.size);

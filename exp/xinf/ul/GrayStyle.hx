@@ -23,11 +23,12 @@ class GrayStyle {
         
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Label" ], {
-                padding: { l:0, t:1, r:0, b:1 },
+                background: new Color().fromRGBInt( 0xbbbbbb ),
+                padding: { l:3, t:2, r:3, b:2 },
                 border: { l:0, t:0, r:0, b:0 },
                 color: new Color().fromRGBInt( 0 ),
-                background: Color.rgba(0,0,0,0),
-                minHeight: 20, minWidth: 50
+                minHeight: 20, minWidth: 50,
+                hAlign: 0, vAlign: .5
             } );
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Pane" ], {
