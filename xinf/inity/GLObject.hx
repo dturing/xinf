@@ -45,7 +45,7 @@ class GLObject {
         transformedBBox = null;
         redoTransform();
     }
-    
+
     public function redoTransform() :Void {
         GL.newList( id, GL.COMPILE );
         GL.pushName(id);

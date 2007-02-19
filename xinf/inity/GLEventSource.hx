@@ -41,23 +41,52 @@ class GLEventSource {
     
     public function attach() :Void {
         GLUT.setKeyboardFunc( keyPress );
+        GLUT.setKeyboardUpFunc( keyRelease );
         GLUT.setSpecialFunc( specialKeyPress );
+        GLUT.setSpecialUpFunc( specialKeyRelease );
         GLUT.setMouseFunc( mouseButton );
         GLUT.setMotionFunc( mouseMotion );
         GLUT.setPassiveMotionFunc( mouseMotion );
     }
     
     public function keyPress( key:Int, x:Int, y:Int ) :Void {
-        var k = Keys.get(key);
-        if( k==null ) k = String.fromCharCode(key);
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, key, k ) );
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, key, k ) );
+        //var k = Keys.get(key);
+        //if( k==null ) 
+        trace("not special "+key );
+        var k = String.fromCharCode(key);
+        postKeyPress( k );
     }
-    
+
+    public function keyRelease( key:Int, x:Int, y:Int ) :Void {
+        //var k = Keys.get(key);
+        //if( k==null ) 
+        trace("Normal KeyRelease "+key );
+        var k = String.fromCharCode(key);
+        postKeyRelease( k );
+    }
+
     public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
         var k = Keys.get(key);
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, 0, k ) );
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, 0, k ) );
+        trace("special "+key+", "+k );
+        postKeyPress( k );
+    }
+
+    public function specialKeyRelease( key:Int, x:Int, y:Int ) :Void {
+        var k = Keys.get(key);
+        trace("special KeyRelease "+key+", "+k );
+        postKeyRelease( k );
+    }
+
+    public function postKeyPress( key:String ) :Void {
+        var mod = GLUT.getModifiers();
+        var shift = mod&GLUT.ACTIVE_SHIFT > 0;
+        var alt = mod&GLUT.ACTIVE_ALT > 0;
+        var ctrl = mod&GLUT.ACTIVE_CTRL > 0;
+        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, 0, key, shift, alt, ctrl ) );
+    }
+
+    public function postKeyRelease( key:String ) :Void {
+        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_UP, 0, key ) );
     }
 
     public function mouseButton( button:Int, state:Int, x:Int, y:Int ) :Void {

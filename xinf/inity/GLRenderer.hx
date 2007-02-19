@@ -247,6 +247,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+        current.mergeBBox( {l:outRegion.x,t:outRegion.y,r:outRegion.x+outRegion.w,b:outRegion.y+outRegion.h} );
+    
         var tx1:Float = (inRegion.x/img.twidth);
         var ty1:Float = (inRegion.y/img.theight);
         var tx2:Float = tx1 + (inRegion.w/img.twidth);

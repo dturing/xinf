@@ -176,7 +176,7 @@ class XinfinityRuntime extends Runtime {
     /* ------------------------------------------------------
        HitTest Functions 
        ------------------------------------------------------ */
-/*       
+       
     public function findIdAt( x:Float, y:Float ) :Int {
         var found = new Array<GLObject>();
         root.hit( {x:x,y:y}, found );
@@ -185,8 +185,8 @@ class XinfinityRuntime extends Runtime {
             return found.pop().id;
         else return -1;
     }
-*/
 
+/*
     public function startPick( x:Float, y:Float ) : Void {
         GL.viewport( 0, 0, Math.round(width), Math.round(height) );
         GL.matrixMode( GL.PROJECTION );
@@ -267,4 +267,6 @@ class XinfinityRuntime extends Runtime {
     public function findIdAt( x:Float, y:Float ) :Int {
         return getObjectsUnderPoint( x, y ).pop();
     }
+    
+    */
 }
