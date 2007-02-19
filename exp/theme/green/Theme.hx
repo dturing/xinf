@@ -13,12 +13,12 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.theme.green;
 
 import xinf.erno.Color;
 import xinf.style.StyleSheet;
 
-class GreenStyle {
+class Theme implements xinf.style.Theme {
     
     public static function addToDefault() :Void {
         
