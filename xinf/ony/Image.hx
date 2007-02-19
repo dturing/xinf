@@ -52,7 +52,7 @@ class Image extends Object {
     
     public function drawContents( g:Renderer ) :Void {
         if( img==null ) return;
-        g.image( img, {x:0,y:0,w:img.width,h:img.height}, {x:0,y:0,w:size.x,h:size.y} );
+        g.image( img, {x:0.,y:0.,w:img.width,h:img.height}, {x:0.,y:0.,w:size.x,h:size.y} );
      }
     
 }

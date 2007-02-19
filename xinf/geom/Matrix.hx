@@ -75,6 +75,21 @@ class Matrix {
         return o;
     }
 
+    public function multiplyf( m00:Float, m01:Float, m02:Float, 
+                              m10:Float, m11:Float, m12:Float ) :Matrix {
+        var o:Matrix=new Matrix();
+        
+        o.m00 = (m00*m00) + (m01*m10);
+        o.m01 = (m00*m01) + (m01*m11);
+        o.m02 = (m00*m02) + (m01*m12);
+
+        o.m10 = (m10*m00) + (m11*m10);
+        o.m11 = (m10*m01) + (m11*m11);
+        o.m12 = (m10*m02) + (m11*m12);
+        
+        return o;
+    }
+    
     public function setIdentity() :Matrix {
         m00=1; m01=0; m02=0;
         m10=0; m11=1; m12=0;
