@@ -153,7 +153,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             format.format.color = pen.fillColor.toRGBInt();
             var tf = new flash.text.TextField();
             tf.alpha = pen.fillColor.a;
-            tf.embedFonts = true;
+            //tf.embedFonts = true;
             tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
@@ -166,18 +166,20 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+        if( img.bitmapData == null ) {
+            return;
+        }
         /* this works, but i feel it's not the most efficient way.
             if you can think of a better one, please submit a patch.
             else, we should at least make an exception for the default case ("natural" image size)*/
-            
-         var bm : flash.display.Bitmap;
-         if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
-         	bm = new flash.display.Bitmap( img.bitmapData );
-         } else {
-         	var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
-         	bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
-         	bm = new flash.display.Bitmap( bd );
-         }
+        var bm : flash.display.Bitmap;
+        if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
+            bm = new flash.display.Bitmap( img.bitmapData );
+        } else {
+            var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
+            bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
+            bm = new flash.display.Bitmap( bd );
+        }
          
      	current.addChild( bm );
      	
