@@ -50,6 +50,10 @@ extern class GLUT {
     public static var KEY_F10:Int;
     public static var KEY_F11:Int;
     public static var KEY_F12:Int;
+    
+    public static var ACTIVE_SHIFT:Int;
+    public static var ACTIVE_CTRL:Int;
+    public static var ACTIVE_ALT:Int;
 
     /** <nekobind><cptr name="argv" null-allowed="true" type="char*"/>
                 <cptr name="argn" null-allowed="true" type="int"/></nekobind> **/
@@ -58,7 +62,9 @@ extern class GLUT {
     public static function setDisplayFunc( func:Dynamic ) :Void; // Void->Void
     public static function setReshapeFunc( func:Dynamic ) :Void; // Int->Int->Void
     public static function setKeyboardFunc( func:Dynamic ) :Void; // String->Int->Int->Void
+    public static function setKeyboardUpFunc( func:Dynamic ) :Void; // String->Int->Int->Void
     public static function setSpecialFunc( func:Dynamic ) :Void; // Int->Int->Int->Void
+    public static function setSpecialUpFunc( func:Dynamic ) :Void; // Int->Int->Int->Void
     public static function setMouseFunc( func:Dynamic ) :Void; // Int->Int->Int->Int->Void
     public static function setMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
     public static function setPassiveMotionFunc( func:Dynamic ) :Void; // Int->Int->Void
@@ -66,6 +72,8 @@ extern class GLUT {
     public static function setVisibilityFunc( func:Dynamic ) :Void; // Int->Void
     public static function setTimerFunc( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
     public static function setExitFunc( func:Dynamic ) :Void; // Void->Void, is really GNU atexit.
+
+    public static function getModifiers() :Int;
 
     public static function initDisplayMode( mode:Int ) :Void;
     

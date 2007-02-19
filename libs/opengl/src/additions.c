@@ -20,6 +20,11 @@ void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsig
         GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
+void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
@@ -38,7 +43,9 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
 static field f_Display;
 static field f_Reshape;
 static field f_Keyboard;
+static field f_KeyboardUp;
 static field f_Special;
+static field f_SpecialUp;
 static field f_Mouse;
 static field f_Motion;
 static field f_PassiveMotion;
@@ -58,7 +65,9 @@ void glut_setup() {
 	f_Display = val_id("display");
 	f_Reshape = val_id("reshape");
 	f_Keyboard = val_id("keyboard");
+	f_KeyboardUp = val_id("keyboardUp");
 	f_Special = val_id("special");
+	f_SpecialUp = val_id("specialUp");
 	f_Mouse = val_id("mouse");
 	f_Motion = val_id("motion");
 	f_PassiveMotion = val_id("passiveMotion");
@@ -149,8 +158,18 @@ void glut_wrap_Keyboard( unsigned char key, int x, int y ) { \
 }
 GLUT_SET_CALLBACK(Keyboard)
 
+void glut_wrap_KeyboardUp( unsigned char key, int x, int y ) { \
+	value callback = glut_get_callback( f_KeyboardUp ); 
+	if( callback == val_null ) return; 
+	val_call3( callback, alloc_int(key), alloc_int(x), alloc_int(y) ); 
+}
+GLUT_SET_CALLBACK(KeyboardUp)
+
 GLUT_WRAP_CALLBACK_INT_INT_INT(Special)
 GLUT_SET_CALLBACK(Special)
+
+GLUT_WRAP_CALLBACK_INT_INT_INT(SpecialUp)
+GLUT_SET_CALLBACK(SpecialUp)
 
 void glut_wrap_Mouse( int button, int state, int x, int y ) { 
 	value callback = glut_get_callback( f_Mouse ); 

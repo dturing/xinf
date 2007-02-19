@@ -52,7 +52,7 @@ class HaxeImplGenerator extends Generator {
             if( n>Generator.CALL_MAX_ARGS ) n=1;
             print("\tprivate static var _"+f.name
                 +" = neko.Lib.load(\""+settings.module+"\",\""
-                +"bind_"+f.name+"\", "+n+");\n");
+                +"bind_"+settings.className+"_"+f.name+"\", "+n+");\n");
             
             
             // haxe wrapper func
@@ -99,7 +99,7 @@ class HaxeImplGenerator extends Generator {
             if( n>Generator.CALL_MAX_ARGS ) n=-1;
             print("\tpublic static var "+f.name
                 +" = neko.Lib.load(\""+settings.module+"\",\""
-                +"bind_"+f.name+"\", "+n+");\n");
+                +"bind_"+settings.className+"_"+f.name+"\", "+n+");\n");
         }
     }
 
@@ -110,7 +110,7 @@ class HaxeImplGenerator extends Generator {
         var n:Int = args.length;
         print("\tprivate static var _"+f.name
             +" = neko.Lib.load(\""+settings.module+"\",\""
-            +"bind_"+f.name+"\", "+n+");\n");
+            +"bind_"+settings.className+"_"+f.name+"\", "+n+");\n");
         
         // haxe wrapper func
         print("\tpublic static function "+f.name+"( ");

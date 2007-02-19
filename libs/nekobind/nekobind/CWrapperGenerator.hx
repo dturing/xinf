@@ -33,7 +33,7 @@ class CWrapperGenerator extends Generator {
         if( functionSettings.isStatic || functionSettings.ctor == "true" ) self=false;
     
         // c function header
-        print( "static value bind_"+f.name+"( " );
+        print( "static value bind_"+settings.className+"_"+f.name+"( " );
             var nArgs = args.length;
             if( self ) nArgs++;
             
@@ -102,10 +102,10 @@ class CWrapperGenerator extends Generator {
         var n:Int = args.length;
         if( self ) n++;
         if( n > Generator.CALL_MAX_ARGS ) {
-//            print( "}\nDEFINE_PRIM_MULT(bind_"+f.name+");\n\n" );
-            print( "}\nDEFINE_PRIM(bind_"+f.name+",1);\n\n" );
+//            print( "}\nDEFINE_PRIM_MULT(bind_"+settings.className+"_"+f.name+");\n\n" );
+            print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+",1);\n\n" );
         } else {
-            print( "}\nDEFINE_PRIM(bind_"+f.name+","+n+");\n\n" );
+            print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+","+n+");\n\n" );
         }
     }
 

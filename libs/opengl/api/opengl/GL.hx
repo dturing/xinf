@@ -897,6 +897,9 @@ extern class GL {
     public static function texSubImageRGB( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
     /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
+    public static function texSubImageGRAY( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+
+    /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
     public static function texSubImageFT( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 /*    
