@@ -57,4 +57,24 @@ class StyleElement extends xinf.ony.Object {
                  y: Math.max( style.get("minHeight",0), Math.min( style.get("maxHeight", Math.POSITIVE_INFINITY), t.y )) });
         
     }
+    public function innerTopLeft() :{x:Float,y:Float} {
+        if( style==null ) return {x:0.,y:0.};
+        return({ x:style.padding.l+style.border.l, y:style.padding.t+style.border.t });
+    }
+    public function leftOffsetAligned(pref:Float,align:Float) :Float {
+        var l = style.padding.l+style.border.l;
+        var iw = size.x;
+        if( pref < iw ) {
+            l += align * (iw-pref);
+        }
+        return l;
+    }
+    public function topOffsetAligned(pref:Float,align:Float) :Float {
+        var l = style.padding.t+style.border.t;
+        var iw = size.y;
+        if( pref < iw ) {
+            l += align * (iw-pref);
+        }
+        return l;
+    }
 }

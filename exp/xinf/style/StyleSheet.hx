@@ -44,6 +44,9 @@ class ClassNameSelector extends StyleSelector {
         return true;
     }
     
+    public function toString() :String {
+        return( "Classes("+classes+")");
+    }
 }
 
 class AncestorSelector extends StyleSelector {
@@ -65,6 +68,9 @@ class AncestorSelector extends StyleSelector {
         return false;
     }
     
+    public function toString() :String {
+        return( "Ancestor("+selector+")");
+    }
 }
 
 class ParentSelector extends StyleSelector {
@@ -79,6 +85,9 @@ class ParentSelector extends StyleSelector {
         return( e.parent != null && selector.matches(e.parent) );
     }
     
+    public function toString() :String {
+        return( "Parent("+selector+")");
+    }
 }
 
 class CombinedSelector extends StyleSelector {
@@ -96,6 +105,9 @@ class CombinedSelector extends StyleSelector {
         return true;
     }
     
+    public function toString() :String {
+        return( "Combined("+selectors+")");
+    }
 }
 
 typedef StyleRule = {
@@ -114,9 +126,11 @@ class StyleSheet {
     }
     
     private var byClassName :Hash<List<StyleRule>>;
+    private var rules :Array<StyleRule>;
     
     public function new() :Void {
         byClassName = new Hash<List<StyleRule>>();
+        rules = new Array<StyleRule>();
     }
     
     public function add( classNames:Array<String>, ?otherSelector:StyleSelector, style:Dynamic ) {
@@ -134,11 +148,14 @@ class StyleSheet {
             byClassName.set( classNames[0], l );
         }
         l.push( rule );
+        
+        rules.push( rule );
     }
     
     private function findStyles( e:StyleClassElement ) :Iterator<Style> {
         var styles = new Array<Style>();
-        var i=0;
+
+    /*
         var classNames = e.getStyleClasses();
         for( className in classNames ) {
             var s = byClassName.get( className );
@@ -147,6 +164,10 @@ class StyleSheet {
                     if( rule.selector.matches(e) ) styles.push( rule.style );
                 }
             }
+        }
+    */
+        for( rule in rules ) {
+            if( rule.selector.matches(e) ) styles.push( rule.style );
         }
         return styles.iterator();
     }

@@ -15,6 +15,7 @@ class Style {
     public var border :Sides<Float>;
     public var background :Color;
     public var color :Color;
+    public var skin :Skin;
     
     private var params:Hash<Dynamic>;
     
