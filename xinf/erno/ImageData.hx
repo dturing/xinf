@@ -53,12 +53,12 @@ class ImageData extends SimpleEventDispatcher {
     /**
         The width of the image, set only after the image is (at least partly) loaded.
     **/
-    public var width(default,null):Int;
+    public var width(default,null):Float;
     
     /**
         The height of the image, set only after the image is (at least partly) loaded.
     **/
-    public var height(default,null):Int;
+    public var height(default,null):Float;
 
     private function frameAvailable( ?data:Dynamic, ?pos:haxe.PosInfos ) :Void {
         postEvent( new ImageLoadEvent( ImageLoadEvent.FRAME_AVAILABLE, this, data ), pos );

@@ -33,7 +33,6 @@ class TextFormat {
     function setFamily( family:String ) :String {
         this.family = family;
         dirty=true;
-        trace("set family: "+family );
         return family;
     }
 
@@ -58,7 +57,7 @@ class TextFormat {
     
     // constructor (private, use create())
     function new( ?family:String,  ?size:Float, ?bold:Bool, ?italic:Bool ) :Void {
-        if( family==null ) family="_sans"; //"_sans";
+        if( family==null ) family="_sans";
         if( size==null ) size=12.0;
         if( bold==null ) bold=false;
         if( italic==null ) italic=false;
