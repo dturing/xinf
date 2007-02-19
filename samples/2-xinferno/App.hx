@@ -118,6 +118,26 @@ class GrayStripes extends RenderTest {
     }
 }
 
+class GrayChecker extends RenderTest {
+    private function renderContents( g:Renderer, size:TPoint ) :Void {
+        var d = 13;
+        var unit={ x:size.x/d, y:size.y/d };
+        var set=true;
+        for( y in 0...d ) {
+            for( x in 0...d ) {
+                if( (x+y)%2 == 0 ) {
+                    g.setFill( 1,1,1,.6 );
+                    g.rect( x*unit.x, y*unit.y, unit.x, unit.y );
+                } else {
+                    g.setFill( 1,1,1,.3 );
+                    g.rect( x*unit.x, y*unit.y, unit.x, unit.y );
+                }
+                set = !set;
+            }
+        }
+    }
+}
+
 class AlphaStripes extends RenderTest {
     private function renderContents( g:Renderer, size:TPoint ) :Void {
         var unit=size.x/8;
@@ -188,7 +208,7 @@ class Circle extends ShapeRenderTest {
     }
 }
 
-class Twist extends RenderTest {
+class AnimatedTest extends RenderTest {
     var innerId:Int;
     var g:Renderer;
     
@@ -197,21 +217,30 @@ class Twist extends RenderTest {
         innerId = Runtime.runtime.getNextId();
         g.setTranslation(innerId,0,0);
         this.g = g;
+        createAnimated( innerId, size.x/6, size.x/6 );
         Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
     }
 
     private function step( e:FrameEvent ) :Void {
-        var n = (e.frame/2);
-        var s = 4;
-        var center = { x:(size.x/2)-(s/2), y:(size.y/2)-(s/2) };
-        var extent = { x:size.x/4, y:size.y/4 };
-        g.startObject(innerId);
-            g.setFill( 1, 1, 1, 1 );
-            g.rect(    center.x + (Math.cos(n/2)*extent.x), 
-                    center.y + (Math.sin(n)*extent.y),
-                    s, s );
-        g.endObject();
+        renderAnimated(innerId, e.frame);
         Runtime.runtime.changed();
+    }
+    
+    private function createAnimated( id:Int, ex:Float, ey:Float ) :Void {
+        var inner = Runtime.runtime.getNextId();
+        g.startObject(inner);
+        g.setFill( 0,0,0,.7 );
+        g.rect( -ex/2, -ey/2, ex, ey );
+        g.endObject();
+    
+        g.startObject(id);
+            g.setFill( 1,1,1,.7 );
+            g.rect( -ex, -ey, ex*2, ey*2 );
+            g.showObject( inner );
+        g.endObject();
+    }
+    
+    private function renderAnimated( id:Int, frame:Int ) :Void {
     }
     
     private function renderContents( g:Renderer, size:TPoint ) :Void {
@@ -222,42 +251,72 @@ class Twist extends RenderTest {
 
 }
 
+class Twist extends AnimatedTest {
+
+    private function renderAnimated( id:Int, frame:Int ) :Void {
+        var n = (frame/2);
+        var s = size.x/16;
+        var center = { x:(size.x/2)-(s/2), y:(size.y/2)-(s/2) };
+        var extent = { x:size.x/6, y:size.x/6 };
+    
+        g.setTranslation( id,
+                    center.x + (Math.cos(n/2)*extent.x), 
+                    center.y + (Math.sin(n)*extent.y) );
+    }
+}
+
+class Rotate extends AnimatedTest {
+    var matrix:xinf.geom.Matrix;
+    public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
+        super( g, position, size );
+        matrix = new xinf.geom.Matrix().setIdentity();
+    }
+    
+    private function renderAnimated( id:Int, frame:Int ) :Void {
+        matrix.setTranslation( size.x/2, size.y/2 );
+        matrix.setRotation( frame/10 );
+        g.setTransform( id, matrix.m02, matrix.m12, matrix.m00, matrix.m01, matrix.m10, matrix.m11 );
+    }
+}
+
+class Scale extends AnimatedTest {
+    var matrix:xinf.geom.Matrix;
+    public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
+        super( g, position, size );
+        matrix = new xinf.geom.Matrix().setIdentity();
+    }
+    
+    private function createAnimated( id:Int, ex:Float, ey:Float ) :Void {
+        super.createAnimated( id, .5, .5 );
+    }
+
+    private function renderAnimated( id:Int, frame:Int ) :Void {
+        matrix.setTranslation( size.x/2, size.y/2 );
+        matrix.setScale( Math.sin(frame/10)*size.x, Math.cos(frame/7)*size.y );
+        g.setTransform( id, matrix.m02, matrix.m12, matrix.m00, matrix.m01, matrix.m10, matrix.m11 );
+    }
+}
+
 class Info extends RenderTest {
     var g:Renderer;
     var l:Dynamic;
-    var textSize:{x:Float,y:Float};
     
     public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
         super( g, position, size );
         this.g = g;
     }
-
-    private function onSizeKnown( w:Float, h:Float) :Void {
-        textSize={x:w,y:h};
-        l = Runtime.addEventListener( FrameEvent.ENTER_FRAME, step );
-    }
-    private function step( e:FrameEvent ) :Void {
-        render(g);
-        Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
-    }
     
     private function renderContents( g:Renderer, size:TPoint ) :Void {
+        var text = "xinferno "+xinf.Version.version;
+        var textSize = TextFormat.getDefault().textSize( text );
+        var pad = 7;
+        size = { x:textSize.x+(2*pad), y:textSize.y+(2*pad) };
+        var ofs = -size.x/2;
         g.setFill( 0, 0, 0, 1 );
-        g.rect( 0, 0, size.x, size.y );
+        g.rect( ofs, 0, size.x, size.y );
         
-        if( textSize==null ) {
-            g.setFill( 1, 1, 1, 1 );
-            g.text( 0, 0, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
-        } else {
-            var ofs = { x:(size.x-textSize.x)/2, y:(size.y-textSize.y)/2 };
-        
-            g.setStroke( 1, 0, 0, 1, 1 );
-            g.setFill( 0, 0, 0, 0 );
-            g.rect( ofs.x, ofs.y, textSize.x, textSize.y );
-            
-            g.setFill( 1, 1, 1, 1 );
-            g.text( ofs.x, ofs.y, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
-        }
+        g.setFill( 1, 1, 1, 1 );
+        g.text( ofs+pad, pad, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
     }
 
 }
@@ -273,6 +332,8 @@ class App {
         var unit={ x:size.x/10, y:size.y/10 };
 
         var tests = [
+            new GrayChecker( g, {x:-unit.x,y:-unit.y}, {x:size.x,y:size.y} ),
+ 
             new Cross( g, {x:0.,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new ColorStripes( g, {x:0.,y:0.}, {x:unit.x*8,y:unit.y*5} ),
             new GrayStripes( g, {x:0.,y:unit.y*5}, {x:unit.x*8,y:unit.y} ),
@@ -282,7 +343,10 @@ class App {
             new Cubic( g, {x:unit.x*2,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Circle( g, {x:unit.x*3,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Twist( g, {x:unit.x*4,y:unit.y*7}, {x:unit.x,y:unit.y} ),
-            new Info( g, {x:unit.x*5,y:unit.y*7}, {x:unit.x*3,y:unit.y} ),
+            new Rotate( g, {x:unit.x*5,y:unit.y*7}, {x:unit.x,y:unit.y} ),
+            new Scale( g, {x:unit.x*6,y:unit.y*7}, {x:unit.x,y:unit.y} ),
+            
+            new Info( g, {x:(size.x*.5)-unit.x,y:size.y*.25}, {x:0.,y:0.} ),
             ];
             
         var id=Runtime.runtime.getNextId();
@@ -300,7 +364,8 @@ class App {
 
 
         Runtime.runtime.addEventFilter( function(e:Dynamic):Bool {
-            if( e.type != FrameEvent.ENTER_FRAME ) trace("Event: "+e);
+            if( e.type != FrameEvent.ENTER_FRAME 
+                && e.type != xinf.event.MouseEvent.MOUSE_MOVE ) trace("Event: "+e);
             return true;
         } );
     }

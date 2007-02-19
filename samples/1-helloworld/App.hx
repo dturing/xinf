@@ -25,6 +25,10 @@ class App extends Application {
 
         hello = new Text( "Hello, World!", Color.WHITE );
         root.attach( hello );
+        var r = new xinf.ony.Rectangle( Color.RED );
+        r.moveTo( 100, 100 );
+        r.resize( 100, 100 );
+        root.attach( r );
     }
     
     public static function main() :Void {
