@@ -13,13 +13,13 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.style;
 
 import xinf.erno.Color;
 
-class GrayStyle {
+class GrayTheme extends Theme {
     
-    public static function addToDefault() :Void {
+    public function addToDefault() :Void {
         
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Label" ], {

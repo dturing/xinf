@@ -15,6 +15,8 @@
 
 package xinf.ul;
 
+import xinf.style.Theme;
+
 class Application extends xinf.ony.Application {
     
     /**
@@ -29,6 +31,11 @@ class Application extends xinf.ony.Application {
     **/
     public function new() :Void {
         super();
+        
+        if( Theme.theme == null ) Theme.theme = new xinf.style.GrayStyle();
+        trace("theme is: "+Theme.theme.info() );
+        Theme.theme.addToDefault();
+        
         container = new RootComponent();
         root.attach(container);
     }
