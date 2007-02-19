@@ -30,7 +30,6 @@ class Pane extends Container {
 
     override public function draw( g:Renderer ) :Void {
         g.startObject( _id );
-        
             var skin:xinf.style.Skin = style.get("skin",null);
             if( skin!=null ) {
                 skin.drawBackground( g, size, style.border );
@@ -38,20 +37,18 @@ class Pane extends Container {
                 setStyleFill( g, "background" );
                 g.setStroke( 0,0,0,0,0 );
                 g.rect( 0, 0, size.x, size.y );
-            }
-            
-            drawContents(g);
-            drawChildren(g);
-            
-            if( skin!=null ) {
-                skin.drawBorder( g, size, style.border );
-            } else {
+                
                 g.setFill(0,0,0,0);
                 setStyleStroke( g, style.border.l, "color" );
                 g.rect( 0, 0, size.x, size.y );
             }
-
+            drawContents(g);
+            drawChildren(g);
+            if( skin!=null ) {
+                skin.drawBorder( g, size, style.border );
+            }
         g.endObject();
         reTransform(g);
     }
+    
 }
