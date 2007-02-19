@@ -15,13 +15,12 @@
 
 import xinf.event.MouseEvent;
 import xinf.erno.Color;
-import xinf.ony.Application;
+import xinf.ul.Application;
 import xinf.ul.Label;
 import xinf.ul.Button;
 import xinf.ul.ListModel;
 import xinf.ul.ListBox;
 import xinf.ul.LineEdit;
-import xinf.ul.GrayStyle;
 import xinf.ul.Dropdown;
 import xinf.ul.Slider;
 import xinf.ul.RadioButton;
@@ -36,23 +35,21 @@ class App extends Application {
     public function new() :Void {
         super();
         
-        GrayStyle.addToDefault();
+        xinf.ul.GreenStyle.addToDefault();
         
-        var top = new xinf.ul.RootComponent();
-        top.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
-        top.moveTo( 20, 20 );
+        container.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
         
-        var container = new Pane();
-        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
-        top.attach(container);
+        var cont = new Pane();
+        cont.layout = new FlowLayout( FlowLayout.VERTICAL, 3 );
+        container.attach(cont);
 
             var label = new Label("Hello, World!");
-            container.attach(label);
+            cont.attach(label);
 
             var button:Button<String>;
-            var msgs = [ "Thank you","Thank You","Thanks a lot","Thanks","","Thanks, really." ];
+            var msgs = [ "Thank you","Softly, please.","Thank You","Thanks a lot","Thanks","","Thanks, really." ];
             var stop = [ "That's enough.","Stop, please.","Stop!","Aaargh!",
-                         "Please!", "Stop it!", "I can't stand it.", "Noo!", "Please stop clicking me!!", "Stop!!" ];
+                         "Please!", "Stop it!", "I can't stand it.", "Noo!", "Please stop clicking me!!", "Stoop!!" ];
             var msg = 0;
             button = Button.createSimple("Click me!", function(v) {
                     if( msg >= msgs.length ) {
@@ -63,43 +60,43 @@ class App extends Application {
                     }
                     trace("Button Value: "+v );
                 }, "Hello" );
-            container.attach(button);
+            cont.attach(button);
             
-            container.attach( Button.createSimple("Me, too!", function(e) {
+            cont.attach( Button.createSimple("Me, too!", function(e) {
                     trace("clicked, yoohooo");
                 } ));
             
             var edit = new LineEdit();
             edit.text = "Edit me!";
-            container.attach(edit);
+            cont.attach(edit);
 
             var slider = new Slider();
-            container.attach(slider);
+            cont.attach(slider);
 
 
-        var container = new Pane();
-        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
-        top.attach(container);
+        var cont = new Pane();
+        cont.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
+        container.attach(cont);
         
             var model = SimpleListModel.create(
                 [ "foo", "bar", "baz", "fnord", "qux", "quux", "qasi" ] );
 
             var listbox = new ListBox<String>( model );
             listbox.setPrefSize( {x:100.,y:100.} );
-            container.attach( listbox );
+            cont.attach( listbox );
 
             var dropdown = new Dropdown(model);
-            container.attach(dropdown);
+            cont.attach(dropdown);
 
 
-        var container = new Pane();
-        container.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
-        top.attach(container);
+        var cont = new Pane();
+        cont.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
+        container.attach(cont);
 
             var chx1 = CheckBox.createSimple("There was a bug", function(e){
                 trace("called tick..");
             });
-            container.attach(chx1);
+            cont.attach(chx1);
 
 
             var rbGroup = new xinf.ul.RadioButtonGroup();
@@ -110,15 +107,17 @@ class App extends Application {
             }
             
             var rb1 = RadioButton.createSimple(rbGroup, "Bird", traceRadio, "tweeter");
-            container.attach(rb1);
+            cont.attach(rb1);
             
             var rb2 = RadioButton.createSimple(rbGroup, "Dog", traceRadio, "woofer");
-            container.attach(rb2);
+            cont.attach(rb2);
             
             var rb3 = RadioButton.createSimple(rbGroup, "Cod", traceRadio, "coder");
-            container.attach(rb3);
+            cont.attach(rb3);
 
-        root.attach(top);
+        root.attach(container);
+        
+        trace("Images loading: "+xinf.style.ImageSkin.loading );
     }
     
     public static function main() :Void {

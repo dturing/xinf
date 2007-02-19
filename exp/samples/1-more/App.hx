@@ -25,7 +25,7 @@ import xinf.ul.ListBox;
 
 import xinf.ul.TreeModel;
 import xinf.ul.TreeView;
-import xinf.ul.ComponentContainer;
+import xinf.ul.Container;
 import xinf.ul.layout.FlowLayout;
 
 class App extends Application {

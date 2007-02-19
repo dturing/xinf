@@ -15,11 +15,13 @@
 
 import xinf.event.MouseEvent;
 import xinf.erno.Color;
-import xinf.ony.Application;
+import xinf.ul.Application;
 import xinf.ul.Pane;
 import xinf.ul.Label;
 import xinf.ul.RootComponent;
+import xinf.ul.Container;
 
+import xinf.ul.layout.BorderLayout;
 import xinf.ul.layout.SpringUtilities;
 
 import xinf.erno.Runtime;
@@ -69,6 +71,7 @@ class App extends Application {
                 border: { l:1, t:1, r:1, b:1 },
                 color: Color.rgba(1,1,1,.5),
                 background: Color.rgba(1,1,1,.3),
+                minWidth: 100, minHeight: 50,
             });
         xinf.style.StyleSheet.defaultSheet.add(
             [ "base" ], {
@@ -84,7 +87,7 @@ class App extends Application {
                 background: Color.rgba(1,1,1,.4),
             });
             
-        var c = new RootComponent();
+        var c = new Pane();
         c.addStyleClass("base");
 
 
@@ -118,19 +121,11 @@ class App extends Application {
             c.attach(new Test(t));
         }
 
-        SpringUtilities.makeCompactGrid( c, 3, 3, 5, 5 );
+        var layout = new xinf.ul.layout.SpringLayout();
+        c.layout = layout;
+        SpringUtilities.makeCompactGrid( c, layout, 3, 3, 5, 5 );
             
-        
-        root.attach(c);
-
-        
-        #if debug
-            xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function( e ) {
-                    xinf.value.Value.dumpCounter();
-                } );
-        #end
-        trace("FOO");
-        return;
+        container.attach(c);
     }
     
     public static function main() :Void {
