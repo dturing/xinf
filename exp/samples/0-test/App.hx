@@ -35,8 +35,7 @@ class App extends Application {
     public function new() :Void {
         super();
         
-        xinf.ul.GreenStyle.addToDefault();
-        
+        container.moveTo( 400, 50 );
         container.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
         
         var cont = new Pane();
@@ -116,8 +115,6 @@ class App extends Application {
             cont.attach(rb3);
 
         root.attach(container);
-        
-        trace("Images loading: "+xinf.style.ImageSkin.loading );
     }
     
     public static function main() :Void {

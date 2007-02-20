@@ -16,24 +16,27 @@
 package xinf.style;
 
 import xinf.erno.Renderer;
+import xinf.erno.ImageData;
 
-class Skin {
-    var border:Border;
-    var bg:Fill;
-    var fg:Fill;
+class ScaledImageFill implements Fill {
+
+    var image:ImageData;
+    var name:String;
+    var inset:Float;
     
-    public function new( ?border:Border, ?background:Fill, ?foreground:Fill ) {
-        this.border = border;
-        bg = background;
-        fg = foreground;
+    public function new( name:String, ?inset:Float ) :Void {
+        image = ImageData.load( name+".png" );
+        if( inset==null ) inset=0;
+        this.inset = inset;
+        this.name = name;
     }
     
-    public function drawBackground( g:Renderer, size:{x:Float,y:Float} ) :Void {
-        if( bg!=null ) bg.draw( g, size );
+    public function draw( g:Renderer, s:{x:Float,y:Float} ) :Void {
+        var i2 = 2*inset;
+        g.image( image, {x:0.,y:0.,w:image.width,h:image.height}, {x:inset, y:inset,w:s.x-i2, h:s.y-i2} );
     }
-    
-    public function drawForeground( g:Renderer, size:{x:Float,y:Float} ) :Void {
-        if( fg!=null ) fg.draw( g, size );
-        if( border!=null ) border.draw( g, size );
+
+    public function toString() :String {
+        return("ScaledImageFill '"+name+"'");
     }
 }

@@ -32,8 +32,8 @@ class Application extends xinf.ony.Application {
     public function new() :Void {
         super();
         
-        if( Theme.theme == null ) Theme.theme = new xinf.style.GrayStyle();
-        trace("theme is: "+Theme.theme.info() );
+        if( Theme.theme == null ) Theme.theme = new xinf.style.GrayTheme();
+        trace("theme is: "+Theme.theme.info().name );
         Theme.theme.addToDefault();
         
         container = new RootComponent();

@@ -3,15 +3,24 @@
 -cp ../../
 -swf-version 9
 -swf App.swf
+-debug
+-cp ../../theme/green/
+-swf-lib ../../theme/green/skin.swf
+skin.Skin
+xinf.style.GreenTheme
 
 --next
 -main App
 -lib xinf
 -cp ../../
 -js App.js
+-cp ../../theme/green/
+xinf.style.GreenTheme
 
 --next
 -main App
 -cp ../../
 -lib xinf
 -neko run.n
+-cp ../../theme/green/
+xinf.style.GreenTheme

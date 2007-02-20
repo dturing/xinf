@@ -18,8 +18,17 @@ package xinf.style;
 import xinf.erno.Color;
 
 class GrayTheme extends Theme {
+
+    override public function info() {
+        return {
+            name: "Gray",
+            description: "A fallback rectangle-only theme",
+            copyright: "(LGPL) 2006-7, Daniel Fischer",
+            url: "http://xinf.org/trac/wiki/GrayTheme",
+        };
+    }
     
-    public function addToDefault() :Void {
+    override public function addToDefault() :Void {
         
         xinf.style.StyleSheet.defaultSheet.add(
             [ "Label" ], {

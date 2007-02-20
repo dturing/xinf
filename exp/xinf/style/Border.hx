@@ -17,23 +17,7 @@ package xinf.style;
 
 import xinf.erno.Renderer;
 
-class Skin {
-    var border:Border;
-    var bg:Fill;
-    var fg:Fill;
-    
-    public function new( ?border:Border, ?background:Fill, ?foreground:Fill ) {
-        this.border = border;
-        bg = background;
-        fg = foreground;
-    }
-    
-    public function drawBackground( g:Renderer, size:{x:Float,y:Float} ) :Void {
-        if( bg!=null ) bg.draw( g, size );
-    }
-    
-    public function drawForeground( g:Renderer, size:{x:Float,y:Float} ) :Void {
-        if( fg!=null ) fg.draw( g, size );
-        if( border!=null ) border.draw( g, size );
-    }
+interface Border {
+    public function getBorder() :{l:Float,t:Float,r:Float,b:Float};
+    public function draw( g:Renderer, size:{x:Float,y:Float} ) :Void;
 }

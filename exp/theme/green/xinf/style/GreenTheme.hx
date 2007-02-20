@@ -13,16 +13,41 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.theme.green;
+package xinf.style;
 
 import xinf.erno.Color;
 import xinf.style.StyleSheet;
 
-class Theme implements xinf.style.Theme {
+class GreenTheme extends Theme {
     
-    public static function addToDefault() :Void {
-        
-        xinf.style.StyleSheet.defaultSheet.add(
+    public static function __init__() :Void {
+        Theme.theme = new GreenTheme();
+    }
+
+    override public function info() {
+        return {
+            name: "Green",
+            description: "xinf's default look - a green image-based theme",
+            copyright: "(LGPL) 2006-7, Daniel Fischer",
+            url: "http://xinf.org/trac/wiki/GreenTheme",
+        };
+    }
+
+    public function addToDefault() :Void {
+        var pfx="skin/";
+        #if flash9
+            pfx = "library://"+pfx;
+        #end
+        var BevelOut = new ImageBorder( pfx+"BevelOut", 5 );
+        var BevelOutFocus = new ImageBorder( pfx+"BevelOutFocus", 5 );
+        var BevelIn = new ImageBorder( pfx+"BevelIn", 5 );
+        var BevelInFocus = new ImageBorder( pfx+"BevelInFocus", 5 );
+    
+        var Field = new ScaledImageFill( pfx+"FieldBg", 3 );
+        var BevelInBg = new ScaledImageFill( pfx+"BevelInBg", 3 );
+        var BevelOutBg = new ScaledImageFill( pfx+"BevelOutBg", 3 );
+    
+        StyleSheet.defaultSheet.add(
             [ "Label" ], {
                 border: { l:0, t:0, r:0, b:0 },
                 padding: { l:3, t:2, r:3, b:2 },
@@ -31,147 +56,107 @@ class Theme implements xinf.style.Theme {
                 color: new Color().fromRGBInt( 0 ),
             } );
 
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Pane" ], {
                 padding: { l:3, t:3, r:3, b:3 },
                 border: { l:5, t:5, r:5, b:5 },
                 color: new Color().fromRGBInt( 0 ),
-                skin: new xinf.style.ImageSkin("skin/Field."),
                 background: new Color().fromRGBInt( 0xbbbbbb ),
                 minHeight: 25, minWidth: 100,
                 fontFamily: "_sans", fontSize: 12.,
                 selectColor: new Color().fromRGBInt( 0x73d216 ),
-                selectBackground: new Color().fromRGBInt( 0x73d216 )
+                selectBackground: new Color().fromRGBInt( 0x73d216 ),
+                skin: new Skin( BevelIn, Field ),
             } );
             
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "RootContainer" ], {
                 padding: { l:25, t:25, r:25, b:25 },
                 border: { l:0, t:0, r:0, b:0 },
                 color: Color.BLACK,
                 background: Color.RED,
-                skin: new xinf.style.ImageSkin("skin/Field."),
+                skin: new Skin( BevelIn, Field ),
             } );
 
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "ListBox" ], {
                 border: { l:5, t:5, r:5, b:5 },
-                padding: { l:-2, t:-2, r:-2, b:-
-                2 },
-                skin: new xinf.style.ImageSkin("skin/Field."),
+                padding: { l:-2, t:-2, r:-2, b:-2 },
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0xdddddd ),
-                minWidth:100, minHeight:60
+                minWidth:100, minHeight:60,
+                skin: new Skin( BevelIn, Field ),
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "ListItem" ], {
                 padding: { l:5, t:2, r:5, b:0 },
                 color: new Color().fromRGBInt( 0x555555 ),
                 minHeight: 20, minWidth:100
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ ":cursor" ], {
                 color: new Color().fromRGBInt( 0 ),
                 background: new Color().fromRGBInt( 0x73d216 )
             } );
 
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "LineEdit" ], {
                 padding: { l:3, t:0, r:3, b:0 },
                 border: { l:5, t:5, r:5, b:5 },
                 color: new Color().fromRGBInt( 0 ),
-                skin: new xinf.style.ImageSkin("skin/Field."),
                 background: new Color().fromRGBInt( 0xbbbbbb ),
                 minHeight: 25, minWidth: 100,
-                fontFamily: "_sans", fontSize: 12.
+                fontFamily: "_sans", fontSize: 12.,
+                skin: new Skin( BevelIn, Field ),
             } );
 
 
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ ":focus" ], {
                 border: { l:5, t:5, r:5, b:5 },
-                skin: new xinf.style.ImageSkin("skin/Field.focus."),
+                skin: new Skin( BevelInFocus, Field ),
             } );
             
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Button" ], {
                 border: { l:5, t:5, r:5, b:5 },
                 padding: { l:2, t:2, r:2, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Button."),
-                minWidth: 75
+                minWidth: 75,
+                skin: new Skin( BevelOut, BevelOutBg ),
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Button", ":focus" ], {
-                skin: new xinf.style.ImageSkin("skin/Button.focus."),
+                skin: new Skin( BevelOutFocus, BevelOutBg ),
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Button", ":press" ], {
                 padding: { l:2, t:3, r:2, b:1 },
-                skin: new xinf.style.ImageSkin("skin/Button.press."),
+                skin: new Skin( BevelOutFocus, BevelInBg ),
             } );
-		xinf.style.StyleSheet.defaultSheet.add(
+		StyleSheet.defaultSheet.add(
             [ ":select" ], {
             } );
             
             
-		xinf.style.StyleSheet.defaultSheet.add(
+		StyleSheet.defaultSheet.add(
             [ "Dropdown" ], {
                 padding: { l:0, t:-5, r:-5, b:-5 },
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Pane" ],
             new ParentSelector( new ClassNameSelector(["Dropdown"]) ), 
             {
                 border: { l:5, t:5, r:5, b:5 },
                 padding: { l:2, t:2, r:2, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Button."),
                 minHeight: 25, minWidth: 25,
+                skin: new Skin( BevelOut, BevelOutBg ),
             } );
-        xinf.style.StyleSheet.defaultSheet.add(
+        StyleSheet.defaultSheet.add(
             [ "Label" ],
             new ParentSelector( new ClassNameSelector(["Dropdown"]) ), 
             {
                 padding: { l:5, t:5, r:5, b:5 },
             } );
-            /*
-        xinf.style.StyleSheet.defaultSheet.add(
-            [ "Label" ],
-            new ParentSelector( new ClassNameSelector(["Dropdown"]) ), 
-            {
-                border: { l:5, t:5, r:0, b:5 },
-                padding: { l:2, t:2, r:0, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Field."),
-                minHeight: 25, minWidth: 75,
-            } );
-        xinf.style.StyleSheet.defaultSheet.add(
-            [ "Pane" ],
-            new ParentSelector( new ClassNameSelector(["Dropdown"]) ), 
-            {
-                border: { l:5, t:5, r:5, b:5 },
-                padding: { l:2, t:2, r:2, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Button.right."),
-                minHeight: 25, minWidth: 25,
-            } );
-        xinf.style.StyleSheet.defaultSheet.add(
-            [ "Pane" ],
-            new ParentSelector( new ClassNameSelector(["Dropdown", ":focus"]) ), 
-            {
-                border: { l:5, t:5, r:5, b:5 },
-                padding: { l:2, t:2, r:2, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Button.right.focus."),
-                minHeight: 25, minWidth: 25,
-            } );
-        xinf.style.StyleSheet.defaultSheet.add(
-            [ "Pane" ],
-            new ParentSelector( new ClassNameSelector(["Dropdown", ":open"]) ), 
-            {
-                border: { l:5, t:5, r:5, b:5 },
-                padding: { l:2, t:2, r:2, b:2 },
-                skin: new xinf.style.ImageSkin("skin/Button.right."),
-                minHeight: 25, minWidth: 25,
-            } );
-            
-        */
     }
     
 }

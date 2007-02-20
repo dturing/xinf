@@ -32,7 +32,7 @@ class Pane extends Container {
         g.startObject( _id );
             var skin:xinf.style.Skin = style.get("skin",null);
             if( skin!=null ) {
-                skin.drawBackground( g, size, style.border );
+                skin.drawBackground( g, size );
             } else {
                 setStyleFill( g, "background" );
                 g.setStroke( 0,0,0,0,0 );
@@ -45,7 +45,7 @@ class Pane extends Container {
             drawContents(g);
             drawChildren(g);
             if( skin!=null ) {
-                skin.drawBorder( g, size, style.border );
+                skin.drawForeground( g, size );
             }
         g.endObject();
         reTransform(g);
