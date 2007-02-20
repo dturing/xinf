@@ -94,12 +94,11 @@ class ImageData extends SimpleEventDispatcher {
         #else js
             return( new xinf.js.JSImageData(url) );
         #else flash
-            if( StringTools.startsWith( url, "resource://" ) ) {
-                throw("Cannot load images from assets yet.");
+            if( StringTools.startsWith( url, "library://" ) ) {
+                return( new xinf.flash9.InternalImageData(url.substr(10)) );
             } else {
                 return( new xinf.flash9.ExternalImageData(url) );
             }
-            return null;
         #else err
         #end
     }
