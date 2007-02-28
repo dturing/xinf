@@ -15,6 +15,7 @@
 
 package xinf.style;
 
+import xinf.erno.Color;
 import xinf.ony.Object;
 import xinf.style.Style;
 import xinf.style.StyleClassElement;
