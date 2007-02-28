@@ -85,7 +85,7 @@ class Button<Value> extends Widget {
     
         setStyleFill( g, "color" );
         
-        g.text(leftOffsetAligned(prefSize.x,.5),style.padding.t+style.border.t,text,getStyleTextFormat());
+        g.text(Math.round(leftOffsetAligned(prefSize.x,.5)),style.padding.t+style.border.t,text,getStyleTextFormat());
     }
 
     public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {
