@@ -72,6 +72,7 @@ extern class GLUT {
     public static function setVisibilityFunc( func:Dynamic ) :Void; // Int->Void
     public static function setTimerFunc( seconds:Int, func:Dynamic, value:Int ) :Void; // Int->Void
     public static function setExitFunc( func:Dynamic ) :Void; // Void->Void, is really GNU atexit.
+    public static function setIdleFunc( func:Dynamic ) :Void; // Void->Void
 
     public static function getModifiers() :Int;
 
