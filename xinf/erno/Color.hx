@@ -121,5 +121,5 @@ class Color {
     public static var RED:Color = new Color().fromRGBInt(0xff0000);
     public static var GREEN:Color = new Color().fromRGBInt(0x00ff00);
     public static var BLUE:Color = new Color().fromRGBInt(0x0000ff);
-    
+    public static var TRANSPARENT:Color = rgba(0,0,0,0);
 }
