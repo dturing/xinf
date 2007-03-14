@@ -29,7 +29,7 @@ class FontReader {
         font = new Font();
         polygon = new Polygon();
         
-        var s = 12;
+        var s = 12; // FIXME. here, the size for TextureGlyphs is hardcoded ;) cleanup!
         var sc = s<<6; //(1024<<6);
         
         var _font = new xinf.support.Font( ttfData, sc, sc );//1024<<6, 1024<<6 );
@@ -55,10 +55,16 @@ class FontReader {
         
         _font.iterateAllGlyphs( this );
         var glyphs = font.getGlyphs();
+        
+        // only for TextureGlyphs...
+        // FIXME: replace the iterateAllGlyphs loading with proper on-demand
+        //  loading, and handle Texture/NonTexture also explicitly
+        //  (currently, things are fixed on TextureGlyphs of a specific size!
         for( char in glyphs.keys() ) {
             var bitmap = _font.renderGlyph(char);
-            glyphs.get(char).setBitmap( bitmap, s );
+            cast(glyphs.get(char),TextureGlyph).setBitmap( bitmap, s );
         }
+        
     }
     
     public function getFont() : Font {
@@ -74,7 +80,7 @@ class FontReader {
     }
 
     public function endGlyph( character:Int, advance:Int ) {
-        var g:Glyph = new Glyph( polygon, scale*advance );
+        var g:Glyph = new TextureGlyph( polygon, scale*advance );
         _add_glyph( character, g );
         polygon = new Polygon();
     }

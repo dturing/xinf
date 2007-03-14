@@ -28,7 +28,11 @@ class XTextFormat extends xinf.erno.TextFormat {
 
     public function load() :Void {
         super.load();
-        font = Font.getFont( family ); // FIXME: bold, italic?
+        try {
+            font = Font.getFont( family ); // FIXME: bold, italic?
+        } catch(e:Dynamic) {
+            font = Font.getFont("_sans");
+        }
     }
     
 }

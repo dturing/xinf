@@ -31,6 +31,7 @@ class FontList {
     }
     
     public function addFont( familyName:Dynamic, style:Dynamic, weight:Int, slant:Int ) {
+        trace("add Font "+familyName+" "+style );
         var n = new String("");
         untyped n.__s = familyName;
         

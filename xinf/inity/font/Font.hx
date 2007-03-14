@@ -52,6 +52,7 @@ class Font {
             data = neko.io.File.getContent( file );
         }
         font = new FontReader( data ).getFont();
+        
         fonts.set( name, font );
         return font;
     }
