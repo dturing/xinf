@@ -214,7 +214,7 @@ extern class GLU {
     public static function NurbsSurface( nurb:Dynamic, sKnotCount:Int, sKnots:Float, tKnotCount:Int, tKnots:Float, sStride:Int, tStride:Int, control:Float, sOrder:Int, tOrder:Int, type:Int ):Void;
     public static function Ortho2D( left:Float, right:Float, bottom:Float, top:Float ):Void;
     public static function PartialDisk( quad:Dynamic, inner:Float, outer:Float, slices:Int, loops:Int, start:Float, sweep:Float ):Void;
-    public static function Perspective( fovy:Float, aspect:Float, zNear:Float, zFar:Float ):Void;
+    // Perspective
     public static function Project( objX:Float, objY:Float, objZ:Float, model:Float, proj:Float, view:Int, winX:Float, winY:Float, winZ:Float ):Int;
     public static function PwlCurve( nurb:Dynamic, count:Int, data:Float, stride:Int, type:Int ):Void;
     public static function QuadricCallback( quad:Dynamic, which:Int, CallBackFunc:Dynamic ):Void;
@@ -248,6 +248,8 @@ extern class GLU {
     public static function EvaluateCubicBezier( _ctrl:Dynamic, _n:Int, callback:Dynamic ):Dynamic;
     public static function EvaluateQuadraticBezier( _ctrl:Dynamic, _n:Int, callback:Dynamic ):Dynamic;
 */
+    public static function perspective( fovy:Float, aspect:Float, zNear:Float, zFar:Float ):Void;
+
     /** <nekobind><cptr name="viewport" type="GLint" min-size="2"/></nekobind> **/
     public static function pickMatrix( x:Float, y:Float, delX:Float, delY:Float, viewport:Float ):Void;
     public static function errorString( error:Int ):String;

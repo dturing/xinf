@@ -812,18 +812,23 @@ extern class GL {
             <cptr name="v2" type="GLint" min-size="2"/></nekobind> **/
         public static function rectiv( v1:Dynamic, v2:Dynamic ):Void;
 
+    
+    /* somewhat more complex size checking required */
+    
+    /** <nekobind><cptr name="ptr" type="GLfloat" min-size="(stride*type)"/></nekobind> **/
+    public static function vertexPointer( size:Int, type:Int, stride:Int, ptr:Dynamic ):Void;
+    
+    public static function drawElements( mode:Int, count:Int, type:Int, indices:Dynamic ):Void;
     /* somewhat more complex size checking required
     
     public static function callLists( n:Int, type:Int, lists:Dynamic ):Void;
 
-    public static function vertexPointer( size:Int, type:Int, stride:Int, ptr:Void ):Void;
     public static function normalPointer( type:Int, stride:Int, ptr:Void ):Void;
     public static function colorPointer( size:Int, type:Int, stride:Int, ptr:Void ):Void;
     public static function indexPointer( type:Int, stride:Int, ptr:Void ):Void;
     public static function texCoordPointer( size:Int, type:Int, stride:Int, ptr:Void ):Void;
     public static function edgeFlagPointer( stride:Int, ptr:Void ):Void;
     
-    public static function drawElements( mode:Int, count:Int, type:Int, indices:Void ):Void;
     public static function interleavedArrays( format:Int, stride:Int, pointer:Void ):Void;
     */
     
