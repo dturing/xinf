@@ -52,10 +52,10 @@ $(NDLL): $(NDLL).x86 $(NDLL).ppc
 	i686-apple-darwin-lipo -create -output $@ -arch i386 $(NDLL).x86 -arch ppc $(NDLL).ppc
 
 $(NDLL).x86: $(C_SRCS) $(C_HEADERS)
-	i686-apple-darwin-gcc -o $@ $(C_SRCS) $(ALL_FLAGS)
+	i686-apple-darwin-gcc -o $@ $(C_SRCS) $(OSX_X86_CFLAGS) $(ALL_FLAGS)
 
 $(NDLL).ppc: $(C_SRCS) $(C_HEADERS)
-	powerpc-apple-darwin-gcc -o $@ $(C_SRCS) $(ALL_FLAGS)
+	powerpc-apple-darwin-gcc -o $@ $(C_SRCS) $(OSX_PPC_CFLAGS) $(ALL_FLAGS)
 
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
@@ -123,5 +123,5 @@ all:
 	NEKO_PLATFORM=Windows make
 	
 clean:
-	-@rm $(BIN_PATH)/Mac/* $(BIN_PATH)/Windows/* $(BIN_PATH)/Linux/*
+	-@rm $(BIN_PATH)/Mac/*.ndll $(BIN_PATH)/Windows/*.ndll $(BIN_PATH)/Linux/*.ndll
 	-@rm $(PROJECT)-tmp.n $(PROJECT).xml $(foreach CLASS,$(BINDING_CLASSES),bind_$(CLASS).c $(CLASS)__impl.hx)
