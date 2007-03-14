@@ -65,6 +65,13 @@ class GLObject {
         update();
     }
 
+    public function localToGlobal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
+        var q = p;
+        if( parent!=null ) q = parent.localToGlobal(q);
+        var q = transform.apply(q);
+        return q;
+    }
+
     public function addChild( child:GLObject ) :Void {
         if( children==null ) children = new Array<GLObject>();
         children.push(child);
@@ -110,7 +117,6 @@ class GLObject {
     
     public function hit( p:TPoint, found:Array<GLObject> ) :Bool {
         if( boundingBox==null ) {
-        trace("NO BBOX: "+id+" -- children: "+children );
             return false;
         }
         var transformedPoint:TPoint = if( transform==null ) p else transform.applyInverse(p);

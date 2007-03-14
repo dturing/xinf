@@ -81,8 +81,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     
     public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         var m:Matrix = new Matrix();
-        m.m00=a; m.m01=b; m.m02=x;
-        m.m10=c; m.m11=d; m.m12=y;
+        m.a=a; m.b=b; m.tx=x;
+        m.c=c; m.d=d; m.ty=y;
         p.setTransform( m );
     }
 
@@ -102,6 +102,11 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         super.endNative();
     }
 
+    public function native( o:NativeObject ) {
+    trace("render native list #"+o );
+        GL.callList( o );
+    }
+    
     public function startObject( id:Int ) {
         super.startObject(id);
         pushPen();
@@ -120,6 +125,22 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     }
 
     public function clipRect( w:Float, h:Float ) {
+    /*
+        uh, man..
+        this is another attempt at using scissors.
+        the whole transformChanged() shebang in xinf.ul is *primarily* for this reason
+        (might be useful for others too though... tap)
+        
+        var p0 = current.localToGlobal( {x:0.,y:0.} );
+        var p1 = current.localToGlobal( {x:w,y:h} );
+        var viewport = opengl.Helper.getFloats( GL.VIEWPORT, 4 );
+        
+        p0.y -= viewport[3];
+        trace("cliprect "+w+","+h+", viewport h "+viewport[3]+" -> global "+p0+", "+p1 );
+        GL.scissor( , Math.round(p0.y), 
+                    Math.round(p1.x-p0.x), Math.round(p1.y-p0.y) );
+        GL.enable( GL.SCISSOR_TEST );
+    */
         var eq:Dynamic = CPtr.double_alloc(4);
         CPtr.double_set(eq,0,1.);
         CPtr.double_set(eq,1,0.);
@@ -127,15 +148,18 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         CPtr.double_set(eq,3,0.);
         GL.clipPlane( GL.CLIP_PLANE0, eq );
         GL.enable( GL.CLIP_PLANE0 );
+
         CPtr.double_set(eq,0,0.);
         CPtr.double_set(eq,1,1.);
         GL.clipPlane( GL.CLIP_PLANE1, eq );
         GL.enable( GL.CLIP_PLANE1 );
+
         CPtr.double_set(eq,0,-1.);
         CPtr.double_set(eq,1,0.);
         CPtr.double_set(eq,3,w);
         GL.clipPlane( GL.CLIP_PLANE2, eq );
         GL.enable( GL.CLIP_PLANE2 );
+
         CPtr.double_set(eq,0,0.);
         CPtr.double_set(eq,1,-1.);
         CPtr.double_set(eq,3,h);
@@ -189,13 +213,14 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
             GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
             GL.lineWidth( pen.strokeWidth );
-            
+            /* FIXME pixelSize issue
             x+=pen.strokeWidth/2;
             y+=pen.strokeWidth/2;
             if( pen.strokeWidth>1 ) {
                 w-=pen.strokeWidth/2;
                 h-=pen.strokeWidth/2;
             }
+            */
             GL.begin( GL.LINE_STRIP );
                 GL.vertex3( x, y, 0. );
                 GL.vertex3( x+w, y, 0. );
@@ -283,13 +308,13 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     public static function matrixForGL( m:Matrix ) :Dynamic {
         var v = CPtr.float_alloc(16);
         
-        CPtr.float_set(v,0,m.m00);
-        CPtr.float_set(v,1,m.m10);
+        CPtr.float_set(v,0,m.a);
+        CPtr.float_set(v,1,m.b);
         CPtr.float_set(v,2,.0);
         CPtr.float_set(v,3,.0);
 
-        CPtr.float_set(v,4,m.m01);
-        CPtr.float_set(v,5,m.m11);
+        CPtr.float_set(v,4,m.c);
+        CPtr.float_set(v,5,m.d);
         CPtr.float_set(v,6,.0);
         CPtr.float_set(v,7,.0);
 
@@ -298,8 +323,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         CPtr.float_set(v,10,1.);
         CPtr.float_set(v,11,.0);
 
-        CPtr.float_set(v,12,m.m02);
-        CPtr.float_set(v,13,m.m12);
+        CPtr.float_set(v,12,m.tx);
+        CPtr.float_set(v,13,m.ty);
         CPtr.float_set(v,14,.0);
         CPtr.float_set(v,15,1.);
         

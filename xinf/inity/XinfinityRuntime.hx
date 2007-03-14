@@ -86,12 +86,11 @@ class XinfinityRuntime extends Runtime {
     }
     
     public function display() :Void {
-    
+        startFrame();
+
         // FIXME: here??
         Font.cacheGlyphs();
-        
-        startFrame();
-        
+
         somethingChanged = false;
         renderRoot();
         // TODO precise timing here
