@@ -18,35 +18,36 @@ package xinf.geom;
 import xinf.geom.Types;
 
 class Matrix {
+/*
+    a  b  0
+    c  d  0
+    tx ty 1
+*/
     
-    public var m00:Float;
-    public var m01:Float;
-    public var m02:Float;
-    public var m10:Float;
-    public var m11:Float;
-    public var m12:Float;
+    public var a:Float;
+    public var c:Float;
+    public var tx:Float;
+    public var b:Float;
+    public var d:Float;
+    public var ty:Float;
     
     public function new() :Void {
     }
     
     public function set( m:Matrix ) :Void {
-        m00=m.m00; m01=m.m01; m02=m.m02;
-        m10=m.m10; m11=m.m11; m12=m.m12;
+        a=m.a; c=m.c; tx=m.tx;
+        b=m.b; d=m.d; ty=m.ty;
     }
     
     public function apply( p:TPoint ) :TPoint {
         return {
-            x: (p.x*m00) + (p.y*m10) + m02,
-            y: (p.x*m01) + (p.y*m11) + m12
+            x: (p.x*a) + (p.y*c) + tx,
+            y: (p.x*b) + (p.y*d) + ty
             };
     }
 
     public function applyInverse( p:TPoint ) :TPoint {
-        // FIXME: this only applys translation!
-        return {
-            x: p.x - m02,
-            y: p.y - m12
-            };
+        return invert().apply(p);
     }
     
     // TODO: geom.TRectangle
@@ -61,58 +62,65 @@ class Matrix {
             };
     }
 
+    public function invert() :Matrix {
+        var o:Matrix=new Matrix();
+        
+        var d1 = 1./((a*d) - (b*c));
+        
+        o.a = d*d1;
+        o.b = -b*d1;
+        o.c = -c*d1;
+        o.d = a*d1;
+        
+        o.tx = ((c*ty)-(d*tx))*d1;
+        o.ty = -((a*ty)-(b*tx))*d1;
+        
+        return o;
+    }
+
     public function multiply( m:Matrix ) :Matrix {
         var o:Matrix=new Matrix();
         
-        o.m00 = (m00*m.m00) + (m01*m.m10);
-        o.m01 = (m00*m.m01) + (m01*m.m11);
-        o.m02 = (m00*m.m02) + (m01*m.m12);
+        o.a = (a*m.a) + (b*m.c);
+        o.c = (c*m.a) + (d*m.c);
+        o.tx = (tx*m.a) + (ty*m.c) + m.tx;
 
-        o.m10 = (m10*m.m00) + (m11*m.m10);
-        o.m11 = (m10*m.m01) + (m11*m.m11);
-        o.m12 = (m10*m.m02) + (m11*m.m12);
+        o.b = (a*m.b) + (b*m.d);
+        o.d = (c*m.b) + (d*m.d);
+        o.ty = (tx*m.b) + (ty*m.d) + m.ty;
         
         return o;
     }
 
-    public function multiplyf( m00:Float, m01:Float, m02:Float, 
-                              m10:Float, m11:Float, m12:Float ) :Matrix {
-        var o:Matrix=new Matrix();
-        
-        o.m00 = (m00*m00) + (m01*m10);
-        o.m01 = (m00*m01) + (m01*m11);
-        o.m02 = (m00*m02) + (m01*m12);
-
-        o.m10 = (m10*m00) + (m11*m10);
-        o.m11 = (m10*m01) + (m11*m11);
-        o.m12 = (m10*m02) + (m11*m12);
-        
-        return o;
-    }
-    
     public function setIdentity() :Matrix {
-        m00=1; m01=0; m02=0;
-        m10=0; m11=1; m12=0;
+        a=1; c=0; tx=0;
+        b=0; d=1; ty=0;
         return this;
     }
     
     public function setTranslation( x:Float, y:Float ) :Matrix {
-        m02 = x;
-        m12 = y;
+        tx = x;
+        ty = y;
         return this;
     }
     
     public function setScale( x:Float, y:Float ) :Matrix {
-        m00 = x;
-        m11 = y;
+        a = x;
+        d = y;
         return this;
     }
 
-    public function setRotation( a:Float ) :Matrix {
-        var c = Math.cos(a);
-        var s = Math.sin(a);
-        m00=c; m01=s;
-        m10=-s; m11=c;
+    public function setSkew( x:Float, y:Float ) :Matrix {
+        c = x;
+        b = y;
+        return this;
+    }
+
+    public function setRotation( angle:Float ) :Matrix {
+        var co = Math.cos(angle);
+        var si = Math.sin(angle);
+        a=co; b=si;
+        c=-si; d=co;
         return this;
     }
     
