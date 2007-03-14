@@ -1,4 +1,5 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include "neko-pixbuf.h"
 #include <neko/neko.h>
 
@@ -42,6 +43,11 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	if( length==0 ) val_throw( alloc_string("data length is zero") );
 		
 	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
+    
+#ifdef GDK_PIXBUF_1
+	gdk_pixbuf_loader_write( loader, data, length );
+	gdk_pixbuf_loader_close( loader );
+#else
 	GError *err = NULL;
 	gdk_pixbuf_loader_write( loader, data, length, &err );
 	if( err!=NULL ) {
@@ -52,6 +58,7 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	if( err!=NULL ) {
 		val_throw( alloc_string("unable to decompress image") );
 	}
+#endif
 	
 	GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
 	if( pixbuf==NULL ) {

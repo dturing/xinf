@@ -29,7 +29,7 @@
 #endif
 #define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure("argument " #v " is not of kind " #k );
 
-
+// FIXME: convert all cptr stuff to strings...
 typedef struct _cptr {
     int size;
     void *ptr;
@@ -39,10 +39,33 @@ typedef struct _cptr {
 #define val_cptr_size(cp) (((cptr*)val_data(cp))->size)
 #define val_cptr(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
 #define val_cptr_check_size(cp,type,s) if( val_cptr_size(cp)<s*sizeof(type) ) failure("cptr " #cp " is not large enough to hold " #s " " #type "s" );
+/*
+value check_cptr( value cp, int size ) { \
+ 	vkind k_cptr = kind_import("cptr"); 
+	val_check_kind( cp, k_cptr ); \
+	if( size>0 && val_cptr_size(cp) < size ) val_throw( alloc_string("cptr overflow") ); \
+	return cp; \
+}
 
-// defined in neko-pixbuf, FIXME
-void cptr_finalize( value cp );
+void cptr_finalize( value cp ) { \
+    check_cptr(cp,0); \
+	cptr *p = val_data( cp ); \
+    if( p->ptr && p->free ) p->free(p->ptr); \
+    if( p ) free(p); \
+} \
+
+value alloc_cptr( void *ptr, int size, void (*free_f)(void*) ) { \
+	vkind k_cptr = kind_import("cptr"); \
+	cptr *cp = (cptr*)malloc( sizeof(cptr) ); \
+	cp->ptr=ptr; cp->size=size; cp->free=free_f; \
+	if( cp->free==NULL ) cp->free = free; \
+	value r = alloc_abstract( k_cptr, cp ); \
+	val_gc( r, cptr_finalize ); \
+	return r; \
+} 
+*/
 value alloc_cptr( void *ptr, int size, void (*free_f)(void*) );
+
 
 static FT_Library ft_library;
 
