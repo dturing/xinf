@@ -275,7 +275,7 @@ class Rotate extends AnimatedTest {
     private function renderAnimated( id:Int, frame:Int ) :Void {
         matrix.setTranslation( size.x/2, size.y/2 );
         matrix.setRotation( frame/10 );
-        g.setTransform( id, matrix.m02, matrix.m12, matrix.m00, matrix.m01, matrix.m10, matrix.m11 );
+        g.setTransform( id, matrix.tx, matrix.ty, matrix.a, matrix.b, matrix.c, matrix.d );
     }
 }
 
@@ -293,7 +293,7 @@ class Scale extends AnimatedTest {
     private function renderAnimated( id:Int, frame:Int ) :Void {
         matrix.setTranslation( size.x/2, size.y/2 );
         matrix.setScale( Math.sin(frame/10)*size.x, Math.cos(frame/7)*size.y );
-        g.setTransform( id, matrix.m02, matrix.m12, matrix.m00, matrix.m01, matrix.m10, matrix.m11 );
+        g.setTransform( id, matrix.tx, matrix.ty, matrix.a, matrix.b, matrix.c, matrix.d );
     }
 }
 

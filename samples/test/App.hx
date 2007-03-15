@@ -13,26 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-import xinf.erno.Color;
-import xinf.ony.Application;
-import xinf.ony.Text;
-
-class App extends Application {
-    private static var hello:Text;
-    
-    public function new() :Void {
-        super();
-
-        hello = new Text( "Hello, World!", Color.WHITE );
-        root.attach( hello );
-        
-        var r = new xinf.ony.Rectangle( Color.RED );
-        r.moveTo( 100, 100 );
-        r.resize( 100, 100 );
-        root.attach( r );
-    }
-    
+class App {
     public static function main() :Void {
-        new App().run();
-    }
+		var r = new haxe.unit.TestRunner();
+		r.add( new XinfinityTest() );
+		r.run();
+	}
 }
