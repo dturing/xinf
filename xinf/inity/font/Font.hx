@@ -159,7 +159,7 @@ class Font {
             } else {
                 var g = getGlyph(c);
                 if( g != null ) {
-                    g.render(fontSize)*fontSize;
+                    g.render(fontSize);
                 }
             }
         }

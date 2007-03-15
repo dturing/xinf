@@ -168,7 +168,7 @@ class XinfinityRuntime extends Runtime {
         // check for OpenGL errors
         var e:Int = GL.getError();
         if( e > 0 ) {
-            trace( "OpenGL error "+GLU.errorString(e) );
+            throw( "OpenGL error "+GLU.errorString(e) );
         }
     }
     
