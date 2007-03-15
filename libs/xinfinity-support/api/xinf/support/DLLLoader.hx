@@ -42,10 +42,10 @@ class DLLLoader {
         if( cur==null || cur.length==0 )
             cur = value;
         else
-            cur = cur+separator+value;
+            cur = value+separator+cur;
             
         neko.Sys.putEnv( name, cur );
-        //trace("added to "+name+": "+value );
+        trace("prefixed "+name+" with: "+value+", now: "+neko.Sys.getEnv( name ) );
     }
     
     public static function addLibToPath( lib:String ) :Void {
