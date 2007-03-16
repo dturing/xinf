@@ -71,7 +71,7 @@ extern class Pixbuf {
                     var p2 = StringTools.replace( p2, "//", "/" );
                     var data2 = StringTools.replace( data, "%PATH%", p2 );
                     var data2 = StringTools.replace( data2, "%EXT%", ext );
-                    trace("LOADERS: "+ fileName+":\n"+data2);
+                    // trace("LOADERS: "+ fileName+":\n"+data2);
                     out.write(data2);
                     out.close();
                 } catch(e:Dynamic) {

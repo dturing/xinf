@@ -36,7 +36,7 @@ class DLLLoader {
         libPath += pathSep+version+pathSep+"ndll"+pathSep+neko.Sys.systemName();
         return libPath;
     }
-    
+/*    
     public static function addToEnvironment( name:String, separator:String, value:String ) {
         var cur = neko.Sys.getEnv(name);
         if( cur==null || cur.length==0 )
@@ -47,25 +47,33 @@ class DLLLoader {
         neko.Sys.putEnv( name, cur );
         trace("prefixed "+name+" with: "+value+", now: "+neko.Sys.getEnv( name ) );
     }
-    
-    public static function addLibToPath( lib:String ) :Void {
-        try {
-            if( loaded==null ) loaded = new Hash<Bool>();
-            if( loaded.get(lib) ) return;
-
-            var libPath = getXinfLibPath();
-
-            switch( neko.Sys.systemName() ) {
-                case "Windows":
-                    addToEnvironment("PATH",";",libPath);
-                    
-                default:
-                    addToEnvironment("LD_LIBRARY_PATH",":",libPath);
+*/
+    public static function checkEnvironment( name:String, separator:String, value:String ) {
+        var cur = neko.Sys.getEnv(name);
+        if( cur!=null ) {
+            var a = cur.split(separator);
+            for( i in a ) {
+                if( i==value ) return;
             }
-            
-            loaded.set( lib, true );
-        } catch( e:Dynamic ) {
-            trace("Trying to load dependency DLLs for '"+lib+"' failed: "+e );
         }
+        
+        throw("Please add '"+value+"' to your environment variable '"+name+"' and start again.");
+    }
+
+    public static function addLibToPath( lib:String ) :Void {
+        if( loaded==null ) loaded = new Hash<Bool>();
+        if( loaded.get(lib) ) return;
+
+        var libPath = getXinfLibPath();
+
+        switch( neko.Sys.systemName() ) {
+            case "Windows":
+                checkEnvironment("PATH",";",libPath);
+            case "Mac":
+                checkEnvironment("DYLD_LIBRARY_PATH",";",libPath);
+            default:
+        }
+        
+        loaded.set( lib, true );
     }
 }
