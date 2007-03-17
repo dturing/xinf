@@ -81,8 +81,13 @@ class Runtime extends SimpleEventDispatcher {
             _runtime = new xinf.inity.XinfinityRuntime();
             // dynamically load renderer
             if( true ) {
-                _renderer = new xinf.inity.GLRenderer();
+                #if gldebug
+                    _renderer = new xinf.inity.GLDebugRenderer();
+                #else true
+                    _renderer = new xinf.inity.GLRenderer();
+                #end
             } else {
+                /* experimental. */
                 var name = "xinfinity-gl0";
                 try {
                     var haxeLibPath = switch( neko.Sys.systemName() ) {
