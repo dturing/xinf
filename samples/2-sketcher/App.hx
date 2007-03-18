@@ -13,9 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-import xinf.erno.Color;
 import xinf.ony.Application;
-import xinf.ony.Text;
 import xinf.event.MouseEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;

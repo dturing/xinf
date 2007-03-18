@@ -13,30 +13,19 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-import xinf.event.FrameEvent;
-import xinf.event.GeometryEvent;
-import xinf.erno.Renderer;
 import xinf.ony.Application;
-import xinf.ony.Object;
+import xinf.ony.Native;
+import xinf.erno.Renderer;
+import xinf.erno.Runtime;
 
-class Native extends Object {
-    private var p:NativeObject;
-
-    public function new( p:NativeObject ) :Void {
-        super();
-        this.p=p;
-    }
-    
-    public function drawContents( g:Renderer ) :Void {
-        if( p!=null ) {
-            g.native(p);
-        }
-    }
-}
-
+#if neko
+import opengl.GL;
+import opengl.GLU;
+import opengl.GLUT;
+#end
 
 class App extends Application {
-    private static var block:Object;
+    private static var block:Native;
 
     public function new() :Void {
         super();
@@ -55,7 +44,13 @@ class App extends Application {
             var div = js.Lib.document.createElement("div");
             div.innerHTML="this is <b onmousedown=\"this.innerHTML = 'clicked'\">native</b> html";
             p=div;
-        #else true
+        #else neko
+            p=Runtime.runtime.getNextId();
+            
+            GL.newList( p, GL.COMPILE );
+            GL.rotate( 12., 1., 2., 3. );
+            GL.rect( 0, 0, 20, 20 );
+            GL.endList();
         #end
 
         block = new Native(p);
