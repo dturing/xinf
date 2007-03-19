@@ -77,8 +77,6 @@ class Sketcher extends xinf.ony.Container<xinf.ony.Object> {
 }
 
 class App extends Application {
-    private static var hello:Text;
-    
     public function new() :Void {
         super();
         
