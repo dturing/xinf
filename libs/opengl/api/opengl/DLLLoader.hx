@@ -49,6 +49,8 @@ class DLLLoader {
     }
 */
     public static function checkEnvironment( name:String, separator:String, value:String ) {
+        var value = StringTools.replace( StringTools.replace( value, "//", "/" ), "\\\\", "\\" );
+    
         var cur = neko.Sys.getEnv(name);
         if( cur!=null ) {
             var a = cur.split(separator);
@@ -57,7 +59,7 @@ class DLLLoader {
             }
         }
         
-        throw("Please add '"+value+"' to your environment variable '"+name+"' and start again.");
+        trace("If things fail, please add '"+value+"' to your environment variable '"+name+"' and try again.");
     }
 
     public static function addLibToPath( lib:String ) :Void {
@@ -77,6 +79,7 @@ class DLLLoader {
         loaded.set( lib, true );
     }
 }
+
 
 
 /*
