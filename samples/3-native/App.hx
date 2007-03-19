@@ -48,7 +48,7 @@ class App extends Application {
             p=Runtime.runtime.getNextId();
             
             GL.newList( p, GL.COMPILE );
-            GL.rotate( 12., 1., 2., 3. );
+            GL.rotate( 45, 0,0,1 );
             GL.rect( 0, 0, 20, 20 );
             GL.endList();
         #end
