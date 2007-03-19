@@ -53,8 +53,11 @@ class XinfinityRuntime extends Runtime {
         _eventSource=new GLEventSource(this);
         
         initGL();
+
         root = new GLObject( getNextId() );
-        
+        root.start();
+        root.end();
+
          addEventListener( GeometryEvent.STAGE_SCALED, resized );
         
         startFrame();

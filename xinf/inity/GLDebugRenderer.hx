@@ -35,10 +35,11 @@ class GLDebugRenderer implements Renderer {
         renderer = new GLRenderer();
     }
 
-    function checkErrors( inst:String) :Void {
+    function checkErrors( inst:String, ?args:Array<Dynamic> ) :Void {
+        trace(""+inst+" "+args );
         var e:Int = GL.getError();
         if( e > 0 ) {
-            throw( "OpenGL on "+inst+" error "+GLU.errorString(e) );
+            throw( "OpenGL Error on "+inst+" "+args+": "+GLU.errorString(e) );
         }
     }
     
@@ -46,7 +47,7 @@ class GLDebugRenderer implements Renderer {
     
     public function startNative( o:NativeContainer ) :Void {
         renderer.startNative(o);
-        checkErrors("startNative");
+        checkErrors("startNative",[o]);
     }
     
     public function endNative() :Void {
@@ -56,7 +57,7 @@ class GLDebugRenderer implements Renderer {
     
     public function startObject( id:Int ) {
         renderer.startObject(id);
-        checkErrors("startObject");
+        checkErrors("startObject",[id]);
     }
     
     public function endObject() {
@@ -66,37 +67,37 @@ class GLDebugRenderer implements Renderer {
     
     public function showObject( id:Int ) {
         renderer.showObject(id);
-        checkErrors("showObject");
+        checkErrors("showObject",[id]);
     }
 
     public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         renderer.setTransform(id,x,y,a,b,c,d);
-        checkErrors("setTransform");
+        checkErrors("setTransform",[id,x,y,a,b,c,d]);
     }
     
     public function setTranslation( id:Int, x:Float, y:Float ) :Void {
         renderer.setTranslation(id,x,y);
-        checkErrors("setTranslation");
+        checkErrors("setTranslation",[id,x,y]);
     }
     
     public function clipRect( w:Float, h:Float ) {
         renderer.clipRect(w,h);
-        checkErrors("clipRect");
+        checkErrors("clipRect",[w,h]);
     }
 
     public function setFill( r:Float, g:Float, b:Float, a:Float ) {
         renderer.setFill(r,g,b,a);
-        checkErrors("setFill");
+        checkErrors("setFill",[r,g,b,a]);
     }
     
     public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
         renderer.setStroke(r,g,b,a,width);
-        checkErrors("setStroke");
+        checkErrors("setStroke",[r,g,b,a,width]);
     }
     
     public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
         renderer.setFont(face,italic,bold,size);
-        checkErrors("setFont");
+        checkErrors("setFont",[face,italic,bold,size]);
     }
 
     public function startShape() {
@@ -111,7 +112,7 @@ class GLDebugRenderer implements Renderer {
     
     public function startPath( x:Float, y:Float) {
         renderer.startPath(x,y);
-        checkErrors("startPath");
+        checkErrors("startPath",[x,y]);
     }
     
     public function endPath() {
@@ -126,42 +127,42 @@ class GLDebugRenderer implements Renderer {
     
     public function lineTo( x:Float, y:Float ) {
         renderer.lineTo(x,y);
-        checkErrors("lineTo");
+        checkErrors("lineTo",[x,y]);
     }
     
     public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
         renderer.quadraticTo(x1,y1,x,y);
-        checkErrors("quadraticTo");
+        checkErrors("quadraticTo",[x1,y1,x,y]);
     }
     
     public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
         renderer.cubicTo(x1,y1,x2,y2,x,y);
-        checkErrors("cubicTo");
+        checkErrors("cubicTo",[x1,y1,x2,y2,x,y]);
     }
 
     public function rect( x:Float, y:Float, w:Float, h:Float ) {
         renderer.rect(x,y,w,h);
-        checkErrors("rect");
+        checkErrors("rect",[x,y,w,h]);
     }
     
     public function circle( x:Float, y:Float, r:Float ) {
         renderer.circle(x,y,r);
-        checkErrors("circle");
+        checkErrors("circle",[x,y,r]);
     }
     
     public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         renderer.text(x,y,text,format);
-        checkErrors("text");
+        checkErrors("text",[x,y,text,format]);
     }
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         renderer.image(img,inRegion,outRegion);
-        checkErrors("image");
+        checkErrors("image",[inRegion,outRegion]);
     }
     
     public function native( o:NativeObject ) {
         renderer.native(o);
-        checkErrors("native");
+        checkErrors("native",[o]);
     }
     
 }

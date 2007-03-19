@@ -103,7 +103,6 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     }
 
     public function native( o:NativeObject ) {
-    trace("render native list #"+o );
         GL.callList( o );
     }
     
