@@ -8,9 +8,9 @@ default:
 
 
 PROJECT:=xinf
-VERSION:=0.0.1
+VERSION:=0.0.5
 TAGLINE:=
-TEST_SAMPLE:=samples/0-test
+TEST_SAMPLE:=samples/test
 
 LIBS:=cptr opengl xinfinity-support
 NEKO_PLATFORMS:=Linux Mac Windows
@@ -54,7 +54,7 @@ DOC_DIR:=doc
 .PHONY: doc
 $(DOC_DIR)/doc.n.xml : $(XINF_SOURCES)
 	cd $(DOC_DIR); haxe --auto-xml \
-		-lib opengl -lib cptr -lib xinfinity-support -neko doc.n -cp ../ xinf.ImportAll \
+		-lib xinf -neko doc.n -cp ../ xinf.ImportAll \
 #		--next -js doc.js -cp ../ xinf.ImportAll \
 #		--next -swf-version 9 -swf doc.swf -cp ../ xinf.ImportAll
 	
@@ -83,8 +83,8 @@ HAXELIB_ROOT:=support/haxelib-build
 HAXELIB_PROJECT:=$(HAXELIB_ROOT)/$(PROJECT)
 
 haxelib : $(HAXELIB_PROJECT).zip
-	
-$(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB) libs
+
+$(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB) libs-all
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	
@@ -102,16 +102,26 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 	$(foreach LIB, $(LIBS), \
 		$(foreach API, $(wildcard libs/$(LIB)/api/*), \
 			svn --force export $(API) $(HAXELIB_PROJECT)/$(notdir $(API)); )\
-		cp libs/$(LIB)/bin/Windows/*.dll $(HAXELIB_PROJECT)/ndll/Windows/; \
+		rm libs/$(LIB)/bin/Mac/*.ppc; \
+		rm libs/$(LIB)/bin/Mac/*.x86; \
 		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
-			cp libs/$(LIB)/bin/$(LIB).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
-			cp libs/$(LIB)/bin/$(PLATFORM)/$(LIB).ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp -r libs/$(LIB)/bin/$(LIB).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp -r libs/$(LIB)/bin/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 		))
 		
 	
 	# build the "0-test" sample for haxelib run
-	#cd $(TEST_SAMPLE); haxe -cp ../../ -lib xinf -main App -neko run.n;
-	#cp $(TEST_SAMPLE)/run.n $(HAXELIB_PROJECT)/
+		#install first
+	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)
+	haxelib test $(HAXELIB_PROJECT).zip
+	
+	cd $(TEST_SAMPLE); haxe -cp ../../ -lib xinf -main App \
+		-resource $(TEST_SAMPLE)/xinf.gif@xinf.gif \
+		-resource $(TEST_SAMPLE)/xinf.png@xinf.png \
+		-resource $(TEST_SAMPLE)/xinf.jpg@xinf.jpg \
+		-resource $(TEST_SAMPLE)/testzweck.ttf@testzweck.ttf \
+		-neko run.n;
+	cp $(TEST_SAMPLE)/run.n $(HAXELIB_PROJECT)/
 	
 	# copy resource FIXME
 	cp $(RESOURCE) $(HAXELIB_PROJECT)/
@@ -128,6 +138,36 @@ $(HAXELIB_PROJECT).zip: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERS
 test: haxelib
 	haxelib test $(HAXELIB_PROJECT).zip
 	haxelib run $(PROJECT)
+
+
+#######################################################
+
+quick: $(RESOURCE) $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB) libs
+	-rm -rf $(HAXELIB_ROOT)
+	mkdir -p $(HAXELIB_PROJECT)
+	
+	# copy haxelib.xml
+	sed -e s/__VERSION__/$(VERSION)/ support/haxelib.xml > $(HAXELIB_PROJECT)/haxelib.xml
+	
+	# copy haXe API and Samples
+	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
+	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
+	
+	# copy libs
+	
+	mkdir $(HAXELIB_PROJECT)/ndll
+	$(foreach PLATFORM, Linux, mkdir $(HAXELIB_PROJECT)/ndll/$(PLATFORM); )
+	$(foreach LIB, $(LIBS), \
+		$(foreach API, $(wildcard libs/$(LIB)/api/*), \
+			svn --force export $(API) $(HAXELIB_PROJECT)/$(notdir $(API)); )\
+		rm libs/$(LIB)/bin/Mac/*.ppc; \
+		rm libs/$(LIB)/bin/Mac/*.x86; \
+		$(foreach PLATFORM, Linux, \
+			cp -r libs/$(LIB)/bin/$(LIB).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp -r libs/$(LIB)/bin/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+		))
+	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)
+	haxelib test $(HAXELIB_PROJECT).zip
 
 #######################################################
 
