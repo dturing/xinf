@@ -57,10 +57,12 @@ if [ -z $SKINS ]; then
     SKINS="BevelInFocus BevelIn BevelOutFocus BevelOut"
 fi
 BGS="FieldBg BevelInBg BevelOutBg"
+ICONS="Dropdown Thumb"
 
 mkdir skin/
 
 #function foo() {
+
 # border 9slices
 Y=0
 for name in $SKINS; do
@@ -72,11 +74,20 @@ done
 # backgrounds
 Y=0
 for NAME in $BGS; do
-    echo ///////// Building image background $name
+    echo ///////// Building image background $NAME
     inkscape -e skin/$NAME.png -a 0:$Y:100:$(expr $Y + 100) backgrounds.svg
     Y=$(expr $Y + 100)
 done
+
+# icons
+for NAME in $ICONS; do
+    echo ///////// Building image icon $NAME
+    inkscape -e skin/$NAME.png -j -i $NAME icons.svg
+done
+
 #}
+
+
 
 # swfmill simple source
 echo "<movie version=\"9\"><library>" > assets.swfml

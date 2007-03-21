@@ -149,13 +149,47 @@ class GreenTheme extends Theme {
                 border: { l:5, t:5, r:5, b:5 },
                 padding: { l:2, t:2, r:2, b:2 },
                 minHeight: 25, minWidth: 25,
-                skin: new Skin( BevelOut, BevelOutBg ),
+                skin: new Skin( BevelOut, BevelOutBg, new CenteredImage( pfx+"Dropdown" ) ),
             } );
         StyleSheet.defaultSheet.add(
             [ "Label" ],
             new ParentSelector( new ClassNameSelector(["Dropdown"]) ), 
             {
                 padding: { l:5, t:5, r:5, b:5 },
+            } );
+            
+        StyleSheet.defaultSheet.add(
+            [ "Thumb" ],
+            {
+                border: { l:5, t:5, r:5, b:5 },
+                padding: { l:2, t:2, r:2, b:2 },
+                minHeight: 25, minWidth: 25,
+                skin: new Skin( BevelOut, BevelOutBg, new CenteredImage( pfx+"Thumb" ) ),
+            } );
+        StyleSheet.defaultSheet.add(
+            [ "Scrollbar" ],
+            {
+                border: { l:5, t:5, r:5, b:5 },
+                padding: { l:2, t:2, r:2, b:2 },
+                minHeight: 25, minWidth: 25,
+                skin: new Skin( null, BevelInBg, null ),
+            } );
+
+        StyleSheet.defaultSheet.add(
+            [ "CheckBox" ],
+            {
+                border: { l:5, t:5, r:5, b:5 },
+                padding: { l:2, t:2, r:2, b:2 },
+                minHeight: 25, minWidth: 25,
+                skin: new Skin(null,null,null),
+            } );
+        StyleSheet.defaultSheet.add(
+            [ "RadioButton" ],
+            {
+                border: { l:5, t:5, r:5, b:5 },
+                padding: { l:2, t:2, r:2, b:2 },
+                minHeight: 25, minWidth: 25,
+                skin: new Skin(null,null,null),
             } );
     }
     
