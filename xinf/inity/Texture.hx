@@ -18,6 +18,7 @@ package xinf.inity;
 import xinf.support.Pixbuf;
 import cptr.CPtr;
 import opengl.GL;
+import opengl.GLU;
 import xinf.erno.ImageData;
 import xinf.inity.ColorSpace;
 
@@ -50,6 +51,11 @@ class Texture extends ImageData {
             GL.texImage2D( GL.TEXTURE_2D, 0, GL.RGBA, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
 
         GL.popAttrib();
+        
+        var e:Int = GL.getError();
+        if( e > 0 ) {
+            throw( "OpenGL Error on trying to initialize "+twidth+"x"+theight+" texture: "+GLU.errorString(e) );
+        }
     }
     
     public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, ?cspace:ColorSpace ) :Void {

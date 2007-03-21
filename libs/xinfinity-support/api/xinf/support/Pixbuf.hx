@@ -30,6 +30,8 @@ extern class Pixbuf {
 
 	/** <nekobind ctor="true"/>	**/
 	public static function newFromCompressedData( data:Dynamic ) :Pixbuf;
+	/** <nekobind ctor="true"/>	**/
+	public static function newFromRGB( data:Dynamic, width:Int, height:Int, hasAlpha:Int ) :Pixbuf;
 	
     
     public static function __init__() : Void {

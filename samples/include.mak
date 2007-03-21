@@ -7,7 +7,7 @@ BINARIES:=$(foreach PLATFORM, $(PLATFORMS), $(APP).$(PLATFORM))
 LIBS=cptr opengl xinfinity-support
 NEKOPATH:=$(NEKOPATH):$(subst : ,:,$(foreach LIB,$(LIBS),../../libs/$(LIB)/bin/Linux:../../libs/$(LIB)/bin:))
 
-HAXEFLAGS:=-cp ../../ $(foreach lib,$(LIBS),-cp ../../libs/$(lib)/api) -D htmltrace
+HAXEFLAGS:=-cp ../../ $(foreach lib,$(LIBS),-cp ../../libs/$(lib)/api) -D htmltrace -D gldebug
 SOURCES:=$(wildcard ../../*.hx ../../*/*.hx ../../*/*/*.hx)
 
 

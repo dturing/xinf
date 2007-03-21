@@ -33,6 +33,13 @@ value alloc_cptr( void *ptr, int size, void (*free_f)(void*) ) {
 	return r;
 } 
 
+GdkPixbuf* gdk_pixbuf_new_from_rgb( value _data, int width, int height, int hasAlpha ) {
+	int bytesPerSample = hasAlpha ? 4 : 3;
+    val_cptr_check_size(_data,unsigned char,width*height*bytesPerSample);
+    return gdk_pixbuf_new_from_data( (const guchar*)val_cptr(_data,unsigned char), GDK_COLORSPACE_RGB,
+        hasAlpha, 8, width, height, width, NULL, NULL );
+}
+
 GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	g_type_init();
 	

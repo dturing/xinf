@@ -35,24 +35,27 @@ package xinf.erno;
     </ul>
 **/
 class Keys {
+    static public var SPECIAL:Int;
     
     private static var keys:IntHash<String>;
     
     private static function __init__() :Void {
+        SPECIAL = 255;
         keys = new IntHash<String>();
         
         keys.set(8,"backspace");
         keys.set(9,"tab");
         keys.set(27,"escape");
         keys.set(32,"space");
+        keys.set(127,"delete");
         
         #if neko
-            keys.set(opengl.GLUT.KEY_PAGE_UP,"page up");
-            keys.set(opengl.GLUT.KEY_PAGE_DOWN,"page down");
-            keys.set(opengl.GLUT.KEY_LEFT,"left");
-            keys.set(opengl.GLUT.KEY_UP,"up");
-            keys.set(opengl.GLUT.KEY_RIGHT,"right");
-            keys.set(opengl.GLUT.KEY_DOWN,"down");
+            keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_UP,"page up");
+            keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_DOWN,"page down");
+            keys.set(SPECIAL+opengl.GLUT.KEY_LEFT,"left");
+            keys.set(SPECIAL+opengl.GLUT.KEY_UP,"up");
+            keys.set(SPECIAL+opengl.GLUT.KEY_RIGHT,"right");
+            keys.set(SPECIAL+opengl.GLUT.KEY_DOWN,"down");
         #else true
             keys.set(33,"page up");
             keys.set(34,"page down");

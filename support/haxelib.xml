@@ -1,5 +1,5 @@
 <project name="xinf" url="http://xinf.org/" license="LGPL">
     <user name="dfischer"/>
     <description>xinf is not flash: cross-runtime, cross-platform graphics.</description>
-    <version name="__VERSION__">Pre-Alpha</version>
+    <version name="__VERSION__">Alpha</version>
 </project>

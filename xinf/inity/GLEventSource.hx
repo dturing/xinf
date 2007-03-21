@@ -50,11 +50,11 @@ class GLEventSource {
     }
     
     public function keyPress( key:Int, x:Int, y:Int ) :Void {
-        //var k = Keys.get(key);
-        //if( k==null ) 
-        //trace("not special "+key );
-        var k = String.fromCharCode(key);
-        postKeyPress( k );
+        var k = Keys.get(key);
+        if( k==null ) 
+            k = String.fromCharCode(key);
+    //   trace("not special "+key+", "+k );
+        postKeyPress( k, key );
     }
 
     public function keyRelease( key:Int, x:Int, y:Int ) :Void {
@@ -66,23 +66,23 @@ class GLEventSource {
     }
 
     public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
-        var k = Keys.get(key);
-        //trace("special "+key+", "+k );
+        var k = Keys.get(Keys.SPECIAL+key);
+     //   trace("special "+key+", "+k );
         postKeyPress( k );
     }
 
     public function specialKeyRelease( key:Int, x:Int, y:Int ) :Void {
-        var k = Keys.get(key);
+        var k = Keys.get(Keys.SPECIAL+key);
         //trace("special KeyRelease "+key+", "+k );
         postKeyRelease( k );
     }
 
-    public function postKeyPress( key:String ) :Void {
+    public function postKeyPress( key:String, ?code:Int ) :Void {
         var mod = GLUT.getModifiers();
         var shift = mod&GLUT.ACTIVE_SHIFT > 0;
         var alt = mod&GLUT.ACTIVE_ALT > 0;
         var ctrl = mod&GLUT.ACTIVE_CTRL > 0;
-        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, 0, key, shift, alt, ctrl ) );
+        runtime.postEvent( new KeyboardEvent( KeyboardEvent.KEY_DOWN, code, key, shift, alt, ctrl ) );
     }
 
     public function postKeyRelease( key:String ) :Void {
