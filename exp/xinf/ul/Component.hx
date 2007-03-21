@@ -43,33 +43,20 @@ class Component extends xinf.style.StyleClassElement {
         return( _prefSize );
     }
 
-    override public function applyStyle( s:Style ) {
+    override public function styleChanged( style:Style ) :Void {
         var p = removePadding( _prefSize );
-        super.applyStyle(s);
+        super.styleChanged(style);
         setPrefSize( p );
     }
 
-    /* maybe...
-    public function getMinimumSize() :{x:Float,y:Float} {
-        return( {x:0.,y:0.} );
+    override public function moveTo( x:Float, y:Float ) :Void {
+        super.moveTo(x,y);
+        transformChanged();
     }
-    public function getMaximumSize() :{x:Float,y:Float} {
-        return( {x:Math.POSITIVE_INFINITY,y:Math.POSITIVE_INFINITY} );
-    }
-    override public function resize( x:Float, y:Float ) :Void {
-        super.resize( x, y );
-        
-        innerSize = {
-            x:x - (style.padding.l+style.padding.r+style.border.l+style.border.r),
-            y:y - (style.padding.t+style.padding.b+style.border.t+style.border.b) };
-        innerPos = {
-            x:style.padding.l+style.border.l,
-            y:style.padding.t+style.border.t };
-    }
-    public function resizeInner( x:Float, y:Float ) :Void {
-        resize( x + style.padding.l+style.padding.r + style.border.l+style.border.r, 
-                y + style.padding.t+style.padding.b + style.border.t+style.border.b );
-    }
-    */
 
+    public function transformChanged() :Void {
+    }
+    public function parentTransformChanged() :Void {
+        transformChanged();
+    }
 }

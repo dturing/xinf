@@ -56,7 +56,6 @@ class LineEdit extends Widget {
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
         if( e.code >= 32 && e.code < 127 ) {
-        trace("non-control code: "+e.code );
             switch( e.code ) {
                 case 127: // Del
                     if( sel.from==sel.to ) {
@@ -67,10 +66,12 @@ class LineEdit extends Widget {
                     replaceSelection( Std.chr(e.code) );
             }
         } else {
-        trace("key: "+e.key );
             switch( e.key ) {
                 case "backspace":
                     if( sel.to==sel.from ) sel.from=sel.to-1;
+                    replaceSelection("");
+                case "delete":
+                    if( sel.to==sel.from ) sel.to=sel.from+1;
                     replaceSelection("");
                 case "left":
                     moveCursor( 
@@ -238,7 +239,6 @@ class LineEdit extends Widget {
                     // just caret
                     g.setFill( fgColor.r, fgColor.g, fgColor.b, fgColor.a );
                 }
-                trace("w: "+(w-x) );
                 g.rect( xofs+x, yofs+y, w-x,h-y );
             }
             

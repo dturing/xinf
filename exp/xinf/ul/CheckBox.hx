@@ -20,7 +20,10 @@ import xinf.erno.Renderer;
 import xinf.erno.Color;
 
 class CheckBox<Value> extends Button<Value> {
-	
+
+    private var label:Label;
+    private var button:Component;
+
 	public var selected(default,setSelected) :Bool;
 	
 	private function setSelected( sel:Bool ) {

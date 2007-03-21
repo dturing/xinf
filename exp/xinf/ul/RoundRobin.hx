@@ -79,6 +79,7 @@ class RoundRobin<T,Item:Settable<T>> extends Container {
             this.n = n;
         }
         
+    //    trace("resize items to "+w+"/"+unit );
         for( item in rr ) {
             item.resize( w, unit );
         }
@@ -95,7 +96,9 @@ class RoundRobin<T,Item:Settable<T>> extends Container {
         var j = 0;
         for( item in rr ) {
             item.moveTo( 0, pos );
-            item.set( model.getItemAt(i++) );
+            var value = if( i>=model.getLength() ) null else model.getItemAt(i);
+            item.set( value );
+            i++;
             pos+=unit;
         }
     }

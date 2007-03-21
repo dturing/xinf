@@ -37,7 +37,7 @@ class Container extends Component {
         relayoutNeeded = true;
         var l = child.addEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, onComponentResize );
         child.__parentSizeListener = l;
-        child.updateStyles();
+        child.updateClassStyle();
         scheduleRedraw();
         scheduleTransform();
     }
@@ -58,9 +58,15 @@ class Container extends Component {
             scheduleTransform();
         }
     }
-    
+
+    override public function transformChanged() :Void {
+        for( child in children ) {
+            child.parentTransformChanged();
+        }
+    }
+
     function relayout() :Void {
-        if( relayoutNeeded ) {
+        if( layout!=null && relayoutNeeded ) {
             var oldSize = size;
             trace("relayout "+this);
             layout.layoutContainer( this );
@@ -76,7 +82,7 @@ class Container extends Component {
     }
 
     public function reTransform( g:Renderer ) :Void {
-        if( layout!=null && relayoutNeeded ) relayout();
+        if( relayoutNeeded ) relayout();
         super.reTransform( g );
     }
 
@@ -94,11 +100,11 @@ class Container extends Component {
         }
     }
     
-    override public function updateStyles() :Void {
-        super.updateStyles();
+    override public function updateClassStyle() :Void {
+        super.updateClassStyle();
         if( children==null ) return;
         for( child in children ) {
-            child.updateStyles();
+            child.updateClassStyle();
         }
     }
 }

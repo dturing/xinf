@@ -27,7 +27,7 @@ import xinf.event.ScrollEvent;
     Improvised Vertical Scrollbar element.
 **/
 
-class VScrollbar extends Container {
+class VScrollbar extends Pane {
     
     private var thumb:Pane;
     private var thumbHeight:Float;
@@ -40,12 +40,12 @@ class VScrollbar extends Container {
         thumb = new xinf.ul.Pane();
         thumb.addStyleClass("Thumb");
         thumb.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
-        thumb.resize(12,12);
+        thumb.resize(18,18);
         attach(thumb);
         
         thumbHeight = thumb.size.y;
         
-        size={x:12.,y:20.};
+        size={x:18.,y:0.};
     }
 
     public function clickBar( e:MouseEvent ) {

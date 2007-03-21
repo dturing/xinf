@@ -18,7 +18,7 @@ package xinf.style;
 import xinf.erno.Renderer;
 import xinf.erno.ImageData;
 
-class ImageBorder implements Border {
+class ImageBorder implements Fill {
 
     static var LT:Int = 0;
     static var T :Int = 1;

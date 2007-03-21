@@ -57,7 +57,8 @@ class Horizontal extends Orientation {
 class FlowLayout implements Layout {
     public static var VERTICAL:Orientation = new Vertical();
     public static var HORIZONTAL:Orientation = new Horizontal();
-    public static var Horizontal3:FlowLayout = new FlowLayout( FlowLayout.HORIZONTAL, 3 );
+    public static var Horizontal0:FlowLayout = new FlowLayout( FlowLayout.HORIZONTAL );
+    public static var Vertical0:FlowLayout = new FlowLayout( FlowLayout.VERTICAL );
     
     public var pad:Float; // FIXME: no way to trigger relayout...
     public var o:Orientation;

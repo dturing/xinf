@@ -98,10 +98,10 @@ class GrayTheme extends Theme {
                 minWidth:100, minHeight:60
             } );
         xinf.style.StyleSheet.defaultSheet.add(
-            [ "TreeItem" ], {
-                padding: { l:5, t:1, r:5, b:1 },
+            [ "StringTreeItem" ], {
+                padding: { l:5, t:3, r:5, b:1 },
                 color: new Color().fromRGBInt( 0x555555 ),
-                minHeight: 20, minWidth:100
+                minHeight: 20, minWidth:100,
             } );
             
         xinf.style.StyleSheet.defaultSheet.add(

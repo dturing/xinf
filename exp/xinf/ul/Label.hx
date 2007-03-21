@@ -26,10 +26,12 @@ class Label extends Pane {
     
     public var text(get_text,set_text):String;
     var _text:String;
+    public var autoSize:Bool;
     
     public function new( ?text:String ) :Void {
         super();
         this.text = text;
+        autoSize = false;
     }
     
     function get_text() :String {
@@ -39,17 +41,17 @@ class Label extends Pane {
     function set_text( t:String ) :String {
         if( t != _text ) {
             _text = t;
-            setPrefSize( getStyleTextFormat().textSize(t) );
+            if( autoSize ) setPrefSize( getStyleTextFormat().textSize(t) );
             scheduleRedraw();
         }
         return(t);
     }
 
-    override public function applyStyle( s:Style ) {
+    override public function styleChanged( s:Style ) {
         var oldFont = getStyleTextFormat();
-        super.applyStyle(s);
+        super.styleChanged(s);
         var font = getStyleTextFormat();
-        if( text != null && font!=oldFont ) {
+        if( autoSize && text != null && font!=oldFont ) {
             setPrefSize( font.textSize(_text) );
         }
     }

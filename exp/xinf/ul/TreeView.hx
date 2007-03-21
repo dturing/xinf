@@ -123,8 +123,18 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
     }
 }
 
+interface TreeItem<T> implements Settable<TreeItemData<T>> {
+    function set( ?d:TreeItemData<T> ) :Void;
+    function attachTo( parent:Container ) :Void;
 
-class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
+    function moveTo( x:Float, y:Float ) :Void;
+    function resize( x:Float, y:Float ) :Void;
+
+    function addStyleClass( name:String ) :Void;
+    function removeStyleClass( name:String ) :Void;
+}
+
+class StringTreeItem<T> extends Label, implements TreeItem<T> {
     var value:T;
     var node:Node<T>;
     
@@ -134,14 +144,16 @@ class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
     }
     
     public function set( ?d:TreeItemData<T> ) :Void {
+        scheduleRedraw();
         if( d==null ) {
             value=null;
+            node=null;
             text="";
             return;
         }
         value = d.node.getValue();
-        text = value+" |"+d.depth;
         node = d.node;
+        text = ""+node;
         moveTo( 15*(d.depth+1), position.y );
     }
     
@@ -150,11 +162,10 @@ class TreeItem<T> extends Label, implements Settable<TreeItemData<T>> {
     }
     
     override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-    
-        setStyleFill( g, "color" );
-        g.text(style.padding.l+style.border.l,style.padding.t+style.border.t,text,getStyleTextFormat());
+        if( value==null ) return;
         
+        super.drawContents(g);
+        setStyleFill( g, "color" );
         if( node!=null && node.firstChild != null ) {
             var h = size.y/3;
             #if js
@@ -188,7 +199,7 @@ class TreeView<T> extends ListBox<TreeItemData<T>> {
     var listModel:TreeAsListModel<T>;
     
     public function new( tree:TreeModel<T>, ?createItem:Void->TreeItem<T> ) :Void {
-        if( createItem==null ) createItem = function() { return new TreeItem<T>(); };
+        if( createItem==null ) createItem = function() { return new StringTreeItem<T>(); };
         listModel = new TreeAsListModel<T>(tree);
         super( listModel, createItem );
 

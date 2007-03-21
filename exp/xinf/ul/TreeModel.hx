@@ -19,8 +19,8 @@ interface Node<T> {
     var parent:Node<T>;
     var firstChild:Node<T>;
     var lastChild:Node<T>;
-    var previous:Node<T>;
     var next:Node<T>;
+    var previous:Node<T>;
     
     var open(getOpen,setOpen):Bool;
     function getValue() :T;

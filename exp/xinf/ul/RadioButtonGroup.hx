@@ -89,8 +89,6 @@ class SelectableGroup<T:ISelectable> {
 	
 }
 
-import xinf.ul.Button;
-
 class RadioButtonGroup<Value> extends SelectableGroup<RadioButton<Value>> {
 
 	public function new() {

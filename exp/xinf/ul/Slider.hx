@@ -79,17 +79,15 @@ class Slider extends Widget {
         label = new xinf.ul.Label();
         label.moveTo( style.padding.l, style.padding.t ); // FIXME
         attach( label );
-        // FIXME: image should be part of the style.
-        button = new Pane(); //new ImageButton(name+"_btn", this, "assets/slider/icon.png" ) );
+        button = new Pane();
         button.addStyleClass("Thumb");
         attach( button );
         
-        slideBar = new Pane();//Image(name+"_slide", this, "assets/slider/bg.png");
+        slideBar = new Pane();
         slideBar.addStyleClass("SliderBar");
 
-        slideThumb = new Pane(); //new xinf.ony.Image(name+"_thumb", this, "assets/slider/handle.png");
-        slideThumb.moveTo( 6, 1 );
-        slideThumb.resize( 7, 2 );
+        slideThumb = new Pane();
+        slideThumb.moveTo( 0, 1 );
         slideThumb.addStyleClass("Thumb");
         slideBar.attach( slideThumb );
 
@@ -105,18 +103,21 @@ class Slider extends Widget {
         button.resize( size.y, size.y );
         button.moveTo( size.x-size.y, 0 );
         
-        slideBar.resize( size.y, 112 );
+        slideBar.resize( size.y, 100+size.y );
+        slideThumb.resize( size.y, size.y );
     }
     
     private function onMouseDown( e:MouseEvent ) {
         FocusManager.setFocus(this);
         
         var y = -(100-(get_normalized()*100));
-        var p = localToGlobal( {x:button.position.x, y:y } );
-        var t = (104-(get_normalized()*100));
+        var p = localToGlobal( {x:button.position.x, y:0. } );
+        var effectiveH = slideBar.size.y - slideThumb.size.y;
+        var t = (effectiveH-(get_normalized()*100));
         trace("e: "+e.y+", p: "+p.y+", t:"+t );
-        slideThumb.moveTo( 6, t );
-        slideBar.moveTo( p.x, (p.y-(100-t)) ); //position.x+button.position.x, -3+position.y+y );
+        slideThumb.moveTo( 0, t );
+        trace("move bar: "+(p.y-(100-t)) );
+        slideBar.moveTo( p.x, (p.y-(t)) ); //position.x+button.position.x, -3+position.y+y );
         
         popup = new Popup(this,slideBar,Move);
         
@@ -129,7 +130,8 @@ class Slider extends Widget {
 
     public function sliderMoved( x:Float, y:Float, marker:Float ) :Void {
         set_normalized( (marker + ((y)/-100)) );
-        slideThumb.moveTo( 6, (104-(get_normalized()*100)) );
+        var effectiveH = slideBar.size.y - slideThumb.size.y;
+        slideThumb.moveTo( 0, (effectiveH-(get_normalized()*100)) );
     }
 
     public function sliderEnd() :Void {

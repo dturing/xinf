@@ -67,6 +67,7 @@ class ListBox<T> extends Widget {
         cropper.attach( rr );
 
         scrollbar = new xinf.ul.VScrollbar();
+        scrollbar.addStyleClass("Scrollbar");
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
 //        scrollbar.visible=false;
         attach( scrollbar );
@@ -86,7 +87,7 @@ class ListBox<T> extends Widget {
         scrollbar.resize( scrollbar.size.x, size.y );
     
         var rrs = removePadding( size );
-        rrs.x-=scrollbar.size.x;
+      // rrs.x-=scrollbar.size.x-(style.padding.r+style.border.r);
         cropper.resize( rrs.x, rrs.y );
         cropper.moveTo( style.padding.l+style.border.l, style.padding.t+style.border.t ); //FIXME
         rr.resize( rrs.x, rrs.y );

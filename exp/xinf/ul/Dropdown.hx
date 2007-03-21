@@ -59,7 +59,6 @@ class Dropdown extends Widget {
         layout.setConstraint( label, Center );
         
         button = new Pane(); //ImageButton( name+"_btn", this, "assets/dropdown/button.png" );
-        button.addStyleClass("Thumb");
         attach(button);
         layout.setConstraint( button, East );
         
@@ -90,7 +89,6 @@ class Dropdown extends Widget {
 
         popup = new Popup(this,menu,Scale);
         isOpen=true;
-//        button.contained.load("assets/dropdown/open/button.png");
     }
     
     private function close() :Void {

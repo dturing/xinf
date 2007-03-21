@@ -18,11 +18,11 @@ package xinf.style;
 import xinf.erno.Renderer;
 
 class Skin {
-    var border:Border;
+    var border:Fill;
     var bg:Fill;
     var fg:Fill;
     
-    public function new( ?border:Border, ?background:Fill, ?foreground:Fill ) {
+    public function new( ?border:Fill, ?background:Fill, ?foreground:Fill ) {
         this.border = border;
         bg = background;
         fg = foreground;

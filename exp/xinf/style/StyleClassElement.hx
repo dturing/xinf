@@ -19,19 +19,19 @@ class StyleClassElement extends StyleElement {
         addStyleClass( clNames[ clNames.length-1 ] );
     }
 
-    public function updateStyles() :Void {
+    public function updateClassStyle() :Void {
         var s = StyleSheet.defaultSheet.match( this );
-        if( s!=style ) applyStyle(s);
+        assignStyle(s);
     }
     
     public function addStyleClass( name:String ) :Void {
         styleClasses.push( name );
-        updateStyles();
+        updateClassStyle();
     }
     
     public function removeStyleClass( name:String ) :Void {
         styleClasses.remove( name );
-        updateStyles();
+        updateClassStyle();
     }
     
     public function hasStyleClass( name:String ) :Bool {

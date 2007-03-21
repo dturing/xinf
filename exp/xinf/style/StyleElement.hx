@@ -5,20 +5,44 @@ import xinf.erno.Color;
 import xinf.erno.TextFormat;
 
 class StyleElement extends xinf.ony.Object {
-    
     public var style :Style;
+    public var assignedStyle :Style;
+    public var ownStyle :Style;
     
     public function new() :Void {
         super();
         style = StyleSheet.newDefaultStyle();
     }
-    
 
-    public function applyStyle( s:Style ) {
-        if( s!=style ) {
-            style = s;
-            scheduleRedraw();
+    public function assignStyle( s:Style ) {
+        if( s!=assignedStyle ) {
+            assignedStyle = s;
+            updateStyle();
         }
+    }
+
+    public function setStyle( s:Style ) {
+        if( s!=ownStyle ) {
+            ownStyle = s;
+            updateStyle();
+        }
+    }
+
+    public function updateStyle() {
+        if( ownStyle!=null && assignedStyle!=null ) {
+            style = new Style();
+            style.setFrom( assignedStyle );
+            style.setFrom( ownStyle );
+        } else if( assignedStyle!=null ) {
+            style = assignedStyle;
+        } else if( ownStyle!=null ) {
+            style = ownStyle;
+        }
+        styleChanged( style );
+        scheduleRedraw();
+    }
+    
+    public function styleChanged( style:Style ) {
     }
     
     public function setStyleStroke( g:Renderer, width:Float, colorProperty:String, ?colorFallback:Color ) :Void {
