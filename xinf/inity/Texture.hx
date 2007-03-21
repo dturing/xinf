@@ -52,10 +52,12 @@ class Texture extends ImageData {
 
         GL.popAttrib();
         
-        var e:Int = GL.getError();
-        if( e > 0 ) {
-            throw( "OpenGL Error on trying to initialize "+twidth+"x"+theight+" texture: "+GLU.errorString(e) );
-        }
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
     }
     
     public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, ?cspace:ColorSpace ) :Void {
@@ -79,6 +81,14 @@ class Texture extends ImageData {
         }
         
         GL.popAttrib();
+
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
+        
         frameAvailable( data );
     }
 

@@ -184,6 +184,13 @@ class GLPolygon {
             GL.color4( fill.r, fill.g, fill.b, fill.a );
 
             drawTesselated( coords );
+            
+            #if gldebug
+                var e:Int = GL.getError();
+                if( e > 0 ) {
+                    throw( "OpenGL Error: "+GLU.errorString(e) );
+                }
+            #end
         }
         
         if( width>0 && stroke != null ) {
@@ -192,6 +199,13 @@ class GLPolygon {
             GL.pointSize( width );
 
             drawOutline( coords );
+            
+            #if gldebug
+                var e:Int = GL.getError();
+                if( e > 0 ) {
+                    throw( "OpenGL Error: "+GLU.errorString(e) );
+                }
+            #end
         }
     }
 

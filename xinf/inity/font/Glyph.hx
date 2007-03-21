@@ -39,6 +39,13 @@ class Glyph {
         GL.newList( displayList, GL.COMPILE );
         polygon.drawFilled();
         GL.endList();
+        
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
     }
     
     public function render( s:Float ) :Float {
@@ -50,6 +57,14 @@ class Glyph {
         GL.callList(displayList);
 // fake hinting        GL.translate( Math.round((advance*s))/s, .0, .0 );
         GL.translate( advance, .0, .0 );
+        
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
+
         return( advance );
     }
 }

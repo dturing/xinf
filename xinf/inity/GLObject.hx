@@ -61,7 +61,14 @@ class GLObject {
         GL.popMatrix();
         GL.popName();
         GL.endList();
-        
+
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
+
         update();
     }
 
@@ -97,6 +104,13 @@ class GLObject {
     
     public function end() :Void {
         GL.endList();
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
+        
         redoTransform();
     }    
     

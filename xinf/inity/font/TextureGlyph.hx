@@ -67,6 +67,12 @@ class TextureGlyph extends Glyph {
 
         GL.popAttrib();
 
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
     }
     
     override public function cache( pixelSize:Float ) :Void {
@@ -91,6 +97,13 @@ class TextureGlyph extends Glyph {
                     
                 GL.popAttrib();
             GL.endList();
+            
+            #if gldebug
+                var e:Int = GL.getError();
+                if( e > 0 ) {
+                    throw( "OpenGL Error: "+GLU.errorString(e) );
+                }
+            #end
         } 
     }
 }

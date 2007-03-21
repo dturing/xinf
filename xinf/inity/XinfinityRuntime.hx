@@ -55,8 +55,6 @@ class XinfinityRuntime extends Runtime {
         initGL();
 
         root = new GLObject( getNextId() );
-        root.start();
-        root.end();
 
          addEventListener( GeometryEvent.STAGE_SCALED, resized );
         
@@ -161,6 +159,13 @@ class XinfinityRuntime extends Runtime {
         GL.translate( -1., 1., 0. );
         GL.scale( (2./width), (-2./height), 1. );
       //  GL.translate( .5, .5, 0. );
+      
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
     }
     
     private function endFrame() :Void {
@@ -168,11 +173,12 @@ class XinfinityRuntime extends Runtime {
         GL.flush();
         GLUT.swapBuffers();
         
-        // check for OpenGL errors
-        var e:Int = GL.getError();
-        if( e > 0 ) {
-            throw( "OpenGL error "+GLU.errorString(e) );
-        }
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+GLU.errorString(e) );
+            }
+        #end
     }
     
     /* ------------------------------------------------------
