@@ -36,7 +36,7 @@ class GLDebugRenderer implements Renderer {
     }
 
     function checkErrors( inst:String, ?args:Array<Dynamic> ) :Void {
-        trace(""+inst+" "+args );
+//        trace(""+inst+" "+args );
         var e:Int = GL.getError();
         if( e > 0 ) {
             throw( "OpenGL Error on "+inst+" "+args+": "+GLU.errorString(e) );

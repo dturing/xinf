@@ -32,12 +32,13 @@ class Event<T> {
     public function toString() :String {
         // FIXME #if debug
         var r = ""+type;
-        if( origin != null ) r+=", from "+origin.fileName+":"+origin.lineNumber+" { ";
+        if( origin != null ) r+=", from "+origin.fileName+":"+origin.lineNumber;
+        r+=" { ";
         for( field in Reflect.fields(this) ) {
             if( field != "origin" )
-                r+=field+":"+Reflect.field(this,field)+" ";
+                r+=field+":"+Reflect.field(this,field)+", ";
         }
-        r+=" }";
+        r+="}";
         
         return r;
     }

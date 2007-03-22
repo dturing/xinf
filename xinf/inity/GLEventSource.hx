@@ -92,7 +92,13 @@ class GLEventSource {
     public function mouseButton( button:Int, state:Int, x:Int, y:Int ) :Void {
         var target:Int = runtime.findIdAt(x,y);
         button+=1;
-        
+
+        var mod = GLUT.getModifiers();
+        var shift = mod&GLUT.ACTIVE_SHIFT > 0;
+        var alt = mod&GLUT.ACTIVE_ALT > 0;
+        var ctrl = mod&GLUT.ACTIVE_CTRL > 0;
+
+
         if( button == 4 || button == 5 ) {
             if( state==1 ) {
                 var delta:Int = -1; // up;
@@ -103,9 +109,9 @@ class GLEventSource {
         }
 
         if( state==0 ) {
-            runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_DOWN, x, y, button, target ) );
+            runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_DOWN, x, y, button, target, shift, alt, ctrl ) );
         } else {
-            runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_UP, x, y, button, target ) );
+            runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_UP, x, y, button, target, shift, alt, ctrl ) );
         }
     }
 

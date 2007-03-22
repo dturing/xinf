@@ -43,7 +43,7 @@ class Glyph {
         #if gldebug
             var e:Int = GL.getError();
             if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
+                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
             }
         #end
     }
@@ -61,7 +61,7 @@ class Glyph {
         #if gldebug
             var e:Int = GL.getError();
             if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
+                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
             }
         #end
 

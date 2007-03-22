@@ -41,12 +41,12 @@ class JSEventSource {
         
         untyped js.Lib.document.onkeydown = untyped keyPress;
         untyped js.Lib.document.onkeyup = untyped keyRelease;
-    /*    
+        
         untyped js.Lib.document.onkeypress = untyped function( e:js.Event ) :Bool {
         //    trace("hold key "+e.keyCode );
             return false;
         };
-      */  
+        
         // Firefox mousewheel support
         // IE to be done, just use document.onmousewheel there...
         if( untyped js.Lib.window.addEventListener ) {
@@ -64,6 +64,7 @@ class JSEventSource {
     
     private function keyEvent( e:js.Event, type:EventKind<KeyboardEvent> ) :Bool {
         var key:String = Keys.get(e.keyCode);
+        if( key==null ) key = String.fromCharCode(e.keyCode);
         if( e.keyCode == 0 ) {
             // normal char - handled by browser
             return true;
@@ -74,9 +75,9 @@ class JSEventSource {
             }
             runtime.postEvent( new KeyboardEvent( 
                 type, e.keyCode, key,
-                untyped e.shiftKey, untyped e.altKey, untyped e.ctrlKey ) );
+                e.shiftKey>0, e.altKey>0, e.ctrlKey>0 ) );
             // prevent browser from handling it
-            return true;
+            return false;
         }
     }
 
@@ -126,7 +127,8 @@ class JSEventSource {
     }
     
     private function postMouseEventTo( e:js.Event, type:EventKind<MouseEvent>, targetId:Int ) :Bool {
-        runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, 0, targetId ) );
+        runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, e.button, targetId,
+                            e.shiftKey>0, e.altKey>0, e.ctrlKey>0 ) );
         
         return e.target.nodeName=="INPUT";
     }

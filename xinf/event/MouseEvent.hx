@@ -31,15 +31,26 @@ class MouseEvent extends Event<MouseEvent> {
     public var button:Int;
     public var targetId:Int;
     
-    public function new( _type:EventKind<MouseEvent>, _x:Int, _y:Int, ?_button:Int, ?targetId:Int ) {
+    public var shiftMod:Bool;
+    public var altMod:Bool;
+    public var ctrlMod:Bool;
+    
+    public function new( _type:EventKind<MouseEvent>, _x:Int, _y:Int, ?_button:Int, ?targetId:Int, ?shiftMod:Bool, ?altMod:Bool, ?ctrlMod:Bool ) {
         super(_type);
         x=_x; y=_y; button=_button;
         this.targetId = targetId;
+        this.shiftMod = if( shiftMod==null ) false else shiftMod;
+        this.altMod = if( altMod==null ) false else altMod;
+        this.ctrlMod = if( ctrlMod==null ) false else ctrlMod;
     }
     
     public function toString() :String {
-        var r = ""+type+"("+x+","+y+", button "+button+")";
-        if( targetId != null ) r+="to #"+targetId;
+        var r = ""+type+"("+x+","+y+", ";
+        if( shiftMod ) r+="Shift+";
+        if( altMod ) r+="Alt+";
+        if( ctrlMod ) r+="Ctrl+";
+        r+="Button "+button+")";
+        if( targetId != null ) r+=">#"+targetId;
         return r;
     }
     
