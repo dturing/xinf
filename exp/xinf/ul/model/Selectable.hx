@@ -13,25 +13,25 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.model;
 
-import xinf.event.Event;
+class Selectable<T> implements ISelectable {
 
-class PickEvent<T> extends Event<PickEvent<T>> {
-    
-    static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
-
+    public var selected(default,setSelected):Bool;
     public var item:T;
-    public var index:Int;
-    public var addModifier:Bool;
-    public var extendModifier:Bool;
     
-    public function new( _type:xinf.event.EventKind<PickEvent<T>>, item:T, index:Int, ?add:Bool, ?extend:Bool ) {
-        super(_type);
+    public function new( item:T ) :Void {
         this.item = item;
-        this.index = index;
-        this.addModifier = add;
-        this.extendModifier = extend;
+        this.selected=false;
     }
     
+    public function setSelected( sel:Bool ) :Bool {
+        selected=sel;
+        return sel;
+    }
+    
+    public function toString() :String {
+        return( ""+item );
+    }
+
 }

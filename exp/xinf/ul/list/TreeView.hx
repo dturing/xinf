@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
 import xinf.ul.RoundRobin;
 import xinf.ul.TreeModel;

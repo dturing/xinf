@@ -13,15 +13,25 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
-class SelectableListItem<T:ISelectable> extends ListItem<T> {
+import xinf.event.Event;
 
-    public function set( ?value:T ) :Void {
-        super.set();
-        if( value!=null && value.selected ) addStyleClass(":selected") else removeStyleClass(":selected");
-        this.value = value;
-        this.text = if( value==null ) "" else ""+value;
+class PickEvent<T> extends Event<PickEvent<T>> {
+    
+    static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
+
+    public var item:T;
+    public var index:Int;
+    public var addModifier:Bool;
+    public var extendModifier:Bool;
+    
+    public function new( _type:xinf.event.EventKind<PickEvent<T>>, item:T, index:Int, ?add:Bool, ?extend:Bool ) {
+        super(_type);
+        this.item = item;
+        this.index = index;
+        this.addModifier = add;
+        this.extendModifier = extend;
     }
     
 }

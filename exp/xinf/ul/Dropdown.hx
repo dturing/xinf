@@ -15,9 +15,6 @@
 
 package xinf.ul;
 
-import xinf.ul.ListModel;
-import xinf.ul.ListBox;
-import xinf.ul.Popup;
 
 import xinf.ony.Root;
 
@@ -25,6 +22,11 @@ import xinf.event.Event;
 import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
+
+import xinf.ul.Popup;
+import xinf.ul.model.ListModel;
+import xinf.ul.list.ListView;
+import xinf.ul.list.PickEvent;
 import xinf.ul.layout.BorderLayout;
 
 /**
@@ -39,7 +41,7 @@ class Dropdown extends Widget {
     
     private var label:Label;
     private var button:Component;
-    private var menu:ListBox<String>;
+    private var menu:ListView<String>;
     
     private var selectedIndex:Int;
     private var isOpen:Bool;
@@ -64,7 +66,7 @@ class Dropdown extends Widget {
         
         addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
-        menu = new ListBox( model );
+        menu = new ListView( model );
         menu.addEventListener( PickEvent.ITEM_PICKED, itemPicked );
         menu.focusable = false;
         

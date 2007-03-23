@@ -16,7 +16,11 @@
 package xinf.ul;
 
 import xinf.event.SimpleEventDispatcher;
+import xinf.ul.model.ISelectable;
 
+/*
+    NOTE: about to be removed.
+*/
 class SelectableGroup<T:ISelectable> extends SimpleEventDispatcher {
 	
 	public var maxSelections(default,default) :Int;

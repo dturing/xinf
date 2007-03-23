@@ -13,31 +13,31 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.model;
 
-interface Node<T> {
-    var parent:Node<T>;
-    var firstChild:Node<T>;
-    var lastChild:Node<T>;
-    var next:Node<T>;
-    var previous:Node<T>;
+interface TreeNode<T> {
+    var parent:TreeNode<T>;
+    var firstChild:TreeNode<T>;
+    var lastChild:TreeNode<T>;
+    var next:TreeNode<T>;
+    var previous:TreeNode<T>;
     
     var open(getOpen,setOpen):Bool;
     function getValue() :T;
 }
 
-typedef TreeModel<T> = Node<T>
+typedef TreeModel<T> = TreeNode<T>
 
-class SimpleNode<T> implements Node<T> {
+class SimpleTreeNode<T> implements TreeNode<T> {
 
     public var open(getOpen,setOpen):Bool;
     var value:T;
     
-    public var parent:Node<T>;
-    public var firstChild:Node<T>;
-    public var lastChild:Node<T>;
-    public var previous:Node<T>;
-    public var next:Node<T>;
+    public var parent:TreeNode<T>;
+    public var firstChild:TreeNode<T>;
+    public var lastChild:TreeNode<T>;
+    public var previous:TreeNode<T>;
+    public var next:TreeNode<T>;
     
     public function new( value:T ) :Void {
         this.value = value;
@@ -56,7 +56,7 @@ class SimpleNode<T> implements Node<T> {
         return open;
     }
 
-    public function addChild( child:Node<T> ) :Void {
+    public function addChild( child:TreeNode<T> ) :Void {
         if( firstChild==null ) 
             firstChild=lastChild=child;
         else {
@@ -76,7 +76,7 @@ class SimpleNode<T> implements Node<T> {
     }
     
     /*
-    public static function createDynamic( e:Dynamic ) :SimpleNode<T> {
+    public static function createDynamic( e:Dynamic ) :SimpleTreeNode<T> {
         // TODO
     }
     */

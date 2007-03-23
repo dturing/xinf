@@ -13,9 +13,12 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
 import xinf.erno.Renderer;
+import xinf.ul.Label;
+import xinf.ul.Container;
+import xinf.ul.model.ISettable;
 
 class ListItem<T> extends Label, implements ISettable<T> {
     

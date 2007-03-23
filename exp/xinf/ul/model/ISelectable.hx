@@ -13,25 +13,11 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.model;
 
-class Selectable<T> implements ISelectable {
-
-    public var selected(default,setSelected):Bool;
-    public var item:T;
-    
-    public function new( item:T ) :Void {
-        this.item = item;
-        this.selected=false;
-    }
-    
-    public function setSelected( sel:Bool ) :Bool {
-        selected=sel;
-        return sel;
-    }
-    
-    public function toString() :String {
-        return( ""+item );
-    }
-
+interface ISelectable {
+	
+	public var selected(default,setSelected) :Bool;
+	public function setSelected( sel:Bool ) :Bool;
+	
 }

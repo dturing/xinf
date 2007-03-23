@@ -13,16 +13,20 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
 import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 
-import xinf.ul.RoundRobin;
+import xinf.ul.Widget;
+import xinf.ul.Crop;
+import xinf.ul.VScrollbar;
+import xinf.ul.model.ListModel;
+import xinf.ul.model.ISettable;
 
-class ListBox<T> extends Widget {
+class ListView<T> extends Widget {
 
     var model:ListModel<T>;
     var rr:RoundRobin<T,ISettable<T>>;

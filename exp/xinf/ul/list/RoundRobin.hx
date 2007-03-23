@@ -13,7 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
+
+import xinf.ul.model.ListModel;
+import xinf.ul.model.ISettable;
 
 /*
       i   rr
@@ -34,7 +37,7 @@ package xinf.ul;
     to display a long list of values (of type T).
 **/
 
-class RoundRobin<T,Item:ISettable<T>> extends Container {
+class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
 
     var model:ListModel<T>;
     var createItem:Void->Item;

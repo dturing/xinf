@@ -13,11 +13,12 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.model;
 
-interface ISelectable {
-	
-	public var selected(default,setSelected) :Bool;
-	public function setSelected( sel:Bool ) :Bool;
-	
+interface ListModel<T> {
+
+    function getLength() :Int;
+    function getItemAt( index:Int ) :T;
+
 }
+

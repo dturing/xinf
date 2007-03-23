@@ -13,9 +13,14 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
-class SelectionListView<T:ISelectable> extends ListBox<T> {
+import xinf.ul.model.ISelectable;
+import xinf.ul.model.ISettable;
+import xinf.ul.model.Selection;
+import xinf.ul.model.ListModel;
+
+class SelectionListView<T:ISelectable> extends ListView<T> {
 
     var lastPickedIndex:Int;
     var selection:Selection<T>;

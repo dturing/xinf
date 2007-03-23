@@ -13,16 +13,17 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.list;
 
-interface ISettable<T> {
+import xinf.ul.model.ISelectable;
 
-    function set( ?value:T ) :Void;
-    function attachTo( parent:Container ) :Void;
+class SelectableListItem<T:ISelectable> extends ListItem<T> {
 
-    function moveTo( x:Float, y:Float ) :Void;
-    function resize( x:Float, y:Float ) :Void;
+    public function set( ?value:T ) :Void {
+        super.set();
+        if( value!=null && value.selected ) addStyleClass(":selected") else removeStyleClass(":selected");
+        this.value = value;
+        this.text = if( value==null ) "" else ""+value;
+    }
     
-    function setCursor( isCursor:Bool ) :Bool;
-
 }

@@ -13,12 +13,16 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.model;
 
-interface ListModel<T> {
+interface ISettable<T> {
 
-    function getLength() :Int;
-    function getItemAt( index:Int ) :T;
+    function set( ?value:T ) :Void;
+    function attachTo( parent:xinf.ul.Container ) :Void;
+
+    function moveTo( x:Float, y:Float ) :Void;
+    function resize( x:Float, y:Float ) :Void;
+    
+    function setCursor( isCursor:Bool ) :Bool;
 
 }
-

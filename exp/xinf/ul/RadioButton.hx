@@ -18,6 +18,7 @@ package xinf.ul;
 import xinf.event.SimpleEvent;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
+import xinf.ul.model.ISelectable;
 
 class RadioButton<Value> extends CheckBox<Value>, implements ISelectable {
 	
