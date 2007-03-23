@@ -18,5 +18,6 @@ package xinf.ul;
 interface ISelectable {
 	
 	public var selected(default,setSelected) :Bool;
+	public function setSelected( sel:Bool ) :Bool;
 	
 }

@@ -16,43 +16,9 @@
 package xinf.ul;
 
 interface ListModel<T> {
+
     function getLength() :Int;
     function getItemAt( index:Int ) :T;
+
 }
 
-class SimpleListModel<T> implements ListModel<T> {
-    
-    private var items:Array<T>;
-    
-    public function new() :Void {
-        items = new Array<T>();
-    }
-    
-    public function addItem( item:T ) :Void {
-        items.push( item );
-    }
-
-    public function addItems( items:Array<T> ) :Void {
-        for( item in items ) {
-            this.items.push( item );
-        }
-    }
-
-    public function getLength() :Int {
-        return items.length;
-    }
-
-    public function getItemAt( index:Int ) :T {
-        return items[index];
-    }
-    
-    public function sort( f:T->T->Int ) :Void {
-        items.sort( f );
-    }
-    
-    public static function create<T>( items:Array<T> ) :SimpleListModel<T> {
-        var r = new SimpleListModel<T>();
-        r.addItems(items);
-        return r;
-    }
-}

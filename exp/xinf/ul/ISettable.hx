@@ -15,10 +15,14 @@
 
 package xinf.ul;
 
-class RadioButtonGroup<Value> extends SelectableGroup<RadioButton<Value>> {
+interface ISettable<T> {
 
-	public function new() {
-		super();
-	}
+    function set( ?value:T ) :Void;
+    function attachTo( parent:Container ) :Void;
+
+    function moveTo( x:Float, y:Float ) :Void;
+    function resize( x:Float, y:Float ) :Void;
     
+    function setCursor( isCursor:Bool ) :Bool;
+
 }

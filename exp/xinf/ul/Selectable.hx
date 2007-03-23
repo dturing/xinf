@@ -15,10 +15,23 @@
 
 package xinf.ul;
 
-class RadioButtonGroup<Value> extends SelectableGroup<RadioButton<Value>> {
+class Selectable<T> implements ISelectable {
 
-	public function new() {
-		super();
-	}
+    public var selected(default,setSelected):Bool;
+    public var item:T;
     
+    public function new( item:T ) :Void {
+        this.item = item;
+        this.selected=false;
+    }
+    
+    public function setSelected( sel:Bool ) :Bool {
+        selected=sel;
+        return sel;
+    }
+    
+    public function toString() :String {
+        return( ""+item );
+    }
+
 }

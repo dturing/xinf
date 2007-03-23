@@ -22,40 +22,22 @@ import xinf.event.SimpleEvent;
 
 import xinf.ul.RoundRobin;
 
-class ListItem<T> extends Label, implements Settable<T> {
-
-    var value:T;
-    
-    public function new( ?value:T ) :Void {
-        super( ""+value );
-        this.value = value;
-    }
-    
-    public function set( ?value:T ) :Void {
-        this.value = value;
-        this.text = if( value==null ) "" else ""+value;
-    }
-    
-    public function attachTo( parent:Container ) :Void {
-        parent.attach(this);
-    }
-}
-
-
 class ListBox<T> extends Widget {
 
     var model:ListModel<T>;
-    var rr:RoundRobin<T,Settable<T>>;
+    var rr:RoundRobin<T,ISettable<T>>;
+    
     var cropper:Crop;
     var scrollbar:VScrollbar;
-    var cursor:Int;
-    var lastCursorItem:Settable<T>;
     
-    public function new( model:ListModel<T>, ?createItem:Void->Settable<T> ) :Void {
+    var cursor:Int;
+    var lastCursorItem:ISettable<T>;
+    
+    public function new( model:ListModel<T>, ?createItem:Void->ISettable<T> ) :Void {
         super();
         this.model = model;
         if( createItem==null ) {
-            createItem = function() :Settable<T> {
+            createItem = function() :ISettable<T> {
                 return new ListItem<T>();
             }
         }
@@ -63,7 +45,7 @@ class ListBox<T> extends Widget {
         cropper = new Crop();
         attach(cropper);
         
-        rr = new RoundRobin<T,Settable<T>>( model, createItem );
+        rr = new RoundRobin<T,ISettable<T>>( model, createItem );
         cropper.attach( rr );
 
         scrollbar = new xinf.ul.VScrollbar();
@@ -87,7 +69,6 @@ class ListBox<T> extends Widget {
         scrollbar.resize( scrollbar.size.x, size.y );
     
         var rrs = removePadding( size );
-      // rrs.x-=scrollbar.size.x-(style.padding.r+style.border.r);
         cropper.resize( rrs.x, rrs.y );
         cropper.moveTo( style.padding.l+style.border.l, style.padding.t+style.border.t ); //FIXME
         rr.resize( rrs.x, rrs.y );
@@ -118,38 +99,45 @@ class ListBox<T> extends Widget {
         var y = globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
         var i = rr.indexAt( y );
         setCursor( i );
-        sendPickEvent();
+        pick( i, e.ctrlMod, e.shiftMod );
+        setCursor( i ); // hmmm FIXME
     }
 
-    function sendPickEvent() :Void {
-        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(cursor), cursor ) );
+    function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
+        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), cursor, add, extend ) );
     }
 
     public function onKeyDown( e:KeyboardEvent ) {
+    //trace("key: "+e+" "+e.shiftMod );
         switch( e.key ) {
             case "up":
                 rr.assureVisible( cursor-1 );
                 setCursor( cursor-1 );
+                if( e.shiftMod ) pick( cursor, false, true );
             case "down":
                 rr.assureVisible( cursor+1 );
                 setCursor( cursor+1 );
+                if( e.shiftMod ) pick( cursor, false, true );
             case "page up":
                 var i=cursor-rr.getPageSize();
                 rr.assureVisible( i );
                 setCursor( i );
+                if( e.shiftMod ) pick( cursor, false, true );
             case "page down":
                 var i=cursor+rr.getPageSize();
                 rr.assureVisible( i );
                 setCursor( i );
+                if( e.shiftMod ) pick( cursor, false, true );
             case "space":
-                sendPickEvent();
+                pick( cursor, true );
+                setCursor( cursor );
         }
         updateScrollbar();
     }
     
     public function setCursor( index:Int ) :Void {
         if( lastCursorItem!=null ) {
-            lastCursorItem.removeStyleClass( ":cursor" );
+            lastCursorItem.setCursor(false);
         }
         cursor = index;
         if( cursor==-2 ) return;
@@ -157,7 +145,7 @@ class ListBox<T> extends Widget {
         if( cursor < 0 ) cursor=0;
 
         var item = rr.getItem( cursor );
-        if( item != null ) item.addStyleClass(":cursor");
+        if( item != null ) item.setCursor(true);
         lastCursorItem = item;
     }
     

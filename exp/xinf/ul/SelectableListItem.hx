@@ -15,10 +15,13 @@
 
 package xinf.ul;
 
-class RadioButtonGroup<Value> extends SelectableGroup<RadioButton<Value>> {
+class SelectableListItem<T:ISelectable> extends ListItem<T> {
 
-	public function new() {
-		super();
-	}
+    public function set( ?value:T ) :Void {
+        super.set();
+        if( value!=null && value.selected ) addStyleClass(":selected") else removeStyleClass(":selected");
+        this.value = value;
+        this.text = if( value==null ) "" else ""+value;
+    }
     
 }

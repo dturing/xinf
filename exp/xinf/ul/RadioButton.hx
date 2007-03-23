@@ -27,11 +27,11 @@ class RadioButton<Value> extends CheckBox<Value>, implements ISelectable {
 		super( label, value );
 		group = grp;
 		selected = false;
-		group.addInstance(this);
+		group.addItem(this);
 	}
 	
-	private function setSelected( sel:Bool ) {
-		if( (sel != selected) && !(sel && !group.selectInstance(this)) ) {
+	public function setSelected( sel:Bool ) {
+		if( (sel != selected) && !(sel && !group.selectItem(this)) ) {
 			selected = sel;
 			if (sel) addStyleClass(":select") else removeStyleClass(":select");
 		}

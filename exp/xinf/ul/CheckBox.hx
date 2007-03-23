@@ -26,7 +26,7 @@ class CheckBox<Value> extends Button<Value> {
 
 	public var selected(default,setSelected) :Bool;
 	
-	private function setSelected( sel:Bool ) {
+	public function setSelected( sel:Bool ) {
 		if( sel != selected ) {
 			selected = sel;
 			if (sel) addStyleClass(":select") else removeStyleClass(":select");

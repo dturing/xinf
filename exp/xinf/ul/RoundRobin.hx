@@ -1,16 +1,19 @@
+/* 
+   xinf is not flash.
+   Copyright (c) 2006, Daniel Fischer.
+ 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+                                                                            
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
+   Lesser General Public License or the LICENSE file for more details.
+*/
 
 package xinf.ul;
-
-interface Settable<T> {
-    function set( ?value:T ) :Void;
-    function attachTo( parent:Container ) :Void;
-
-    function moveTo( x:Float, y:Float ) :Void;
-    function resize( x:Float, y:Float ) :Void;
-
-    function addStyleClass( name:String ) :Void;
-    function removeStyleClass( name:String ) :Void;
-}
 
 /*
       i   rr
@@ -27,11 +30,11 @@ interface Settable<T> {
 */
 
 /**
-    RoundRobin maintains a short list of Items (which must implement Settable<T>) 
+    RoundRobin maintains a short list of Items (which must implement ISettable<T>) 
     to display a long list of values (of type T).
 **/
 
-class RoundRobin<T,Item:Settable<T>> extends Container {
+class RoundRobin<T,Item:ISettable<T>> extends Container {
 
     var model:ListModel<T>;
     var createItem:Void->Item;
