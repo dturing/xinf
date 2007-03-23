@@ -2,11 +2,11 @@ package xinf.style;
 
 class StyleClassElement extends StyleElement {
     
-    private var styleClasses :Array<String>;
+    private var styleClasses :Hash<Bool>;
     
     public function new() :Void {
         super();
-        styleClasses = new Array<String>();
+        styleClasses = new Hash<Bool>();
         style = StyleSheet.newDefaultStyle();
         
         // add our own class to the list of style classes
@@ -25,7 +25,7 @@ class StyleClassElement extends StyleElement {
     }
     
     public function addStyleClass( name:String ) :Void {
-        styleClasses.push( name );
+        styleClasses.set( name, true );
         updateClassStyle();
     }
     
@@ -35,14 +35,11 @@ class StyleClassElement extends StyleElement {
     }
     
     public function hasStyleClass( name:String ) :Bool {
-        for( c in styleClasses ) {
-            if( c == name ) return true;
-        }
-        return false;
+        return styleClasses.get(name);
     }
 
-    public function getStyleClasses() :Array<String> {
-        return styleClasses;
+    public function getStyleClasses() :Iterator<String> {
+        return styleClasses.keys();
     }
     
 }
