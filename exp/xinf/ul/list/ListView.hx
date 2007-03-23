@@ -100,7 +100,7 @@ class ListView<T> extends Widget {
     }
     
     function entryClicked( e:MouseEvent ) :Void {
-        var y = rr.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
+        var y = cropper.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
         var i = rr.indexAt( y );
         setCursor( i );
         pick( i, e.ctrlMod, e.shiftMod );
