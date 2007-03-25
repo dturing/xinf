@@ -4,6 +4,11 @@
     </head>
 	<body style="background:#000000;font-family:sans;margin:0;" text="#aaaaaa" link="#eeeeee" vlink="#eeeeee">
 
+		<div style="position:absolute; max-height: 200px; overflow:auto; bottom: 0; background:#333;">
+			<p style="padding:10px; background:#000">  <a href="TEST.html">&gt; JavaScript</a> | <b>Flash</b></p>
+			<div id="haxe:trace" style="padding: 10px;"></div>
+		</div>
+
 		<script language="JavaScript">
 			function haxeTrace( msg, posInfos ) {
                 var div = document.createElement("div");
@@ -13,12 +18,7 @@
                 div.scrollIntoView();
             
 			}
-		</script>
-
-		<div style="position:absolute; max-height: 200px; overflow:auto; bottom: 0; background:#333;">
-			<p style="padding:10px; background:#000">  <a href="TEST.html">&gt; JavaScript</a> | <b>Flash</b></p>
-			<div id="haxe:trace" style="padding: 10px;"></div>
-		</div>
+        </script>
 
         <embed src="App.swf"
 			   width="320"

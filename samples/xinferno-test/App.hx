@@ -371,7 +371,6 @@ class App {
     }
     
     public static function main() :Void {
-    
         try {
             var g:Renderer = Runtime.renderer;
             
