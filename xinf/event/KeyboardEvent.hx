@@ -42,7 +42,7 @@ class KeyboardEvent extends Event<KeyboardEvent> {
         if( altMod ) r+="Alt-";
         if( ctrlMod ) r+="Ctrl-";
         if( key==null ) r+="[null]";
-        else if( r.length==1 ) r+="'"+key+"'";
+        else if( key.length==1 ) r+="'"+key+"'";
         else r+=key;
         r+=")";
         return r;

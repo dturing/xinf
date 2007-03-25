@@ -112,7 +112,6 @@ class Font {
                 if( w>maxW ) maxW = w;
                 w=0;
                 lines++;
-                GL.translate( .0, lineHeight*lines, .0 );
             } else {
                 var g = getGlyph(c);
                 if( g != null ) {
@@ -166,6 +165,13 @@ class Font {
         GL.popMatrix();
 
         GL.popMatrix();
+        
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
+            }
+        #end
     }
 
     public function toString() :String {

@@ -67,7 +67,7 @@ class Flash9EventSource {
     }
     
     private function postMouseEventTo( e:flash.events.MouseEvent, type:EventKind<MouseEvent>, targetId:Int ) :Void {
-        runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), 0, targetId ) );
+        runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), 0, targetId, e.shiftKey, e.altKey, e.ctrlKey ) );
         e.stopPropagation();
     }
 
@@ -106,7 +106,7 @@ class Flash9EventSource {
             }
             runtime.postEvent( new KeyboardEvent( 
                 type, e.keyCode, key,
-                untyped e.shiftKey, untyped e.altKey, untyped e.ctrlKey ) );
+                e.shiftKey, e.altKey, e.ctrlKey ) );
             // prevent browser from handling it
             e.stopPropagation();
         }

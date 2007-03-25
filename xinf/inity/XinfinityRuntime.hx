@@ -92,6 +92,13 @@ class XinfinityRuntime extends Runtime {
         // FIXME: here??
         Font.cacheGlyphs();
 
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
+            }
+        #end
+
         somethingChanged = false;
         renderRoot();
         // TODO precise timing here
