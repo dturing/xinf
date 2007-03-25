@@ -79,7 +79,16 @@ class GreenTheme extends Theme {
             } );
 
         StyleSheet.defaultSheet.add(
-            [ "ListBox" ], {
+            [ "ListView" ], {
+                border: { l:5, t:5, r:5, b:5 },
+                padding: { l:-2, t:-2, r:-2, b:-2 },
+                color: new Color().fromRGBInt( 0 ),
+                background: new Color().fromRGBInt( 0xdddddd ),
+                minWidth:100, minHeight:60,
+                skin: new Skin( BevelIn, Field ),
+            } );
+        StyleSheet.defaultSheet.add(
+            [ "SelectionListView" ], {
                 border: { l:5, t:5, r:5, b:5 },
                 padding: { l:-2, t:-2, r:-2, b:-2 },
                 color: new Color().fromRGBInt( 0 ),
@@ -91,12 +100,26 @@ class GreenTheme extends Theme {
             [ "ListItem" ], {
                 padding: { l:5, t:2, r:5, b:0 },
                 color: new Color().fromRGBInt( 0x555555 ),
-                minHeight: 20, minWidth:100
+                minHeight: 20, minWidth:100,
             } );
         StyleSheet.defaultSheet.add(
-            [ ":cursor" ], {
+            [ "SelectableListItem" ], {
+                padding: { l:8, t:2, r:5, b:0 },
+                color: new Color().fromRGBInt( 0x555555 ),
+                minHeight: 20, minWidth:100,
+            } );
+		StyleSheet.defaultSheet.add(
+            [ ":selected" ], {
                 color: new Color().fromRGBInt( 0 ),
-                background: new Color().fromRGBInt( 0x73d216 )
+                background: new Color().fromRGBInt( 0x73d216  )
+            } );
+        StyleSheet.defaultSheet.add(
+            [ "cursor" ], {
+                padding: { l:5, t:2, r:5, b:0 },
+                color: new Color().fromRGBInt( 0xff0000 ),
+                background: new Color().fromRGBInt( 0x0000ff  ),
+                skin: new Skin( null, null, new CenteredImage( pfx+"ListCursor" ) ),
+                minHeight: 20, minWidth:10,
             } );
 
         StyleSheet.defaultSheet.add(
@@ -132,9 +155,6 @@ class GreenTheme extends Theme {
             [ "Button", ":press" ], {
                 padding: { l:2, t:3, r:2, b:1 },
                 skin: new Skin( BevelOutFocus, BevelInBg ),
-            } );
-		StyleSheet.defaultSheet.add(
-            [ ":select" ], {
             } );
             
             

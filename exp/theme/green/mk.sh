@@ -57,7 +57,7 @@ if [ -z $SKINS ]; then
     SKINS="BevelInFocus BevelIn BevelOutFocus BevelOut"
 fi
 BGS="FieldBg BevelInBg BevelOutBg"
-ICONS="Dropdown Thumb"
+ICONS="Dropdown Thumb ListCursor"
 
 mkdir skin/
 
@@ -91,7 +91,7 @@ done
 
 # swfmill simple source
 echo "<movie version=\"9\"><library>" > assets.swfml
-for NAME in $SKINS $BGS; do
+for NAME in $SKINS $BGS $ICONS; do
     echo "  <clip id=\"skin.${NAME}_png\" import=\"skin/${NAME}.png\"/>" >> assets.swfml
 done
 echo "<frame/></library></movie>" >> assets.swfml
@@ -101,6 +101,6 @@ swfmill simple assets.swfml skin.swf
 
 # haXe asset classes
 echo "package skin;" > skin/Skin.hx
-for NAME in $SKINS $BGS; do
+for NAME in $SKINS $BGS $ICONS; do
     echo "class ${NAME}_png extends flash.display.MovieClip { }" >> skin/Skin.hx
 done

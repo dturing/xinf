@@ -6,4 +6,7 @@
   <clip id="skin.FieldBg_png" import="skin/FieldBg.png"/>
   <clip id="skin.BevelInBg_png" import="skin/BevelInBg.png"/>
   <clip id="skin.BevelOutBg_png" import="skin/BevelOutBg.png"/>
+  <clip id="skin.Dropdown_png" import="skin/Dropdown.png"/>
+  <clip id="skin.Thumb_png" import="skin/Thumb.png"/>
+  <clip id="skin.ListCursor_png" import="skin/ListCursor.png"/>
 <frame/></library></movie>
