@@ -190,6 +190,10 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
         return Math.floor( (offset/unit)+cOffset );
     }
 
+    public function positionOf( index:Int ) :Float {
+        return( (index-cOffset)*unit );
+    }
+
     public function setModel( m:ListModel<T> ) :Void {
         model = m;
         redoAll();

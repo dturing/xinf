@@ -21,6 +21,7 @@ import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 
 import xinf.ul.Widget;
+import xinf.ul.Pane;
 import xinf.ul.Crop;
 import xinf.ul.VScrollbar;
 import xinf.ul.model.ListModel;
@@ -31,10 +32,11 @@ class ListView<T> extends Widget {
     var model:ListModel<T>;
     var rr:RoundRobin<T,ISettable<T>>;
     
+    var cursor:Pane;
     var cropper:Crop;
     var scrollbar:VScrollbar;
     
-    var cursor:Int;
+    var cursorPosition:Int;
     var lastCursorItem:ISettable<T>;
     
     public function new( model:ListModel<T>, ?createItem:Void->ISettable<T> ) :Void {
@@ -48,9 +50,15 @@ class ListView<T> extends Widget {
 
         cropper = new Crop();
         attach(cropper);
-        
+
         rr = new RoundRobin<T,ISettable<T>>( model, createItem );
         cropper.attach( rr );
+
+        cursor = new Pane();
+        cursor.addStyleClass("cursor");
+        cursor.resize( 8, 18 );
+        cursor.moveTo( -100, -100 );
+        cropper.attach( cursor );
 
         scrollbar = new xinf.ul.VScrollbar();
         scrollbar.addStyleClass("Scrollbar");
@@ -74,19 +82,22 @@ class ListView<T> extends Widget {
     
         var rrs = removePadding( size );
         cropper.resize( rrs.x, rrs.y );
-        cropper.moveTo( style.padding.l+style.border.l, style.padding.t+style.border.t ); //FIXME
+
+
+        var itl = innerTopLeft();
+        cropper.moveTo( itl.x, itl.y );
         rr.resize( rrs.x, rrs.y );
     }
 
     function scrollBy( value:Float ) {
         rr.scrollBy( value );
         updateScrollbar();
-        setCursor(cursor);
+        setCursor(cursorPosition);
     }
 
     function scroll( e:ScrollEvent ) :Void {
         rr.scrollToNormalized( e.value );
-        setCursor(cursor);
+        setCursor(cursorPosition);
     }
 
     function scrollStep( e:ScrollEvent ) :Void {
@@ -104,37 +115,37 @@ class ListView<T> extends Widget {
         var i = rr.indexAt( y );
         setCursor( i );
         pick( i, e.ctrlMod, e.shiftMod );
-        setCursor( i ); // hmmm FIXME
+    //    setCursor( i ); // hmmm FIXME
     }
 
     function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
-        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), cursor, add, extend ) );
+        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), cursorPosition, add, extend ) );
     }
 
     public function onKeyDown( e:KeyboardEvent ) {
     //trace("key: "+e+" "+e.shiftMod );
         switch( e.key ) {
             case "up":
-                rr.assureVisible( cursor-1 );
-                setCursor( cursor-1 );
-                if( e.shiftMod ) pick( cursor, false, true );
+                rr.assureVisible( cursorPosition-1 );
+                setCursor( cursorPosition-1 );
+                if( e.shiftMod ) pick( cursorPosition, false, true );
             case "down":
-                rr.assureVisible( cursor+1 );
-                setCursor( cursor+1 );
-                if( e.shiftMod ) pick( cursor, false, true );
+                rr.assureVisible( cursorPosition+1 );
+                setCursor( cursorPosition+1 );
+                if( e.shiftMod ) pick( cursorPosition, false, true );
             case "page up":
-                var i=cursor-rr.getPageSize();
+                var i=cursorPosition-rr.getPageSize();
                 rr.assureVisible( i );
                 setCursor( i );
-                if( e.shiftMod ) pick( cursor, false, true );
+                if( e.shiftMod ) pick( cursorPosition, false, true );
             case "page down":
-                var i=cursor+rr.getPageSize();
+                var i=cursorPosition+rr.getPageSize();
                 rr.assureVisible( i );
                 setCursor( i );
-                if( e.shiftMod ) pick( cursor, false, true );
+                if( e.shiftMod ) pick( cursorPosition, false, true );
             case "space":
-                pick( cursor, true );
-                setCursor( cursor );
+                pick( cursorPosition, true );
+                setCursor( cursorPosition );
         }
         updateScrollbar();
     }
@@ -143,12 +154,16 @@ class ListView<T> extends Widget {
         if( lastCursorItem!=null ) {
             lastCursorItem.setCursor(false);
         }
-        cursor = index;
-        if( cursor==-2 ) return;
-        if( cursor >= model.getLength() ) cursor = model.getLength()-1;
-        if( cursor < 0 ) cursor=0;
+        cursorPosition = index;
+        
+        if( cursorPosition==-2 ) return;
+        if( cursorPosition >= model.getLength() ) cursorPosition = model.getLength()-1;
+        if( cursorPosition < 0 ) cursorPosition=0;
 
-        var item = rr.getItem( cursor );
+//        trace("cursor @"+cursorPosition+" ==> "+rr.positionOf( cursorPosition ) );
+        cursor.moveTo( 0, rr.positionOf( cursorPosition ) );
+
+        var item = rr.getItem( cursorPosition );
         if( item != null ) item.setCursor(true);
         lastCursorItem = item;
     }
@@ -163,7 +178,7 @@ class ListView<T> extends Widget {
     }
     
     public function getCurrentItem() :T {
-        return model.getItemAt(cursor);
+        return model.getItemAt(cursorPosition);
     }
     
     public function setModel( m:ListModel<T> ) :Void {
