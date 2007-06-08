@@ -1,5 +1,8 @@
 #include "additions.h"
 
+#include <string.h>
+
+
 /* FIXME: use proper GL vertex array, not this hacky crap! */
 void gluVerticesOffset( int offset, int n, double *v ) {
 	double *_v = v+offset;
@@ -39,6 +42,12 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
     
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+    
+    unsigned char empty[w];
+    memset( empty, 0, w );
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y+h, w, 1,
+        GL_ALPHA, GL_UNSIGNED_BYTE, empty );
+    
     
     glPopClientAttrib();    
 }
