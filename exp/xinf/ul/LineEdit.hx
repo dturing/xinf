@@ -172,7 +172,7 @@ class LineEdit extends Widget {
         var i:Int=0;
         var g;
         while( x < p.x && i<text.length ) {
-            g = font.getGlyph(text.charCodeAt(i));
+            g = font.getGlyph(text.charCodeAt(i),fontSize);
             if( g != null ) {
                 x += Math.round((g.advance*fontSize));
             }

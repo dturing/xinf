@@ -69,12 +69,13 @@ class Slider extends Widget {
         return v;
     }
     
-    public function new( ?max:Float, ?min:Float, ?increment:Float ) :Void {
+    public function new( ?max:Float, ?min:Float, ?increment:Float, ?initial:Float ) :Void {
         super();
         precision=1000; this.min=0; this.max=1; this.increment=.1;
         if( min!=null ) this.min = min;
         if( max!=null ) this.max = max;
         if( increment!=null ) this.increment = increment;
+        else increment=0.1;
     
         label = new xinf.ul.Label();
         label.moveTo( style.padding.l, style.padding.t ); // FIXME
@@ -91,7 +92,8 @@ class Slider extends Widget {
         slideThumb.addStyleClass("Thumb");
         slideBar.attach( slideThumb );
 
-        value = .0;
+        if( initial==0 || initial==null ) initial=0.;
+        value = initial;
 
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );

@@ -43,6 +43,7 @@ class Container extends Component {
     }
 
     public function detach( child:Component ) :Void {
+        if( child==null ) throw("trying to detach null");
         children.remove( child );
         child.parent = null;
         child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
@@ -68,7 +69,7 @@ class Container extends Component {
     function relayout() :Void {
         if( layout!=null && relayoutNeeded ) {
             var oldSize = size;
-            trace("relayout "+this);
+//            trace("relayout "+this);
             layout.layoutContainer( this );
             relayoutNeeded = false;
         }

@@ -41,12 +41,14 @@ class Crop extends Container {
     
     #if neko
     /*
+        -- only for glScissors, see GLRenderer's clipRect()
+        
         i dont know how else to do this, glScissors need to update their global position whenever
         parent transforms change...
         really, use glClip-- but doesnt work on a r300 (my testing machine)
+        maybe stencil?
         so, FIXME, once that works...
         
-        -- only for glScissors, see GLRenderer's clipRect()
     override public function transformChanged() :Void {
         scheduleRedraw();
     }

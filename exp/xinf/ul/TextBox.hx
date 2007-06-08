@@ -116,7 +116,7 @@ class TextBox extends Widget {
                 var text = line.text;
                 //trace("render "+text+" at "+y );
                 for( i in 0...text.length ) {
-                    var g = format.font.getGlyph( text.charCodeAt(i) );
+                    var g = format.font.getGlyph( text.charCodeAt(i), format.size );
                     if( g!=null ) {
                         g.render( format.size );
                     }
