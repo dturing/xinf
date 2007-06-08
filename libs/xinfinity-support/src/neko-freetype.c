@@ -84,6 +84,7 @@ void ft_failure_v( const char *one, value v ) {
 DEFINE_KIND(k_ft_face);
 
 void _font_finalize( value v ) {
+    fprintf(stderr,"FINALIZE font %p\n", val_data(v) );
     free( val_data(v) );
 }
 
@@ -129,6 +130,8 @@ value ftLoadFont( value _data, value _width, value _height ) {
     value __f = alloc_abstract( k_ft_face, face );
     val_gc( __f, _font_finalize );
     alloc_field( font, val_id("__f"), __f );
+    
+    //fprintf(stderr,"Load Font %p\n", face );
 
     return font;
 }
@@ -175,7 +178,7 @@ void importGlyphPoints( FT_Vector *points, int n, value callbacks, field lineTo,
 	}
 }
 
-value ftRenderGlyph( value font, value _index ) {
+value ftRenderGlyph( value font, value _index, value _size, value _hint ) {
     if( !val_is_object(font) ) {
         ft_failure_v("not a freetype font face: ", font );
     }
@@ -184,22 +187,37 @@ value ftRenderGlyph( value font, value _index ) {
         ft_failure_v("not a freetype font face: ", font );
     }
     FT_Face *face = val_data( __f );
+
+    val_check( _size, number );
+    int size = val_number(_size);
+    FT_Set_Char_Size( *face, size, size, 72, 72 );
+    
+    val_check( _hint, bool );
+    int hint = val_bool(_hint);
     
     val_check(_index,number);
-    int index = FT_Get_Char_Index( *face, val_number(_index) );
-    
-    int err = FT_Load_Glyph( *face, index, FT_LOAD_NO_BITMAP );
+    /*
+    int index = FT_Get_Char_Index( *face, (FT_UInt) val_number(_index) );
+    fprintf( stderr, "char %i is glyph %i\n", (int)val_number(_index), (int)index );
+    int err = FT_Load_Glyph( *face, index, FT_LOAD_RENDER | FT_LOAD_NO_HINTING );
+        fprintf( stderr, "Load Glyph idx %i->%i/%i, sz %i, face %p: err 0x%x\n",
+                (int)val_number(_index), index, 
+                (int)((*face)->num_glyphs), size>>6, face, err );
+    */
+    int err = FT_Load_Char( *face, (FT_ULong)val_number(_index), FT_LOAD_RENDER | (hint?0:FT_LOAD_NO_HINTING) );
     if( err ) { 
+        
+        fprintf( stderr, "Load_Char failed: %x char index %i\n", err, FT_Get_Char_Index( *face, (FT_UInt) val_number(_index) ) );
         val_throw(alloc_string("Could not load requested Glyph"));
-        return( val_null );
+   //     return( val_null );
     }
     FT_GlyphSlot glyph = (*face)->glyph;
-    
+    /*
     err = FT_Render_Glyph( glyph, FT_RENDER_MODE_NORMAL );
     if( err || glyph->format != ft_glyph_format_bitmap ) {
         val_throw(alloc_string("Could not render requested Glyph"));
     }
-    
+    */
     FT_Bitmap bitmap = glyph->bitmap;
 
     value ret = alloc_object(NULL);
@@ -208,12 +226,13 @@ value ftRenderGlyph( value font, value _index ) {
     char *data = (char*)malloc( bitmap.width*bitmap.rows );
     memcpy( data, bitmap.buffer, bitmap.width*bitmap.rows );
     alloc_field( ret, val_id("bitmap"), alloc_cptr(data,bitmap.width*bitmap.rows,free) );
-    alloc_field( ret, val_id("x"), alloc_int(glyph->metrics.horiBearingX) );
-    alloc_field( ret, val_id("y"), alloc_int(glyph->metrics.horiBearingY) );
+    alloc_field( ret, val_id("x"), alloc_int( glyph->metrics.horiBearingX ) );
+    alloc_field( ret, val_id("y"), alloc_int( glyph->metrics.horiBearingY ) );
+    alloc_field( ret, val_id("advance"), alloc_float( glyph->advance.x ));
     
     return ret;
 }
-DEFINE_PRIM(ftRenderGlyph,2);
+DEFINE_PRIM(ftRenderGlyph,4);
 
 value ftIterateGlyphs( value font, value callbacks ) {
     if( !val_is_object(callbacks) ) {
