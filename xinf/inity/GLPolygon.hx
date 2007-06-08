@@ -47,16 +47,16 @@ class GLContour {
 
     public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) :Void {
         var d=Math.round(Math.max(2,(Math.abs(last.y-y)+Math.abs(last.x-x)) * pixelSize));
-    //    if( pixelSize>1. ) trace("D: "+d+", "+(Math.abs(last.y-y)+Math.abs(last.x-x)) );
         Helper.evaluateQuadraticBezier( [ last.x, last.y, x1, y1, x, y ], d, this.lineTo );
     //    last = { x:x, y:y };
     }
     
     public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
-        var d=Math.round(Math.max(2,Math.abs((last.y-x)+(last.x-y)) * pixelSize));
+        var d=Math.round(Math.max(2,(Math.abs(last.y-y)+Math.abs(last.x-x)) * pixelSize));
         var a = [ last.x, last.y, x1, y1, x2, y2, x, y ];
+        //trace("D: "+d+", "+(Math.abs(last.y-y)+Math.abs(last.x-x))+", "+last+", "+x+","+y+", pixelSize "+pixelSize );
         Helper.evaluateCubicBezier( a, d, this.lineTo );
-    //    last = { x:x, y:y };
+        //  last = { x:x, y:y };
     }
 
     public function appendArray( a:Array<Float> ) :Void {

@@ -90,7 +90,7 @@ class XinfinityRuntime extends Runtime {
         startFrame();
 
         // FIXME: here??
-        Font.cacheGlyphs();
+//        Font.cacheGlyphs();
 
         #if gldebug
             var e:Int = GL.getError();
