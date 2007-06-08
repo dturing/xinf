@@ -27,6 +27,12 @@ class StyleElement extends xinf.ony.Object {
             updateStyle();
         }
     }
+    
+    public function setStyleProperty( name:String, value:Dynamic ) {
+        if( ownStyle==null ) ownStyle=new Style();
+        ownStyle.set(name,value);
+        updateStyle();
+    }
 
     public function updateStyle() {
         if( ownStyle!=null && assignedStyle!=null ) {
