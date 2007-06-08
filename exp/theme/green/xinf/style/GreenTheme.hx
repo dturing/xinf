@@ -98,7 +98,7 @@ class GreenTheme extends Theme {
             } );
         StyleSheet.defaultSheet.add(
             [ "ListItem" ], {
-                padding: { l:5, t:2, r:5, b:0 },
+                padding: { l:8, t:2, r:5, b:0 },
                 color: new Color().fromRGBInt( 0x555555 ),
                 minHeight: 20, minWidth:100,
             } );

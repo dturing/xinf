@@ -18,14 +18,14 @@ import xinf.erno.Color;
 import xinf.ul.Application;
 import xinf.ul.Label;
 import xinf.ul.Button;
-import xinf.ul.ListModel;
-import xinf.ul.ListBox;
 import xinf.ul.LineEdit;
 import xinf.ul.Dropdown;
 import xinf.ul.Slider;
 import xinf.ul.RadioButton;
 import xinf.ul.CheckBox;
 import xinf.ul.Pane;
+import xinf.ul.model.SimpleListModel;
+import xinf.ul.list.ListView;
 
 import xinf.ul.Container;
 import xinf.ul.layout.FlowLayout;
@@ -80,13 +80,14 @@ class App extends Application {
             var model = SimpleListModel.create(
                 [ "foo", "bar", "baz", "fnord", "qux", "quux", "qasi" ] );
 
-            var listbox = new ListBox<String>( model );
+            var listbox = new ListView<String>( model );
             listbox.setPrefSize( {x:100.,y:100.} );
             cont.attach( listbox );
 
             var dropdown = new Dropdown(model);
             cont.attach(dropdown);
 
+/* disabled until fixed.
 
         var cont = new Pane();
         cont.layout = new FlowLayout( FlowLayout.VERTICAL, 5 );
@@ -96,7 +97,6 @@ class App extends Application {
                 trace("called tick..");
             });
             cont.attach(chx1);
-
 
             var rbGroup = new xinf.ul.RadioButtonGroup();
             rbGroup.maxSelections = 2;
@@ -113,7 +113,7 @@ class App extends Application {
             
             var rb3 = RadioButton.createSimple(rbGroup, "Cod", traceRadio, "coder");
             cont.attach(rb3);
-
+*/
     }
     
     public static function main() :Void {

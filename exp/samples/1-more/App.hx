@@ -13,42 +13,33 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-import xinf.ony.Application;
-import xinf.event.MouseEvent;
-import xinf.ul.GrayStyle;
-import xinf.ul.RoundRobin;
-import xinf.ul.Label;
+import xinf.ul.Application;
 import xinf.ul.Pane;
-import xinf.ul.ListModel;
-import xinf.ul.Widget;
-import xinf.ul.ListBox;
-
-import xinf.ul.TreeModel;
-import xinf.ul.TreeView;
-import xinf.ul.Container;
 import xinf.ul.layout.FlowLayout;
+
+import xinf.ul.list.SelectionListView;
+import xinf.ul.model.SelectableListModel;
+import xinf.ul.model.Selectable;
 
 class App extends Application {
     
     public function new() :Void {
         super();
         
-        GrayStyle.addToDefault();
-
-        var container = new Pane();
+       // var container = new Pane();
         container.layout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
-        root.attach(container);
+       // root.attach(container);
 
-        var model = new SimpleListModel<String>();
+        var model = new SelectableListModel<String>();
         for( i in 0...100 ) {
             model.addItem("Item #"+i);
         }
         
-        var list = new ListBox( model );
-        list.resize( 100, 100 );
+        var list = new SelectionListView<Selectable<String>>( model, 10 );
+        list.setPrefSize( {x:100., y:150. } );
         container.attach(list);
         
-        
+     /*   
         var foo = new SimpleNode( "Fruit" );
         foo.addSimple("Apple");
         foo.addSimple("Cherry");
@@ -88,6 +79,7 @@ class App extends Application {
         var v = new TreeView( tree );
         v.resize( 100, 100 );
         container.attach( v );
+*/
     }
     
     public static function main() :Void {

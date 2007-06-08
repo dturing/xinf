@@ -1,17 +1,6 @@
 -main App
--lib xinf
--cp ../../
--swf-version 9
--swf App.swf
-
---next
--main App
--lib xinf
--cp ../../
--js App.js
-
---next
--main App
 -cp ../../
 -lib xinf
 -neko run.n
+-cp ../../theme/green/
+xinf.style.GreenTheme
