@@ -50,10 +50,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
 
     /* our part of the drawing protocol */
+    
     public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
-        // FIXME: this is only translation
-        p.x = x;
-        p.y = y;
+        p.x=0; p.y=0;
+        p.transform.matrix = new flash.geom.Matrix( a,b,c,d,x,y );
     }
 
     public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
