@@ -18,10 +18,8 @@ package xinf.inity.font;
 import cptr.CPtr;
 import opengl.GL;
 
-import xinf.inity.GLPolygon;
-
 class TextureGlyph extends Glyph {
-    
+
     var texture:Int;
     var w:Float;
     var h:Float;
@@ -30,23 +28,29 @@ class TextureGlyph extends Glyph {
     var x2:Float;
     var y2:Float;
     
-    
-    public function new( p:GLPolygon, adv:Float ) {
-        super(p,adv);
+    public function new( character:Int, font:Font, size:Int, hint:Bool ) {
+        super(10);
+        try {
+        var b = font.renderGlyph( character, size<<6, hint );
+        setBitmap( b, Math.round(size) );
+        } catch(e:Dynamic) {
+            trace(e);
+        }
     }
     
-    public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int }, fontHeight:Int ) {
-        var twidth = 2; while( twidth<b.width ) twidth<<=1;
-        var theight = 2; while( theight<b.height ) theight<<=1;
+    public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
+        advance = b.advance/(1<<6);
+        var twidth = 2; while( twidth<b.width+2 ) twidth<<=1;
+        var theight = 2; while( theight<b.height+2 ) theight<<=1;
 
-        w = b.width/twidth;
-        h = b.height/theight;
+        w = b.width/(twidth);
+        h = b.height/(theight);
   
-        var by = (b.y/(fontHeight<<6));
+        var by = Math.floor(b.y/(1<<6))/fontHeight;
         y1=-by;
         y2=y1+(b.height/fontHeight);
 
-        var bx = (b.x/(fontHeight<<6));
+        var bx = Math.floor(b.x/(1<<6))/fontHeight;
         x1=bx;
         x2=x1+(b.width/fontHeight);
 
@@ -75,35 +79,27 @@ class TextureGlyph extends Glyph {
         #end
     }
     
-    override public function cache( pixelSize:Float ) :Void {
+    override public function render( s:Float ) :Float {
         if( texture!=null ) {
-            GL.newList( displayList, GL.COMPILE );
-              //  GL.color4( 1., 1., 0., 1. );
+            GL.pushAttrib( GL.ENABLE_BIT );
+                GL.enable( GL.TEXTURE_2D );
+                GL.bindTexture( GL.TEXTURE_2D, texture );
 
-                GL.pushAttrib( GL.ENABLE_BIT );
-                    GL.enable( GL.TEXTURE_2D );
-                    GL.bindTexture( GL.TEXTURE_2D, texture );
-
-                    GL.begin( GL.QUADS );
-                        GL.texCoord2( 0, 0 );
-                        GL.vertex2  ( x1, y1 ); 
-                        GL.texCoord2( w, 0 );
-                        GL.vertex2  ( x2, y1 );
-                        GL.texCoord2( w, h );
-                        GL.vertex2  ( x2, y2 ); 
-                        GL.texCoord2( 0, h );
-                        GL.vertex2  ( x1, y2 ); 
-                    GL.end();
-                    
-                GL.popAttrib();
-            GL.endList();
-            
-            #if gldebug
-                var e:Int = GL.getError();
-                if( e > 0 ) {
-                    throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
-                }
-            #end
-        } 
+                GL.begin( GL.QUADS );
+                    GL.texCoord2( 0, 0 );
+                    GL.vertex2  ( x1, y1 ); 
+                    GL.texCoord2( w, 0 );
+                    GL.vertex2  ( x2, y1 );
+                    GL.texCoord2( w, h );
+                    GL.vertex2  ( x2, y2 ); 
+                    GL.texCoord2( 0, h );
+                    GL.vertex2  ( x1, y2 ); 
+                GL.end();
+                
+            GL.popAttrib();
+        } else {
+            trace("Trying to render TextureGlyph, but no bitmap set.");
+        }
+        return super.render(s);
     }
 }

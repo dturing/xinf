@@ -19,13 +19,12 @@ import opengl.GL;
 import xinf.erno.Renderer;
 import xinf.erno.FontStyle;
 
-class Font {
+class Font extends xinf.support.Font {
     
     private static var fonts:Hash<Font> = new Hash<Font>();
     
-    public static function getFont( ?name:String, ?weight:Int, ?slant:Int, ?dontCache:Bool ) :Font {
+    public static function getFont( ?name:String, ?weight:Int, ?slant:Int ) :Font {
         if( name==null ) name="_sans";
-        if( dontCache==null ) dontCache=false;
         if( weight==null ) weight=100;
         if( slant==null ) slant=0;
         
@@ -51,56 +50,48 @@ class Font {
             if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
             data = neko.io.File.getContent( file );
         }
-        font = new FontReader( data ).getFont();
+        
+        var font = new Font( data, 12 );
         
         fonts.set( name, font );
         return font;
     }
+
+    public var font:xinf.support.Font;
+    private var cache:Hash<GlyphCache>;
+    // later, maybe: private var outlines:GlyphCache();
+
+    public function new( data:String, size:Int ) {
+        var s = Math.round(size<<24);
+        super( data, s, s );
+        cache = new Hash<GlyphCache>();
+        /*for( size in [ 10, 12, 24, 36 ] ) {
+            var c = new GlyphCache( this, size );
+            cache.set( ""+size, c );
+        }*/
+    }
     
-    private static var glyphsToCache:Array<Glyph> = new Array<Glyph>();
-    
-    public static function cacheGlyphs() :Void {
-        var g:Glyph;
-        while( (g = glyphsToCache.shift())!=null ) {
-        // FIXME: this should depend on actual pixel size..
-        //          50 is quite too much for 20pt, but too little for 1000. 
-        //          GLPolygon has some pixelSize sh*t.
-            g.cache(50.0);
+    public function getGlyph( character:Int, fontSize:Float ) :Glyph {
+        var c = cache.get(""+Math.round(fontSize));
+        
+        //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
+        if( c==null ) {
+            trace("Adding font cache "+this+" sz "+fontSize );
+            c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
+            cache.set(""+Math.round(fontSize),c);
+
+            // FIXME-- getting Cannot load Glyph after 4th time new characters are needed---
+            // thus, preloading all common glyphs (!)
+            for( i in 32...128 ) {
+                c.get(i);
+            }
+
         }
-    }
-    
-    public static function cacheGlyph( g:Glyph ) :Void {
-        glyphsToCache.push(g);
-    }
-    
-    private var glyphs:IntHash<Glyph>;
-    
-    public var family_name(default,null):String;
-    public var style_name(default,null):String;
-    public var ascender(default,null):Float;
-    public var descender(default,null):Float;
-    public var height(default,null):Float;
-    public var underline_thickness(default,null):Float;
-    public var underline_position(default,null):Float;
-    public var units_per_EM(default,null):Float;
-    
-    public function new() {
-        glyphs = new IntHash<Glyph>();
-    }
-    
-    public function getGlyph( character:Int ) :Glyph {
-        var g:Glyph = glyphs.get(character);
+        
+        var g = c.get(character);
         return( g );
     }
 
-    public function getGlyphs() :IntHash<Glyph> {
-        return glyphs;
-    }
-    
-    public function addGlyph( character:Int, g:Glyph ) :Void {
-        glyphs.set(character,g);
-    }
-    
     public function textSize( text:String, fontSize:Float ) :{x:Float,y:Float} {
         var lines=0;
         var lineHeight = Math.round(height*fontSize)/fontSize;
@@ -113,9 +104,9 @@ class Font {
                 w=0;
                 lines++;
             } else {
-                var g = getGlyph(c);
+                var g = getGlyph(c,fontSize);
                 if( g != null ) {
-                    w += g.advance;
+                    w += g.advance/fontSize;
                 }
             }
         }
@@ -156,7 +147,7 @@ class Font {
                 lines++;
                 GL.translate( .0, lineHeight*lines, .0 );
             } else {
-                var g = getGlyph(c);
+                var g = getGlyph(c,fontSize);
                 if( g != null ) {
                     g.render(fontSize);
                 }

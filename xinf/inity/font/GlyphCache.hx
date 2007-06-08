@@ -15,28 +15,32 @@
 
 package xinf.inity.font;
 
-import opengl.GL;
-
-class Glyph {
-    public var advance:Float;
+class GlyphCache {
+    var glyphs:IntHash<Glyph>;
+    var size:Int;
+    var font:Font;
+    var hint:Bool;
     
-    public function new( adv:Float ) {
-        advance = adv;
+    public function new( font:Font, size:Int, ?hint:Bool ) {
+        glyphs = new IntHash<Glyph>();
+        this.font = font;
+        this.size = size;
+        if( hint==null ) hint=false; 
+        this.hint = hint;
     }
     
-    public function render( s:Float ) :Float {
-
-        // "implement here"
-
-        GL.translate( advance/s, .0, .0 );
+    public function get( character:Int ) {
+        var g = glyphs.get(character);
+        if( g==null ) {
+//            trace("glyph "+character+" not cached in "+this+" (yet)");
         
-        #if gldebug
-            var e:Int = GL.getError();
-            if( e > 0 ) {
-                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
-            }
-        #end
-
-        return( advance );
+            g = new TextureGlyph( character, font, size, hint );
+            glyphs.set(character,g);
+        }
+        return g;
+    }
+    
+    public function toString() :String {
+        return("Cache("+font+","+size+")");
     }
 }
