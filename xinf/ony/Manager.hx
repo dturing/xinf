@@ -107,7 +107,7 @@ class Manager {
         if( somethingChanged ) Runtime.runtime.changed();
     }
     
-    private function find( id:Int ) :Object {
+    public function find( id:Int ) :Object {
         return objects.get(id);
     }
     

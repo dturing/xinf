@@ -47,6 +47,11 @@ class Object extends SimpleEventDispatcher {
         return _manager;
     }
 
+    public static function findById(id:Int) :Object {
+        return( manager.find(id) );
+    }
+
+
     /** Unique (to the runtime environment) ID of this object. Will be set in the constructor. **/
     public var _id(default,null):Int;
     

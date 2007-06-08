@@ -51,8 +51,9 @@ class Image extends Object {
     }
     
     public function drawContents( g:Renderer ) :Void {
-        if( img==null ) return;
+        if( img==null || img.width==null ) return;
         g.setFill( 1,1,1,1 );
+        trace(""+img+" --> "+size );
         g.image( img, {x:0.,y:0.,w:img.width,h:img.height}, {x:0.,y:0.,w:size.x,h:size.y} );
      }
     
