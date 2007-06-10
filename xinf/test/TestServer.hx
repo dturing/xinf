@@ -1,0 +1,115 @@
+
+package xinf.test;
+
+import x11.Display;
+
+/**
+    A neko remoting server for TestShell to connect to.
+    Takes screenshot on given X display with netpbm.
+    Linux-only, needs elaborate environment. See test/Makefile.
+**/
+class TestServer {
+    
+    public static var displayName = ":10.0";
+    public static var resultDir = "results";
+    
+    static function assureResultDir() {
+        // assure result directory exists
+        if( !neko.FileSystem.exists( resultDir ) ) {
+            neko.FileSystem.createDirectory( resultDir );
+        }
+        if( !neko.FileSystem.isDirectory( resultDir ) ) {
+            throw( "test result directory '"+resultDir+"' exists but is not a directory" );
+        }
+    }
+    
+    static function freshRun() {
+        //var out = neko.io.File.write( resultDir+"/result.log", false );
+        //out.write( "date\ttest\tplatform\tpassed\tmessage\n" );
+        //out.close();
+    }
+
+    static function result( testNumber:Int, testName:String, platform:String, pass:Bool, message:String ) :Void {
+        var out = neko.io.File.append( resultDir+"/results.xml", false );
+        out.write(
+            "<result date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
+            +"\" test=\""+testName
+            +"\" nr=\""+testNumber
+            +"\" platform=\""+platform
+            +"\" pass=\""+pass
+            +"\">"+message
+            +"</result>\n");
+        out.close();
+    }
+
+    static function info( testName:String, platform:String, message:String ) :Void {
+        var out = neko.io.File.append( resultDir+"/results.xml", false );
+        out.write(
+            "<info date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
+            +"\" test=\""+testName
+            +"\" platform=\""+platform
+            +"\">"+message
+            +"</info>\n");
+        out.close();
+    }
+
+    static function shoot( testNumber:Int, testName:String, platform:String, targetEquality:Float ) :Float {
+        var baseName = resultDir+"/"+testName+"-";
+        var img = baseName+platform+".pnm";
+        var diff = baseName+platform+"-diff.pnm";
+        var ref = baseName+"reference.pnm";
+
+        // make screenshot
+        var exitCode = neko.Sys.command("xwd -display "+displayName+" -root | xwdtopnm > "+img );
+        if( exitCode != 0 ) throw("Could not take screenshot.");
+
+        if( neko.FileSystem.exists( ref ) ) {
+            // compare to reference
+            exitCode = neko.Sys.command("pamarith -difference "+ref+" "+img+" > "+diff );
+            if( exitCode != 0 ) throw("Could not compare reference image.");
+            exitCode = neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
+            if( exitCode != 0 ) throw("Could not compare reference image.");
+            
+            var eq = 1.0 - Std.parseFloat( neko.io.File.getContent("/tmp/xinftest-diff") );
+            
+            
+            // convert images to png
+            neko.Sys.command("pnmtopng -compression 7 "+img+" > "+baseName+platform+".png");
+            neko.Sys.command("pnmtopng -compression 7 "+diff+" > "+baseName+platform+"-diff.png");
+            
+            result( testNumber, testName, platform, eq>=targetEquality, ""+eq );
+            return eq;
+        } else {
+            // copy as reference
+            neko.Sys.command("cp "+img+" "+ref );
+            neko.Sys.command("pnmtopng -compression 7 "+ref+" > "+baseName+"reference.png");
+            return -2.;
+        }
+        return -1.;
+    }
+    
+    static function mouseMove( x:Int, y:Int ) {
+        var dpy = Display.openDisplay( displayName );
+        if( !dpy.hasTestFakeExtension() ) throw("need XTest extension to fake input events");
+        dpy.testFakeMotionEvent( 0, x+1, y+1, 0 );
+    }
+
+    static function mouseButton( button:Int, press:Bool ) {
+        var dpy = Display.openDisplay( displayName );
+        if( !dpy.hasTestFakeExtension() ) throw("need XTest extension to fake input events");
+        dpy.testFakeButtonEvent( button, press, 0 );
+    }
+
+    static function main() {
+        assureResultDir();
+        var r = new neko.net.RemotingServer();
+        r.addObject( "test", TestServer );
+        if( r.handleRequest() ) return;
+        
+        // else, emit result.xml
+        neko.Web.setHeader("Content-type", "text/xml");
+        neko.Lib.print("<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"static/results.xsl\"?>\n<results>\n");
+        neko.Lib.print( neko.io.File.getContent( resultDir+"/results.xml" ) );
+        neko.Lib.print("</results>\n");
+    }
+}
