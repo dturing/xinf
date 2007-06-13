@@ -6,15 +6,30 @@ import xinf.event.EventKind;
 import xinf.event.FrameEvent;
 
 class TestCase {
-    public var next:Void->Void;
-    public var shell:TestShell;
+    var next:Void->Void;
+    var cnx:haxe.remoting.AsyncConnection;
+    var iteration:Int;
+    var platform:String;
+    var name:String;
+    var expectFail:Bool;
     
     public function new() {
+        iteration = 0;
+        platform = 
+                #if neko
+                    "inity";
+                #else flash9
+                    "flash9";
+                #else js
+                    "js";
+                #end
+        name = ""+this;
+        expectFail = false;
     }
     
-    public function run( shell:TestShell, next:Void->Void ) {
+    public function run( cnx:haxe.remoting.AsyncConnection, next:Void->Void ) {
         this.next = next;
-        this.shell = shell;
+        this.cnx = cnx;
         test();
     }
     
@@ -23,23 +38,68 @@ class TestCase {
         finish();
     }
 
-    public function finish( ?passed:Bool ) {
-        shell.runAtNextFrame( next );
+    public function expectFailure( platform:String ) :Void {
+        if( platform==this.platform ) expectFail=true;
     }
 
-    public function assertDisplay( result:Bool->Void, ?targetEquality:Float ) {
-        shell.assertDisplay(""+this,result,targetEquality);
+    public function runAtNextFrame( f:Void->Void ) {
+        var handler:Dynamic;
+        handler = xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function(e) {
+                xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
+                f();
+            });
     }
-    
+
+    public function mouseMove( x:Int, y:Int ) {
+        cnx.test.mouseMove.call( [x,y], function(r) { });
+    }
+    public function mouseButton( b:Int, press:Bool ) {
+        cnx.test.mouseButton.call( [b, press], function(r) { });
+    }
+
+    public function result( pass:Bool, message:String, ?expectFail:Bool ) :Void {
+        if( expectFail==null ) expectFail=this.expectFail;
+        cnx.test.result.call( [iteration++, name, platform, pass, message, expectFail, null ],
+            function(r) { } );
+    }
+
+    public function info( message:String ) :Void {
+        cnx.test.info.call( [ name, platform, message],
+            function(r) { } );
+    }
+
+
+    public function assertDisplay( result:Bool->Void, ?targetEquality:Float, ?expectFail:Bool ) {
+        if( expectFail==null ) expectFail=this.expectFail;
+        if( targetEquality==null ) targetEquality=1.;
+        
+        var self=this;
+        var handler:Dynamic;
+        handler = xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function(e) {
+            xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
+            
+            try {
+                self.cnx.test.shoot.call([ self.iteration++, self.name, self.platform, targetEquality, expectFail ], function( r:Dynamic ) {
+                        result( r>=targetEquality );
+                    } );
+            } catch(e:Dynamic) {
+                trace("Cannot make screenshot: "+Std.string(e) );
+            }
+                
+        } );
+    }
+
+
     public function assertEvent<T>( obj:EventDispatcher, type :EventKind<T>, assert :T->Bool, result:Bool->Void, ?timeout:Int ) {
         var self=this;
         var t:Dynamic;
         var h:Dynamic;
+        timeout=15;
         t = xinf.erno.Runtime.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
                 timeout-=1;
                 if( timeout <= 0 ) {
                     trace("assert event timeout");
-                    self.shell.result( ""+self, false, "Event timed out" );
+                    self.result( false, "Event timed out" );
                     xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, t );
                     obj.removeEventListener( type, h );
                     result( false );
@@ -50,10 +110,10 @@ class TestCase {
                 if( assert(e) ) {
                     xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, t );
                     obj.removeEventListener( type, h );
-                    self.shell.result( ""+self, true, "Got expected event: "+e );
+                    self.result( true, "Got expected event: "+e );
                     result( true );
                 } else {
-                    self.shell.info( ""+self, "unexpected event: "+e );
+                    self.info( "unexpected event: "+e );
                 }
             });
     }
@@ -63,10 +123,22 @@ class TestCase {
         for( c in r.children() ) {
             r.detach(c);
         }
-    
-        finish(passed);
+
+        mouseMove( 0, 0 );
+        mouseButton( 1, false );
+        mouseButton( 2, false );
+
+        var self=this;
+        runAtNextFrame( function() {
+            self.finish(passed);
+        });
     }
-    
+
+    public function finish( ?passed:Bool ) {
+        runAtNextFrame( next );
+    }
+
+
     public function toString() :String {
         return Type.getClassName( Type.getClass(this) ).split(".").pop().split("::").pop();
     }

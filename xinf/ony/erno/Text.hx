@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Color;

@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 
@@ -21,7 +21,7 @@ import xinf.erno.Renderer;
     A Root-like Object, embeds a Xinfony display hierarchy
     into a Runtime-native Object.
 **/
-class Embed extends Container<Object> {
+class Embed extends Group {
     
     private var root:NativeContainer;
     
@@ -39,10 +39,10 @@ class Embed extends Container<Object> {
         redraws the Object. This redefines the contents of the NativeContainer
         you passed to the constructor.
     **/
-    public function draw( g:Renderer ) :Void {
+    override public function draw( g:Renderer ) :Void {
         g.startNative( root );
-        for( child in children ) {
-            g.showObject( child._id );
+        for( child in children() ) {
+            g.showObject( child.xid );
         }
         g.endNative();
     }

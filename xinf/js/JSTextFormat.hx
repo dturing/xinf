@@ -39,13 +39,13 @@ class JSTextFormat extends xinf.erno.TextFormat {
     }
     
     
-    public function textSize( text:String ) :{ x:Float, y:Float } {
+    override public function textSize( text:String ) :{ x:Float, y:Float } {
         assureLoaded();
         apply( measure ); // FIXME: move to load(), for flash also (assigning the format to measure)?
         measure.innerHTML = text.split("\n").join("<br/>");
         return {x:1.*measure.offsetWidth,y:1.*measure.offsetHeight};
     }
 
-    public function load() :Void {
+    override public function load() :Void {
     }
 }

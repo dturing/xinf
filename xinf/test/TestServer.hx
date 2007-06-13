@@ -23,21 +23,35 @@ class TestServer {
         }
     }
     
-    static function freshRun() {
-        //var out = neko.io.File.write( resultDir+"/result.log", false );
-        //out.write( "date\ttest\tplatform\tpassed\tmessage\n" );
-        //out.close();
-    }
-
-    static function result( testNumber:Int, testName:String, platform:String, pass:Bool, message:String ) :Void {
+    static function startRun( platform:String ) {
         var out = neko.io.File.append( resultDir+"/results.xml", false );
         out.write(
-            "<result date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
-            +"\" test=\""+testName
+            "<testrun date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
+            +"\" platform=\""+platform
+            +"\">\n");
+        out.close();
+    }
+
+    static function endRun() {
+        var out = neko.io.File.append( resultDir+"/results.xml", false );
+        out.write("</testrun>\n");
+        out.close();
+    }
+
+    static function result( testNumber:Int, testName:String, platform:String, pass:Bool, message:String, expectFail:Bool, imageUrl:String ) :Void {
+        var exp = if( expectFail!=null ) { ""+expectFail; } else { "false"; }
+        var out = neko.io.File.append( resultDir+"/results.xml", false );
+        out.write(
+            "<result test=\""+testName
             +"\" nr=\""+testNumber
             +"\" platform=\""+platform
             +"\" pass=\""+pass
-            +"\">"+message
+            +"\" expect-fail=\""+exp+"\"" );
+        if( imageUrl!=null ) {
+            out.write(" image=\""+imageUrl+"\"" );
+        }
+        out.write(
+            ">"+message
             +"</result>\n");
         out.close();
     }
@@ -45,15 +59,14 @@ class TestServer {
     static function info( testName:String, platform:String, message:String ) :Void {
         var out = neko.io.File.append( resultDir+"/results.xml", false );
         out.write(
-            "<info date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
-            +"\" test=\""+testName
+            "<info test=\""+testName
             +"\" platform=\""+platform
             +"\">"+message
             +"</info>\n");
         out.close();
     }
 
-    static function shoot( testNumber:Int, testName:String, platform:String, targetEquality:Float ) :Float {
+    static function shoot( testNumber:Int, testName:String, platform:String, targetEquality:Float, expectFail:Bool ) :Float {
         var baseName = resultDir+"/"+testName+"-";
         var img = baseName+platform+".pnm";
         var diff = baseName+platform+"-diff.pnm";
@@ -77,12 +90,14 @@ class TestServer {
             neko.Sys.command("pnmtopng -compression 7 "+img+" > "+baseName+platform+".png");
             neko.Sys.command("pnmtopng -compression 7 "+diff+" > "+baseName+platform+"-diff.png");
             
-            result( testNumber, testName, platform, eq>=targetEquality, ""+eq );
+            result( testNumber, testName, platform, eq>=targetEquality, ""+eq, expectFail, baseName+platform+".png" );
             return eq;
         } else {
             // copy as reference
             neko.Sys.command("cp "+img+" "+ref );
             neko.Sys.command("pnmtopng -compression 7 "+ref+" > "+baseName+"reference.png");
+            
+            result( testNumber, testName, platform, false, "reference image generated", true, baseName+"reference.png" );
             return -2.;
         }
         return -1.;

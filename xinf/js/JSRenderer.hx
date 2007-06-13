@@ -48,24 +48,24 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         // FIXME (maybe): regards only translation
         p.style.left = ""+Math.round(x);
         p.style.top = ""+Math.round(y);
     }
 
-    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
         p.style.left = ""+Math.round(x);
         p.style.top = ""+Math.round(y);
     }
 
-    public function clipRect( w:Float, h:Float ) {
+    override public function clipRect( w:Float, h:Float ) {
         current.style.overflow = "hidden";
         current.style.width = ""+Math.max(0,Math.round(w));
         current.style.height = ""+Math.max(0,Math.round(h));
     }
     
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.left = ""+Math.round(x);
@@ -85,11 +85,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild( r );
     }
 
-    public function circle( x:Float, y:Float, r:Float ) {
+    override public function circle( x:Float, y:Float, r:Float ) {
         rect( x-r, y-r, r*2, r*2 );
     }
 
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.whiteSpace="nowrap";
@@ -111,7 +111,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild(r);
     }
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         var wf = outRegion.w/inRegion.w;
         var hf = outRegion.h/inRegion.h;
 
@@ -135,7 +135,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild(wrap);
     }
     
-    public function native( o:NativeObject ) {
+    override public function native( o:NativeObject ) {
         current.appendChild(o);
     }
     

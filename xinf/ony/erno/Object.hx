@@ -13,13 +13,15 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.geom.Matrix;
+import xinf.geom.Transform;
 import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
+import xinf.style.StyleParser;
 
 /**
     A xinf.ony.Object is a basic Element in the xinfony display
@@ -35,7 +37,7 @@ import xinf.event.SimpleEventDispatcher;
     </p>
 **/
 
-class Object extends SimpleEventDispatcher {
+class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;
@@ -52,36 +54,29 @@ class Object extends SimpleEventDispatcher {
     }
 
 
-    /** Unique (to the runtime environment) ID of this object. Will be set in the constructor. **/
-    public var _id(default,null):Int;
+    public var xid(default,null):Int;
+    public var id(default,null):String;
+    public var parent(default,null):xinf.ony.Group;
+    public var document(default,null):xinf.ony.Document;
+    public var style(default,null):xinf.style.ElementStyle;
     
-    /** Other Object that contains this Object, if any. **/
-    public var parent:Container<Object>;
+    public var transform(default,set_transform):Transform;
+    private function set_transform( t:Transform ) :Transform {
+        transform=t;
+        scheduleTransform();
+        return transform;
+    }
     
-    /** Current position of this Object in parent's coordinates<br/>
-        Set with [moveTo()]. **/
-    public var position(default,null):{x:Float,y:Float};
-    
-    /** The Objects' size, in local's coordinates<br/>
-        Set with [resize()].
-        On XinfInity, the object's size defines it's area that is active
-        to MOUSE_DOWN events. Other objects might use the size for
-        layout or drawing. Size is here because it's convenient,
-        it has no direct impact on Object's behaviour.
-    **/
-    public var size(default,null):{x:Float,y:Float};
-
     /** Object constructor<br/>
         A simple Object will not display anything by itself.
     **/
     public function new() :Void {
         super();
         
-        _id = Runtime.runtime.getNextId();
-        manager.register( _id, this );
-        
-        position = { x:0., y:0. };
-        size = { x:0., y:0. };
+        xid = Runtime.runtime.getNextId();
+        manager.register( xid, this );
+        transform = new Identity();
+        style = new xinf.style.ElementStyle(this);
         
         scheduleRedraw();
     }
@@ -90,38 +85,22 @@ class Object extends SimpleEventDispatcher {
         You must call this function if you want to get rid of this object and free
         all associated memory. (Yes, is garbage-collected, but we need some
         trigger to free all associated objects in the runtime. This is it.)
+        
+        Could this be done on deattach? we dont need it registered any more...
     **/
     public function destroy() :Void {
         // how about deleting our associated Sprite/Div/GLObject?
         // also: detach from parent
-        manager.unregister(_id);
-    }
-
-    /** move this Object to a new 2D position<br/>
-        Schedules a [reTransform()]. Moving Objects should be pretty
-        efficient on all runtimes. **/
-    public function moveTo( x:Float, y:Float ) :Void {
-        if( x!=position.x || y!=position.y ) {
-            position = { x:x, y:y };
-            scheduleTransform();
-        }
-    }
-
-    /** resize this Object<br/>
-        Sets new [size] and schedules a re-[draw()] of the Object.
-        **/
-    public function resize( x:Float, y:Float ) :Void {
-        if( x!=size.x || y!=size.y ) {
-            size = { x:x, y:y };
-            scheduleRedraw();
-        }
+        manager.unregister(xid);
     }
 
     /** apply new transformation (position)<br/>
         This is an internal function, you should usually not care about it.
         **/
     public function reTransform( g:Renderer ) :Void {
-        g.setTranslation( _id, position.x, position.y );
+        var m = transform.getMatrix();
+        g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
+        // TODO g.setTranslation( xid, position.x, position.y );
     }
     
     /** draw the Object to the given [Renderer]<br/>
@@ -130,7 +109,7 @@ class Object extends SimpleEventDispatcher {
         override [drawContents()] to draw stuff.
         **/
     public function draw( g:Renderer ) :Void {
-        g.startObject( _id );
+        g.startObject( xid );
             drawContents(g);
         g.endObject();
         reTransform(g);
@@ -139,11 +118,14 @@ class Object extends SimpleEventDispatcher {
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
         You can override this method, and call the [Renderer]'s methods to draw things.
         Everything you do will be in the Object's local coordinate space.
-        The default implementation does nothing, so it is safe to not call super.drawContents()
-        (unless you are deriving from Object indirectly via some other Class that requires
-        you to call it).
         **/
     public function drawContents( g:Renderer ) :Void {
+        var c = style.fill;
+        if( c!=null ) g.setFill( c.r, c.g, c.b, c.a );
+        
+        c = style.stroke;
+        var w = style.strokeWidth;
+        if( c!=null ) g.setStroke( c.r,c.g,c.b,c.a,w );
     }
 
     /** schedule this Object for redrawing<br/>
@@ -152,7 +134,7 @@ class Object extends SimpleEventDispatcher {
         - there's no need to call it if anything changes about it's children. 
     **/
     public function scheduleRedraw() :Void {
-        manager.objectChanged( _id, this );
+        manager.objectChanged( xid, this );
     }
     
     /**    schedule this Object for redefining it's transformation<br/>
@@ -160,38 +142,51 @@ class Object extends SimpleEventDispatcher {
         when you modify it's transformation (currently, the only way to do this is [moveTo()].
     **/
     public function scheduleTransform() :Void {
-        manager.objectMoved( _id, this );
+        manager.objectMoved( xid, this );
     }
 
-    /** convert the given point from global to local coordinates<br/>
-        FIXME: this function is currently implemented half-heartedly, and will
-        only work for translation.
-    **/
+    /** convert the given point from global to local coordinates **/
     public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
         var q = { x:p.x, y:p.y };
         if( parent!=null ) q = parent.globalToLocal(q);
-        q.x-=position.x;
-        q.y-=position.y;
-        return q;
+        return( transform.applyInverse(q) );
     }
     
-    /** convert the given point from local to global coordinates<br/>
-        FIXME: this function is currently implemented half-heartedly, and will
-        only work for translation.
-    **/
     public function localToGlobal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
         var q = { x:p.x, y:p.y };
-        q.x+=position.x;
-        q.y+=position.y;
         if( parent!=null ) q = parent.localToGlobal(q);
-        return q;
+        return( transform.apply(q) );
     }
     
+    public function attachedTo( p:xinf.ony.Group ) {
+        parent=p;
+        document=parent.document;
+    }
+
+    public function detachedFrom( p:xinf.ony.Group ) {
+        parent=null;
+        document=null;
+    }
+
+    public function fromXml( xml:Xml ) :Void {
+        if( xml.exists("id") ) {
+            id = xml.get("id");
+        }
+        if( xml.exists("style") ) {
+            StyleParser.parse( style, xml.get("style") );
+        }
+        style.fromXml( xml );
+        
+        if( xml.exists("transform") ) {
+            transform = TransformParser.parse( xml.get("transform") );
+        }
+    }
+
     /** dispatch the given Event<br/>
         tries to dispatch the given Event to any registered listeners.
         If no handler is found, 'bubble' the Event - i.e., pass it up to our parent.
     **/
-    public function dispatchEvent<T>( e : Event<T> ) :Void {
+    override public function dispatchEvent<T>( e : Event<T> ) :Void {
         var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
         var dispatched:Bool = false;
         if( l != null ) {
@@ -206,7 +201,25 @@ class Object extends SimpleEventDispatcher {
     }
 
     public function toString() :String {
-        return( Type.getClassName( Type.getClass(this) )+"["+_id+"]" );
+        return( Type.getClassName( Type.getClass(this) )+"["+xid+"]" );
+    }
+    
+    
+    /* SVG parsing helper function-- should go somewhere else? FIXME */
+    function getFloatProperty( xml:Xml, name:String, ?def:Float ) :Float {
+        if( xml.exists(name) ) return Std.parseFloat(xml.get(name));
+        if( def==null ) def=0;
+        return def;
+    }
+
+    function getBooleanProperty( xml:Xml, name:String, ?def:Bool ) :Bool {
+        if( xml.exists(name) ) {
+            var v = xml.get(name);
+            if( v.toLowerCase()=="true" || v=="1" ) return true;
+            return false;
+        }
+        if( def==null ) def=false;
+        return def;
     }
     
 }

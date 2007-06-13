@@ -34,18 +34,30 @@ class TestTranslate extends TransformTest {
 }
 
 class TestRotate extends TransformTest {
+    public function new() {
+        super();
+        expectFailure("js");
+    }
     override public function doTransform( e:Element ) {
         e.transform = new Rotate( Math.PI/8 );
     }
 }
 
 class TestScale extends TransformTest {
+    public function new() {
+        super();
+        expectFailure("js");
+    }
     override public function doTransform( e:Element ) {
         e.transform = new Scale( 1.5, 1.5 );
     }
 }
 
 class TestMatrix extends TransformTest {
+    public function new() {
+        super();
+        expectFailure("js");
+    }
     override public function doTransform( e:Element ) {
         e.transform = new Matrix().translate(-160,-120).scale(.5,.5).rotate(Math.PI/4).translate(160,120);
     }

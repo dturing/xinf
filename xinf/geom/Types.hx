@@ -10,14 +10,10 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
+   Lesser General License or the LICENSE file for more details.
 */
 
 package xinf.geom;
-
-/*
-    TODO: parameterize all geometry (Int/Float)
-*/
 
 typedef TPoint = {
     var x:Float;
@@ -29,4 +25,13 @@ typedef TRectangle = {
     var t:Float;
     var r:Float;
     var b:Float;
+}
+
+typedef TMatrix = {
+    var a:Float;
+    var c:Float;
+    var tx:Float;
+    var b:Float;
+    var d:Float;
+    var ty:Float;
 }

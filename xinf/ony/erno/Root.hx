@@ -13,7 +13,7 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ony;
+package xinf.ony.erno;
 
 import xinf.event.GeometryEvent;
 import xinf.erno.Runtime;
@@ -42,7 +42,7 @@ class Root extends Embed {
     }
 
     private function stageScaled( e:GeometryEvent ) :Void {
-        resize(e.x,e.y);
+//        resize(e.x,e.y);
     }
     
 }

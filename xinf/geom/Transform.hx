@@ -15,45 +15,164 @@
 
 package xinf.geom;
 
-/*
-enum Transform {
-    Identity;
-    Translate(x:Float,y:Float,?z:Float);
-    Scale(x:Float,y:Float,?z:Float);
-    Rotate(angle:Float,x:Float,y:Float,?z:Float);
-    Concatenate( a:Transform, ?b:Transform, ?c:Transform, ?d:Transform );
+import xinf.geom.Types;
+
+interface Transform {
+    function getTranslation() :TPoint;
+    function getScale() :TPoint;
+    function getMatrix() :TMatrix;
+    
+    function apply( p:TPoint ) :TPoint;
+    function applyInverse( p:TPoint ) :TPoint;
 }
-*/
 
-typedef Coordinates = { x:Float, y:Float, ?z:Float };
-
-class Transform {
+class Identity implements Transform {
+    public function new() {
+    }
+    
     public function getTranslation() {
         return { x:.0, y:.0 };
     }
     public function getScale() {
         return { x:.0, y:.0 };
     }
-    public function getMatrix2d() {
-        return [ .0, .0, .0, .0, .0, .0 ];
+    public function getMatrix() {
+        return { a:1., b:0., c:0., d:1., tx:0., ty:0. };
     }
-
-    public function setTranslation( x:Float, y:Float, ?z:Float ) {
+    
+    public function apply( p:TPoint ) :TPoint {
+        return p;
     }
-    public function setScale( x:Float, y:Float, ?z:Float ) {
-    }
-    public function setMatrix2d( m:Array<Float> ) {
+    public function applyInverse( p:TPoint ) :TPoint {
+        return p;
     }
 }
 
-class Translation {
-    var x:Float, y:Float;
+class Translate implements Transform {
+    var x:Float;
+    var y:Float;
+    
+    public function new( x:Float, y:Float ) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public function getTranslation() {
+        return { x:x, y:y };
+    }
+    public function getScale() {
+        return { x:.0, y:.0 };
+    }
+    public function getMatrix() {
+        return { a:1., b:0., c:0., d:1., tx:x, ty:y };
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return { x:p.x+x, y:p.y+y };
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return { x:p.x-x, y:p.y-y };
+    }
+}
+
+
+class Rotate implements Transform {
+    var a:Float;
+    
+    public function new( a:Float ) {
+        this.a = a;
+    }
+    
     public function getTranslation() {
         return { x:.0, y:.0 };
     }
-    public function setTranslation( x:Float, y:Float, ?z:Float ) {
+    public function getScale() {
+        return { x:.0, y:.0 };
     }
-    public function setMatrix2d( m:Array<Float> ) {
-        
+    public function getMatrix() {
+        var co = Math.cos(a);
+        var si = Math.sin(a);
+        return { a:co, b:si, c:-si, d:co, tx:0., ty:0. };
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).apply(p);
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).applyInverse(p);
+    }
+}
+
+class Scale implements Transform {
+    var x:Float;
+    var y:Float;
+    
+    public function new( x:Float, y:Float ) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public function getTranslation() {
+        return { x:.0, y:.0 };
+    }
+    public function getScale() {
+        return { x:x, y:y };
+    }
+    public function getMatrix() {
+        return { a:x, b:0., c:0., d:y, tx:0., ty:0. };
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).apply(p);
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).applyInverse(p);
+    }
+}
+
+class TransformParser {
+    static var DEG_TO_RAD = ((2.*Math.PI)/360.);
+
+    /* TODO: 
+        rotate(angle,cx,cy)
+        scale(sx [sy [cx [cy]]])
+        fix translate( cx [cy] )
+        inherit
+        fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
+    */
+    static var translate = ~/translate\(([0-9\.\-]+),([0-9\.\-]+)\)/;
+    static var rotate = ~/rotate\(([0-9\.\-]+)\)/; 
+    static var matrix = ~/matrix\(([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+)\)/;
+    static var scale = ~/scale\(([0-9\.\-]+),([0-9\.\-]+)\)/; 
+    
+    public static function parse( text:String ) :Transform {
+        var r :Transform;
+        if( translate.match(text) ) {
+            r = new Translate( 
+                    Std.parseFloat(translate.matched(1)),
+                    Std.parseFloat(translate.matched(2))
+                );
+        } else if( matrix.match(text) ) {
+            r = new Matrix( {
+                    a:Std.parseFloat(matrix.matched(1)),
+                    c:Std.parseFloat(matrix.matched(3)),
+                    tx:Std.parseFloat(matrix.matched(5)),
+                    b:Std.parseFloat(matrix.matched(2)),
+                    d:Std.parseFloat(matrix.matched(4)),
+                    ty:Std.parseFloat(matrix.matched(6))
+                });
+        } else if( rotate.match(text) ) {
+            r = new Rotate( 
+                    Std.parseFloat(rotate.matched(1)) * DEG_TO_RAD
+                );
+        } else if( scale.match(text) ) {
+            r = new Scale(
+                    Std.parseFloat(scale.matched(1)),
+                    Std.parseFloat(scale.matched(2)) 
+                );
+        } else {
+            throw("invalid/unimplemented SVG transform '"+text+"'" );
+        }
+        return r;
     }
 }

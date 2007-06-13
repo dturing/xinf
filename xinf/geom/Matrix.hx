@@ -17,7 +17,7 @@ package xinf.geom;
 
 import xinf.geom.Types;
 
-class Matrix {
+class Matrix implements Transform {
 /*
     a  b  0
     c  d  0
@@ -31,10 +31,25 @@ class Matrix {
     public var d:Float;
     public var ty:Float;
     
-    public function new() :Void {
+    public function new( ?m:TMatrix ) :Void {
+        if( m==null ) 
+            setIdentity();
+        else { 
+            set( m );
+        }
     }
-    
-    public function set( m:Matrix ) :Void {
+
+    public function getTranslation() {
+        return { x:tx, y:ty };
+    }
+    public function getScale() {
+        return { x:a, y:d };
+    }
+    public function getMatrix() {
+        return this;
+    }
+
+    public function set( m:TMatrix ) :Void {
         a=m.a; c=m.c; tx=m.tx;
         b=m.b; d=m.d; ty=m.ty;
     }
@@ -51,6 +66,7 @@ class Matrix {
     }
     
     // TODO: geom.TRectangle
+    // FIXME: regard all four corners?
     public function transformBBox( r:{l:Float,t:Float,r:Float,b:Float}) :{l:Float,t:Float,r:Float,b:Float} {
         var tl = apply( {x:r.l,y:r.t} );
         var br = apply( {x:r.r,y:r.b} );
@@ -98,24 +114,36 @@ class Matrix {
         return this;
     }
     
+    public function translate( x:Float, y:Float ) :Matrix {
+        return multiply( new Matrix().setTranslation(x,y) );
+    }
     public function setTranslation( x:Float, y:Float ) :Matrix {
         tx = x;
         ty = y;
         return this;
     }
     
+    public function scale( x:Float, y:Float ) :Matrix {
+        return multiply( new Matrix().setScale(x,y) );
+    }
     public function setScale( x:Float, y:Float ) :Matrix {
         a = x;
         d = y;
         return this;
     }
 
+    public function skew( x:Float, y:Float ) :Matrix {
+        return multiply( new Matrix().setSkew(x,y) );
+    }
     public function setSkew( x:Float, y:Float ) :Matrix {
         c = x;
         b = y;
         return this;
     }
 
+    public function rotate( a:Float ) :Matrix {
+        return multiply( new Matrix().setRotation(a) );
+    }
     public function setRotation( angle:Float ) :Matrix {
         var co = Math.cos(angle);
         var si = Math.sin(angle);

@@ -79,51 +79,52 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         p.clear();
     }
     
-    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         var m:Matrix = new Matrix();
         m.a=a; m.b=b; m.tx=x;
         m.c=c; m.d=d; m.ty=y;
         p.setTransform( m );
     }
 
-    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
         var m:Matrix = new Matrix().setIdentity().setTranslation(x,y);
         p.setTransform( m );
     }
 
     // erno.Renderer API
 
-    public function startNative( o:NativeContainer ) :Void {
+    override public function startNative( o:NativeContainer ) :Void {
         super.startNative(o);
         o.start();
     }
-    public function endNative() :Void {
+    
+    override public function endNative() :Void {
         current.end();
         super.endNative();
     }
 
-    public function native( o:NativeObject ) {
+    override public function native( o:NativeObject ) {
         GL.callList( o );
     }
     
-    public function startObject( id:Int ) {
+    override public function startObject( id:Int ) {
         super.startObject(id);
         pushPen();
         current.start();
     }
     
-    public function endObject() {
+    override public function endObject() {
         current.end();
         popPen();
         super.endObject();
     }
     
-    public function showObject( id:Int ) {
+    override public function showObject( id:Int ) {
         super.showObject(id);
         GL.callList( id );
     }
 
-    public function clipRect( w:Float, h:Float ) {
+    override public function clipRect( w:Float, h:Float ) {
     /*
         uh, man..
         this is another attempt at using scissors.
@@ -166,43 +167,43 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         GL.enable( GL.CLIP_PLANE3 );
     }
     
-    public function startShape() {
+    override public function startShape() {
         if( shape != null ) throw("Can only define one path at a time");
         shape = new GLPolygon();
     }
     
-    public function endShape() {
+    override public function endShape() {
         if( shape==null ) throw("no current Polygon");
         shape.draw( pen.fillColor, pen.strokeColor, pen.strokeWidth );
         shape = null;
     }
     
-    public function startPath( x:Float, y:Float) {
+    override public function startPath( x:Float, y:Float) {
         if( shape==null ) throw("no current Polygon");
         shape.startPath( x, y );
     }
     
-    public function endPath() {
+    override public function endPath() {
         shape.endPath();
     }
     
-    public function close() {
+    override public function close() {
         shape.close();
     }
     
-    public function lineTo( x:Float, y:Float ) {
+    override public function lineTo( x:Float, y:Float ) {
         shape.lineTo(x,y);
     }
     
-    public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+    override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
         shape.quadraticTo(x1,y1,x,y);
     }
     
-    public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+    override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
         shape.cubicTo(x1,y1,x2,y2,x,y);
     }
     
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
         
         if( pen.fillColor != null ) {
@@ -240,7 +241,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function circle( x:Float, y:Float, r:Float ) {
+    override public function circle( x:Float, y:Float, r:Float ) {
         GL.pushMatrix();
         GL.translate( x, y, 0. );
         GL.scale( r, r, 1.);
@@ -257,7 +258,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         GL.popMatrix();
     }
     
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         format.assureLoaded();
         var font = format.font;
         if( font==null ) trace("NULL font");
@@ -270,7 +271,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         if( img.theight==0 || img.twidth==0 ) return;
         current.mergeBBox( {l:outRegion.x,t:outRegion.y,r:outRegion.x+outRegion.w,b:outRegion.y+outRegion.h} );
     

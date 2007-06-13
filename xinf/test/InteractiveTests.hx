@@ -3,6 +3,7 @@ package xinf.test;
 
 import xinf.test.TransformTest;
 import xinf.test.EventTest;
+import xinf.test.StyleTest;
 
 class TestEmptyStage extends TestCase {
     override public function test() {
@@ -26,10 +27,15 @@ class TestRectangle extends TestCase {
 class InteractiveTests extends TestCase {
     static function main() {
         var shell = new TestShell();
-        
+
         shell.add( new TestEmptyStage() );
         shell.add( new TestRectangle() );
-        
+
+        shell.add( new TestStyleBasics() );
+
+/*
+
+
         shell.add( new TestIdentity() );
         shell.add( new TestTranslate() );
         shell.add( new TestRotate() );
@@ -40,12 +46,9 @@ class InteractiveTests extends TestCase {
         shell.add( new TestMouseOut() );
         shell.add( new TestMouseDown() );
         shell.add( new TestMouseDown2() );
-        /*
-        shell.add( new TestMouseDown3() );
-        */
         shell.add( new TestMouseUp() );
         shell.add( new TestMouseMove() );
-        
+  */      
         shell.run();
     }
 }

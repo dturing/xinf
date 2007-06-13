@@ -29,18 +29,44 @@ class Flash9Runtime extends SimpleRuntime {
         super();
         _eventSource = new Flash9EventSource(this);
         
-        flash.external.ExternalInterface.call("haxeTrace","HEllo?");
         #if htmltrace
-            // setup trace to javascript
+            // setup trace to javascript FIXME this is b0rked. i get securityerrors since flash9, which need stupid web-auth.
             try {
                 var ttrace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
                     flash.external.ExternalInterface.call("haxeTrace",v,pos);
                 }
                 haxe.Log.trace = ttrace;
+                //fixLinuxTrace();
+                
+                trace("hello trace");
             } catch( e:Dynamic ) {
+                fixLinuxTrace();
+                trace("Exception trying to setup HTML trace: "+e );
             }
+        #else true
+            fixLinuxTrace();
         #end
+    }
+    
+    function fixLinuxTrace() {
+        var mc = flash.Lib.current;
+        var tf = new flash.text.TextField();
+        tf.selectable = false;
+        tf.width = mc.stage.stageWidth;
+        tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+
+        var format:flash.text.TextFormat = tf.getTextFormat();
+        format.font = "_sans";
+        tf.defaultTextFormat = format;
+        mc.addChild(tf); // TODO stay on top
         
+        var ttrace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
+            mc.removeChild(tf);
+            mc.addChild(tf);
+            
+            tf.text += v+"\n";
+        }
+        haxe.Log.trace = ttrace;
     }
     
     override public function getDefaultRoot() :NativeContainer {

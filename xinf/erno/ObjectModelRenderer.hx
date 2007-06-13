@@ -99,7 +99,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     }
 
     // we implement the root and object parts of the erno Instruction protocol
-    public function startNative( o:NativeContainer ) :Void {
+    override public function startNative( o:NativeContainer ) :Void {
         // TODO #if debug, check if current is set
 
         // FIXME cast unneccessary if type parameter (Primitive) was constrained to NativeContainer
@@ -110,11 +110,11 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
         pushPen();
     }
     
-    public function endNative() :Void {
+    override public function endNative() :Void {
         current=null;
     }
 
-    public function startObject( id:Int ) {
+    override public function startObject( id:Int ) {
         // TODO #if debug, check if current is set
         // see if there already is an object with that id.
         current = lookup(id);
@@ -129,22 +129,22 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
         pushPen();
     }
     
-    public function endObject() {
+    override public function endObject() {
         current = null;
         popPen();
     }
     
-    public function showObject( id:Int ) {
+    override public function showObject( id:Int ) {
         var o = lookup(id);
         attachPrimitive( current, o );
     }
     
-    public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
+    override public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
         var o = lookup(id);
         setPrimitiveTransform( o, x, y, a, b, c, d );
     }
 
-    public function setTranslation( id:Int, x:Float, y:Float ) {
+    override public function setTranslation( id:Int, x:Float, y:Float ) {
         var o = lookup(id);
         setPrimitiveTranslation( o, x, y );
     }

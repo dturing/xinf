@@ -51,17 +51,17 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 
     /* our part of the drawing protocol */
     
-    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         p.x=0; p.y=0;
         p.transform.matrix = new flash.geom.Matrix( a,b,c,d,x,y );
     }
 
-    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
         p.x = x;
         p.y = y;
     }
 
-    public function clipRect( w:Float, h:Float ) {
+    override public function clipRect( w:Float, h:Float ) {
         var crop = new Sprite();
         var g = crop.graphics;
         g.beginFill( 0xff0000, 1 );
@@ -71,7 +71,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         current.mask = crop;
     }
 
-    public function startShape() {
+    override public function startShape() {
         if( pen.fillColor != null ) {
             current.graphics.beginFill( pen.fillColor.toRGBInt() );
         }
@@ -80,37 +80,37 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function endShape() {
+    override public function endShape() {
         if( pen.fillColor != null ) {
             current.graphics.endFill();
         }
     }
     
-    public function startPath( x:Float, y:Float) {
+    override public function startPath( x:Float, y:Float) {
         current.graphics.moveTo(x,y);
     }
     
-    public function endPath() {
+    override public function endPath() {
         current.graphics.moveTo(0,0);
     }
     
-    public function close() {
+    override public function close() {
         // FIXME
     }
     
-    public function lineTo( x:Float, y:Float ) {
+    override public function lineTo( x:Float, y:Float ) {
         current.graphics.lineTo(x,y);
     }
     
-    public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+    override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
         current.graphics.curveTo( x1,y1,x,y );
     }
     
-    public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+    override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
         throw("unimplemented");
     }
         
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         var g = current.graphics;
         if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
@@ -128,7 +128,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         g.endFill();
     }
     
-    public function circle( x:Float, y:Float, r:Float ) {
+    override public function circle( x:Float, y:Float, r:Float ) {
         var g = current.graphics;
         if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
@@ -145,7 +145,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         g.endFill();
     }
     
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         format.assureLoaded();
         
         // FIXME: textStyles
@@ -165,7 +165,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         if( img.bitmapData == null ) {
             return;
         }
@@ -191,7 +191,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
      	}
     }
 
-    public function native( o:NativeObject ) {
+    override public function native( o:NativeObject ) {
         current.addChild(o);
     }
     

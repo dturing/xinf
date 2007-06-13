@@ -127,7 +127,7 @@ class JSEventSource {
     }
     
     private function postMouseEventTo( e:js.Event, type:EventKind<MouseEvent>, targetId:Int ) :Bool {
-        runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, e.button, targetId,
+        runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, untyped e.which, targetId,
                             e.shiftKey>0, e.altKey>0, e.ctrlKey>0 ) );
         
         return e.target.nodeName=="INPUT";

@@ -134,7 +134,7 @@ class PenStackRenderer extends BasicRenderer {
         the implementation of the Renderer setFill method, sets the fillColor of the
         current pen.
     **/
-    public function setFill( r:Float, g:Float, b:Float, a:Float ) {
+    override public function setFill( r:Float, g:Float, b:Float, a:Float ) {
         pen.fillColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
     }
     
@@ -142,7 +142,7 @@ class PenStackRenderer extends BasicRenderer {
         the implementation of the Renderer setStroke method, sets the strokeColor and
         strokeWidth of the current pen.
     **/
-    public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
+    override public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
         pen.strokeColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
         pen.strokeWidth = width;
     }
@@ -151,7 +151,7 @@ class PenStackRenderer extends BasicRenderer {
         the implementation of the Renderer setFont method, sets the fontFace,
         fontSlant, fontWeight and fontSize of the current pen.
     **/
-    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
+    override public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
         pen.fontFace = face;
         pen.fontItalic = italic;
         pen.fontBold = bold;
