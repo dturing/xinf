@@ -9,6 +9,7 @@
                 th, td {
                     padding: 3px 3px 3px 3px;
                     margin: 0;
+                    vertical-align: top;
                 }
                 th {
                     background: #eee;
@@ -21,10 +22,11 @@
                 }
             </style>
         </head>
-        <body>
+        <body bgcolor="#ddd">
             <table>
                 <tr>
                     <th>Test</th>
+                    <th>Ref</th>
                     <xsl:for-each select="//testrun">
                         <th title="{@date}"><xsl:value-of select="@platform"/></th>
                     </xsl:for-each>
@@ -34,6 +36,9 @@
                     <xsl:variable name="name"><xsl:value-of select="@test"/></xsl:variable>
                     <tr>
                         <td><xsl:value-of select="@test"/></td>
+                        <td>
+                            <a href="/static/svg/png/basic-{@test}.png"><img width="40" height="30" src="/static/svg/png/basic-{@test}.png"/></a>
+                        </td>
                         <xsl:for-each select="//testrun">
                             <xsl:choose>
                                 <xsl:when test="result/@test=$name">
@@ -72,6 +77,8 @@
             title="{.}">
             <xsl:if test="@image">
                 <a href="{@image}"><img width="40" height="30" src="{@image}"></img></a>
+                <br/>
+                <a href="results/{@test}-{@platform}-diff.png"><img width="40" height="30" src="results/{@test}-{@platform}-diff.png"></img></a>
             </xsl:if>
         </td>
     </xsl:template>
