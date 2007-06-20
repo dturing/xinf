@@ -69,9 +69,9 @@ class TestCase {
     }
 
 
-    public function assertDisplay( result:Bool->Void, ?targetEquality:Float, ?expectFail:Bool ) {
+    public function assertDisplay( result:Bool->Void, width:Float, height:Float, ?targetEquality:Float, ?expectFail:Bool ) {
         if( expectFail==null ) expectFail=this.expectFail;
-        if( targetEquality==null ) targetEquality=1.;
+        if( targetEquality==null ) targetEquality=1.0;
         
         var self=this;
         var handler:Dynamic;
@@ -79,7 +79,7 @@ class TestCase {
             xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
             
             try {
-                self.cnx.test.shoot.call([ self.iteration++, self.name, self.platform, targetEquality, expectFail ], function( r:Dynamic ) {
+                self.cnx.test.shoot.call([ self.iteration++, self.name, self.platform, width, height, targetEquality, expectFail ], function( r:Dynamic ) {
                         result( r>=targetEquality );
                     } );
             } catch(e:Dynamic) {

@@ -26,7 +26,7 @@ import xinf.erno.Color;
 
 class GLContour {
     
-    private var last:TPoint;
+    public var last:TPoint;
     private var pixelSize:Float;
     public var path:Array<TPoint>;
     
@@ -82,7 +82,12 @@ class GLPolygon {
         if( pixelSize==null ) pixelSize=5.;
         this.pixelSize=pixelSize;
     }
-    
+
+    public function last() :{ x:Float, y:Float } {
+        if( contour==null ) return { x:0., y:0. };
+        else return contour.last;
+    }
+
     /* FIXME */
     public function setPixelSize( s:Float ) :Void {
         pixelSize = s;
@@ -146,7 +151,7 @@ class GLPolygon {
         if( tess == null ) {
             tess=Tesselator.create();
         }
-
+        
         tess.normal( 0., 0., 1. );
         tess.beginPolygon( null );
         
@@ -182,7 +187,6 @@ class GLPolygon {
 
         if( fill != null ) {
             GL.color4( fill.r, fill.g, fill.b, fill.a );
-
             drawTesselated( coords );
             
             #if gldebug

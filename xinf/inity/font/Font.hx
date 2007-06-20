@@ -33,23 +33,11 @@ class Font extends xinf.support.Font {
         if( font != null ) return font;
         
         var data:String;
-        if( name=="_sans" ) {
-            data = Std.resource("default-font");
-            if( data==null ) {
-                // try to load bitstream vera- bundled with xinfinity
-                untyped {
-                    var module = __dollar__loader.loadmodule("xinf-resources".__s,__dollar__loader);
-                    data = module.font;
-                }
-                if( data == null ) {
-                    throw("default font not found - include xinf-resources");
-                }
-            }
-        } else if( name!=null ) {
-            var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
-            if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
-            data = neko.io.File.getContent( file );
-        }
+        if( name=="_sans" ) { name=="sans"; }
+        
+        var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
+        if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
+        data = neko.io.File.getContent( file );
         
         var font = new Font( data, 12 );
         

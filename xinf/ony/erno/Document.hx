@@ -34,9 +34,11 @@ class Document extends Group, implements xinf.ony.Document {
         binding.add( "line", Line );
         binding.add( "polygon", Polygon );
         binding.add( "polyline", Polyline );
+        binding.add( "ellipse", Ellipse );
+        binding.add( "circle", Circle );
+        binding.add( "text", Text );
         /*
         binding.add( "path", Path );
-        binding.add( "text", Text );
         binding.add( "a", Link );
         */
     }
@@ -50,6 +52,15 @@ class Document extends Group, implements xinf.ony.Document {
     }
 
 
+    public var width(default,set_width):Int;
+    public var height(default,set_height):Int;
+    private function set_width(v:Int) {
+        width=v; return width;
+    }
+    private function set_height(v:Int) {
+        height=v; return height;
+    }
+
     public var styleSheet(default,null):xinf.style.StyleSheet;
     public var elementsById(default,null):Hash<xinf.ony.Element>;
 
@@ -58,6 +69,20 @@ class Document extends Group, implements xinf.ony.Document {
         document=this;
         styleSheet=null;
         elementsById = new Hash<xinf.ony.Element>();
+    }
+
+
+    override public function fromXml( xml:Xml ) :Void {
+        super.fromXml(xml);
+        // for now...
+        if( xml.exists("viewBox") ) {
+            var vb = xml.get("viewBox").split(" ");
+            if( vb.length != 4 ) {
+                throw("illegal/unsupported viewBox: "+vb );
+            }
+            width = Std.parseInt( vb[2] );
+            height = Std.parseInt( vb[3] );
+        }
     }
 
     public function getElementById( id:String ) :xinf.ony.Element {

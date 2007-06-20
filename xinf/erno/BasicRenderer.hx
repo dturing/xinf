@@ -112,17 +112,25 @@ class BasicRenderer implements Renderer {
         unimplemented("cubicTo");
     }
 
+    public function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) {
+        unimplemented("arcTo");
+    }
+
     public function rect( x:Float, y:Float, w:Float, h:Float ) {
         unimplemented("rect");
     }
-    
-    public function circle( x:Float, y:Float, r:Float ) {
-        unimplemented("circle");
+
+    public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        unimplemented("roundedRect");
+    }
+
+    public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+        unimplemented("ellipse");
     }
     
     public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         unimplemented("text");
-    }
+    }  
     
     public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         unimplemented("image");

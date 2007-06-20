@@ -116,6 +116,11 @@ class Color {
         return new Color().fromRGBA(r,g,b,1.0);
     }
 
+    /** creates a new Color object from the given 0-255 values for red, green and blue. alpha will be 1 (opaque) **/
+    public static function rgbI(r:Int,g:Int,b:Int) :Color {
+        return new Color().fromRGBA(r/255.,g/255.,b/255.,1.0);
+    }
+
     public static var BLACK:Color = new Color().fromRGBInt(0);
     public static var WHITE:Color = new Color().fromRGBInt(0xffffff);
     public static var RED:Color = new Color().fromRGBInt(0xff0000);

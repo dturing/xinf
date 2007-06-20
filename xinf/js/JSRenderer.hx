@@ -85,8 +85,12 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild( r );
     }
 
-    override public function circle( x:Float, y:Float, r:Float ) {
-        rect( x-r, y-r, r*2, r*2 );
+    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        rect( x, y, w, h );
+    }
+    
+    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+        rect( x-rx, y-ry, rx*2, ry*2 );
     }
 
     override public function text( x:Float, y:Float, text:String, format:TextFormat ) {

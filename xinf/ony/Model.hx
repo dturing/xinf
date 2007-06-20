@@ -35,7 +35,7 @@ class Model {
         return new Group_();
     }
     
-    public function document() :Group {
+    public function document() :Document {
         return new Document_();
     }
     

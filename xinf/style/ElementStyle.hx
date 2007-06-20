@@ -2,7 +2,7 @@
 package xinf.style;
 
 import xinf.erno.Color;
-import xinf.style.StyleParser;
+import xinf.style.StylePropertyDefinition;
 
 class ElementStyle extends InheritedStyle {
     public var fill(get_fill,set_fill):Color;
@@ -17,9 +17,38 @@ class ElementStyle extends InheritedStyle {
     function get_stroke_width() :Float { return getProperty("stroke-width",Float); }
     function set_stroke_width( v:Float ) :Float { return setProperty("stroke-width",v); }
 
+    public var fontFamily(get_font_family,set_font_family):String;
+    function get_font_family() :String { return getProperty("font-family",String); }
+    function set_font_family( v:String ) :String { return setProperty("font-family",v); }
 
-    
+    public var fontSize(get_font_size,set_font_size):Float;
+    function get_font_size() :Float { return getProperty("font-size",Float); }
+    function set_font_size( v:Float ) :Float { return setProperty("font-size",v); }
+
     override public function fromXml( xml:Xml ) :Void {
-        parseXmlProperties(xml,["fill","stroke","stroke-width"]);
+        StyleParser.parseXmlAttributes( xml, this, propertyDefinitions );
+    }
+
+    override public function parse( values:String ) :Void {
+        StyleParser.parse( values, this, propertyDefinitions );
+    }
+
+    static var propertyDefinitions:Hash<StylePropertyDefinition>;
+    static function __init__() {
+        propertyDefinitions = new Hash<StylePropertyDefinition>();
+        for( def in [
+            new ColorProperty("fill"),
+            new ColorProperty("stroke"),
+            new UnitFloatProperty("stroke-width"),
+            
+            new StringListProperty("font-family"),
+            new UnitFloatProperty("font-size"),
+            new StringChoiceProperty("font-weight", ["normal","bold"] )
+            ] ) {
+            
+            propertyDefinitions.set( def.name, def );
+            
+        }
+    
     }
 }

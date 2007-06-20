@@ -22,58 +22,66 @@ import xinf.erno.TextFormat;
 /**
     A simple Xinfony Object displaying a string of text.
 **/
-class Text extends Object {
+class Text extends Object, implements xinf.ony.Text {
     
-    public var color:Color;
-    public var text(default,setText):String;
-    public var format(default,setFormat):TextFormat;
-    public var autoSize(default,setAutoSize):Bool;
-    
-    public function new( ?text:String, ?color:Color ) :Void {
-        if( color==null ) color = Color.BLACK;
-        this.color=color;
-        this.text=text;
-        this.format=TextFormat.getDefault();
-        //format.size = 12;
-        //format.family = "_sans";
-        super();
+    public var text(default,set_text):String;
+    public var x(default,set_x):Float;
+    public var y(default,set_y):Float;
+
+    private var format:TextFormat;
+
+    private function set_x(v:Float) {
+        x=v; scheduleRedraw(); return x;
     }
-    
-    function setText( t:String ) :String {
-        this.text = t;
-        calcSize();
-        return text;
+    private function set_y(v:Float) {
+        y=v; scheduleRedraw(); return y;
+    }
+    private function set_text( t:String ) :String {
+        text=t; scheduleRedraw(); return text;
     }
 
-    function setFormat( format:TextFormat ) :TextFormat {
-        this.format = format;
-        calcSize();
-        return format;
-    }
-
-    function setAutoSize( a:Bool ) :Bool {
-        this.autoSize = a;
-        calcSize();
-        return a;
-    }
-
-    public function calcSize() :Void {
-        if( autoSize ) {
-            var s = format.textSize( text );
-            if( s.x!=size.x || s.y!=size.y ) {
-                resize( s.x, s.y );
-            }
-//            trace("calc font size for text '"+text+"': "+s.x+"/"+s.y );
-        }
+    override public function fromXml( xml:Xml ) :Void {
+        super.fromXml(xml);
+        x = getFloatProperty(xml,"x");
+        y = getFloatProperty(xml,"y");
+        text = textContent(xml);
     }
     
-    public function drawContents( g:Renderer ) :Void {
+    override public function styleChanged() :Void {
+        var family = style.fontFamily;
+        var size = style.fontSize;
+        format = TextFormat.create( family, size ); 
+        // TODO: weight
+    }
+    
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
         if( text!=null ) {
-            g.setFill( 1,1,1,.5 );
-            g.rect( 0, 0, 500, 500 ); //size.x, size.y );
-            g.setFill( color.r, color.g, color.b, color.a );
-            g.text(0,0,text,format);
+            g.text(x,y-format.size,text,format);
         }
     }
     
+    
+/* helpers *******************/
+
+    function textContent( xml:Xml ) :String {
+        var text = "";
+        for( child in xml ) {
+            switch( child.nodeType ) {
+                case Xml.PCData:
+                    text+=child.nodeValue;
+                case Xml.Element:
+                    text+=textContent(child)+"\n";
+                default:
+            }
+        }
+        return xmlUnescape(StringTools.trim( text ));
+    }
+    
+	/**
+		Unescape XML special characters of the string.
+	**/
+	public static function xmlUnescape( s : String ) : String {
+		return s.split("&gt;").join(">").split("&lt;").join("<").split("&amp;").join("&").split("&quot;").join("\"");
+	}
 }

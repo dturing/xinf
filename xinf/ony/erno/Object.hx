@@ -122,10 +122,19 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public function drawContents( g:Renderer ) :Void {
         var c = style.fill;
         if( c!=null ) g.setFill( c.r, c.g, c.b, c.a );
-        
+        else g.setFill( 0,0,0,1 );
+
         c = style.stroke;
         var w = style.strokeWidth;
-        if( c!=null ) g.setStroke( c.r,c.g,c.b,c.a,w );
+        if( w==null ) w=1.;
+        if( c!=null ) {
+            #if neko
+                w = localToGlobal( {x:w,y:0.} ).x;
+            #end
+            g.setStroke( c.r,c.g,c.b,c.a,w );
+        } else {
+            g.setStroke( 0,0,0,0,0 );
+        }
     }
 
     /** schedule this Object for redrawing<br/>
@@ -161,6 +170,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public function attachedTo( p:xinf.ony.Group ) {
         parent=p;
         document=parent.document;
+        styleChanged();
     }
 
     public function detachedFrom( p:xinf.ony.Group ) {
@@ -173,13 +183,16 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
             id = xml.get("id");
         }
         if( xml.exists("style") ) {
-            StyleParser.parse( style, xml.get("style") );
+            style.parse( xml.get("style") );
         }
         style.fromXml( xml );
         
         if( xml.exists("transform") ) {
             transform = TransformParser.parse( xml.get("transform") );
         }
+    }
+
+    public function styleChanged() :Void {
     }
 
     /** dispatch the given Event<br/>

@@ -12,6 +12,7 @@ class TestServer {
     
     public static var displayName = ":10.0";
     public static var resultDir = "results";
+    public static var refDir = "static/svg/pnm";
     
     static function assureResultDir() {
         // assure result directory exists
@@ -66,14 +67,17 @@ class TestServer {
         out.close();
     }
 
-    static function shoot( testNumber:Int, testName:String, platform:String, targetEquality:Float, expectFail:Bool ) :Float {
+    static function shoot( testNumber:Int, testName:String, platform:String, width, height, targetEquality:Float, expectFail:Bool ) :Float {
         var baseName = resultDir+"/"+testName+"-";
         var img = baseName+platform+".pnm";
         var diff = baseName+platform+"-diff.pnm";
-        var ref = baseName+"reference.pnm";
+        var ref = refDir+"/basic-"+testName+".pnm";
+
+        if( width==null ) width=160;
+        if( height==null ) height=120;
 
         // make screenshot
-        var exitCode = neko.Sys.command("xwd -display "+displayName+" -root | xwdtopnm > "+img );
+        var exitCode = neko.Sys.command("xwd -display "+displayName+" -nobdrs -root | xwdtopnm | pnmcut -left 1 -top 1 -width "+width+" -height "+height+" | pnmscale -xysize 160 120 > "+img );
         if( exitCode != 0 ) throw("Could not take screenshot.");
 
         if( neko.FileSystem.exists( ref ) ) {
@@ -93,12 +97,17 @@ class TestServer {
             result( testNumber, testName, platform, eq>=targetEquality, ""+eq, expectFail, baseName+platform+".png" );
             return eq;
         } else {
+            info(testName,platform,"reference "+ref+" no existe");
+
+            /*
+        } else {
             // copy as reference
             neko.Sys.command("cp "+img+" "+ref );
             neko.Sys.command("pnmtopng -compression 7 "+ref+" > "+baseName+"reference.png");
             
             result( testNumber, testName, platform, false, "reference image generated", true, baseName+"reference.png" );
             return -2.;
+            */
         }
         return -1.;
     }

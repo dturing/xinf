@@ -124,24 +124,43 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         } else {
             g.beginFill( 0, 0 );
         }
-        g.drawRect( x+(pen.strokeWidth/2),y+(pen.strokeWidth/2),1+w-pen.strokeWidth,1+h-pen.strokeWidth );
+        g.drawRect( x,y,w,h );
         g.endFill();
     }
-    
-    override public function circle( x:Float, y:Float, r:Float ) {
+
+    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
         var g = current.graphics;
         if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
                 false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
         } else {
             g.lineStyle( 0, 0, 0 );
+            pen.strokeWidth=0;
         }
         if( pen.fillColor != null ) {
             g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
         } else {
             g.beginFill( 0, 0 );
         }
-        g.drawCircle( x,y,r );
+        g.drawRoundRect( x,y,w,h, 2*rx, 2*ry );
+        g.endFill();
+    }
+    
+    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+        var g = current.graphics;
+        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+            g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
+                false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
+        } else {
+            g.lineStyle( 0, 0, 0 );
+            pen.strokeWidth=0;
+        }
+        if( pen.fillColor != null ) {
+            g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
+        } else {
+            g.beginFill( 0, 0 );
+        }
+        g.drawEllipse( x-rx,y-ry,2*rx,2*ry );
         g.endFill();
     }
     

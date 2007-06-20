@@ -21,12 +21,13 @@ class Style {
     
     public function fromXml( xml:Xml ) :Void {
     }
+    public function parse( values:String ) :Void {
+    }
     
-    public function parseXmlProperties( xml:Xml, properties:Iterable<String> ) :Void {
-        for( prop in properties ) {
-            if( xml.exists(prop) ) {
-                setProperty( prop, StyleParser.parseValue(xml.get(prop)) );
-            }
-        }
+    
+    public function getTextFormat() :xinf.erno.TextFormat {
+        var family:String = getProperty("font-family",String);
+        var size:Float = getProperty("font-size",Float);
+        return xinf.erno.TextFormat.create( family, size );
     }
 }
