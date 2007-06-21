@@ -77,7 +77,6 @@
             title="{.}">
             <xsl:if test="@image">
                 <a href="{@image}"><img width="40" height="30" src="{@image}"></img></a>
-                <br/>
                 <a href="results/{@test}-{@platform}-diff.png"><img width="40" height="30" src="results/{@test}-{@platform}-diff.png"></img></a>
             </xsl:if>
         </td>
