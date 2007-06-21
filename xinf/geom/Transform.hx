@@ -140,10 +140,11 @@ class TransformParser {
         inherit
         fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
     */
-    static var translate = ~/translate\(([0-9\.\-]+),([0-9\.\-]+)\)/;
+    static var split = ~/[,\r\n\t]/g;
+    static var translate = ~/translate\([ \t\r\n]*([0-9\.\-]+)[ \t\r\n]*,[ \t\r\n]*([0-9\.\-]+)[ \t\r\n]*\)/;
     static var rotate = ~/rotate\(([0-9\.\-]+)\)/; 
     static var matrix = ~/matrix\(([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+)\)/;
-    static var scale = ~/scale\(([0-9\.\-]+),([0-9\.\-]+)\)/; 
+    static var scale = ~/scale\(([0-9e\.\-,]+)\)/; 
     
     public static function parse( text:String ) :Transform {
         var r :Transform;
@@ -166,10 +167,15 @@ class TransformParser {
                     Std.parseFloat(rotate.matched(1)) * DEG_TO_RAD
                 );
         } else if( scale.match(text) ) {
-            r = new Scale(
-                    Std.parseFloat(scale.matched(1)),
-                    Std.parseFloat(scale.matched(2)) 
-                );
+            var s = split.split(scale.matched(1));
+            if( s.length==1 ) {
+                var scale=Std.parseFloat(s[0]);
+                r = new Scale( scale, scale );
+            } else if( s.length==2 ) {
+                r = new Scale( Std.parseFloat(s[0]), Std.parseFloat(s[1]) );
+            } else {
+                throw("unimplemented transform: "+text );
+            }
         } else {
             throw("invalid/unimplemented SVG transform '"+text+"'" );
         }

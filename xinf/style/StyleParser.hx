@@ -17,7 +17,7 @@ class StyleParser {
                 if( def!=null ) {
                     def.parseAndSet( value, s );
                 } else {
-                    throw("unknown style property '"+name+"'" );
+                    trace("unknown style property '"+name+"'" );
                 }
             } else if( prop.length==0 ) {
             } else {

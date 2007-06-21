@@ -129,11 +129,12 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         if( w==null ) w=1.;
         if( c!=null ) {
             #if neko
-                w = localToGlobal( {x:w,y:0.} ).x;
+            // naah. FIXME
+            //    w = localToGlobal( {x:w,y:0.} ).x;
             #end
             g.setStroke( c.r,c.g,c.b,c.a,w );
         } else {
-            g.setStroke( 0,0,0,0,0 );
+            g.setStroke( 0,0,0,1.,w );
         }
     }
 

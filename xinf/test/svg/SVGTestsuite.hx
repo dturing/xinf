@@ -85,6 +85,7 @@ class SVGTestsuite {
             // FIXME: the first test never works...
             shell.add( new SVGTest( "<svg/>") );
             
+           /* 
             shell.add( new HttpSVGTest( base+"shapes-intro-01-t.svg" ) );
             shell.add( new HttpSVGTest( base+"shapes-rect-01-t.svg" ) );
             shell.add( new HttpSVGTest( base+"shapes-rect-02-t.svg" ) );
@@ -95,6 +96,21 @@ class SVGTestsuite {
             shell.add( new HttpSVGTest( base+"shapes-ellipse-02-t.svg" ) );
             shell.add( new HttpSVGTest( base+"shapes-circle-01-t.svg" ) );
             shell.add( new HttpSVGTest( base+"shapes-circle-02-t.svg" ) );
+          */ 
+            
+            shell.add( new HttpSVGTest( base+"paths-data-01-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-02-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-04-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-05-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-06-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-07-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-08-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-09-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-10-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-12-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-13-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-14-t.svg" ) );
+            shell.add( new HttpSVGTest( base+"paths-data-15-t.svg" ) );
         }
         
         shell.run();

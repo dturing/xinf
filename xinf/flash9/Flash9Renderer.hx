@@ -75,9 +75,6 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         if( pen.fillColor != null ) {
             current.graphics.beginFill( pen.fillColor.toRGBInt() );
         }
-        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-            current.graphics.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
-        }
     }
     
     override public function endShape() {
@@ -87,11 +84,14 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
     
     override public function startPath( x:Float, y:Float) {
+        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
+            current.graphics.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
+        }
         current.graphics.moveTo(x,y);
     }
     
     override public function endPath() {
-        current.graphics.moveTo(0,0);
+        current.graphics.lineStyle( 0, 0, 0 );
     }
     
     override public function close() {

@@ -37,8 +37,8 @@ class Document extends Group, implements xinf.ony.Document {
         binding.add( "ellipse", Ellipse );
         binding.add( "circle", Circle );
         binding.add( "text", Text );
-        /*
         binding.add( "path", Path );
+        /*
         binding.add( "a", Link );
         */
     }
