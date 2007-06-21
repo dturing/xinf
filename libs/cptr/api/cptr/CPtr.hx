@@ -72,4 +72,5 @@ class CPtr {
     public static var as_string = neko.Lib.load("cptr","cptr_as_string",1);
     public static var from_string = neko.Lib.load("cptr","cptr_from_string",1);
     public static var info = neko.Lib.load("cptr","cptr_info",1);
+    public static var copy = neko.Lib.load("cptr","cptr_copy",1);
 }

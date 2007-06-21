@@ -71,6 +71,14 @@ value cptr_info( value cp ) {
 }
 DEFINE_PRIM( cptr_info, 1 );
 
+value cptr_copy( value cp ) {
+    check_cptr(cp,0);
+    int sz = val_cptr_size(cp);
+    void *p = malloc( sz );
+    memcpy( p, val_cptr(cp,void), sz );
+    return alloc_cptr( p, sz, free );
+}
+DEFINE_PRIM( cptr_copy, 1 );
 
 #define CPTR_ALLOC(ctype,hxtype) \
 value cptr_## ctype ##_alloc( value n ) { \
@@ -84,7 +92,7 @@ DEFINE_PRIM(cptr_## ctype ##_alloc,1);
 #define CPTR_GET(ctype,hxtype) \
 value cptr_## ctype ##_get( value cp, value _i ) { \
     check_cptr( cp, 0 ); \
-    val_check( _i, int ); \
+    val_check( _i, number ); \
     int n=val_cptr_size(cp)/sizeof(ctype); \
     int i=val_number(_i); \
     if( i<0 || i>=n ) val_throw(alloc_string("cptr index out of bounds")); \
