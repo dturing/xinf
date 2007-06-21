@@ -41,7 +41,7 @@ class Path extends Element {
     }
 
     static var command = ~/[ \t\n\r]*([MLQCSZAlqcsza])/;
-    static var float = ~/[ \t\n\r,]*([0-9\.\-]*)[ \t\n\r,]*/;
+    static var float = ~/[ \t\n\r,]*([0-9\.\-]+)([e0-9\-])*[ \t\n\r,]*/;
 
     function parseFloats( text:String, n:Int ) :{ a:Array<Float>, rest:String } {
         var a = new Array<Float>();
@@ -49,6 +49,7 @@ class Path extends Element {
             if( float.match(text) ) {
                 var m = float.matchedPos();
                 a.push( Std.parseFloat(float.matched(1)) );
+                // FIXME matched(2) might contain exponent!
                 text = text.substr( m.pos+m.len );
             } else {
                 throw("expected number, but got '"+text+"'");
