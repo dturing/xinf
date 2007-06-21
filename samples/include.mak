@@ -17,7 +17,7 @@ test : $(APP).n
 all : $(BINARIES)
 
 %.swf : %.hx $(SOURCES)
-	haxe $(HAXEFLAGS) --flash-strict -debug -main $* -swf-version 9 -swf-header 320:240:25:000000 -swf $*.swf
+	haxe $(HAXEFLAGS) --flash-strict -debug -main $* -swf-version 9 -swf-header 320:240:25:aaaaaa -swf $*.swf
 
 %.js : %.hx $(SOURCES)
 	haxe $(HAXEFLAGS) -main $* -js $*.js

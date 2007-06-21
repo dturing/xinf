@@ -293,13 +293,35 @@ class Scale extends AnimatedTest {
     private function renderAnimated( id:Int, frame:Int ) :Void {
         matrix.setTranslation( size.x/2, size.y/2 );
         matrix.setScale( Math.sin(frame/10)*size.x, Math.cos(frame/7)*size.y );
+        //matrix.setScale( size.x, Math.cos(frame/7)*size.y );
         g.setTransform( id, matrix.tx, matrix.ty, matrix.a, matrix.b, matrix.c, matrix.d );
+    }
+}
+
+class Text extends RenderTest {
+    var g:Renderer;
+    
+    public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
+        super( g, position, size );
+        this.g = g;
+    }
+    
+    private function renderContents( g:Renderer, size:TPoint ) :Void {
+        var text = "a";
+        var format = TextFormat.create(24.0);
+        var textSize = format.textSize( text );
+        
+        var ofs = (size.x/2)-(textSize.x/2);
+        g.setFill( 0, 0, 0, 1 );
+        g.rect( 0, 0, size.x, size.y );
+        
+        g.setFill( 1, 1, 1, 1 );
+        g.text( ofs, (size.y/2)-(textSize.y/2), text, format );
     }
 }
 
 class Info extends RenderTest {
     var g:Renderer;
-    var l:Dynamic;
     
     public function new( g:Renderer, position:TPoint, size:TPoint ) :Void {
         super( g, position, size );
@@ -318,7 +340,6 @@ class Info extends RenderTest {
         g.setFill( 1, 1, 1, 1 );
         g.text( ofs+pad, pad, "xinferno "+xinf.Version.version, TextFormat.getDefault() );
     }
-
 }
 
 class App {
@@ -345,6 +366,7 @@ class App {
             new Twist( g, {x:unit.x*4,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Rotate( g, {x:unit.x*5,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             new Scale( g, {x:unit.x*6,y:unit.y*7}, {x:unit.x,y:unit.y} ),
+            new Text( g, {x:unit.x*7,y:unit.y*7}, {x:unit.x,y:unit.y} ),
             
             new Info( g, {x:(size.x*.5)-unit.x,y:size.y*.25}, {x:0.,y:0.} ),
             ];
