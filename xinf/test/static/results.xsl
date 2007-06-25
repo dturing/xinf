@@ -37,7 +37,7 @@
                     <tr>
                         <td><xsl:value-of select="@test"/></td>
                         <td>
-                            <a href="/static/svg/png/basic-{@test}.png"><img width="40" height="30" src="/static/svg/png/basic-{@test}.png"/></a>
+                            <a href="static/svg/png/basic-{@test}.png"><img width="40" height="30" src="static/svg/png/basic-{@test}.png"/></a>
                         </td>
                         <xsl:for-each select="//testrun">
                             <xsl:choose>
