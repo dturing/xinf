@@ -5,6 +5,10 @@ import xinf.erno.Color;
 import xinf.style.StylePropertyDefinition;
 
 class ElementStyle extends InheritedStyle {
+    public var xmlBase(get_xmlBase,set_xmlBase):String;
+    function get_xmlBase() :String { return getProperty("xml:base",String); }
+    function set_xmlBase( v:String ) :String { return setProperty("xml:base",v); }
+
     public var fill(get_fill,set_fill):Color;
     function get_fill() :Color { return getProperty("fill",Color); }
     function set_fill( v:Color ) :Color { return setProperty("fill",v); }
