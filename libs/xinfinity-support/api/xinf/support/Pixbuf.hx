@@ -23,6 +23,7 @@ extern class Pixbuf {
 	
 	public function getWidth():Int;
 	public function getHeight():Int;
+	public function getRowstride():Int;
 	public function getHasAlpha():Int;
 	public function copyPixels():Dynamic;
 	

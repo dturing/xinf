@@ -81,10 +81,11 @@ value gdk_pixbuf_copy_pixels( GdkPixbuf *pixbuf ) {
 	int w = gdk_pixbuf_get_width(pixbuf);
 	int h = gdk_pixbuf_get_height(pixbuf);
 	int bpp = gdk_pixbuf_get_has_alpha(pixbuf)?4:3;
-	
-	unsigned char *data = malloc(w*h*bpp);
-	memset( data, 0xff, w*h*bpp );
-	memcpy( data, gdk_pixbuf_get_pixels(pixbuf), w*h*bpp );
+	int stride = gdk_pixbuf_get_rowstride(pixbuf);
     
-	return alloc_cptr( data, w*h*bpp, free );
+	unsigned char *data = malloc(h*stride);
+    unsigned char *src = gdk_pixbuf_get_pixels(pixbuf);
+	memcpy( data, gdk_pixbuf_get_pixels(pixbuf), h*stride );
+    
+	return alloc_cptr( data, h*stride, free );
 }
