@@ -120,21 +120,22 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         Everything you do will be in the Object's local coordinate space.
         **/
     public function drawContents( g:Renderer ) :Void {
-        var c = style.fill;
-        if( c!=null ) g.setFill( c.r, c.g, c.b, c.a );
+        var fill = style.fill;
+        if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, fill.a );
         else g.setFill( 0,0,0,1 );
 
-        c = style.stroke;
+        var stroke = style.stroke;
         var w = style.strokeWidth;
         if( w==null ) w=1.;
-        if( c!=null ) {
+        if( stroke!=null ) {
             #if neko
             // naah. FIXME
             //    w = localToGlobal( {x:w,y:0.} ).x;
             #end
-            g.setStroke( c.r,c.g,c.b,c.a,w );
+            g.setStroke( stroke.r,stroke.g,stroke.b,stroke.a,w );
         } else {
-            g.setStroke( 0,0,0,1.,w );
+            // maybe: if fill is also null, black!
+            g.setStroke( 0,0,0,0,w );
         }
     }
 

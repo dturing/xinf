@@ -22,6 +22,7 @@ import xinf.event.Event;
 import xinf.event.SimpleEventDispatcher;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
+import xinf.ony.URL;
 
 class Document extends Group, implements xinf.ony.Document {
    static var binding:Binding<xinf.ony.Element>;
@@ -38,6 +39,7 @@ class Document extends Group, implements xinf.ony.Document {
         binding.add( "circle", Circle );
         binding.add( "text", Text );
         binding.add( "path", Path );
+        binding.add( "image", Image );
         /*
         binding.add( "a", Link );
         */
@@ -64,6 +66,8 @@ class Document extends Group, implements xinf.ony.Document {
     public var styleSheet(default,null):xinf.style.StyleSheet;
     public var elementsById(default,null):Hash<xinf.ony.Element>;
 
+    private var baseURL:URL;
+
     public function new() :Void {
         super();
         document=this;
@@ -71,6 +75,13 @@ class Document extends Group, implements xinf.ony.Document {
         elementsById = new Hash<xinf.ony.Element>();
     }
 
+    public function setBaseURL( url:URL ) :URL {
+        baseURL = url;
+        return baseURL;
+    }
+    public function getBaseURL() :URL {
+        return baseURL;
+    }
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
@@ -91,10 +102,13 @@ class Document extends Group, implements xinf.ony.Document {
         return r;
     }
 
-    public function unmarshal( xml:Xml ) :xinf.ony.Element {
+    public function unmarshal( xml:Xml, ?parent:xinf.ony.Group ) :xinf.ony.Element {
         var r = binding.instantiate( xml );
         if( r==null ) return null;
+        
+        if( parent!=null ) parent.attach(r);
         untyped r.document = this; // FIXME
+        
         r.fromXml( xml );
         if( r.id!=null ) {
             elementsById.set( r.id, r );

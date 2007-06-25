@@ -94,7 +94,7 @@ class Matrix implements Transform {
         return o;
     }
 
-    public function multiply( m:Matrix ) :Matrix {
+    public function multiply( m:TMatrix ) :Matrix {
         var o:Matrix=new Matrix();
         
         o.a = (a*m.a) + (b*m.c);
@@ -152,4 +152,7 @@ class Matrix implements Transform {
         return this;
     }
     
+    public function toString() {
+        return("matrix("+a+","+b+","+c+","+d+","+tx+","+ty+")");
+    }
 }

@@ -46,6 +46,10 @@ class Identity implements Transform {
     public function applyInverse( p:TPoint ) :TPoint {
         return p;
     }
+    
+    public function toString() {
+        return("identity");
+    }
 }
 
 class Translate implements Transform {
@@ -72,6 +76,10 @@ class Translate implements Transform {
     }
     public function applyInverse( p:TPoint ) :TPoint {
         return { x:p.x-x, y:p.y-y };
+    }
+    
+    public function toString() {
+        return("translate("+x+","+y+")");
     }
 }
 
@@ -101,6 +109,10 @@ class Rotate implements Transform {
     public function applyInverse( p:TPoint ) :TPoint {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
+
+    public function toString() {
+        return("rotate("+(a*TransformParser.R2D)+")");
+    }
 }
 
 class Scale implements Transform {
@@ -128,10 +140,108 @@ class Scale implements Transform {
     public function applyInverse( p:TPoint ) :TPoint {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
+
+    public function toString() {
+        return("scale("+x+","+y+")");
+    }
+}
+
+
+class SkewX implements Transform {
+    var a:Float;
+    
+    public function new( a:Float ) {
+        this.a = a;
+    }
+    
+    public function getTranslation() {
+        return { x:.0, y:.0 };
+    }
+    public function getScale() {
+        return { x:.0, y:.0 };
+    }
+    public function getMatrix() {
+        return { a:1., b:0., c:Math.tan(a), d:1., tx:0., ty:0. };
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).apply(p);
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).applyInverse(p);
+    }
+
+    public function toString() {
+        return("skewX("+(a*TransformParser.R2D)+")");
+    }
+}
+
+
+class SkewY implements Transform {
+    var a:Float;
+    
+    public function new( a:Float ) {
+        this.a = a;
+    }
+    
+    public function getTranslation() {
+        return { x:.0, y:.0 };
+    }
+    public function getScale() {
+        return { x:.0, y:.0 };
+    }
+    public function getMatrix() {
+        return { a:1., b:Math.tan(a), c:0., d:1., tx:0., ty:0. };
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).apply(p);
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).applyInverse(p);
+    }
+
+    public function toString() {
+        return("skewY("+(a*TransformParser.R2D)+")");
+    }
+}
+
+
+class Concatenate implements Transform {
+    var a:Transform;
+    var b:Transform;
+
+    public function new( a:Transform, b:Transform ) {
+        this.a = a;
+        this.b = b;
+    }
+    
+    public function getTranslation() {
+        return new Matrix( getMatrix() ).getTranslation();
+    }
+    public function getScale() {
+        return new Matrix( getMatrix() ).getScale();
+    }
+    public function getMatrix() {
+        var m = new Matrix( a.getMatrix() ).multiply( b.getMatrix() );
+        return m;
+    }
+    
+    public function apply( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).apply(p);
+    }
+    public function applyInverse( p:TPoint ) :TPoint {
+        return new Matrix( getMatrix() ).applyInverse(p);
+    }
+
+    public function toString() {
+        return("concat( "+a+", "+b+" )");
+    }
 }
 
 class TransformParser {
-    static var DEG_TO_RAD = ((2.*Math.PI)/360.);
+    public static var D2R = ((2.*Math.PI)/360.);
+    public static var R2D = (360./(2.*Math.PI));
 
     /* TODO: 
         rotate(angle,cx,cy)
@@ -140,13 +250,34 @@ class TransformParser {
         inherit
         fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
     */
-    static var split = ~/[,\r\n\t]/g;
-    static var translate = ~/translate\([ \t\r\n]*([0-9\.\-]+)[ \t\r\n]*,[ \t\r\n]*([0-9\.\-]+)[ \t\r\n]*\)/;
+    static var splitNumbers = ~/[,\r\n\t]/g;
+    static var translate = ~/translate\([ \t\r\n]*([0-9\.\-]+)[ \t\r\n,]+[ \t\r\n]*([0-9\.\-]+)[ \t\r\n]*\)/;
     static var rotate = ~/rotate\(([0-9\.\-]+)\)/; 
     static var matrix = ~/matrix\(([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+)\)/;
-    static var scale = ~/scale\(([0-9e\.\-,]+)\)/; 
+    static var scale = ~/scale\(([0-9e\.\-, ]+)\)/;
+    static var skewX = ~/skewX\((\-*[0-9e\.]+)\)/;
+    static var skewY = ~/skewY\((\-*[0-9e\.]+)\)/;
+    
+    static var transform = ~/([a-zA-Z]+\([0-9e\.\-, ]+\))/;
     
     public static function parse( text:String ) :Transform {
+        var r:Transform = null;
+        while( transform.match(text) ) {
+            //trace("parse single transform: "+transform.matched(1) );
+        
+            var t = parseSingle( transform.matched(1) );
+            if( r!=null ) r = new Concatenate( t, r );
+            else r = t;
+        
+            var p = transform.matchedPos();
+            text = text.substr(p.pos+p.len);
+        }
+        if( r==null ) r=new Identity();
+   //     trace("parsed transform "+text+": "+r );
+        return r;
+    }
+    
+    public static function parseSingle( text:String ) :Transform {
         var r :Transform;
         if( translate.match(text) ) {
             r = new Translate( 
@@ -164,10 +295,10 @@ class TransformParser {
                 });
         } else if( rotate.match(text) ) {
             r = new Rotate( 
-                    Std.parseFloat(rotate.matched(1)) * DEG_TO_RAD
+                    Std.parseFloat(rotate.matched(1)) * D2R
                 );
         } else if( scale.match(text) ) {
-            var s = split.split(scale.matched(1));
+            var s = splitNumbers.split(scale.matched(1));
             if( s.length==1 ) {
                 var scale=Std.parseFloat(s[0]);
                 r = new Scale( scale, scale );
@@ -176,9 +307,20 @@ class TransformParser {
             } else {
                 throw("unimplemented transform: "+text );
             }
+        } else if( skewX.match(text) ) {
+            r = new SkewX( 
+                    Std.parseFloat(skewX.matched(1)) * D2R
+                );
+        } else if( skewY.match(text) ) {
+            r = new SkewY( 
+                    Std.parseFloat(skewY.matched(1)) * D2R
+                );
+        } else if( StringTools.trim(text).length == 0 ) {
+            return new Identity();
         } else {
             throw("invalid/unimplemented SVG transform '"+text+"'" );
         }
+        
         return r;
     }
 }

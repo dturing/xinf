@@ -18,20 +18,56 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
+import xinf.ony.URL;
 
 /**
-    An Image. You have to create an <a href="../erno/ImageData.html">ImageData</a> object
-    to pass into the constructor. The Image will be redrawn as soon as the ImageData
-    is completely loaded. The complete image is displayed in the rectangle defined by
-    [Object.size]. If the size is not set, it will default to the original image size.
-    (you can draw parts of an image if you override the drawContents method).
 **/
-class Image extends Object {
+class Image extends Object, implements xinf.ony.Image {
+    
+    public var x(default,set_x):Float;
+    public var y(default,set_y):Float;
+    public var width(default,set_width):Float;
+    public var height(default,set_height):Float;
+    public var href(default,set_href):String;
     
     private var img:ImageData;
 
-    public function new( i:ImageData ) :Void {
+
+    private function set_x(v:Float) {
+        x=v; scheduleRedraw(); return x;
+    }
+    private function set_y(v:Float) {
+        y=v; scheduleRedraw(); return y;
+    }
+    private function set_width(v:Float) {
+        width=v; scheduleRedraw(); return width;
+    }
+    private function set_height(v:Float) {
+        height=v; scheduleRedraw(); return height;
+    }
+
+    private function set_href(v:String) {
+        href=v;
+        var b = document.style.xmlBase;
+        var url:URL;
+        if( b!=null ) url = new URL(b).getRelativeURL( href );
+        else url = new URL(href);
+        
+        trace("Load image: "+url );
+        img = load( url.toString() );
+
+        img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
+        img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
+        img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+        
+        scheduleRedraw();
+        return href;
+    }
+
+    public function new() :Void {
         super();
+        x=y=width=height=0;
+    /*
         img = i;
         if( img.width!=null ) {
             size.x = img.width;
@@ -40,21 +76,42 @@ class Image extends Object {
         img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
         img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
         img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+    */
     }
     
     private function dataChanged( e:ImageLoadEvent ) :Void {
-        if( size.x==0 && size.y==0 ) {
-            size.x = img.width;
-            size.y = img.height;
-        }
         scheduleRedraw();
     }
-    
-    public function drawContents( g:Renderer ) :Void {
+   
+
+    override public function fromXml( xml:Xml ) :Void {
+        super.fromXml(xml);
+        x = getFloatProperty(xml,"x");
+        y = getFloatProperty(xml,"y");
+        width = getFloatProperty(xml,"width");
+        height = getFloatProperty(xml,"height");
+        href = xml.get("xlink:href");
+    }
+
+    public static function load( url:String ) :ImageData {
+        #if neko
+            return( xinf.inity.Texture.newByName( url ) );
+        #else js
+            return( new xinf.js.JSImageData(url) );
+        #else flash
+            if( StringTools.startsWith( url, "library://" ) ) {
+                return( new xinf.flash9.InternalImageData(url.substr(10)) );
+            } else {
+                return( new xinf.flash9.ExternalImageData(url) );
+            }
+        #else err
+        #end
+    }
+
+    override public function drawContents( g:Renderer ) :Void {
         if( img==null || img.width==null ) return;
         g.setFill( 1,1,1,1 );
-        trace(""+img+" --> "+size );
-        g.image( img, {x:0.,y:0.,w:img.width,h:img.height}, {x:0.,y:0.,w:size.x,h:size.y} );
+        g.image( img, {x:0.,y:0.,w:img.width,h:img.height}, {x:x,y:y,w:width,h:height} );
      }
     
 }

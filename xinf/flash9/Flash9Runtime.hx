@@ -38,7 +38,7 @@ class Flash9Runtime extends SimpleRuntime {
                 haxe.Log.trace = ttrace;
                 //fixLinuxTrace();
                 
-                trace("hello trace");
+                trace("trace seems fine");
             } catch( e:Dynamic ) {
                 fixLinuxTrace();
                 trace("Exception trying to setup HTML trace: "+e );

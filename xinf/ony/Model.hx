@@ -50,4 +50,24 @@ class Model {
     public function polygon() :Polygon {
         return new Polygon_();
     }
+    
+    public function loadDocument( url:String, ?onLoad:Document->Void ) :Document {
+        var doc = document();
+        doc.style.xmlBase = url;
+        try {
+            var request = new haxe.Http(url);
+            request.onError = function(e) {
+                    throw(e);
+                };
+            request.onData = function(data) {
+                    var xml = Xml.parse(data);
+                    doc.fromXml( xml.firstElement() );
+                    if( onLoad!=null ) onLoad( doc );
+                };
+            request.request(false);
+        } catch( e:Dynamic ) {
+            throw("Could not load document '"+url+"': "+e );
+        }
+        return doc;
+    }
 }

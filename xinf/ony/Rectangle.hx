@@ -7,5 +7,7 @@ interface Rectangle implements Element {
     var y(default,set_y):Float;
     var width(default,set_width):Float;
     var height(default,set_height):Float;
+    var rx(default,set_rx):Float;
+    var ry(default,set_ry):Float;
 
 }

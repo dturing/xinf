@@ -31,7 +31,7 @@ class BasicRenderer implements Renderer {
     }
     
     private function unimplemented( ?func:String ) :Void {
-        throw("unimplemented: "+func );
+        trace("unimplemented: "+func );
     }
 
     // erno Instruction protocol

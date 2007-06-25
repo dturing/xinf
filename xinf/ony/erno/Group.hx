@@ -89,10 +89,7 @@ class Group extends Object, implements xinf.ony.Group {
         super.fromXml(xml);
         if( document==null ) throw("Document not set.");
         for( node in xml.elements() ) {
-            var child = document.unmarshal( node );
-            if( child!=null ) {
-                attach( child );
-            }
+            document.unmarshal( node, this );
         }
     }
     

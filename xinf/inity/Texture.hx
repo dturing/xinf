@@ -28,7 +28,7 @@ import xinf.inity.ColorSpace;
 class Texture extends ImageData {
     // texture (id), twidth, theight, width and height are already defined in ImageData.
     
-    public function initialize( w:Int, h:Int ) {
+    public function initialize( w:Int, h:Int, cspace:ColorSpace ) {
         width=w;
         height=h;
         
@@ -43,12 +43,14 @@ class Texture extends ImageData {
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
         
+        var internalFormat = if( cspace==RGB ) GL.RGB else GL.RGBA;
+        
             GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
-            GL.texImage2D( GL.TEXTURE_2D, 0, GL.RGBA, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
+            GL.texImage2D( GL.TEXTURE_2D, 0, internalFormat, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
 
         GL.popAttrib();
         
@@ -132,9 +134,10 @@ class Texture extends ImageData {
         var r = new Texture();
         
         var w = pixbuf.getWidth();
-        var h = pixbuf.getHeight();        
-        r.initialize( w, h );
+        var h = pixbuf.getHeight();
+        var stride = pixbuf.getRowstride();
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
+        r.initialize( w, h, cs );
         var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
         r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
         return r;
