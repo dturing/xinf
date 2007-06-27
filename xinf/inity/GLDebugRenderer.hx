@@ -140,14 +140,24 @@ class GLDebugRenderer implements Renderer {
         checkErrors("cubicTo",[x1,y1,x2,y2,x,y]);
     }
 
+    public function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) {
+        renderer.arcTo(rx,ry,rotation,largeArc,sweep,x,y);
+        checkErrors("arcTo",[rx,ry,rotation,largeArc,sweep,x,y]);
+    }
+
     public function rect( x:Float, y:Float, w:Float, h:Float ) {
         renderer.rect(x,y,w,h);
         checkErrors("rect",[x,y,w,h]);
     }
-    
-    public function circle( x:Float, y:Float, r:Float ) {
-        renderer.circle(x,y,r);
-        checkErrors("circle",[x,y,r]);
+
+    public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        renderer.roundedRect(x,y,w,h,rx,ry);
+        checkErrors("roundedRect",[x,y,w,h,rx,ry]);
+    }
+
+    public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+        renderer.ellipse(x,y,rx,ry);
+        checkErrors("ellipse",[x,y,rx,ry]);
     }
     
     public function text( x:Float, y:Float, text:String, format:TextFormat ) {

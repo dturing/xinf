@@ -2,11 +2,12 @@
 package xinf.style;
 
 class InheritedStyle extends MatchStyle {
-    override public function getProperty<T>( name:String, cl:Class<T> ) :T {
-        var v:Dynamic = super.getProperty(name,cl);
+    override public function getInheritedProperty<T>( name:String, cl:Dynamic ) :T {
+        var v:Dynamic = super.getInheritedProperty(name,cl);
         if( v!=null ) return v;
         
-        if( element.parent!=null ) return element.parent.style.getProperty(name,cl);
+        // FIXME: register for style change? but where to unregister?
+        if( element.parent!=null ) return element.parent.style.getInheritedProperty(name,cl);
         return null;
     }
 }

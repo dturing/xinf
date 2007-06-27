@@ -48,9 +48,11 @@ class Text extends Object, implements xinf.ony.Text {
     }
     
     override public function styleChanged() :Void {
+        super.styleChanged();
+        
         var family = style.fontFamily;
         var size = style.fontSize;
-        format = TextFormat.create( family, size ); 
+        format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
         // TODO: weight
     }
     

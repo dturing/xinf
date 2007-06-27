@@ -63,8 +63,6 @@ class Path extends Object, implements xinf.ony.Path  {
         var qsmooth = null;
         
         for( seg in segments ) {
-            trace("draw "+seg );
-            
             var csmooth2 = null;
             var qsmooth2 = null;
             

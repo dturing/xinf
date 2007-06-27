@@ -30,7 +30,7 @@ class Image extends Object, implements xinf.ony.Image {
     public var height(default,set_height):Float;
     public var href(default,set_href):String;
     
-    private var img:ImageData;
+    public var bitmap(default,set_bitmap):ImageData;
 
 
     private function set_x(v:Float) {
@@ -48,35 +48,31 @@ class Image extends Object, implements xinf.ony.Image {
 
     private function set_href(v:String) {
         href=v;
-        var b = document.style.xmlBase;
+        var b = if( document!=null ) document.style.xmlBase else null;
         var url:URL;
         if( b!=null ) url = new URL(b).getRelativeURL( href );
         else url = new URL(href);
         
         trace("Load image: "+url );
-        img = load( url.toString() );
+        bitmap = load( url.toString() );
 
-        img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-        img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-        img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
-        
         scheduleRedraw();
         return href;
+    }
+
+    private function set_bitmap(v:ImageData) {
+        // FIXME: if old bitmap, unregister...
+        bitmap=v;
+        bitmap.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
+        bitmap.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
+        bitmap.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+        scheduleRedraw();
+        return bitmap;
     }
 
     public function new() :Void {
         super();
         x=y=width=height=0;
-    /*
-        img = i;
-        if( img.width!=null ) {
-            size.x = img.width;
-            size.y = img.height;
-        }
-        img.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-        img.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-        img.addEventListener( ImageLoadEvent.LOADED, dataChanged );
-    */
     }
     
     private function dataChanged( e:ImageLoadEvent ) :Void {
@@ -109,9 +105,13 @@ class Image extends Object, implements xinf.ony.Image {
     }
 
     override public function drawContents( g:Renderer ) :Void {
-        if( img==null || img.width==null ) return;
-        g.setFill( 1,1,1,1 );
-        g.image( img, {x:0.,y:0.,w:img.width,h:img.height}, {x:x,y:y,w:width,h:height} );
+        if( bitmap==null || bitmap.width==null ) {
+            // "empty"
+            g.setStroke( 1,0,0,1,1 );
+            g.setFill( .5,.5,.5,.5 );
+            g.rect( x, y, width, height );
+        }
+        g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, {x:x,y:y,w:width,h:height} );
      }
     
 }

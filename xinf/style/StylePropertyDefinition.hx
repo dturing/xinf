@@ -40,12 +40,12 @@ class StringProperty extends TypedPropertyDefinition<String> {
 }
 
 
-class StringListProperty extends TypedPropertyDefinition<Array<String>> {
+class StringListProperty extends TypedPropertyDefinition<StringList> {
 
     // FIXME: use an ereg to split. - [,\ \t\r\n]
     // maybe: remove quotes ['"], trim
-    override public function parse( value:String ) :Array<String> {
-        return value.split(",");
+    override public function parse( value:String ) :StringList {
+        return new StringList( value.split(",") );
     }
 
 }
@@ -67,6 +67,28 @@ class StringChoiceProperty extends TypedPropertyDefinition<String> {
         return null;
     }
 
+}
+
+class EnumProperty<T> extends TypedPropertyDefinition<T> {
+    var enumClass:Dynamic;
+    var def:T;
+    
+    public function new( name:String, enumClass:Dynamic, ?def:T ) {
+        super(name);
+        this.enumClass = enumClass;
+        this.def = def;
+    }
+    
+    override public function parse( value:String ) :T {
+        for( choice in Type.getEnumConstructs(enumClass) ) {
+            if( choice.toLowerCase() == value ) {
+                var v = untyped Reflect.field(enumClass,choice);
+                return v;
+            }
+        }
+        throw("Does not match an Enum value: '"+value+"'");
+        return def;
+    }
 }
 
 // FIXME: regard unit!

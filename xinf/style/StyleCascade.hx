@@ -9,7 +9,7 @@ class StyleCascade extends Style {
         styles=s;
     }
 
-    override public function getProperty<T>( name:String, cl:Class<T> ) :T {
+    override public function getProperty<T>( name:String, cl:Dynamic ) :T {
         for( style in styles ) {
             v = style.getProperty(name,cl);
             if( v!=null ) return v;

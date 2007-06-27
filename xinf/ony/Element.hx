@@ -18,6 +18,9 @@ interface Element implements EventDispatcher, implements Serializable {
     /** textual (SVG) id **/
     var id(default,null):String;
 
+    /** textual name (name attribute) **/
+    var name(default,null):String;
+
     /** Other Object that contains this Object, if any. **/
     var parent(default,null):Group;
 
@@ -29,6 +32,8 @@ interface Element implements EventDispatcher, implements Serializable {
 
     /** the element's style **/
     var style(default,null):ElementStyle;
+
+    function styleChanged() :Void;
 
     /** read element data from xml */
     function fromXml( xml:Xml ) :Void;

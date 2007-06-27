@@ -33,9 +33,10 @@ typedef Child=xinf.ony.Element
 
 class Group extends Object, implements xinf.ony.Group {
     
+    public var children(get_children,null) :Iterator<xinf.ony.Element>;
     private var mChildren(default,null):Array<Child>;    
 
-    public function children() :Iterator<xinf.ony.Element> {
+    function get_children() :Iterator<xinf.ony.Element> {
         return mChildren.iterator();
     }
 
@@ -93,21 +94,13 @@ class Group extends Object, implements xinf.ony.Group {
         }
     }
     
-    /** draw the Object to the given [Renderer]<br/>
-        You should usually neither call nor override this function,
-        instead, schedule a redraw with [scheduleRedraw()] and 
-        override [drawContents()] to draw stuff.
-        **/
-    override public function draw( g:Renderer ) :Void {
-        g.startObject( xid );
-            drawContents(g);
-            
-            // draw mChildren
-            for( child in mChildren ) {
-                g.showObject( child.xid );
-            }
-            
-        g.endObject();
-        reTransform(g);
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+        
+        // draw children
+        for( child in children ) {
+            g.showObject( child.xid );
+        }
     }
+
 }

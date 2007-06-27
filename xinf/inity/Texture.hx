@@ -39,6 +39,13 @@ class Texture extends ImageData {
         var t:Dynamic = CPtr.uint_alloc(1);
         GL.genTextures(1,t);
         texture = CPtr.uint_get(t,0);
+        var e:Int = GL.getError();
+        if( e > 0 ) { throw("could not create texture"); }
+        
+        /* If this happens, likely the GL context isnt initialized yet. 
+            Might be the cause for white rectangles instead of glyphs in text.. */
+        if( texture>1000000 ) throw("unlikely texture ID: "+texture ); 
+            
 
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
@@ -68,13 +75,19 @@ class Texture extends ImageData {
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
         GL.bindTexture( GL.TEXTURE_2D, texture );
-        
+
         if( data != null ) {
             switch( cspace ) {
                 case RGB:
                     GL.texSubImageRGB( texture, pos.x, pos.y, size.x, size.y, data );
                 case RGBA:
                     GL.texSubImageRGBA( texture, pos.x, pos.y, size.x, size.y, data );
+        #if gldebug
+            var e:Int = GL.getError();
+            if( e > 0 ) {
+                throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
+            }
+        #end
                 case GRAY:
                     GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
                 default:
@@ -87,7 +100,7 @@ class Texture extends ImageData {
         #if gldebug
             var e:Int = GL.getError();
             if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
+                throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
             }
         #end
         

@@ -41,7 +41,7 @@ class Embed extends Group {
     **/
     override public function draw( g:Renderer ) :Void {
         g.startNative( root );
-        for( child in children() ) {
+        for( child in children ) {
             g.showObject( child.xid );
         }
         g.endNative();

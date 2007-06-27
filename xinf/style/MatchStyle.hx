@@ -18,11 +18,17 @@ class MatchStyle extends Style {
   //      matchedStyle = element.document.styleSheet.matchStyle(element);
     }
 
-    override public function getProperty<T>( name:String, cl:Class<T> ) :T {
+    override public function getProperty<T>( name:String, cl:Dynamic ) :T {
         var v:Dynamic = super.getProperty(name,cl);
         if( Std.is( v, cl ) ) return v;
         if( matchedStyle!=null ) return matchedStyle.getProperty( name, cl );
         return null;
+    }
+
+    override public function setProperty<T>( name:String, value:T ) :T {
+        super.setProperty(name,value);
+        if( element!=null ) element.styleChanged();
+        return value;
     }
 }
 

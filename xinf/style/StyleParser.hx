@@ -16,8 +16,9 @@ class StyleParser {
                 var def:StylePropertyDefinition = defs.get(name);
                 if( def!=null ) {
                     def.parseAndSet( value, s );
+//                    trace("parse PROP "+name+": "+value );
                 } else {
-                    trace("unknown style property '"+name+"'" );
+//                    trace("unknown style property '"+name+"'" );
                 }
             } else if( prop.length==0 ) {
             } else {

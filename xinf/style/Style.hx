@@ -13,12 +13,16 @@ class Style {
         return value;
     }
 
-    public function getProperty<T>( name:String, cl:Class<T> ) :T {
+    public function getProperty<T>( name:String, cl:Dynamic ) :T {
         var v:Dynamic = Reflect.field( style, name );
         if( Std.is( v, cl ) ) return v;
         return null;
     }
-    
+
+    public function getInheritedProperty<T>( name:String, cl:Dynamic ) :T {
+        return getProperty(name,cl);
+    }
+
     public function fromXml( xml:Xml ) :Void {
     }
     public function parse( values:String ) :Void {

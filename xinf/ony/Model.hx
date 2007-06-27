@@ -8,6 +8,7 @@ typedef Document_ = xinf.ony.erno.Document
 typedef Rectangle_ = xinf.ony.erno.Rectangle
 typedef Line_ = xinf.ony.erno.Line
 typedef Polygon_ = xinf.ony.erno.Polygon
+typedef Image_ = xinf.ony.erno.Image
 
 
 class Model {
@@ -50,24 +51,24 @@ class Model {
     public function polygon() :Polygon {
         return new Polygon_();
     }
-    
-    public function loadDocument( url:String, ?onLoad:Document->Void ) :Document {
+
+    public function image() :Image {
+        return new Image_();
+    }
+
+
+    public function loadDocument( url_s:String, ?onLoad:Document->Void ) :Document {
         var doc = document();
-        doc.style.xmlBase = url;
-        try {
-            var request = new haxe.Http(url);
-            request.onError = function(e) {
-                    throw(e);
-                };
-            request.onData = function(data) {
-                    var xml = Xml.parse(data);
-                    doc.fromXml( xml.firstElement() );
-                    if( onLoad!=null ) onLoad( doc );
-                };
-            request.request(false);
-        } catch( e:Dynamic ) {
-            throw("Could not load document '"+url+"': "+e );
-        }
+        doc.style.xmlBase = url_s;
+        
+        var url = new URL(url_s);
+        url.fetch( function(data) {
+                var xml = Xml.parse(data);
+                doc.fromXml( xml.firstElement() );
+                if( onLoad!=null ) onLoad( doc );
+            }, function( error ) {
+                throw(error);
+            } );
         return doc;
     }
 }

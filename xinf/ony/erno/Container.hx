@@ -66,21 +66,12 @@ class Container<Child:Object> extends Object {
     }
 
     
-    /** draw the Object to the given [Renderer]<br/>
-        You should usually neither call nor override this function,
-        instead, schedule a redraw with [scheduleRedraw()] and 
-        override [drawContents()] to draw stuff.
-        **/
-    override public function draw( g:Renderer ) :Void {
-        g.startObject( xid );
-            drawContents(g);
-            
-            // draw children
-            for( child in children ) {
-                g.showObject( child.xid );
-            }
-            
-        g.endObject();
-        reTransform(g);
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+        
+        // draw children
+        for( child in children ) {
+            g.showObject( child.xid );
+        }
     }
 }

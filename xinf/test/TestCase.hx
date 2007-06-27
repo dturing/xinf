@@ -120,7 +120,7 @@ class TestCase {
     
     public function cleanFinish( ?passed:Bool ) {
         var r = X.root();
-        for( c in r.children() ) {
+        for( c in r.children ) {
             r.detach(c);
         }
 

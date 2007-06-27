@@ -56,6 +56,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
 
     public var xid(default,null):Int;
     public var id(default,null):String;
+    public var name(default,null):String;
     public var parent(default,null):xinf.ony.Group;
     public var document(default,null):xinf.ony.Document;
     public var style(default,null):xinf.style.ElementStyle;
@@ -110,7 +111,12 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         **/
     public function draw( g:Renderer ) :Void {
         g.startObject( xid );
-            drawContents(g);
+            switch( style.visibility ) {
+                case Hidden:
+                    // nada
+                default:
+                    drawContents(g);
+            }
         g.endObject();
         reTransform(g);
     }
@@ -172,7 +178,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public function attachedTo( p:xinf.ony.Group ) {
         parent=p;
         document=parent.document;
-        styleChanged();
+        styleChanged(); // FIXME not neccessarily...
     }
 
     public function detachedFrom( p:xinf.ony.Group ) {
@@ -183,6 +189,9 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public function fromXml( xml:Xml ) :Void {
         if( xml.exists("id") ) {
             id = xml.get("id");
+        }
+        if( xml.exists("name") ) {
+            name = xml.get("name");
         }
         if( xml.exists("style") ) {
             style.parse( xml.get("style") );
@@ -195,6 +204,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     }
 
     public function styleChanged() :Void {
+        scheduleRedraw();
     }
 
     /** dispatch the given Event<br/>
@@ -216,7 +226,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     }
 
     public function toString() :String {
-        return( Type.getClassName( Type.getClass(this) )+"["+xid+"]" );
+        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
     }
     
     
