@@ -1,0 +1,3 @@
+-main App
+-neko run.n
+-lib opengl
