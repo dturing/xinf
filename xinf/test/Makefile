@@ -1,10 +1,9 @@
 
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
 
-INITYLIBSDIR=/home/dan/develop/xinf/libs
 INITYLIBS=opengl xinfinity-support cptr
-INITYCP=$(foreach LIB, $(INITYLIBS), -cp $(INITYLIBSDIR)/$(LIB)/api )
-NEKOPATH:=$(NEKOPATH):$(subst : ,:,$(foreach LIB,$(INITYLIBS),$(INITYLIBSDIR)/$(LIB)/bin/Linux:$(INITYLIBSDIR)/$(LIB)/bin:))
+INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
+NEKOPATH:=$(NEKOPATH)
 
 HAXEFLAGS=--override $(INITYCP) -D htmltrace -cp ../../ -lib x11
 
@@ -22,7 +21,7 @@ testenv : testd
 	-pkill Xvfb
 
 	# run server
-	NEKOPATH=$NEKOPATH:/home/dan/.haxe/x11/0,0,0/ndll/Linux/ nekotools server &
+	NEKOPATH=$(NEKOPATH):/home/dan/.haxe/x11/0,0,0/ndll/Linux/ nekotools server &
 	
 	# run Xvfb
 	Xvfb $(TEST_DISPLAY) -screen $(TEST_DISPLAY) 640x480x24 -fbdir /tmp -ac &

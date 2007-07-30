@@ -25,7 +25,7 @@ class ScrollEvent extends Event<ScrollEvent> {
     static public var SCROLL_TO   = new EventKind<ScrollEvent>("scrollTo");
 
     public var value:Float; // delta (+-1.0) or absolute (0..1) - depending on the kind
-    public var targetId:Int;
+    public var targetId:Null<Int>;
     
     public function new( _type:EventKind<ScrollEvent>, value:Float, ?targetId:Int ) {
         super(_type);

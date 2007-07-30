@@ -28,7 +28,7 @@ class Flash9EventSource {
     
     private var runtime:Flash9Runtime;
     private var frame:Int;
-    private var currentOver:Int;
+    private var currentOver:Null<Int>;
     
     public function new( r:Flash9Runtime ) :Void {
         runtime = r;

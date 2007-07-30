@@ -29,7 +29,7 @@ class MouseEvent extends Event<MouseEvent> {
     public var x:Int;
     public var y:Int;
     public var button:Int;
-    public var targetId:Int;
+    public var targetId:Null<Int>;
     
     public var shiftMod:Bool;
     public var altMod:Bool;
@@ -50,7 +50,7 @@ class MouseEvent extends Event<MouseEvent> {
         if( altMod ) r+="Alt+";
         if( ctrlMod ) r+="Ctrl+";
         r+="Button "+button+")";
-        if( targetId != null ) r+=" to #"+targetId;
+        if( targetId != 0 ) r+=" to #"+targetId;
         return r;
     }
     

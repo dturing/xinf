@@ -28,7 +28,7 @@ class ElementStyle extends InheritedStyle {
     function get_stroke() :Color { return getInheritedProperty("stroke",Color); }
     function set_stroke( v:Color ) :Color { return setProperty("stroke",v); }
 
-    public var strokeWidth(get_stroke_width,set_stroke_width):Float;
+    public var strokeWidth(get_stroke_width,set_stroke_width):Null<Float>;
     function get_stroke_width() :Float { return getInheritedProperty("stroke-width",Float); }
     function set_stroke_width( v:Float ) :Float { return setProperty("stroke-width",v); }
 

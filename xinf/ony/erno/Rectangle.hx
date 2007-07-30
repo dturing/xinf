@@ -50,7 +50,7 @@ class Rectangle extends Object, implements xinf.ony.Rectangle  {
     public function new() :Void {
         super();
         x=y=width=height=0;
-        rx=ry=null;
+        rx=ry=0.;
     }
 
     override public function fromXml( xml:Xml ) :Void {
@@ -68,13 +68,13 @@ class Rectangle extends Object, implements xinf.ony.Rectangle  {
         if( width<=0 || height<=0 ) return;
         super.drawContents(g);
         
-        if( (rx==null || rx==0) && (ry==null || ry==0) ) {
+        if( rx==0 && ry==0 ) {
             g.rect( x, y, width, height );
         } else {
             var ry2=ry;
-            if( ry2==null || ry2==0. ) ry2=rx;
+            if( ry2==0. ) ry2=rx;
             var rx2=rx;
-            if( rx2==null || rx2==0. ) rx2=ry2;
+            if( rx2==0. ) rx2=ry2;
             if( rx2 > (width/2) ) rx2 = width/2;
             if( ry2 > (height/2) ) ry2 = height/2;
             

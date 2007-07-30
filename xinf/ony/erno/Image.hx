@@ -105,7 +105,7 @@ class Image extends Object, implements xinf.ony.Image {
     }
 
     override public function drawContents( g:Renderer ) :Void {
-        if( bitmap==null || bitmap.width==null ) {
+        if( bitmap==null ) {
             // "empty"
             g.setStroke( 1,0,0,1,1 );
             g.setFill( .5,.5,.5,.5 );

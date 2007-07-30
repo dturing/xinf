@@ -97,7 +97,7 @@ class UnitFloatProperty extends TypedPropertyDefinition<Float> {
     static var unit = ~/^([0-9\.]+)[\r\n\t ]*([a-zA-Z]+)$/;
 
     override public function parse( value:String ) :Float {
-        var v:Float;
+        var v:Null<Float> = null;
 
         if( unit.match(value) ) {
             v = Std.parseFloat( unit.matched(1) );
