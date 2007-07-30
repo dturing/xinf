@@ -1,0 +1,65 @@
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
+#include "neko-pixbuf.h"
+#include <neko.h>
+
+#include <stdlib.h>
+#include <string.h>
+
+GdkPixbuf* gdk_pixbuf_new_from_rgb( value _data, int width, int height, int hasAlpha ) {
+	int bytesPerSample = hasAlpha ? 4 : 3;
+    if( val_strlen(_data)<sizeof(unsigned char)*width*height*bytesPerSample ) 
+		val_throw(alloc_string("data to small to fit image"));
+    return gdk_pixbuf_new_from_data( (const guchar*)val_string(_data), GDK_COLORSPACE_RGB,
+        hasAlpha, 8, width, height, width, NULL, NULL );
+}
+
+GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
+	g_type_init();
+	
+	if( val_is_object(_data) ) _data = val_field( _data, val_id("__s") );
+	val_check(_data,string);
+	const guchar *data = (const guchar*)val_string(_data);
+	int length = val_strlen(_data);
+	if( length==0 ) val_throw( alloc_string("data length is zero") );
+		
+	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
+    
+#ifdef GDK_PIXBUF_1
+	gdk_pixbuf_loader_write( loader, data, length );
+	gdk_pixbuf_loader_close( loader );
+#else
+	GError *err = NULL;
+	gdk_pixbuf_loader_write( loader, data, length, &err );
+	if( err!=NULL ) {
+		val_throw( alloc_string(err->message) );
+	}
+    
+	gdk_pixbuf_loader_close( loader, &err );
+	if( err!=NULL ) {
+		val_throw( alloc_string("unable to decompress image") );
+	}
+#endif
+	
+	GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
+	if( pixbuf==NULL ) {
+		val_throw( alloc_string("unable to decompress image") );
+	}
+
+    g_object_ref( pixbuf );
+	g_object_unref( loader );
+	return pixbuf;
+}
+
+value gdk_pixbuf_copy_pixels( GdkPixbuf *pixbuf ) {
+	int w = gdk_pixbuf_get_width(pixbuf);
+	int h = gdk_pixbuf_get_height(pixbuf);
+	int bpp = gdk_pixbuf_get_has_alpha(pixbuf)?4:3;
+	int stride = gdk_pixbuf_get_rowstride(pixbuf);
+    
+	unsigned char *data = malloc(h*stride);
+    unsigned char *src = gdk_pixbuf_get_pixels(pixbuf);
+	memcpy( data, gdk_pixbuf_get_pixels(pixbuf), h*stride );
+    
+	return alloc_string( (char*)data );
+}

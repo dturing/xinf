@@ -1,0 +1,7 @@
+-main App
+-neko run.n
+-lib xinfinity-support
+-resource testzweck.ttf@default-font
+-resource xinf.gif@xinf.gif
+
+

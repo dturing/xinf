@@ -60,7 +60,7 @@ else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		CC:=mingw32-gcc
 		NEKO_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/neko -DNEKO_WIN
-		NEKO_LIBS:=-shared -L/opt/mingw/lib -lneko
+		NEKO_LIBS:=-shared -L/opt/mingw/lib -lneko /opt/mingw/lib/neko.dll
 	else
 		CC:=gcc
 		NEKO_CFLAGS:=-fPIC -shared -I/usr/include/neko
@@ -133,7 +133,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 		rm $(BIN_PATH)/Mac/*.x86; \
 		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
 			cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
-			cp $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp -r $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 		)
 	
 	# copy haXe API and Samples

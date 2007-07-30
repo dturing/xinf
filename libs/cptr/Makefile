@@ -19,7 +19,7 @@ ifeq ($(NEKO_PLATFORM),Mac)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=/opt/mingw/lib/neko.dll
+		PROJECT_LIBS:=
 	else
 		PROJECT_CFLAGS:=
 		PROJECT_LIBS:=
