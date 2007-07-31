@@ -51,6 +51,7 @@ class App extends haxe.unit.TestCase {
         assertEquals(100,pixbuf.getWidth());
         assertEquals(61,pixbuf.getHeight());
         assertEquals(1,pixbuf.getHasAlpha());
+		assertEquals( 100*61*4, neko.Lib.nekoToHaxe(pixbuf.copyPixels()).length );
     }
 
 	public function new() {

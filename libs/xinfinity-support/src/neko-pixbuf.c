@@ -59,7 +59,5 @@ value gdk_pixbuf_copy_pixels( GdkPixbuf *pixbuf ) {
     
 	unsigned char *data = malloc(h*stride);
     unsigned char *src = gdk_pixbuf_get_pixels(pixbuf);
-	memcpy( data, gdk_pixbuf_get_pixels(pixbuf), h*stride );
-    
-	return alloc_string( (char*)data );
+	return( copy_string( src, h*stride ) );
 }

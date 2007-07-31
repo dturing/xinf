@@ -186,13 +186,10 @@ value ftRenderGlyph( value font, value _index, value _size, value _hint ) {
     value ret = alloc_object(NULL);
     alloc_field( ret, val_id("width"), alloc_int(bitmap.width) );
     alloc_field( ret, val_id("height"), alloc_int(bitmap.rows) );
-    char *data = (char*)malloc( bitmap.width*bitmap.rows );
-    memcpy( data, bitmap.buffer, bitmap.width*bitmap.rows );
-    alloc_field( ret, val_id("bitmap"), alloc_string((char *)data) );
+    alloc_field( ret, val_id("bitmap"), copy_string( (char*)bitmap.buffer, bitmap.width*bitmap.rows ) );
     alloc_field( ret, val_id("x"), alloc_int( glyph->metrics.horiBearingX ) );
     alloc_field( ret, val_id("y"), alloc_int( glyph->metrics.horiBearingY ) );
     alloc_field( ret, val_id("advance"), alloc_float( glyph->advance.x ));
-    
     return ret;
 }
 DEFINE_PRIM(ftRenderGlyph,4);

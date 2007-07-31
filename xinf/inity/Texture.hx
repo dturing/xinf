@@ -82,12 +82,12 @@ class Texture extends ImageData {
                     GL.texSubImageRGB( texture, pos.x, pos.y, size.x, size.y, data );
                 case RGBA:
                     GL.texSubImageRGBA( texture, pos.x, pos.y, size.x, size.y, data );
-        #if gldebug
-            var e:Int = GL.getError();
-            if( e > 0 ) {
-                throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
-            }
-        #end
+					#if gldebug
+						var e:Int = GL.getError();
+						if( e > 0 ) {
+							throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
+						}
+					#end
                 case GRAY:
                     GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
                 default:
@@ -132,14 +132,14 @@ class Texture extends ImageData {
                     }
                 }
                 if( data == null || data.length==0 ) {
-                    throw("could not load: "+url );
+                    throw("Could not load: "+url );
                 }
                 r = newFromPixbuf( Pixbuf.newFromCompressedData(data) );
                 cache.set(url,r);
             }
             return r;
         } catch( e:Dynamic ) {
-            throw("Could not load '"+url+": "+e );
+            throw("Error loading '"+url+": "+e );
         }
     }
     
@@ -152,7 +152,7 @@ class Texture extends ImageData {
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
         r.initialize( w, h, cs );
         var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
-        r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
+		r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
         return r;
     }
 
