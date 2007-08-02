@@ -15,24 +15,30 @@
 
 package xinf.ul;
 
-import Xinferno;
+import xinf.ony.Element;
+import xinf.geom.Types;
+import xinf.event.SimpleEventDispatcher;
 
-class Component {
+class Component extends SimpleEventDispatcher {
     public var __parentSizeListener:Dynamic;
 
-    public var prefSize(getPrefSize,null):{x:Float,y:Float};
-    var _prefSize:{x:Float,y:Float};
+    public var prefSize(getPrefSize,null):TPoint;
+    var _prefSize:TPoint;
+	
+	var size:TPoint;
+	var element:Element;
 
-    public function new() :Void {
+    public function new( ?e:Element ) :Void {
+		super();
         _prefSize = { x:.0, y:.0 };
-        super();
+		element=e;
     }
 
-    public function getPrefSize() :{x:Float,y:Float} {
+    public function getPrefSize() :TPoint {
         return( _prefSize );
     }
     
-    public function setPrefSize( n:{x:Float,y:Float} ) :{x:Float,y:Float} {
+    public function setPrefSize( n:TPoint ) :TPoint {
         var s = n; //addPadding(n);
         if( _prefSize==null || s.x!=_prefSize.x || s.y!=_prefSize.y ) {
             _prefSize = s;
@@ -40,9 +46,14 @@ class Component {
         }
         return( _prefSize );
     }
+	
+	// perform the actual resizing, called by the layout manager
+	public function resize( s:TPoint ) :Void {
+		size = s;
+	}
 
     public function getElement() :Element {
-        throw("unimplemented getElement");
+		return element;
     }
 
 }

@@ -16,7 +16,8 @@
 package xinf.ul;
 
 import xinf.ul.layout.Layout;
-import Xinferno;
+import xinf.ony.Element;
+import xinf.ony.Group;
 
 class Container extends Component {
     var relayoutNeeded:Bool;
@@ -26,8 +27,10 @@ class Container extends Component {
 
     var group:Group;
 
-    public function new() :Void {
-        super( new Group() );
+    public function new( ?g:Group ) :Void {
+		group = g;
+		if( group==null ) group = X.group();
+        super( g );
         children = new Array<Component>();
         relayoutNeeded = true;
     }
@@ -52,7 +55,7 @@ class Container extends Component {
 
     function onComponentResize( e:ComponentSizeEvent ) :Void {
         if( layout==null ) {
-            e.component.resize( e.x, e.y );
+            e.component.resize( e );
         } else {
             relayoutNeeded=true;
         }

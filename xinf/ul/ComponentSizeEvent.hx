@@ -36,7 +36,7 @@ class ComponentSizeEvent extends Event<ComponentSizeEvent> {
         component = _c;
     }
 
-    public function toString() :String {
+    override public function toString() :String {
         return( ""+type+"("+x+","+y+")" );
     }
     
