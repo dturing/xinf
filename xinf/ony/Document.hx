@@ -10,6 +10,7 @@ interface Document implements Group {
 
     var styleSheet(default,null):StyleSheet;
     function getElementById( id:String ) :Element;
+    function getTypedElementById<T>( id:String, cl:Class<T> ) :T;
     
     function unmarshal( xml:Xml, ?parent:Group ) :Element;
 

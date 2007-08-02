@@ -19,6 +19,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.geom.Matrix;
 import xinf.event.Event;
+import xinf.ony.Element;
 import xinf.event.SimpleEventDispatcher;
 
 /**
@@ -94,6 +95,19 @@ class Group extends Object, implements xinf.ony.Group {
         }
     }
     
+	public function getChildByName( name:String ) :Element {
+		for( child in children ) {
+			if( child.name == name ) return child;
+		}
+		throw( "no child with name '"+name+"'" );
+	}
+	
+	public function getTypedChildByName<T>( name:String, cl:Class<T> ) :T {
+		var r = getChildByName( name );
+		if( !Std.is( r, cl ) ) throw("Child '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+        return cast(r);
+	}
+	
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
         

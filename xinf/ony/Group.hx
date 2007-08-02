@@ -8,4 +8,6 @@ interface Group implements Element {
     
     var children(get_children,null) :Iterator<Element>;
     
+	function getChildByName( name:String ) :Element;
+	function getTypedChildByName<T>( name:String, cl:Class<T> ) :T;
 }

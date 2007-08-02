@@ -102,6 +102,12 @@ class Document extends Group, implements xinf.ony.Document {
         return r;
     }
 
+	public function getTypedElementById<T>( id:String, cl:Class<T> ) :T {
+        var r = getElementById( id );
+		if( !Std.is( r, cl ) ) throw("Element #"+id+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+        return cast(r);
+    }
+
     public function unmarshal( xml:Xml, ?parent:xinf.ony.Group ) :xinf.ony.Element {
         var r = binding.instantiate( xml );
         if( r==null ) return null;
