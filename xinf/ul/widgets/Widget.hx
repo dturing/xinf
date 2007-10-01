@@ -13,8 +13,9 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
+import xinf.ul.Container;
 import xinf.ul.FocusManager;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
@@ -23,7 +24,7 @@ import xinf.event.MouseEvent;
     Widget base class.
     Takes care of Keyboard Focus.
 **/
-class Widget extends Pane {
+class Widget extends Container {
     
     public var focusable:Bool;
 
@@ -33,7 +34,6 @@ class Widget extends Pane {
         FocusManager.register(this);
         
         addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
-        addStyleClass("Pane");
     }
     
     // FIXME: child classes have their own onMouseDown, which is not really override.

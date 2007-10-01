@@ -15,16 +15,9 @@
 
 package xinf.ul;
 
-import xinf.ul.Widget;
-import xinf.erno.Runtime;
-import xinf.event.KeyboardEvent;
-import xinf.event.FrameEvent;
+import Xinf;
 import xinf.event.Event;
-
-import xinf.erno.Color;
-import xinf.erno.Renderer;
-import xinf.ony.Object;
-import xinf.ony.Root;
+import xinf.ul.widget.Widget;
 
 /**
     Keyboard Focus manager singleton
@@ -42,8 +35,8 @@ class FocusManager {
         if( widgets==null ) {
             widgets = new Array<Widget>();
             currentFocus=-1;
-            Runtime.addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
-            Runtime.addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
+            Root.addEventListener( KeyboardEvent.KEY_DOWN, handleKeyboardEvent );
+            Root.addEventListener( KeyboardEvent.KEY_UP, handleKeyboardEvent );
         }
     }
     
@@ -114,10 +107,10 @@ class FocusManager {
                         handleKeyboardEvent( repeat );
                     }
                 }
-                Runtime.addEventListener( FrameEvent.ENTER_FRAME, timer );
+                Root.addEventListener( FrameEvent.ENTER_FRAME, timer );
             }
         } else if( e.type == KeyboardEvent.KEY_UP ) {
-            Runtime.removeEventListener( FrameEvent.ENTER_FRAME, timer );
+            Root.removeEventListener( FrameEvent.ENTER_FRAME, timer );
             timer = null;
         }
         #end
@@ -129,7 +122,6 @@ class FocusManager {
             else next();
             return;
         }
-        
         if( currentFocus >= 0 ) {
             widgets[currentFocus].dispatchEvent(e);
         }

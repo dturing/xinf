@@ -13,18 +13,11 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
-import xinf.ony.Object;
-import xinf.erno.Runtime;
-
-import xinf.event.MouseEvent;
-import xinf.event.KeyboardEvent;
-import xinf.event.SimpleEvent;
+import Xinf;
 import xinf.event.EventKind;
-
-import xinf.erno.Renderer;
-import xinf.erno.Color;
+import xinf.ul.ValueEvent;
 
 /**
     Button element.
@@ -35,6 +28,7 @@ class Button<Value> extends Widget {
     public static var PRESS = new EventKind<ValueEvent<Value>>("buttonPress");
 
     public var text(get_text,set_text):String;
+	var textElement:Text;
     var value:Value;
     var _mouseUp:Dynamic;
 
@@ -45,55 +39,51 @@ class Button<Value> extends Widget {
     function set_text( t:String ) :String {
         if( t != text ) {
             text = t;
-            setPrefSize( getStyleTextFormat().textSize(t) );
-            scheduleRedraw();
+			textElement.text = text;
+// TODO            setPrefSize( getStyleTextFormat().textSize(t) );
         }
         return(t);
     }
 
     public function new( ?text:String, ?value:Value ) :Void {
         super();
+		textElement = new Text();
+		group.attach( textElement );
+		
         this.set_text(text);
         this.value = value;
-        addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+        textElement.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
     function onMouseDown( e:MouseEvent ) {
         addStyleClass(":press");
-        Runtime.addEventListener( MouseEvent.MOUSE_UP,
+		trace("down!");
+        Root.addEventListener( MouseEvent.MOUSE_UP,
             _mouseUp=onMouseUp );
     }
     
     function onMouseUp( e:MouseEvent ) {
-        if( this._id==e.targetId )
+        //if( this._id==e.targetId )
+		// TODO: onMouseOut?
             postEvent( new ValueEvent( Button.PRESS, value ) );
         
         removeStyleClass(":press");
-        Runtime.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
     }
     
     function onKeyDown( e:KeyboardEvent ) {
-        switch( e.key ) {
+		switch( e.key ) {
             case "space":
-                postEvent( new ValueEvent( Button.PRESS, value ) );
+                postEvent( new ValueEvent( PRESS, value ) );
         }
     }
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-    
-        setStyleFill( g, "color" );
-        
-        g.text(Math.round(leftOffsetAligned(prefSize.x,.5)),style.padding.t+style.border.t,text,getStyleTextFormat());
-    }
-
-    public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {
+	public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {
         var b = new Button<Value>( text, value );
-        b.addEventListener( Button.PRESS, function( e ) {
-                f(e.value);
+        b.addEventListener( PRESS, function( e ) {
+                f(untyped e.value); // FIXME: this untyped should really not be neccessary, haxe bug?
             } );
         return b;
-    }
-    
+    } 
 }

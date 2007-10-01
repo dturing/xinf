@@ -15,7 +15,7 @@
 
 package xinf.ul;
 
-import xinf.ony.Group;
+import Xinf;
 import xinf.geom.Types;
 import xinf.event.GeometryEvent;
 

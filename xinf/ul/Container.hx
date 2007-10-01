@@ -16,8 +16,7 @@
 package xinf.ul;
 
 import xinf.ul.layout.Layout;
-import xinf.ony.Element;
-import xinf.ony.Group;
+import Xinf;
 
 class Container extends Component {
     var relayoutNeeded:Bool;
@@ -29,7 +28,7 @@ class Container extends Component {
 
     public function new( ?g:Group ) :Void {
 		group = g;
-		if( group==null ) group = X.group();
+		if( group==null ) group = new Group();
         super( g );
         children = new Array<Component>();
         relayoutNeeded = true;
@@ -41,6 +40,7 @@ class Container extends Component {
         relayoutNeeded = true;
         var l = child.addEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, onComponentResize );
         child.__parentSizeListener = l;
+		child.attachedTo( this );
 
         group.attach(child.getElement());
     }
@@ -49,7 +49,7 @@ class Container extends Component {
         if( child==null ) throw("trying to detach null");
         children.remove( child );
         child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
-
+		child.detachedFrom( this );
         group.detach(child.getElement());
     }
 

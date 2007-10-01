@@ -16,7 +16,6 @@
 package xinf.ul;
 
 import xinf.erno.Renderer;
-import xinf.style.StyleClassElement;
 
 /**
     Simple Pane element.

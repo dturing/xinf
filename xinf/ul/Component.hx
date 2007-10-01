@@ -18,11 +18,16 @@ package xinf.ul;
 import xinf.ony.Element;
 import xinf.geom.Types;
 import xinf.event.SimpleEventDispatcher;
+import xinf.style.Stylable;
 
-class Component extends SimpleEventDispatcher {
+class Component extends SimpleEventDispatcher, implements Stylable {
     public var __parentSizeListener:Dynamic;
 
-    public var prefSize(getPrefSize,null):TPoint;
+    public var parent(default,null):Container;
+	public var style(default,null):ComponentStyle;
+    private var styleClasses :Hash<Bool>;
+    
+	public var prefSize(getPrefSize,null):TPoint;
     var _prefSize:TPoint;
 	
 	var size:TPoint;
@@ -32,7 +37,39 @@ class Component extends SimpleEventDispatcher {
 		super();
         _prefSize = { x:.0, y:.0 };
 		element=e;
+		
+        styleClasses = new Hash<Bool>();
+		
+//  TODO      style = StyleSheet.newDefaultStyle();
+		style = new ComponentStyle(this);
+		        
+        // add our own class to the list of style classes
+		// TODO check this-- simplify?
+        var clNames:Array<String>;
+        #if flash9
+            clNames = Type.getClassName(Type.getClass(this)).split("::");
+        #else true
+            clNames = Type.getClassName(Type.getClass(this)).split(".");
+        #end
+        addStyleClass( clNames[ clNames.length-1 ] );
+		
     }
+
+    public function attachedTo( p:Container ) {
+        parent=p;
+    }
+
+    public function detachedFrom( p:Container ) {
+        parent=null;
+    }
+	
+    public function styleChanged() :Void {
+    }
+	
+	public function getParentStyle() :xinf.style.Style {
+		if( parent!=null ) return parent.style;
+		return null;
+	}
 
     public function getPrefSize() :TPoint {
         return( _prefSize );
@@ -55,5 +92,35 @@ class Component extends SimpleEventDispatcher {
     public function getElement() :Element {
 		return element;
     }
+
+	// Style class functions
+    public function updateClassStyle() :Void {
+//        var s = StyleSheet.defaultSheet.match( this );
+//        assignStyle(s);
+		// TODO
+		trace("should updateClassStyle "+styleClasses);
+    }
+    
+    public function addStyleClass( name:String ) :Void {
+        styleClasses.set( name, true );
+        updateClassStyle();
+    }
+    
+    public function removeStyleClass( name:String ) :Void {
+        styleClasses.remove( name );
+        updateClassStyle();
+    }
+    
+    public function hasStyleClass( name:String ) :Bool {
+        return styleClasses.get(name);
+    }
+
+    public function getStyleClasses() :Iterator<String> {
+        return styleClasses.keys();
+    }
+	
+	public function toString() :String {
+		return( Type.getClassName(Type.getClass(this)) );
+	}
 
 }
