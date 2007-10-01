@@ -1,13 +1,11 @@
 
 package xinf.style;
 
-import xinf.ony.Element;
-
 class MatchStyle extends Style {
-    var element:Element;
+    var element:Stylable;
     var matchedStyle:Style;
     
-    public function new( e:Element ) {
+    public function new( e:xinf.style.Stylable ) {
         super();
         element=e;
     // TODO    e.document.styleSheet.addEventListener( StyleEvent.STYLESHEET_CHANGED, rematch );

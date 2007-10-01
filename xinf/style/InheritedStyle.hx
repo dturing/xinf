@@ -7,7 +7,8 @@ class InheritedStyle extends MatchStyle {
         if( v!=null ) return v;
         
         // FIXME: register for style change? but where to unregister?
-        if( element.parent!=null ) return element.parent.style.getInheritedProperty(name,cl);
+		var p = element.getParentStyle();
+		if( p!=null ) return p.getInheritedProperty(name,cl);
         return null;
     }
 }

@@ -18,14 +18,14 @@ class TypedPropertyDefinition<T> implements StylePropertyDefinition {
     public function new( name:String ) {
         this.name=name;
     }
-    
-    public function parseAndSet( value:String, style:Style ) {
-        style.setProperty( name, parse(value) );
-    }
-    
-    public function parse( value:String ) :T {
-        throw("parse() not implemented");
-        return null;
+
+	/* actually, this class should implement parse() for descendants to override
+	  but that fails in flash9 currently.
+	  see http://lists.motion-twin.com/pipermail/haxe/2007-July/010658.html
+	*/
+
+    override public function parseAndSet( value:String, style:Style ) {
+		throw( "unimplemented" );
     }
 
 }
@@ -33,7 +33,11 @@ class TypedPropertyDefinition<T> implements StylePropertyDefinition {
 
 class StringProperty extends TypedPropertyDefinition<String> {
 
-    override public function parse( value:String ) :String {
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+
+	public function parse( value:String ) :String {
         return StringTools.trim(value);
     }
 
@@ -42,9 +46,13 @@ class StringProperty extends TypedPropertyDefinition<String> {
 
 class StringListProperty extends TypedPropertyDefinition<StringList> {
 
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+	
     // FIXME: use an ereg to split. - [,\ \t\r\n]
     // maybe: remove quotes ['"], trim
-    override public function parse( value:String ) :StringList {
+    public function parse( value:String ) :StringList {
         return new StringList( value.split(",") );
     }
 
@@ -60,7 +68,11 @@ class StringChoiceProperty extends TypedPropertyDefinition<String> {
         this.choices=choices;
     }
     
-    override public function parse( value:String ) :String {
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+
+	public function parse( value:String ) :String {
         for( choice in choices ) {
             if( choice==value ) return choice;
         }
@@ -79,7 +91,11 @@ class EnumProperty<T> extends TypedPropertyDefinition<T> {
         this.def = def;
     }
     
-    override public function parse( value:String ) :T {
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+	
+    public function parse( value:String ) :T {
         for( choice in Type.getEnumConstructs(enumClass) ) {
             if( choice.toLowerCase() == value ) {
                 var v = untyped Reflect.field(enumClass,choice);
@@ -91,12 +107,58 @@ class EnumProperty<T> extends TypedPropertyDefinition<T> {
     }
 }
 
+class FloatProperty extends TypedPropertyDefinition<Float> {
+    static var numeric = ~/^([0-9\.]+)$/;
+    
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+
+	public function parse( value:String ) :Float {
+        var v:Null<Float> = null;
+
+		if( numeric.match(value) ) {
+            v = Std.parseFloat( numeric.matched(1) );
+        }
+
+        if( v==null ) throw("Not a numeric/unit value: "+value );
+
+        return v;
+    }
+}
+
+class BoundedFloatProperty extends FloatProperty {
+    static var numeric = ~/^([0-9\.]+)$/;
+    
+	var min:Null<Float>;
+	var max:Null<Float>;
+	
+    public function new( name:String, ?min:Null<Float>, ?max:Null<Float> ) {
+        super(name);
+		this.min = min;
+		this.max = max;
+    }
+
+	override public function parse( value:String ) :Float {
+		var v:Null<Float> = parse(value);
+
+		if( min!=null ) v = Math.max( min, v );
+		if( max!=null ) v = Math.min( max, v );
+
+        return v;
+    }
+}
+
 // FIXME: regard unit!
 class UnitFloatProperty extends TypedPropertyDefinition<Float> {
     static var numeric = ~/^([0-9\.]+)$/;
     static var unit = ~/^([0-9\.]+)[\r\n\t ]*([a-zA-Z]+)$/;
 
-    override public function parse( value:String ) :Float {
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+
+	public function parse( value:String ) :Float {
         var v:Null<Float> = null;
 
         if( unit.match(value) ) {
@@ -279,7 +341,11 @@ class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
         return colorNames;
     }
  
-    override public function parse( value:String ) :Color {
+    override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+	
+	public function parse( value:String ) :Color {
         var v:Color;
         
         if( hexcolor.match(value) ) {

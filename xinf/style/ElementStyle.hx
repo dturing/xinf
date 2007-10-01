@@ -4,7 +4,6 @@ package xinf.style;
 import xinf.erno.Color;
 import xinf.style.StylePropertyDefinition;
 
-
 class ElementStyle extends InheritedStyle {
     public var xmlBase(get_xmlBase,set_xmlBase):String;
     function get_xmlBase() :String { return getInheritedProperty("xml:base",String); }
@@ -19,6 +18,10 @@ class ElementStyle extends InheritedStyle {
         return v;
     }
     function set_visibility( v:Visibility ) :Visibility { return setProperty("visibility",v); }
+
+    public var opacity(get_opacity,set_opacity):Null<Float>;
+    function get_opacity() :Float { return getInheritedProperty("opacity",Float); }
+    function set_opacity( v:Float ) :Float { return setProperty("opacity",v); }
 
     public var fill(get_fill,set_fill):Color;
     function get_fill() :Color { return getInheritedProperty("fill",Color); }
@@ -40,6 +43,8 @@ class ElementStyle extends InheritedStyle {
     function get_font_size() :Float { return getInheritedProperty("font-size",Float); }
     function set_font_size( v:Float ) :Float { return setProperty("font-size",v); }
 
+	// TODO fontWeight
+	
     override public function fromXml( xml:Xml ) :Void {
         StyleParser.parseXmlAttributes( xml, this, propertyDefinitions );
     }
@@ -61,11 +66,10 @@ class ElementStyle extends InheritedStyle {
             new StringChoiceProperty("font-weight", ["normal","bold"] ),
             
             new EnumProperty<Visibility>("visibility", Visibility ),
+            new BoundedFloatProperty("opacity",0,1),
             ] ) {
             
             propertyDefinitions.set( def.name, def );
-            
         }
-    
     }
 }
