@@ -206,6 +206,11 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public function styleChanged() :Void {
         scheduleRedraw();
     }
+	
+	public function getParentStyle() :xinf.style.Style {
+		if( parent!=null ) return parent.style;
+		return null;
+	}
 
     /** dispatch the given Event<br/>
         tries to dispatch the given Event to any registered listeners.

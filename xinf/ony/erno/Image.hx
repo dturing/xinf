@@ -47,12 +47,12 @@ class Image extends Object, implements xinf.ony.Image {
     }
 
     private function set_href(v:String) {
-        href=v;
-        var b = if( document!=null ) document.style.xmlBase else null;
         var url:URL;
+        href=v;
+		var b;
+		if( document!=null ) b = document.style.xmlBase;
         if( b!=null ) url = new URL(b).getRelativeURL( href );
         else url = new URL(href);
-        
         trace("Load image: "+url );
         bitmap = load( url.toString() );
 
@@ -72,7 +72,8 @@ class Image extends Object, implements xinf.ony.Image {
 
     public function new() :Void {
         super();
-        x=y=width=height=0;
+        x=y=0;
+		width=height=0;
     }
     
     private function dataChanged( e:ImageLoadEvent ) :Void {
@@ -86,7 +87,7 @@ class Image extends Object, implements xinf.ony.Image {
         y = getFloatProperty(xml,"y");
         width = getFloatProperty(xml,"width");
         height = getFloatProperty(xml,"height");
-        href = xml.get("xlink:href");
+		href = xml.get("xlink:href");
     }
 
     public static function load( url:String ) :ImageData {
@@ -111,7 +112,13 @@ class Image extends Object, implements xinf.ony.Image {
             g.setFill( .5,.5,.5,.5 );
             g.rect( x, y, width, height );
         }
-        g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, {x:x,y:y,w:width,h:height} );
+		if( width<=0 ) width = bitmap.width;
+		if( height<=0 ) height = bitmap.height;
+		
+		g.setFill( 1,1,1,style.opacity );
+		
+		if( style.opacity > 0 ) 
+			g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, {x:x,y:y,w:width,h:height} );
      }
     
 }

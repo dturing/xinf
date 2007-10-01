@@ -40,6 +40,10 @@ class Document extends Group, implements xinf.ony.Document {
         binding.add( "text", Text );
         binding.add( "path", Path );
         binding.add( "image", Image );
+		
+		binding.add( "svg", Document );
+		binding.add( "use", Use );
+        binding.add( "defs", Definitions );
         /*
         binding.add( "a", Link );
         */
@@ -54,12 +58,20 @@ class Document extends Group, implements xinf.ony.Document {
     }
 
 
-    public var width(default,set_width):Int;
-    public var height(default,set_height):Int;
-    private function set_width(v:Int) {
+    public var x(default,set_x):Float;
+    public var y(default,set_y):Float;
+    public var width(default,set_width):Float;
+    public var height(default,set_height):Float;
+    private function set_x(v:Float) {
+        x=v; scheduleTransform(); return x;
+    }
+    private function set_y(v:Float) {
+        y=v; scheduleTransform(); return y;
+    }
+    private function set_width(v:Float) {
         width=v; return width;
     }
-    private function set_height(v:Int) {
+    private function set_height(v:Float) {
         height=v; return height;
     }
 
@@ -72,6 +84,7 @@ class Document extends Group, implements xinf.ony.Document {
         super();
         document=this;
         styleSheet=null;
+		x=y=0.;
         elementsById = new Hash<xinf.ony.Element>();
     }
 
@@ -85,7 +98,13 @@ class Document extends Group, implements xinf.ony.Document {
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
-        // for now...
+
+        x = getFloatProperty(xml,"x");
+        y = getFloatProperty(xml,"y");
+        width = getFloatProperty(xml,"width");
+        height = getFloatProperty(xml,"height");
+
+		// for now...
         if( xml.exists("viewBox") ) {
             var vb = xml.get("viewBox").split(" ");
             if( vb.length != 4 ) {
@@ -94,6 +113,11 @@ class Document extends Group, implements xinf.ony.Document {
             width = Std.parseInt( vb[2] );
             height = Std.parseInt( vb[3] );
         }
+    }
+
+    override public function reTransform( g:Renderer ) :Void {
+        g.setTransform( xid, x, y, 1., 0., 0., 1. );
+        // TODO g.setTranslation( xid, x, y );
     }
 
     public function getElementById( id:String ) :xinf.ony.Element {
@@ -126,5 +150,20 @@ class Document extends Group, implements xinf.ony.Document {
         super.attachedTo(p);
         document=this;
     }
-    
+
+    public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
+        var doc = new Document();
+        doc.style.xmlBase = url_s;
+        
+        var url = new URL(url_s);
+        url.fetch( function(data) {
+                var xml = Xml.parse(data);
+                doc.fromXml( xml.firstElement() );
+                if( onLoad!=null ) onLoad( doc );
+            }, function( error ) {
+                throw(error);
+            } );
+        return doc;
+    }
+
 }

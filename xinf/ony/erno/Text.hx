@@ -40,6 +40,12 @@ class Text extends Object, implements xinf.ony.Text {
         text=t; scheduleRedraw(); return text;
     }
 
+	public function new() :Void {
+		super();
+		x=y=0;
+		format = TextFormat.getDefault();
+	}
+
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
         x = getFloatProperty(xml,"x");
