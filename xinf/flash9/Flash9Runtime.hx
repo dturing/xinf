@@ -28,7 +28,7 @@ class Flash9Runtime extends SimpleRuntime {
     public function new() :Void {
         super();
         _eventSource = new Flash9EventSource(this);
-        
+        /*
         #if htmltrace
             // setup trace to javascript FIXME this is b0rked. i get securityerrors since flash9, which need stupid web-auth.
             try {
@@ -46,6 +46,7 @@ class Flash9Runtime extends SimpleRuntime {
         #else true
             fixLinuxTrace();
         #end
+		*/
     }
     
     function fixLinuxTrace() {

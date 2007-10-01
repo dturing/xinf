@@ -27,13 +27,13 @@ import flash.display.LineScaleMode;
 import flash.display.CapsStyle;
 import flash.display.JointStyle;
 
-typedef Primitive = XinfSprite
+typedef Primitive = Dynamic // FIXME XinfSprite
 
 class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     
     override public function createPrimitive(id:Int) :Primitive {
         // create new object
-        var o = new Primitive();
+        var o = new XinfSprite(); // FIXME Primitive();
         o.xinfId = id;
         return o;
     }
@@ -116,7 +116,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
                 false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
         } else {
-            g.lineStyle( 0, 0, 0 );
+            g.lineStyle( 0, 0, 0, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
             pen.strokeWidth=0;
         }
         if( pen.fillColor != null ) {
@@ -134,7 +134,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
                 false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
         } else {
-            g.lineStyle( 0, 0, 0 );
+            g.lineStyle( 0, 0, 0, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
             pen.strokeWidth=0;
         }
         if( pen.fillColor != null ) {
@@ -152,7 +152,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
                 false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
         } else {
-            g.lineStyle( 0, 0, 0 );
+            g.lineStyle( 0, 0, 0, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
             pen.strokeWidth=0;
         }
         if( pen.fillColor != null ) {
@@ -200,6 +200,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             bm = new flash.display.Bitmap( bd );
         }
          
+        if( pen.fillColor!=null ) {
+			current.alpha = pen.fillColor.a;
+		}
+			
      	current.addChild( bm );
      	
      	if( (outRegion != null)  && (outRegion != inRegion) ) {

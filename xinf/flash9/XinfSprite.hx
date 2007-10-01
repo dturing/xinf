@@ -20,5 +20,8 @@ import flash.display.Sprite;
 class XinfSprite extends Sprite {
     
     public var xinfId:Int;
+	public function new() : Void {
+		super();
+	}
     
 }
