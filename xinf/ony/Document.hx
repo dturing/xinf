@@ -5,8 +5,10 @@ import xinf.style.StyleSheet;
 
 interface Document implements Group {
 
-    var width(default,set_width):Int;
-    var height(default,set_height):Int;
+    var x(default,set_x):Float;
+    var y(default,set_y):Float;
+    var width(default,set_width):Float;
+    var height(default,set_height):Float;
 
     var styleSheet(default,null):StyleSheet;
     function getElementById( id:String ) :Element;
@@ -14,4 +16,5 @@ interface Document implements Group {
     
     function unmarshal( xml:Xml, ?parent:Group ) :Element;
 
+	static function load( url:String ) :Document;
 }

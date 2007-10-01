@@ -7,8 +7,10 @@ typedef Group_ = xinf.ony.erno.Group
 typedef Document_ = xinf.ony.erno.Document
 typedef Rectangle_ = xinf.ony.erno.Rectangle
 typedef Line_ = xinf.ony.erno.Line
-typedef Polygon_ = xinf.ony.erno.Polygon
 typedef Image_ = xinf.ony.erno.Image
+typedef Polygon_ = xinf.ony.erno.Polygon
+typedef Path_ = xinf.ony.erno.Path
+typedef Text_ = xinf.ony.erno.Text
 
 
 class Model {
@@ -48,12 +50,20 @@ class Model {
         return new Line_();
     }
 
+    public function image() :Image {
+        return new Image_();
+    }
+
     public function polygon() :Polygon {
         return new Polygon_();
     }
 
-    public function image() :Image {
-        return new Image_();
+    public function path() :Path {
+        return new Path_();
+    }
+
+    public function text() :Text {
+        return new Text_();
     }
 
 

@@ -7,9 +7,10 @@ import xinf.event.EventDispatcher;
 import xinf.geom.Types;
 import xinf.geom.Transform;
 import xinf.style.ElementStyle;
+import xinf.style.Stylable;
 import xinf.xml.Serializable;
 
-interface Element implements EventDispatcher, implements Serializable {
+interface Element implements EventDispatcher, implements Serializable, implements Stylable {
 
     /** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
         Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
@@ -34,6 +35,7 @@ interface Element implements EventDispatcher, implements Serializable {
     var style(default,null):ElementStyle;
 
     function styleChanged() :Void;
+	function getParentStyle() :xinf.style.Style;
 
     /** read element data from xml */
     function fromXml( xml:Xml ) :Void;
