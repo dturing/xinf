@@ -136,6 +136,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         wrap.style.height = ""+Math.round(outRegion.h);
         
         wrap.appendChild(r);
+		
+		if( pen.fillColor!=null ) {
+			untyped r.style.opacity = pen.fillColor.a;
+		}
+			
         current.appendChild(wrap);
     }
     
