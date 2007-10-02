@@ -140,7 +140,7 @@ class BoundedFloatProperty extends FloatProperty {
     }
 
 	override public function parse( value:String ) :Float {
-		var v:Null<Float> = parse(value);
+		var v:Null<Float> = super.parse(value);
 
 		if( min!=null ) v = Math.max( min, v );
 		if( max!=null ) v = Math.min( max, v );
