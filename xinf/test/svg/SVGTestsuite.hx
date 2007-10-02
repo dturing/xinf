@@ -24,7 +24,7 @@ class SVGTest extends TestCase {
         doc = X.loadDocument( url, function(d:xinf.ony.Document) {
                 if( !self.interactive ) {
                     self.runAtNextFrame( function() {
-                        self.assertDisplay( self.cleanFinish, doc.width, doc.height, self.targetEquality );
+					self.assertDisplay( self.cleanFinish, doc.width, doc.height, self.targetEquality );
                     } );
                 } // else just loop on...    
             } );
@@ -105,7 +105,7 @@ class SVGTestsuite {
             shell.add( new SVGTest( base+"coords-trans-05-t.svg" ) );
             shell.add( new SVGTest( base+"coords-trans-06-t.svg" ) );
 
-
+			// fails in flash as images are not loaded when shot is taken.
             shell.add( new SVGTest( base+"struct-image-01-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-02-b.svg" ) );
             // reference image is 240x180...

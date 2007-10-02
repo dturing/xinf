@@ -35,7 +35,7 @@ class Binding<T:Serializable> {
             if( m==null && i.fits(xml) ) m=i.getClass(xml);
         }
         if( m==null ) m = marshallers.get( xml.nodeName );
-        if( m==null ) return null;
+		if( m==null ) return null;
         var ret:T = Type.createInstance( m, [ ] );
         return ret;
     }

@@ -111,7 +111,7 @@ class Texture extends ImageData {
     public static var cache:Hash<Texture> = new Hash<Texture>();
     
     public static function newByName( url:String ) :Texture {
-        try {
+	    try {
             var r = cache.get(url);
             if( r==null ) {
                 var data:String;
@@ -134,7 +134,8 @@ class Texture extends ImageData {
                 if( data == null || data.length==0 ) {
                     throw("Could not load: "+url );
                 }
-                r = newFromPixbuf( Pixbuf.newFromCompressedData(data) );
+				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
+				r = newFromPixbuf( p );
                 cache.set(url,r);
             }
             return r;

@@ -79,7 +79,7 @@ class GLPolygon {
     public function new( ?pixelSize:Float ) :Void {
         shape = new Array<GLContour>();
         contour = null;
-        if( pixelSize==null ) pixelSize=5.;
+        if( pixelSize==null ) pixelSize=1.;
         this.pixelSize=pixelSize;
     }
 

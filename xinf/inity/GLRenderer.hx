@@ -323,7 +323,10 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         var x2:Float = outRegion.w+x;
         var y2:Float = outRegion.h+y;
 
-        GL.color4( 1., 1., 1., 1. );
+        if( pen.fillColor!=null ) 
+			GL.color4( 1., 1., 1., pen.fillColor.a );
+		else
+			GL.color4( 1., 1., 1., 1. );
 
         GL.pushAttrib( GL.ENABLE_BIT );
             GL.enable( GL.TEXTURE_2D );
