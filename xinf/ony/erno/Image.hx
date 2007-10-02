@@ -117,8 +117,9 @@ class Image extends Object, implements xinf.ony.Image {
 		
 		g.setFill( 1,1,1,style.opacity );
 		
-		if( style.opacity > 0 ) 
+		if( style.opacity > 0 || style.opacity==null ) {
 			g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, {x:x,y:y,w:width,h:height} );
+		}
      }
     
 }
