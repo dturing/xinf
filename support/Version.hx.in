@@ -1,0 +1,8 @@
+package xinf;
+
+class Version {
+	public static var version:String = "__VERSION__";
+	public static var revision:String = "__REVISION__";
+	public static var built:String = "__DATE__";
+	public static var tagline:String = "__TAGLINE__";
+}
