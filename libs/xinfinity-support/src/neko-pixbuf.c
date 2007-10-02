@@ -8,6 +8,7 @@
 
 GdkPixbuf* gdk_pixbuf_new_from_rgb( value _data, int width, int height, int hasAlpha ) {
 	int bytesPerSample = hasAlpha ? 4 : 3;
+	val_check(_data,string);
     if( val_strlen(_data)<sizeof(unsigned char)*width*height*bytesPerSample ) 
 		val_throw(alloc_string("data to small to fit image"));
     return gdk_pixbuf_new_from_data( (const guchar*)val_string(_data), GDK_COLORSPACE_RGB,
@@ -17,8 +18,7 @@ GdkPixbuf* gdk_pixbuf_new_from_rgb( value _data, int width, int height, int hasA
 GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	g_type_init();
 	
-	if( val_is_object(_data) ) _data = val_field( _data, val_id("__s") );
-	val_check(_data,string);
+	if( !val_is_string(_data) ) val_throw( alloc_string("data argument is not a string") );
 	const guchar *data = (const guchar*)val_string(_data);
 	int length = val_strlen(_data);
 	if( length==0 ) val_throw( alloc_string("data length is zero") );
@@ -34,7 +34,7 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	if( err!=NULL ) {
 		val_throw( alloc_string(err->message) );
 	}
-    
+
 	gdk_pixbuf_loader_close( loader, &err );
 	if( err!=NULL ) {
 		val_throw( alloc_string("unable to decompress image") );
@@ -57,7 +57,6 @@ value gdk_pixbuf_copy_pixels( GdkPixbuf *pixbuf ) {
 	int bpp = gdk_pixbuf_get_has_alpha(pixbuf)?4:3;
 	int stride = gdk_pixbuf_get_rowstride(pixbuf);
     
-	unsigned char *data = malloc(h*stride);
     unsigned char *src = gdk_pixbuf_get_pixels(pixbuf);
 	return( copy_string( src, h*stride ) );
 }
