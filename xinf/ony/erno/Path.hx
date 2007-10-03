@@ -42,6 +42,7 @@ class Path extends Object, implements xinf.ony.Path  {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
+        if( segments==null ) return;
         
         g.startShape();
         var open=false;

@@ -2,6 +2,7 @@ package xinf.ony;
 
 import Xinf;
 import xinf.event.EventKind;
+import xinf.event.Event;
 
 class Root {
     private static var mRoot:Document;
@@ -31,7 +32,7 @@ class Root {
         return xinf.erno.Runtime.runtime.removeEventListener(type,h);
     }
 	
-    public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
+    public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
 	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
     }
 
