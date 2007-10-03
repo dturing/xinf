@@ -30,6 +30,10 @@ class Root {
     public static function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
         return xinf.erno.Runtime.runtime.removeEventListener(type,h);
     }
+	
+    public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
+	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
+    }
 
     public static function main() {
         xinf.erno.Runtime.runtime.run();
