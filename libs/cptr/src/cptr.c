@@ -1,6 +1,5 @@
 #include <string.h>
 #include <neko.h>
-#include <stdio.h>
 
 void check_cptr( value cp, int size ) {
 	if( !val_is_string( cp ) ) val_throw( alloc_string("not a string - cannot access as cptr") );

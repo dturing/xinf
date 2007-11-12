@@ -133,6 +133,8 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 		rm $(BIN_PATH)/Mac/*.x86; \
 		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
 			cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp $(BIN_PATH)/*.ttf $(HAXELIB_PROJECT)/ndll/; \
+			cp $(BIN_PATH)/README $(HAXELIB_PROJECT)/ndll/; \
 			cp -r $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 		)
 	

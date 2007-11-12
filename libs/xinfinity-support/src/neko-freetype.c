@@ -17,8 +17,13 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_GLYPH_H
 
 #include <neko.h>
+
+#ifdef NEKO_MAC
+//#include <Resources.h>		
+#endif
 
 #ifdef val_check
 #undef val_check
@@ -68,10 +73,13 @@ value ftLoadFont( value _data, value _width, value _height ) {
 	
     value font = alloc_object(NULL);
     FT_Face *face = (FT_Face*)malloc( sizeof(FT_Face) );
-    
-    if( !face || FT_New_Memory_Face( ft_library, (const FT_Byte*)val_string(_data), val_strlen(_data), 0, face ) ) {
-        val_throw( alloc_string("FreeType cannot read font"));
-    }
+	if( !face ) val_throw( alloc_string("out of memory") );
+
+    int err = FT_New_Memory_Face( ft_library, (const FT_Byte*)val_string(_data), val_strlen(_data), 0, face );
+	if( err == FT_Err_Unknown_File_Format )
+		val_throw( alloc_string("Freetype cant read font (unknown format)"));
+	else if( err )
+		val_throw( alloc_string("Freetype cant read font"));
     
     FT_Set_Char_Size( *face, width, height, 72, 72 );
     
