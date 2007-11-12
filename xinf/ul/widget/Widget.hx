@@ -33,13 +33,13 @@ class Widget extends Container {
         focusable = true;
         FocusManager.register(this);
         
-        addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDownWidget );
     }
     
     // FIXME: child classes have their own onMouseDown, which is not really override.
     // is Widget the class that "highlevels" mouseevents towards onClick, onDrag etc? probably!
     private function onMouseDownWidget( e:MouseEvent ) :Void {
-        FocusManager.setFocus( this );
+        if( focusable ) FocusManager.setFocus(this);
     }
     
     public function focus() :Bool {

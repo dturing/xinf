@@ -13,52 +13,58 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
-import xinf.erno.Renderer;
-import xinf.style.Style;
+import Xinf;
+import xinf.ul.Container;
+import xinf.ul.layout.Helper;
 
 /**
     Simple Label element.
 **/
 
-class Label extends Pane {
+class Label extends Container {
     
     public var text(get_text,set_text):String;
-    var _text:String;
-    public var autoSize:Bool;
+	var textElement:Text;
     
     public function new( ?text:String ) :Void {
+		textElement = new Text();
         super();
+		group.attach( textElement );
         this.text = text;
-        autoSize = false;
     }
     
     function get_text() :String {
-        return(_text);
+        return(text);
     }
     
     function set_text( t:String ) :String {
-        if( t != _text ) {
-            _text = t;
-            if( autoSize ) setPrefSize( getStyleTextFormat().textSize(t) );
-            scheduleRedraw();
+        if( t != text ) {
+            text = t;
+            textElement.text = text;
+			styleChanged();
         }
         return(t);
     }
 
-    override public function styleChanged( s:Style ) {
-        var oldFont = getStyleTextFormat();
-        super.styleChanged(s);
-        var font = getStyleTextFormat();
-        if( autoSize && text != null && font!=oldFont ) {
-            setPrefSize( font.textSize(_text) );
-        }
-    }
+	override public function set_size( s:TPoint ) :TPoint {
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 );
+		textElement.x = Helper.leftOffsetAligned( this, s.x, .5 );
+		return super.set_size(s);
+	}
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-        setStyleFill( g, "color" );
-        g.text( Math.round(leftOffsetAligned(prefSize.x,style.get("hAlign",0.))), topOffsetAligned(prefSize.y,style.get("vAlign",0.)), text, getStyleTextFormat() );
+    override public function styleChanged() {
+		super.styleChanged();
+		
+		textElement.style.fontSize = style.fontSize;
+		textElement.style.fontFamily = style.fontFamily;
+		textElement.style.fill = style.textColor;
+		textElement.styleChanged();
+		
+		// TODO: fontWeight
+		if( text!=null ) {
+			setPrefSize( Helper.addPadding( style.getTextFormat().textSize(text), style ) );
+		}
     }
 }

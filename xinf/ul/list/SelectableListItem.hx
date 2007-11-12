@@ -15,15 +15,20 @@
 
 package xinf.ul.list;
 
+import Xinf;
 import xinf.ul.model.ISelectable;
 
 class SelectableListItem<T:ISelectable> extends ListItem<T> {
 
-    public function set( ?value:T ) :Void {
-        super.set();
-        if( value!=null && value.selected ) addStyleClass(":selected") else removeStyleClass(":selected");
+    override public function set( ?value:T ) :Void {
+  //      super.set();
         this.value = value;
-        this.text = if( value==null ) "" else ""+value;
+		if( value!=null ) {
+			if( value.selected ) this.text.style.fill = Color.RED;
+		//	else this.text.style.fill = Color.BLACK;
+			trace( value.selected );
+		}
+        this.text.text = if( value==null ) "" else ""+value;
     }
     
 }

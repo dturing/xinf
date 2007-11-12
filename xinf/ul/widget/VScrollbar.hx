@@ -13,48 +13,47 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
-import xinf.ony.Object;
-import xinf.ul.Pane;
-import xinf.event.Event;
-import xinf.erno.Color;
-
-import xinf.event.MouseEvent;
-import xinf.event.ScrollEvent;
+import Xinf;
+import xinf.ul.Component;
+import xinf.ul.Container;
+import xinf.ul.Drag;
 
 /**
     Improvised Vertical Scrollbar element.
 **/
 
-class VScrollbar extends Pane {
+class VScrollbar extends Container {
     
-    private var thumb:Pane;
+    private var thumb:Component;
     private var thumbHeight:Float;
     
     public function new() :Void {
         super();
         
-        addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
+        element.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
         
-        thumb = new xinf.ul.Pane();
+        thumb = new Container();
         thumb.addStyleClass("Thumb");
-        thumb.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
-        thumb.resize(18,18);
+        thumb.element.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
+        thumb.size = { x:18., y:18. };
+		thumb.position = { x:0., y:0. };
         attach(thumb);
         
         thumbHeight = thumb.size.y;
         
-        size={x:18.,y:0.};
+        size = {x:18.,y:0.};
     }
 
     public function clickBar( e:MouseEvent ) {
-        var y = globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
-        
-        var delta:Int;
+        var y = group.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
+
+		var delta:Int;
         if( y > thumb.position.y+thumb.size.y ) delta = 1;
         else if( y < thumb.position.y ) delta = -1;
         else return;
+		
         postEvent( new ScrollEvent( ScrollEvent.SCROLL_LEAP, delta ) );
     }
         
@@ -69,18 +68,15 @@ class VScrollbar extends Pane {
         } else if( y > size.y-thumbHeight ) {
             y = size.y-thumbHeight;
         }
-        thumb.position.y = Math.floor(y);
+        thumb.position = { x:0., y:Math.floor(y)*1. };
         
         var value:Float = y/(size.y-thumbHeight);
         postEvent( new ScrollEvent( ScrollEvent.SCROLL_TO, value ) );
-        
-        thumb.scheduleRedraw();
     }
     
     public function setScrollPosition( position:Float ) :Void {
         position = Math.max( 0, Math.min( 1, position ) );
-        thumb.position.y = Math.floor(position * (size.y-thumbHeight));
-        thumb.scheduleRedraw();
+        thumb.position = { x:thumb.position.x, y:1.*Math.floor(position * (size.y-thumbHeight)) };
     }
     
 }

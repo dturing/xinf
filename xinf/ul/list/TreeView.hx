@@ -194,7 +194,7 @@ class StringTreeItem<T> extends Label, implements TreeItem<T> {
     }
 }
 
-class TreeView<T> extends ListBox<TreeItemData<T>> {
+class TreeView<T> extends ListView<TreeItemData<T>> {
     var tree:TreeModel<T>;
     var listModel:TreeAsListModel<T>;
     

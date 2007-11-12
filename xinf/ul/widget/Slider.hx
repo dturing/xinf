@@ -13,15 +13,15 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
-import xinf.ony.Object;
-import xinf.event.MouseEvent;
-import xinf.event.KeyboardEvent;
-import xinf.event.ScrollEvent;
+import Xinf;
 import xinf.ul.Drag;
 import xinf.ul.Popup;
 import xinf.ul.FocusManager;
+import xinf.ul.Container;
+import xinf.ul.layout.Helper;
+import xinf.ul.ValueEvent;
 
 /**
     Slider (numeric entry) element.
@@ -30,9 +30,9 @@ import xinf.ul.FocusManager;
 class Slider extends Widget {
     
     private var slideBar:Container;
-    private var slideThumb:Pane;
-    private var label:Label;
-    private var button:Component;
+    private var slideThumb:Container;
+    private var textElement:Text;
+    private var button:Rectangle;
     private var popup:Popup;
     
     public var precision:Float;
@@ -53,8 +53,8 @@ class Slider extends Widget {
         if( _value > max ) _value=max;
         if( _value < min ) _value=min;
         if( _value != old ) {
-            label.text = ""+Math.floor( precision*_value )/precision;
-            postEvent( new ValueEvent<Float>( ValueEvent.VALUE, _value ) );
+		    textElement.text = ""+Math.floor( precision*_value )/precision;
+            postEvent( new ValueEvent<Float>( untyped ValueEvent.VALUE, _value ) );
         }
         return _value;
     }
@@ -70,6 +70,8 @@ class Slider extends Widget {
     }
     
     public function new( ?max:Float, ?min:Float, ?increment:Float, ?initial:Float ) :Void {
+        textElement = new Text();
+		
         super();
         precision=1000; this.min=0; this.max=1; this.increment=.1;
         if( min!=null ) this.min = min;
@@ -77,49 +79,67 @@ class Slider extends Widget {
         if( increment!=null ) this.increment = increment;
         else increment=0.1;
     
-        label = new xinf.ul.Label();
-        label.moveTo( style.padding.l, style.padding.t ); // FIXME
-        attach( label );
-        button = new Pane();
-        button.addStyleClass("Thumb");
-        attach( button );
+		group.attach( textElement );
+	
+        button = new Rectangle();
+        group.attach( button );
         
-        slideBar = new Pane();
+        slideBar = new Container();
         slideBar.addStyleClass("SliderBar");
 
-        slideThumb = new Pane();
-        slideThumb.moveTo( 0, 1 );
-        slideThumb.addStyleClass("Thumb");
+        slideThumb = new Container();
+        slideThumb.addStyleClass("SliderThumb");
+		slideThumb.position = { x:0., y:1. };
         slideBar.attach( slideThumb );
 
         if( initial==0 || initial==null ) initial=0.;
         value = initial;
 
-        addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
         addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
+		
+		styleChanged();
     }
-    
-    public function resize( x:Float, y:Float ) :Void {
-        super.resize(x,y);
-        button.resize( size.y, size.y );
-        button.moveTo( size.x-size.y, 0 );
-        
-        slideBar.resize( size.y, 100+size.y );
-        slideThumb.resize( size.y, size.y );
+
+	override public function set_size( s:TPoint ) :TPoint {
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 );
+		textElement.x = Helper.leftOffsetAligned( this, s.x, style.horizontalAlign );
+		
+		button.x = s.x-s.y;
+		button.width = button.height = s.y;
+
+        slideBar.size = { x:s.y, y:100+s.y };
+		slideThumb.size = { x:s.y, y:s.y };
+
+		return super.set_size(s);
+	}
+
+    override public function styleChanged() {
+		super.styleChanged();
+		
+		textElement.style.fontSize = style.fontSize;
+		textElement.style.fontFamily = style.fontFamily;
+		textElement.style.fill = style.textColor;
+		textElement.styleChanged();
+		
+		// TODO: fontWeight
+		if( textElement.text!=null ) {
+			var s = Helper.addPadding( style.getTextFormat().textSize(textElement.text), style );
+			s.x += s.y; // add button.width==height
+			setPrefSize( s );
+		}
     }
-    
+
     private function onMouseDown( e:MouseEvent ) {
-        FocusManager.setFocus(this);
+//        FocusManager.setFocus(this);
         
         var y = -(100-(get_normalized()*100));
-        var p = localToGlobal( {x:button.position.x, y:0. } );
+        var p = group.localToGlobal( {x:button.x, y:0. } );
         var effectiveH = slideBar.size.y - slideThumb.size.y;
         var t = (effectiveH-(get_normalized()*100));
-        trace("e: "+e.y+", p: "+p.y+", t:"+t );
-        slideThumb.moveTo( 0, t );
-        trace("move bar: "+(p.y-(100-t)) );
-        slideBar.moveTo( p.x, (p.y-(t)) ); //position.x+button.position.x, -3+position.y+y );
+        slideThumb.position = { x:0., y:t };
+        slideBar.position = { x:p.x, y:(p.y-(t)) };
         
         popup = new Popup(this,slideBar,Move);
         
@@ -133,7 +153,7 @@ class Slider extends Widget {
     public function sliderMoved( x:Float, y:Float, marker:Float ) :Void {
         set_normalized( (marker + ((y)/-100)) );
         var effectiveH = slideBar.size.y - slideThumb.size.y;
-        slideThumb.moveTo( 0, (effectiveH-(get_normalized()*100)) );
+        slideThumb.position = { x:0., y:(effectiveH-(get_normalized()*100)) };
     }
 
     public function sliderEnd() :Void {
@@ -160,7 +180,7 @@ class Slider extends Widget {
     public static function createFunctionControl( f:Float->Void, min:Float, max:Float, increment:Float ) :Slider {
         var s = new Slider( max, min, increment );
         s.addEventListener( ValueEvent.VALUE, function( e ) {
-                f(e.value);
+                f(untyped e.value); // FIXME
             });
         return s;
     }

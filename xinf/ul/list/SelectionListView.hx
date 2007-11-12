@@ -33,9 +33,10 @@ class SelectionListView<T:ISelectable> extends ListView<T> {
         }
         
         super( model, createItem );
+		
         selection = new Selection<T>( maxSelected );
         lastPickedIndex=0;
-        addEventListener( PickEvent.ITEM_PICKED, onPick );
+        addEventListener( untyped PickEvent.ITEM_PICKED, onPick );
     }
     
     public function onPick( e:PickEvent<T> ) {
@@ -51,7 +52,7 @@ class SelectionListView<T:ISelectable> extends ListView<T> {
         */
         if( e.addModifier ) {
             lastPickedIndex = e.index;
-            trace("select + "+e.index );
+            trace("select "+( if( item.selected ) "-" else "+" )+" "+e.index );
             selection.select( item, !item.selected );
         } else if( e.extendModifier ) {
             selection.clear();

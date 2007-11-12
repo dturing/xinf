@@ -29,7 +29,11 @@ class Container extends Component {
     public function new( ?g:Group ) :Void {
 		group = g;
 		if( group==null ) group = new Group();
-        super( g );
+        super( group );
+		
+		skin.attachBackground( group );
+		skin.attachForeground( group );
+		
         children = new Array<Component>();
         relayoutNeeded = true;
     }
@@ -42,7 +46,9 @@ class Container extends Component {
         child.__parentSizeListener = l;
 		child.attachedTo( this );
 
+		skin.detachForeground( group );
         group.attach(child.getElement());
+		skin.attachForeground( group );
     }
 
     public function detach( child:Component ) :Void {
@@ -55,13 +61,14 @@ class Container extends Component {
 
     function onComponentResize( e:ComponentSizeEvent ) :Void {
         if( layout==null ) {
-            e.component.resize( e );
+            e.component.size = e;
         } else {
             relayoutNeeded=true;
+			relayout();
         }
     }
 
-    function relayout() :Void {
+    public function relayout() :Void {
         if( layout!=null && relayoutNeeded ) {
             var oldSize = size;
 //            trace("relayout "+this);

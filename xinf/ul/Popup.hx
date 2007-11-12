@@ -15,10 +15,7 @@
 
 package xinf.ul;
 
-import xinf.event.MouseEvent;
-import xinf.ony.Root;
-import xinf.ony.Object;
-import xinf.ony.Container;
+import Xinf;
 
 enum PopupMode {
     Move;
@@ -27,40 +24,35 @@ enum PopupMode {
 
 class Popup {
     
-    var object:Object;
-    var root:Container<Object>;
+    var object:Component;
+    var root:xinf.ony.Document;
     
-    public function new( parent:Object, o:Object, ?popupMode:PopupMode ) :Void {
+    public function new( parent:Component, o:Component, ?popupMode:PopupMode ) :Void {
         object = o;
-        root = parent.parent;
-        while( root.parent!=null ) {
-            root=root.parent;
-        }
+        root = parent.getElement().document;
         
         if( popupMode == null ) popupMode = Move;
         
-        if( o.position.x < 0 ) o.moveTo( 0, o.position.y );
-        if( o.position.y < 0 ) o.moveTo( o.position.x, 0 );
+        if( o.position.x < 0 ) o.position = { x:0., y:o.position.y };
+        if( o.position.y < 0 ) o.position = { x:o.position.x, y:0. };
         
-        if( root.size.x != 0 ) {
-            switch( popupMode ) {
-                case Move:
-                    if( o.position.x+o.size.x >= root.size.x ) 
-                        o.moveTo( root.size.x - (o.size.x+1), o.position.y );
-                    if( o.position.y+o.size.y >= root.size.y ) 
-                        o.moveTo( o.position.x, root.size.y - (o.size.y+1) );
-                case Scale:
-                    if( o.position.x+o.size.x >= root.size.x ) 
-                        o.resize( root.size.x - (o.position.x+1), o.size.y );
-                    if( o.position.y+o.size.y >= root.size.y ) 
-                        o.resize( o.size.x, root.size.y - (o.position.y+1) );
-            }
+		switch( popupMode ) {
+			case Move:
+				if( o.position.x+o.size.x >= root.width ) 
+					o.position = { x:root.width - (o.size.x+1), y:o.position.y };
+				if( o.position.y+o.size.y >= root.height ) 
+					o.position = { x:o.position.x, y:root.height - (o.size.y+1) };
+			case Scale:
+				if( o.position.x+o.size.x >= root.width ) 
+					o.size = { x:root.width - (o.position.x+1), y:o.size.y };
+				if( o.position.y+o.size.y >= root.height ) 
+					o.size = { x:o.size.x, y:root.height - (o.position.y+1) };
         }
-        root.attach(object);
+        root.attach(object.getElement());
     }
     
     public function close() :Void {
-        root.detach(object);
+        root.detach(object.getElement());
     }
     
 }

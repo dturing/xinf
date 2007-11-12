@@ -18,6 +18,8 @@ package xinf.ul.widget;
 import Xinf;
 import xinf.event.EventKind;
 import xinf.ul.ValueEvent;
+import xinf.ul.layout.Helper;
+import xinf.ul.FocusManager;
 
 /**
     Button element.
@@ -31,6 +33,7 @@ class Button<Value> extends Widget {
 	var textElement:Text;
     var value:Value;
     var _mouseUp:Dynamic;
+	var _keyUp:Dynamic;
 
     function get_text() :String {
         return(text);
@@ -40,33 +43,54 @@ class Button<Value> extends Widget {
         if( t != text ) {
             text = t;
 			textElement.text = text;
-// TODO            setPrefSize( getStyleTextFormat().textSize(t) );
-        }
+			styleChanged();
+		}
         return(t);
     }
 
+	override public function set_size( s:TPoint ) :TPoint {
+		// FIXME: text-anchor center, set center here.
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 );
+		textElement.x = Helper.leftOffsetAligned( this, s.x, .5 );
+		return super.set_size(s);
+	}
+
     public function new( ?text:String, ?value:Value ) :Void {
-        super();
 		textElement = new Text();
+		
+        super();
+
 		group.attach( textElement );
 		
         this.set_text(text);
         this.value = value;
-        textElement.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
+	override public function styleChanged() :Void {
+		super.styleChanged();
+		
+		textElement.style.fontSize = style.fontSize;
+		textElement.style.fontFamily = style.fontFamily;
+		textElement.style.fill = style.textColor;
+		textElement.styleChanged();
+		
+		// TODO: fontWeight
+		if( text!=null ) {
+			setPrefSize( Helper.addPadding( style.getTextFormat().textSize(text), style ) );
+		}
+    }
+	
     function onMouseDown( e:MouseEvent ) {
-        addStyleClass(":press");
-		trace("down!");
-        Root.addEventListener( MouseEvent.MOUSE_UP,
-            _mouseUp=onMouseUp );
+		addStyleClass(":press");
+        _mouseUp = Root.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
     }
     
     function onMouseUp( e:MouseEvent ) {
         //if( this._id==e.targetId )
 		// TODO: onMouseOut?
-            postEvent( new ValueEvent( Button.PRESS, value ) );
+		    postEvent( new ValueEvent( PRESS, value ) );
         
         removeStyleClass(":press");
         Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
@@ -75,7 +99,17 @@ class Button<Value> extends Widget {
     function onKeyDown( e:KeyboardEvent ) {
 		switch( e.key ) {
             case "space":
-                postEvent( new ValueEvent( PRESS, value ) );
+				if( _keyUp!=null ) return;
+				addStyleClass(":press");
+				var self=this;
+				_keyUp = addEventListener( KeyboardEvent.KEY_UP, function(e) {
+					if( e.key=="space" ) {
+						self.removeStyleClass(":press");
+						self.postEvent( new ValueEvent( PRESS, self.value ) );
+						self.removeEventListener( KeyboardEvent.KEY_UP, self._keyUp );
+						self._keyUp = null;
+					}
+				});
         }
     }
 

@@ -15,41 +15,42 @@
 
 package xinf.ul.layout;
 
+import Xinf;
 import xinf.ul.Component;
 import xinf.ul.Container;
-import xinf.style.Style;
+import xinf.ul.ComponentStyle;
 
 class Orientation {
     public function new();
     
-    public function A(d:{x:Float,y:Float}):Float { throw("unimplemented"); return null; }
-    public function B(d:{x:Float,y:Float}):Float { throw("unimplemented"); return null; }
+    public function A(d:{x:Float,y:Float}):Float { throw("unimplemented"); return 0.; }
+    public function B(d:{x:Float,y:Float}):Float { throw("unimplemented"); return 0.; }
     public function get(a:Float,b:Float):{x:Float,y:Float} { throw("unimplemented"); return null; }
 
-    public function firstA(d:{l:Float,t:Float}):Float { throw("unimplemented"); return null; }
-    public function firstB(d:{l:Float,t:Float}):Float { throw("unimplemented"); return null; }
-    public function alignA(s:Style):Float { throw("unimplemented"); return null; }
-    public function alignB(s:Style):Float { throw("unimplemented"); return null; }
+    public function firstA(d:{l:Float,t:Float}):Float { throw("unimplemented"); return 0.; }
+    public function firstB(d:{l:Float,t:Float}):Float { throw("unimplemented"); return 0.; }
+    public function alignA(s:ComponentStyle):Float { throw("unimplemented"); return 0.; }
+    public function alignB(s:ComponentStyle):Float { throw("unimplemented"); return 0.; }
 }
 
 class Vertical extends Orientation {
-    public function A(d:{x:Float,y:Float}):Float { return d.y; }
-    public function B(d:{x:Float,y:Float}):Float { return d.x; }
-    public function get(a:Float,b:Float):{x:Float,y:Float} { return({x:b,y:a}); }
-    public function firstA(d:{l:Float,t:Float}):Float { return d.t; }
-    public function firstB(d:{l:Float,t:Float}):Float { return d.l; }
-    public function alignA(s:Style):Float { return( s.get("vAlign",0.) ); }
-    public function alignB(s:Style):Float { return( s.get("hAlign",0.) ); }
+    override public function A(d:{x:Float,y:Float}):Float { return d.y; }
+    override public function B(d:{x:Float,y:Float}):Float { return d.x; }
+    override public function get(a:Float,b:Float):{x:Float,y:Float} { return({x:b,y:a}); }
+    override public function firstA(d:{l:Float,t:Float}):Float { return d.t; }
+    override public function firstB(d:{l:Float,t:Float}):Float { return d.l; }
+    override public function alignA(s:ComponentStyle):Float { return( s.verticalAlign ); }
+    override public function alignB(s:ComponentStyle):Float { return( s.horizontalAlign ); }
 }
 
 class Horizontal extends Orientation {
-    public function A(d:{x:Float,y:Float}):Float { return d.x; }
-    public function B(d:{x:Float,y:Float}):Float { return d.y; }
-    public function get(a:Float,b:Float):{x:Float,y:Float} { return({x:a,y:b}); }
-    public function firstA(d:{l:Float,t:Float}):Float { return d.l; }
-    public function firstB(d:{l:Float,t:Float}):Float { return d.t; }
-    public function alignA(s:Style):Float { return( s.get("hAlign",0.) ); }
-    public function alignB(s:Style):Float { return( s.get("vAlign",0.) ); }
+    override public function A(d:{x:Float,y:Float}):Float { return d.x; }
+    override public function B(d:{x:Float,y:Float}):Float { return d.y; }
+    override public function get(a:Float,b:Float):{x:Float,y:Float} { return({x:a,y:b}); }
+    override public function firstA(d:{l:Float,t:Float}):Float { return d.l; }
+    override public function firstB(d:{l:Float,t:Float}):Float { return d.t; }
+    override public function alignA(s:ComponentStyle):Float { return( s.horizontalAlign ); }
+    override public function alignB(s:ComponentStyle):Float { return( s.verticalAlign ); }
 }
 
 
@@ -59,6 +60,8 @@ class FlowLayout implements Layout {
     public static var HORIZONTAL:Orientation = new Horizontal();
     public static var Horizontal0:FlowLayout = new FlowLayout( FlowLayout.HORIZONTAL );
     public static var Vertical0:FlowLayout = new FlowLayout( FlowLayout.VERTICAL );
+    public static var Horizontal5:FlowLayout = new FlowLayout( FlowLayout.HORIZONTAL, 5 );
+    public static var Vertical5:FlowLayout = new FlowLayout( FlowLayout.VERTICAL, 5 );
     
     public var pad:Float; // FIXME: no way to trigger relayout...
     public var o:Orientation;
@@ -80,23 +83,22 @@ class FlowLayout implements Layout {
         for( c in parent.children ) {
             positions.push( o.get( acc, bPad ) );
             
-            var s = c.clampSize( c.prefSize );
-            c.resize( s.x, s.y ); // somewhere else?
-            
-            acc += o.A(c.size) + pad;
+            var s = Helper.clampSize( c.prefSize, c.style );
+			c.size = {x:s.x, y:s.y}; // somewhere else?
+			acc += o.A(c.size) + pad;
             max = Math.max( o.B(c.size), max );
         }
         var total = acc-(first+pad);
     
         // parent alignment
-        var s = parent.removePadding(parent.size);
+        var s = Helper.removePadding(parent.size,parent.style);
         var ashift = ( o.A( s ) - total ) * o.alignA( parent.style );
         var bshift = ( o.B( s ) - max   ) * o.alignB( parent.style );
         for( c in parent.children ) {
             var p = positions.shift();
             var cshift = ( max - o.B( c.size ) ) * o.alignB( c.style );
             var q = o.get( o.A(p)+ashift, o.B(p)+bshift+cshift );
-            c.moveTo( q.x, q.y );
+            c.position = { x:q.x, y:q.y };
         }
 
         parent.setPrefSize( o.get(total,max) );

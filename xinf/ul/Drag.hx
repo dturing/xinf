@@ -15,8 +15,7 @@
 
 package xinf.ul;
 
-import xinf.event.MouseEvent;
-import xinf.erno.Runtime;
+import Xinf;
 
 class Drag<T> {
     
@@ -35,8 +34,8 @@ class Drag<T> {
         this.move=move;
         this.marker=marker;
         
-        _mouseMove  = Runtime.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
-        _mouseUp    = Runtime.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+        _mouseMove  = Root.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+        _mouseUp    = Root.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
     }
     
     private function onMouseMove( e:MouseEvent ) {
@@ -44,8 +43,8 @@ class Drag<T> {
     }
     
     private function onMouseUp( e:MouseEvent ) {
-        Runtime.removeEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
-        Runtime.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        Root.removeEventListener( MouseEvent.MOUSE_MOVE, _mouseMove );
+        Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
         if( end != null ) end();
     }
     

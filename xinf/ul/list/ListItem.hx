@@ -15,49 +15,46 @@
 
 package xinf.ul.list;
 
-import xinf.erno.Renderer;
-import xinf.ul.Label;
-import xinf.ul.Container;
+import Xinf;
 import xinf.ul.model.ISettable;
 
-class ListItem<T> extends Label, implements ISettable<T> {
+class ListItem<T> implements ISettable<T> {
     
     var cursor:Bool;
+	var text:Text;
+    var value:T;
     
     public function setCursor( isCursor:Bool ) :Bool {
         if( isCursor!=cursor ) {
             cursor = isCursor;
-            scheduleRedraw();
         }
         return cursor;
     }
     
-    var value:T;
-    
     public function new( ?value:T ) :Void {
-        super( ""+value );
+		text = new Text();
         this.value = value;
         cursor=false;
-        autoSize=false;
     }
     
     public function set( ?value:T ) :Void {
         this.value = value;
-        this.text = if( value==null ) "" else ""+value;
+        text.text = if( value==null ) "" else ""+value;
     }
     
-    public function attachTo( parent:Container ) :Void {
-        parent.attach(this);
+	public function setStyle( style:ElementStyle ) :Void {
+		text.style = style;
+	}
+	
+    public function attachTo( parent:Group ) :Void {
+        parent.attach(text);
     }
-    
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-        if( cursor ) {
-            setStyleFill( g, "cursorColor" );
-            var cs = style.get("cursorSize",3);
-            g.rect( -cs, 0, cs, size.y ); 
-        }
-        setStyleFill( g, "color" );
-        g.text( Math.round(leftOffsetAligned(prefSize.x,style.get("hAlign",0.))), topOffsetAligned(prefSize.y,style.get("vAlign",0.)), text, getStyleTextFormat() );
-    }
+
+	public function moveTo( x:Float, y:Float ) :Void {
+		text.x = x;
+		text.y = y;
+	}
+	
+	public function resize( x:Float, y:Float ) :Void {
+	}
 }

@@ -15,31 +15,30 @@
 
 package xinf.ul.list;
 
-import xinf.event.MouseEvent;
-import xinf.event.KeyboardEvent;
-import xinf.event.ScrollEvent;
-import xinf.event.SimpleEvent;
+import Xinf;
 
-import xinf.ul.Widget;
-import xinf.ul.Pane;
-import xinf.ul.Crop;
-import xinf.ul.VScrollbar;
+import xinf.ul.widget.Widget;
+import xinf.ul.widget.VScrollbar;
 import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
+import xinf.ul.layout.Helper;
 
 class ListView<T> extends Widget {
 
     var model:ListModel<T>;
     var rr:RoundRobin<T,ISettable<T>>;
     
-    var cursor:Pane;
+    var cursor:Rectangle;
     var cropper:Crop;
     var scrollbar:VScrollbar;
     
     var cursorPosition:Int;
     var lastCursorItem:ISettable<T>;
+	var itemStyle:ElementStyle;
     
     public function new( model:ListModel<T>, ?createItem:Void->ISettable<T> ) :Void {
+		itemStyle = new ElementStyle();
+		
         super();
         this.model = model;
         if( createItem==null ) {
@@ -49,46 +48,58 @@ class ListView<T> extends Widget {
         }
 
         cropper = new Crop();
-        attach(cropper);
+        group.attach(cropper);
 
-        rr = new RoundRobin<T,ISettable<T>>( model, createItem );
+        rr = new RoundRobin<T,ISettable<T>>( model, createItem, itemStyle, style );
         cropper.attach( rr );
 
-        cursor = new Pane();
-        cursor.addStyleClass("cursor");
-        cursor.resize( 8, 18 );
-        cursor.moveTo( -100, -100 );
+        cursor = new Rectangle();
+		cursor.width = 8; cursor.height = 18;
+		cursor.x = 0; cursor.y = -100;
+		cursor.style.fill = Color.rgba(0,.5,0,.5);
         cropper.attach( cursor );
 
-        scrollbar = new xinf.ul.VScrollbar();
-        scrollbar.addStyleClass("Scrollbar");
+        scrollbar = new VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
 //        scrollbar.visible=false;
         attach( scrollbar );
 
-        addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
-        addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
-        addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
+        scrollbar.addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
+        scrollbar.addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
         
         setCursor(-2);
     }
     
-    override public function resize( x:Float, y:Float ) :Void {
-        super.resize( x, y );
+    override public function set_size( s:TPoint ) :TPoint {
+        super.set_size( s );
 
-        scrollbar.moveTo( size.x-scrollbar.size.x, 0 );
-        scrollbar.resize( scrollbar.size.x, size.y );
+        scrollbar.position = {  x:size.x-scrollbar.size.x, y:0. };
+        scrollbar.size = { x:scrollbar.size.x, y:size.y };
     
-        var rrs = removePadding( size );
-        cropper.resize( rrs.x, rrs.y );
+		cursor.width = s.x;
+	
+        var rrs = Helper.removePadding( size, style );
+		rrs.x -= scrollbar.size.x;
+        cropper.width = rrs.x;
+		cropper.height = rrs.y;
 
-
-        var itl = innerTopLeft();
-        cropper.moveTo( itl.x, itl.y );
+        var itl = Helper.innerTopLeft( style );
+		cropper.transform = new Translate( itl.x, itl.y );
         rr.resize( rrs.x, rrs.y );
+		
+		return size;
     }
 
+	override public function styleChanged() :Void {
+		super.styleChanged();
+		
+		itemStyle.fontSize = style.fontSize;
+		itemStyle.fontFamily = style.fontFamily;
+		itemStyle.fill = style.textColor;
+    }
+	
     function scrollBy( value:Float ) {
         rr.scrollBy( value );
         updateScrollbar();
@@ -119,7 +130,7 @@ class ListView<T> extends Widget {
     }
 
     function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
-        postEvent( new PickEvent<T>( PickEvent.ITEM_PICKED, model.getItemAt(index), cursorPosition, add, extend ) );
+		postEvent( new PickEvent<T>( untyped PickEvent.ITEM_PICKED, model.getItemAt(index), cursorPosition, add, extend ) );
     }
 
     public function onKeyDown( e:KeyboardEvent ) {
@@ -161,7 +172,7 @@ class ListView<T> extends Widget {
         if( cursorPosition < 0 ) cursorPosition=0;
 
 //        trace("cursor @"+cursorPosition+" ==> "+rr.positionOf( cursorPosition ) );
-        cursor.moveTo( 0, rr.positionOf( cursorPosition ) );
+        cursor.y = rr.positionOf( cursorPosition );
 
         var item = rr.getItem( cursorPosition );
         if( item != null ) item.setCursor(true);

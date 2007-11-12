@@ -15,8 +15,16 @@
 
 package xinf.ul.list;
 
+import Xinf;
 import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
+import xinf.ul.layout.Helper;
+import xinf.ul.ComponentStyle;
+
+/*
+	TODO: when height is not an exact multiple of unit,
+	scroll better.
+*/
 
 /*
       i   rr
@@ -37,23 +45,29 @@ import xinf.ul.model.ISettable;
     to display a long list of values (of type T).
 **/
 
-class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
+class RoundRobin<T,Item:ISettable<T>> extends Group {
 
     var model:ListModel<T>;
     var createItem:Void->Item;
-    
+
+	var itemStyle:ElementStyle;
+	var itemOffset:TPoint;
+
     var n:Int;              // number of slots
     var rr:Array<Item>;     // the round-robin array
     var rrofs:Int;
     var rrstart:Int;
+	
+	public var height:Float; // pixel height of display crop
     
     var unit:Float;         // size of one unit (row height)
     var cOffset:Float;      // current negative offset in rows
     
-    public function new( model:ListModel<T>, createItem:Void->Item, ?unit:Float ) :Void {
+    public function new( model:ListModel<T>, createItem:Void->Item, eStyle:ElementStyle, cStyle:ComponentStyle, ?unit:Float ) :Void {
         super();
         
-        this.model = model;
+		itemStyle = eStyle;
+		this.model = model;
         this.createItem = createItem;
         
         n = 0;
@@ -61,14 +75,18 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
         rrofs = 0;
         rrstart = 0;
         
-        this.unit = if( unit==null ) 20 else unit;
+		if( unit==null ) {
+			var s = Helper.addPadding( style.getTextFormat().textSize("Ag["), cStyle );
+			unit = s.y;
+		}
+		itemOffset = Helper.innerTopLeft( cStyle );
+        this.unit = unit;
         cOffset = 0;
 
     }
 
-    override public function resize( x:Float, y:Float ) :Void {
+	public function resize( x:Float, y:Float ) :Void {
         setup( x, y );
-        super.resize( x, unit*model.getLength() );
     }
     
     function setup( w:Float, total:Float ) :Void {
@@ -77,6 +95,7 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
         if( n != this.n ) {
             for( i in this.n...n ) {
                 var item = createItem();
+				item.setStyle( itemStyle );
                 item.attachTo(this);
                 rr.push( item );
             }
@@ -101,7 +120,7 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
         var i = rrstart;
         var j = 0;
         for( item in rr ) {
-            item.moveTo( 0, pos );
+            item.moveTo( itemOffset.x, itemOffset.y+pos );
             var value = if( i>=model.getLength() ) null else model.getItemAt(i);
             item.set( value );
             i++;
@@ -111,7 +130,7 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
     
     function shiftDown() :Void {
         var item = rr[rrofs];
-        item.moveTo( 0, (rrstart+n)*unit );
+        item.moveTo( itemOffset.x, itemOffset.y + ((rrstart+n)*unit) );
         item.set( model.getItemAt(rrstart+n) );
         
         rrstart++;
@@ -130,7 +149,7 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
 
     public function scrollTo( offset:Float ) :Void {
         cOffset = offset;
-        moveTo( position.x, -(cOffset*unit) );
+		transform = new Translate( 0, -(cOffset*unit) );
         redoAll();
     }
     
@@ -151,14 +170,16 @@ class RoundRobin<T,Item:ISettable<T>> extends xinf.ul.Container {
 
     public function scrollBy( offset:Float ) :Void {
         var ofs = cOffset+offset;
-        ofs = Math.max( 0, Math.min( (model.getLength()-(n-1)), ofs ) );
-        
+        ofs = Math.max( 0, Math.min( (model.getLength()-(n-2)), ofs ) );
+
+            scrollTo( ofs );
+		return; // FIXME
         if( offset >= n ) {
             scrollTo( ofs );
         } else {
             // some items will remain the same. do the robin.
             cOffset = ofs;
-            moveTo( position.x, -(cOffset*unit) );
+			transform = new Translate( 0, -(cOffset*unit) ); 
             while( (rrstart+1) < ofs ) {
                 shiftDown();
             }
