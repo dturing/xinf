@@ -6,6 +6,11 @@ import xinf.event.Event;
 
 class Root {
     private static var mRoot:Document;
+	
+    public static var children(get_children,null) :Iterator<Element>;
+	static function get_children() :Iterator<Element> {
+		return cast mRoot.children;
+	}
 
 	private static function getRoot() :Document {
 		if( mRoot==null ) {

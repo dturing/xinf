@@ -8,6 +8,7 @@ import xinf.geom.Types;
 import xinf.geom.Transform;
 import xinf.style.ElementStyle;
 import xinf.style.Stylable;
+import xinf.style.Selector;
 import xinf.xml.Serializable;
 
 interface Element implements EventDispatcher, implements Serializable, implements Stylable {
@@ -32,13 +33,17 @@ interface Element implements EventDispatcher, implements Serializable, implement
     var transform(default,set_transform):Transform;
 
     /** the element's style **/
-    var style(default,null):ElementStyle;
+    var style(default,default):ElementStyle;
 
     function styleChanged() :Void;
 	function getParentStyle() :xinf.style.Style;
+	function matchSelector( s:Selector ) :Bool;
 
     /** read element data from xml */
     function fromXml( xml:Xml ) :Void;
+	
+	/** called when the document is completely loaded **/
+	function onLoad() :Void;
 
     /** convert the given point from global to local coordinates **/
     function globalToLocal( p:TPoint ) :TPoint;
