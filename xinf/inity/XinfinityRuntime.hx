@@ -56,7 +56,7 @@ class XinfinityRuntime extends Runtime {
 
         root = new GLObject( getNextId() );
 
-         addEventListener( GeometryEvent.STAGE_SCALED, resized );
+		addEventListener( GeometryEvent.STAGE_SCALED, resized );
         
         startFrame();
     }
@@ -133,9 +133,11 @@ class XinfinityRuntime extends Runtime {
         GLUT.setReshapeFunc( function( width:Int, height:Int ) {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
             });
+		/* consumes CPU when window invisible (GLUT problem? see opengl test)
         GLUT.setVisibilityFunc( function( state:Int ) {
                 if( state>0 ) self.changed();
             });
+		*/
         GLUT.setEntryFunc( function( state:Int ) {
                 self.changed();
                 GLUT.postRedisplay();
