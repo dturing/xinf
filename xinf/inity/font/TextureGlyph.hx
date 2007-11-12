@@ -39,14 +39,14 @@ class TextureGlyph extends Glyph {
     }
     
     public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
-        advance = b.advance/(1<<6);
+        advance = Math.round( b.advance/(1<<6) );
         var twidth = 2; while( twidth<b.width+2 ) twidth<<=1;
         var theight = 2; while( theight<b.height+2 ) theight<<=1;
 
         w = b.width/(twidth);
         h = b.height/(theight);
   
-        var by = Math.floor(b.y/(1<<6))/fontHeight;
+        var by = Math.ceil(b.y/(1<<6))/fontHeight;
         y1=-by;
         y2=y1+(b.height/fontHeight);
 

@@ -37,9 +37,17 @@ class Font extends xinf.support.Font {
         
         var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
         if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
-        data = neko.io.File.getContent( file );
-        
-        var font = new Font( data, 12 );
+
+		var font;
+		
+		try {
+			data = neko.io.File.getContent( file );
+			font = new Font( data, 12 );
+		} catch( e:Dynamic ) {
+			trace("Couldn't load font: using bundled Vera");
+			data = neko.io.File.getContent( xinf.support.DLLLoader.getXinfLibPath()+"/../vera.ttf" );
+			font = new Font( data, 12 );
+		}
         
         fonts.set( name, font );
         return font;
@@ -64,7 +72,7 @@ class Font extends xinf.support.Font {
         
         //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
         if( c==null ) {
-            trace("Adding font cache "+this+" sz "+fontSize );
+//            trace("Adding font cache "+this+" sz "+fontSize );
             c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
             cache.set(""+Math.round(fontSize),c);
 
@@ -115,7 +123,7 @@ class Font extends xinf.support.Font {
         GL.pushMatrix();
         
         GL.scale( fontSize, fontSize, 1.0 );
-        GL.translate( .0, ascender, .0 );
+        GL.translate( .0, ascender, .0 ); // FIXME *.9?
 
         GL.pushMatrix(); // for lines.
 

@@ -23,7 +23,7 @@ class XTextFormat extends xinf.erno.TextFormat {
 
     override public function textSize( text:String ) :{ x:Float, y:Float } {
         assureLoaded();
-        return font.textSize( text, size );
+		return font.textSize( text, size );
     }
 
     override public function load() :Void {
