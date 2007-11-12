@@ -898,8 +898,14 @@ extern class GL {
     /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
     public static function texSubImageRGBA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
+    /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
+    public static function texSubImageBGRA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+
     /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*3)"/></nekobind> **/
     public static function texSubImageRGB( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+
+    /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*3)"/></nekobind> **/
+    public static function texSubImageBGR( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
     /** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
     public static function texSubImageGRAY( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
@@ -962,14 +968,14 @@ extern class GL {
     public static function popName( ):Void;
     
     public static var MULTISAMPLE:Int;
-    
+    public static var BGR:Int;
+    public static var BGRA:Int;
+	
     /* OpenGL >1.0 (or so)
     public static var RESCALE_NORMAL:Int;
     public static var CLAMP_TO_EDGE:Int;
     public static var MAX_ELEMENTS_VERTICES:Int;
     public static var MAX_ELEMENTS_INDICES:Int;
-    public static var BGR:Int;
-    public static var BGRA:Int;
     public static var UNSIGNED_BYTE_3_3_2:Int;
     public static var UNSIGNED_BYTE_2_3_3_REV:Int;
     public static var UNSIGNED_SHORT_5_6_5:Int;

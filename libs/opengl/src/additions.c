@@ -18,9 +18,19 @@ void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsi
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
+void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
        glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
+void glTexSubImageBGR( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+       glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_BGR, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
