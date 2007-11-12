@@ -27,6 +27,10 @@ class ElementStyle extends InheritedStyle {
     function get_fill() :Color { return getInheritedProperty("fill",Color); }
     function set_fill( v:Color ) :Color { return setProperty("fill",v); }
 
+    public var fillOpacity(get_fill_opacity,set_fill_opacity):Null<Float>;
+    function get_fill_opacity() :Float { return getInheritedProperty("fill-opacity",Float); }
+    function set_fill_opacity( v:Float ) :Float { return setProperty("fill-opacity",v); }
+
     public var stroke(get_stroke,set_stroke):Color;
     function get_stroke() :Color { return getInheritedProperty("stroke",Color); }
     function set_stroke( v:Color ) :Color { return setProperty("stroke",v); }
@@ -57,7 +61,9 @@ class ElementStyle extends InheritedStyle {
     static function __init__() {
         propertyDefinitions = new Hash<StylePropertyDefinition>();
         for( def in [
+            new BoundedFloatProperty("opacity",0,1,1),
             new ColorProperty("fill"),
+            new BoundedFloatProperty("fill-opacity",0,1,1),
             new ColorProperty("stroke"),
             new UnitFloatProperty("stroke-width"),
             
@@ -66,7 +72,6 @@ class ElementStyle extends InheritedStyle {
             new StringChoiceProperty("font-weight", ["normal","bold"] ),
             
             new EnumProperty<Visibility>("visibility", Visibility ),
-            new BoundedFloatProperty("opacity",0,1),
             ] ) {
             
             propertyDefinitions.set( def.name, def );

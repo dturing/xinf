@@ -7,7 +7,8 @@ interface StylePropertyDefinition {
 
     var name:String;
     function parseAndSet( value:String, style:Style ) :Void;
-
+	function getDefault() :Dynamic;
+	
 }
 
 
@@ -27,6 +28,11 @@ class TypedPropertyDefinition<T> implements StylePropertyDefinition {
     override public function parseAndSet( value:String, style:Style ) {
 		throw( "unimplemented" );
     }
+	
+	override public function getDefault() :Dynamic {
+		throw( "unimplemented" );
+		return null;
+	}
 
 }
 
@@ -40,6 +46,10 @@ class StringProperty extends TypedPropertyDefinition<String> {
 	public function parse( value:String ) :String {
         return StringTools.trim(value);
     }
+
+	override public function getDefault() :Dynamic {
+		return "";
+	}
 
 }
 
@@ -55,6 +65,10 @@ class StringListProperty extends TypedPropertyDefinition<StringList> {
     public function parse( value:String ) :StringList {
         return new StringList( value.split(",") );
     }
+
+	override public function getDefault() :Dynamic {
+		return new StringList( [""] );
+	}
 
 }
 
@@ -79,9 +93,14 @@ class StringChoiceProperty extends TypedPropertyDefinition<String> {
         return null;
     }
 
+	override public function getDefault() :Dynamic {
+		return choices[0];
+	}
+
 }
 
 class EnumProperty<T> extends TypedPropertyDefinition<T> {
+
     var enumClass:Dynamic;
     var def:T;
     
@@ -105,11 +124,26 @@ class EnumProperty<T> extends TypedPropertyDefinition<T> {
         throw("Does not match an Enum value: '"+value+"'");
         return def;
     }
+
+	override public function getDefault() :Dynamic {
+		return def;
+	}
+	
 }
 
+
 class FloatProperty extends TypedPropertyDefinition<Float> {
+
     static var numeric = ~/^([0-9\.]+)$/;
+
+    var def:Float;
     
+    public function new( name:String, ?def:Null<Float> ) {
+        super(name);
+        this.def = def;
+		if( def==null ) this.def=0.;
+    }
+
     override public function parseAndSet( value:String, style:Style ) {
         style.setProperty( name, parse(value) );
     }
@@ -125,16 +159,24 @@ class FloatProperty extends TypedPropertyDefinition<Float> {
 
         return v;
     }
+	
+	override public function getDefault() :Dynamic {
+	if( name=="opacity" ) trace("opacity default: "+def );
+		return def;
+	}
+	
 }
 
+
 class BoundedFloatProperty extends FloatProperty {
+
     static var numeric = ~/^([0-9\.]+)$/;
     
 	var min:Null<Float>;
 	var max:Null<Float>;
 	
-    public function new( name:String, ?min:Null<Float>, ?max:Null<Float> ) {
-        super(name);
+    public function new( name:String, ?min:Null<Float>, ?max:Null<Float>, ?def:Null<Float> ) {
+        super(name,def);
 		this.min = min;
 		this.max = max;
     }
@@ -147,10 +189,13 @@ class BoundedFloatProperty extends FloatProperty {
 
         return v;
     }
+	
 }
 
+
 // FIXME: regard unit!
-class UnitFloatProperty extends TypedPropertyDefinition<Float> {
+class UnitFloatProperty extends FloatProperty {
+
     static var numeric = ~/^([0-9\.]+)$/;
     static var unit = ~/^([0-9\.]+)[\r\n\t ]*([a-zA-Z]+)$/;
 
@@ -158,7 +203,7 @@ class UnitFloatProperty extends TypedPropertyDefinition<Float> {
         style.setProperty( name, parse(value) );
     }
 
-	public function parse( value:String ) :Float {
+	override public function parse( value:String ) :Float {
         var v:Null<Float> = null;
 
         if( unit.match(value) ) {
@@ -173,6 +218,36 @@ class UnitFloatProperty extends TypedPropertyDefinition<Float> {
 
         return v;
     }
+
+}
+
+
+class BorderProperty extends TypedPropertyDefinition<Border> {
+
+	static var whitespace = ~/\W/g;
+	static var numeric = ~/^([0-9\.]+)$/;
+	
+	override public function parseAndSet( value:String, style:Style ) {
+        style.setProperty( name, parse(value) );
+    }
+
+	public function parse( value:String ) :Border {
+		var vs = whitespace.split(value);
+		var v = Lambda.array(Lambda.map( vs, Std.parseFloat ));
+		if( v.length == 4 ) {
+			return new Border( v[0], v[1], v[2], v[3] );
+		} else if( v.length == 2 ) {
+			return new Border( v[0], v[1], v[0], v[1] );
+		} else if( v.length == 1 ) {
+			return new Border( v[0], v[0], v[0], v[0] );
+		} else {
+			return new Border( 0, 0, 0, 0 );
+		}
+	}
+	
+	override public function getDefault() :Dynamic {
+		return new Border(0,0,0,0);
+	}
 
 }
 
@@ -373,5 +448,9 @@ class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
 
         return v;
     }
+
+	override public function getDefault() :Dynamic {
+		return Color.TRANSPARENT;
+	}
 
 }

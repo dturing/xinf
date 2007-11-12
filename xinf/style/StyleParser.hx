@@ -35,4 +35,14 @@ class StyleParser {
             }
         }
     }
+	
+    public static function parseObject( obj:Dynamic, s:Style, defs:Hash<StylePropertyDefinition> ) :Void {
+        for( field in Reflect.fields(obj) ) {
+			var attr = StringTools.replace(field,"_","-");
+            var def = defs.get(attr);
+            if( def!=null ) {
+                s.setProperty( attr, Reflect.field(obj,field) );
+            }
+        }
+    }
 }

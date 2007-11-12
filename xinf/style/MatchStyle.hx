@@ -1,11 +1,16 @@
 
 package xinf.style;
 
+/*
+	TODO: actually match style; associate with stylesheet?
+	change event propagation
+*/
+
 class MatchStyle extends Style {
     var element:Stylable;
     var matchedStyle:Style;
     
-    public function new( e:xinf.style.Stylable ) {
+    public function new( ?e:Stylable ) {
         super();
         element=e;
     // TODO    e.document.styleSheet.addEventListener( StyleEvent.STYLESHEET_CHANGED, rematch );
