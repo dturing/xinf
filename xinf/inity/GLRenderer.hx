@@ -264,6 +264,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     }
 
     override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
+		
         startShape();
         
         if( rx==0 || ry==0 ) {
