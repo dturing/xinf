@@ -172,16 +172,19 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             format.format.color = pen.fillColor.toRGBInt();
             var tf = new flash.text.TextField();
             tf.alpha = pen.fillColor.a;
-            //tf.embedFonts = true;
+			//tf.embedFonts = true;
+	
             tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
             tf.y=y;
             tf.x=x;
             tf.text = text;
-            
+			
             current.addChild(tf);
-        }
+        } else {
+			trace("NULL fillColor for text "+text );
+		}
     }
     
     override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {

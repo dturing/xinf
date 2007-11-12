@@ -38,7 +38,9 @@ class Flash9TextFormat extends xinf.erno.TextFormat {
     override public function load() :Void {
         format = new flash.text.TextFormat();
         format.font = family;
+		if( format.font=="" ) format.font="_sans"; // FIXME
         format.size = size;
+		if( format.size<=0 ) format.size=12; // FIXME
         format.leftMargin = 0;
     }
 }
