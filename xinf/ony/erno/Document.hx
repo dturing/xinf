@@ -23,6 +23,8 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
 import xinf.ony.URL;
+import xinf.style.StyleSheet;
+import xinf.style.ElementStyle;
 
 class Document extends Group, implements xinf.ony.Document {
    static var binding:Binding<xinf.ony.Element>;
@@ -75,7 +77,7 @@ class Document extends Group, implements xinf.ony.Document {
         height=v; return height;
     }
 
-    public var styleSheet(default,null):xinf.style.StyleSheet;
+    public var styleSheet(default,null):StyleSheet<ElementStyle>;
     public var elementsById(default,null):Hash<xinf.ony.Element>;
 
     private var baseURL:URL;
@@ -122,7 +124,7 @@ class Document extends Group, implements xinf.ony.Document {
 
     public function getElementById( id:String ) :xinf.ony.Element {
         var r = elementsById.get(id);
-        if( r==null ) throw("No such Element #"+id );
+        if( r==null ) throw("No such Element #"+id+" - elements: "+elementsById );
         return r;
     }
 
@@ -151,6 +153,15 @@ class Document extends Group, implements xinf.ony.Document {
         document=this;
     }
 
+	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
+        var doc = new Document();
+		var xml = Xml.parse(data);
+		doc.fromXml( xml.firstElement() );
+		doc.onLoad();
+		if( onLoad!=null ) onLoad( doc );
+		return doc;
+	}
+	
     public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
         var doc = new Document();
         doc.style.xmlBase = url_s;
@@ -159,6 +170,7 @@ class Document extends Group, implements xinf.ony.Document {
         url.fetch( function(data) {
                 var xml = Xml.parse(data);
                 doc.fromXml( xml.firstElement() );
+				doc.onLoad();
                 if( onLoad!=null ) onLoad( doc );
             }, function( error ) {
                 throw(error);

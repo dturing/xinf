@@ -18,6 +18,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.Color;
 import xinf.erno.TextFormat;
+import xinf.event.SimpleEvent;
 
 /**
     A simple Xinfony Object displaying a string of text.
@@ -43,7 +44,7 @@ class Text extends Object, implements xinf.ony.Text {
 	public function new() :Void {
 		super();
 		x=y=0;
-		format = TextFormat.getDefault();
+	//	format = TextFormat.getDefault();
 	}
 
     override public function fromXml( xml:Xml ) :Void {
@@ -65,7 +66,7 @@ class Text extends Object, implements xinf.ony.Text {
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
         if( text!=null ) {
-            g.text(x,y-format.size,text,format);
+			g.text(x,y,text,format);
         }
     }
     

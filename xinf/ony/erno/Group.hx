@@ -49,7 +49,16 @@ class Group extends Object, implements xinf.ony.Group {
         super();
         mChildren = new Array<Child>();
     }
-    
+
+    override public function destroy() :Void {
+		// destroy all children
+		for( child in mChildren ) {
+			detach( child );
+			untyped child.destroy(); // FIXME
+		}
+		super.destroy();
+    }
+
     /** attach (add) a child Object<br/>
         Add 'child' to this object's list of mChildren, inserts
         the child into the display hierarchy, similar to addChild in Flash 
@@ -94,7 +103,14 @@ class Group extends Object, implements xinf.ony.Group {
             document.unmarshal( node, this );
         }
     }
-    
+
+	override public function onLoad() :Void {
+		for( child in mChildren ) {
+			child.onLoad();
+		}
+		super.onLoad();
+	}
+
 	public function getChildByName( name:String ) :Element {
 		for( child in children ) {
 			if( child.name == name ) return child;

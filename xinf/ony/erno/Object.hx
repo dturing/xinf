@@ -20,8 +20,13 @@ import xinf.erno.Runtime;
 import xinf.geom.Matrix;
 import xinf.geom.Transform;
 import xinf.event.Event;
+import xinf.event.SimpleEvent;
 import xinf.event.SimpleEventDispatcher;
 import xinf.style.StyleParser;
+import xinf.style.Selector;
+
+// FIXME: remove, only for debug
+import xinf.event.MouseEvent;
 
 /**
     A xinf.ony.Object is a basic Element in the xinfony display
@@ -59,7 +64,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     public var name(default,null):String;
     public var parent(default,null):xinf.ony.Group;
     public var document(default,null):xinf.ony.Document;
-    public var style(default,null):xinf.style.ElementStyle;
+    public var style(default,default):xinf.style.ElementStyle;
     
     public var transform(default,set_transform):Transform;
     private function set_transform( t:Transform ) :Transform {
@@ -126,9 +131,15 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         Everything you do will be in the Object's local coordinate space.
         **/
     public function drawContents( g:Renderer ) :Void {
+		var opacity = style.opacity;
+		if( opacity==null ) opacity=1.;
+		
+		var fillOpacity = style.fillOpacity;
+		if( fillOpacity==null ) fillOpacity=1.;
+		
         var fill = style.fill;
-        if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, fill.a );
-        else g.setFill( 0,0,0,1 );
+		if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, (fillOpacity*opacity) );
+        else g.setFill( 0,1,1,1 );
 
         var stroke = style.stroke;
         var w = style.strokeWidth;
@@ -156,7 +167,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
     
     /**    schedule this Object for redefining it's transformation<br/>
         You should usually not need to call this yourself, the Object will be automatically scheduled
-        when you modify it's transformation (currently, the only way to do this is [moveTo()].
+        when you modify it's transformation.
     **/
     public function scheduleTransform() :Void {
         manager.objectMoved( xid, this );
@@ -202,6 +213,9 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
             transform = TransformParser.parse( xml.get("transform") );
         }
     }
+	
+	public function onLoad() :Void {
+	}
 
     public function styleChanged() :Void {
         scheduleRedraw();
@@ -210,6 +224,11 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
 	public function getParentStyle() :xinf.style.Style {
 		if( parent!=null ) return parent.style;
 		return null;
+	}
+
+	public function matchSelector( s:Selector ) :Bool {
+		// TODO
+		return false;
 	}
 
     /** dispatch the given Event<br/>
@@ -225,7 +244,7 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
                 dispatched=true;
             }
         }
-        if( !dispatched && parent != null ) {
+		if( !dispatched && parent != null ) {
             parent.dispatchEvent(e);
         }
     }
