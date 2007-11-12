@@ -3,7 +3,7 @@ package xinf.test;
 
 import xinf.event.EventDispatcher;
 import xinf.event.EventKind;
-import xinf.event.FrameEvent;
+import Xinf;
 
 class TestCase {
     var next:Void->Void;
@@ -80,7 +80,7 @@ class TestCase {
             
             try {
                 self.cnx.test.shoot.call([ self.iteration++, self.name, self.platform, width, height, targetEquality, expectFail ], function( r:Dynamic ) {
-                        result( r>=targetEquality );
+				        result( r>=targetEquality );
                     } );
             } catch(e:Dynamic) {
                 trace("Cannot make screenshot: "+Std.string(e) );
@@ -119,7 +119,7 @@ class TestCase {
     }
     
     public function cleanFinish( ?passed:Bool ) {
-        var r = X.root();
+        var r = Root;
         for( c in r.children ) {
             r.detach(c);
         }

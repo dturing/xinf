@@ -2,7 +2,7 @@ package xinf.test.svg;
 
 import xinf.test.TestCase;
 import xinf.test.TestShell;
-import xinf.geom.Transform;
+import Xinf;
 
 class SVGTest extends TestCase {
 
@@ -20,15 +20,15 @@ class SVGTest extends TestCase {
 
     override public function test() {
         var self=this;
-        var doc:xinf.ony.Document;
-        doc = X.loadDocument( url, function(d:xinf.ony.Document) {
+        var doc:Document;
+        doc = Document.load( url, function(d:xinf.ony.Document) {
                 if( !self.interactive ) {
                     self.runAtNextFrame( function() {
 					self.assertDisplay( self.cleanFinish, doc.width, doc.height, self.targetEquality );
                     } );
                 } // else just loop on...    
             } );
-        X.root().attach( doc );
+        Root.attach( doc );
     }
 
     override public function toString() :String {
@@ -52,7 +52,7 @@ class SVGTestsuite {
         
         if( runOnly!=null ) {
             #if neko
-            shell.add( new SVGTest( neko.io.File.getContent(runOnly), true ) );
+            shell.add( new SVGTest( "file://"+runOnly ) );
             #end
         } else {
             // FIXME: the first test never works...

@@ -1,6 +1,7 @@
 
 package xinf.test;
 
+import Xinf;
 
 class TestShell {
     public static var serverUrl = "http://localhost:2000/testserver.n";
@@ -62,6 +63,6 @@ class TestShell {
 
         runNextCase();
         
-        X.main();
+        Root.main();
     }
 }
