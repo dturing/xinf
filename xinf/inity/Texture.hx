@@ -50,7 +50,13 @@ class Texture extends ImageData {
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
         
-        var internalFormat = if( cspace==RGB ) GL.RGB else GL.RGBA;
+        var internalFormat = switch( cspace ) {
+				case RGB: GL.RGB;
+				case RGBA: GL.RGBA;
+				case BGR: GL.BGR;
+				case BGRA: GL.BGRA;
+				default: GL.RGBA;
+			}
         
             GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
@@ -80,14 +86,12 @@ class Texture extends ImageData {
             switch( cspace ) {
                 case RGB:
                     GL.texSubImageRGB( texture, pos.x, pos.y, size.x, size.y, data );
+                case BGR:
+                    GL.texSubImageBGR( texture, pos.x, pos.y, size.x, size.y, data );
                 case RGBA:
                     GL.texSubImageRGBA( texture, pos.x, pos.y, size.x, size.y, data );
-					#if gldebug
-						var e:Int = GL.getError();
-						if( e > 0 ) {
-							throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
-						}
-					#end
+                case BGRA:
+                    GL.texSubImageBGRA( texture, pos.x, pos.y, size.x, size.y, data );
                 case GRAY:
                     GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
                 default:
