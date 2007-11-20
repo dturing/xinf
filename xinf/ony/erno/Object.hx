@@ -1,48 +1,11 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.geom.Matrix;
-import xinf.geom.Transform;
-import xinf.event.Event;
-import xinf.event.SimpleEvent;
-import xinf.event.SimpleEventDispatcher;
 import xinf.style.StyleParser;
 import xinf.style.Selector;
 
-// FIXME: remove, only for debug
-import xinf.event.MouseEvent;
-
-/**
-    A xinf.ony.Object is a basic Element in the xinfony display
-    hierarchy.
-    <p>
-        An Object has a position and size that you can set with [moveTo()] and [resize()], 
-        or query at [position] and [size].
-    </p>
-    <p>
-        You will often (maybe indirectly) derive from Object, and override the [drawContents()]
-        method to draw something. Beware that you need to [destroy()] your Object's to free
-        associated resources.
-    </p>
-**/
-
-class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
+class Element extends xinf.ony.Element {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;
@@ -58,7 +21,6 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         return( manager.find(id) );
     }
 
-
     public var xid(default,null):Int;
     public var id(default,null):String;
     public var name(default,null):String;
@@ -73,17 +35,10 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         return transform;
     }
     
-    /** Object constructor<br/>
-        A simple Object will not display anything by itself.
-    **/
     public function new() :Void {
-        super();
-        
-        xid = Runtime.runtime.getNextId();
+        super( Runtime.runtime.getNextId() );
+		
         manager.register( xid, this );
-        transform = new Identity();
-        style = new xinf.style.ElementStyle(this);
-        
         scheduleRedraw();
     }
     
@@ -173,102 +128,8 @@ class Object extends SimpleEventDispatcher, implements xinf.ony.Element {
         manager.objectMoved( xid, this );
     }
 
-    /** convert the given point from global to local coordinates **/
-    public function globalToLocal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
-        var q = { x:p.x, y:p.y };
-        if( parent!=null ) q = parent.globalToLocal(q);
-        return( transform.applyInverse(q) );
-    }
-    
-    public function localToGlobal( p:{ x:Float, y:Float } ) :{ x:Float, y:Float } {
-        var q = { x:p.x, y:p.y };
-        if( parent!=null ) q = parent.localToGlobal(q);
-        return( transform.apply(q) );
-    }
-    
-    public function attachedTo( p:xinf.ony.Group ) {
-        parent=p;
-        document=parent.document;
-        styleChanged(); // FIXME not neccessarily...
-    }
-
-    public function detachedFrom( p:xinf.ony.Group ) {
-        parent=null;
-        document=null;
-    }
-
-    public function fromXml( xml:Xml ) :Void {
-        if( xml.exists("id") ) {
-            id = xml.get("id");
-        }
-        if( xml.exists("name") ) {
-            name = xml.get("name");
-        }
-        if( xml.exists("style") ) {
-            style.parse( xml.get("style") );
-        }
-        style.fromXml( xml );
-        
-        if( xml.exists("transform") ) {
-            transform = TransformParser.parse( xml.get("transform") );
-        }
-    }
-	
-	public function onLoad() :Void {
-	}
-
-    public function styleChanged() :Void {
+    override public function styleChanged() :Void {
         scheduleRedraw();
     }
-	
-	public function getParentStyle() :xinf.style.Style {
-		if( parent!=null ) return parent.style;
-		return null;
-	}
 
-	public function matchSelector( s:Selector ) :Bool {
-		// TODO
-		return false;
-	}
-
-    /** dispatch the given Event<br/>
-        tries to dispatch the given Event to any registered listeners.
-        If no handler is found, 'bubble' the Event - i.e., pass it up to our parent.
-    **/
-    override public function dispatchEvent<T>( e : Event<T> ) :Void {
-        var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
-        var dispatched:Bool = false;
-        if( l != null ) {
-            for( h in l ) {
-                h(e);
-                dispatched=true;
-            }
-        }
-		if( !dispatched && parent != null ) {
-            parent.dispatchEvent(e);
-        }
-    }
-
-    public function toString() :String {
-        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
-    }
-    
-    
-    /* SVG parsing helper function-- should go somewhere else? FIXME */
-    function getFloatProperty( xml:Xml, name:String, ?def:Float ) :Float {
-        if( xml.exists(name) ) return Std.parseFloat(xml.get(name));
-        if( def==null ) def=0;
-        return def;
-    }
-
-    function getBooleanProperty( xml:Xml, name:String, ?def:Bool ) :Bool {
-        if( xml.exists(name) ) {
-            var v = xml.get(name);
-            if( v.toLowerCase()=="true" || v=="1" ) return true;
-            return false;
-        }
-        if( def==null ) def=false;
-        return def;
-    }
-    
 }
