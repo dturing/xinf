@@ -2,11 +2,11 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.style.StyleParser;
-import xinf.style.Selector;
 import xinf.geom.Transform;
+import xinf.event.SimpleEventDispatcher;
+import xinf.style.ElementStyle;
 
-class Element {
+class ElementImpl extends SimpleEventDispatcher {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;
@@ -15,6 +15,17 @@ class Element {
         Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
     public var xid(default,null):Int;
 
+	/** the Element's transformation **/
+    public var transform(default,set_transform):Transform;
+	function set_transform( t:Transform ) :Transform {
+		transform=t;
+		scheduleTransform();
+		return t;
+	}
+
+    /** the Element's style **/
+    public var style(default,default):ElementStyle;
+
 	private static function getManager() :Manager {
         if( _manager == null ) {
             _manager = new Manager();
@@ -22,16 +33,12 @@ class Element {
         return _manager;
     }
 
-    public static function findById(id:Int) :Element {
+    public static function findById(id:Int) :ElementImpl {
         return( manager.find(id) );
-    }
-
-    function set_transform( t:Transform ) :Transform {
-        scheduleTransform();
-        return super.set_transform(t);
     }
     
     public function new() :Void {
+		super();
 		xid = Runtime.runtime.getNextId();
         manager.register( xid, this );
         scheduleRedraw();
@@ -123,7 +130,7 @@ class Element {
         manager.objectMoved( xid, this );
     }
 
-    override public function styleChanged() :Void {
+    public function styleChanged() :Void {
         scheduleRedraw();
     }
 

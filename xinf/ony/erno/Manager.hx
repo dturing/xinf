@@ -22,39 +22,39 @@ import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
 
 /**
-    Xinfony creates one singleton Manager object as a static private member of Object.
+    Xinfony creates one singleton Manager object as a static private member of ElementImpl.
     <p>
-    It keeps a list (actually an IntHash) of all Objects,
+    It keeps a list (actually an IntHash) of all Elements,
     keeps track of changes to their contents or transformation
     and re-draws and re-transforms those that changed, once for each frame
     and using <a href="../erno/Runtime.html">Runtime</a>'s global renderer.
     <p></p>
     It also dispatches MouseEvent.MOUSE_DOWN and ScrollEvent.SCROLL_STEP to the
-    Object whose ID is given in the Event (xinf.erno only knows about IDs, and
+    ElementImpl whose ID is given in the Event (xinf.erno only knows about IDs, and
     has no reference to the actual object).
     </p>
     <p>
-    All public functions on Manager are for use from <a href="Object.html">Object</a>,
+    All public functions on Manager are for use from <a href="ElementImpl.html">ElementImpl</a>,
     there should be no need to "manually" register any object.
-    Use Object.scheduleRedraw() to mark an object as changed.
+    Use ElementImpl.scheduleRedraw() to mark an object as changed.
     </p>
 **/
 class Manager {
     
-    private var objects:IntHash<Object>;
-    private var changed:IntHash<Object>;
-    private var moved:IntHash<Object>;
+    private var objects:IntHash<ElementImpl>;
+    private var changed:IntHash<ElementImpl>;
+    private var moved:IntHash<ElementImpl>;
 
     public function new() :Void {
-        objects = new IntHash<Object>();
-        changed = new IntHash<Object>();
-        moved   = new IntHash<Object>();
+        objects = new IntHash<ElementImpl>();
+        changed = new IntHash<ElementImpl>();
+        moved   = new IntHash<ElementImpl>();
 
         // redraw changed objects each frame
         Runtime.addEventListener( FrameEvent.ENTER_FRAME,
             redrawChanged );
 
-        // dispatch some events to targets (xinferno only knows about IDs, not Objects 
+        // dispatch some events to targets (xinferno only knows about IDs, not Elements 
         Runtime.addEventListener( MouseEvent.MOUSE_DOWN, dispatchToTarget );
         Runtime.addEventListener( MouseEvent.MOUSE_OVER, dispatchToTarget );
         Runtime.addEventListener( MouseEvent.MOUSE_OUT, dispatchToTarget );
@@ -68,7 +68,7 @@ class Manager {
         }
     }
     
-    public function register( id:Int, o:Object ) :Void {
+    public function register( id:Int, o:ElementImpl ) :Void {
         // TODO #if debug, check if already set.
         objects.set(id,o);
     }
@@ -78,11 +78,11 @@ class Manager {
         objects.remove(id);
     }
 
-    public function objectChanged( id:Int, o:Object ) :Void {
+    public function objectChanged( id:Int, o:ElementImpl ) :Void {
         changed.set(id,o);
     }
 
-    public function objectMoved( id:Int, o:Object ) :Void {
+    public function objectMoved( id:Int, o:ElementImpl ) :Void {
         moved.set(id,o);
     }
 
@@ -91,14 +91,14 @@ class Manager {
         var g:Renderer = Runtime.renderer;
         
         var ch = moved;
-        moved = new IntHash<Object>();
+        moved = new IntHash<ElementImpl>();
         for( id in ch.keys() ) {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
         
         var ch = changed;
-        changed = new IntHash<Object>();
+        changed = new IntHash<ElementImpl>();
         for( id in ch.keys() ) {
             ch.get(id).draw( g );
             somethingChanged = true;
@@ -107,7 +107,7 @@ class Manager {
         if( somethingChanged ) Runtime.runtime.changed();
     }
     
-    public function find( id:Int ) :Object {
+    public function find( id:Int ) :ElementImpl {
         return objects.get(id);
     }
     
