@@ -1,66 +1,142 @@
-
 package xinf.ony;
 
 import xinf.event.Event;
 import xinf.event.EventKind;
 import xinf.event.EventDispatcher;
+
 import xinf.geom.Types;
 import xinf.geom.Transform;
-import xinf.style.ElementStyle;
+import xinf.geom.Matrix;
+
 import xinf.style.Stylable;
 import xinf.style.Selector;
+
 import xinf.xml.Serializable;
 
-interface Element implements EventDispatcher, implements Serializable, implements Stylable {
-
-    /** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
-        Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
-    var xid(default,null):Int;
+class Element 
+	extends __ElementImpl,
+	implements Serializable, implements Stylable {
 
     /** textual (SVG) id **/
-    var id(default,null):String;
+    public var id(default,null):String;
 
     /** textual name (name attribute) **/
-    var name(default,null):String;
+    public var name(default,null):String;
 
-    /** Other Object that contains this Object, if any. **/
-    var parent(default,null):Group;
+    /** Group that contains this Element, if any. **/
+    public var parent(default,null):Group;
 
-    /** Document that ultimately contains this Object **/
-    var document(default,null):Document;
+    /** Document that ultimately contains this Element **/
+    public var document(default,null):Document;
 
-    /** the object's transformation **/
-    var transform(default,set_transform):Transform;
+    // transform and style must be declared in ElementImpl
 
-    /** the element's style **/
-    var style(default,default):ElementStyle;
-
-    function styleChanged() :Void;
-	function getParentStyle() :xinf.style.Style;
-	function matchSelector( s:Selector ) :Bool;
-
+    public function new() :Void {
+        super();
+		
+        transform = new Identity();
+        style = new xinf.style.ElementStyle(this);
+	}
+	
     /** read element data from xml */
-    function fromXml( xml:Xml ) :Void;
+    public function fromXml( xml:Xml ) :Void {
+        if( xml.exists("id") ) {
+            id = xml.get("id");
+        }
+        if( xml.exists("name") ) {
+            name = xml.get("name");
+        }
+        if( xml.exists("style") ) {
+            style.parse( xml.get("style") );
+        }
+        style.fromXml( xml );
+        
+        if( xml.exists("transform") ) {
+            transform = TransformParser.parse( xml.get("transform") );
+        }
+    }
 	
 	/** called when the document is completely loaded **/
-	function onLoad() :Void;
+	public function onLoad() :Void {
+	}
 
     /** convert the given point from global to local coordinates **/
-    function globalToLocal( p:TPoint ) :TPoint;
+    public function globalToLocal( p:TPoint ) :TPoint {
+        var q = { x:p.x, y:p.y };
+        if( parent!=null ) q = parent.globalToLocal(q);
+        return( transform.applyInverse(q) );
+    }
     
     /** convert the given point from local to global coordinates **/
-    function localToGlobal( p:TPoint ) :TPoint;
+    public function localToGlobal( p:TPoint ) :TPoint {
+        var q = { x:p.x, y:p.y };
+        if( parent!=null ) q = parent.localToGlobal(q);
+        return( transform.apply(q) );
+    }
 
-    /** hook to do something when attached to a parent Group **/
-    function attachedTo( p:Group ) :Void;
+    /** do something when attached to a parent Group **/
+    public function attachedTo( p:Group ) :Void {
+        parent=p;
+        document=parent.document;
+        styleChanged(); // FIXME not neccessarily...
+    }
 
-    /** hook to do something when detached from a parent Group **/
-    function detachedFrom( p:Group ) :Void;
+    /** do something when detached from a parent Group **/
+    function detachedFrom( p:Group ) :Void {
+        parent=null;
+        document=null;
+    }
 
-    function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void;
-    function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool;
-    /** dispatch the given event to registered listeners **/
-    function dispatchEvent<T>( e : Event<T> ) :Void;
-    function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void;
-    
+    override public function styleChanged() :Void {
+		super.styleChanged();
+	}
+	
+	public function getParentStyle() :xinf.style.Style {
+		if( parent!=null ) return parent.style;
+		return null;
+	}
+
+	public function matchSelector( s:Selector ) :Bool {
+		// TODO
+		return false;
+	}
+
+    public function toString() :String {
+        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
+    }
+
+    /** dispatch the given Event<br/>
+        tries to dispatch the given Event to any registered listeners.
+        If no handler is found, 'bubble' the Event - i.e., pass it up to our parent.
+    **/
+    override public function dispatchEvent<T>( e : Event<T> ) :Void {
+        var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
+        var dispatched:Bool = false;
+        if( l != null ) {
+            for( h in l ) {
+                h(e);
+                dispatched=true;
+            }
+        }
+		if( !dispatched && parent != null ) {
+            parent.dispatchEvent(e);
+        }
+    }
+
+    /* SVG parsing helper function-- should go somewhere else? FIXME */
+    function getFloatProperty( xml:Xml, name:String, ?def:Float ) :Float {
+        if( xml.exists(name) ) return Std.parseFloat(xml.get(name));
+        if( def==null ) def=0;
+        return def;
+    }
+
+    function getBooleanProperty( xml:Xml, name:String, ?def:Bool ) :Bool {
+        if( xml.exists(name) ) {
+            var v = xml.get(name);
+            if( v.toLowerCase()=="true" || v=="1" ) return true;
+            return false;
+        }
+        if( def==null ) def=false;
+        return def;
+    }
 }
