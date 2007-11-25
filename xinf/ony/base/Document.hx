@@ -1,21 +1,24 @@
-package xinf.ony;
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
 import xinf.style.StyleSheet;
 import xinf.style.ElementStyle;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
 
-class Document extends Group {
+import xinf.ony.URL;
+
+class Document extends GroupImpl {
 
     public var x(default,set_x):Float;
     public var y(default,set_y):Float;
     public var width(default,set_width):Float;
     public var height(default,set_height):Float;
     function set_x(v:Float) {
-        x=v; scheduleTransform(); return x;
+        x=v; retransform(); return x;
     }
     function set_y(v:Float) {
-        y=v; scheduleTransform(); return y;
+        y=v; retransform(); return y;
     }
     function set_width(v:Float) {
         width=v; return width;
@@ -25,17 +28,17 @@ class Document extends Group {
     }
 
     public var styleSheet(default,null):StyleSheet<ElementStyle>;
-    public var elementsById(default,null):Hash<xinf.ony.Element>;
+    public var elementsById(default,null):Hash<ElementImpl>;
 	
     public function new() :Void {
         super();
         document=this;
         styleSheet=null;
 		x=y=0.;
-        elementsById = new Hash<xinf.ony.Element>();
+        elementsById = new Hash<ElementImpl>();
     }
 
-    public function getElementById( id:String ) :Element {
+    public function getElementById( id:String ) :ElementImpl {
         var r = elementsById.get(id);
         if( r==null ) throw("No such Element #"+id+" - elements: "+elementsById );
         return r;
@@ -66,12 +69,12 @@ class Document extends Group {
         }
     }
 
-    public function unmarshal( xml:Xml, ?parent:Group ) :Element {
+    public function unmarshal( xml:Xml, ?parent:Group ) :ElementImpl {
         var r = binding.instantiate( xml );
         if( r==null ) return null;
         
         if( parent!=null ) parent.attach(r);
-        untyped r.document = this; // FIXME
+        r.document = this; // FIXME
         
         r.fromXml( xml );
         if( r.id!=null ) {
@@ -80,16 +83,16 @@ class Document extends Group {
         return r;
     }
 
-    override public function attachedTo( p:xinf.ony.Group ) :Void {
+    override public function attachedTo( p:Group ) :Void {
         super.attachedTo(p);
         document=this;
     }
 
-    public static function overrideBinding( nodeName:String, cl:Class<xinf.ony.Element> ) :Void {
+    public static function overrideBinding( nodeName:String, cl:Class<ElementImpl> ) :Void {
         binding.add( nodeName, cl );
     }
     
-    public static function addInstantiator( i:Instantiator<xinf.ony.Element> ) :Void {
+    public static function addInstantiator( i:Instantiator<ElementImpl> ) :Void {
         binding.addInstantiator( i );
     }
 
@@ -118,13 +121,13 @@ class Document extends Group {
         return doc;
     }
 	
-	static var binding:Binding<xinf.ony.Element>;
+	static var binding:Binding<ElementImpl>;
 	static function __init__() :Void {
-        binding = new Binding<xinf.ony.Element>();
+        binding = new Binding<ElementImpl>();
         
         // basic elements
-        binding.add( "g", Group );
-        binding.add( "rect", Rectangle );
+        binding.add( "g", xinf.ony.erno.Group );
+        binding.add( "rect", xinf.ony.erno.Rectangle );
 		/*
         binding.add( "line", Line );
         binding.add( "polygon", Polygon );

@@ -22,7 +22,7 @@ import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
 
 /**
-    Xinfony creates one singleton Manager object as a static private member of ElementImpl.
+    Xinfony creates one singleton Manager object as a static private member of Element.
     <p>
     It keeps a list (actually an IntHash) of all Elements,
     keeps track of changes to their contents or transformation
@@ -30,25 +30,25 @@ import xinf.event.ScrollEvent;
     and using <a href="../erno/Runtime.html">Runtime</a>'s global renderer.
     <p></p>
     It also dispatches MouseEvent.MOUSE_DOWN and ScrollEvent.SCROLL_STEP to the
-    ElementImpl whose ID is given in the Event (xinf.erno only knows about IDs, and
+    Element whose ID is given in the Event (xinf.erno only knows about IDs, and
     has no reference to the actual object).
     </p>
     <p>
-    All public functions on Manager are for use from <a href="ElementImpl.html">ElementImpl</a>,
+    All public functions on Manager are for use from <a href="Element.html">Element</a>,
     there should be no need to "manually" register any object.
-    Use ElementImpl.scheduleRedraw() to mark an object as changed.
+    Use Element.scheduleRedraw() to mark an object as changed.
     </p>
 **/
 class Manager {
     
-    private var objects:IntHash<ElementImpl>;
-    private var changed:IntHash<ElementImpl>;
-    private var moved:IntHash<ElementImpl>;
+    private var objects:IntHash<Element>;
+    private var changed:IntHash<Element>;
+    private var moved:IntHash<Element>;
 
     public function new() :Void {
-        objects = new IntHash<ElementImpl>();
-        changed = new IntHash<ElementImpl>();
-        moved   = new IntHash<ElementImpl>();
+        objects = new IntHash<Element>();
+        changed = new IntHash<Element>();
+        moved   = new IntHash<Element>();
 
         // redraw changed objects each frame
         Runtime.addEventListener( FrameEvent.ENTER_FRAME,
@@ -68,7 +68,7 @@ class Manager {
         }
     }
     
-    public function register( id:Int, o:ElementImpl ) :Void {
+    public function register( id:Int, o:Element ) :Void {
         // TODO #if debug, check if already set.
         objects.set(id,o);
     }
@@ -78,11 +78,11 @@ class Manager {
         objects.remove(id);
     }
 
-    public function objectChanged( id:Int, o:ElementImpl ) :Void {
+    public function objectChanged( id:Int, o:Element ) :Void {
         changed.set(id,o);
     }
 
-    public function objectMoved( id:Int, o:ElementImpl ) :Void {
+    public function objectMoved( id:Int, o:Element ) :Void {
         moved.set(id,o);
     }
 
@@ -91,14 +91,14 @@ class Manager {
         var g:Renderer = Runtime.renderer;
         
         var ch = moved;
-        moved = new IntHash<ElementImpl>();
+        moved = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
         
         var ch = changed;
-        changed = new IntHash<ElementImpl>();
+        changed = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).draw( g );
             somethingChanged = true;
@@ -107,7 +107,7 @@ class Manager {
         if( somethingChanged ) Runtime.runtime.changed();
     }
     
-    public function find( id:Int ) :ElementImpl {
+    public function find( id:Int ) :Element {
         return objects.get(id);
     }
     

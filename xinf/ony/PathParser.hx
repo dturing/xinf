@@ -1,5 +1,4 @@
-
-package xinf.ony.erno;
+package xinf.ony;
 
 import xinf.ony.PathSegment;
 

@@ -4,7 +4,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.event.SimpleEventDispatcher;
 
-class Group extends xinf.ony.Group {
+class Group extends xinf.ony.base.Group {
     
     override public function destroy() :Void {
 		// destroy all children
@@ -14,17 +14,6 @@ class Group extends xinf.ony.Group {
 		}
 		super.destroy();
     }
-
-    override public function attach( child:xinf.ony.Element, ?after:xinf.ony.Element ) :Void {
-		super.attach( child, after );
-		scheduleRedraw();
-    }
-	
-    override public function detach( child:xinf.ony.Element ) :Void {
-		super.detach( child );
-        scheduleRedraw();
-    }
-
 	
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);

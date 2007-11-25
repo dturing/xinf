@@ -19,11 +19,8 @@ import xinf.erno.Renderer;
 
 class Definitions extends Group, implements xinf.ony.Definitions {
 
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-    }
-
     override public function drawContents( g:Renderer ) :Void {
 		// <defs> is just like a Group, but nothing will be drawn.
 	}
+	
 }

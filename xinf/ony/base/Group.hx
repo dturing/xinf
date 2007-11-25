@@ -1,10 +1,11 @@
-package xinf.ony;
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
-class Group extends Element {
+class Group extends ElementImpl {
 
-    public var children(get_children,null) :Iterator<Element>;
-    private var mChildren(default,null):Array<Element>;    
-    function get_children() :Iterator<Element> {
+    public var children(get_children,null) :Iterator<ElementImpl>;
+    private var mChildren(default,null):Array<ElementImpl>;    
+    function get_children() :Iterator<ElementImpl> {
         return mChildren.iterator();
     }
 
@@ -15,7 +16,7 @@ class Group extends Element {
     **/
     public function new() :Void {
         super();
-        mChildren = new Array<Element>();
+        mChildren = new Array<ElementImpl>();
     }
 
     override public function fromXml( xml:Xml ) :Void {
@@ -35,12 +36,12 @@ class Group extends Element {
 
     /** attach (add) a child Object<br/>
         Add 'child' to this object's list of mChildren, inserts
-        the child into the display hierarchy, similar to addElement in Flash 
-        or appendElement in JavaScript/DOM.
+        the child into the display hierarchy, similar to addElementImpl in Flash 
+        or appendElementImpl in JavaScript/DOM.
         The new child will be added at the end of the list, so it will appear
         in front of all current mChildren.
     **/
-    public function attach( child:Element, ?after:Element ) :Void {
+    public function attach( child:ElementImpl, ?after:ElementImpl ) :Void {
         if( after!=null ) {
             // find 'after'
             var pos=-1;
@@ -59,17 +60,17 @@ class Group extends Element {
         
         child.attachedTo( this );
    
-        scheduleRedraw();
+        redraw();
     }
 
     /** detach (remove) a child Object<br/>
         Removes 'child' from this object's list of mChildren. **/
-    public function detach( child:Element ) :Void {
+    public function detach( child:ElementImpl ) :Void {
         mChildren.remove( child );
         child.detachedFrom( this );
     }
 
-	public function getElementByName( name:String ) :Element {
+	public function getElementByName( name:String ) :ElementImpl {
 		for( child in children ) {
 			if( child.name == name ) return child;
 		}
@@ -78,7 +79,7 @@ class Group extends Element {
 	
 	public function getTypedElementByName<T>( name:String, cl:Class<T> ) :T {
 		var r = getElementByName( name );
-		if( !Std.is( r, cl ) ) throw("Element '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+		if( !Std.is( r, cl ) ) throw("ElementImpl '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
         return cast(r);
 	}
 	

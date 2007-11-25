@@ -1,6 +1,6 @@
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
-package xinf.ony;
-
-interface Definitions implements Group {
+class Definitions extends GroupImpl {
 
 }

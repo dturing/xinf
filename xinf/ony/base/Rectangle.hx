@@ -1,6 +1,7 @@
-package xinf.ony;
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
-class Rectangle extends Element {
+class Rectangle extends ElementImpl {
 
     public var x(default,set_x):Float;
     public var y(default,set_y):Float;
@@ -10,26 +11,25 @@ class Rectangle extends Element {
     public var ry(default,set_ry):Float;
 
     private function set_x(v:Float) {
-        x=v; return x;
+        x=v; redraw(); return x;
     }
     private function set_y(v:Float) {
-        y=v; return y;
+        y=v; redraw(); return y;
     }
     private function set_width(v:Float) {
-        width=v; return width;
+        width=v; redraw(); return width;
     }
     private function set_height(v:Float) {
-        height=v; return height;
+        height=v; redraw(); return height;
     }
     private function set_rx(v:Float) {
-        rx=v; return rx;
+        rx=v; redraw(); return rx;
     }
     private function set_ry(v:Float) {
-        ry=v; return ry;
+        ry=v; redraw(); return ry;
     }
 
     public function new() :Void {
-	trace("Rectangle");
         super();
         x=y=width=height=0;
         rx=ry=0.;

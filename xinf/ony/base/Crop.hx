@@ -1,16 +1,27 @@
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
-package xinf.ony;
+class Crop extends GroupImpl {
 
-interface Crop implements Group {
+    public var width(default,set_width):Float;
+    public var height(default,set_height):Float;
 
-    var width(default,set_width):Float;
-    var height(default,set_height):Float;
+    private function set_width(v:Float) {
+        width=v; redraw(); return width;
+    }
+    private function set_height(v:Float) {
+        height=v; redraw(); return height;
+    }
 
-    function attach( o:Element, ?after:Element ) :Void;
-    function detach( o:Element ) :Void;
-    
-    var children(get_children,null) :Iterator<Element>;
-    
-	function getChildByName( name:String ) :Element;
-	function getTypedChildByName<T>( name:String, cl:Class<T> ) :T;
+    public function new() :Void {
+        super();
+        width=height=0;
+    }
+
+    override public function fromXml( xml:Xml ) :Void {
+        super.fromXml(xml);
+        width = getFloatProperty(xml,"width");
+        height = getFloatProperty(xml,"height");
+    }
+
 }

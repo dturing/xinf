@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -20,25 +5,7 @@ import xinf.erno.Color;
 
 import xinf.ony.PathSegment;
 
-
-class Path extends Object, implements xinf.ony.Path  {
-
-    public var segments(default,set_segments):Iterable<PathSegment>;
-
-    private function set_segments(v:Iterable<PathSegment>) {
-        segments=v; scheduleRedraw(); return segments;
-    }
-
-    public function new() :Void {
-        super();
-    }
-
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        if( xml.exists("d") ) {
-            segments = new PathParser().parse(xml.get("d"));
-        }
-    }
+class Path extends xinf.ony.base.Path  {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);

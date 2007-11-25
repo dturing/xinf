@@ -3,10 +3,8 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.geom.Transform;
-import xinf.event.SimpleEventDispatcher;
-import xinf.style.ElementStyle;
 
-class ElementImpl extends SimpleEventDispatcher {
+class Element extends xinf.ony.base.Element {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;
@@ -15,17 +13,6 @@ class ElementImpl extends SimpleEventDispatcher {
         Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
     public var xid(default,null):Int;
 
-	/** the Element's transformation **/
-    public var transform(default,set_transform):Transform;
-	function set_transform( t:Transform ) :Transform {
-		transform=t;
-		scheduleTransform();
-		return t;
-	}
-
-    /** the Element's style **/
-    public var style(default,default):ElementStyle;
-
 	private static function getManager() :Manager {
         if( _manager == null ) {
             _manager = new Manager();
@@ -33,7 +20,7 @@ class ElementImpl extends SimpleEventDispatcher {
         return _manager;
     }
 
-    public static function findById(id:Int) :ElementImpl {
+    public static function findById(id:Int) :Element {
         return( manager.find(id) );
     }
     
@@ -41,7 +28,7 @@ class ElementImpl extends SimpleEventDispatcher {
 		super();
 		xid = Runtime.runtime.getNextId();
         manager.register( xid, this );
-        scheduleRedraw();
+        redraw();
     }
     
     /** Object destructor<br/>
@@ -63,12 +50,11 @@ class ElementImpl extends SimpleEventDispatcher {
     public function reTransform( g:Renderer ) :Void {
         var m = transform.getMatrix();
         g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
-        // TODO g.setTranslation( xid, position.x, position.y );
     }
     
     /** draw the Object to the given [Renderer]<br/>
         You should usually neither call nor override this function,
-        instead, schedule a redraw with [scheduleRedraw()] and 
+        instead, schedule a redraw with [redraw()] and 
         override [drawContents()] to draw stuff.
         **/
     public function draw( g:Renderer ) :Void {
@@ -113,25 +99,12 @@ class ElementImpl extends SimpleEventDispatcher {
         }
     }
 
-    /** schedule this Object for redrawing<br/>
-        The Object will (on JavaScript: <i>should</i>) be redrawn before the next frame is shown to the user.
-        Call this function whenever your Object needs to redraw itself because it's (immediate) content changed
-        - there's no need to call it if anything changes about it's children. 
-    **/
-    public function scheduleRedraw() :Void {
+    override public function redraw() :Void {
         manager.objectChanged( xid, this );
     }
     
-    /**    schedule this Object for redefining it's transformation<br/>
-        You should usually not need to call this yourself, the Object will be automatically scheduled
-        when you modify it's transformation.
-    **/
-    public function scheduleTransform() :Void {
+    override public function retransform() :Void {
         manager.objectMoved( xid, this );
-    }
-
-    public function styleChanged() :Void {
-        scheduleRedraw();
     }
 
 }

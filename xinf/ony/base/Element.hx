@@ -1,20 +1,21 @@
-package xinf.ony;
+package xinf.ony.base;
+import xinf.ony.base.Implementation;
 
 import xinf.event.Event;
 import xinf.event.EventKind;
-import xinf.event.EventDispatcher;
+import xinf.event.SimpleEventDispatcher;
 
 import xinf.geom.Types;
 import xinf.geom.Transform;
 import xinf.geom.Matrix;
 
+import xinf.style.ElementStyle;
 import xinf.style.Stylable;
 import xinf.style.Selector;
 
 import xinf.xml.Serializable;
 
-class Element 
-	extends __ElementImpl,
+class Element extends SimpleEventDispatcher,
 	implements Serializable, implements Stylable {
 
     /** textual (SVG) id **/
@@ -29,7 +30,16 @@ class Element
     /** Document that ultimately contains this Element **/
     public var document(default,null):Document;
 
-    // transform and style must be declared in ElementImpl
+	/** the Element's transformation **/
+    public var transform(default,set_transform):Transform;
+	function set_transform( t:Transform ) :Transform {
+		transform=t;
+		retransform();
+		return t;
+	}
+
+    /** the Element's style **/
+    public var style(default,default):ElementStyle;
 
     public function new() :Void {
         super();
@@ -59,6 +69,45 @@ class Element
 	/** called when the document is completely loaded **/
 	public function onLoad() :Void {
 	}
+	
+    /**    
+		schedule this Object for redefining it's transformation<br/>
+        You should usually not need to call this yourself, 
+		the Object will be automatically scheduled
+        when you modify it's transformation.
+    **/
+	public function retransform() :Void {
+	}
+
+    /** schedule this Object for redrawing<br/>
+        The Object will (on JavaScript: <i>should</i>) be redrawn before the next frame is shown to the user.
+        Call this function whenever your Object needs to redraw itself because it's (immediate) content changed
+        - there's no need to call it if anything changes about it's children. 
+    **/
+	public function redraw() :Void {
+	}
+
+    /** do something when attached to a parent Group **/
+    public function attachedTo( p:Group ) :Void {
+        parent=p;
+        document=parent.document;
+        styleChanged(); // FIXME not neccessarily...
+    }
+
+    /** do something when detached from a parent Group **/
+    function detachedFrom( p:Group ) :Void {
+        parent=null;
+        document=null;
+    }
+
+    public function styleChanged() :Void {
+		redraw();
+	}
+	
+	public function getParentStyle() :xinf.style.Style {
+		if( parent!=null ) return parent.style;
+		return null;
+	}
 
     /** convert the given point from global to local coordinates **/
     public function globalToLocal( p:TPoint ) :TPoint {
@@ -74,36 +123,10 @@ class Element
         return( transform.apply(q) );
     }
 
-    /** do something when attached to a parent Group **/
-    public function attachedTo( p:Group ) :Void {
-        parent=p;
-        document=parent.document;
-        styleChanged(); // FIXME not neccessarily...
-    }
-
-    /** do something when detached from a parent Group **/
-    function detachedFrom( p:Group ) :Void {
-        parent=null;
-        document=null;
-    }
-
-    override public function styleChanged() :Void {
-		super.styleChanged();
-	}
-	
-	public function getParentStyle() :xinf.style.Style {
-		if( parent!=null ) return parent.style;
-		return null;
-	}
-
 	public function matchSelector( s:Selector ) :Bool {
 		// TODO
 		return false;
 	}
-
-    public function toString() :String {
-        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
-    }
 
     /** dispatch the given Event<br/>
         tries to dispatch the given Event to any registered listeners.
@@ -121,6 +144,10 @@ class Element
 		if( !dispatched && parent != null ) {
             parent.dispatchEvent(e);
         }
+    }
+
+    public function toString() :String {
+        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
     }
 
     /* SVG parsing helper function-- should go somewhere else? FIXME */

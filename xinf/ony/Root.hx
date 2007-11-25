@@ -21,7 +21,7 @@ class Root {
 		return mRoot;
 	}
 	
-    public static function attach( o:xinf.ony.Element, ?after:xinf.ony.Element ) :Void {
+    public static function attach( o:Element, ?after:Element ) :Void {
 		getRoot().attach( o, after );
 	}
 	
