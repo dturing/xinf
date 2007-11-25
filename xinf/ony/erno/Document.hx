@@ -3,6 +3,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.ony.URL;
+import xinf.xml.Binding;
 
 class Document extends xinf.ony.base.Document {
 
@@ -23,4 +24,29 @@ class Document extends xinf.ony.base.Document {
     public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
 		return xinf.ony.base.Document.load( url_s, onLoad );
 	}
+	
+	static function __init__() :Void {
+        var binding = new Binding<Element>();
+        
+        // basic elements FIXME: runtime dependant! or *Impl
+        binding.add( "g", Group );
+        binding.add( "rect", Rectangle );
+        binding.add( "line", Line );
+        binding.add( "polygon", Polygon );
+        binding.add( "polyline", Polyline );
+        binding.add( "ellipse", Ellipse );
+        binding.add( "circle", Circle );
+        binding.add( "text", Text );
+        binding.add( "path", Path );
+        binding.add( "image", Image );
+		
+		binding.add( "svg", Document );
+		binding.add( "use", Use );
+        binding.add( "defs", Definitions );
+        /*
+        binding.add( "a", Link );
+        */
+		
+		xinf.ony.base.Document.binding = binding;
+    }
 }

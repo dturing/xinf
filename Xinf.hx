@@ -34,7 +34,9 @@ typedef Polygon = xinf.ony.erno.Polygon
 typedef Polyline = xinf.ony.erno.Polyline
 typedef Text = xinf.ony.erno.Text
 typedef Use = xinf.ony.erno.Use
+typedef Definitions = xinf.ony.erno.Definitions
 
 typedef Crop = xinf.ony.erno.Crop
 
 typedef ElementStyle = xinf.style.ElementStyle;
+

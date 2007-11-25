@@ -122,26 +122,4 @@ class Document extends GroupImpl {
     }
 	
 	static var binding:Binding<ElementImpl>;
-	static function __init__() :Void {
-        binding = new Binding<ElementImpl>();
-        
-        // basic elements FIXME: runtime dependant! or *Impl
-        binding.add( "g", xinf.ony.erno.Group );
-        binding.add( "rect", xinf.ony.erno.Rectangle );
-        binding.add( "line", xinf.ony.erno.Line );
-        binding.add( "polygon", xinf.ony.erno.Polygon );
-        binding.add( "polyline", xinf.ony.erno.Polyline );
-        binding.add( "ellipse", xinf.ony.erno.Ellipse );
-        binding.add( "circle", xinf.ony.erno.Circle );
-        binding.add( "text", xinf.ony.erno.Text );
-        binding.add( "path", xinf.ony.erno.Path );
-        binding.add( "image", xinf.ony.erno.Image );
-		
-		binding.add( "svg", xinf.ony.erno.Document );
-		binding.add( "use", xinf.ony.erno.Use );
-        binding.add( "defs", xinf.ony.erno.Definitions );
-        /*
-        binding.add( "a", Link );
-        */
-    }
 }
