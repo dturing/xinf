@@ -36,7 +36,7 @@ import xinf.event.ScrollEvent;
     <p>
     All public functions on Manager are for use from <a href="Element.html">Element</a>,
     there should be no need to "manually" register any object.
-    Use Element.scheduleRedraw() to mark an object as changed.
+    Use Element.redraw() to mark an object as changed.
     </p>
 **/
 class Manager {
