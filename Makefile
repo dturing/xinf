@@ -11,6 +11,7 @@ REVISION:=$(shell svnversion)
 
 
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
+VERSION_STUB:=xinf/Version.hx
 
 INITYLIBS=cptr opengl xinfinity-support
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
@@ -22,7 +23,7 @@ default: test
 	
 # Example.hx test
 
-test : $(SRC)
+test : $(VERSION_STUB) $(SRC) 
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main Example
 	NEKOPATH=$(NEKOPATH) neko test.n
 	
@@ -35,16 +36,16 @@ js : $(SRC)
 
 #######################################################
 # generate version file
+.PHONY: FORCE
 FORCE:
 
-VERSION_STUB:=xinf/Version.hx
-
-$(VERSION_STUB): support/$(notdir $(VERSION_STUB)).in Makefile FORCE
+$(VERSION_STUB): support/$(notdir $(VERSION_STUB)).in FORCE
 	@sed -e "s/__VERSION__/$(VERSION)/" \
 		-e "s/__REVISION__/$(REVISION)/" \
 		-e "s/__TAGLINE__/$(TAGLINE)/" \
 		-e "s/__DATE__/$(DATE)/" \
 		$< > $@
+	
 	
 ######################
 # xinf haxelib
