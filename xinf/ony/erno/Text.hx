@@ -8,6 +8,11 @@ import xinf.event.SimpleEvent;
 class Text extends xinf.ony.base.Text {
     
     var format:TextFormat;
+	
+	public function new() :Void {
+		super();
+		format = TextFormat.getDefault();
+	}
 
     override public function styleChanged() :Void {
         super.styleChanged();

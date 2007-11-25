@@ -31,6 +31,7 @@ typedef Image = xinf.ony.erno.Image
 typedef Path = xinf.ony.erno.Path
 typedef Line = xinf.ony.erno.Line
 typedef Polygon = xinf.ony.erno.Polygon
+typedef Polyline = xinf.ony.erno.Polyline
 typedef Text = xinf.ony.erno.Text
 typedef Use = xinf.ony.erno.Use
 

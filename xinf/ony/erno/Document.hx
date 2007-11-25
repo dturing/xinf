@@ -20,4 +20,7 @@ class Document extends xinf.ony.base.Document {
         // TODO g.setTranslation( xid, x, y );
     }
 
+    public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
+		return xinf.ony.base.Document.load( url_s, onLoad );
+	}
 }

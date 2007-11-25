@@ -8,6 +8,12 @@ class Example {
 
 	public static function main() {
 	
+		var t = new Text();
+		t.x = 25; t.y = 370;
+		t.text = "xinf "+xinf.Version.version+" '"+xinf.Version.tagline+"' r"+xinf.Version.revision+" built "+xinf.Version.built;
+		t.style.fill = Color.BLACK;
+		Root.attach(t);
+	
 		var g = new Group();
 	
 		var r = new Rectangle();

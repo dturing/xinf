@@ -1,3 +1,14 @@
+#######################################################
+
+PROJECT:=xinf
+VERSION:=0.3.2
+TAGLINE:=iteration 4
+
+DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
+REVISION:=$(shell svnversion)
+
+#######################################################
+
 
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
 
@@ -23,22 +34,12 @@ js : $(SRC)
 
 
 #######################################################
-
-PROJECT:=xinf
-VERSION:=0.3.1
-TAGLINE:=iteration 3
-
-DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
-REVISION:=$(shell svnversion)
-
-
-#######################################################
 # generate version file
 FORCE:
 
 VERSION_STUB:=xinf/Version.hx
 
-$(VERSION_STUB):support/$(notdir $(VERSION_STUB)).in FORCE
+$(VERSION_STUB): support/$(notdir $(VERSION_STUB)).in Makefile FORCE
 	@sed -e "s/__VERSION__/$(VERSION)/" \
 		-e "s/__REVISION__/$(REVISION)/" \
 		-e "s/__TAGLINE__/$(TAGLINE)/" \
@@ -66,7 +67,7 @@ $(HAXELIB_PROJECT).zip: $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	# copy haXe API and Samples
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 
-# cp Xinf.hx $(HAXELIB_PROJECT)/
+	cp Xinf.hx $(HAXELIB_PROJECT)/
 #	svn export samples $(HAXELIB_PROJECT)/samples
 	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
 	
