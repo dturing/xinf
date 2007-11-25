@@ -1,4 +1,3 @@
-
 import xinf.geom.Types;
 
 typedef Color = xinf.erno.Color
@@ -12,6 +11,8 @@ typedef Rotate = xinf.geom.Rotate
 typedef Concatenate = xinf.geom.Concatenate
 typedef Matrix = xinf.geom.Matrix
 
+import xinf.ony.PathSegment;
+
 typedef MouseEvent = xinf.event.MouseEvent
 typedef KeyboardEvent = xinf.event.KeyboardEvent
 typedef FrameEvent = xinf.event.FrameEvent
@@ -20,7 +21,7 @@ typedef SimpleEvent = xinf.event.SimpleEvent
 typedef ScrollEvent = xinf.event.ScrollEvent
 
 typedef Root = xinf.ony.Root
-typedef Element = xinf.ony.erno.Object
+typedef Element = xinf.ony.erno.Element
 typedef Document = xinf.ony.erno.Document
 typedef Group = xinf.ony.erno.Group
 typedef Rectangle = xinf.ony.erno.Rectangle
