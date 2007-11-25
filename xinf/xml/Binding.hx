@@ -15,7 +15,7 @@
 
 package xinf.xml;
 
-class Binding<T:Serializable> {
+class Binding<T> {
     var marshallers:Hash<Class<T>>;
     var instantiators:Array<Instantiator<T>>;
     

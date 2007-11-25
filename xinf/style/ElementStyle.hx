@@ -20,24 +20,24 @@ class ElementStyle extends InheritedStyle {
     function set_visibility( v:Visibility ) :Visibility { return setProperty("visibility",v); }
 
     public var opacity(get_opacity,set_opacity):Null<Float>;
-    function get_opacity() :Float { return getInheritedProperty("opacity",Float); }
-    function set_opacity( v:Float ) :Float { return setProperty("opacity",v); }
+    function get_opacity() :Null<Float> { return getInheritedProperty("opacity",Float); }
+    function set_opacity( v:Null<Float> ) :Null<Float> { return setProperty("opacity",v); }
 
     public var fill(get_fill,set_fill):Color;
     function get_fill() :Color { return getInheritedProperty("fill",Color); }
     function set_fill( v:Color ) :Color { return setProperty("fill",v); }
 
     public var fillOpacity(get_fill_opacity,set_fill_opacity):Null<Float>;
-    function get_fill_opacity() :Float { return getInheritedProperty("fill-opacity",Float); }
-    function set_fill_opacity( v:Float ) :Float { return setProperty("fill-opacity",v); }
+    function get_fill_opacity() :Null<Float> { return getInheritedProperty("fill-opacity",Float); }
+    function set_fill_opacity( v:Null<Float> ) :Null<Float> { return setProperty("fill-opacity",v); }
 
     public var stroke(get_stroke,set_stroke):Color;
     function get_stroke() :Color { return getInheritedProperty("stroke",Color); }
     function set_stroke( v:Color ) :Color { return setProperty("stroke",v); }
 
     public var strokeWidth(get_stroke_width,set_stroke_width):Null<Float>;
-    function get_stroke_width() :Float { return getInheritedProperty("stroke-width",Float); }
-    function set_stroke_width( v:Float ) :Float { return setProperty("stroke-width",v); }
+    function get_stroke_width() :Null<Float> { return getInheritedProperty("stroke-width",Float); }
+    function set_stroke_width( v:Float ) :Null<Float> { return setProperty("stroke-width",v); }
 
     public var fontFamily(get_font_family,set_font_family):StringList;
     function get_font_family() :StringList { return getInheritedProperty("font-family",StringList); }

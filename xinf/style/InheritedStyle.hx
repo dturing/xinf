@@ -3,7 +3,7 @@ package xinf.style;
 
 class InheritedStyle extends MatchStyle {
     override public function getInheritedProperty<T>( name:String, cl:Dynamic ) :T {
-        var v:Dynamic = super.getInheritedProperty(name,cl);
+        var v:T = super.getInheritedProperty(name,cl);
         if( v!=null ) return v;
         
         // FIXME: register for style change? but where to unregister?
@@ -11,7 +11,7 @@ class InheritedStyle extends MatchStyle {
 			var p = element.getParentStyle();
 			if( p!=null ) return p.getInheritedProperty(name,cl);
 		}
-		
+
         return null; //getDefault(name);
     }
 }

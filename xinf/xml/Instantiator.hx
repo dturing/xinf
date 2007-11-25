@@ -15,7 +15,7 @@
 
 package xinf.xml;
 
-class Instantiator<T:Serializable> {
+class Instantiator<T> {
     var myClass : Class<T>;
     public function new( m:Class<T> ) {
         myClass = m;
@@ -30,7 +30,7 @@ class Instantiator<T:Serializable> {
     }
 }
 
-class ByPropertyValue<T:Serializable> extends Instantiator<T> {
+class ByPropertyValue<T> extends Instantiator<T> {
     var propName:String;
     var propValue:String;
     
@@ -45,7 +45,7 @@ class ByPropertyValue<T:Serializable> extends Instantiator<T> {
     }
 }
 
-class HasProperty<T:Serializable> extends Instantiator<T> {
+class HasProperty<T> extends Instantiator<T> {
     var propName:String;
     
     public function new( propName:String, m:Class<T> ) {

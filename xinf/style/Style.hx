@@ -16,7 +16,9 @@ class Style {
 
     public function getProperty<T>( name:String, cl:Dynamic ) :T {
         var v:Dynamic = Reflect.field( style, name );
-        if( Std.is( v, cl ) ) return v;
+        if( Std.is( v, cl ) ) {
+			return v;
+		}
         return null;
     }
 

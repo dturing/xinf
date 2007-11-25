@@ -161,7 +161,8 @@ class FloatProperty extends TypedPropertyDefinition<Float> {
     }
 	
 	override public function getDefault() :Dynamic {
-	if( name=="opacity" ) trace("opacity default: "+def );
+	//if( name=="opacity" ) 
+	trace(name+" default: "+def );
 		return def;
 	}
 	
