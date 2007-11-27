@@ -69,7 +69,7 @@ $(HAXELIB_PROJECT).zip: $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 
 	cp Xinf.hx $(HAXELIB_PROJECT)/
-#	svn export samples $(HAXELIB_PROJECT)/samples
+	svn export samples $(HAXELIB_PROJECT)/samples
 	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
 	
 	# create the final .zip
