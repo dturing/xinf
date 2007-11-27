@@ -96,8 +96,8 @@ class Document extends GroupImpl {
         binding.addInstantiator( i );
     }
 
-	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
-        var doc = new Document();
+	public static function instantiate( data:String, ?onLoad:DocumentImpl->Void ) :DocumentImpl {
+        var doc = new DocumentImpl();
 		var xml = Xml.parse(data);
 		doc.fromXml( xml.firstElement() );
 		doc.onLoad();

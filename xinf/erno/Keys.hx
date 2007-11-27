@@ -64,9 +64,21 @@ class Keys {
             keys.set(39,"right");
             keys.set(40,"down");
         #end
+		
+		#if flash9
+		/*
+			keys.set(187,"+");
+			keys.set(188,",");
+			keys.set(189,"-");
+			keys.set(190,".");
+			*/
+		#end
     }
     
     public static function get( code:Int ) :String {
+		#if flash
+		if( code>=49 && code<=142 ) return String.fromCharCode(code-16);
+		#end
         return( keys.get(code) );
     }
     

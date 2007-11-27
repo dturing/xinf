@@ -21,7 +21,7 @@ class SVGTest extends TestCase {
     override public function test() {
         var self=this;
         var doc:Document;
-        doc = Document.load( url, function(d:xinf.ony.Document) {
+        doc = Document.load( url, function(d:Document) {
                 if( !self.interactive ) {
                     self.runAtNextFrame( function() {
 					self.assertDisplay( self.cleanFinish, doc.width, doc.height, self.targetEquality );

@@ -15,11 +15,16 @@ class Document extends xinf.ony.base.Document {
     public function getBaseURL() :URL {
         return baseURL;
     }
-
+/*
+	FIXME Concatenate( Translate(x,y), transform ) ?
     override public function reTransform( g:Renderer ) :Void {
         g.setTransform( xid, x, y, 1., 0., 0., 1. );
         // TODO g.setTranslation( xid, x, y );
     }
+*/
+	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
+		return xinf.ony.base.Document.instantiate( data, onLoad );
+	}
 
     public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
 		return xinf.ony.base.Document.load( url_s, onLoad );

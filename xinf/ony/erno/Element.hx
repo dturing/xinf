@@ -81,7 +81,7 @@ class Element extends xinf.ony.base.Element {
 		if( fillOpacity==null ) fillOpacity=1.;
 		
         var fill = style.fill;
-		if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, (fillOpacity*opacity) );
+		if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, fill.a*fillOpacity*opacity );
         else g.setFill( 0,1,1,1 );
 
         var stroke = style.stroke;

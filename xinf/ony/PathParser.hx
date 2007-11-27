@@ -34,7 +34,8 @@ class PathParser {
         //   trace("CHAR '"+c+"', STATE "+state);
             if( StringTools.isSpace(c,0) || c=="," ) {  // whitespace
                 endState();
-            } else if( c=="-" ) {            // - (minus)
+				/*
+            } else if( c=="-" ) {            // - (minus) // fixme should trigger new float, except when in exponent like "1.324e-12"
                 switch( state ) {
                     case ParseFloat(f,old):
                         if( f.length==0 ) state=ParseFloat("-",old);
@@ -46,6 +47,7 @@ class PathParser {
                         state=ParseFloat("-",state);
                         pin++;
                 }
+				*/
             } else if( commandReg.match(c) ) {
                 endState();
                 parseCommand(commandReg.matched(0));
@@ -101,7 +103,7 @@ class PathParser {
                 
             case ParseCommand(cmd,nargs):
                 if( args.length==nargs ) {
-    //                trace("COMMAND "+cmd+", args: "+args );
+        //            trace("COMMAND "+cmd+", args: "+args );
                     command( cmd, args );
                     args = new Array<Float>();
                     if( nargs==0 ) state=Empty;
