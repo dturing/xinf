@@ -61,10 +61,18 @@ class Font extends xinf.support.Font {
         var s = Math.round(size<<24);
         super( data, s, s );
         cache = new Hash<GlyphCache>();
-        /*for( size in [ 10, 12, 24, 36 ] ) {
-            var c = new GlyphCache( this, size );
-            cache.set( ""+size, c );
-        }*/
+
+		// FIXME
+        var c = cache.get(""+Math.round(size));
+        if( c==null ) {
+            c = new GlyphCache( this, Math.round(size), size<=12 );
+            cache.set(""+Math.round(size),c);
+		}
+		trace("preload: "+this );
+		for( i in 32...128 ) {
+			c.get(i);
+		}
+		
     }
     
     public function getGlyph( character:Int, fontSize:Float ) :Glyph {
@@ -72,16 +80,8 @@ class Font extends xinf.support.Font {
         
         //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
         if( c==null ) {
-//            trace("Adding font cache "+this+" sz "+fontSize );
             c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
             cache.set(""+Math.round(fontSize),c);
-
-            // FIXME-- getting Cannot load Glyph after 4th time new characters are needed---
-            // thus, preloading all common glyphs (!)
-            for( i in 32...128 ) {
-                c.get(i);
-            }
-
         }
         
         var g = c.get(character);

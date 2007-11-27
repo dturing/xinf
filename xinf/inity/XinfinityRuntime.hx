@@ -121,7 +121,7 @@ class XinfinityRuntime extends Runtime {
     /* internal functions */
     private function initGL() :Void {
         // init GLUT Window
-        GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB ); //| GLUT.DEPTH );
+        GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
         GLUT.createWindow("Xinfinity");
         
         // TODO: set some kind of preferred size (style??)

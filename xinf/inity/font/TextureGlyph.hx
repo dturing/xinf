@@ -30,13 +30,9 @@ class TextureGlyph extends Glyph {
     
     public function new( character:Int, font:Font, size:Int, hint:Bool ) {
         super(10);
-        try {
         var b = font.renderGlyph( character, size<<6, hint );
         setBitmap( b, Math.round(size) );
-        } catch(e:Dynamic) {
-            trace(e);
-        }
-    }
+	}
     
     public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
         advance = Math.round( b.advance/(1<<6) );
