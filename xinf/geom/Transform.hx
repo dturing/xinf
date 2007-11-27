@@ -222,14 +222,14 @@ class TransformParser {
         fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
     */
     static var splitNumbers = ~/[,\r\n\t]/g;
-    static var translate = ~/translate\([ \t\r\n]*([0-9e\.\-]+)[ \t\r\n,]+[ \t\r\n]*([0-9e\.\-]+)[ \t\r\n]*\)/;
-    static var rotate = ~/rotate\(([0-9e\.\-]+)\)/; 
-    static var matrix = ~/matrix\(([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+),([0-9e\.\-]+)\)/;
-    static var scale = ~/scale\(([0-9e\.\-, ]+)\)/;
-    static var skewX = ~/skewX\((\-*[0-9e\.]+)\)/;
-    static var skewY = ~/skewY\((\-*[0-9e\.]+)\)/;
+    static var translate = ~/translate\([ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n,]+[ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n]*\)/;
+    static var rotate = ~/rotate\(([0-9eE\.\-]+)\)/; 
+    static var matrix = ~/matrix\(([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+)\)/;
+    static var scale = ~/scale\(([0-9eE\.\-, ]+)\)/;
+    static var skewX = ~/skewX\((\-*[0-9eE\.]+)\)/;
+    static var skewY = ~/skewY\((\-*[0-9eE\.]+)\)/;
     
-    static var transform = ~/([a-zA-Z]+\([0-9e\.\-, ]+\))/;
+    static var transform = ~/([a-zA-Z]+\([0-9eE\.\-, ]+\))/;
     
     public static function parse( text:String ) :Transform {
         var r:Transform = null;
