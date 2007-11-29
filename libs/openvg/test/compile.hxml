@@ -1,0 +1,5 @@
+-main App
+-neko run.n
+-lib openvg
+-lib opengl
+-lib cptr
