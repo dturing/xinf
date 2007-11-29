@@ -212,7 +212,6 @@ extern class GLU {
     public static function NurbsCurve( nurb:Dynamic, knotCount:Int, knots:Float, stride:Int, control:Float, order:Int, type:Int ):Void;
     public static function NurbsProperty( nurb:Dynamic, property:Int, value:Float ):Void;
     public static function NurbsSurface( nurb:Dynamic, sKnotCount:Int, sKnots:Float, tKnotCount:Int, tKnots:Float, sStride:Int, tStride:Int, control:Float, sOrder:Int, tOrder:Int, type:Int ):Void;
-    public static function Ortho2D( left:Float, right:Float, bottom:Float, top:Float ):Void;
     public static function PartialDisk( quad:Dynamic, inner:Float, outer:Float, slices:Int, loops:Int, start:Float, sweep:Float ):Void;
     // Perspective
     public static function Project( objX:Float, objY:Float, objZ:Float, model:Float, proj:Float, view:Int, winX:Float, winY:Float, winZ:Float ):Int;
@@ -255,7 +254,8 @@ extern class GLU {
     public static function errorString( error:Int ):String;
         
     public static function lookAt( eyeX:Float, eyeY:Float, eyeZ:Float, centerX:Float, centerY:Float, centerZ:Float, upX:Float, upY:Float, upZ:Float ):Void;
-    
+	public static function ortho2D( left:Float, right:Float, bottom:Float, top:Float ):Void;
+        
 /* additions */
     /** <nekobind><cptr name="v" type="double" min-size="(offset+(n*3))"/></nekobind> **/
     public static function verticesOffset( offset:Int, n:Int, v:Dynamic  ) :Void;
