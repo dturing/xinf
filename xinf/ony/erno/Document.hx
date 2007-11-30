@@ -48,6 +48,9 @@ class Document extends xinf.ony.base.Document {
 		binding.add( "svg", Document );
 		binding.add( "use", Use );
         binding.add( "defs", Definitions );
+		
+        binding.add( "linearGradient", xinf.ony.base.LinearGradient );
+        binding.add( "radialGradient", xinf.ony.base.RadialGradient );
         /*
         binding.add( "a", Link );
         */

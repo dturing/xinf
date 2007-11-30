@@ -2,7 +2,11 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
+import xinf.erno.Paint;
 import xinf.geom.Transform;
+import xinf.erno.CapsStyle;
+import xinf.erno.JoinStyle;
+import xinf.ony.base.PaintElement;
 
 class Element extends xinf.ony.base.Element {
     
@@ -75,28 +79,47 @@ class Element extends xinf.ony.base.Element {
         **/
     public function drawContents( g:Renderer ) :Void {
 		var opacity = style.opacity;
-		if( opacity==null ) opacity=1.;
-		
 		var fillOpacity = style.fillOpacity;
-		if( fillOpacity==null ) fillOpacity=1.;
 		
         var fill = style.fill;
-		if( fill!=null ) g.setFill( fill.r, fill.g, fill.b, fill.a*fillOpacity*opacity );
-        else g.setFill( 0,1,1,1 );
+		if( fill!=null ) {
+			switch( fill ) {
+				case URLReference(url):
+					var r = document.getTypedElementByURI( url, PaintElement );
+					if( r==null ) throw("Referenced Paint not found: "+url );
+					g.setFill( r.getPaint(this) );
+				case SolidColor(r,green,b,a):
+					g.setFill( SolidColor(r,green,b,a*fillOpacity*opacity) );
+				default:
+					g.setFill( fill );
+			}
+		} else g.setFill( null );
 
-        var stroke = style.stroke;
+
+		var strokeOpacity = style.strokeOpacity;
+		
+		var stroke = style.stroke;
         var w = style.strokeWidth;
-        if( w==null ) w=1.;
-        if( stroke!=null ) {
-            #if neko
-            // naah. FIXME
-            //    w = localToGlobal( {x:w,y:0.} ).x;
-            #end
-            g.setStroke( stroke.r,stroke.g,stroke.b,stroke.a,w );
-        } else {
-            // maybe: if fill is also null, black!
-            g.setStroke( 0,0,0,0,w );
-        }
+		
+		// TODO: gradients, dash
+		var caps = style.lineCap;
+		var join = style.lineJoin;
+		var miterLimit = style.strokeMiterlimit;
+		var dashArray:Iterable<Float> = null;
+		var dashOffset:Null<Float> = null;
+		
+		if( stroke!=null ) {
+			switch( stroke) {
+				case URLReference(url):
+					var r = document.getTypedElementByURI( url, PaintElement );
+					if( r==null ) throw("Referenced Paint not found: "+url );
+					g.setStroke( r.getPaint(this), w, caps, join, miterLimit, dashArray, dashOffset );
+				case SolidColor(r,green,b,a):
+					g.setStroke( SolidColor(r,green,b,a*strokeOpacity*opacity), w, caps, join, miterLimit, dashArray, dashOffset );
+				default:
+					g.setStroke( stroke, w, caps, join, miterLimit, dashArray, dashOffset );
+			}
+		} else g.setStroke( 0 );
     }
 
     override public function redraw() :Void {
