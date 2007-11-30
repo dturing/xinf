@@ -38,5 +38,5 @@ typedef Definitions = xinf.ony.erno.Definitions
 
 typedef Crop = xinf.ony.erno.Crop
 
-typedef ElementStyle = xinf.style.ElementStyle;
+typedef ElementStyle = xinf.ony.ElementStyle;
 

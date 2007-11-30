@@ -1,7 +1,7 @@
 #######################################################
 
 PROJECT:=xinf
-VERSION:=0.3.2
+VERSION:=0.4.0
 TAGLINE:=iteration 4
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
@@ -13,7 +13,7 @@ REVISION:=$(shell svnversion)
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
 VERSION_STUB:=xinf/Version.hx
 
-INITYLIBS=cptr opengl xinfinity-support
+INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
@@ -69,6 +69,7 @@ $(HAXELIB_PROJECT).zip: $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 
 	cp Xinf.hx $(HAXELIB_PROJECT)/
+	cp xinf/Version.hx $(HAXELIB_PROJECT)/xinf/
 	svn export samples $(HAXELIB_PROJECT)/samples
 	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)
 	

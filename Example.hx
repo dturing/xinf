@@ -1,89 +1,93 @@
 import Xinf;
 
-import Type;
-
-import xinf.ony.PathSegment;
-
 class Example {
-
-	public static function main() {
 	
-		var t = new Text();
-		t.x = 25; t.y = 370;
-		t.text = "xinf "+xinf.Version.version+" '"+xinf.Version.tagline+"' r"+xinf.Version.revision+" built "+xinf.Version.built;
-		t.style.fill = Color.BLACK;
-		Root.attach(t);
+	public function new( ?url:String ) :Void {
 	
 		var g = new Group();
-	
-		var r = new Rectangle();
-		r.width=r.height=100;
-		r.style.fill = Color.BLUE;
-		r.transform = new Translate( 25, 25 );
-		g.attach(r);
-
-		var c = new Circle();
-		c.cx=50; c.cy=50; 
-		c.r=50;
-		c.style.fill = Color.RED;
-		c.transform = new Translate( 150, 25 );
-		g.attach(c);
-
-		var p = new Path();
-		p.segments = [
-			MoveTo( 0, 100 ),
-			CubicTo( 0,50, 50,50, 50, 0 ),
-			QuadraticTo( 100, 0, 100, 100 ),
-			LineTo( 0, 100 ),
-		];
-		p.style.fill = Color.GREEN;
-		p.transform = new Translate( 275, 25 );
-		g.attach(p);
-
-		var p = new Polygon();
-		p.points = [
-			{ x:000., y:050. },
-			{ x:050., y:000. },
-			{ x:050., y:100. },
-			{ x:100., y:050. },
-		];
-		p.style.stroke = Color.RED;
-		p.style.fill = Color.TRANSPARENT;
-		p.style.strokeWidth = 4;
-		p.transform = new Translate( 25, 150 );
-		g.attach(p);
-
-		var l = new Line();
-		l.x1 = l.y1 = 0;
-		l.x2 = l.y2 = 100;
-		l.style.stroke = Color.GREEN;
-		l.style.strokeWidth = 4;
-		l.transform = new Translate( 150, 150 );
-		g.attach(l);
-
-		var e = new Ellipse();
-		e.cx = e.cy = 0;
-		e.rx = 20; e.ry=70;
-		e.style.fill = Color.BLUE;
-		e.transform = new Concatenate(
-						new Rotate( 45 ),
-						new Translate( 275+50, 150+50 ) 
-						);
-		g.attach(e);
-		
 		Root.attach(g);
 		
-		#if neko
-		var u = new Use();
-		u.peer = g;
-		u.transform = new Concatenate(
-						new Scale( .3, .3 ),
-						new Translate( 25, 275 )
-						);
-		Root.attach( u );
-		#end
+		var doc:Document;
+		var stage = {x:100.,y:100.};
+	
+		if( url==null ) {
+			doc = Document.instantiate( Std.resource("test.svg") );
+		} else {
+			doc = Document.load( url );
+		}
+		g.attach( doc );
 
-		Root.main();
+
+		var scale = 1.;
+		var offset={ x:0., y:0. };
+		
+		var trans = function() {
+			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
+			g.transform = new Concatenate( 
+							new Concatenate(
+								new Translate( -doc.width/2, -doc.height/2 ),
+								new Concatenate(
+//									new Scale(  (stage.x/doc.width)*scale, 
+//												(stage.y/doc.height)*scale ),
+									new Scale(  scale, scale ),
+									new Translate(offset.x,offset.y)
+								)
+							),
+							new Translate( stage.x/2, stage.y/2 )
+							);
+		};
+
+		Root.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
+			stage.x=e.x; stage.y=e.y;
+			trans();
+		});
+		
+
+		Root.addEventListener( KeyboardEvent.KEY_DOWN, function(e) {
+			var d=25;
+			trace("key "+e.key );
+			switch( e.key ) {
+				case "up":
+					offset.y += d;
+				case "down":
+					offset.y -= d;
+				case "left":
+					offset.x += d;
+				case "right":
+					offset.x -= d;
+				case "-":
+					scale*=.9;
+				case "+":
+					scale*=1./.9;
+				case "1":
+					offset = { x:0., y:0. };
+					scale = 1;
+			}
+			
+			trans();
+		});
+		
+		Root.addEventListener( MouseEvent.MOUSE_DOWN, function(check) {
+			var upL:Dynamic;
+			var moveL:Dynamic;
+			var old = offset;
+			moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {
+				offset = { x:old.x-(check.x-e.x), y:old.y-(check.y-e.y) };
+				trans();
+			});
+			upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
+				Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
+				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
+			});
+		});
 	}
 	
+	public static function main() :Void {
+		var arg:String;
+		#if neko
+			arg = neko.Sys.args()[0];
+		#end
+		var d = new Example( arg );
+		Root.main();
+	}
 }
