@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.erno;
 
 #if flash
@@ -117,17 +102,17 @@ interface Renderer {
     function clipRect( w:Float, h:Float ) :Void;
 
     /**
-        Set the fill color for following drawing operations. If you specify [null],
+        Set the fill paint for following drawing operations. If you specify [null],
         or leave away the argument, shapes won't be filled.
     **/
-    function setFill( r:Float, g:Float, b:Float, a:Float ) :Void;
+    function setFill( ?paint:Paint ) :Void;
     
     /**
-        Set the stroke (line) color and width (thickness) for following drawing operations. 
+        Set the stroke (line) paint and width (thickness) for following drawing operations. 
         If you specify [null] for c,
         [0] or [null] for width or leave away the arguments, shapes' contours won't be stroked.
     **/
-    function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) :Void;
+    function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
     
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially

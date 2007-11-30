@@ -1,19 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.erno;
+
+import xinf.erno.Paint;
 
 /**
     Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).
@@ -121,10 +108,10 @@ class Color {
         return new Color().fromRGBA(r/255.,g/255.,b/255.,1.0);
     }
 
-    public static var BLACK:Color = new Color().fromRGBInt(0);
-    public static var WHITE:Color = new Color().fromRGBInt(0xffffff);
-    public static var RED:Color = new Color().fromRGBInt(0xff0000);
-    public static var GREEN:Color = new Color().fromRGBInt(0x00ff00);
-    public static var BLUE:Color = new Color().fromRGBInt(0x0000ff);
-    public static var TRANSPARENT:Color = rgba(0,0,0,0);
+    public static var BLACK:Paint = SolidColor(0,0,0,1);
+    public static var WHITE:Paint = SolidColor(1,1,1,1);
+    public static var RED:Paint = SolidColor(1,0,0,1);
+    public static var GREEN:Paint = SolidColor(0,1,0,1);
+    public static var BLUE:Paint = SolidColor(0,0,1,1);
+    public static var TRANSPARENT:Paint = SolidColor(0,0,0,0);
 }

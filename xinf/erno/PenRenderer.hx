@@ -28,18 +28,15 @@ class Pen {
     /**
         current fill color, may be [null].
     **/
-    public var fillColor:Color;
+    public var fill :Paint;
     
-    /**
-        current stroke color, may be [null].
-    **/
-    public var strokeColor:Color;
-
-    /**
-        current stroke width (thickness), may be [null] or 0 to signal no contour
-        should be drawn.
-    **/
-    public var strokeWidth:Float;
+	public var stroke:Paint;
+	public var width:Float;
+	public var caps:CapsStyle;
+	public var join:JoinStyle;
+	public var miterLimit:Float;
+	public var dashArray:Iterable<Float>;
+	public var dashOffset:Float;
 
     /**
         current font family, a comma-separated list of official font family names or
@@ -78,13 +75,22 @@ class Pen {
     **/
     public function clone() :Pen {
         var p = new Pen();
-        p.fillColor = fillColor;
-        p.strokeColor = strokeColor;
-        p.strokeWidth = strokeWidth;
+        
+		p.fill = fill;
+        
+		p.stroke = stroke;
+		p.width = width;
+		p.caps = caps;
+		p.join = join;
+		p.miterLimit = miterLimit;
+		p.dashArray = dashArray;
+		p.dashOffset = dashOffset;
+		
         p.fontFace = fontFace;
         p.fontItalic = fontItalic;
         p.fontBold = fontBold;
         p.fontSize = fontSize;
+		
         return p;
     }
 }
@@ -101,50 +107,35 @@ class Pen {
     </p>
 **/
 // FIXME: does this actually have to be a stack? i dont think so...
-class PenStackRenderer extends BasicRenderer {
+class PenRenderer extends BasicRenderer {
     
     private var pen:Pen;
-    private var pens:Array<Pen>;
 
     public function new() :Void {
         super();
-        pens = new Array<Pen>();
         pen = new Pen();
-    }
-    
-    /**
-        push the current Pen onto the stack.
-        Deriving classes should usually call this from their implementation of [startObject].
-    **/
-    public function pushPen() :Void {
-        pens.push(pen);
-        pen = pen.clone();
-    }
-    
-    /**
-        pop the current Pen from the stack.
-        Deriving classes should usually call this from their implementation of [endObject].
-    **/
-    public function popPen() :Void {
-        pen = pens.pop();
-        if( pen==null ) throw("Pen Stack underflow");
     }
     
     /**
         the implementation of the Renderer setFill method, sets the fillColor of the
         current pen.
     **/
-    override public function setFill( r:Float, g:Float, b:Float, a:Float ) {
-        pen.fillColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
+    override public function setFill( ?paint:Paint ) :Void {
+		pen.fill = paint;
     }
     
     /**
         the implementation of the Renderer setStroke method, sets the strokeColor and
         strokeWidth of the current pen.
     **/
-    override public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
-        pen.strokeColor = if( a>0 ) Color.rgba(r,g,b,a) else null;
-        pen.strokeWidth = width;
+    override public function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+		pen.stroke = paint;
+		pen.width = width;
+		pen.caps = caps;
+		pen.join = join;
+		pen.miterLimit = miterLimit;
+		pen.dashArray = dashArray;
+		pen.dashOffset = dashOffset;
     }
     
     /**
