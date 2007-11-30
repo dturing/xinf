@@ -296,7 +296,7 @@ extern class VG {
 	public static function rotate( angle:Float ) :Void;
 	
 /* Masking and Clearing */
-	public static function mask( mask:Int, operation:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
+	// NYI public static function mask( mask:Int, operation:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
 	public static function clear( x:Int, y:Int, width:Int, height:Int ) :Void;
 	
 /* Paths */
@@ -313,15 +313,15 @@ extern class VG {
 	public static function modifyPathCoords( path:Int, startIndex:Int, numSegments:Int, pathData:String ) :Void;
 	public static function transformPath( path:Int, srcPath:Int ) :Void;
 	public static function interpolatePath( path:Int, startPath:Int, endPath:Int, amount:Float ) :Bool;
-	public static function pathLength( path:Int, startSegment:Int, numSegments:Int ) :Float;
+	// NYI public static function pathLength( path:Int, startSegment:Int, numSegments:Int ) :Float;
 	/** <nekobind>
 		<cptr name="x" type="float" min-size="1"/>
 		<cptr name="y" type="float" min-size="1"/>
 		<cptr name="tangentX" type="float" min-size="1"/>
 		<cptr name="tangentY" type="float" min-size="1"/>
 		</nekobind> **/
-	public static function pointAlongPath( path:Int, startSegment:Int, numSegments:Int,
-									distance:Float, x:String, y:String, tangentX:String, tangentY:String ) :Void;
+	// NYI public static function pointAlongPath( path:Int, startSegment:Int, numSegments:Int,
+	//								distance:Float, x:String, y:String, tangentX:String, tangentY:String ) :Void;
 	/** <nekobind>
 		<cptr name="minX" type="float" min-size="1"/>
 		<cptr name="minY" type="float" min-size="1"/>
@@ -342,10 +342,10 @@ extern class VG {
 	public static function createPaint() :Int;
 	public static function destroyPaint( paint:Int ) :Void;
 	public static function setPaint( paint:Int, paintModes:Int ) :Void;
-	public static function getPaint( paintModes:Int ) :Int;
-	public static function setColor( paint:Int, rgba:Int ) :Void;
-	public static function getColor( paint:Int ) :Int;
-	public static function paintPattern( paint:Int, pattern:Int ) :Void;
+	// NYI public static function getPaint( paintModes:Int ) :Int;
+	// NYI public static function setColor( paint:Int, rgba:Int ) :Void;
+	// NYI public static function getColor( paint:Int ) :Int;
+	// NYI public static function paintPattern( paint:Int, pattern:Int ) :Void;
 
 /* Images */
 	public static function createImage( format:Int, width:Int, height:Int, quality:Int ) :Int;
@@ -355,8 +355,8 @@ extern class VG {
 	public static function imageSubData( image:Int, data:String, stride:Int, format:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
 	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **/
 	public static function getImageSubData( image:Int, data:String, stride:Int, format:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
-	public static function childImage( image:Int, x:Int, y:Int, width:Int, height:Int ) :Int;
-	public static function getParent( image:Int ) :Int;
+	// NYI public static function childImage( image:Int, x:Int, y:Int, width:Int, height:Int ) :Int;
+	// NYI public static function getParent( image:Int ) :Int;
 	public static function copyImage( dst:Int, dx:Int, dy:Int, src:Int, sx:Int, sy:Int, width:Int, height:Int, dither:Bool ) :Void;
 	public static function drawImage( image:Int ) :Void;
 	public static function setPixels( dx:Int, dy:Int, src:Int, sx:Int, sy:Int, width:Int, height:Int ) :Void;
@@ -377,7 +377,7 @@ extern class VG {
 */
 
 /* Hardware Queries */
-	public static function hardwareQuery( type:Int, setting:Int ) :Int;
+	// NYI public static function hardwareQuery( type:Int, setting:Int ) :Int;
 	
 /* Renderer and Extension Information */
 /*VG_API_CALL const VGubyte * vgGetString(VGStringID name);*/

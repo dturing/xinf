@@ -14,12 +14,12 @@ XINF_PKG_PATH:=openvg
 
 # project cflags and libs
 ifeq ($(NEKO_PLATFORM),Mac)
-		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-framework GLUT -framework OpenGL -framework System
+		PROJECT_CFLAGS:=-I/opt/osx/manual/include
+		PROJECT_LIBS:=-framework GLUT -framework OpenGL -framework System -lOpenVG 
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lopengl32 -lglu32 -lglut32
+		PROJECT_LIBS:=-L/opt/mingw/lib -lopengl32 -lglu32 -lOpenVG
 	else
 		PROJECT_CFLAGS:=
 		PROJECT_LIBS:=-lOpenVG
