@@ -11,7 +11,7 @@ class InheritedStyle extends MatchStyle {
 			var p = element.getParentStyle();
 			if( p!=null ) return p.getInheritedProperty(name,cl);
 		}
-
-        return null; //getDefault(name);
+		
+        return getDefault(name);
     }
 }

@@ -1,6 +1,7 @@
 
 package xinf.style;
 
+import xinf.erno.Paint;
 import xinf.erno.Color;
 
 interface StylePropertyDefinition {
@@ -103,11 +104,14 @@ class EnumProperty<T> extends TypedPropertyDefinition<T> {
 
     var enumClass:Dynamic;
     var def:T;
+	var sfx:String;
     
-    public function new( name:String, enumClass:Dynamic, ?def:T ) {
+    public function new( name:String, enumClass:Dynamic, ?suffix:String, ?def:T ) {
         super(name);
         this.enumClass = enumClass;
         this.def = def;
+		this.sfx = suffix;
+		if( this.sfx==null ) this.sfx="";
     }
     
     override public function parseAndSet( value:String, style:Style ) {
@@ -116,8 +120,8 @@ class EnumProperty<T> extends TypedPropertyDefinition<T> {
 	
     public function parse( value:String ) :T {
         for( choice in Type.getEnumConstructs(enumClass) ) {
-            if( choice.toLowerCase() == value ) {
-                var v = untyped Reflect.field(enumClass,choice);
+            if( choice.toLowerCase() == value+sfx ) {
+                var v = Reflect.field(enumClass,choice);
                 return v;
             }
         }
@@ -161,8 +165,6 @@ class FloatProperty extends TypedPropertyDefinition<Float> {
     }
 	
 	override public function getDefault() :Dynamic {
-	//if( name=="opacity" ) 
-	trace(name+" default: "+def );
 		return def;
 	}
 	
@@ -253,8 +255,9 @@ class BorderProperty extends TypedPropertyDefinition<Border> {
 }
 
 
-class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
+class PaintProperty extends TypedPropertyDefinition<xinf.erno.Paint> {
 
+	static var url = ~/url\((.*)\)/i;
     static var hexcolor = ~/^#([0-9a-f]+)$/i;
     static var rgbcolor = ~/^rgb\([\r\n\t ]*([0-9]+)[\r\n\t ]*,[\r\n\t ]*([0-9]+)[\r\n\t ]*,[\r\n\t ]*([0-9]+)[\r\n\t ]*\)$/;
     // TODO: rgb(r,g,b), others?
@@ -263,7 +266,7 @@ class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
     public static function getColorNames() :Hash<Color> {
         if( colorNames==null ) {
             colorNames = new Hash<Color>();
-            colorNames.set( "none", Color.TRANSPARENT );   
+            colorNames.set( "none", Color.rgba(0,0,0,0) );
             
             // SVG colors
             colorNames.set( "aliceblue", Color.rgbI(240,248,255));
@@ -417,12 +420,21 @@ class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
         return colorNames;
     }
  
+	var def:Paint;
+	
+	public function new( name:String, ?def:Paint ) {
+		super(name);
+		this.def=def;
+		if( def==null ) this.def=None;
+	}
+ 
     override public function parseAndSet( value:String, style:Style ) {
         style.setProperty( name, parse(value) );
     }
 	
-	public function parse( value:String ) :Color {
-        var v:Color;
+	public function parse( value:String ) :Paint {
+        var v:Paint;
+		var color:Color;
         
         if( hexcolor.match(value) ) {
             var w = hexcolor.matched(1);
@@ -431,27 +443,31 @@ class ColorProperty extends TypedPropertyDefinition<xinf.erno.Color> {
                 var r = ((c&0xf00)>>8)/0xf;
                 var g = ((c&0x0f0)>>4)/0xf;
                 var b =  (c&0x00f)/0xf;
-                v = new Color().fromRGBA( r,g,b,1.0 );
+                color = new Color().fromRGBA( r,g,b,1.0 );
             } else if( w.length==6 ) {
-                v = new Color().fromRGBInt( Std.parseInt("0x"+w) );
+                color = new Color().fromRGBInt( Std.parseInt("0x"+w) );
             }
         } else if( rgbcolor.match(value) ) {
-            v = Color.rgbI( Std.parseInt( rgbcolor.matched(1) ), 
+            v = SolidColor( Std.parseInt( rgbcolor.matched(1) ), 
                             Std.parseInt( rgbcolor.matched(2) ), 
-                            Std.parseInt( rgbcolor.matched(3) ) );
-        } else if( (v=getColorNames().get(value)) !=null ) {
+                            Std.parseInt( rgbcolor.matched(3) ), 1. );
+		} else if( url.match(value) ) {
+			v = URLReference( url.matched(1) );
+        } else if( (color=getColorNames().get(value)) !=null ) {
             // do nothing more
         } else if( StringTools.trim(value).length==0 ) {
-            v = Color.TRANSPARENT;
+            color = Color.rgba(0,0,0,0);
         }
         
+		if( v==null && color!=null ) v = SolidColor( color.r, color.g, color.b, color.a );
+
         if( v==null ) throw("Not a color: -"+value+"- ("+value.length+")" );
 
         return v;
     }
 
 	override public function getDefault() :Dynamic {
-		return Color.TRANSPARENT;
+		return def;
 	}
 
 }
