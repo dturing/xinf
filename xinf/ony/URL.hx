@@ -62,7 +62,6 @@ class URL {
             url.path = p.join("/");
 			if( p.length>1 ) url.path+="/";
         }
-		trace("self: "+this+", rel: "+rel );
         url.path+=rel;
         return url;
     }
