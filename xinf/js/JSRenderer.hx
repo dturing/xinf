@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.js;
 
 import xinf.erno.Renderer;
@@ -70,15 +55,26 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.position="absolute";
         r.style.left = ""+Math.round(x);
         r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null ) {
-            r.style.background = pen.fillColor.toRGBString();
-            untyped r.style.opacity = pen.fillColor.a;
+        if( pen.fill != null ) {
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					r.style.background = Color.rgb(red,g,b).toRGBString();
+					untyped r.style.opacity = a;
+				default:
+					untyped r.style.opacity = 0;
+			}
         }
-        if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
-            r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
-            r.style.width = ""+Math.round(w+1-(pen.strokeWidth*2));
-            r.style.height = ""+Math.round(h+1-(pen.strokeWidth*2));
-        } else {
+        if( pen.width > 0 && pen.stroke != null ) {
+			switch( pen.stroke ) {
+				case SolidColor(red,g,b,a):
+					// FIXME: a
+					r.style.border = ""+pen.width+"px solid "+Color.rgb(red,g,b).toRGBString();
+					r.style.width = ""+Math.round(w+1-(pen.width*2));
+					r.style.height = ""+Math.round(h+1-(pen.width*2));
+				default:
+					r.style.border = 0;
+			}
+		} else {
             r.style.width = ""+Math.round(w);
             r.style.height = ""+Math.round(h);
         }
@@ -100,9 +96,15 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         r.style.cursor="default";
         if( x!=null ) r.style.left = ""+Math.round(x);
         if( y!=null ) r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null ) {
-            r.style.color = pen.fillColor.toRGBString();
-            untyped r.style.opacity = pen.fillColor.a;
+		
+        if( pen.fill != null ) {
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					r.style.color = Color.rgb(red,g,b).toRGBString();
+					untyped r.style.opacity = a;
+				default:
+					untyped r.style.opacity = 0;
+			}
         }
         /*
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
@@ -137,9 +139,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         
         wrap.appendChild(r);
 		
+		/* FIXME reenable opacity
 		if( pen.fillColor!=null ) {
 			untyped r.style.opacity = pen.fillColor.a;
 		}
+		*/
 			
         current.appendChild(wrap);
     }
