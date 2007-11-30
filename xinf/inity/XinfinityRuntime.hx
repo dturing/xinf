@@ -121,8 +121,8 @@ class XinfinityRuntime extends Runtime {
     /* internal functions */
     private function initGL() :Void {
         // init GLUT Window
-        GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
-        GLUT.createWindow("Xinfinity");
+        GLUT.initDisplayMode( GLUT.RGBA | GLUT.DOUBLE | GLUT.ALPHA | GLUT.STENCIL | GLUT.MULTISAMPLE );
+		GLUT.createWindow("Xinfinity");
         
         // TODO: set some kind of preferred size (style??)
     
@@ -151,6 +151,10 @@ class XinfinityRuntime extends Runtime {
         GL.enable( GL.BLEND );
         GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         GL.shadeModel( GL.FLAT );
+		
+		openvg.VG.createContextSH();
+		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_FASTER );
+		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_BETTER );
     }
 
     private function startFrame() :Void {

@@ -20,6 +20,7 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
+import xinf.erno.Paint;
 
 import opengl.GL;
 import opengl.GLU;
@@ -64,6 +65,34 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         lineTo( cx+p2.x, cy+p2.y );
     }
 
+	function applyFill() {
+		applyFillGL();
+	}
+	
+	function applyFillGL() {
+		if( pen.fill==null ) return;
+		switch( pen.fill ) {
+			case SolidColor(r,g,b,a):
+				GL.color4(r,g,b,a);
+			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
+				trace("Warning: Gradients not yet implemented");
+				var c = stops.iterator().next().color;
+				GL.color4( c.r, c.g, c.b, c.a );
+			default:
+				throw("unimplemented fill paint: "+pen.fill );
+		}
+	}
+
+	function applyStroke() {
+		if( pen.stroke==null ) return;
+		switch( pen.stroke ) {
+			case SolidColor(r,g,b,a):
+				GL.color4(r,g,b,a);
+			default:
+				throw("unimplemented stroke paint: "+pen.stroke );
+		}
+		GL.lineWidth( pen.width );
+	}
 
     // erno.ObjectModelRenderer API
     
@@ -111,13 +140,11 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     
     override public function startObject( id:Int ) {
         super.startObject(id);
-        pushPen();
         current.start();
     }
     
     override public function endObject() {
         current.end();
-        popPen();
         super.endObject();
     }
     
@@ -176,7 +203,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     
     override public function endShape() {
         if( shape==null ) throw("no current Polygon");
-        shape.draw( pen.fillColor, pen.strokeColor, pen.strokeWidth );
+        shape.draw( pen );
         shape = null;
     }
     
@@ -246,13 +273,12 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
         
-        if( pen.fillColor != null ) {
-            GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
+        if( pen.fill != null ) {
+			applyFill();
             GL.rect( x, y, x+w, y+h );
         }
-        if( pen.strokeColor != null && pen.strokeWidth > 0 ) {
-            GL.color4( pen.strokeColor.r, pen.strokeColor.g, pen.strokeColor.b, pen.strokeColor.a );
-            GL.lineWidth( pen.strokeWidth );
+        if( pen.stroke != null && pen.width > 0 ) {
+			applyStroke();
             GL.begin( GL.LINE_STRIP );
                 GL.vertex3( x, y, 0. );
                 GL.vertex3( x+w, y, 0. );
@@ -296,18 +322,19 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         endPath();
         endShape();
     }
-    
-    
  
     override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         format.assureLoaded();
         var font = format.font;
         if( font==null ) trace("NULL font");
-        if( pen.fillColor != null && font != null ) {
+        if( pen.fill != null && font != null ) {
             GL.pushMatrix();
                 GL.translate( x, y, 0 );
-                GL.color4( pen.fillColor.r, pen.fillColor.g, pen.fillColor.b, pen.fillColor.a );
-                font.renderText( text, format.size, null );
+                applyFillGL();
+				GL.enable(GL.BLEND);
+				font.renderText( text, format.size, null );
+				GL.disable(GL.BLEND);
+                
             GL.popMatrix();
         }
     }
@@ -325,10 +352,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         var x2:Float = outRegion.w+x;
         var y2:Float = outRegion.h+y;
 
-        if( pen.fillColor!=null ) 
-			GL.color4( 1., 1., 1., pen.fillColor.a );
-		else
-			GL.color4( 1., 1., 1., 1. );
+//		applyFill();
+		GL.color4(1,1,1,1);
 
         GL.pushAttrib( GL.ENABLE_BIT );
             GL.enable( GL.TEXTURE_2D );

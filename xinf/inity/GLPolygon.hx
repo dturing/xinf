@@ -23,6 +23,8 @@ import cptr.CPtr;
 
 import xinf.geom.Types;
 import xinf.erno.Color;
+import xinf.erno.PenRenderer;
+import xinf.erno.Paint;
 
 class GLContour {
     
@@ -92,15 +94,6 @@ class GLPolygon {
     public function setPixelSize( s:Float ) :Void {
         pixelSize = s;
     }
-
-    /* these would construct/end myself!
-    public function startShape() {
-        throw("unimplemented");
-    }
-    public function endShape() {
-        throw("unimplemented");
-    }
-    */
     
     public function startPath( x:Float, y:Float) {
         contour = new GLContour(x,y,pixelSize);
@@ -182,35 +175,37 @@ class GLPolygon {
         }
     }
     
-    public function draw( fill:Color, stroke:Color, width:Float ) :Void {
+    public function draw( pen:Pen ) :Void {
         var coords = makeCPtr();
 
-        if( fill != null ) {
-            GL.color4( fill.r, fill.g, fill.b, fill.a );
-            drawTesselated( coords );
-            
-            #if gldebug
-                var e:Int = GL.getError();
-                if( e > 0 ) {
-                    throw( "OpenGL Error: "+GLU.errorString(e) );
-                }
-            #end
-        }
-        
-        if( width>0 && stroke != null ) {
-            GL.color4( stroke.r, stroke.g, stroke.b, stroke.a );
-            GL.lineWidth( width );
-            GL.pointSize( width );
-
-            drawOutline( coords );
-            
-            #if gldebug
-                var e:Int = GL.getError();
-                if( e > 0 ) {
-                    throw( "OpenGL Error: "+GLU.errorString(e) );
-                }
-            #end
-        }
+		if( pen.fill!=null ) {
+			switch( pen.fill ) {
+				case SolidColor(r,g,b,a):
+					GL.color4(r,g,b,a);
+					drawTesselated( coords );
+				default:
+					throw("unimplemented fill: "+pen.fill );
+			}
+		}
+		
+		if( pen.stroke!=null ) {
+			switch( pen.stroke ) {
+				case SolidColor(r,g,b,a):
+					GL.color4(r,g,b,a);
+					GL.lineWidth( pen.width );
+					GL.pointSize( pen.width );
+					drawOutline( coords );
+				default:
+					throw("unimplemented stroke: "+pen.stroke );
+			}
+		}
+		
+		#if gldebug
+			var e:Int = GL.getError();
+			if( e > 0 ) {
+				throw( "OpenGL Error: "+GLU.errorString(e) );
+			}
+		#end
     }
 
     public function drawFilled() :Void {
