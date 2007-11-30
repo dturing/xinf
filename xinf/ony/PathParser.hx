@@ -31,15 +31,17 @@ class PathParser {
         
         while( pin<input.length ) {
             var c = input.charAt(pin);
-        //   trace("CHAR '"+c+"', STATE "+state);
+           // trace("CHAR '"+c+"', STATE "+state);
             if( StringTools.isSpace(c,0) || c=="," ) {  // whitespace
                 endState();
-				/*
-            } else if( c=="-" ) {            // - (minus) // fixme should trigger new float, except when in exponent like "1.324e-12"
+			} else if( c=="-" ) {            // - (minus) // fixme should trigger new float, except when in exponent like "1.324e-12"
                 switch( state ) {
                     case ParseFloat(f,old):
                         if( f.length==0 ) state=ParseFloat("-",old);
-                        else {
+						else if( f.charAt(f.length-1)=="e" ) {
+							state=ParseFloat(f+c,old);
+							pin++;
+                        } else {
                             endState();
                             state=ParseFloat("-",state);
                         }
@@ -47,8 +49,7 @@ class PathParser {
                         state=ParseFloat("-",state);
                         pin++;
                 }
-				*/
-            } else if( commandReg.match(c) ) {
+			} else if( commandReg.match(c) ) {
                 endState();
                 parseCommand(commandReg.matched(0));
             } else {
@@ -90,7 +91,7 @@ class PathParser {
     }
     
     function endState() {
-    //   trace("SWITCH "+state );
+       //trace("END "+state );
         switch( state ) {
         
             case Empty:
