@@ -42,7 +42,7 @@ ifeq ($(NEKO_PLATFORM),Mac)
 		OSX_SDK:=/opt/osx/MacOSX10.4u.sdk/
 		NEKO_CFLAGS:=-I/opt/osx/manual/include/neko -DNEKO_OSX
 		NEKO_LIBS:=-dynamiclib -L/opt/osx/manual/lib -lneko
-		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include 
+		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include -fshort-enums -fpack-struct -lSystemStubs
 		PLATFORM_CFLAGS+=-isysroot $(OSX_SDK) -Wl,-syslibroot,$(OSX_SDK)
 
 default: $(TARGETS)
