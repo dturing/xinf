@@ -2,7 +2,7 @@ package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
 import xinf.style.StyleSheet;
-import xinf.style.ElementStyle;
+import xinf.ony.ElementStyle;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
 
@@ -40,7 +40,7 @@ class Document extends GroupImpl {
 
     public function getElementById( id:String ) :ElementImpl {
         var r = elementsById.get(id);
-        if( r==null ) throw("No such Element #"+id+" - elements: "+elementsById );
+        if( r==null ) throw("No such Element #"+id );
         return r;
     }
 
@@ -49,6 +49,20 @@ class Document extends GroupImpl {
 		if( !Std.is( r, cl ) ) throw("Element #"+id+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
         return cast(r);
     }
+	
+	public function getElementByURI( uri:String ) :ElementImpl {
+		var u = uri.split("#");
+		if( u.length!=2 ) throw("invalid URI, or URI doesn't include fragment identifier: "+uri );
+		if( u[0] != "" ) throw("full URIs are not yet supported");
+		var id = u[1];
+		return getElementById( id );
+	}
+	
+	public function getTypedElementByURI<T>( uri:String, cl:Class<T> ) :T {
+        var r = getElementByURI( uri );
+		if( !Std.is( r, cl ) ) throw("Element "+uri+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+        return cast(r);
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

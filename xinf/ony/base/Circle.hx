@@ -1,6 +1,8 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
+import xinf.geom.Types;
+
 class Circle extends ElementImpl {
 
     public var cx(default,set_cx):Float;
@@ -16,6 +18,10 @@ class Circle extends ElementImpl {
     function set_r(v:Float) {
         r=v; redraw(); return r;
     }
+
+	override public function getBoundingBox() : TRectangle {
+		return { l:cx-r, t:cy-r, r:cx+r, b:cy+r };
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

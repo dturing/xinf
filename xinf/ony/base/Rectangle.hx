@@ -1,6 +1,8 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
+import xinf.geom.Types;
+
 class Rectangle extends ElementImpl {
 
     public var x(default,set_x):Float;
@@ -34,6 +36,14 @@ class Rectangle extends ElementImpl {
         x=y=width=height=0;
         rx=ry=0.;
     }
+
+	override public function getBoundingBox() : TRectangle {
+		return { l:x, t:y, r:x+width, b:y+height };
+	}
+	
+	override public function toString() :String {
+		return "RECTANGLE";
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

@@ -1,6 +1,8 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
+import xinf.geom.Types;
+
 class Line extends ElementImpl {
 
     public var x1(default,set_x1):Float;
@@ -25,6 +27,10 @@ class Line extends ElementImpl {
         super();
         x1=y1=x2=y2=0;
     }
+
+	override public function getBoundingBox() : TRectangle {
+		return { l:x1, t:y1, r:x2, b:y2 };
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

@@ -3,6 +3,7 @@ import xinf.ony.base.Implementation;
 
 import xinf.geom.Types;
 
+/* FIXME: overlap with Polygon; inherit? */
 class Polyline extends ElementImpl  {
 
     public var points(default,set_points):Iterable<TPoint>;
@@ -14,6 +15,23 @@ class Polyline extends ElementImpl  {
         super();
         points = null;
     }
+
+	override function getBoundingBox() : TRectangle {
+		var pi = points.iterator();
+		if( !pi.hasNext() ) {
+			return { l:0., t:0., r:0., b:0. };
+		}
+		var p = pi.next();
+		var xmin=p.x, xmax=p.x, ymin=p.y, ymax=p.y;
+		while( pi.hasNext() ) {
+			p = pi.next();
+			if( p.x<xmin ) xmin=p.x;
+			if( p.x>xmax ) xmax=p.x;
+			if( p.y<ymin ) ymin=p.y;
+			if( p.y>ymax ) ymax=p.y;
+		}
+		return { l:xmin, t:ymin, r:xmax, b:ymax };
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

@@ -1,6 +1,8 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
+import xinf.geom.Types;
+
 class Ellipse extends ElementImpl {
 
 	public var cx(default,set_cx):Float;
@@ -26,6 +28,10 @@ class Ellipse extends ElementImpl {
         cx=cy=0;
         rx=ry=0;
     }
+
+	override public function getBoundingBox() : TRectangle {
+		return { l:cx-rx, t:cy-ry, r:cx+rx, b:cy+ry };
+	}
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);

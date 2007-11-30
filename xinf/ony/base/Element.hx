@@ -9,7 +9,7 @@ import xinf.geom.Types;
 import xinf.geom.Transform;
 import xinf.geom.Matrix;
 
-import xinf.style.ElementStyle;
+import xinf.ony.ElementStyle;
 import xinf.style.Stylable;
 import xinf.style.Selector;
 
@@ -45,7 +45,7 @@ class Element extends SimpleEventDispatcher,
         super();
 		
         transform = new Identity();
-        style = new xinf.style.ElementStyle(this);
+        style = new ElementStyle(this);
 	}
 	
     /** read element data from xml */
@@ -69,7 +69,13 @@ class Element extends SimpleEventDispatcher,
 	/** called when the document is completely loaded **/
 	public function onLoad() :Void {
 	}
-	
+
+	/** the bounding box of the element **/
+	public function getBoundingBox() : TRectangle {
+		throw("unimplemented");
+		return { l:0., t:0., r:0., b:0. };
+	}
+
     /**    
 		schedule this Object for redefining it's transformation<br/>
         You should usually not need to call this yourself, 

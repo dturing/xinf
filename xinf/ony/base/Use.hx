@@ -22,4 +22,11 @@ class Use extends ElementImpl {
 		redraw();
 		return v;
 	}
+	
+    override public function fromXml( xml:Xml ) :Void {
+        super.fromXml(xml);
+		if( xml.exists("xlink:href") ) 
+			href = xml.get("xlink:href");
+    }
+	
 }
