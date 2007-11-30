@@ -32,10 +32,14 @@ class GlyphCache {
     public function get( character:Int ) {
         var g = glyphs.get(character);
         if( g==null ) {
-//            trace("glyph "+character+" not cached in "+this+" (yet)");
+        //    trace("glyph "+character+" not cached in "+this+" (yet)");
         
-            g = new TextureGlyph( character, font, size, hint );
-            glyphs.set(character,g);
+			try {
+				g = new TextureGlyph( character, font, size, hint );
+				glyphs.set(character,g);
+			} catch(e:Dynamic) {
+				trace(""+e+": "+character);
+			}
         }
         return g;
     }

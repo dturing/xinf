@@ -142,8 +142,9 @@ class GLObject {
                     if( child.hit( transformedPoint, found ) ) childHit=true;
                 }
             }
-    //        trace("HIT: "+id );
-            if( !childHit ) found.push(this);
+            if( !childHit && (children==null || children.length==0 ) )
+                found.push(this);
+//        trace("HIT: "+id );
             return true;
         } 
 //        trace("NO HIT: "+id );

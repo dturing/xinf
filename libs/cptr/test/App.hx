@@ -90,7 +90,7 @@ class TestCPtr extends haxe.unit.TestCase {
 
     function testDouble() {
         var n:Int = 1024;
-        var ptr:Dynamic = CPtr.double_alloc(n);
+        var ptr = CPtr.double_alloc(n);
         
         for( i in 0...n ) {
             CPtr.double_set(ptr,i,i/10);
@@ -101,8 +101,8 @@ class TestCPtr extends haxe.unit.TestCase {
     }
     
     function testIntFromArray() {
-        var n:Int = 1024;
-        var ptr:Dynamic = CPtr.int_alloc(n);
+        var n:Int = 32;
+        var ptr = CPtr.int_alloc(n);
         var a = new Array<Int>();
         
         for( i in 0...n ) {
@@ -116,7 +116,7 @@ class TestCPtr extends haxe.unit.TestCase {
     
     function testIntToArray() {
         var n:Int = 1024;
-        var ptr:Dynamic = CPtr.int_alloc(n);
+        var ptr = CPtr.int_alloc(n);
         var a:Array<Int>;
         
         for( i in 0...n ) {
@@ -127,37 +127,54 @@ class TestCPtr extends haxe.unit.TestCase {
             assertEquals( i*10, a[i] );
         }
     }
-   
-    function testInvalidAssignment() {
-        var ptr:Dynamic = CPtr.double_alloc(2);
-        try {
-            CPtr.double_set( ptr, 2, 1 );
-        } catch( e:Dynamic ) {
-            assertTrue( true );
-            return;
+
+    function testFloatFromArray() {
+        var n:Int = 32;
+        var ptr = CPtr.float_alloc(n);
+        var a = new Array<Float>();
+        
+        for( i in 0...n ) {
+            a[i] = i*10;
         }
-        assertTrue( false );
+        CPtr.float_from_array( ptr, untyped a.__a );
+        for( i in 0...n ) {
+            assertEquals( i*10, CPtr.float_get(ptr,i) );
+        }
+    }
+    
+    function testFloatToArray() {
+        var n:Int = 1024;
+        var ptr = CPtr.float_alloc(n);
+        var a:Array<Int>;
+        
+        for( i in 0...n ) {
+            CPtr.float_set(ptr,i,i*10);
+        }
+        a = CPtr.float_to_array( ptr, 0, n );
+        for( i in 0...n ) {
+            assertEquals( i*10, a[i] );
+        }
     }
 
     function testIndexOutOfBounds() {
-        var ptr:Dynamic = CPtr.double_alloc(2);
+        var ptr = CPtr.double_alloc(2);
         try {
             CPtr.double_set( ptr, 3, 1 );
-        } catch( e:Dynamic ) {
-            assertTrue( true );
+        } catch( e:String ) {
+            assertEquals( "cptr overflow", e );
             return;
         }
         try {
             CPtr.double_set( ptr, -1, 1 );
-        } catch( e:Dynamic ) {
-            assertTrue( true );
+        } catch( e:String ) {
+            assertEquals( "cptr overflow", e );
             return;
         }
         assertTrue( false );
     }
 
     function testCast() {
-        var ptr:Dynamic = CPtr.uint_alloc(1);
+        var ptr = CPtr.uint_alloc(1);
         CPtr.uint_set( ptr, 0, 0xffffffff );
         
         for( i in 0...4 ) {
@@ -166,31 +183,23 @@ class TestCPtr extends haxe.unit.TestCase {
     }
 
     function testAsString() {
-        var ptr:Dynamic = CPtr.short_alloc(2);
+        var ptr = CPtr.short_alloc(2);
         CPtr.uchar_set( ptr, 0, 0x41 );
         CPtr.uchar_set( ptr, 1, 0x42 );
         CPtr.uchar_set( ptr, 2, 0x43 );
         CPtr.uchar_set( ptr, 3, 0x44 );
         
-        assertEquals( untyped "ABCD".__s, CPtr.as_string(ptr) );
+        assertEquals( "ABCD", neko.Lib.nekoToHaxe( ptr ) );
     }
 
     function testFromString() {
-        var ptr:Dynamic = CPtr.from_string(untyped "ABCD".__s);
+        var ptr = neko.Lib.haxeToNeko("ABCD");
         
         assertEquals( 0x41, CPtr.uchar_get(ptr,0) );
         assertEquals( 0x42, CPtr.uchar_get(ptr,1) );
         assertEquals( 0x43, CPtr.uchar_get(ptr,2) );
         assertEquals( 0x44, CPtr.uchar_get(ptr,3) );
     }
-
-    function testVoidNull() {
-        var info:{ size:Int, address:Float } = untyped CPtr.info( CPtr.void_null );
-        assertEquals( 0, info.size );
-        assertEquals( 0., info.address );
-    }
-    
-    // TODO: test bounds checking
 }
 
 class App {

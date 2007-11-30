@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.flash9;
 
 import xinf.erno.Renderer;
@@ -20,20 +5,28 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
+import xinf.erno.Paint;
+
+import xinf.geom.Transform;
+import xinf.geom.Types;
 
 import flash.display.Sprite;
 import flash.display.Graphics;
 import flash.display.LineScaleMode;
 import flash.display.CapsStyle;
 import flash.display.JointStyle;
+import flash.display.GradientType;
+import flash.display.InterpolationMethod;
 
-typedef Primitive = XinfSprite
+typedef FlashSpreadMethod = flash.display.SpreadMethod;
+
+typedef Primitive = Dynamic // FIXME XinfSprite
 
 class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     
     override public function createPrimitive(id:Int) :Primitive {
         // create new object
-        var o = new Primitive();
+        var o = new XinfSprite(); // FIXME Primitive();
         o.xinfId = id;
         return o;
     }
@@ -51,17 +44,17 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 
     /* our part of the drawing protocol */
     
-    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         p.x=0; p.y=0;
         p.transform.matrix = new flash.geom.Matrix( a,b,c,d,x,y );
     }
 
-    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
         p.x = x;
         p.y = y;
     }
 
-    public function clipRect( w:Float, h:Float ) {
+    override public function clipRect( w:Float, h:Float ) {
         var crop = new Sprite();
         var g = crop.graphics;
         g.beginFill( 0xff0000, 1 );
@@ -71,101 +64,198 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         current.mask = crop;
     }
 
-    public function startShape() {
-        if( pen.fillColor != null ) {
-            current.graphics.beginFill( pen.fillColor.toRGBInt() );
-        }
-        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-            current.graphics.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a );
-        }
+	function flashGradient( stops:Iterable<TGradientStop>, spread:SpreadMethod ) {
+		var colors = new Array();
+		var alphas = new Array();
+		var ratios = new Array();
+		var lR=0.;
+		for( stop in stops ) {
+			colors.push(stop.color.toRGBInt());
+			alphas.push(stop.color.a);
+			if( stop.offset < lR ) throw("LinearGradient offset out of sequence");
+			lR = Math.max(0,Math.min(1,stop.offset));
+			ratios.push(lR*255);
+		}
+		var sprd = switch(spread) {
+			case PadSpread: FlashSpreadMethod.PAD;
+			case ReflectSpread: FlashSpreadMethod.REFLECT;
+			case RepeatSpread: FlashSpreadMethod.REPEAT;
+			default: FlashSpreadMethod.PAD;
+		}
+		
+		return {
+			colors:colors, alphas:alphas, ratios:ratios,
+			spread:sprd };
+	}
+
+	function flashLinearGradient( x1:Float, y1:Float, x2:Float, y2:Float ) {
+		var w = x2-x1; var h=y2-y1;
+		var a = Math.atan2(h,w);
+		var vl = Math.sqrt( Math.pow(w,2) + Math.pow(h,2) );
+		
+		var matr = new flash.geom.Matrix();
+		matr.createGradientBox( 1, 1, 0, 0., 0. );
+
+		matr.rotate( a );
+		matr.scale( vl, vl );
+		matr.translate( x1, y1 );
+		
+		return matr;
+	}
+
+	function flashRadialGradient( cx:Float, cy:Float, r:Float, fx:Float, fy:Float ) {
+		var d = r*2;
+		var matr = new flash.geom.Matrix();
+		matr.createGradientBox( d, d, 0, 0., 0. );
+
+		var a = Math.atan2(fy-cy,fx-cx);
+		matr.translate( -cx, -cy );
+		matr.rotate( a );
+		matr.translate( cx, cy );
+		
+		return matr;
+	}
+
+	function applyFill() {
+		switch( pen.fill ) {
+			case None:
+				current.alpha=0;
+		
+			case SolidColor(r,g,b,a):
+				current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt() );
+				
+			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
+				var gr = flashGradient( stops, spread );
+				var matrix = flashLinearGradient( x1,y1,x2,y2 );
+				current.graphics.beginGradientFill( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
+				
+			case PRadialGradient( stops, cx, cy, r, fx, fy, spread ):
+				var gr = flashGradient( stops, spread );
+				var matrix = flashRadialGradient( cx,cy,r,fx,fy );
+				var f = { x:fx-cx, y:fy-cy };
+				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) );
+				focalRatio = focalRatio/r;
+				trace("foc: "+focalRatio );
+//				var focalRatio = .5;
+				current.graphics.beginGradientFill( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
+				
+			default:
+				throw("fill "+pen.fill+" not implemented");
+		}
+	}
+
+	function applyStroke() {
+		var caps:CapsStyle = switch( pen.caps ) {
+			case ButtCaps: CapsStyle.NONE;
+			case RoundCaps: CapsStyle.ROUND;
+			case SquareCaps: CapsStyle.SQUARE;
+			default: CapsStyle.NONE;
+		}
+		var join:JointStyle = switch( pen.join ) {
+			case MiterJoin: JointStyle.MITER;
+			case RoundJoin: JointStyle.ROUND;
+			case BevelJoin: JointStyle.BEVEL;
+			default: JointStyle.MITER;
+		}
+		switch( pen.stroke ) {
+			case None:
+				current.graphics.lineStyle( pen.width, 0xff0000, 0, false );
+			case SolidColor(r,g,b,a):
+				current.graphics.lineStyle( pen.width, Color.rgba(r,g,b,a).toRGBInt(), a, false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
+			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
+				var gr = flashGradient( stops, spread );
+				var matrix = flashLinearGradient( x1,y1,x2,y2 );
+				current.graphics.lineStyle( pen.width, Color.rgba(0,0,0,0).toRGBInt(), 1., false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
+				current.graphics.lineGradientStyle( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
+			default:
+				throw("stroke "+pen.stroke+" not implemented");
+		}
+	}
+
+    override public function startShape() {
+		applyFill();
     }
     
-    public function endShape() {
-        if( pen.fillColor != null ) {
-            current.graphics.endFill();
-        }
+    override public function endShape() {
+		current.graphics.endFill();
     }
     
-    public function startPath( x:Float, y:Float) {
+    override public function startPath( x:Float, y:Float) {
+		applyStroke();
         current.graphics.moveTo(x,y);
     }
     
-    public function endPath() {
-        current.graphics.moveTo(0,0);
+    override public function endPath() {
+        current.graphics.lineStyle( 0, 0, 0 );
     }
     
-    public function close() {
+    override public function close() {
         // FIXME
     }
     
-    public function lineTo( x:Float, y:Float ) {
+    override public function lineTo( x:Float, y:Float ) {
         current.graphics.lineTo(x,y);
     }
     
-    public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+    override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
         current.graphics.curveTo( x1,y1,x,y );
     }
     
-    public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+    override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
         throw("unimplemented");
     }
         
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         var g = current.graphics;
-        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-            g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
-                false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
-        } else {
-            g.lineStyle( 0, 0, 0 );
-            pen.strokeWidth=0;
-        }
-        if( pen.fillColor != null ) {
-            g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
-        } else {
-            g.beginFill( 0, 0 );
-        }
-        g.drawRect( x+(pen.strokeWidth/2),y+(pen.strokeWidth/2),1+w-pen.strokeWidth,1+h-pen.strokeWidth );
+		applyStroke();
+		applyFill();
+        g.drawRect( x,y,w,h );
+        g.endFill();
+    }
+
+    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        var g = current.graphics;
+		applyStroke();
+		applyFill();
+        g.drawRoundRect( x,y,w,h, 2*rx, 2*ry );
         g.endFill();
     }
     
-    public function circle( x:Float, y:Float, r:Float ) {
+    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
         var g = current.graphics;
-        if( pen.strokeColor!=null && pen.strokeWidth>0 ) {
-            g.lineStyle( pen.strokeWidth, pen.strokeColor.toRGBInt(), pen.strokeColor.a,
-                false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER );
-        } else {
-            g.lineStyle( 0, 0, 0 );
-        }
-        if( pen.fillColor != null ) {
-            g.beginFill( pen.fillColor.toRGBInt(), pen.fillColor.a );
-        } else {
-            g.beginFill( 0, 0 );
-        }
-        g.drawCircle( x,y,r );
+        applyStroke();
+		applyFill();
+        g.drawEllipse( x-rx,y-ry,2*rx,2*ry );
         g.endFill();
     }
     
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         format.assureLoaded();
         
         // FIXME: textStyles
-        if( pen.fillColor != null ) {
-            format.format.color = pen.fillColor.toRGBInt();
+		if( pen.fill != null ) {
             var tf = new flash.text.TextField();
-            tf.alpha = pen.fillColor.a;
-            //tf.embedFonts = true;
+			switch( pen.fill ) {
+				case SolidColor(r,g,b,a):
+					format.format.color = Color.rgb(r,g,b).toRGBInt();
+					tf.alpha = a;
+				default:
+					throw("Fill "+pen.fill+" not supported for text");
+			}
+			//tf.embedFonts = true;
+	
             tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
             tf.y=y;
             tf.x=x;
             tf.text = text;
-            
+			
             current.addChild(tf);
-        }
+		}
     }
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         if( img.bitmapData == null ) {
             return;
         }
@@ -180,7 +270,15 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
             bm = new flash.display.Bitmap( bd );
         }
-         
+
+        if( pen.fill!=null ) {
+			switch( pen.fill ) {
+				case SolidColor(r,g,b,a):
+					current.alpha = a;
+				default:
+			}
+		}
+			
      	current.addChild( bm );
      	
      	if( (outRegion != null)  && (outRegion != inRegion) ) {
@@ -191,7 +289,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
      	}
     }
 
-    public function native( o:NativeObject ) {
+    override public function native( o:NativeObject ) {
         current.addChild(o);
     }
     

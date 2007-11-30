@@ -28,11 +28,12 @@ class Flash9EventSource {
     
     private var runtime:Flash9Runtime;
     private var frame:Int;
-    private var currentOver:Int;
+    private var currentOver:Null<Int>;
     
     public function new( r:Flash9Runtime ) :Void {
         runtime = r;
         frame = 0;
+        currentOver = 0;
         
         var stage = flash.Lib.current.stage;
         stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown, false );
@@ -67,7 +68,8 @@ class Flash9EventSource {
     }
     
     private function postMouseEventTo( e:flash.events.MouseEvent, type:EventKind<MouseEvent>, targetId:Int ) :Void {
-        runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), 0, targetId, e.shiftKey, e.altKey, e.ctrlKey ) );
+  //  trace("post Mouse "+type+", to "+targetId );
+        runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), if(e.buttonDown) 1 else 0, targetId, e.shiftKey, e.altKey, e.ctrlKey ) );
         e.stopPropagation();
     }
 
@@ -87,8 +89,9 @@ class Flash9EventSource {
             }
             postMouseEventTo( e, MouseEvent.MOUSE_OVER, targetId );
             currentOver = targetId;
-        } else 
+        } else {
             postMouseEventTo( e, MouseEvent.MOUSE_MOVE, targetId );
+        }
     }
     
     public function mouseWheel( e:flash.events.MouseEvent ) :Void {

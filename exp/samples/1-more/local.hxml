@@ -1,6 +1,0 @@
--main App
--cp ../../
--lib xinf
--neko run.n
--cp ../../theme/green/
-xinf.style.GreenTheme

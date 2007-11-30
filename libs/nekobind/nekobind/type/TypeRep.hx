@@ -115,17 +115,17 @@ class CPtrType extends TypeRep {
     public function cCheckAssign( c:String, n:String ) :String {
         var r = asC()+" "+c+"; ";
         if( nullAllowed ) r += "if( "+n+" == val_null ) "+c+"=NULL; else { ";
-            r += "val_check_kind("+n+", kind_import(\"cptr\") ); ";
+            r += "val_check("+n+", string ); ";
             if( minSize != null ) {
-                r += "val_cptr_check_size( "+n+", "+type+", "+minSize+" ); ";
+                r += "if( val_strlen( "+n+" ) < sizeof("+type+")*"+minSize+" ) val_throw(alloc_string(\"cptr too small\")); ";
             }
-            r+= c+"="+"val_cptr("+n+","+type+"); ";
+            r+= c+"="+"("+type+"*)val_string("+n+"); ";
         if( nullAllowed ) r+="}";
         return r;
     }
 
     public function cNekoAlloc( c:String ) :String {
-        return( "val_throw( alloc_string(\"nekobind cannot return cptrs\") )" );
+        return( "val_throw( alloc_string(\"nekobind functions cannot return cptrs\") )" );
     }
 }
 

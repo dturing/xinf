@@ -4,7 +4,7 @@ SRCS:=$(wildcard nekobind/*.hx nekobind/*/*.hx)
 default: $(BINARY)
 
 $(BINARY): $(SRCS)
-	haxe -neko $(BINARY).n -main nekobind.App -resource cptr.include@cptr.include
+	haxe -neko $(BINARY).n -main nekobind.App
 	nekotools boot $(BINARY).n
 
 .PHONY: test 

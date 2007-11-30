@@ -56,7 +56,7 @@ class XinfinityRuntime extends Runtime {
 
         root = new GLObject( getNextId() );
 
-         addEventListener( GeometryEvent.STAGE_SCALED, resized );
+		addEventListener( GeometryEvent.STAGE_SCALED, resized );
         
         startFrame();
     }
@@ -121,8 +121,8 @@ class XinfinityRuntime extends Runtime {
     /* internal functions */
     private function initGL() :Void {
         // init GLUT Window
-        GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB ); //| GLUT.DEPTH );
-        GLUT.createWindow("Xinfinity");
+        GLUT.initDisplayMode( GLUT.RGBA | GLUT.DOUBLE | GLUT.ALPHA | GLUT.STENCIL | GLUT.MULTISAMPLE );
+		GLUT.createWindow("Xinfinity");
         
         // TODO: set some kind of preferred size (style??)
     
@@ -133,9 +133,11 @@ class XinfinityRuntime extends Runtime {
         GLUT.setReshapeFunc( function( width:Int, height:Int ) {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
             });
+		/* consumes CPU when window invisible (GLUT problem? see opengl test)
         GLUT.setVisibilityFunc( function( state:Int ) {
                 if( state>0 ) self.changed();
             });
+		*/
         GLUT.setEntryFunc( function( state:Int ) {
                 self.changed();
                 GLUT.postRedisplay();
@@ -149,6 +151,10 @@ class XinfinityRuntime extends Runtime {
         GL.enable( GL.BLEND );
         GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         GL.shadeModel( GL.FLAT );
+		
+		openvg.VG.createContextSH();
+		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_FASTER );
+		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_BETTER );
     }
 
     private function startFrame() :Void {
@@ -159,7 +165,7 @@ class XinfinityRuntime extends Runtime {
         GL.matrixMode( GL.MODELVIEW );
         GL.loadIdentity();
 
-        GL.clearColor( 0,0,0,0 );
+        GL.clearColor( 1,1,1,0 );
         GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
             
         // FIXME depends on stage scale mode

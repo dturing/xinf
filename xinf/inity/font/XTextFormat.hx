@@ -21,12 +21,12 @@ class XTextFormat extends xinf.erno.TextFormat {
         super( family, size, bold, italic );
     }
 
-    public function textSize( text:String ) :{ x:Float, y:Float } {
+    override public function textSize( text:String ) :{ x:Float, y:Float } {
         assureLoaded();
-        return font.textSize( text, size );
+		return font.textSize( text, size );
     }
 
-    public function load() :Void {
+    override public function load() :Void {
         super.load();
         try {
             font = Font.getFont( family ); // FIXME: bold, italic?

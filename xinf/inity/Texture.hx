@@ -28,7 +28,7 @@ import xinf.inity.ColorSpace;
 class Texture extends ImageData {
     // texture (id), twidth, theight, width and height are already defined in ImageData.
     
-    public function initialize( w:Int, h:Int ) {
+    public function initialize( w:Int, h:Int, cspace:ColorSpace ) {
         width=w;
         height=h;
         
@@ -39,16 +39,31 @@ class Texture extends ImageData {
         var t:Dynamic = CPtr.uint_alloc(1);
         GL.genTextures(1,t);
         texture = CPtr.uint_get(t,0);
+        var e:Int = GL.getError();
+        if( e > 0 ) { throw("could not create texture"); }
+        
+        /* If this happens, likely the GL context isnt initialized yet. 
+            Might be the cause for white rectangles instead of glyphs in text.. */
+        if( texture>1000000 ) throw("unlikely texture ID: "+texture ); 
+            
 
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
+        
+        var internalFormat = switch( cspace ) {
+				case RGB: GL.RGB;
+				case RGBA: GL.RGBA;
+				case BGR: GL.BGR;
+				case BGRA: GL.BGRA;
+				default: GL.RGBA;
+			}
         
             GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
-            GL.texImage2D( GL.TEXTURE_2D, 0, GL.RGBA, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
+            GL.texImage2D( GL.TEXTURE_2D, 0, internalFormat, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
 
         GL.popAttrib();
         
@@ -66,13 +81,17 @@ class Texture extends ImageData {
         GL.pushAttrib( GL.ENABLE_BIT );
         GL.enable( GL.TEXTURE_2D );
         GL.bindTexture( GL.TEXTURE_2D, texture );
-        
+
         if( data != null ) {
             switch( cspace ) {
                 case RGB:
                     GL.texSubImageRGB( texture, pos.x, pos.y, size.x, size.y, data );
+                case BGR:
+                    GL.texSubImageBGR( texture, pos.x, pos.y, size.x, size.y, data );
                 case RGBA:
                     GL.texSubImageRGBA( texture, pos.x, pos.y, size.x, size.y, data );
+                case BGRA:
+                    GL.texSubImageBGRA( texture, pos.x, pos.y, size.x, size.y, data );
                 case GRAY:
                     GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
                 default:
@@ -85,7 +104,7 @@ class Texture extends ImageData {
         #if gldebug
             var e:Int = GL.getError();
             if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
+                throw( "OpenGL Error trying to set texture #"+texture+": "+GLU.errorString(e) );
             }
         #end
         
@@ -96,7 +115,7 @@ class Texture extends ImageData {
     public static var cache:Hash<Texture> = new Hash<Texture>();
     
     public static function newByName( url:String ) :Texture {
-        try {
+	    try {
             var r = cache.get(url);
             if( r==null ) {
                 var data:String;
@@ -117,14 +136,15 @@ class Texture extends ImageData {
                     }
                 }
                 if( data == null || data.length==0 ) {
-                    throw("could not load: "+url );
+                    throw("Could not load: "+url );
                 }
-                r = newFromPixbuf( Pixbuf.newFromCompressedData(data) );
+				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
+				r = newFromPixbuf( p );
                 cache.set(url,r);
             }
             return r;
         } catch( e:Dynamic ) {
-            throw("Could not load '"+url+": "+e );
+            throw("Error loading '"+url+": "+e );
         }
     }
     
@@ -132,11 +152,12 @@ class Texture extends ImageData {
         var r = new Texture();
         
         var w = pixbuf.getWidth();
-        var h = pixbuf.getHeight();        
-        r.initialize( w, h );
+        var h = pixbuf.getHeight();
+        var stride = pixbuf.getRowstride();
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
+        r.initialize( w, h, cs );
         var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
-        r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
+		r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
         return r;
     }
 

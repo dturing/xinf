@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.js;
 
 import xinf.erno.Renderer;
@@ -48,57 +33,78 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         }
     }
     
-    public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         // FIXME (maybe): regards only translation
         p.style.left = ""+Math.round(x);
         p.style.top = ""+Math.round(y);
     }
 
-    public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
         p.style.left = ""+Math.round(x);
         p.style.top = ""+Math.round(y);
     }
 
-    public function clipRect( w:Float, h:Float ) {
+    override public function clipRect( w:Float, h:Float ) {
         current.style.overflow = "hidden";
         current.style.width = ""+Math.max(0,Math.round(w));
         current.style.height = ""+Math.max(0,Math.round(h));
     }
     
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.left = ""+Math.round(x);
         r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null ) {
-            r.style.background = pen.fillColor.toRGBString();
-            untyped r.style.opacity = pen.fillColor.a;
+        if( pen.fill != null ) {
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					r.style.background = Color.rgb(red,g,b).toRGBString();
+					untyped r.style.opacity = a;
+				default:
+					untyped r.style.opacity = 0;
+			}
         }
-        if( pen.strokeWidth > 0 && pen.strokeColor != null ) {
-            r.style.border = ""+pen.strokeWidth+"px solid "+pen.strokeColor.toRGBString();
-            r.style.width = ""+Math.round(w+1-(pen.strokeWidth*2));
-            r.style.height = ""+Math.round(h+1-(pen.strokeWidth*2));
-        } else {
+        if( pen.width > 0 && pen.stroke != null ) {
+			switch( pen.stroke ) {
+				case SolidColor(red,g,b,a):
+					// FIXME: a
+					r.style.border = ""+pen.width+"px solid "+Color.rgb(red,g,b).toRGBString();
+					r.style.width = ""+Math.round(w+1-(pen.width*2));
+					r.style.height = ""+Math.round(h+1-(pen.width*2));
+				default:
+					r.style.border = 0;
+			}
+		} else {
             r.style.width = ""+Math.round(w);
             r.style.height = ""+Math.round(h);
         }
         current.appendChild( r );
     }
 
-    public function circle( x:Float, y:Float, r:Float ) {
-        rect( x-r, y-r, r*2, r*2 );
+    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+        rect( x, y, w, h );
+    }
+    
+    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+        rect( x-rx, y-ry, rx*2, ry*2 );
     }
 
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
         var r = js.Lib.document.createElement("div");
         r.style.position="absolute";
         r.style.whiteSpace="nowrap";
         r.style.cursor="default";
         if( x!=null ) r.style.left = ""+Math.round(x);
         if( y!=null ) r.style.top = ""+Math.round(y);
-        if( pen.fillColor != null ) {
-            r.style.color = pen.fillColor.toRGBString();
-            untyped r.style.opacity = pen.fillColor.a;
+		
+        if( pen.fill != null ) {
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					r.style.color = Color.rgb(red,g,b).toRGBString();
+					untyped r.style.opacity = a;
+				default:
+					untyped r.style.opacity = 0;
+			}
         }
         /*
         if( pen.fontFace != null ) r.style.fontFamily = if( pen.fontFace=="_sans" ) "Bitstream Vera Sans, Arial, sans-serif" else pen.fontFace;pen.fontFace;
@@ -111,7 +117,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         current.appendChild(r);
     }
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         var wf = outRegion.w/inRegion.w;
         var hf = outRegion.h/inRegion.h;
 
@@ -132,10 +138,17 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         wrap.style.height = ""+Math.round(outRegion.h);
         
         wrap.appendChild(r);
+		
+		/* FIXME reenable opacity
+		if( pen.fillColor!=null ) {
+			untyped r.style.opacity = pen.fillColor.a;
+		}
+		*/
+			
         current.appendChild(wrap);
     }
     
-    public function native( o:NativeObject ) {
+    override public function native( o:NativeObject ) {
         current.appendChild(o);
     }
     

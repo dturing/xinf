@@ -30,25 +30,14 @@ class DLLLoader {
     public static function getXinfLibPath() :String {
         var pathSep = "/";
         if( neko.Sys.systemName()=="Windows" ) pathSep = "\\";
-        var libPath = getHaxelibPath()+pathSep+"xinf";
+        var libPath = getHaxelibPath()+pathSep+"xinfinity-support";
         var version = neko.io.File.getContent( libPath+pathSep+".current" );
         version = version.split(".").join(",");
         libPath += pathSep+version+pathSep+"ndll"+pathSep+neko.Sys.systemName();
         return libPath;
     }
-/*    
-    public static function addToEnvironment( name:String, separator:String, value:String ) {
-        var cur = neko.Sys.getEnv(name);
-        if( cur==null || cur.length==0 )
-            cur = value;
-        else
-            cur = value+separator+cur;
-            
-        neko.Sys.putEnv( name, cur );
-        trace("prefixed "+name+" with: "+value+", now: "+neko.Sys.getEnv( name ) );
-    }
-*/
-    public static function checkEnvironment( name:String, separator:String, value:String ) {
+
+	public static function checkEnvironment( name:String, separator:String, value:String ) {
         var value = StringTools.replace( StringTools.replace( value, "//", "/" ), "\\\\", "\\" );
     
         var cur = neko.Sys.getEnv(name);

@@ -15,7 +15,6 @@
    
 ***********************************************************************/
 
-#include <neko/neko.h>
 #include <additions.h>
 #include <stdlib.h>
 

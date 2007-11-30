@@ -18,9 +18,21 @@ void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsi
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
+void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+	val_throw(alloc_string("glTexSubImageBGRA not implemented"));
+//    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+//        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
-    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+       glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
+void glTexSubImageBGR( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+	val_throw(alloc_string("glTexSubImageBGR not implemented"));
+//       glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+//        GL_BGR, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
@@ -39,14 +51,16 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
     glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
+
+    unsigned char empty[w*h]; // FIXME. but it should be cleared on creation...
+    memset( empty, 0, w*h );
+    glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, w, h,
+        GL_ALPHA, GL_UNSIGNED_BYTE, empty );
+
     
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
     
-    unsigned char empty[w];
-    memset( empty, 0, w );
-    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y+h, w, 1,
-        GL_ALPHA, GL_UNSIGNED_BYTE, empty );
     
     
     glPopClientAttrib();    

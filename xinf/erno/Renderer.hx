@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.erno;
 
 #if flash
@@ -117,17 +102,17 @@ interface Renderer {
     function clipRect( w:Float, h:Float ) :Void;
 
     /**
-        Set the fill color for following drawing operations. If you specify [null],
+        Set the fill paint for following drawing operations. If you specify [null],
         or leave away the argument, shapes won't be filled.
     **/
-    function setFill( r:Float, g:Float, b:Float, a:Float ) :Void;
+    function setFill( ?paint:Paint ) :Void;
     
     /**
-        Set the stroke (line) color and width (thickness) for following drawing operations. 
+        Set the stroke (line) paint and width (thickness) for following drawing operations. 
         If you specify [null] for c,
         [0] or [null] for width or leave away the arguments, shapes' contours won't be stroked.
     **/
-    function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) :Void;
+    function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
     
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially
@@ -183,18 +168,37 @@ interface Renderer {
     function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) :Void;
     
     /**
+        Adds an elliptical arc, as definined by the SVG spec:
+        
+        "... from the current point to (x, y). 
+        The size and orientation of the ellipse are defined by two radii (rx, ry) 
+        and an x-axis-rotation, which indicates how the ellipse as a whole is 
+        rotated relative to the current coordinate system. The center (cx, cy) 
+        of the ellipse is calculated automatically to satisfy the constraints 
+        imposed by the other parameters. large-arc-flag and sweep-flag contribute 
+        to the automatic calculations and help determine how the arc is drawn."
+
+    **/
+    function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void;
+    
+    /**
         Draws a rectangle with the current fill and stroke styles within the current
         object. The rectangle's upper left corner will be at ([x],[y]), and it will
         be [w] units wide and [h] units high.
     **/
     function rect( x:Float, y:Float, w:Float, h:Float ) :Void;
 
-    /**
-        Draws a circle with the current fill and stroke styles within the current
-        object. The circles center will be at ([x],[y]), and it will
-        have a radius of [r] units.
+   /**
+        Draws a rounded rectangle, just like rect() but with a rounding of rx/ry radius.
     **/
-    function circle( x:Float, y:Float, r:Float ) :Void;
+    function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) :Void;
+
+    /**
+        Draws a ellipse with the current fill and stroke styles within the current
+        object. The center will be at ([x],[y]), and it will
+        have a x-radius of [rx] and y-radius of [ry] units.
+    **/
+    function ellipse( x:Float, y:Float, rx:Float, ry:Float ) :Void;
 
     /**
         Draws a string of text at coordinates ([x],[y]) within the current object,

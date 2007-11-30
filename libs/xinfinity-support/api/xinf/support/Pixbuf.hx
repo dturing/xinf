@@ -45,6 +45,9 @@ extern class Pixbuf {
             
             if( !neko.FileSystem.exists( fileName ) ) {
                 try {
+					if( !neko.FileSystem.exists(path) ) {
+						neko.FileSystem.createDirectory(path);
+					}
                     var out = neko.io.File.write(fileName,false);
                     
                     var data = '# GdkPixbuf Image Loader Modules file
@@ -78,7 +81,7 @@ extern class Pixbuf {
                     out.write(data2);
                     out.close();
                 } catch(e:Dynamic) {
-                    throw("Could not create gdk-pixbuf loaders file. Image loading will not work.");
+                    throw("Could not create gdk-pixbuf loaders file. Image loading will not work: "+e);
                 }
             }
             

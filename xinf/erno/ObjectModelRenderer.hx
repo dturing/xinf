@@ -1,21 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.erno;
 
-import xinf.erno.PenStackRenderer;
+import xinf.erno.PenRenderer;
 import xinf.erno.Renderer;
 
 /**
@@ -38,7 +23,7 @@ import xinf.erno.Renderer;
         being (re-)defined.
     </p>
 **/
-class ObjectModelRenderer<Primitive> extends PenStackRenderer {
+class ObjectModelRenderer<Primitive> extends PenRenderer {
     
     private var objects:IntHash<Primitive>;
     
@@ -99,7 +84,7 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
     }
 
     // we implement the root and object parts of the erno Instruction protocol
-    public function startNative( o:NativeContainer ) :Void {
+    override public function startNative( o:NativeContainer ) :Void {
         // TODO #if debug, check if current is set
 
         // FIXME cast unneccessary if type parameter (Primitive) was constrained to NativeContainer
@@ -107,14 +92,13 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
         // see ml 2006-12-13. (fixed on cvs)
         current=cast(o);
         clearPrimitive(current);
-        pushPen();
     }
     
-    public function endNative() :Void {
+    override public function endNative() :Void {
         current=null;
     }
 
-    public function startObject( id:Int ) {
+    override public function startObject( id:Int ) {
         // TODO #if debug, check if current is set
         // see if there already is an object with that id.
         current = lookup(id);
@@ -126,25 +110,23 @@ class ObjectModelRenderer<Primitive> extends PenStackRenderer {
             // clear object
             clearPrimitive( current );
         }
-        pushPen();
     }
     
-    public function endObject() {
+    override public function endObject() {
         current = null;
-        popPen();
     }
     
-    public function showObject( id:Int ) {
+    override public function showObject( id:Int ) {
         var o = lookup(id);
         attachPrimitive( current, o );
     }
     
-    public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
+    override public function setTransform( id:Int, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) {
         var o = lookup(id);
         setPrimitiveTransform( o, x, y, a, b, c, d );
     }
 
-    public function setTranslation( id:Int, x:Float, y:Float ) {
+    override public function setTranslation( id:Int, x:Float, y:Float ) {
         var o = lookup(id);
         setPrimitiveTranslation( o, x, y );
     }

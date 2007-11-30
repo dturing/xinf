@@ -58,16 +58,15 @@ class GLEventSource {
     }
 
     public function keyRelease( key:Int, x:Int, y:Int ) :Void {
-        //var k = Keys.get(key);
-        //if( k==null ) 
-        //trace("Normal KeyRelease "+key );
-        var k = String.fromCharCode(key);
+        var k = Keys.get(key);
+        if( k==null ) 
+            k = String.fromCharCode(key);
         postKeyRelease( k );
     }
 
     public function specialKeyPress( key:Int, x:Int, y:Int ) :Void {
         var k = Keys.get(Keys.SPECIAL+key);
-     //   trace("special "+key+", "+k );
+//        trace("special "+key+", "+k );
         postKeyPress( k );
     }
 

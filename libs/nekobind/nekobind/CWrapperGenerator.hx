@@ -123,7 +123,7 @@ class CWrapperGenerator extends Generator {
         }
 
         print("/* nekobind class settings:\n   "+settings+"\n*/\n\n" );
-        print("#include <neko/neko.h>\n\n");
+        print("#include <neko.h>\n\n");
 
         // beautify val_check and val_check_kind (throws a readable exception)
         print("#ifdef val_check\n#undef val_check\n#endif\n");
@@ -140,9 +140,6 @@ class CWrapperGenerator extends Generator {
         }
         print("\n");
 
-        // cptr
-        print( Std.resource("cptr.include") );
-        
         if( settings.cStruct != null ) {
             var cl = settings.className;
             var cStruct = settings.cStruct;

@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>xinf SWF test</title>
+        <style type="text/css">
+            body {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body bgcolor="#0000ff">
+       <script language="javascript">
+                  
+            window.statusbar.visible =
+ 	        window.toolbar.visible =
+ 	        window.locationbar.visible =
+ 	        window.menubar.visible =
+ 	        window.personalbar.visible =
+ 	                false;
+                    
+            window.innerWidth = 640;
+            window.innerHeight = 480;
+            
+            document.body.style.overflow="hidden";
+        </script> 
+    
+		<div id="haxe:trace" style="position:absolute; max-height: 200px; 
+            overflow:auto; bottom: 0; padding: 10px; display:none; "></div>
+
+		<script language="JavaScript">
+			function haxeTrace( msg, posInfos ) {
+                var div = document.createElement("div");
+                div.appendChild( document.createTextNode( msg ) );
+					div.setAttribute("title",posInfos.fileName+":"+posInfos.lineNumber);
+                document.getElementById("haxe:trace").appendChild(div);
+                div.scrollIntoView();
+			}
+		</script>
+		
+        <embed src="../test.swf"
+			   width="640"
+               height="480"
+               style="position: absolute; top: 0px; left: 0px;
+               name="haxe"
+               quality="high"
+               align="middle"
+               swLiveConnect="true"
+               allowScriptAccess="sameDomain"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer"
+        />
+
+    </body>
+</html>
+
+

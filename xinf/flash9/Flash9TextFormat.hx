@@ -28,17 +28,19 @@ class Flash9TextFormat extends xinf.erno.TextFormat {
         measure = tf;
     }
     
-    public function textSize( text:String ) :{ x:Float, y:Float } {
+    override public function textSize( text:String ) :{ x:Float, y:Float } {
         assureLoaded();
         measure.defaultTextFormat = format;
         measure.text = text;
         return {x:measure.width,y:measure.height};
     }
 
-    public function load() :Void {
+    override public function load() :Void {
         format = new flash.text.TextFormat();
         format.font = family;
+		if( format.font=="" ) format.font="_sans"; // FIXME
         format.size = size;
+		if( format.size<=0 ) format.size=12; // FIXME
         format.leftMargin = 0;
     }
 }

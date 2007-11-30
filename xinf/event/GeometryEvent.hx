@@ -32,7 +32,7 @@ class GeometryEvent extends Event<GeometryEvent> {
         x=_x; y=_y;
     }
 
-    public function toString() :String {
+    override public function toString() :String {
         return( ""+type+"("+x+","+y+")" );
     }
     

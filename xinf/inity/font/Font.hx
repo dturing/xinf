@@ -33,25 +33,21 @@ class Font extends xinf.support.Font {
         if( font != null ) return font;
         
         var data:String;
-        if( name=="_sans" ) {
-            data = Std.resource("default-font");
-            if( data==null ) {
-                // try to load bitstream vera- bundled with xinfinity
-                untyped {
-                    var module = __dollar__loader.loadmodule("xinf-resources".__s,__dollar__loader);
-                    data = module.font;
-                }
-                if( data == null ) {
-                    throw("default font not found - include xinf-resources");
-                }
-            }
-        } else if( name!=null ) {
-            var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
-            if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
-            data = neko.io.File.getContent( file );
-        }
+        if( name=="_sans" ) { name=="sans"; }
         
-        var font = new Font( data, 12 );
+        var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
+        if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
+
+		var font;
+		
+		try {
+			data = neko.io.File.getContent( file );
+			font = new Font( data, 12 );
+		} catch( e:Dynamic ) {
+			trace("Couldn't load font: using bundled Vera");
+			data = neko.io.File.getContent( xinf.support.DLLLoader.getXinfLibPath()+"/../vera.ttf" );
+			font = new Font( data, 12 );
+		}
         
         fonts.set( name, font );
         return font;
@@ -65,10 +61,18 @@ class Font extends xinf.support.Font {
         var s = Math.round(size<<24);
         super( data, s, s );
         cache = new Hash<GlyphCache>();
-        /*for( size in [ 10, 12, 24, 36 ] ) {
-            var c = new GlyphCache( this, size );
-            cache.set( ""+size, c );
-        }*/
+
+		// FIXME
+        var c = cache.get(""+Math.round(size));
+        if( c==null ) {
+            c = new GlyphCache( this, Math.round(size), size<=12 );
+            cache.set(""+Math.round(size),c);
+		}
+		trace("preload: "+this );
+		for( i in 32...128 ) {
+			c.get(i);
+		}
+		
     }
     
     public function getGlyph( character:Int, fontSize:Float ) :Glyph {
@@ -76,16 +80,8 @@ class Font extends xinf.support.Font {
         
         //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
         if( c==null ) {
-            trace("Adding font cache "+this+" sz "+fontSize );
             c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
             cache.set(""+Math.round(fontSize),c);
-
-            // FIXME-- getting Cannot load Glyph after 4th time new characters are needed---
-            // thus, preloading all common glyphs (!)
-            for( i in 32...128 ) {
-                c.get(i);
-            }
-
         }
         
         var g = c.get(character);
@@ -127,7 +123,7 @@ class Font extends xinf.support.Font {
         GL.pushMatrix();
         
         GL.scale( fontSize, fontSize, 1.0 );
-        GL.translate( .0, ascender, .0 );
+        GL.translate( .0, ascender, .0 ); // FIXME *.9?
 
         GL.pushMatrix(); // for lines.
 

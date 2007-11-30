@@ -1,0 +1,5 @@
+<project name="opengl" url="http://xinf.org/trac/wiki/NekoOpenGL" license="LGPL">
+    <user name="dfischer"/>
+    <description>neko/haXe binding for OpenGL, GLU and GLUT</description>
+    <version name="0.1.0">Beta</version>
+</project>

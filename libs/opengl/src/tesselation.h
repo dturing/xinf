@@ -15,7 +15,7 @@
    
 ***********************************************************************/
 
-#include <neko/neko.h>
+#include <neko.h>
 #include <additions.h>
 
 #ifndef __TESSELATION_H

@@ -17,7 +17,7 @@
 
 #include <fontconfig/fontconfig.h>
 
-#include <neko/neko.h>
+#include <neko.h>
 
 #ifdef val_check
 #undef val_check
@@ -59,7 +59,7 @@ value fcFindFont( value _familyName, value _weight, value _slant, value _size ) 
     float size = val_number(_size);
     
 	FcPattern *pattern;
-    
+
 	pattern = FcNameParse( (FcChar8*)familyName );
 
 	FcDefaultSubstitute( pattern );
@@ -80,7 +80,7 @@ value fcFindFont( value _familyName, value _weight, value _slant, value _size ) 
 		val_throw(alloc_string("Could not load font"));
 	}
 	value ret = alloc_string((const char *)temp);
-	
+
 	FcPatternDestroy( pattern );
 	FcPatternDestroy( match );
 	

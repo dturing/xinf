@@ -28,6 +28,9 @@ extern class GLUT {
     public static var DOUBLE:Int;
     public static var RGB:Int;
     public static var DEPTH:Int;
+    public static var RGBA:Int;
+    public static var ALPHA:Int;
+    public static var STENCIL:Int;
 
     public static var KEY_UP:Int;
     public static var KEY_DOWN:Int;
@@ -54,6 +57,8 @@ extern class GLUT {
     public static var ACTIVE_SHIFT:Int;
     public static var ACTIVE_CTRL:Int;
     public static var ACTIVE_ALT:Int;
+
+    public static var MULTISAMPLE:Int;
 
     /** <nekobind><cptr name="argv" null-allowed="true" type="char*"/>
                 <cptr name="argn" null-allowed="true" type="int"/></nekobind> **/

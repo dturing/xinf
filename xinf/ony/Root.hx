@@ -1,48 +1,48 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ony;
 
-import xinf.event.GeometryEvent;
-import xinf.erno.Runtime;
+import Xinf;
+import xinf.event.EventKind;
+import xinf.event.Event;
 
-/**
-    Root represents the Runtime-default root Object, i.e., the Stage in Flash,
-    the Document in JS, or the (main) Window in Xinfinity.
-    <p>
-        Root is  an <a href="Embed.html">Embed</a> Object that uses the 
-        Runtime's default root to embed its display hierarchy. It also watches
-        for STAGE_SCALED events to update it's size.
-    </p>
-**/
-class Root extends Embed {
+class Root {
+    private static var mRoot:Document;
+	
+    public static var children(get_children,null) :Iterator<Element>;
+	static function get_children() :Iterator<Element> {
+		return cast mRoot.children;
+	}
+
+	private static function getRoot() :Document {
+		if( mRoot==null ) {
+			var r = new xinf.ony.erno.Root();
+			mRoot = new Document();
+			r.attach( mRoot );
+		}
+		return mRoot;
+	}
+	
+    public static function attach( o:Element, ?after:Element ) :Void {
+		getRoot().attach( o, after );
+	}
+	
+    public static function detach( o:Element ) :Void {
+		getRoot().detach( o );
+	}
+
+    public static function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
+        return xinf.erno.Runtime.runtime.addEventListener(type,h);
+    }
     
-    /**
-        Constructor; creates a new Root. This should only ever be called once
-        for every Application (if you need multiple Roots, use <a href="Embed.html">Embed</a>).
-        There is nothing checking this, so take care. If you instantiate an
-        <a href="Application.html">Application</a>, the Root will be created for you,
-        access it with Application.root.
-    **/
-    public function new() :Void {
-        super( Runtime.runtime.getDefaultRoot() );
-        Runtime.addEventListener( GeometryEvent.STAGE_SCALED, stageScaled );
+    public static function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
+        return xinf.erno.Runtime.runtime.removeEventListener(type,h);
+    }
+	
+    public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
+	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
     }
 
-    private function stageScaled( e:GeometryEvent ) :Void {
-        resize(e.x,e.y);
+    public static function main() {
+        xinf.erno.Runtime.runtime.run();
     }
-    
+
 }

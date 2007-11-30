@@ -35,7 +35,7 @@ class KeyboardEvent extends Event<KeyboardEvent> {
         this.ctrlMod = if( ctrlMod==null ) false else ctrlMod;
     }
 
-    public function toString() :String {
+    override public function toString() :String {
         // FIXME #if debug
         var r = ""+type+"(";
         if( shiftMod ) r+="Shift-";

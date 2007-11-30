@@ -7,7 +7,7 @@ class App {
     public static var i=0;
     public static function step( n:Int ) {
         GLUT.postRedisplay();
-        GLUT.setTimerFunc( Math.round(1000/25), step, i );
+		GLUT.setTimerFunc( Math.round(1000/1), step, i );
     }
     
     public static function display() {
@@ -40,10 +40,10 @@ class App {
     public static function main() {
         GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
         var d = GLUT.createWindow("Hello World");
-        
+		
         GLUT.setDisplayFunc( display );
         GLUT.setTimerFunc( Math.round(1000/25), step, 0 );
-        
+    
         GLUT.setReshapeFunc( function( w:Int, h:Int ) {
                 GL.viewport( 0, 0, w, h );
             } );
@@ -59,9 +59,12 @@ class App {
         GLUT.setEntryFunc( function( state:Int ) {
                 trace("entry: "+state );
             } );
+        
+// FIXME: setting this consumes CPU when window invisible...		
         GLUT.setVisibilityFunc( function( state:Int ) {
                 trace("window visibility: "+state );
             } );
+			
         GLUT.setKeyboardFunc( function( key:Int, x:Int, y:Int ) {
                 var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
                 

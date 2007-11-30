@@ -17,8 +17,13 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_GLYPH_H
 
-#include <neko/neko.h>
+#include <neko.h>
+
+#ifdef NEKO_MAC
+//#include <Resources.h>		
+#endif
 
 #ifdef val_check
 #undef val_check
@@ -28,43 +33,6 @@
 #undef val_check_kind
 #endif
 #define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure("argument " #v " is not of kind " #k );
-
-// FIXME: convert all cptr stuff to strings...
-typedef struct _cptr {
-    int size;
-    void *ptr;
-	void (*free)(void*);
-} cptr;
-
-#define val_cptr_size(cp) (((cptr*)val_data(cp))->size)
-#define val_cptr(cp,type) ((type*)(((cptr*)val_data(cp))->ptr))
-#define val_cptr_check_size(cp,type,s) if( val_cptr_size(cp)<s*sizeof(type) ) failure("cptr " #cp " is not large enough to hold " #s " " #type "s" );
-/*
-value check_cptr( value cp, int size ) { \
- 	vkind k_cptr = kind_import("cptr"); 
-	val_check_kind( cp, k_cptr ); \
-	if( size>0 && val_cptr_size(cp) < size ) val_throw( alloc_string("cptr overflow") ); \
-	return cp; \
-}
-
-void cptr_finalize( value cp ) { \
-    check_cptr(cp,0); \
-	cptr *p = val_data( cp ); \
-    if( p->ptr && p->free ) p->free(p->ptr); \
-    if( p ) free(p); \
-} \
-
-value alloc_cptr( void *ptr, int size, void (*free_f)(void*) ) { \
-	vkind k_cptr = kind_import("cptr"); \
-	cptr *cp = (cptr*)malloc( sizeof(cptr) ); \
-	cp->ptr=ptr; cp->size=size; cp->free=free_f; \
-	if( cp->free==NULL ) cp->free = free; \
-	value r = alloc_abstract( k_cptr, cp ); \
-	val_gc( r, cptr_finalize ); \
-	return r; \
-} 
-*/
-value alloc_cptr( void *ptr, int size, void (*free_f)(void*) );
 
 
 static FT_Library ft_library;
@@ -105,10 +73,13 @@ value ftLoadFont( value _data, value _width, value _height ) {
 	
     value font = alloc_object(NULL);
     FT_Face *face = (FT_Face*)malloc( sizeof(FT_Face) );
-    
-    if( !face || FT_New_Memory_Face( ft_library, (const FT_Byte*)val_string(_data), val_strlen(_data), 0, face ) ) {
-        val_throw( alloc_string("FreeType cannot read font"));
-    }
+	if( !face ) val_throw( alloc_string("out of memory") );
+
+    int err = FT_New_Memory_Face( ft_library, (const FT_Byte*)val_string(_data), val_strlen(_data), 0, face );
+	if( err == FT_Err_Unknown_File_Format )
+		val_throw( alloc_string("Freetype cant read font (unknown format)"));
+	else if( err )
+		val_throw( alloc_string("Freetype cant read font"));
     
     FT_Set_Char_Size( *face, width, height, 72, 72 );
     
@@ -223,13 +194,10 @@ value ftRenderGlyph( value font, value _index, value _size, value _hint ) {
     value ret = alloc_object(NULL);
     alloc_field( ret, val_id("width"), alloc_int(bitmap.width) );
     alloc_field( ret, val_id("height"), alloc_int(bitmap.rows) );
-    char *data = (char*)malloc( bitmap.width*bitmap.rows );
-    memcpy( data, bitmap.buffer, bitmap.width*bitmap.rows );
-    alloc_field( ret, val_id("bitmap"), alloc_cptr(data,bitmap.width*bitmap.rows,free) );
+    alloc_field( ret, val_id("bitmap"), copy_string( (char*)bitmap.buffer, bitmap.width*bitmap.rows ) );
     alloc_field( ret, val_id("x"), alloc_int( glyph->metrics.horiBearingX ) );
     alloc_field( ret, val_id("y"), alloc_int( glyph->metrics.horiBearingY ) );
     alloc_field( ret, val_id("advance"), alloc_float( glyph->advance.x ));
-    
     return ret;
 }
 DEFINE_PRIM(ftRenderGlyph,4);

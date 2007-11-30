@@ -29,7 +29,7 @@ class MouseEvent extends Event<MouseEvent> {
     public var x:Int;
     public var y:Int;
     public var button:Int;
-    public var targetId:Int;
+    public var targetId:Null<Int>;
     
     public var shiftMod:Bool;
     public var altMod:Bool;
@@ -44,13 +44,13 @@ class MouseEvent extends Event<MouseEvent> {
         this.ctrlMod = if( ctrlMod==null ) false else ctrlMod;
     }
     
-    public function toString() :String {
+    override public function toString() :String {
         var r = ""+type+"("+x+","+y+", ";
         if( shiftMod ) r+="Shift+";
         if( altMod ) r+="Alt+";
         if( ctrlMod ) r+="Ctrl+";
         r+="Button "+button+")";
-        if( targetId != null ) r+=">#"+targetId;
+        if( targetId != 0 ) r+=" to #"+targetId;
         return r;
     }
     

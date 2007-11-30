@@ -30,7 +30,7 @@ class DLLLoader {
     public static function getXinfLibPath() :String {
         var pathSep = "/";
         if( neko.Sys.systemName()=="Windows" ) pathSep = "\\";
-        var libPath = getHaxelibPath()+pathSep+"xinf";
+        var libPath = getHaxelibPath()+pathSep+"opengl";
         var version = neko.io.File.getContent( libPath+pathSep+".current" );
         version = version.split(".").join(",");
         libPath += pathSep+version+pathSep+"ndll"+pathSep+neko.Sys.systemName();

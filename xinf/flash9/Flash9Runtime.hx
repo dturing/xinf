@@ -28,18 +28,17 @@ class Flash9Runtime extends SimpleRuntime {
     public function new() :Void {
         super();
         _eventSource = new Flash9EventSource(this);
-        
+        /*
         #if htmltrace
             // setup trace to javascript FIXME this is b0rked. i get securityerrors since flash9, which need stupid web-auth.
-            // leaving a test in, for when u fix it.
             try {
                 var ttrace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
                     flash.external.ExternalInterface.call("haxeTrace",v,pos);
                 }
-                //haxe.Log.trace = ttrace;
-                fixLinuxTrace();
+                haxe.Log.trace = ttrace;
+                //fixLinuxTrace();
                 
-                ttrace("foo");
+                trace("trace seems fine");
             } catch( e:Dynamic ) {
                 fixLinuxTrace();
                 trace("Exception trying to setup HTML trace: "+e );
@@ -47,8 +46,7 @@ class Flash9Runtime extends SimpleRuntime {
         #else true
             fixLinuxTrace();
         #end
-
-     //   flash.external.ExternalInterface.call("haxeTrace","HEllo?");
+		*/
     }
     
     function fixLinuxTrace() {

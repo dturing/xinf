@@ -79,7 +79,7 @@ class SimpleEventDispatcher implements EventDispatcher {
         // FIXME if debug_events
         e.origin = pos;
         
-        // for now, FIXME (maybe)
+        // for now, FIXME (maybe, put them thru a global queue)
         dispatchEvent(e);
     }
     

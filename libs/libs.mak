@@ -1,5 +1,3 @@
-# project name
-#PROJECT:=cptr
 
 #
 # xinf libs Makefile include for (cross-)compiling on linux
@@ -20,6 +18,7 @@ SRC_PATHS:=src src/$(NEKO_PLATFORM)
 NDLL:=$(BIN_PATH)/$(NEKO_PLATFORM)/$(PROJECT).ndll
 
 TARGETS:=$(NDLL)
+NEKO_PLATFORMS:=Linux Mac Windows
 
 PROJECT_CFLAGS+=$(foreach SRC_PATH, $(SRC_PATHS), -I$(SRC_PATH))
 C_SRCS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.c))
@@ -41,9 +40,9 @@ endif
 ifeq ($(NEKO_PLATFORM),Mac)
 		PATH:=$(PATH):/opt/osx/bin
 		OSX_SDK:=/opt/osx/MacOSX10.4u.sdk/
-		NEKO_CFLAGS:=-I/opt/osx/manual/include -DNEKO_OSX
+		NEKO_CFLAGS:=-I/opt/osx/manual/include/neko -DNEKO_OSX
 		NEKO_LIBS:=-dynamiclib -L/opt/osx/manual/lib -lneko
-		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include 
+		PLATFORM_CFLAGS:=-I/opt/osx/powerpc-apple-darwin/include -fshort-enums -fpack-struct -lSystemStubs
 		PLATFORM_CFLAGS+=-isysroot $(OSX_SDK) -Wl,-syslibroot,$(OSX_SDK)
 
 default: $(TARGETS)
@@ -60,11 +59,11 @@ $(NDLL).ppc: $(C_SRCS) $(C_HEADERS)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		CC:=mingw32-gcc
-		NEKO_CFLAGS:=-I/opt/mingw/include -DNEKO_WIN
-		NEKO_LIBS:=-shared -L/opt/mingw/lib -lneko
+		NEKO_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/neko -DNEKO_WIN
+		NEKO_LIBS:=-shared -L/opt/mingw/lib -lneko /opt/mingw/lib/neko.dll
 	else
 		CC:=gcc
-		NEKO_CFLAGS:=-fPIC -shared -DNEKO_LINUX
+		NEKO_CFLAGS:=-fPIC -shared -I/usr/include/neko
 		NEKO_LIBS:=-L/usr/lib -lneko -lz  -ldl
 	endif
 
@@ -111,6 +110,42 @@ $(BIN_PATH)/$(PROJECT).n: $(BINDING_HX_IMPL)
 	haxe $(HAXEFLAGS) -cp ../api -neko $@ $(BINDING_HX_IMPL)
 
 
+
+####################################################
+# build haxelib package
+HAXELIB_ROOT:=haxelib
+HAXELIB_PROJECT:=$(HAXELIB_ROOT)/$(PROJECT)
+
+haxelib : $(HAXELIB_PROJECT).zip
+		
+$(HAXELIB_PROJECT).zip: $(NDLL)
+	-rm -rf $(HAXELIB_ROOT)
+	mkdir -p $(HAXELIB_PROJECT)
+	
+	# copy haxelib.xml
+	cp haxelib.xml $(HAXELIB_PROJECT)
+	
+	# copy platform ndlls and .n modules
+	mkdir $(HAXELIB_PROJECT)/ndll
+#	-$(foreach PLATFORM, $(NEKO_PLATFORMS), mkdir $(HAXELIB_PROJECT)/ndll/$(PLATFORM); )
+	svn --force export $(API_PATH) $(HAXELIB_PROJECT);
+	-@rm $(BIN_PATH)/Mac/*.ppc; 
+	-@rm $(BIN_PATH)/Mac/*.x86;
+		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
+			svn export $(BIN_PATH)/$(PLATFORM) $(HAXELIB_PROJECT)/ndll/$(PLATFORM); \
+			cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+			cp -r $(BIN_PATH)/$(PLATFORM)/*.ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+		)
+		#	cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+		#	cp $(BIN_PATH)/*.ttf $(HAXELIB_PROJECT)/ndll/; \
+		#	cp $(BIN_PATH)/README $(HAXELIB_PROJECT)/ndll/; \
+		#	cp -r $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+	
+	# copy haXe API and Samples
+	svn --force export test $(HAXELIB_PROJECT)/test
+	
+	# create the final .zip
+	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)
 
 
 

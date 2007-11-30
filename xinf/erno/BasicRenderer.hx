@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.erno;
 
 import xinf.erno.Renderer;
@@ -31,7 +16,7 @@ class BasicRenderer implements Renderer {
     }
     
     private function unimplemented( ?func:String ) :Void {
-        throw("unimplemented: "+func );
+        trace("unimplemented: "+func );
     }
 
     // erno Instruction protocol
@@ -44,15 +29,15 @@ class BasicRenderer implements Renderer {
         unimplemented("endNative");
     }
     
-    public function startObject( id:Int ) {
+    public function startObject( id:Int ) :Void {
         unimplemented("startObject");
     }
     
-    public function endObject() {
+    public function endObject() :Void {
         unimplemented("endObject");
     }
     
-    public function showObject( id:Int ) {
+    public function showObject( id:Int ) :Void {
         unimplemented("showObject");
     }
 
@@ -64,71 +49,79 @@ class BasicRenderer implements Renderer {
         unimplemented("setTranslation");
     }
     
-    public function clipRect( w:Float, h:Float ) {
+    public function clipRect( w:Float, h:Float ) :Void {
         unimplemented("clipRect");
     }
 
-    public function setFill( r:Float, g:Float, b:Float, a:Float ) {
-        unimplemented("setFill");
-    }
+	public function setFill( ?paint:Paint ) :Void {
+		unimplemented("setFill");
+	}
     
-    public function setStroke( r:Float, g:Float, b:Float, a:Float, width:Float ) {
-        unimplemented("setStroke");
-    }
-    
-    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) {
+    public function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+		unimplemented("setStroke");
+	}
+        
+    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) :Void {
         unimplemented("setFont");
     }
 
-    public function startShape() {
+    public function startShape() :Void {
         unimplemented("startShape");
     }
     
-    public function endShape() {
+    public function endShape() :Void {
         unimplemented("endShape");
     }
     
-    public function startPath( x:Float, y:Float) {
+    public function startPath( x:Float, y:Float) :Void {
         unimplemented("startPath");
     }
     
-    public function endPath() {
+    public function endPath() :Void {
         unimplemented("endPath");
     }
     
-    public function close() {
+    public function close() :Void {
         unimplemented("close");
     }
     
-    public function lineTo( x:Float, y:Float ) {
+    public function lineTo( x:Float, y:Float ) :Void {
         unimplemented("lineTo");
     }
     
-    public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+    public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) :Void {
         unimplemented("quadraticTo");
     }
     
-    public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+    public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) :Void {
         unimplemented("cubicTo");
     }
 
-    public function rect( x:Float, y:Float, w:Float, h:Float ) {
+    public function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void {
+        unimplemented("arcTo");
+    }
+
+    public function rect( x:Float, y:Float, w:Float, h:Float ) :Void {
         unimplemented("rect");
     }
-    
-    public function circle( x:Float, y:Float, r:Float ) {
-        unimplemented("circle");
+
+    public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) :Void {
+        unimplemented("roundedRect");
+    }
+
+    public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) :Void {
+        unimplemented("ellipse");
     }
     
-    public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+    public function text( x:Float, y:Float, text:String, format:TextFormat ) :Void {
         unimplemented("text");
-    }
+    }  
     
-    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+    public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void {
         unimplemented("image");
     }
     
-    public function native( o:NativeObject ) {
+    public function native( o:NativeObject ) :Void {
         unimplemented("native");
     }
     
