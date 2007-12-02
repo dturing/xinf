@@ -56,8 +56,10 @@ class Font extends xinf.support.Font {
     public var font:xinf.support.Font;
     private var cache:Hash<GlyphCache>;
     // later, maybe: private var outlines:GlyphCache();
+	var data:String;
 
     public function new( data:String, size:Int ) {
+		this.data = data;
         var s = Math.round(size<<24);
         super( data, s, s );
         cache = new Hash<GlyphCache>();
