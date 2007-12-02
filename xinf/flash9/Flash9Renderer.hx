@@ -23,7 +23,10 @@ typedef FlashSpreadMethod = flash.display.SpreadMethod;
 typedef Primitive = Dynamic // FIXME XinfSprite
 
 class Flash9Renderer extends ObjectModelRenderer<Primitive> {
-    
+
+	var last		: { x:Float, y:Float };
+	var first		: { x:Float, y:Float };
+
     override public function createPrimitive(id:Int) :Primitive {
         // create new object
         var o = new XinfSprite(); // FIXME Primitive();
@@ -183,6 +186,8 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     override public function startPath( x:Float, y:Float) {
 		applyStroke();
         current.graphics.moveTo(x,y);
+        last = { x:x, y:y };
+        first = { x:x, y:y };
     }
     
     override public function endPath() {
@@ -195,14 +200,21 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     
     override public function lineTo( x:Float, y:Float ) {
         current.graphics.lineTo(x,y);
-    }
+		last = { x:x, y:y };
+	}
     
     override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
         current.graphics.curveTo( x1,y1,x,y );
+		last = { x:x, y:y };
     }
     
     override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
-        throw("unimplemented");
+		var s = xinf.geom.Lib.cubicBezierFM(last, {x:x1,y:y1}, {x:x2,y:y2}, {x:x,y:y});
+		current.graphics.curveTo(s.control[0].x, s.control[0].y, s.anchor[0].x, s.anchor[0].y);
+		current.graphics.curveTo(s.control[1].x, s.control[1].y, s.anchor[1].x, s.anchor[1].y);
+		current.graphics.curveTo(s.control[2].x, s.control[2].y, s.anchor[2].x, s.anchor[2].y);
+		current.graphics.curveTo(s.control[3].x, s.control[3].y, s.anchor[3].x, s.anchor[3].y);
+		last = { x:x, y:y };
     }
         
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {
