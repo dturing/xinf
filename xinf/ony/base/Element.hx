@@ -153,6 +153,8 @@ class Element extends SimpleEventDispatcher,
     }
 
     public function toString() :String {
+		if( id!=null ) return "#"+id;
+		if( name!=null ) return "\""+name+"\"";
         return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
     }
 

@@ -68,6 +68,7 @@ class Group extends ElementImpl {
     public function detach( child:ElementImpl ) :Void {
         mChildren.remove( child );
         child.detachedFrom( this );
+        redraw();
     }
 
 	public function getElementByName( name:String ) :ElementImpl {

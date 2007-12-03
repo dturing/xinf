@@ -42,7 +42,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     }
     
     override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
-        parent.addChild( child );
+		if( child.parent!=null && child.parent!=parent ) {
+			parent.addChild( child.duplicateMovieClip() );
+		} else
+			parent.addChild( child );
     }
 
     /* our part of the drawing protocol */
@@ -122,10 +125,13 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	function applyFill() {
 		switch( pen.fill ) {
 			case None:
-				current.alpha=0;
+				// do nothing
 		
 			case SolidColor(r,g,b,a):
-				current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt() );
+				if( a>0 ) {
+					current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt() );
+					current.alpha=a;
+				}
 				
 			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
 				var gr = flashGradient( stops, spread );
