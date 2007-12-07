@@ -60,7 +60,7 @@ else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		CC:=mingw32-gcc
 		NEKO_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/neko -DNEKO_WIN
-		NEKO_LIBS:=-shared -L/opt/mingw/lib -lneko /opt/mingw/lib/neko.dll
+		NEKO_LIBS:=-shared /opt/mingw/lib/neko.dll
 	else
 		CC:=gcc
 		NEKO_CFLAGS:=-fPIC -shared -I/usr/include/neko

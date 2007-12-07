@@ -19,7 +19,7 @@ ifeq ($(NEKO_PLATFORM),Mac)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-L/opt/mingw/lib -lopengl32 -lglu32 -lOpenVG
+		PROJECT_LIBS:=-lopengl32 -lglu32 bin/Windows/libOpenVG.dll
 	else
 		PROJECT_CFLAGS:=
 		PROJECT_LIBS:=-lOpenVG
