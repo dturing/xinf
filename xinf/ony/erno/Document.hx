@@ -23,8 +23,8 @@ class Document extends xinf.ony.base.Document {
         // TODO g.setTranslation( xid, x, y );
     }
 */
-	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
-		return xinf.ony.base.Document.instantiate( data, onLoad );
+	public static function instantiate( data:String, ?onLoad:Document->Void, ?parent:Document ) :Document {
+		return xinf.ony.base.Document.instantiate( data, onLoad, parent );
 	}
 
     public static function load( url_s:String, ?onLoad:Document->Void ) :Document {

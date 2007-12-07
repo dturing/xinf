@@ -37,12 +37,14 @@ class Rectangle extends ElementImpl {
         rx=ry=0.;
     }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.x=x; to.y=y; to.width=width; to.height=height;
+		to.rx=rx; to.ry=ry;
+	}
+
 	override public function getBoundingBox() : TRectangle {
 		return { l:x, t:y, r:x+width, b:y+height };
-	}
-	
-	override public function toString() :String {
-		return "RECTANGLE";
 	}
 
     override public function fromXml( xml:Xml ) :Void {

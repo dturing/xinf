@@ -69,6 +69,20 @@ class Element extends SimpleEventDispatcher,
 	/** called when the document is completely loaded **/
 	public function onLoad() :Void {
 	}
+	
+	
+	public function clone<T>() :T {
+		var clone = cast(Type.createEmptyInstance( Type.getClass(this) ));
+		copyProperties( clone );
+		return clone;
+	}
+	function copyProperties( to:Dynamic ) :Void {
+		if( id!=null ) to.id=id+"'";
+		to.name=name;
+		to.style=style; 		// FIXME: should dup.
+		to.transform=transform; // FIXME: should dup.
+		to.listeners=listeners;
+	}
 
 	/** the bounding box of the element **/
 	public function getBoundingBox() : TRectangle {

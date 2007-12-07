@@ -19,6 +19,14 @@ class Group extends ElementImpl {
         mChildren = new Array<ElementImpl>();
     }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.mChildren = new Array<ElementImpl>();
+		for( child in mChildren ) {
+			to.mChildren.push( child.clone() );
+		}
+	}
+
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
         if( document==null ) throw("Document not set.");
