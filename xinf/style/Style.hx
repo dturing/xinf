@@ -14,6 +14,10 @@ class Style {
         return value;
     }
 
+    public function getDynamicProperty( name:String ) :Dynamic {
+        return( Reflect.field( style, name ) );
+	}
+	
     public function getProperty<T>( name:String, cl:Dynamic ) :T {
         var v:Dynamic = Reflect.field( style, name );
         if( Std.is( v, cl ) ) {
