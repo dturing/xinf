@@ -1,5 +1,9 @@
 import Xinf;
 
+import xinf.style.Selector;
+import xinf.style.StyleSheet;
+import xinf.erno.Paint;
+
 class Example {
 	
 	public function new( ?url:String ) :Void {
@@ -9,12 +13,14 @@ class Example {
 		
 		var doc:Document;
 		var stage = {x:100.,y:100.};
-	
+		
 		if( url==null ) {
 			doc = Document.instantiate( Std.resource("test.svg") );
 		} else {
 			doc = Document.load( url );
 		}
+
+		doc.onLoad();
 		g.attach( doc );
 
 

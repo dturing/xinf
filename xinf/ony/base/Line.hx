@@ -2,42 +2,40 @@ package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
 import xinf.geom.Types;
+import xinf.traits.TraitDefinition;
+import xinf.traits.FloatTrait;
 
 class Line extends ElementImpl {
 
-    public var x1(default,set_x1):Float;
-    public var y1(default,set_y1):Float;
-    public var x2(default,set_x2):Float;
-    public var y2(default,set_y2):Float;
+	static var TRAITS:Hash<TraitDefinition>;
+	static function __init__() {
+		TRAITS = new Hash<TraitDefinition>();
+		for( trait in [
+			new FloatTrait("x1",0.),
+			new FloatTrait("y1",0.),
+			new FloatTrait("x2",0.),
+			new FloatTrait("y2",0.),
+		] ) { TRAITS.set( trait.name, trait ); }
+	}
+	
+    public var x1(get_x1,set_x1):Float;
+    function get_x1() :Float { return getTrait("x1",Float); }
+    function set_x1( v:Float ) :Float { redraw(); return setTrait("x1",v); }
 
-    private function set_x1(v:Float) {
-        x1=v; redraw(); return x1;
-    }
-    private function set_y1(v:Float) {
-        y1=v; redraw(); return y1;
-    }
-    private function set_x2(v:Float) {
-        x2=v; redraw(); return x2;
-    }
-    private function set_y2(v:Float) {
-        y2=v; redraw(); return y2;
-    }
+    public var y1(get_y1,set_y1):Float;
+    function get_y1() :Float { return getTrait("y1",Float); }
+    function set_y1( v:Float ) :Float { redraw(); return setTrait("y1",v); }
 
-    public function new() :Void {
-        super();
-        x1=y1=x2=y2=0;
-    }
+    public var x2(get_x2,set_x2):Float;
+    function get_x2() :Float { return getTrait("x2",Float); }
+    function set_x2( v:Float ) :Float { redraw(); return setTrait("x2",v); }
+
+    public var y2(get_y2,set_y2):Float;
+    function get_y2() :Float { return getTrait("y2",Float); }
+    function set_y2( v:Float ) :Float { redraw(); return setTrait("y2",v); }
 
 	override public function getBoundingBox() : TRectangle {
 		return { l:x1, t:y1, r:x2, b:y2 };
 	}
-
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        x1 = getFloatProperty(xml,"x1");
-        y1 = getFloatProperty(xml,"y1");
-        x2 = getFloatProperty(xml,"x2");
-        y2 = getFloatProperty(xml,"y2");
-    }
 
 }

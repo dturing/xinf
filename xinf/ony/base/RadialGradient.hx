@@ -7,47 +7,42 @@ import xinf.erno.Paint;
 import xinf.geom.Types;
 
 import xinf.ony.base.Gradient;
+import xinf.traits.TraitDefinition;
+import xinf.traits.FloatTrait;
 
 class RadialGradient extends Gradient {
 	
-    public var cx(get_cx,set_cx):Null<Float>;
-    public var cy(get_cy,set_cy):Null<Float>;
-    public var r(get_r,set_r):Null<Float>;
-    public var fx(get_fx,set_fx):Null<Float>;
-    public var fy(get_fy,set_fy):Null<Float>;
+	static var TRAITS:Hash<TraitDefinition>;
+	static function __init__() {
+		TRAITS = new Hash<TraitDefinition>();
+		for( trait in [
+			new FloatTrait("cx",.5),
+			new FloatTrait("cy",.5),
+			new FloatTrait("r", .5),
+			new FloatTrait("fx",.5),
+			new FloatTrait("fy",.5),
+		] ) { TRAITS.set( trait.name, trait ); }
+	}
 
-	function set_cx(v:Null<Float>) :Null<Float> { return cx=v; }
-	function set_cy(v:Null<Float>) :Null<Float> { return cy=v; }
-	function set_r(v:Null<Float>) :Null<Float> { return r=v; }
-	function set_fx(v:Null<Float>) :Null<Float> { return fx=v; }
-	function set_fy(v:Null<Float>) :Null<Float> { return fy=v; }
-	function get_cx() :Null<Float> {
-		if( cx!=null ) return cx;
-//		if( peer!=null ) return peer.x1;
-		return .5;
-	}
-	function get_cy() :Null<Float> {
-		if( cy!=null ) return cy;
-//		if( peer!=null ) return peer.y1;
-		return .5;
-	}
-	function get_r() :Null<Float> {
-		if( r!=null ) return r;
-//		if( peer!=null ) return peer.y1;
-		return .5;
-	}
-	function get_fx() :Null<Float> {
-		if( fx!=null ) return fx;
-//		if( peer!=null ) return peer.fx;
-		if( cx!=null ) return cx;
-		return .5;
-	}
-	function get_fy() :Null<Float> {
-		if( fy!=null ) return fy;
-//		if( peer!=null ) return peer.y2;
-		if( cy!=null ) return cy;
-		return .5;
-	}
+    public var cx(get_cx,set_cx):Float;
+    function get_cx() :Float { return getTrait("cx",Float); }
+    function set_cx( v:Float ) :Float { return setTrait("cx",v); }
+
+    public var cy(get_cy,set_cy):Float;
+    function get_cy() :Float { return getTrait("cy",Float); }
+    function set_cy( v:Float ) :Float { return setTrait("cy",v); }
+
+    public var r(get_r,set_r):Float;
+    function get_r() :Float { return getTrait("r",Float); }
+    function set_r( v:Float ) :Float { return setTrait("r",v); }
+
+    public var fx(get_fx,set_fx):Float;
+    function get_fx() :Float { return getTrait("fx",Float); }
+    function set_fx( v:Float ) :Float { return setTrait("fx",v); }
+
+    public var fy(get_fy,set_fy):Float;
+    function get_fy() :Float { return getTrait("fy",Float); }
+    function set_fy( v:Float ) :Float { return setTrait("fy",v); }
 
 	override public function getPaint( target:Element ) :Paint {	
 		var center = {x:cx,y:cy};
@@ -81,20 +76,4 @@ class RadialGradient extends Gradient {
 		return PRadialGradient(stops,center.x,center.y,_r,focus.x,focus.y,spreadMethod);
 	}
 	
-	
-	override public function fromXml( xml:Xml ) :Void {
-		super.fromXml(xml);
-
-		if( xml.exists("cx") )
-			cx = getFloatProperty(xml,"cx");
-		if( xml.exists("cy") )
-			cy = getFloatProperty(xml,"cy");
-		if( xml.exists("r") )
-			r = getFloatProperty(xml,"r");
-		if( xml.exists("fx") )
-			fx = getFloatProperty(xml,"fx");
-		if( xml.exists("fy") )
-			fy = getFloatProperty(xml,"fy");
-
-	}
 }

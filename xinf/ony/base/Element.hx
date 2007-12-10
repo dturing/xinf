@@ -3,7 +3,6 @@ import xinf.ony.base.Implementation;
 
 import xinf.event.Event;
 import xinf.event.EventKind;
-import xinf.event.SimpleEventDispatcher;
 
 import xinf.geom.Types;
 import xinf.geom.Transform;
@@ -13,16 +12,11 @@ import xinf.ony.ElementStyle;
 import xinf.style.Stylable;
 import xinf.style.Selector;
 
-import xinf.xml.Serializable;
+import xinf.xml.Node;
+import xinf.traits.TraitDefinition;
+import xinf.traits.FloatTrait;
 
-class Element extends SimpleEventDispatcher,
-	implements Serializable, implements Stylable {
-
-    /** textual (SVG) id **/
-    public var id(default,null):String;
-
-    /** textual name (name attribute) **/
-    public var name(default,null):String;
+class Element extends Node, implements Stylable {
 
     /** Group that contains this Element, if any. **/
     public var parent(default,null):Group;
@@ -41,21 +35,17 @@ class Element extends SimpleEventDispatcher,
     /** the Element's style **/
     public var style(default,default):ElementStyle;
 
-    public function new() :Void {
-        super();
+    public function new( ?traits:Dynamic ) :Void {
+        super( traits );
 		
         transform = new Identity();
         style = new ElementStyle(this);
 	}
 	
     /** read element data from xml */
-    public function fromXml( xml:Xml ) :Void {
-        if( xml.exists("id") ) {
-            id = xml.get("id");
-        }
-        if( xml.exists("name") ) {
-            name = xml.get("name");
-        }
+    override public function fromXml( xml:Xml ) :Void {
+		super.fromXml( xml );
+		
         if( xml.exists("style") ) {
             style.parse( xml.get("style") );
         }
@@ -66,10 +56,6 @@ class Element extends SimpleEventDispatcher,
         }
     }
 	
-	/** called when the document is completely loaded **/
-	public function onLoad() :Void {
-	}
-
 	/** the bounding box of the element **/
 	public function getBoundingBox() : TRectangle {
 		throw("unimplemented");
@@ -156,20 +142,4 @@ class Element extends SimpleEventDispatcher,
         return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
     }
 
-    /* SVG parsing helper function-- should go somewhere else? FIXME */
-    function getFloatProperty( xml:Xml, name:String, ?def:Float ) :Float {
-        if( xml.exists(name) ) return Std.parseFloat(xml.get(name));
-        if( def==null ) def=0;
-        return def;
-    }
-
-    function getBooleanProperty( xml:Xml, name:String, ?def:Bool ) :Bool {
-        if( xml.exists(name) ) {
-            var v = xml.get(name);
-            if( v.toLowerCase()=="true" || v=="1" ) return true;
-            return false;
-        }
-        if( def==null ) def=false;
-        return def;
-    }
 }

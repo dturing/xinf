@@ -5,36 +5,47 @@ import xinf.style.StyleSheet;
 import xinf.ony.ElementStyle;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
+import xinf.traits.TraitDefinition;
+import xinf.traits.FloatTrait;
 
 import xinf.ony.URL;
 
 class Document extends GroupImpl {
 
-    public var x(default,set_x):Float;
-    public var y(default,set_y):Float;
-    public var width(default,set_width):Float;
-    public var height(default,set_height):Float;
-    function set_x(v:Float) {
-        x=v; retransform(); return x;
-    }
-    function set_y(v:Float) {
-        y=v; retransform(); return y;
-    }
-    function set_width(v:Float) {
-        width=v; return width;
-    }
-    function set_height(v:Float) {
-        height=v; return height;
-    }
+	static var TRAITS:Hash<TraitDefinition>;
+	static function __init__() {
+		TRAITS = new Hash<TraitDefinition>();
+		for( trait in [
+			new FloatTrait("x",0.),
+			new FloatTrait("y",0.),
+			new FloatTrait("width",0.),
+			new FloatTrait("height",0.),
+		] ) { TRAITS.set( trait.name, trait ); }
+	}
+
+    public var x(get_x,set_x):Float;
+    function get_x() :Float { return getTrait("x",Float); }
+    function set_x( v:Float ) :Float { retransform(); return setTrait("x",v); }
+	
+    public var y(get_y,set_y):Float;
+    function get_y() :Float { return getTrait("y",Float); }
+    function set_y( v:Float ) :Float { retransform(); return setTrait("y",v); }
+
+	public var width(get_width,set_width):Float;
+    function get_width() :Float { return getTrait("width",Float); }
+    function set_width( v:Float ) :Float { return setTrait("width",v); }
+	
+    public var height(get_height,set_height):Float;
+    function get_height() :Float { return getTrait("height",Float); }
+    function set_height( v:Float ) :Float { return setTrait("height",v); }
 
     public var styleSheet(default,null):StyleSheet<ElementStyle>;
     public var elementsById(default,null):Hash<ElementImpl>;
 	
-    public function new() :Void {
-        super();
+    public function new( ?traits:Dynamic ) {
+        super( traits );
         document=this;
         styleSheet=null;
-		x=y=0.;
         elementsById = new Hash<ElementImpl>();
     }
 
@@ -66,11 +77,6 @@ class Document extends GroupImpl {
 
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
-
-        x = getFloatProperty(xml,"x");
-        y = getFloatProperty(xml,"y");
-        width = getFloatProperty(xml,"width");
-        height = getFloatProperty(xml,"height");
 
 		// for now...
         if( xml.exists("viewBox") ) {

@@ -5,33 +5,45 @@ import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 import xinf.ony.URL;
 
+import xinf.traits.TraitDefinition;
+import xinf.traits.FloatTrait;
+import xinf.traits.StringTrait;
+
 class Image extends ElementImpl {
 
-    public var x(default,set_x):Float;
-    public var y(default,set_y):Float;
-    public var width(default,set_width):Float;
-    public var height(default,set_height):Float;
-    public var href(default,set_href):String;
-    
-    public var bitmap(default,set_bitmap):ImageData;
+	static var TRAITS:Hash<TraitDefinition>;
+	static function __init__() {
+		TRAITS = new Hash<TraitDefinition>();
+		for( trait in [
+			new FloatTrait("x",0.),
+			new FloatTrait("y",0.),
+			new FloatTrait("width",0.),
+			new FloatTrait("height",0.),
+			new StringTrait("xlink:href"),
+		] ) { TRAITS.set( trait.name, trait ); }
+	}
 
-    private function set_x(v:Float) {
-        x=v; redraw(); return x;
-    }
-    private function set_y(v:Float) {
-        y=v; redraw(); return y;
-    }
-    private function set_width(v:Float) {
-        width=v; redraw(); return width;
-    }
-    private function set_height(v:Float) {
-        height=v; redraw(); return height;
-    }
+    public var x(get_x,set_x):Float;
+    function get_x() :Float { return getTrait("x",Float); }
+    function set_x( v:Float ) :Float { redraw(); return setTrait("x",v); }
+	
+    public var y(get_y,set_y):Float;
+    function get_y() :Float { return getTrait("y",Float); }
+    function set_y( v:Float ) :Float { redraw(); return setTrait("y",v); }
 
-    private function set_href(v:String) {
-        var url:URL;
-        href=v;
-		var b;
+	public var width(get_width,set_width):Float;
+    function get_width() :Float { return getTrait("width",Float); }
+    function set_width( v:Float ) :Float { redraw(); return setTrait("width",v); }
+	
+    public var height(get_height,set_height):Float;
+    function get_height() :Float { return getTrait("height",Float); }
+    function set_height( v:Float ) :Float { redraw(); return setTrait("height",v); }
+
+    public var href(get_href,set_href):String;
+    function get_href() :String { return getTrait("xlink:href",String); }
+    function set_href( v:String ) :String { 
+		setTrait("xlink:ref",v);
+        var url:URL; var b;
 		if( document!=null ) b = document.style.xmlBase;
         if( b!=null ) url = new URL(b).getRelativeURL( href );
         else url = new URL(href);
@@ -40,7 +52,9 @@ class Image extends ElementImpl {
 
         redraw();
         return href;
-    }
+	}
+
+    public var bitmap(default,set_bitmap):ImageData;
 
     private function set_bitmap(v:ImageData) {
         // FIXME: if old bitmap, unregister...
@@ -51,26 +65,11 @@ class Image extends ElementImpl {
         redraw();
         return bitmap;
     }
-
-    public function new() :Void {
-        super();
-        x=y=0;
-		width=height=0;
-    }
     
     private function dataChanged( e:ImageLoadEvent ) :Void {
         redraw();
     }
    
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        x = getFloatProperty(xml,"x");
-        y = getFloatProperty(xml,"y");
-        width = getFloatProperty(xml,"width");
-        height = getFloatProperty(xml,"height");
-		href = xml.get("xlink:href");
-    }
-
     public static function load( url:String ) :ImageData {
         #if neko
             return( xinf.inity.Texture.newByName( url ) );

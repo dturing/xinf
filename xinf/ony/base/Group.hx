@@ -14,8 +14,8 @@ class Group extends ElementImpl {
         A simple Container will not display anything by itself,
         but can be used as a container object to group other Objects.
     **/
-    public function new() :Void {
-        super();
+    public function new( ?traits:Dynamic ) {
+        super( traits );
         mChildren = new Array<ElementImpl>();
     }
 

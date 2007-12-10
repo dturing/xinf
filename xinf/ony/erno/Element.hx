@@ -28,8 +28,8 @@ class Element extends xinf.ony.base.Element {
         return( manager.find(id) );
     }
     
-    public function new() :Void {
-		super();
+    public function new( ?traits:Dynamic ) :Void {
+		super( traits );
 		xid = Runtime.runtime.getNextId();
         manager.register( xid, this );
         redraw();

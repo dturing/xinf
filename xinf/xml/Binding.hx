@@ -36,7 +36,7 @@ class Binding<T> {
         }
         if( m==null ) m = marshallers.get( xml.nodeName );
 		if( m==null ) return null;
-        var ret:T = Type.createInstance( m, [ ] );
+		var ret:T = Type.createInstance( m, [ null ] );
         return ret;
     }
 }
