@@ -176,11 +176,7 @@ class PaintTrait extends TypedTrait<xinf.erno.Paint> {
 		if( def==null ) this.def=None;
 	}
  
-    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
-        obj.setTrait( name, parse(value) );
-    }
-	
-	public function parse( value:String ) :Paint {
+	override public function parse( value:String ) :Dynamic {
         var v:Paint;
 		var color:Color;
         

@@ -68,5 +68,21 @@ class TraitsEventDispatcher extends TraitsObject,
         // for now, FIXME (maybe, put them thru a global queue)
         dispatchEvent(e);
     }
-    
+
+	function copyProperties( to:Dynamic ) :Void {
+		// copy traits
+		to._traits = Reflect.copy(_traits);
+	
+		// copy my event listeners
+		to.listeners = new Hash<List<Dynamic->Void>>();
+		for( e in listeners.keys() ) {
+			var v = listeners.get(e);
+            var l = new List<Dynamic->Void>();
+			for( i in v ) {
+				l.add(i);
+			}
+            to.listeners.set( e, l );
+		}
+	}
+
 }

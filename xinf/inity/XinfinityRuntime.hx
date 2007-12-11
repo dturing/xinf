@@ -100,7 +100,12 @@ class XinfinityRuntime extends Runtime {
         #end
 
         somethingChanged = false;
+		
+		var d:Float = neko.Sys.time();
         renderRoot();
+		var d2:Float = neko.Sys.time();
+		trace("render root: "+((d2-d)*1000000));
+		trace("time: "+neko.Sys.time() );
         // TODO precise timing here
         
         endFrame();

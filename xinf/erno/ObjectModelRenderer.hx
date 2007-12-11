@@ -46,6 +46,14 @@ class ObjectModelRenderer<Primitive> extends PenRenderer {
     public function createPrimitive(id:Int) :Primitive {
         return null;
     }
+
+    /**
+        to be overridden by deriving classes, 
+		free resources (notably memory) associated to the given Object.
+    **/
+    public function destroyPrimitive( p:Primitive ) :Void {
+        return null;
+    }
     
     /**
         to be overridden by deriving classes, 
@@ -115,6 +123,12 @@ class ObjectModelRenderer<Primitive> extends PenRenderer {
     override public function endObject() {
         current = null;
     }
+
+	override public function destroyObject( id:Int ) :Void {
+        var o = lookup(id);
+		objects.remove(id);
+		destroyPrimitive( o );
+	}
     
     override public function showObject( id:Int ) {
         var o = lookup(id);

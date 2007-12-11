@@ -9,8 +9,8 @@ class Text extends xinf.ony.base.Text {
     
     var format:TextFormat;
 	
-	public function new() :Void {
-		super();
+	public function new(?traits:Dynamic) :Void {
+		super(traits);
 		format = TextFormat.getDefault();
 	}
 
@@ -26,7 +26,7 @@ class Text extends xinf.ony.base.Text {
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
         if( text!=null ) {
-			g.text(x,y,text,format);
+			g.text(x,y-format.size,text,format);
         }
     }
     

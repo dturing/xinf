@@ -7,6 +7,9 @@ import xinf.event.Event;
 class Root {
     private static var mRoot:Document;
 	
+	public static var width:Float;
+	public static var height:Float;
+	
     public static var children(get_children,null) :Iterator<Element>;
 	static function get_children() :Iterator<Element> {
 		return cast mRoot.children;
@@ -17,6 +20,11 @@ class Root {
 			var r = new xinf.ony.erno.Root();
 			mRoot = new Document();
 			r.attach( mRoot );
+			
+			Root.width = Root.height = 100;
+			xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
+				Root.width = e.x; Root.height = e.y;
+			});
 		}
 		return mRoot;
 	}

@@ -12,13 +12,13 @@ class StyledNode extends Node {
 		_style = Reflect.empty();
 	}
 	
-	public function setStyleTrait<T>( name:String, value:T ) :T {
+	override public function setStyleTrait<T>( name:String, value:T ) :T {
 		var r = setTrait( name, value );
 		styleChanged();
 		return r;
 	}
 	
-	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
+	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
 		if( inherit==null ) inherit=true;
 		
 		// lookup XML attribute
@@ -51,10 +51,21 @@ class StyledNode extends Node {
 
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
-		// TODO parse @style
+
+		if( xml.exists("style") ) {
+			StyleParser.parse( xml.get("style"), this, _style );
+		}
+
 		styleChanged();
 	}
-	
+
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		
+		// copy style traits
+		to._style = Reflect.copy(_style);
+	}
+
 	// hook
 	public function getStyleParent() :StyledNode {
 		return null;

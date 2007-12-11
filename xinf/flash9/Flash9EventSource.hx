@@ -104,11 +104,12 @@ class Flash9EventSource {
         var key:String = Keys.get(e.keyCode);
         if( e.keyCode != 0 ) {
             if( key == null ) {
-                trace("unhandled key code "+e.keyCode );
-                return;
+				key = String.fromCharCode(e.charCode);
+//                trace("unhandled key code "+e.keyCode );
+//                return;
             }
             runtime.postEvent( new KeyboardEvent( 
-                type, e.keyCode, key,
+                type, e.charCode, key,
                 e.shiftKey, e.altKey, e.ctrlKey ) );
             // prevent browser from handling it
             e.stopPropagation();

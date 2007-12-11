@@ -38,3 +38,7 @@ typedef Definitions = xinf.ony.erno.Definitions
 
 typedef Crop = xinf.ony.erno.Crop
 
+typedef TraitAccess = xinf.traits.TraitAccess;
+typedef FloatTrait = xinf.traits.FloatTrait;
+typedef IntTrait = xinf.traits.IntTrait;
+typedef StringTrait = xinf.traits.StringTrait;

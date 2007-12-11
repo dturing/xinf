@@ -96,14 +96,19 @@ class Manager {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
-        
+
+//		var d = neko.Sys.time();
+
         var ch = changed;
         changed = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).draw( g );
             somethingChanged = true;
         }
-        
+
+//		var d2 = neko.Sys.time();
+//		trace("draw changed: "+((d2-d)*1000000));
+
         if( somethingChanged ) Runtime.runtime.changed();
     }
     

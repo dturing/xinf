@@ -99,7 +99,11 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
     override public function createPrimitive(id:Int) :Primitive {
         return new GLObject(id);
     }
-    
+
+    override public function destroyPrimitive( p:Primitive ) :Void {
+		p.destroy();
+    }
+
     override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
         if( parent==null ) return;
         parent.addChild(child);

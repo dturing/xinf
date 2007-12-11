@@ -9,11 +9,7 @@ class StringChoiceTrait extends TypedTrait<String> {
         this.choices=choices;
     }
     
-    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
-        obj.setTrait( name, parse(value) );
-    }
-
-	public function parse( value:String ) :String {
+	override public function parse( value:String ) :Dynamic {
         for( choice in choices ) {
             if( choice==value ) return choice;
         }

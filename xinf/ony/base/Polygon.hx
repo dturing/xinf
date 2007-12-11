@@ -10,8 +10,8 @@ class Polygon extends ElementImpl {
         points=v; redraw(); return points;
     }
 
-    public function new() :Void {
-        super();
+    public function new( traits:Dynamic ) :Void {
+        super(traits);
         points = null;
     }
 

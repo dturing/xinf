@@ -25,6 +25,12 @@ class Text extends ElementImpl {
     function get_text() :String { return getTrait("text",String); }
     function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.x=x; to.y=y; 
+		to.text=text;
+	}
+
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
         text = textContent(xml);

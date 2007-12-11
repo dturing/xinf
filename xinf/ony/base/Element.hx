@@ -67,40 +67,40 @@ class Element extends StyledNode {
     function set_fill( v:Paint ) :Paint{ return setStyleTrait("fill",v); }
 
     public var fillOpacity(get_fill_opacity,set_fill_opacity):Null<Float>;
-    function get_fill_opacity() :Null<Float> { return getStyleTrait("fill_opacity",Float); }
-    function set_fill_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("fill_opacity",v); }
+    function get_fill_opacity() :Null<Float> { return getStyleTrait("fill-opacity",Float); }
+    function set_fill_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("fill-opacity",v); }
 
     public var stroke(get_stroke,set_stroke):Paint;
     function get_stroke() :Paint { return getStyleTrait("stroke",Paint); }
     function set_stroke( v:Paint ) :Paint { return setStyleTrait("stroke",v); }
 
     public var strokeWidth(get_stroke_width,set_stroke_width):Null<Float>;
-    function get_stroke_width() :Null<Float> { return getStyleTrait("stroke_width",Float); }
-    function set_stroke_width( v:Float ) :Null<Float> { return setStyleTrait("stroke_width",v); }
+    function get_stroke_width() :Null<Float> { return getStyleTrait("stroke-width",Float); }
+    function set_stroke_width( v:Float ) :Null<Float> { return setStyleTrait("stroke-width",v); }
 
     public var strokeOpacity(get_stroke_opacity,set_stroke_opacity):Null<Float>;
-    function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke_opacity",Float); }
-    function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke_opacity",v); }
+    function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke-opacity",Float); }
+    function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-opacity",v); }
 
     public var fontFamily(get_font_family,set_font_family):StringList;
-    function get_font_family() :StringList { return getStyleTrait("font_family",StringList); }
-    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font_family",v); }
+    function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
+    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
 
     public var fontSize(get_font_size,set_font_size):Float;
-    function get_font_size() :Float { return getStyleTrait("font_size",Float); }
-    function set_font_size( v:Float ) :Float { return setStyleTrait("font_size",v); }
+    function get_font_size() :Float { return getStyleTrait("font-size",Float); }
+    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",v); }
 
     public var lineJoin(get_line_join,set_line_join):JoinStyle;
-    function get_line_join() :JoinStyle { return getStyleTrait("stroke_linejoin",JoinStyle); }
-    function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("stroke_linejoin",v); }
+    function get_line_join() :JoinStyle { return getStyleTrait("stroke-linejoin",JoinStyle); }
+    function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("stroke-linejoin",v); }
 
     public var lineCap(get_line_cap,set_line_cap):CapsStyle;
-    function get_line_cap() :CapsStyle { return getStyleTrait("stroke_linecap",CapsStyle); }
-    function set_line_cap( v:CapsStyle ) :CapsStyle { return setStyleTrait("stroke_linecap",v); }
+    function get_line_cap() :CapsStyle { return getStyleTrait("stroke-linecap",CapsStyle); }
+    function set_line_cap( v:CapsStyle ) :CapsStyle { return setStyleTrait("stroke-linecap",v); }
 
     public var strokeMiterlimit(get_stroke_miterlimit,set_stroke_miterlimit):Null<Float>;
-    function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("stroke_miterlimit",Float); }
-    function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke_miterlimit",v); }
+    function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("stroke-miterlimit",Float); }
+    function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-miterlimit",v); }
 
 	// TODO fontWeight
 
@@ -117,6 +117,17 @@ class Element extends StyledNode {
 		transform=t;
 		retransform();
 		return t;
+	}
+	
+	public function clone<T>() :T {
+		var clone:T = cast(Type.createInstance( Type.getClass(this), [ null ] ));
+		copyProperties( clone );
+		return clone;
+	}
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties( to );
+		to.transform=transform; // FIXME: should dup.
+		to.document=document;
 	}
 
     public function new( ?traits:Dynamic ) :Void {
@@ -206,13 +217,16 @@ class Element extends StyledNode {
                 dispatched=true;
             }
         }
-		if( !dispatched && parent != null ) {
+ 		if( !dispatched && parent != null && e.type.bubble==true ) {
             parent.dispatchEvent(e);
         }
     }
 
     public function toString() :String {
-        return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
+		var s = "";
+ 		if( id!=null ) s += "#"+id;
+ 		if( name!=null ) s += "(\""+name+"\")";
+		return( Type.getClassName( Type.getClass(this) )+s );
     }
 
 }

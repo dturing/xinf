@@ -4,6 +4,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.ony.URL;
 import xinf.xml.Binding;
+import xinf.xml.Instantiator;
 
 class Document extends xinf.ony.base.Document {
 
@@ -22,14 +23,22 @@ class Document extends xinf.ony.base.Document {
         // TODO g.setTranslation( xid, x, y );
     }
 */
-	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
-		return xinf.ony.base.Document.instantiate( data, onLoad );
+	public static function instantiate( data:String, ?onLoad:Document->Void, ?parent:Document ) :Document {
+		return xinf.ony.base.Document.instantiate( data, onLoad, parent );
 	}
 
     public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
 		return xinf.ony.base.Document.load( url_s, onLoad );
 	}
-	
+
+    public static function overrideBinding( nodeName:String, cl:Class<Element> ) :Void {
+		return xinf.ony.base.Document.overrideBinding( nodeName, cl );
+    }
+    
+    public static function addInstantiator( i:Instantiator<Element> ) :Void {
+		return xinf.ony.base.Document.addInstantiator( i );
+    }
+
 	static function __init__() :Void {
         var binding = new Binding<Element>();
         

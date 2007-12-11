@@ -13,7 +13,7 @@ class BoundedFloatTrait extends FloatTrait {
 		this.max = max;
     }
 
-	override public function parse( value:String ) :Float {
+	override public function parse( value:String ) :Dynamic {
 		var v:Null<Float> = super.parse(value);
 
 		if( min!=null ) v = Math.max( min, v );

@@ -2,8 +2,8 @@ package xinf.traits;
 
 class FloatTrait extends TypedTrait<Float> {
 
-    static var numeric = ~/^([0-9\.]+)$/;
-
+    static var numeric = ~/^([\-+]?[0-9\.]+([eE][\-+]?[0-9]+)?)$/;
+	
     var def:Float;
     
     public function new( ?def:Null<Float> ) {
@@ -12,11 +12,7 @@ class FloatTrait extends TypedTrait<Float> {
         this.def = def;
     }
 
-    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
-        obj.setTrait( name, parse(value) );
-    }
-
-	public function parse( value:String ) :Float {
+	override public function parse( value:String ) :Dynamic {
         var v:Null<Float> = null;
 
 		if( numeric.match(value) ) {

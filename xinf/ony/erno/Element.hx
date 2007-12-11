@@ -35,6 +35,13 @@ class Element extends xinf.ony.base.Element {
         manager.register( xid, this );
         redraw();
     }
+	
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.xid = Runtime.runtime.getNextId();
+        manager.register( to.xid, to );
+		to.redraw();
+	}
     
     /** Object destructor<br/>
         You must call this function if you want to get rid of this object and free
@@ -93,11 +100,9 @@ class Element extends xinf.ony.base.Element {
 		} else g.setFill( null );
 
 
-		var strokeOpacity = strokeOpacity;
-		
 		var w = strokeWidth;
 		
-		// TODO: gradients, dash
+		// TODO: dash
 		var caps = lineCap;
 		var join = lineJoin;
 		var miterLimit = strokeMiterlimit;

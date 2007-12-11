@@ -77,7 +77,7 @@ class Keys {
     
     public static function get( code:Int ) :String {
 		#if flash
-		if( code>=49 && code<=142 ) return String.fromCharCode(code-16);
+		//if( code>=49 && code<=142 ) return String.fromCharCode(code-16);
 		#end
         return( keys.get(code) );
     }

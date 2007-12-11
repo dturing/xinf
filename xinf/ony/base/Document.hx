@@ -43,9 +43,9 @@ class Document extends GroupImpl {
     //public var styleSheet(default,null):StyleSheet<ElementStyle>;
     public var elementsById(default,null):Hash<ElementImpl>;
 	
-    public function new( ?traits:Dynamic ) {
+	public function new( ?parentDocument:Document, ?traits:Dynamic ) :Void {
         super( traits );
-        document=this;
+ 		document = if( parentDocument!=null ) parentDocument else this;
 //        styleSheet=null;
         elementsById = new Hash<ElementImpl>();
     }
@@ -117,8 +117,8 @@ class Document extends GroupImpl {
         binding.addInstantiator( i );
     }
 
-	public static function instantiate( data:String, ?onLoad:DocumentImpl->Void ) :DocumentImpl {
-        var doc = new DocumentImpl();
+	public static function instantiate( data:String, ?onLoad:DocumentImpl->Void, ?parent:DocumentImpl ) :DocumentImpl {
+        var doc = new DocumentImpl(parent);
 		var xml = Xml.parse(data);
 		doc.fromXml( xml.firstElement() );
 		doc.onLoad();

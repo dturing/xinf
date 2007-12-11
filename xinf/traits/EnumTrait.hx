@@ -14,11 +14,7 @@ class EnumTrait<T> extends TypedTrait<T> {
 		if( this.sfx==null ) this.sfx="";
     }
     
-    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
-        obj.setTrait( name, parse(value) );
-    }
-	
-    public function parse( value:String ) :T {
+    override public function parse( value:String ) :Dynamic {
         for( choice in Type.getEnumConstructs(enumClass) ) {
             if( choice.toLowerCase() == value+sfx ) {
                 var v = Reflect.field(enumClass,choice);

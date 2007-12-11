@@ -6,7 +6,7 @@ class UnitFloatTrait extends FloatTrait {
     static var numeric = ~/^([0-9\.]+)$/;
     static var unit = ~/^([0-9\.]+)[\r\n\t ]*([a-zA-Z]+)$/;
 
-	override public function parse( value:String ) :Float {
+	override public function parse( value:String ) :Dynamic {
         var v:Null<Float> = null;
 
         if( unit.match(value) ) {

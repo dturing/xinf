@@ -21,7 +21,7 @@ class StyleSheet {
     public function add( rule:StyleRule ) {
 		rules.push( rule );
     }
-	
+/*	
     public function match( e:Stylable ) :Dynamic {
 		var a = new Array<Dynamic>();
 		
@@ -32,5 +32,5 @@ class StyleSheet {
 		}
         return a[0]; // FIXME
     }
-	
+	*/
 }

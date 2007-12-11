@@ -28,5 +28,11 @@ class Use extends ElementImpl {
 		if( xml.exists("xlink:href") ) 
 			href = xml.get("xlink:href");
     }
-	
+
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		if( href!=null ) to.href = href;
+		trace("clone use href: "+href+" "+peer );
+	}
+
 }

@@ -19,6 +19,16 @@ class Group extends ElementImpl {
         mChildren = new Array<ElementImpl>();
     }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.mChildren = new Array<ElementImpl>();
+		for( child in mChildren ) {
+			var c =  child.clone();
+			c.parent = to;
+			to.mChildren.push( c );
+		}
+	}
+
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
         if( document==null ) throw("Document not set.");
@@ -68,6 +78,7 @@ class Group extends ElementImpl {
     public function detach( child:ElementImpl ) :Void {
         mChildren.remove( child );
         child.detachedFrom( this );
+        redraw();
     }
 
 	public function getElementByName( name:String ) :ElementImpl {
