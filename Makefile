@@ -1,8 +1,8 @@
 #######################################################
 
 PROJECT:=xinf
-VERSION:=0.4.0
-TAGLINE:=iteration 4
+VERSION:=0.4.1
+TAGLINE:=traits
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
 REVISION:=$(shell svnversion)
