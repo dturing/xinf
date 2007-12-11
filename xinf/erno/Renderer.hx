@@ -77,7 +77,12 @@ interface Renderer {
         End an object definition.
     **/
     function endObject() :Void;
-    
+
+    /**
+        Forget about an object, free associated resources.
+    **/
+    function destroyObject( id:Int ) :Void;
+
     /**
         Show the object with the specified ID inside the current object.
         (For Object-model renderers, this does something like addChild/appendChild.)

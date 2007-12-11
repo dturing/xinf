@@ -33,5 +33,16 @@ class MatchStyle extends Style {
         if( element!=null ) element.styleChanged();
         return value;
     }
+	
+	public function cloneFor<T>( e:Stylable ) :T {
+		var clone:MatchStyle = cast(Type.createInstance( Type.getClass(this), [ e ] ));
+		/*
+		for( f in Reflect.fields(style) )
+			Reflect.setField(clone.style,f,Reflect.field(style,f));
+			*/
+		clone.style = Reflect.copy(style);
+		clone.element=e;
+		return cast(clone);
+	}
 }
 

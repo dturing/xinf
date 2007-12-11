@@ -40,6 +40,10 @@ class GLObject {
         this.inner = GL.genLists(1);
     }
 
+	public function destroy() :Void {
+		GL.deleteLists(id,1);
+	}
+
     public function setTransform( transform:Matrix ) :Void {
         this.transform = transform;
         transformedBBox = null;

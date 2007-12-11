@@ -23,9 +23,12 @@ package xinf.event;
 class EventKind<T> {
     
     public var name(default,null) :String;
-    
-    public function new( name:String ) {
+    public var bubble(default,null) :Bool;
+	
+    public function new( name:String, ?bubble:Bool ) {
         this.name = name;
+		if( bubble==null ) bubble=true;
+		this.bubble = bubble;
     }
     
     public function toString() {

@@ -129,8 +129,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		
 			case SolidColor(r,g,b,a):
 				if( a>0 ) {
-					current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt() );
-					current.alpha=a;
+					current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt(), a );
 				}
 				
 			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
@@ -243,7 +242,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         var g = current.graphics;
         applyStroke();
 		applyFill();
-        g.drawEllipse( x-rx,y-ry,2*rx,2*ry );
+        g.drawEllipse( x-rx,y-ry,rx,ry );
         g.endFill();
     }
     
@@ -256,16 +255,17 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			switch( pen.fill ) {
 				case SolidColor(r,g,b,a):
 					format.format.color = Color.rgb(r,g,b).toRGBInt();
-					tf.alpha = a;
+					current.alpha = a;
 				default:
 					throw("Fill "+pen.fill+" not supported for text");
 			}
-			//tf.embedFonts = true;
+			
+			tf.embedFonts = true;
 	
             tf.defaultTextFormat = format.format;
             tf.selectable = false;
             tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-            tf.y=y;
+            tf.y=y-1;
             tf.x=x;
             tf.text = text;
 			

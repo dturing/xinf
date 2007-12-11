@@ -36,7 +36,11 @@ class BasicRenderer implements Renderer {
     public function endObject() :Void {
         unimplemented("endObject");
     }
-    
+
+    public function destroyObject( id:Int ) :Void {
+		unimplemented("freeObject");
+	}
+
     public function showObject( id:Int ) :Void {
         unimplemented("showObject");
     }

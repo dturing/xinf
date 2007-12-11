@@ -150,7 +150,7 @@ class Path extends ElementImpl {
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
-		to.segments = Lambda.array(segments);
+		if( segments!=null ) to.segments = Lambda.array(segments);
 	}
 
 	override public function getBoundingBox() : TRectangle {

@@ -26,7 +26,7 @@ class Text extends xinf.ony.base.Text {
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
         if( text!=null ) {
-			g.text(x,y,text,format);
+			g.text(x,y-format.size,text,format);
         }
     }
     

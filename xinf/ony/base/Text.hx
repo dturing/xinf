@@ -22,6 +22,12 @@ class Text extends ElementImpl {
 		x=y=0;
 	}
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		to.x=x; to.y=y; 
+		to.text=text;
+	}
+
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
         x = getFloatProperty(xml,"x");

@@ -208,7 +208,7 @@ class GLVGRenderer extends GLRenderer {
     override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
         current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
 		drawPath( function(path) {
-			VGU.roundRect(path,x,y,w,h,rx,ry);
+			VGU.roundRect(path,x,y,w,h,rx*2,ry*2);
 		});
 	}
 

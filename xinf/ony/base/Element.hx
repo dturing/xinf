@@ -72,16 +72,18 @@ class Element extends SimpleEventDispatcher,
 	
 	
 	public function clone<T>() :T {
-		var clone = cast(Type.createEmptyInstance( Type.getClass(this) ));
+		var clone:T = cast(Type.createInstance( Type.getClass(this), [ ] ));
 		copyProperties( clone );
+//	trace("clone "+Type.getClassName(Type.getClass(this))+" #"+untyped clone.id );
 		return clone;
 	}
-	function copyProperties( to:Dynamic ) :Void {
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties( to );
 		if( id!=null ) to.id=id+"'";
 		to.name=name;
-		to.style=style; 		// FIXME: should dup.
+		to.style=style.cloneFor(to);
 		to.transform=transform; // FIXME: should dup.
-		to.listeners=listeners;
+		to.document=document;
 	}
 
 	/** the bounding box of the element **/
@@ -161,7 +163,7 @@ class Element extends SimpleEventDispatcher,
                 dispatched=true;
             }
         }
-		if( !dispatched && parent != null ) {
+		if( !dispatched && parent != null && e.type.bubble==true ) {
             parent.dispatchEvent(e);
         }
     }
@@ -171,6 +173,22 @@ class Element extends SimpleEventDispatcher,
 		if( name!=null ) return "\""+name+"\"";
         return( Type.getClassName( Type.getClass(this) )+"#"+id+":"+name );
     }
+
+	public function getInheritedProperty<T>( name:String, cl:Class<T> ) :T {
+		var e = this;
+		while( e!=null && !Reflect.hasField(e,name) ) {
+			e = e.parent;
+		}
+		if( e!=null ) {
+			var v = Reflect.field(e,name);
+			if( Std.is( v, cl ) ) {
+				return( cast(v) );
+			}
+			throw("Inherited Property '"+name+"' is of wrong type");
+		}
+		throw("Inherited Property '"+name+"' not found.");
+		return null;
+	}
 
     /* SVG parsing helper function-- should go somewhere else? FIXME */
     function getFloatProperty( xml:Xml, name:String, ?def:Float ) :Float {

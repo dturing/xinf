@@ -23,7 +23,9 @@ class Group extends ElementImpl {
 		super.copyProperties(to);
 		to.mChildren = new Array<ElementImpl>();
 		for( child in mChildren ) {
-			to.mChildren.push( child.clone() );
+			var c =  child.clone();
+			c.parent = to;
+			to.mChildren.push( c );
 		}
 	}
 

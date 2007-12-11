@@ -68,12 +68,19 @@ class SimpleEventDispatcher implements EventDispatcher {
                 dispatched=true;
             }
         }
-        /*
-        if( !dispatched ) {
-            trace("unhandled event: "+e );
-        }
-        */
     }
+
+	function copyProperties( to:Dynamic ) :Void {
+		to.listeners = new Hash<List<Dynamic->Void>>();
+		for( e in listeners.keys() ) {
+			var v = listeners.get(e);
+            var l = new List<Dynamic->Void>();
+			for( i in v ) {
+				l.add(i);
+			}
+            to.listeners.set( e, l );
+		}
+	}
 
     public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
         // FIXME if debug_events
