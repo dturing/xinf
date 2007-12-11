@@ -4,16 +4,13 @@ import xinf.ony.base.Implementation;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 
+// FIXME: not SVG.
 class Crop extends GroupImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("width",0.),
-			new FloatTrait("height",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		width:new FloatTrait(),
+		height:new FloatTrait(),
+	};
 
 	public var width(get_width,set_width):Float;
     function get_width() :Float { return getTrait("width",Float); }

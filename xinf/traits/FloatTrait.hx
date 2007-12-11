@@ -6,13 +6,13 @@ class FloatTrait extends TypedTrait<Float> {
 
     var def:Float;
     
-    public function new( name:String, ?def:Null<Float> ) {
-        super(name);
+    public function new( ?def:Null<Float> ) {
+		super();
+		if( def==null ) def=0.;
         this.def = def;
-		if( def==null ) this.def=0.;
     }
 
-    override public function parseAndSet( value:String, obj:TraitAccess ) {
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
         obj.setTrait( name, parse(value) );
     }
 

@@ -1,6 +1,7 @@
 package xinf.traits;
 
 import xinf.erno.Paint;
+import xinf.erno.Color;
 
 class PaintTrait extends TypedTrait<xinf.erno.Paint> {
 
@@ -169,14 +170,14 @@ class PaintTrait extends TypedTrait<xinf.erno.Paint> {
  
 	var def:Paint;
 	
-	public function new( name:String, ?def:Paint ) {
-		super(name);
+	public function new( ?def:Paint ) {
+		super();
 		this.def=def;
 		if( def==null ) this.def=None;
 	}
  
-    override public function parseAndSet( value:String, style:Style ) {
-        style.setTrait( name, parse(value) );
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
+        obj.setTrait( name, parse(value) );
     }
 	
 	public function parse( value:String ) :Paint {

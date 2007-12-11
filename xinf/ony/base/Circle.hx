@@ -7,15 +7,11 @@ import xinf.traits.FloatTrait;
 
 class Circle extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("cx",0.),
-			new FloatTrait("cy",0.),
-			new FloatTrait("r",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		cx:new FloatTrait(),
+		cy:new FloatTrait(),
+		 r:new FloatTrait(),
+	};
 
     public var cx(get_cx,set_cx):Float;
     function get_cx() :Float { return getTrait("cx",Float); }

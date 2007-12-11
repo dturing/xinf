@@ -6,10 +6,6 @@ class UnitFloatTrait extends FloatTrait {
     static var numeric = ~/^([0-9\.]+)$/;
     static var unit = ~/^([0-9\.]+)[\r\n\t ]*([a-zA-Z]+)$/;
 
-    override public function parseAndSet( value:String, style:Style ) {
-        style.setTrait( name, parse(value) );
-    }
-
 	override public function parse( value:String ) :Float {
         var v:Null<Float> = null;
 

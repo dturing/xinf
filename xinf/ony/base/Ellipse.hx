@@ -7,16 +7,12 @@ import xinf.traits.FloatTrait;
 
 class Ellipse extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("cx",0.),
-			new FloatTrait("cy",0.),
-			new FloatTrait("rx",0.),
-			new FloatTrait("ry",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		cx:new FloatTrait(),
+		cy:new FloatTrait(),
+		rx:new FloatTrait(),
+		ry:new FloatTrait(),
+	};
 
     public var cx(get_cx,set_cx):Float;
     function get_cx() :Float { return getTrait("cx",Float); }

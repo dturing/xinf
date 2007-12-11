@@ -15,9 +15,9 @@ class Image extends xinf.ony.base.Image {
 		if( width<=0 ) width = bitmap.width;
 		if( height<=0 ) height = bitmap.height;
 		
-		g.setFill( SolidColor(1,1,1,style.opacity) );
+		g.setFill( SolidColor(1,1,1,opacity) );
 		
-		if( style.opacity > 0 || style.opacity==null ) {
+		if( opacity > 0 || opacity==null ) {
 			g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, {x:x,y:y,w:width,h:height} );
 		}
      }

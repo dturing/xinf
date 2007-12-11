@@ -4,13 +4,13 @@ class StringChoiceTrait extends TypedTrait<String> {
 
     var choices:Array<String>;
     
-    public function new( name:String, choices:Array<String> ) {
-        super(name);
+    public function new( choices:Array<String> ) {
+		super();
         this.choices=choices;
     }
     
-    override public function parseAndSet( value:String, style:Style ) {
-        style.setTrait( name, parse(value) );
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
+        obj.setTrait( name, parse(value) );
     }
 
 	public function parse( value:String ) :String {

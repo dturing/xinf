@@ -1,5 +1,5 @@
 
-package xinf.style;
+package xinf.type;
 
 class StringList {
     public var list:Array<String>;

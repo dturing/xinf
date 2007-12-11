@@ -17,8 +17,8 @@ class Text extends xinf.ony.base.Text {
     override public function styleChanged() :Void {
         super.styleChanged();
         
-        var family = style.fontFamily;
-        var size = style.fontSize;
+        var family = fontFamily;
+        var size = fontSize;
         format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
         // TODO: weight
     }

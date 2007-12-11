@@ -12,18 +12,14 @@ import xinf.traits.FloatTrait;
 
 class RadialGradient extends Gradient {
 	
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("cx",.5),
-			new FloatTrait("cy",.5),
-			new FloatTrait("r", .5),
-			new FloatTrait("fx",.5),
-			new FloatTrait("fy",.5),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
-
+	static var TRAITS = {
+		cx:new FloatTrait(.5),
+		cy:new FloatTrait(.5),
+		 r:new FloatTrait(.5),
+		fx:new FloatTrait(.5),
+		fy:new FloatTrait(.5),
+	};
+	
     public var cx(get_cx,set_cx):Float;
     function get_cx() :Float { return getTrait("cx",Float); }
     function set_cx( v:Float ) :Float { return setTrait("cx",v); }

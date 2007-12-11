@@ -1,38 +1,36 @@
 
 package xinf.style;
 
-typedef StyleRule<S:Style> = {
+typedef StyleRule = {
     var selector:Selector;
-    var style:S;
+    var style:Dynamic;
 }
 
 
-class StyleSheet<S:Style> {
+class StyleSheet {
 
-	private var rules :Array<StyleRule<S>>;
-    private var wrap :Style->S;
+	private var rules :Array<StyleRule>;
 	
-    public function new( wrap:Style->S, ?d:Iterable<StyleRule<S>> ) :Void {
-        rules = new Array<StyleRule<S>>();
-		this.wrap = wrap;
+    public function new( ?d:Iterable<StyleRule> ) :Void {
+        rules = new Array<StyleRule>();
 		if( d!=null ) {
 			for( r in d ) add( r );
 		}
     }
 	
-    public function add( rule:StyleRule<S> ) {
+    public function add( rule:StyleRule ) {
 		rules.push( rule );
     }
 	
-    public function match( e:Stylable ) :S {
-		var a = new Array<S>();
+    public function match( e:Stylable ) :Dynamic {
+		var a = new Array<Dynamic>();
 		
 		for( rule in rules ) {
 			if( e.matchSelector( rule.selector ) ) {
 				a.push( rule.style );
 			}
 		}
-        return wrap( new StyleCascade( untyped a ) ); // FIXME
+        return a[0]; // FIXME
     }
 	
 }

@@ -7,8 +7,8 @@ class BoundedFloatTrait extends FloatTrait {
 	var min:Null<Float>;
 	var max:Null<Float>;
 	
-    public function new( name:String, ?min:Null<Float>, ?max:Null<Float>, ?def:Null<Float> ) {
-        super(name,def);
+    public function new( ?min:Null<Float>, ?max:Null<Float>, ?def:Null<Float> ) {
+        super(def);
 		this.min = min;
 		this.max = max;
     }

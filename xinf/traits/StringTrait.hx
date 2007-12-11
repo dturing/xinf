@@ -2,7 +2,7 @@ package xinf.traits;
 
 class StringTrait extends TypedTrait<String> {
 
-    override public function parseAndSet( value:String, obj:TraitAccess ) {
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
         obj.setTrait( name, parse(value) );
     }
 

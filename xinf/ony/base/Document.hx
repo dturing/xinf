@@ -1,26 +1,23 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
-import xinf.style.StyleSheet;
-import xinf.ony.ElementStyle;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
+
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
+import xinf.traits.StringTrait;
 
 import xinf.ony.URL;
 
 class Document extends GroupImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("x",0.),
-			new FloatTrait("y",0.),
-			new FloatTrait("width",0.),
-			new FloatTrait("height",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
+	static var TRAITS = {
+		x:new FloatTrait(),
+		y:new FloatTrait(),
+		width:new FloatTrait(),
+		height:new FloatTrait(),
+		xmlBase:new StringTrait(),// FIXME: xml-base? xml:base?
 	}
 
     public var x(get_x,set_x):Float;
@@ -39,13 +36,17 @@ class Document extends GroupImpl {
     function get_height() :Float { return getTrait("height",Float); }
     function set_height( v:Float ) :Float { return setTrait("height",v); }
 
-    public var styleSheet(default,null):StyleSheet<ElementStyle>;
+    public var xmlBase(get_xmlBase,set_xmlBase):String;
+    function get_xmlBase() :String { return getTrait("xmlBase",String); } 
+    function set_xmlBase( v:String ) :String { redraw(); return setTrait("xmlBase",v); }
+
+    //public var styleSheet(default,null):StyleSheet<ElementStyle>;
     public var elementsById(default,null):Hash<ElementImpl>;
 	
     public function new( ?traits:Dynamic ) {
         super( traits );
         document=this;
-        styleSheet=null;
+//        styleSheet=null;
         elementsById = new Hash<ElementImpl>();
     }
 
@@ -127,7 +128,7 @@ class Document extends GroupImpl {
 	
     public static function load( url_s:String, ?onLoad:DocumentImpl->Void ) :DocumentImpl {
         var doc = new DocumentImpl();
-        doc.style.xmlBase = url_s;
+        doc.xmlBase = url_s;
         
         var url = new URL(url_s);
         url.fetch( function(data) {

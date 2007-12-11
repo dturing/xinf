@@ -11,17 +11,13 @@ import xinf.traits.StringTrait;
 
 class Image extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("x",0.),
-			new FloatTrait("y",0.),
-			new FloatTrait("width",0.),
-			new FloatTrait("height",0.),
-			new StringTrait("xlink:href"),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		x:new FloatTrait(),
+		y:new FloatTrait(),
+		width:new FloatTrait(),
+		height:new FloatTrait(),
+		href:new FloatTrait(), // FIXME proper namespaces
+	};
 
     public var x(get_x,set_x):Float;
     function get_x() :Float { return getTrait("x",Float); }
@@ -39,12 +35,12 @@ class Image extends ElementImpl {
     function get_height() :Float { return getTrait("height",Float); }
     function set_height( v:Float ) :Float { redraw(); return setTrait("height",v); }
 
-    public var href(get_href,set_href):String;
-    function get_href() :String { return getTrait("xlink:href",String); }
+    public var href(get_href,set_href):String; // TODO xlink namespace
+    function get_href() :String { return getTrait("href",String); }
     function set_href( v:String ) :String { 
-		setTrait("xlink:ref",v);
+		setTrait("href",v);
         var url:URL; var b;
-		if( document!=null ) b = document.style.xmlBase;
+		if( document!=null ) b = document.xmlBase;
         if( b!=null ) url = new URL(b).getRelativeURL( href );
         else url = new URL(href);
         trace("Load image: "+url );

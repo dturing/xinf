@@ -1,16 +1,16 @@
 package xinf.ony.base;
 
 import xinf.xml.Serializable;
-import xinf.style.StylePropertyDefinition;
-import xinf.style.Style;
-import xinf.style.StyleParser;
+//import xinf.style.StylePropertyDefinition;
+//import xinf.style.Style;
+//import xinf.style.StyleParser;
 import xinf.erno.Paint;
 import xinf.erno.Color;
-
+/*
 class GradientStopStyle extends Style {
     public var stopOpacity(get_stop_opacity,set_stop_opacity):Null<Float>;
-    function get_stop_opacity() :Null<Float> { return getInheritedProperty("stop-opacity",Float); }
-    function set_stop_opacity( v:Null<Float> ) :Null<Float> { return setProperty("stop-opacity",v); }
+    function get_stop_opacity() :Null<Float> { return getTrait("stop-opacity",Float); }
+    function set_stop_opacity( v:Null<Float> ) :Null<Float> { return setTrait("stop-opacity",v); }
 
     public var stopColor(get_stop_color,set_stop_color):Paint;
     function get_stop_color() :Paint { return getInheritedProperty("stop-color",Paint); }
@@ -36,20 +36,20 @@ class GradientStopStyle extends Style {
         }
     }
 }
-
+*/
 class GradientStop implements Serializable {
 	public var offset :Float;
 	public var color :Color;
-	public var style :GradientStopStyle;
+//	public var style :GradientStopStyle;
 
 	public function new() :Void {
-		style = new GradientStopStyle();
+//		style = new GradientStopStyle();
 	}
 
 	public function fromXml( xml:Xml ) :Void {
 		if( xml.exists("offset") )
 			offset = Std.parseFloat( xml.get("offset") );
-	
+	/*
         if( xml.exists("style") ) {
             style.parse( xml.get("style") );
         }
@@ -64,6 +64,7 @@ class GradientStop implements Serializable {
 					throw("GradientStop stop-color must be a SolidColor");
 			}
 		}
+		*/
 	}
 	
 }

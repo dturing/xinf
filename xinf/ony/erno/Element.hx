@@ -7,6 +7,7 @@ import xinf.geom.Transform;
 import xinf.erno.CapsStyle;
 import xinf.erno.JoinStyle;
 import xinf.ony.base.PaintElement;
+import xinf.ony.Visibility;
 
 class Element extends xinf.ony.base.Element {
     
@@ -63,7 +64,7 @@ class Element extends xinf.ony.base.Element {
         **/
     public function draw( g:Renderer ) :Void {
         g.startObject( xid );
-            switch( style.visibility ) {
+            switch( visibility ) {
                 case Hidden:
                     // nada
                 default:
@@ -78,11 +79,7 @@ class Element extends xinf.ony.base.Element {
         Everything you do will be in the Object's local coordinate space.
         **/
     public function drawContents( g:Renderer ) :Void {
-		var opacity = style.opacity;
-		var fillOpacity = style.fillOpacity;
-		
-        var fill = style.fill;
-		if( fill!=null ) {
+        if( fill!=null ) {
 			switch( fill ) {
 				case URLReference(url):
 					var r = document.getTypedElementByURI( url, PaintElement );
@@ -96,20 +93,19 @@ class Element extends xinf.ony.base.Element {
 		} else g.setFill( null );
 
 
-		var strokeOpacity = style.strokeOpacity;
+		var strokeOpacity = strokeOpacity;
 		
-		var stroke = style.stroke;
-        var w = style.strokeWidth;
+		var w = strokeWidth;
 		
 		// TODO: gradients, dash
-		var caps = style.lineCap;
-		var join = style.lineJoin;
-		var miterLimit = style.strokeMiterlimit;
+		var caps = lineCap;
+		var join = lineJoin;
+		var miterLimit = strokeMiterlimit;
 		var dashArray:Iterable<Float> = null;
 		var dashOffset:Null<Float> = null;
 		
 		if( stroke!=null ) {
-			switch( stroke) {
+			switch( stroke ) {
 				case URLReference(url):
 					var r = document.getTypedElementByURI( url, PaintElement );
 					if( r==null ) throw("Referenced Paint not found: "+url );

@@ -7,18 +7,14 @@ import xinf.traits.FloatTrait;
 
 class Rectangle extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("x",0.),
-			new FloatTrait("y",0.),
-			new FloatTrait("width",0.),
-			new FloatTrait("height",0.),
-			new FloatTrait("rx",0.),
-			new FloatTrait("ry",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		x:new FloatTrait(),
+		y:new FloatTrait(),
+		width:new FloatTrait(),
+		height:new FloatTrait(),
+		rx:new FloatTrait(),
+		ry:new FloatTrait(),
+	};
 
     public var x(get_x,set_x):Float;
     function get_x() :Float { return getTrait("x",Float); }

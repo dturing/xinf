@@ -6,16 +6,16 @@ class EnumTrait<T> extends TypedTrait<T> {
     var def:T;
 	var sfx:String;
     
-    public function new( name:String, enumClass:Dynamic, ?suffix:String, ?def:T ) {
-        super(name);
+    public function new( enumClass:Dynamic, ?suffix:String, ?def:T ) {
+        super();
         this.enumClass = enumClass;
         this.def = def;
 		this.sfx = suffix;
 		if( this.sfx==null ) this.sfx="";
     }
     
-    override public function parseAndSet( value:String, style:Style ) {
-        style.setTrait( name, parse(value) );
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
+        obj.setTrait( name, parse(value) );
     }
 	
     public function parse( value:String ) :T {

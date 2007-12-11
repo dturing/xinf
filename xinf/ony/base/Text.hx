@@ -7,14 +7,10 @@ import xinf.traits.StringTrait;
 
 class Text extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("x",0.),
-			new FloatTrait("y",0.),
-			new StringTrait("text"),
-		] ) { TRAITS.set( trait.name, trait ); }
+	static var TRAITS = {
+		x:new FloatTrait(),
+		y:new FloatTrait(),
+		text:new StringTrait(), // FIXME uDOM: "#text"?
 	}
 
     public var x(get_x,set_x):Float;

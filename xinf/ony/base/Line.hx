@@ -7,16 +7,12 @@ import xinf.traits.FloatTrait;
 
 class Line extends ElementImpl {
 
-	static var TRAITS:Hash<TraitDefinition>;
-	static function __init__() {
-		TRAITS = new Hash<TraitDefinition>();
-		for( trait in [
-			new FloatTrait("x1",0.),
-			new FloatTrait("y1",0.),
-			new FloatTrait("x2",0.),
-			new FloatTrait("y2",0.),
-		] ) { TRAITS.set( trait.name, trait ); }
-	}
+	static var TRAITS = {
+		x1:new FloatTrait(),
+		y1:new FloatTrait(),
+		x2:new FloatTrait(),
+		y2:new FloatTrait(),
+	};
 	
     public var x1(get_x1,set_x1):Float;
     function get_x1() :Float { return getTrait("x1",Float); }

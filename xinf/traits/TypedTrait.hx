@@ -1,11 +1,8 @@
 package xinf.traits;
 
 class TypedTrait<T> implements TraitDefinition {
-
-    public var name:String;
     
-    public function new( name:String ) {
-        this.name=name;
+    public function new() {
     }
 
 	/* actually, this class should implement parse() for descendants to override
@@ -13,7 +10,7 @@ class TypedTrait<T> implements TraitDefinition {
 	  see http://lists.motion-twin.com/pipermail/haxe/2007-July/010658.html
 	*/
 
-    override public function parseAndSet( value:String, obj:TraitAccess ) {
+    override public function parseAndSet( name:String, value:String, obj:TraitAccess ) {
 		throw( "unimplemented" );
     }
 	

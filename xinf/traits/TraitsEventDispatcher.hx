@@ -10,7 +10,8 @@ class TraitsEventDispatcher extends TraitsObject,
     private var listeners :Hash<List<Dynamic->Void>>;
     private var filters :List<Dynamic->Bool>;
 
-    public function new() :Void {
+    public function new( ?traits:Dynamic ) :Void {
+		super( traits );
         listeners = new Hash<List<Dynamic->Void>>();
     }
 
