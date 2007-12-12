@@ -27,7 +27,7 @@ class StyledNode extends Node {
 			if( Std.is(v,type) ) return v;
 			throw( new TraitTypeException( name, this, v, type ) );
 		}
-		
+
 		// lookup in style attribute
 		v = Reflect.field(_style,name);
 		if(v!=null) {
@@ -36,6 +36,7 @@ class StyledNode extends Node {
 		}
 		
 		// inherited.. (no update- FIXME/TODO/MAYBE)
+		
 		if( inherit ) {
 			var p = getStyleParent();
 			if( p!=null ) return p.getStyleTrait( name, type, inherit );

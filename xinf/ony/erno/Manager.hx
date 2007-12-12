@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -90,14 +75,21 @@ class Manager {
         var somethingChanged:Bool = false;
         var g:Renderer = Runtime.renderer;
         
-        var ch = moved;
+ 		#if profile
+ 			xinf.test.Profile.before("transform");
+ 		#end
+
+		var ch = moved;
         moved = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
 
-//		var d = neko.Sys.time();
+ 		#if profile
+			xinf.test.Profile.after("transform");
+ 			xinf.test.Profile.before("draw");
+ 		#end
 
         var ch = changed;
         changed = new IntHash<Element>();
@@ -106,8 +98,9 @@ class Manager {
             somethingChanged = true;
         }
 
-//		var d2 = neko.Sys.time();
-//		trace("draw changed: "+((d2-d)*1000000));
+ 		#if profile
+ 			xinf.test.Profile.after("draw");
+ 		#end
 
         if( somethingChanged ) Runtime.runtime.changed();
     }

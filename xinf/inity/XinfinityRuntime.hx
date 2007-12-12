@@ -101,12 +101,15 @@ class XinfinityRuntime extends Runtime {
 
         somethingChanged = false;
 		
-		var d:Float = neko.Sys.time();
-        renderRoot();
-		var d2:Float = neko.Sys.time();
-		trace("render root: "+((d2-d)*1000000));
-		trace("time: "+neko.Sys.time() );
-        // TODO precise timing here
+ 		#if profile
+ 			xinf.test.Profile.before("render");
+ 		#end
+		renderRoot();
+ 		#if profile
+ 			xinf.test.Profile.after("render");
+ 		#end
+ 
+ 		// TODO precise timing here
         
         endFrame();
 
@@ -121,6 +124,10 @@ class XinfinityRuntime extends Runtime {
         if( somethingChanged ) {
             GLUT.postRedisplay();
         }
+		
+		#if profile
+			if( frame % 50 == 0 ) xinf.test.Profile.dump();
+		#end
     }
 
     /* internal functions */

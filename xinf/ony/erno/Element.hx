@@ -78,7 +78,7 @@ class Element extends xinf.ony.base.Element {
                     drawContents(g);
             }
         g.endObject();
-        reTransform(g);
+        reTransform(g); // FIXME: needed?
     }
     
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
@@ -98,7 +98,6 @@ class Element extends xinf.ony.base.Element {
 					g.setFill( fill );
 			}
 		} else g.setFill( null );
-
 
 		var w = strokeWidth;
 		
