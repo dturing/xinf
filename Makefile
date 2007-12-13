@@ -34,6 +34,12 @@ js : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -js test.js -main Example
 
 
+# Benchmark
+
+benchmark : $(VERSION_STUB) $(SRC) 
+	haxe $(HAXEFLAGS) -D profile -neko bench.n -main Benchmark
+	NEKOPATH=$(NEKOPATH) neko bench.n
+
 #######################################################
 # generate version file
 .PHONY: FORCE

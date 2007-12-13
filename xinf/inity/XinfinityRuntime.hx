@@ -126,7 +126,13 @@ class XinfinityRuntime extends Runtime {
         }
 		
 		#if profile
-			if( frame % 50 == 0 ) xinf.test.Profile.dump();
+//			xinf.test.Counter.count("frames");
+			if( frame % 50 == 0 ) {
+				neko.Lib.print("---------------------------\n");
+				xinf.test.Counter.dump();
+				xinf.test.Counter.reset();
+				xinf.test.Profile.dump();
+			}
 		#end
     }
 

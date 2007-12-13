@@ -78,7 +78,7 @@ class Element extends xinf.ony.base.Element {
                     drawContents(g);
             }
         g.endObject();
-        reTransform(g); // FIXME: needed?
+        reTransform(g);
     }
     
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
@@ -86,6 +86,9 @@ class Element extends xinf.ony.base.Element {
         Everything you do will be in the Object's local coordinate space.
         **/
     public function drawContents( g:Renderer ) :Void {
+		#if profile
+			xinf.test.Counter.count("drawContents");
+		#end
         if( fill!=null ) {
 			switch( fill ) {
 				case URLReference(url):
@@ -99,16 +102,15 @@ class Element extends xinf.ony.base.Element {
 			}
 		} else g.setFill( null );
 
-		var w = strokeWidth;
-		
-		// TODO: dash
-		var caps = lineCap;
-		var join = lineJoin;
-		var miterLimit = strokeMiterlimit;
-		var dashArray:Iterable<Float> = null;
-		var dashOffset:Null<Float> = null;
-		
 		if( stroke!=null ) {
+			var w = strokeWidth;
+			var caps = lineCap;
+			var join = lineJoin;
+			var miterLimit = strokeMiterlimit;
+			// TODO: dash
+			var dashArray:Iterable<Float> = null;
+			var dashOffset:Null<Float> = null;
+			
 			switch( stroke ) {
 				case URLReference(url):
 					var r = document.getTypedElementByURI( url, PaintElement );

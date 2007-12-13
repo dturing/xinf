@@ -37,7 +37,7 @@ class Element extends StyledNode {
 		stroke_width:	new UnitFloatTrait(1),
 		stroke_opacity:	new BoundedFloatTrait(0,1,1),
 		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
-		stroke_linecap:	new EnumTrait<JoinStyle>( CapsStyle, "caps" ),
+		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", RoundCaps ),
 		stroke_miterlimit: new FloatTrait(4),
 		
 		font_family:	new StringListTrait(),

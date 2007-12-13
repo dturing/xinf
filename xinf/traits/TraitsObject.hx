@@ -14,13 +14,18 @@ class TraitsObject implements TraitAccess {
 	public function getTrait<T>( name:String, type:Dynamic ) :T {
 		var v = Reflect.field(_traits,name);
 		if(v!=null) {
-			if( Std.is(v,type) ) return v;
+			if( Std.is(v,type) ) {
+				return v;
+			}
 			throw( new TraitTypeException( name, this, v, type ) );
 		}
+		
 		var def = getTraitDefinition(name);
 		if( def!=null ) {
-			return def.getDefault();
+			var d = def.getDefault();
+			return d;
 		}
+		
 		return null;
 	}
 

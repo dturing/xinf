@@ -16,7 +16,7 @@ class Group extends xinf.ony.base.Group {
     }
 	
     override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
+        // super.drawContents(g);
         
         // draw children
         for( child in children ) {
