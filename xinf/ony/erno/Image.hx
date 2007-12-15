@@ -11,7 +11,9 @@ class Image extends xinf.ony.base.Image {
             g.setStroke( SolidColor(1,0,0,1), 1 );
             g.setFill( SolidColor(.5,.5,.5,.5) );
             g.rect( x, y, width, height );
+			return;
         }
+		
 		if( width<=0 ) width = bitmap.width;
 		if( height<=0 ) height = bitmap.height;
 		
