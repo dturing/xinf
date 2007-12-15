@@ -94,13 +94,15 @@ class Document extends GroupImpl {
         var r = binding.instantiate( xml );
         if( r==null ) return null;
         
-        if( parent!=null ) parent.attach(r);
-        r.document = this; // FIXME
-        
+        r.document = this; // FIXME | why?
         r.fromXml( xml );
-        if( r.id!=null ) {
+
+		if( r.id!=null ) {
             elementsById.set( r.id, r );
         }
+		
+        if( parent!=null ) parent.attach(r);
+		
         return r;
     }
 

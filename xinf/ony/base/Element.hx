@@ -105,11 +105,20 @@ class Element extends StyledNode {
 	// TODO fontWeight
 
 
+    override function set_id( v:String ) :String { 
+		if( document!=null ) {
+			document.elementsById.remove(id);
+			document.elementsById.set(v,untyped this); // FIXME gnaa
+		}
+		return super.set_id(v); 
+	}
+
+
     /** Group that contains this Element, if any. **/
     public var parent(default,null):Group;
 
     /** Document that ultimately contains this Element **/
-    public var document(default,null):Document;
+    public var document(default,null):Document;		// FIXME: update elementsById
 
 	/** the Element's transformation **/
     public var transform(default,set_transform):Transform;
@@ -119,11 +128,6 @@ class Element extends StyledNode {
 		return t;
 	}
 	
-	public function clone<T>() :T {
-		var clone:T = cast(Type.createInstance( Type.getClass(this), [ null ] ));
-		copyProperties( clone );
-		return clone;
-	}
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties( to );
 		to.transform=transform; // FIXME: should dup.
