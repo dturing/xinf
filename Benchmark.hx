@@ -5,7 +5,7 @@ import xinf.erno.Paint;
 
 class Benchmark {
 	public static function main() {
-		var n=100;
+		var n=50;
 		
 		for( i in 0...n ) {
 			var r = new Rectangle();
@@ -17,9 +17,25 @@ class Benchmark {
 			Root.attach(r);
 			Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
 				r.transform = new Concatenate( new Rotate( e.frame/10 ), t );
-				r.x=-12;
+			//	r.x=-12;
 			});
 		}
+		
+		var scanline = new Rectangle();
+		scanline.height=1; scanline.fill=SolidColor(0,0,0,1);
+		Root.attach( scanline );
+		Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
+			scanline.width = Root.width;
+			scanline.transform = new Translate(0,e.frame % Root.height);
+		});
+		
+		var flicker = new Rectangle();
+		flicker.width=100; flicker.fill=SolidColor(0,0,0,1);
+		Root.attach( flicker );
+		Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
+			flicker.height = Root.height;
+			flicker.transform = new Translate((e.frame*10) % Root.width,0);
+		});
 		
 		Root.main();
 	}
