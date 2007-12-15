@@ -125,8 +125,9 @@ class GLVGRenderer extends GLRenderer {
 				default: VG.CAP_BUTT;
 			}
 		VG.seti( VG.STROKE_CAP_STYLE, caps );
-		
-		VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
+
+		if( pen.miterLimit!=null )
+			VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
 	}
 
 	function drawPath( f:Int->Void ) {
