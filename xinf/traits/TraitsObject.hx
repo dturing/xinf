@@ -65,6 +65,17 @@ class TraitsObject implements TraitAccess {
 		}
 	}
 	
+	public function clone<T>() :T {
+		var clone:T = cast(Type.createInstance( Type.getClass(this), [ null ] ));
+		copyProperties( clone );
+		return clone;
+	}
+	
+	function copyProperties( to:Dynamic ) :Void {
+		// copy traits
+		to._traits = Reflect.copy(_traits);
+	}
+	
 	public function getTraitDefinition( _name:String ) :TraitDefinition {
 		var name = StringTools.replace(_name,"-","_");
 		var cl:Class<Dynamic> = Type.getClass( this );

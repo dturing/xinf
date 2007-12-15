@@ -69,9 +69,8 @@ class TraitsEventDispatcher extends TraitsObject,
         dispatchEvent(e);
     }
 
-	function copyProperties( to:Dynamic ) :Void {
-		// copy traits
-		to._traits = Reflect.copy(_traits);
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to); 
 	
 		// copy my event listeners
 		to.listeners = new Hash<List<Dynamic->Void>>();

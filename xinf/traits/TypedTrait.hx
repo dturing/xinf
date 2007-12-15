@@ -15,7 +15,7 @@ class TypedTrait<T> implements TraitDefinition {
     }
 	
 	override public function getDefault() :Dynamic {
-		throw( "unimplemented" );
+		throw( "unimplemented "+Type.getClassName(Type.getClass(this))+".getDefault()" );
 		return null;
 	}
 
