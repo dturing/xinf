@@ -216,7 +216,7 @@ class GLVGRenderer extends GLRenderer {
     override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
         current.mergeBBox( {l:x-rx,t:y-ry,r:x+rx,b:y+ry} );
 		drawPath( function(path) {
-			VGU.ellipse(path,x,y,rx,ry);
+			VGU.ellipse(path,x,y,rx*2,ry*2);
 		});
 	}
 }

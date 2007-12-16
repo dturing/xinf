@@ -110,7 +110,6 @@ class XinfinityRuntime extends Runtime {
 		
 		var d = (time-now);
 		while( d>.005 ) {
-		//	trace("should sleep "+(((time-now)*1000))+"ms");
 			neko.Sys.sleep(d*.95);
 			now = neko.Sys.time();
 			d=time-now;
@@ -132,10 +131,10 @@ class XinfinityRuntime extends Runtime {
         // post enter_frame event
         postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
         
-        if( somethingChanged ) {
+        //if( somethingChanged ) {
             //GLUT.postRedisplay();
 			display();
-        }
+       // }
 		
 		#if profile
 //			xinf.test.Counter.count("frames");
