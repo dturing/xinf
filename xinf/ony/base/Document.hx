@@ -20,7 +20,6 @@ class Document extends GroupImpl {
 		y:new FloatTrait(),
 		width:new LengthTrait(),
 		height:new LengthTrait(),
-		xmlBase:new StringTrait(),// FIXME: xml-base? xml:base?
 	}
 
     public var x(get_x,set_x):Float;
@@ -38,10 +37,6 @@ class Document extends GroupImpl {
     public var height(get_height,set_height):Float;
     function get_height() :Float { return getTrait("height",Length).value; }
     function set_height( v:Float ) :Float { setTrait("height",new Length(v)); return v; }
-
-    public var xmlBase(get_xmlBase,set_xmlBase):String;
-    function get_xmlBase() :String { return getTrait("xmlBase",String); } 
-    function set_xmlBase( v:String ) :String { redraw(); return setTrait("xmlBase",v); }
 
     public var styleSheet(default,null):StyleSheet;
     public var elementsById(default,null):Hash<ElementImpl>;
@@ -133,9 +128,8 @@ class Document extends GroupImpl {
 	
     public static function load( url_s:String, ?onLoad:DocumentImpl->Void ) :DocumentImpl {
         var doc = new DocumentImpl();
-        doc.xmlBase = url_s;
-        
         var url = new URL(url_s);
+        doc.base = url.pathString();
         url.fetch( function(data) {
                 var xml = Xml.parse(data);
                 doc.fromXml( xml.firstElement() );

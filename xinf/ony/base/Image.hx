@@ -65,10 +65,9 @@ class Image extends ElementImpl {
 		super.onLoad();
 		if( href!=null ) {
 			var url:URL; var b;
-			if( document!=null ) b = document.xmlBase;
+			if( document!=null ) b = base;
 			if( b!=null ) url = new URL(b).getRelativeURL( href );
 			else url = new URL(href);
-			trace("Load image: "+url );
 			bitmap = load( url.toString() );
 			redraw();
 		}

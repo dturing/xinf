@@ -20,6 +20,7 @@ class URL {
     public var host:String;
     public var port:Int;
     public var path:String;
+	public var filename:String;
     // fragments (#foo) and GET parameters (?foo=bar) are just part of the path (for now)
     
     public function new( s:String ) :Void {
@@ -27,7 +28,7 @@ class URL {
     }
     
     private function parse( s:String ) :Void {
-        var r:EReg = ~/([a-z]+):\/\/([a-zA-Z-\.]+)(:([0-9]+))?(.*)/;
+        var r:EReg = ~/([a-z]+):\/\/([a-zA-Z-\.]*)(:([0-9]+))?(.*)/;
         if( r.match( s ) ) {
             protocol = r.matched(1);
             host = r.matched(2);
@@ -41,7 +42,7 @@ class URL {
                 }
             }
             path = r.matched(5);
-			if( protocol=="file" ) { 
+			if( protocol=="file" ) {
 				if( path!="" ) path=host+"/"+path; 
 				else path=host;
 				host=""; 
@@ -52,17 +53,18 @@ class URL {
             port=0;
             path=s;
         }
+        if( path.charAt(path.length-1)!="/" ) {
+            var p = path.split("/");
+            filename = p.pop();
+            path = p.join("/");
+			if( p.length>1 ) path+="/";
+        } else {
+			filename="";
+		}
     }
     
     public function getRelativeURL( rel:String ) :URL {
-        var url = new URL( this.toString() );
-        if( url.path.charAt(url.path.length-1)!="/" ) {
-            var p = url.path.split("/");
-            p.pop();
-            url.path = p.join("/");
-			if( p.length>1 ) url.path+="/";
-        }
-        url.path+=rel;
+        var url = new URL( this.pathString()+rel );
         return url;
     }
     
@@ -71,7 +73,7 @@ class URL {
         
         #if neko
             if( protocol=="file" ) {
-                var data = neko.io.File.getContent( if( host!=null ) host+path else path );
+                var data = neko.io.File.getContent( if( host!=null ) host+path+filename else path+filename );
                 onData( data );
                 return;
             }
@@ -89,7 +91,7 @@ class URL {
         }
     }
     
-    public function toString() :String {
+    public function pathString() :String {
         var h = "";
         if( host!=null ) {
             h = host;
@@ -98,5 +100,9 @@ class URL {
             h = h+":"+port;
         }
         return( protocol+"://"+h+path );
+    }
+
+	public function toString() :String {
+		return( pathString()+filename );
     }
 }

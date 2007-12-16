@@ -22,6 +22,7 @@ import xinf.traits.PaintTrait;
 import xinf.traits.UnitFloatTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.FloatTrait;
+import xinf.traits.StringTrait;
 import xinf.traits.StringListTrait;
 import xinf.traits.StringChoiceTrait;
 // import xinf.traits.TransformTrait;
@@ -29,6 +30,7 @@ import xinf.traits.StringChoiceTrait;
 class Element extends StyledNode {
 
 	static var TRAITS = {
+		xml__base:		new StringTrait(),
 		opacity:		new BoundedFloatTrait(0,1,1),
 		
 		fill:			new PaintTrait(SolidColor(0,0,0,1)),
@@ -47,6 +49,19 @@ class Element extends StyledNode {
 		
 		visibility:		new EnumTrait<Visibility>( Visibility ),
 	}
+	
+    public var base(get_base,set_base):String; // FIXME: maybe, as xml: is not a "normal" namespace prefix, this might actually work... - although, it's not really a style trait, but is inherited...
+    function get_base() :String { 
+		var p=this;
+		var b:String=null;
+		while( p!=null ) {
+			var thisBase = p.getTrait("xml:base",String);
+			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
+			p = p.parent;
+		}
+		return b; 
+	} 
+    function set_base( v:String ) :String { redraw(); return setStyleTrait("xml:base",v); }
 	
     public var visibility(get_visibility,set_visibility):Visibility;
     function get_visibility() :Visibility { 
