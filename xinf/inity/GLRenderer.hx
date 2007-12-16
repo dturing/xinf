@@ -361,7 +361,9 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 
         GL.pushAttrib( GL.ENABLE_BIT );
             GL.enable( GL.TEXTURE_2D );
-            GL.bindTexture( GL.TEXTURE_2D, img.texture );
+			GL.enable( GL.BLEND );
+			
+			GL.bindTexture( GL.TEXTURE_2D, img.texture );
             
             GL.begin( GL.QUADS );
                 GL.texCoord2( tx1, ty1 );
