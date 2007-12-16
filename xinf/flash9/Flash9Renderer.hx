@@ -242,7 +242,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         var g = current.graphics;
         applyStroke();
 		applyFill();
-        g.drawEllipse( x-rx,y-ry,rx,ry );
+        g.drawEllipse( x-rx,y-ry,rx*2,ry*2 );
         g.endFill();
     }
     
