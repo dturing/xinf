@@ -5,7 +5,7 @@ import xinf.erno.Paint;
 
 class Benchmark {
 	public static function main() {
-		var n=50;
+		var n=100;
 		
 		for( i in 0...n ) {
 			var r = new Rectangle();
@@ -17,7 +17,7 @@ class Benchmark {
 			Root.attach(r);
 			Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
 				r.transform = new Concatenate( new Rotate( e.frame/10 ), t );
-			//	r.x=-12;
+				r.x=-12;
 			});
 		}
 		

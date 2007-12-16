@@ -24,7 +24,7 @@ default: test
 # Example.hx test
 
 test : $(VERSION_STUB) $(SRC) 
-	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main Example
+	haxe $(HAXEFLAGS) -D profile -resource test.svg@test.svg -neko test.n -main Example
 	NEKOPATH=$(NEKOPATH) neko test.n
 	
 flash : $(SRC)

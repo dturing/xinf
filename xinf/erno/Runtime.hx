@@ -85,7 +85,7 @@ class Runtime extends SimpleEventDispatcher {
                 #if gldebug
                     _renderer = new xinf.inity.GLDebugRenderer();
                 #else true
-                    _renderer = new xinf.inity.GLRenderer();
+                  _renderer = new xinf.inity.GLRenderer();
                 #end
 				*/
 				_renderer = new xinf.inity.GLVGRenderer();

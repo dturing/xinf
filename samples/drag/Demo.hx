@@ -5,14 +5,14 @@ class DraggableRectangle extends Rectangle {
 	public function new() :Void {
 		super();
 		
-		style.fill = Color.BLUE;
+		fill = Color.BLUE;
 		x=y=100;
 		width=height=100;
 		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		
 		var self=this;
-		addEventListener( MouseEvent.MOUSE_OVER, function(e) { self.style.fill = Color.RED; } );
-		addEventListener( MouseEvent.MOUSE_OUT, function(e) { self.style.fill = Color.BLUE; } );
+		addEventListener( MouseEvent.MOUSE_OVER, function(e) { self.fill = Color.RED; } );
+		addEventListener( MouseEvent.MOUSE_OUT, function(e) { self.fill = Color.BLUE; } );
 
 	}
 	
@@ -22,10 +22,10 @@ class DraggableRectangle extends Rectangle {
 		var moveL:Dynamic;
 		var self = this;
 		
-		style.fill = Color.GREEN;
+		fill = Color.GREEN;
 		
 		upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
-				self.style.fill = Color.RED;
+				self.fill = Color.RED;
 				Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
 				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
 			} );
