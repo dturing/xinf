@@ -7,7 +7,7 @@ class TraitsObject implements TraitAccess {
 	var _traits:Dynamic;
 	
 	public function new( ?traits:Dynamic ) {
-		if( traits ) _traits=traits;
+		if( traits!=null ) _traits=traits;
 		else _traits = Reflect.empty();
 	}
 	
@@ -77,7 +77,7 @@ class TraitsObject implements TraitAccess {
 	}
 	
 	public function getTraitDefinition( _name:String ) :TraitDefinition {
-		var name = StringTools.replace(_name,"-","_");
+		var name = StringTools.replace( StringTools.replace(_name,"-","_"), ":", "__" );
 		var cl:Class<Dynamic> = Type.getClass( this );
 		var t:TraitDefinition;
 		while( t==null && cl!=null ) {
