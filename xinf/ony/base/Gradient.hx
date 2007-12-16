@@ -51,8 +51,8 @@ class Gradient extends PaintElement {
 		return stops;
 	}
 
-	public function new() {
-		super();
+	public function new( ?traits:Dynamic ) {
+		super( traits );
 		gradientUnits = null;
 		spreadMethod = null;
 		transform = new Identity();

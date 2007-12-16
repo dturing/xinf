@@ -3,32 +3,35 @@ import xinf.ony.base.Implementation;
 
 import xinf.geom.Types;
 import xinf.traits.TraitDefinition;
-import xinf.traits.FloatTrait;
+import xinf.traits.LengthTrait;
+import xinf.type.Length;
 
 class Ellipse extends ElementImpl {
 
+	static var tagName = "ellipse";
+
 	static var TRAITS = {
-		cx:new FloatTrait(),
-		cy:new FloatTrait(),
-		rx:new FloatTrait(),
-		ry:new FloatTrait(),
+		cx:new LengthTrait(),
+		cy:new LengthTrait(),
+		rx:new LengthTrait(),
+		ry:new LengthTrait(),
 	};
 
     public var cx(get_cx,set_cx):Float;
-    function get_cx() :Float { return getTrait("cx",Float); }
-    function set_cx( v:Float ) :Float { redraw(); return setTrait("cx",v); }
+    function get_cx() :Float { return getTrait("cx",Length).value; }
+    function set_cx( v:Float ) :Float { setTrait("cx",new Length(v)); redraw(); return v; }
 
     public var cy(get_cy,set_cy):Float;
-    function get_cy() :Float { return getTrait("cy",Float); }
-    function set_cy( v:Float ) :Float { redraw(); return setTrait("cy",v); }
+    function get_cy() :Float { return getTrait("cy",Length).value; }
+    function set_cy( v:Float ) :Float { setTrait("cy",new Length(v)); redraw(); return v; }
 
     public var rx(get_rx,set_rx):Float;
-    function get_rx() :Float { return getTrait("rx",Float); }
-    function set_rx( v:Float ) :Float { redraw(); return setTrait("rx",v); }
+    function get_rx() :Float { return getTrait("rx",Length).value; }
+    function set_rx( v:Float ) :Float { setTrait("rx",new Length(v)); redraw(); return v; }
 
-    public var ry(get_ry,set_ry):Float;
-    function get_ry() :Float { return getTrait("ry",Float); }
-    function set_ry( v:Float ) :Float { redraw(); return setTrait("ry",v); }
+	public var ry(get_ry,set_ry):Float;
+    function get_ry() :Float { return getTrait("ry",Length).value; }
+    function set_ry( v:Float ) :Float { setTrait("ry",new Length(v)); redraw(); return v; }
 
 	override public function getBoundingBox() : TRectangle {
 		return { l:cx-rx, t:cy-ry, r:cx+rx, b:cy+ry };

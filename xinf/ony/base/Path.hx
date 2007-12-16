@@ -142,6 +142,8 @@ typedef SimplifiedPathRenderer = {
 
 class Path extends ElementImpl {
 
+	static var tagName = "path";
+
     public var segments(default,set_segments):Iterable<PathSegment>;
 
     private function set_segments(v:Iterable<PathSegment>) {

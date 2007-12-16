@@ -3,6 +3,8 @@ import xinf.ony.base.Implementation;
 
 class Group extends ElementImpl {
 
+	static var tagName = "g";
+
     public var children(get_children,null) :Iterator<ElementImpl>;
     private var mChildren(default,null):Array<ElementImpl>;    
     function get_children() :Iterator<ElementImpl> {

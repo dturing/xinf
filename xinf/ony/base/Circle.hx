@@ -3,27 +3,30 @@ import xinf.ony.base.Implementation;
 
 import xinf.geom.Types;
 import xinf.traits.TraitDefinition;
-import xinf.traits.FloatTrait;
+import xinf.traits.LengthTrait;
+import xinf.type.Length;
 
 class Circle extends ElementImpl {
 
+	static var tagName = "circle";
+
 	static var TRAITS = {
-		cx:new FloatTrait(),
-		cy:new FloatTrait(),
-		 r:new FloatTrait(),
+		cx:new LengthTrait(),
+		cy:new LengthTrait(),
+		 r:new LengthTrait(),
 	};
 
     public var cx(get_cx,set_cx):Float;
-    function get_cx() :Float { return getTrait("cx",Float); }
-    function set_cx( v:Float ) :Float { redraw(); return setTrait("cx",v); }
+    function get_cx() :Float { return getTrait("cx",Length).value; }
+    function set_cx( v:Float ) :Float { setTrait("cx",new Length(v)); redraw(); return v; }
 
     public var cy(get_cy,set_cy):Float;
-    function get_cy() :Float { return getTrait("cy",Float); }
-    function set_cy( v:Float ) :Float { redraw(); return setTrait("cy",v); }
+    function get_cy() :Float { return getTrait("cy",Length).value; }
+    function set_cy( v:Float ) :Float { setTrait("cy",new Length(v)); redraw(); return v; }
 
     public var r(get_r,set_r):Float;
-    function get_r() :Float { return getTrait("r",Float); }
-    function set_r( v:Float ) :Float { redraw(); return setTrait("r",v); }
+    function get_r() :Float { return getTrait("r",Length).value; }
+    function set_r( v:Float ) :Float { setTrait("r",new Length(v)); redraw(); return v; }
 
 	override public function getBoundingBox() : TRectangle {
 		return { l:cx-r, t:cy-r, r:cx+r, b:cy+r };

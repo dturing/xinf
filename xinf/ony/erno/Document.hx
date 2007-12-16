@@ -60,9 +60,8 @@ class Document extends xinf.ony.base.Document {
 		
         binding.add( "linearGradient", xinf.ony.base.LinearGradient );
         binding.add( "radialGradient", xinf.ony.base.RadialGradient );
-        /*
-        binding.add( "a", Link );
-        */
+
+		binding.add( "style", xinf.ony.base.Style );
 		
 		xinf.ony.base.Document.binding = binding;
     }

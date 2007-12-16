@@ -5,6 +5,8 @@ import xinf.geom.Types;
 
 class Polygon extends ElementImpl {
 
+	static var tagName = "polygon";
+
     public var points(default,set_points):Iterable<TPoint>;
     private function set_points(v:Iterable<TPoint>) {
         points=v; redraw(); return points;

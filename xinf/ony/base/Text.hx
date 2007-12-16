@@ -2,24 +2,27 @@ package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
 import xinf.traits.TraitDefinition;
-import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
+import xinf.traits.LengthTrait;
+import xinf.type.Length;
 
 class Text extends ElementImpl {
 
+	static var tagName = "text";
+
 	static var TRAITS = {
-		x:new FloatTrait(),
-		y:new FloatTrait(),
+		x:new LengthTrait(),
+		y:new LengthTrait(),
 		text:new StringTrait(), // FIXME uDOM: "#text"?
 	}
 
     public var x(get_x,set_x):Float;
-    function get_x() :Float { return getTrait("x",Float); }
-    function set_x( v:Float ) :Float { redraw(); return setTrait("x",v); }
-	
+    function get_x() :Float { return getTrait("x",Length).value; }
+    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
+
     public var y(get_y,set_y):Float;
-    function get_y() :Float { return getTrait("y",Float); }
-    function set_y( v:Float ) :Float { redraw(); return setTrait("y",v); }
+    function get_y() :Float { return getTrait("y",Length).value; }
+    function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
     public var text(get_text,set_text):String;
     function get_text() :String { return getTrait("text",String); }

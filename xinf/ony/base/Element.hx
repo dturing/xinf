@@ -7,6 +7,7 @@ import xinf.geom.Matrix;
 import xinf.event.Event;
 
 import xinf.style.StyledNode;
+import xinf.style.Selector;
 
 // these should probably be moved to some basic xinf.Types:
 import xinf.erno.Paint;
@@ -37,7 +38,7 @@ class Element extends StyledNode {
 		stroke_width:	new UnitFloatTrait(1),
 		stroke_opacity:	new BoundedFloatTrait(0,1,1),
 		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
-		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", RoundCaps ),
+		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", ButtCaps ),
 		stroke_miterlimit: new FloatTrait(4),
 		
 		font_family:	new StringListTrait(),
@@ -113,7 +114,6 @@ class Element extends StyledNode {
 		return super.set_id(v); 
 	}
 
-
     /** Group that contains this Element, if any. **/
     public var parent(default,null):Group;
 
@@ -121,25 +121,27 @@ class Element extends StyledNode {
     public var document(default,null):Document;		// FIXME: update elementsById
 
 	/** the Element's transformation **/
+	// FIXME: TransformTrait?
     public var transform(default,set_transform):Transform;
 	function set_transform( t:Transform ) :Transform {
 		transform=t;
 		retransform();
 		return t;
 	}
-	
+
+    public function new( ?traits:Dynamic ) :Void {
+        super( traits );
+		
+        transform = new Identity();
+		styleClasses = new Hash<Bool>();
+	}
+
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties( to );
 		to.transform=transform; // FIXME: should dup.
 		to.document=document;
 	}
 
-    public function new( ?traits:Dynamic ) :Void {
-        super( traits );
-		
-        transform = new Identity();
-	}
-	
     /** read element data from xml */
     override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
@@ -193,6 +195,55 @@ class Element extends StyledNode {
 	override public function getStyleParent() :StyledNode {
 		return parent;
 	}
+	
+	override public function matchSelector( s:Selector ) :Bool {
+		return switch(s) {
+		
+			case Parent(sel):
+				if( parent==null ) return false;
+				return parent.matchSelector(sel);
+				
+			case Ancestor(sel):
+				var p = this;
+				while( p.parent != null ) {
+					p = p.parent;
+					if( p.matchSelector(sel) ) return true;
+				}
+				return false;
+
+			case GrandAncestor(sel):
+				if( parent==null ) return false;
+				var p = parent;
+				while( p.parent != null ) {
+					p = p.parent;
+					if( p.matchSelector(sel) ) return true;
+				}
+				return false;
+
+			case Preceding(sel):
+				if( parent==null ) return false;
+				// FIXME: maybe implement children as a doubly-linked list?
+				var p:Element = null;
+				for( c in parent.children ) {
+					if( c==this ) {
+						if( p==null ) return false;
+						return( p.matchSelector(sel) );
+					}
+					p=c;
+				}
+				return false;
+
+			default:
+				super.matchSelector(s);
+		}
+	}
+		
+    override public function updateClassStyle() :Void {
+		if( document!=null && document.styleSheet!=null ) {
+			_matchedStyle = document.styleSheet.match(this);
+			styleChanged();
+		}
+    }
 
     /** convert the given point from global to local coordinates **/
     public function globalToLocal( p:TPoint ) :TPoint {

@@ -6,6 +6,8 @@ import xinf.geom.Types;
 /* FIXME: overlap with Polygon; inherit? */
 class Polyline extends ElementImpl  {
 
+	static var tagName = "polyline";
+
     public var points(default,set_points):Iterable<TPoint>;
     private function set_points(v:Iterable<TPoint>) {
         points=v; redraw(); return points;

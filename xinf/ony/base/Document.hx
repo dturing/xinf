@@ -7,16 +7,19 @@ import xinf.xml.Instantiator;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
+import xinf.traits.LengthTrait;
 
+import xinf.style.StyleSheet;
 import xinf.ony.URL;
+import xinf.type.Length;
 
 class Document extends GroupImpl {
 
 	static var TRAITS = {
 		x:new FloatTrait(),
 		y:new FloatTrait(),
-		width:new FloatTrait(),
-		height:new FloatTrait(),
+		width:new LengthTrait(),
+		height:new LengthTrait(),
 		xmlBase:new StringTrait(),// FIXME: xml-base? xml:base?
 	}
 
@@ -29,24 +32,24 @@ class Document extends GroupImpl {
     function set_y( v:Float ) :Float { retransform(); return setTrait("y",v); }
 
 	public var width(get_width,set_width):Float;
-    function get_width() :Float { return getTrait("width",Float); }
-    function set_width( v:Float ) :Float { return setTrait("width",v); }
+    function get_width() :Float { return getTrait("width",Length).value; }
+    function set_width( v:Float ) :Float { setTrait("width",new Length(v)); return v; }
 	
     public var height(get_height,set_height):Float;
-    function get_height() :Float { return getTrait("height",Float); }
-    function set_height( v:Float ) :Float { return setTrait("height",v); }
+    function get_height() :Float { return getTrait("height",Length).value; }
+    function set_height( v:Float ) :Float { setTrait("height",new Length(v)); return v; }
 
     public var xmlBase(get_xmlBase,set_xmlBase):String;
     function get_xmlBase() :String { return getTrait("xmlBase",String); } 
     function set_xmlBase( v:String ) :String { redraw(); return setTrait("xmlBase",v); }
 
-    //public var styleSheet(default,null):StyleSheet<ElementStyle>;
+    public var styleSheet(default,null):StyleSheet;
     public var elementsById(default,null):Hash<ElementImpl>;
 	
-	public function new( ?parentDocument:Document, ?traits:Dynamic ) :Void {
+	public function new( ?traits:Dynamic ) :Void {
         super( traits );
- 		document = if( parentDocument!=null ) parentDocument else this;
-//        styleSheet=null;
+ 		document = this;
+        styleSheet = new StyleSheet();
         elementsById = new Hash<ElementImpl>();
     }
 
