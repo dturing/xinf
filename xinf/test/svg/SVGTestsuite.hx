@@ -56,8 +56,8 @@ class SVGTestsuite {
             #end
         } else {
             // FIXME: the first test never works...
-            
-            shell.add( new SVGTest( base+"shapes-intro-01-t.svg" ) );
+
+			shell.add( new SVGTest( base+"shapes-intro-01-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-rect-01-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-rect-02-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-line-01-t.svg" ) );
@@ -93,11 +93,12 @@ class SVGTestsuite {
             
             shell.add( new SVGTest( base+"struct-group-01-t.svg" ) );
             shell.add( new SVGTest( base+"struct-group-02-b.svg" ) );
+		//  currentColor
       //      shell.add( new SVGTest( base+"struct-group-03-t.svg" ) );
            
 
             shell.add( new SVGTest( base+"coords-coord-01-t.svg" ) );
-            shell.add( new SVGTest( base+"coords-coord-02-t.svg" ) );
+			shell.add( new SVGTest( base+"coords-coord-02-t.svg" ) );
             shell.add( new SVGTest( base+"coords-trans-01-b.svg" ) );
             shell.add( new SVGTest( base+"coords-trans-02-t.svg" ) );
             shell.add( new SVGTest( base+"coords-trans-03-t.svg" ) );
@@ -108,17 +109,41 @@ class SVGTestsuite {
 			// fails in flash as images are not loaded when shot is taken.
             shell.add( new SVGTest( base+"struct-image-01-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-02-b.svg" ) );
+			
             // reference image is 240x180...
-            //shell.add( new SVGTest( base+"struct-image-03-t.svg" ) );
+            // shell.add( new SVGTest( base+"struct-image-03-t.svg" ) );
             // inline data handling
             //shell.add( new SVGTest( base+"struct-image-04-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-05-b.svg" ) );
             shell.add( new SVGTest( base+"struct-image-06-t.svg" ) );
-            // xml:base attribute
-            //shell.add( new SVGTest( base+"struct-image-07-t.svg" ) );
+            shell.add( new SVGTest( base+"struct-image-07-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-08-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-09-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-10-t.svg" ) );
+	
+	
+            shell.add( new SVGTest( base+"painting-fill-01-t.svg" ) );
+            // currentColor
+			// shell.add( new SVGTest( base+"painting-fill-02-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-fill-03-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-fill-04-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-fill-05-b.svg" ) );
+            shell.add( new SVGTest( base+"painting-render-01-b.svg" ) );
+            shell.add( new SVGTest( base+"painting-stroke-02-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-stroke-03-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-stroke-04-t.svg" ) );
+            shell.add( new SVGTest( base+"painting-stroke-07-t.svg" ) );
+			
+            shell.add( new SVGTest( base+"styling-css-01-b.svg" ) );
+            shell.add( new SVGTest( base+"styling-css-02-b.svg" ) );
+            // /*comment*/ in CSS
+			// shell.add( new SVGTest( base+"styling-css-03-b.svg" ) );
+            shell.add( new SVGTest( base+"styling-css-05-b.svg" ) );
+            shell.add( new SVGTest( base+"styling-css-06-b.svg" ) );
+            // GradientStop color "inherit"
+			// shell.add( new SVGTest( base+"styling-inherit-01-b.svg" ) );
+			// !important
+            // shell.add( new SVGTest( base+"styling-pres-01-t.svg" ) );
     }
         
         shell.run();

@@ -1,11 +1,11 @@
 
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
 
-INITYLIBS=opengl xinfinity-support cptr
+INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
-HAXEFLAGS=--override $(INITYCP) -D htmltrace -cp ../../ -lib x11
+HAXEFLAGS=--override -D htmltrace -lib x11 -cp . -cp ../../ $(INITYCP)
 
 TEST_DISPLAY=:10
 
