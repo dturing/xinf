@@ -3,10 +3,20 @@ package xinf.style;
 import xinf.traits.TraitAccess;
 import xinf.traits.TraitException;
 
-class StyleParser {
+import xinf.style.StyleSheet;
+import xinf.style.Selector;
 
+class StyleParser {
+	static var comment = ~/\/\*[^\*]*\*\//g;
     static var split = ~/[ \r\n\t]*;[ \r\n\t]*/g;
+	
+	/** 
+		parse a single CSS style definition (as found in a 'style' attribute).
+		uses the "via" argument for finding definitions,
+		sets values on "to".
+	**/
     public static function parse( text:String, via:TraitAccess, to:Dynamic ) :Void {
+		text = comment.replace(text,"");
         var properties = split.split(text);
         for( prop in properties ) {
             var p = prop.split(":");
@@ -24,5 +34,125 @@ class StyleParser {
             }
         }
     }
+
+	static var cssRules = ~/\W*(.*)\W{\W(.*)\W/g;
+	
+	/** 
+		parse CSS style rules, as found in a <style type="text/css"> element.
+	**/
+	public static function parseRules( text:String, via:TraitAccess ) :Array<StyleRule> {
+		//trace("should parse style: "+text+", defs "+definitions );
+		text = comment.replace(text,"");
+		
+		var rules = new Array<StyleRule>();
+		
+		var ruleTexts = text.split("}");
+		for( ruleText in ruleTexts ) {
+			var sr = ruleText.split("{");
+			if( sr.length==2 ) {
+				var selText = StringTools.trim(sr[0]);
+				var styleText = StringTools.trim(sr[1]);
+				
+				// TODO parse selector
+				var sel = parseSelectorGroup( selText );
+				
+				var s = Reflect.empty();
+				StyleParser.parse( styleText, via, s );
+				
+				trace(""+sel+" "+s );
+				rules.push( { selector:sel, style:s } );
+
+			} else {
+				if( StringTools.trim(ruleText).length>0 )
+					throw("ignore non-CSS '"+ruleText+"'");
+			}
+		}
+		
+		return rules;
+	}
+
+    static var comma_split = ~/[ \r\n\t]*,[ \r\n\t]*/g;
+    static var ws_split = ~/[ \r\n\t]+/g;
+	static var first_s = ~/([^ ]+) (([\*\+>]) )?(.+)/;
+    
+	/**
+		parse a CSS selector
+	**/
+	public static function parseSelectorGroup( text:String ) :Selector {
+		var anyTexts = comma_split.split(text);
+		var any = new Array<Selector>();
+		for( a in anyTexts ) {
+			if( a.length>0 ) {
+				any.push( parseSelector( a ) );
+			}
+		}
+		if( any.length==1 ) return any[0];
+		return AnyOf( any );
+	}
+
+	static function parseSelector( text:String ) :Selector {
+		
+		if( first_s.match(text) ) {
+			// hierarchical
+			
+			var a = first_s.matched(1);
+			var b = first_s.matched(4);
+			var op = first_s.matched(3);
+			var a = parseCombinedSelector( a );
+			var b = parseSelector( b );
+			
+			var a2 = switch( op ) {
+				case "":
+					Ancestor(a);
+				case "+":
+					Preceding(a);
+				case ">":
+					Parent(a);
+				case "*":
+					GrandAncestor(a);
+				default:
+					throw("unknown style selector operator '"+op+"'");
+					Unknown(op);
+			}
+			return AllOf( [ a2, b ] );
+		} else {
+			// single/combined selector
+			return parseCombinedSelector(text);
+		}
+	}
+	
+	static function parseCombinedSelector( text:String ) :Selector {
+		var allTexts = ws_split.split(text);
+		var all = new Array<Selector>();
+		for( a in allTexts ) {
+			if( a.length>0 ) {
+				parseSingleSelector( a, all );
+			}
+		}
+		if( all.length==1 ) return all[0];
+		return AllOf( all );
+	}
+
+	static var classSel = ~/\.([a-zA-Z0-9]*)/;
+	static var idSel = ~/#([a-zA-Z0-9]*)/;
+	static function parseSingleSelector( text:String, list:Array<Selector> ) :Void {
+		if( classSel.match(text) ) {
+			list.push( StyleClass( classSel.matched(1) ) );
+			parseSingleSelector( classSel.matchedLeft()+classSel.matchedRight(), list );
+			return;
+		}
+		if( idSel.match(text) ) {
+			list.push( ById( idSel.matched(1) ) );
+			parseSingleSelector( idSel.matchedLeft()+idSel.matchedRight(), list );
+			return;
+		}
+		if( text=="*" ) {
+			list.push(Any);
+			return;
+		}
+		if( StringTools.trim(text).length>0 ) {
+			list.push( ClassName( text ) );
+		}
+	}
 
 }
