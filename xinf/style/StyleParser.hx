@@ -90,34 +90,39 @@ class StyleParser {
 		return AnyOf( any );
 	}
 
-	static function parseSelector( text:String ) :Selector {
+	static function parseSelector( text:String, ?already:Selector ) :Selector {
 		
 		if( first_s.match(text) ) {
 			// hierarchical
 			
-			var a = first_s.matched(1);
+			var a_s = first_s.matched(1);
 			var b = first_s.matched(4);
 			var op = first_s.matched(3);
-			var a = parseCombinedSelector( a );
-			var b = parseSelector( b );
+			var a = parseCombinedSelector( a_s );
 			
-			var a2 = switch( op ) {
+			var a2 = if( already!=null ) AllOf([ already, a ]) else a;
+			var a3 = switch( op ) {
 				case "":
-					Ancestor(a);
+					Ancestor(a2);
+				case null:
+					Ancestor(a2);
 				case "+":
-					Preceding(a);
+					Preceding(a2);
 				case ">":
-					Parent(a);
+					Parent(a2);
 				case "*":
-					GrandAncestor(a);
+					GrandAncestor(a2);
 				default:
+					trace("a: "+a+", b: "+b+", op: "+op );
 					throw("unknown style selector operator '"+op+"'");
 					Unknown(op);
 			}
-			return AllOf( [ a2, b ] );
+			return parseSelector( b, a3 );
 		} else {
 			// single/combined selector
-			return parseCombinedSelector(text);
+			var thisSelector = parseCombinedSelector(text);
+			if( already!=null ) return AllOf([ already, thisSelector ]);
+			return thisSelector;
 		}
 	}
 	
@@ -133,8 +138,8 @@ class StyleParser {
 		return AllOf( all );
 	}
 
-	static var classSel = ~/\.([a-zA-Z0-9]*)/;
-	static var idSel = ~/#([a-zA-Z0-9]*)/;
+	static var classSel = ~/\.([a-zA-Z0-9\-]*)/;
+	static var idSel = ~/#([a-zA-Z0-9\-]*)/;
 	static function parseSingleSelector( text:String, list:Array<Selector> ) :Void {
 		if( classSel.match(text) ) {
 			list.push( StyleClass( classSel.matched(1) ) );
