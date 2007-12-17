@@ -25,7 +25,7 @@ enum PopupMode {
 class Popup {
     
     var object:Component;
-    var root:xinf.ony.Document;
+    var root:xinf.ony.base.Document;
     
     public function new( parent:Component, o:Component, ?popupMode:PopupMode ) :Void {
         object = o;

@@ -105,7 +105,7 @@ class ComponentStyle extends InheritedStyle {
 			new FloatProperty("max-width",Math.POSITIVE_INFINITY),
 			new FloatProperty("min-height",0),
 			new FloatProperty("max-height",Math.POSITIVE_INFINITY),
-			new ColorProperty("text-color"),
+			new PaintProperty("text-color"),
             ] ) {
             
             propertyDefinitions.set( def.name, def );

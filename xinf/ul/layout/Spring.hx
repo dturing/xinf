@@ -16,7 +16,7 @@
 package xinf.ul.layout;
 
 class Spring {
-    public static var UNSET:Float = null;
+    public static var UNSET:Null<Float> = null;
     public static var MAX:Float = 1073741824;
     
     public function getMin() :Float  { return UNSET; }
@@ -28,7 +28,7 @@ class Spring {
     private function new() :Void {
     }
     
-    public static function constant( min:Float, ?pref:Float, ?max:Float ) :Spring {
+    public static function constant( min:Float, ?pref:Null<Float>, ?max:Null<Float> ) :Spring {
         if( pref==null ) pref=min;
         if( max==null ) max=pref;
         return new ConstantSpring( min, pref, max );

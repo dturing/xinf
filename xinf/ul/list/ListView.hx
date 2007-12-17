@@ -23,6 +23,8 @@ import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
 
+import xinf.erno.Paint;
+
 class ListView<T> extends Widget {
 
     var model:ListModel<T>;
@@ -42,9 +44,9 @@ class ListView<T> extends Widget {
         super();
         this.model = model;
         if( createItem==null ) {
-            createItem = function() :ISettable<T> {
-                return new ListItem<T>();
-            }
+            //createItem = function() :ISettable<T> {
+                //return new xinf.ul.list.ListItem<T>();
+            //}
         }
 
         cropper = new Crop();
@@ -56,7 +58,7 @@ class ListView<T> extends Widget {
         cursor = new Rectangle();
 		cursor.width = 8; cursor.height = 18;
 		cursor.x = 0; cursor.y = -100;
-		cursor.style.fill = Color.rgba(0,.5,0,.5);
+		cursor.style.fill = SolidColor(0,.5,0,.5);
         cropper.attach( cursor );
 
         scrollbar = new VScrollbar();
@@ -97,7 +99,8 @@ class ListView<T> extends Widget {
 		
 		itemStyle.fontSize = style.fontSize;
 		itemStyle.fontFamily = style.fontFamily;
-		itemStyle.fill = style.textColor;
+		//FIXME textColor breaks
+		itemStyle.fill = SolidColor(.5,.5,.5,.5);//style.textColor.toSolidColor();
     }
 	
     function scrollBy( value:Float ) {

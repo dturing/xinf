@@ -23,6 +23,7 @@ import xinf.ul.list.ListView;
 import xinf.ul.list.PickEvent;
 import xinf.event.Event;
 import xinf.ul.layout.Helper;
+import xinf.erno.Paint;
 
 /**
     Improvised Dropdown element.
@@ -51,10 +52,15 @@ class Dropdown extends Widget {
         isOpen=false;
         
 		textElement.text = model.getItemAt(selectedIndex=0);
+		
         group.attach( textElement );
         
         button = new Rectangle();
+        button.width = 20.;
+		button.height = 20.;
+        
         group.attach(button);
+        
         
         group.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
@@ -83,7 +89,8 @@ class Dropdown extends Widget {
 		
 		textElement.style.fontSize = style.fontSize;
 		textElement.style.fontFamily = style.fontFamily;
-		textElement.style.fill = style.textColor;
+		//FIXME textColor breaks
+		textElement.style.fill = SolidColor(.5,.5,.5,.5);//style.textColor.toSolidColor();
 		textElement.styleChanged();
 		
 		// TODO: fontWeight

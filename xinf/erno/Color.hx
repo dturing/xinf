@@ -107,6 +107,10 @@ class Color {
     public static function rgbI(r:Int,g:Int,b:Int) :Color {
         return new Color().fromRGBA(r/255.,g/255.,b/255.,1.0);
     }
+    
+    public function toSolidColor() :Paint {
+    	return SolidColor(r,g,b,a);
+    }
 
     public static var BLACK:Paint = SolidColor(0,0,0,1);
     public static var WHITE:Paint = SolidColor(1,1,1,1);

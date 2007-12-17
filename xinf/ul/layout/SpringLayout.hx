@@ -15,7 +15,6 @@
 
 package xinf.ul.layout;
 
-import xinf.ony.Object;
 import xinf.ul.Component;
 import xinf.ul.Container;
 import xinf.ul.layout.Spring;
@@ -49,7 +48,7 @@ class DeferredSpring extends SimpleSpring {
         return _value;
     }
     public function toString() :String {
-        return(""+o._id+edge+":"+resolve());
+        return(""+o.getElement().xid+edge+":"+resolve());
     }
 }
 
@@ -64,7 +63,7 @@ class WidthSpring extends SimpleSpring {
         return 0;
     }
     public function getPref() :Float {
-        return c.clampSize( c.prefSize ).x;
+    	return Helper.clampSize( c.prefSize, c.style ).x;
     }
     public function getMax() :Float {
         return Spring.MAX;
@@ -76,7 +75,7 @@ class WidthSpring extends SimpleSpring {
 
 class HeightSpring extends WidthSpring {
     override public function getPref() :Float {
-        return c.clampSize( c.prefSize ).y;
+    	return Helper.clampSize( c.prefSize, c.style ).y;
     }
     override public function toString() :String {
         return("H("+c+":"+getPref()+")");
@@ -131,14 +130,15 @@ class SpringLayout implements Layout {
     }
     
     public function getConstraints( comp:Component ) :Constraints {
-        var c:Constraints = index.get( comp._id );
+    	var compId = comp.getElement().xid;
+        var c:Constraints = index.get( compId );
         if( c==null ) {
             c = new Constraints();
             c.setWidth( new WidthSpring(comp) );
             c.setHeight( new HeightSpring(comp) );
             c.setX( Spring.constant(0) );
             c.setY( Spring.constant(0) );
-            index.set( comp._id, c );
+            index.set( compId, c );
         }
         return c;
     }
@@ -176,8 +176,8 @@ class SpringLayout implements Layout {
             var height = constraints.getHeight().getValue();
             
         //    trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height );
-            if( c.position.x!=x || c.position.y!=y ) c.moveTo(x,y);
-            if( c.size.x!=width || c.size.y!=height ) c.resize(width,height);
+            if( c.position.x!=x || c.position.y!=y ) c.set_position({x:x,y:y});
+            if( c.size.x!=width || c.size.y!=height ) c.set_size({x:width,y:height});
 
         }
 
@@ -185,7 +185,7 @@ class SpringLayout implements Layout {
         var y = cs.getY().getValue();
         var width = cs.getWidth().getValue();
         var height = cs.getHeight().getValue();
-        p.setPrefSize( p.removePadding( {x:width,y:height} ));
+        p.setPrefSize( Helper.removePadding( {x:width,y:height}, p.style ));
     }
     
     public function putConstraint( e1:Edge, c1:Component, ?s:Spring, 

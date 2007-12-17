@@ -20,6 +20,7 @@ import xinf.event.EventKind;
 import xinf.ul.ValueEvent;
 import xinf.ul.layout.Helper;
 import xinf.ul.FocusManager;
+import xinf.erno.Paint;
 
 /**
     Button element.
@@ -73,7 +74,10 @@ class Button<Value> extends Widget {
 		
 		textElement.style.fontSize = style.fontSize;
 		textElement.style.fontFamily = style.fontFamily;
-		textElement.style.fill = style.textColor;
+		textElement.style.fill = SolidColor(.5,.5,.5,.5);
+		//hmm?
+		//trace("style.textColor = " + style.textColor);
+		//textElement.style.fill = style.textColor.toSolidColor();
 		textElement.styleChanged();
 		
 		// TODO: fontWeight

@@ -15,7 +15,6 @@
 
 package xinf.ul.layout;
 
-import xinf.ony.Object;
 import xinf.ul.Component;
 import xinf.ul.Container;
 
@@ -27,16 +26,17 @@ class ConstrainedLayout<Constraint> {
     }
     
     public function getConstraints( comp:Component ) :Constraint {
-        var c:Constraint = index.get( comp._id );
+    	var compId = comp.getElement().xid;
+        var c:Constraint = index.get( compId );
         if( c==null ) {
             c = createConstraints();
-            index.set( comp._id, c );
+            index.set( compId, c );
         }
         return c;
     }
     
     public function setConstraint( comp:Component, c:Constraint ) :Void {
-        index.set( comp._id, c );
+        index.set( comp.getElement().xid, c );
     }
     
     public function createConstraints() :Constraint {

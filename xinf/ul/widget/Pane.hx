@@ -13,9 +13,10 @@
    Lesser General Public License or the LICENSE file for more details.
 */
 
-package xinf.ul;
+package xinf.ul.widget;
 
 import xinf.erno.Renderer;
+import xinf.ul.Container;
 
 /**
     Simple Pane element.
@@ -26,28 +27,5 @@ class Pane extends Container {
     public function new() :Void {
         super();
     }
-
-    override public function draw( g:Renderer ) :Void {
-        g.startObject( _id );
-            var skin:xinf.style.Skin = style.get("skin",null);
-            if( skin!=null ) {
-                skin.drawBackground( g, size );
-            } else {
-                setStyleFill( g, "background" );
-                g.setStroke( 0,0,0,0,0 );
-                g.rect( 0, 0, size.x, size.y );
-                
-                g.setFill(0,0,0,0);
-                setStyleStroke( g, style.border.l, "color" );
-                g.rect( 0, 0, size.x, size.y );
-            }
-            drawContents(g);
-            drawChildren(g);
-            if( skin!=null ) {
-                skin.drawForeground( g, size );
-            }
-        g.endObject();
-        reTransform(g);
-    }
-    
+  
 }

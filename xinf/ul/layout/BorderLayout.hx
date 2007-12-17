@@ -59,40 +59,40 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
             }
         }
 
-        var p = parent.removePadding( parent.size );
-        var tl = parent.innerTopLeft();
+        var p = Helper.removePadding( parent.size, parent.style );
+        var tl = Helper.innerTopLeft( parent.style );
         var n=tl.y;
         var w=tl.x;
         var s=0.;
         var e=0.;
         
         if( N!=null ) {
-            var s = N.clampSize( {x:p.x, y:N.prefSize.y} );
+            var s = Helper.clampSize( {x:p.x, y:N.prefSize.y}, N.style );
             n += s.y;
-            N.resize( s.x, s.y );
-            N.moveTo( tl.x, tl.y );
+            N.set_size( {x:s.x, y:s.y} );
+            N.set_position( {x:tl.x, y:tl.y} );
         }
         if( S!=null ) {
-            var sz = S.clampSize( {x:p.x, y:S.prefSize.y} );
+            var sz = Helper.clampSize( {x:p.x, y:S.prefSize.y}, S.style );
             s = sz.y;
-            S.resize( sz.x, sz.y );
-            S.moveTo( tl.x, (tl.y+p.y) - s );
+            S.set_size( {x:sz.x, y:sz.y} );
+            S.set_position( {x:tl.x, y:(tl.y+p.y) - s} );
         }
         if( W!=null ) {
-            var s = W.clampSize( {x:W.prefSize.x, y:(tl.y+p.y) - (n+s)} );
+            var s = Helper.clampSize( {x:W.prefSize.x, y:(tl.y+p.y) - (n+s)}, W.style );
             w += s.x;
-            W.resize( s.x, s.y );
-            W.moveTo( tl.x, n );
+            W.set_size( {x:s.x, y:s.y} );
+            W.set_position( {x:tl.x, y:n} );
         }
         if( E!=null ) {
-            var s = E.clampSize( {x:E.prefSize.x, y:(tl.y+p.y) - (n+s)} );
+            var s = Helper.clampSize( {x:E.prefSize.x, y:(tl.y+p.y) - (n+s)}, E.style );
             e = s.x;
-            E.resize( s.x, s.y );
-            E.moveTo( (tl.x+p.x) - e, n );
+            E.set_size( {x:s.x, y:s.y} );
+            E.set_position( {x:(tl.x+p.x) - e, y:n} );
         }
         if( C!=null ) {
-            C.moveTo( w, n );
-            C.resize( (tl.x+p.x) - (w+e), (tl.y+p.y) - (n+s) );
+            C.set_position( {x:w, y:n} );
+            C.set_size( {x:(tl.x+p.x) - (w+e), y:(tl.y+p.y) - (n+s)} );
         }
     }
 }

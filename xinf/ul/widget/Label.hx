@@ -18,6 +18,7 @@ package xinf.ul.widget;
 import Xinf;
 import xinf.ul.Container;
 import xinf.ul.layout.Helper;
+import xinf.erno.Paint;
 
 /**
     Simple Label element.
@@ -59,7 +60,8 @@ class Label extends Container {
 		
 		textElement.style.fontSize = style.fontSize;
 		textElement.style.fontFamily = style.fontFamily;
-		textElement.style.fill = style.textColor;
+		//hmm?
+		textElement.style.fill = SolidColor(.9,.4,.9,.9);//style.textColor;
 		textElement.styleChanged();
 		
 		// TODO: fontWeight

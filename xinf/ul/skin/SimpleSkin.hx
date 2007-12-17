@@ -16,6 +16,7 @@
 package xinf.ul.skin;
 
 import Xinf;
+import xinf.erno.Paint;
 
 class SimpleSkin extends Skin {
 	var bg:Rectangle;
@@ -28,15 +29,15 @@ class SimpleSkin extends Skin {
 	override public function setTo( name:String ) :Void {
 		switch( name ) {
 			case "focus":
-				bg.style.fill = Color.rgba(.8,.8,.8,.6);
+				bg.style.fill = SolidColor(.8,.8,.8,.6);
 				bg.style.stroke = Color.BLACK;
 				bg.style.strokeWidth = 2;
 			case "press":
-				bg.style.fill = Color.rgba(.9,.9,.9,.8);
+				bg.style.fill = SolidColor(.9,.9,.9,.8);
 				bg.style.stroke = Color.BLACK;
 				bg.style.strokeWidth = 2;
 			default:
-				bg.style.fill = Color.rgba(.8,.8,.8,.6);
+				bg.style.fill = SolidColor(.8,.8,.8,.6);
 				bg.style.stroke = Color.BLACK;
 				bg.style.strokeWidth = 1;
 		}
