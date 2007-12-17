@@ -4,43 +4,11 @@ import xinf.test.TestCase;
 import xinf.test.TestShell;
 import Xinf;
 
-class SVGTest extends TestCase {
-
-    var interactive:Bool;
-    var url:String;
-    var targetEquality:Float;
-
-    public function new( url:String, ?targetEq:Float, ?interactive:Bool ) {
-        this.url=url;
-        if( targetEq==null ) targetEq=.96;
-        this.targetEquality=targetEq;
-        this.interactive=interactive;
-        super();
-    }
-
-    override public function test() {
-        var self=this;
-        var doc:Document;
-        doc = Document.load( url, function(d:Document) {
-                if( !self.interactive ) {
-                    self.runAtNextFrame( function() {
-					self.assertDisplay( self.cleanFinish, doc.width, doc.height, self.targetEquality );
-                    } );
-                } // else just loop on...    
-            } );
-        Root.attach( doc );
-    }
-
-    override public function toString() :String {
-        return( url.split("/").pop().split(".").shift() );
-    }
-}
-
-
 class SVGTestsuite {
     static function main() {
-        var shell = new TestShell();
-        var base="http://localhost:2000/static/svg/svg/";
+		var suite = "SVG1.1";
+        var shell = new TestShell(suite);
+        var base="http://localhost:2000/static/"+suite+"/svg/";
         
         var runOnly:String;
         
@@ -55,10 +23,9 @@ class SVGTestsuite {
             shell.add( new SVGTest( "file://"+runOnly ) );
             #end
         } else {
-            // FIXME: the first test never works...
-
 			shell.add( new SVGTest( base+"shapes-intro-01-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-rect-01-t.svg" ) );
+			/*
             shell.add( new SVGTest( base+"shapes-rect-02-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-line-01-t.svg" ) );
             shell.add( new SVGTest( base+"shapes-polygon-01-t.svg" ) );
@@ -93,8 +60,8 @@ class SVGTestsuite {
             
             shell.add( new SVGTest( base+"struct-group-01-t.svg" ) );
             shell.add( new SVGTest( base+"struct-group-02-b.svg" ) );
-		//  currentColor
-      //      shell.add( new SVGTest( base+"struct-group-03-t.svg" ) );
+			// currentColor
+			// shell.add( new SVGTest( base+"struct-group-03-t.svg" ) );
            
 
             shell.add( new SVGTest( base+"coords-coord-01-t.svg" ) );
@@ -113,7 +80,7 @@ class SVGTestsuite {
             // reference image is 240x180...
             // shell.add( new SVGTest( base+"struct-image-03-t.svg" ) );
             // inline data handling
-            //shell.add( new SVGTest( base+"struct-image-04-t.svg" ) );
+            // shell.add( new SVGTest( base+"struct-image-04-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-05-b.svg" ) );
             shell.add( new SVGTest( base+"struct-image-06-t.svg" ) );
             shell.add( new SVGTest( base+"struct-image-07-t.svg" ) );
@@ -136,14 +103,14 @@ class SVGTestsuite {
 			
             shell.add( new SVGTest( base+"styling-css-01-b.svg" ) );
             shell.add( new SVGTest( base+"styling-css-02-b.svg" ) );
-            // /*comment*/ in CSS
-			// shell.add( new SVGTest( base+"styling-css-03-b.svg" ) );
+            shell.add( new SVGTest( base+"styling-css-03-b.svg" ) );
             shell.add( new SVGTest( base+"styling-css-05-b.svg" ) );
             shell.add( new SVGTest( base+"styling-css-06-b.svg" ) );
             // GradientStop color "inherit"
 			// shell.add( new SVGTest( base+"styling-inherit-01-b.svg" ) );
 			// !important
             // shell.add( new SVGTest( base+"styling-pres-01-t.svg" ) );
+			*/
     }
         
         shell.run();

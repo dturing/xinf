@@ -9,6 +9,7 @@ class TestCase {
     var next:Void->Void;
     var cnx:haxe.remoting.AsyncConnection;
     var iteration:Int;
+	var suite:String;
     var platform:String;
     var name:String;
     var expectFail:Bool;
@@ -27,9 +28,10 @@ class TestCase {
         expectFail = false;
     }
     
-    public function run( cnx:haxe.remoting.AsyncConnection, next:Void->Void ) {
+    public function run( cnx:haxe.remoting.AsyncConnection, next:Void->Void, suite:String ) {
         this.next = next;
         this.cnx = cnx;
+		this.suite = suite;
         test();
     }
     
@@ -79,7 +81,7 @@ class TestCase {
             xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
             
             try {
-                self.cnx.test.shoot.call([ self.iteration++, self.name, self.platform, width, height, targetEquality, expectFail ], function( r:Dynamic ) {
+                self.cnx.test.shoot.call([ self.iteration++, self.name, self.suite, self.platform, width, height, targetEquality, expectFail ], function( r:Dynamic ) {
 				        result( r>=targetEquality );
                     } );
             } catch(e:Dynamic) {

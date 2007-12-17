@@ -12,7 +12,6 @@ class TestServer {
     
     public static var displayName = ":10.0";
     public static var resultDir = "results";
-    public static var refDir = "static/svg/pnm";
     
     static function assureResultDir() {
         // assure result directory exists
@@ -24,12 +23,13 @@ class TestServer {
         }
     }
     
-    static function startRun( platform:String ) {
-        var out = neko.io.File.append( resultDir+"/results.xml", false );
+    static function startRun( suite:String, platform:String ) {
+		var out = neko.io.File.append( resultDir+"/results.xml", false );
         out.write(
-            "<testrun date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )
-            +"\" platform=\""+platform
-            +"\">\n");
+            "<testrun  date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )+"\""
+            +" suite=\""+suite+"\""
+			+" platform=\""+platform+"\""
+			+">\n");
         out.close();
     }
 
@@ -67,25 +67,29 @@ class TestServer {
         out.close();
     }
 
-    static function shoot( testNumber:Int, testName:String, platform:String, width, height, targetEquality:Float, expectFail:Bool ) :Float {
+    static function shoot( testNumber:Int, testName:String, suite:String, platform:String, width, height, targetEquality:Float, expectFail:Bool ) :Float {
         var baseName = resultDir+"/"+testName+"-";
         var img = baseName+platform+".pnm";
         var diff = baseName+platform+"-diff.pnm";
-        var ref = refDir+"/basic-"+testName+".pnm";
+		var refDir = "static/"+suite+"/pnm";
+		var ref = refDir+"/"+testName+".pnm";
 
-        if( width==null ) width=160;
-        if( height==null ) height=120;
+        if( width==null ) width=480;
+        if( height==null ) height=360;
 
         // make screenshot
-        var exitCode = neko.Sys.command("xwd -display "+displayName+" -nobdrs -root | xwdtopnm | pnmcut -left 1 -top 1 -width "+width+" -height "+height+" | pnmscale -xysize 160 120 > "+img );
-        if( exitCode != 0 ) throw("Could not take screenshot.");
+        //var exitCode = neko.Sys.command("xwd -display "+displayName+" -nobdrs -root | xwdtopnm | pnmcut -left 1 -top 1 -width "+width+" -height "+height+" | pnmscale -xysize 160 120 > "+img );
+		var exitCode = neko.Sys.command("xwd -display "+displayName+" -nobdrs -root | xwdtopnm | pnmcut -left 1 -top 1 -width "+width+" -height "+height+" > "+img );
+		if( exitCode != 0 ) throw("Could not take screenshot.");
 
         if( neko.FileSystem.exists( ref ) ) {
             // compare to reference
             exitCode = neko.Sys.command("pamarith -difference "+ref+" "+img+" > "+diff );
-            if( exitCode != 0 ) throw("Could not compare reference image.");
-            exitCode = neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
-            if( exitCode != 0 ) throw("Could not compare reference image.");
+            if( exitCode == 0 ) exitCode = neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
+            if( exitCode != 0 ) {
+				info(testName,platform,"Could not compare reference image. Wrong Size?");
+				return 0.;
+			}
             
             var eq = 1.0 - Std.parseFloat( neko.io.File.getContent("/tmp/xinftest-diff") );
             
@@ -97,7 +101,7 @@ class TestServer {
             result( testNumber, testName, platform, eq>=targetEquality, ""+eq, expectFail, baseName+platform+".png" );
             return eq;
         } else {
-            info(testName,platform,"reference "+ref+" no existe");
+            info(testName,platform,"reference "+ref+" doesn't exist");
 
             /*
         } else {

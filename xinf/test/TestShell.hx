@@ -9,8 +9,10 @@ class TestShell {
     var cnx:haxe.remoting.AsyncConnection;
     var cases:Array<TestCase>;
     var caseIterator:Iterator<TestCase>;
+	var suite:String;
     
-    public function new() {
+    public function new( suite:String ) {
+		this.suite=suite;
         cnx = haxe.remoting.AsyncConnection.urlConnect( serverUrl );
         cnx.onError = function(err) { throw( err ); };
         cases = new Array<TestCase>();
@@ -32,8 +34,8 @@ class TestShell {
         }
         
         var testCase = caseIterator.next();
-        trace("run test "+testCase );
-        testCase.run( cnx, runNextCase );
+        trace("run test "+testCase ); // FIXME handle exc?
+        testCase.run( cnx, runNextCase, suite );
     }
     
 
@@ -47,7 +49,7 @@ class TestShell {
                     "js";
                 #end    
         try {
-            cnx.test.startRun.call([platform],function(r){ });
+            cnx.test.startRun.call([suite,platform],function(r){ });
         } catch(e:Dynamic) {
             trace("No connection to server: "+Std.string(e));
         }
@@ -61,8 +63,13 @@ class TestShell {
             self.cnx.test.info.call(["trace", platform, Std.string(v)],function(r){ } );
         }
 
-        runNextCase();
-        
-        Root.main();
+		while( true ) {
+			try {
+				runNextCase();
+				Root.main();
+			} catch( e:Dynamic ) {
+				trace("EXCEPTION "+e );
+			}
+		}
     }
 }
