@@ -206,6 +206,6 @@ class EditableTextArea extends TextArea {
 
 #else true
 
-" TextArea is not yet supported on this platform. "
+typedef EditableTextArea = TextArea;
 
 #end

@@ -56,7 +56,7 @@ class TextArea extends xinf.ony.base.TextArea {
 			var size = fontSize;
         // TODO: weight
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
-			format.load();
+			format.assureLoaded();
 		}
 	}
 	
@@ -154,8 +154,113 @@ class TextArea extends xinf.ony.base.TextArea {
     
 }
 
-#else true
+#else flash9
 
-" TextArea is not yet supported on this platform. "
+import xinf.ony.Editable;
 
+class TextArea extends xinf.ony.base.TextArea {
+
+    var format:TextFormat;
+
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+
+		if( format==null ) {
+			var family = fontFamily;
+			var size = fontSize;
+        // TODO: weight
+			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
+			format.assureLoaded();
+		}
+
+		var tf = new flash.text.TextField();
+		
+		switch( fill ) {
+			case SolidColor(r,g,b,a):
+				format.format.color = Color.rgb(r,g,b).toRGBInt();
+				tf.alpha = a;
+			default:
+				throw("Fill "+fill+" not supported for text");
+		}
+		
+		//tf.embedFonts = true;
+		if( editable != None ) {
+			tf.selectable = true;
+			tf.type = "input";
+			tf.condenseWhite = false;
+		} else {
+			tf.selectable = false;
+		}
+
+		tf.wordWrap = true;
+		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
+
+		tf.defaultTextFormat = format.format;
+		
+		tf.y=y-1;
+		tf.x=x;
+		tf.width=width;
+		tf.height=height;
+		
+		//tf.border=true;
+		
+		tf.text = text;
+
+		g.native( tf );
+    }
+	
+}
+
+#else js
+
+import xinf.ony.Editable;
+
+class TextArea extends xinf.ony.base.TextArea {
+
+    var format:TextFormat;
+
+    override public function drawContents( g:Renderer ) :Void {
+        super.drawContents(g);
+
+		if( format==null ) {
+			var family = fontFamily;
+			var size = fontSize;
+        // TODO: weight
+			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
+			format.assureLoaded();
+		}
+
+        var r = js.Lib.document.createElement("div");
+        r.style.position="absolute";
+//        r.style.whiteSpace="nowrap";
+		r.style.overflow = "hidden";
+        
+		if( editable != None ) {
+		} else {
+			r.style.cursor="default";
+		}
+		
+        r.style.left = ""+Math.round(x);
+        r.style.top = ""+Math.round(y);
+        r.style.width = ""+Math.round(x);
+        r.style.height = ""+Math.round(y);
+		
+		switch( fill ) {
+			case SolidColor(red,g,b,a):
+				r.style.color = Color.rgb(red,g,b).toRGBString();
+			//	untyped r.opacity = a;
+			default:
+				throw("Fill "+fill+" not supported for text");
+		}
+        format.apply(r);
+		
+        r.innerHTML=text.split("\n").join("<br/>");
+
+		g.native( r );
+    }
+	
+}
+
+#else err
+ "platform not supported"
 #end

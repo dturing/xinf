@@ -212,7 +212,7 @@ class Element extends StyledNode {
 	}
 	
 	override public function matchSelector( s:Selector ) :Bool {
-		return switch(s) {
+		switch(s) {
 		
 			case Parent(sel):
 				if( parent==null ) return false;
@@ -249,7 +249,7 @@ class Element extends StyledNode {
 				return false;
 
 			default:
-				super.matchSelector(s);
+				return super.matchSelector(s);
 		}
 	}
 		

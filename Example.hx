@@ -1,73 +1,101 @@
 import Xinf;
-import xinf.ul.layout.SpringUtilities;
-import xinf.ul.layout.BorderLayout;
-import xinf.ul.widget.Widget;
-import xinf.ul.Component;
+
+import xinf.style.Selector;
+import xinf.style.StyleSheet;
+import xinf.erno.Paint;
 
 class Example {
 	
-	public function new() :Void {
-		var lm = xinf.ul.model.SimpleListModel.create([
-			"one",
-			"two",
-			"three",
-			"four",
-			"five",
-			"six",
-			"seven"
-		]);
+	public function new( ?url:String ) :Void {
+	
+		var g = new Group();
+		Root.attach(g);
 		
-		var c = new xinf.ul.Container();
-		c.layout = xinf.ul.layout.FlowLayout.Vertical5;
-		c.position = { x:100., y:100. };
-		c.size = { x:120., y:250. };
-		Root.attach(c.getElement());
+		var doc:Document;
+		var stage = {x:100.,y:100.};
 		
-		var dumpButtonInfo = function(m:Dynamic) {
-			trace("Button press: "+m );
+		if( url==null ) {
+			doc = Document.instantiate( Std.resource("test.svg") );
+		} else {
+			doc = Document.load( url );
+		}
+
+		doc.onLoad();
+		g.attach( doc );
+
+
+		var scale = 1.;
+		var offset={ x:0., y:0. };
+		
+		var trans = function() {
+			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
+			g.transform = new Concatenate( 
+							new Concatenate(
+								new Translate( -doc.width/2, -doc.height/2 ),
+								new Concatenate(
+//									new Scale(  (stage.x/doc.width)*scale, 
+//												(stage.y/doc.height)*scale ),
+									new Scale(  scale, scale ),
+									new Translate(offset.x,offset.y)
+								)
+							),
+							new Translate( stage.x/2, stage.y/2 )
+							);
 		};
-		
-		c.attach( xinf.ul.widget.Button.createSimple("Hello", dumpButtonInfo, "Hi!" ) );
-		c.attach( xinf.ul.widget.Button.createSimple("World", dumpButtonInfo, "World!" ) );
 
-		var l = new xinf.ul.list.ListView(lm);
-		c.attach(l);
+		Root.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
+			stage.x=e.x; stage.y=e.y;
+			trans();
+		});
 		
-		var d = new xinf.ul.widget.Dropdown(lm);
-		c.attach(d);
+/*
+		Root.addEventListener( KeyboardEvent.KEY_DOWN, function(e) {
+			var d=25;
+			trace("key "+e.key );
+			switch( e.key ) {
+				case "up":
+					offset.y += d;
+				case "down":
+					offset.y -= d;
+				case "left":
+					offset.x += d;
+				case "right":
+					offset.x -= d;
+				case "-":
+					scale*=.9;
+				case "+":
+					scale*=1./.9;
+				case "1":
+					offset = { x:0., y:0. };
+					scale = 1;
+			}
+			
+			trans();
+		});
+		
+		Root.addEventListener( MouseEvent.MOUSE_DOWN, function(check) {
+			var upL:Dynamic;
+			var moveL:Dynamic;
+			var old = offset;
+			moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {
+				offset = { x:old.x-(check.x-e.x), y:old.y-(check.y-e.y) };
+				trans();
+			});
+			upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
+				Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
+				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
+			});
+		});
+		*/		
 
-		/*
-		*/
-		/*
-		var layout = new xinf.ul.layout.BorderLayout();
-		//var layout = new xinf.ul.layout.SpringLayout();
-		
-		var c = new xinf.ul.widget.Pane();
-		c.set_size({x:300.,y:300.});
-		var arr = ["one","two","three","four","five"];//,"six","seven","eight","nine"];
-		var borders = [West,North,East,South,Center];
-		var count = 0;
-		for( t in arr ) {
-            var l :Component = if (count%2==0) {
-            	if (count==4) cast(new xinf.ul.widget.CheckBox(t),Component);
-            	else cast(new xinf.ul.widget.Label(t),Component);
-            } else {
-            	cast(new xinf.ul.widget.Button(t),Component);
-            }
-            l.set_size(l.prefSize);
-            layout.setConstraint(l,borders[count++]);
-            c.attach(l);
-            
-        }
-		
-        c.layout = layout;
-        c.relayout();
-        Root.attach(c.getElement());
-        */
 	}
 	
 	public static function main() :Void {
-		var d = new Example();
+		var arg:String;
+		#if neko
+			arg = neko.Sys.args()[0];
+		#end
+		var d = new Example( arg );
 		Root.main();
 	}
 }
