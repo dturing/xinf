@@ -44,7 +44,7 @@ class Element extends StyledNode {
 		stroke_miterlimit: new FloatTrait(4),
 		
 		font_family:	new StringListTrait(),
-		font_size:		new UnitFloatTrait(),
+		font_size:		new UnitFloatTrait(10.),
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
 		
 		visibility:		new EnumTrait<Visibility>( Visibility ),

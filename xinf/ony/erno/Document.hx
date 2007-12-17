@@ -51,6 +51,7 @@ class Document extends xinf.ony.base.Document {
         binding.add( "ellipse", Ellipse );
         binding.add( "circle", Circle );
         binding.add( "text", Text );
+        binding.add( "textArea", EditableTextArea );
         binding.add( "path", Path );
         binding.add( "image", Image );
 		

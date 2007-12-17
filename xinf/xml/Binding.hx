@@ -26,7 +26,7 @@ class Binding<T> {
 		try {
 			ret = Type.createInstance( m, [ null ] );
 		} catch( e:Dynamic ) {
-			throw("Could not create instance of "+Type.getClassName(m) );
+			throw("Could not create instance of "+Type.getClassName(m)+": "+e );
 		}
         return ret;
     }
