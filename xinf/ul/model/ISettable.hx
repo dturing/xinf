@@ -20,7 +20,7 @@ import Xinf;
 interface ISettable<T> {
 
     function set( ?value:T ) :Void;
-	function setStyle( style:ElementStyle ) :Void;
+	function setStyle( style:Dynamic ) :Void;
     function attachTo( parent:Group ) :Void;
 
     function moveTo( x:Float, y:Float ) :Void;

@@ -22,7 +22,7 @@ class Rectangle extends ElementImpl {
 
     public var x(get_x,set_x):Float;
     function get_x() :Float { return getTrait("x",Length).value; }
-    function set_x( v:Float ) :Float { setTrait("width",new Length(v)); redraw(); return v; }
+    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
 	
     public var y(get_y,set_y):Float;
     function get_y() :Float { return getTrait("y",Length).value; }

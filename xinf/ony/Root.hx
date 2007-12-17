@@ -24,6 +24,7 @@ class Root {
 			Root.width = Root.height = 100;
 			xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
 				Root.width = e.x; Root.height = e.y;
+				mRoot.width = e.x; mRoot.height = e.y;
 			});
 		}
 		return mRoot;

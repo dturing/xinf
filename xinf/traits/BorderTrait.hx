@@ -1,5 +1,7 @@
 package xinf.traits;
 
+import xinf.type.Border;
+
 class BorderTrait extends TypedTrait<Border> {
 
 	static var whitespace = ~/\W/g;

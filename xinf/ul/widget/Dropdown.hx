@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ul.widget;
 
 import Xinf;
@@ -25,9 +10,6 @@ import xinf.event.Event;
 import xinf.ul.layout.Helper;
 import xinf.erno.Paint;
 
-/**
-    Improvised Dropdown element.
-**/
 
 typedef T=String
 
@@ -61,7 +43,6 @@ class Dropdown extends Widget {
         
         group.attach(button);
         
-        
         group.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         
         menu = new ListView( model );
@@ -75,9 +56,9 @@ class Dropdown extends Widget {
     }
 
 	override public function set_size( s:TPoint ) :TPoint {
-		textElement.y = Helper.topOffsetAligned( this, s.y, .5 );
-		textElement.x = Helper.leftOffsetAligned( this, s.x, style.horizontalAlign );
-		
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 ) + fontSize;
+		textElement.x = Helper.leftOffsetAligned( this, s.x, horizontalAlign );
+
 		button.x = s.x-s.y;
 		button.width = button.height = s.y;
 		
@@ -87,15 +68,14 @@ class Dropdown extends Widget {
     override public function styleChanged() {
 		super.styleChanged();
 		
-		textElement.style.fontSize = style.fontSize;
-		textElement.style.fontFamily = style.fontFamily;
-		//FIXME textColor breaks
-		textElement.style.fill = SolidColor(.5,.5,.5,.5);//style.textColor.toSolidColor();
+		textElement.fontSize = fontSize;
+		textElement.fontFamily = fontFamily;
+		textElement.fill = textColor;
 		textElement.styleChanged();
 		
 		// TODO: fontWeight
 		if( textElement.text!=null ) {
-			var s = Helper.addPadding( style.getTextFormat().textSize(textElement.text), style );
+			var s = Helper.addPadding( getTextFormat().textSize(textElement.text), this );
 			s.x += s.y; // add button.width==height
 			setPrefSize( s );
 		}
@@ -109,7 +89,7 @@ class Dropdown extends Widget {
     private function open() :Void {
         addStyleClass(":open");
 
-        var p = group.localToGlobal( {x:5., y:size.y-(style.border.b) } );
+        var p = group.localToGlobal( {x:5., y:size.y-(border.b) } );
         menu.position = p;
         menu.size = { x:size.x-5., y:size.y*5. };
         

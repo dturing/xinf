@@ -1,18 +1,3 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
 package xinf.ul.list;
 
 import Xinf;
@@ -36,29 +21,29 @@ class ListView<T> extends Widget {
     
     var cursorPosition:Int;
     var lastCursorItem:ISettable<T>;
-	var itemStyle:ElementStyle;
+	var itemStyle:Dynamic;
     
-    public function new( model:ListModel<T>, ?createItem:Void->ISettable<T> ) :Void {
-		itemStyle = new ElementStyle();
+    public function new( model:ListModel<T>, ?createItem:Null<Void->ISettable<T>> ) :Void {
+		itemStyle = Reflect.empty();
 		
         super();
         this.model = model;
         if( createItem==null ) {
-            //createItem = function() :ISettable<T> {
-                //return new xinf.ul.list.ListItem<T>();
-            //}
+            createItem = function() :ISettable<T> {
+                return new xinf.ul.list.ListItem<T>();
+            }
         }
 
         cropper = new Crop();
         group.attach(cropper);
 
-        rr = new RoundRobin<T,ISettable<T>>( model, createItem, itemStyle, style );
+        rr = new RoundRobin<T,ISettable<T>>( model, createItem, itemStyle, this );
         cropper.attach( rr );
 
         cursor = new Rectangle();
 		cursor.width = 8; cursor.height = 18;
 		cursor.x = 0; cursor.y = -100;
-		cursor.style.fill = SolidColor(0,.5,0,.5);
+		cursor.fill = SolidColor(0,.5,0,.5);
         cropper.attach( cursor );
 
         scrollbar = new VScrollbar();
@@ -82,12 +67,12 @@ class ListView<T> extends Widget {
     
 		cursor.width = s.x;
 	
-        var rrs = Helper.removePadding( size, style );
+        var rrs = Helper.removePadding( size, this );
 		rrs.x -= scrollbar.size.x;
         cropper.width = rrs.x;
 		cropper.height = rrs.y;
 
-        var itl = Helper.innerTopLeft( style );
+        var itl = Helper.innerTopLeft( this );
 		cropper.transform = new Translate( itl.x, itl.y );
         rr.resize( rrs.x, rrs.y );
 		
@@ -97,10 +82,9 @@ class ListView<T> extends Widget {
 	override public function styleChanged() :Void {
 		super.styleChanged();
 		
-		itemStyle.fontSize = style.fontSize;
-		itemStyle.fontFamily = style.fontFamily;
-		//FIXME textColor breaks
-		itemStyle.fill = SolidColor(.5,.5,.5,.5);//style.textColor.toSolidColor();
+		itemStyle.font_size = fontSize;
+		itemStyle.font_family = fontFamily;
+		itemStyle.fill = textColor;
     }
 	
     function scrollBy( value:Float ) {

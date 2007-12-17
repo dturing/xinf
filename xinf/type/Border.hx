@@ -1,4 +1,4 @@
-package xinf.style;
+package xinf.type;
 
 class Border {
 	public var l:Float;

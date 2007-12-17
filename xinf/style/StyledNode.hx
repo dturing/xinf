@@ -24,7 +24,11 @@ class StyledNode extends Node {
 		styleChanged();
 		return r;
 	}
-	
+
+	function clearTraitsCache() {
+		_cache = Reflect.empty();
+	}
+
 	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
 		if( Reflect.hasField(_cache,name) ) return Reflect.field(_cache,name);
 		

@@ -35,8 +35,9 @@ class Popup {
         
         if( o.position.x < 0 ) o.position = { x:0., y:o.position.y };
         if( o.position.y < 0 ) o.position = { x:o.position.x, y:0. };
-        
-		switch( popupMode ) {
+		
+		// FIXME: if too close to root border, it's invisible!
+        switch( popupMode ) {
 			case Move:
 				if( o.position.x+o.size.x >= root.width ) 
 					o.position = { x:root.width - (o.size.x+1), y:o.position.y };
@@ -48,7 +49,7 @@ class Popup {
 				if( o.position.y+o.size.y >= root.height ) 
 					o.size = { x:o.size.x, y:root.height - (o.position.y+1) };
         }
-        root.attach(object.getElement());
+		root.attach(object.getElement());
     }
     
     public function close() :Void {

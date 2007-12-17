@@ -78,6 +78,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 				trace("Warning: Gradients not yet implemented");
 				var c = stops.iterator().next().color;
 				GL.color4( c.r, c.g, c.b, c.a );
+			case None:
+				GL.color4(0,0,0,0);
 			default:
 				throw("unimplemented fill paint: "+pen.fill );
 		}

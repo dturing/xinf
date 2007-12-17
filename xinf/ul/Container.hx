@@ -31,8 +31,8 @@ class Container extends Component {
 		if( group==null ) group = new Group();
         super( group );
 		
-		skin.attachBackground( group );
-		skin.attachForeground( group );
+		_skin.attachBackground( group );
+		_skin.attachForeground( group );
 		
         children = new Array<Component>();
         relayoutNeeded = true;
@@ -46,9 +46,11 @@ class Container extends Component {
         child.__parentSizeListener = l;
 		child.attachedTo( this );
 
-		skin.detachForeground( group );
+		_skin.detachForeground( group );
         group.attach(child.getElement());
-		skin.attachForeground( group );
+		_skin.attachForeground( group );
+		
+		relayout();
     }
 
     public function detach( child:Component ) :Void {

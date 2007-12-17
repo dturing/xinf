@@ -51,7 +51,8 @@ class TraitsObject implements TraitAccess {
 	
 	public function setTraitsFromObject( o:Dynamic ) {
 		for( field in Reflect.fields(o) ) {
-			setTrait( field, Reflect.field(o,field) );
+			var field2 = StringTools.replace( field, "_", "-" );
+			setTrait( field2, Reflect.field(o,field) );
 		}
 	}
 

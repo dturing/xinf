@@ -23,12 +23,17 @@ class StyleSheet {
     }
 	
     public function add( rule:StyleRule ) {
-		rules.push( rule );
+		var s = Reflect.empty();
+		for( field in Reflect.fields(rule.style) ) {
+			var field2 = StringTools.replace( field, "_", "-" );
+			Reflect.setField( s, field2, Reflect.field(rule.style,field) );
+		}
+		rules.push( { selector:rule.selector, style:s } );
     }
 	
 	public function addMany( _rules:Iterable<StyleRule> ) {
 		for( rule in _rules )
-			rules.push( rule );
+			add( rule );
 	}
 
     public function match( e:Stylable ) :Dynamic {
