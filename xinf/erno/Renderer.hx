@@ -207,13 +207,11 @@ interface Renderer {
 
     /**
         Draws a string of text at coordinates ([x],[y]) within the current object,
-        using the current font style (family, weight, slant and size) and the
-        current fill color. You can optionally pass in a <a href="FontStyle.html">FontStyle</a>
-        for changing the font color in the middle of the string. The string may contain
-        '\n's to span multiple lines.
+        using the given font style (family, weight, slant and size) and the
+        current fill color. The string may contain '\n's to span multiple lines.
     **/
     function text( x:Float, y:Float, text:String, format:TextFormat ) :Void;
-    
+
     /**
         Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 
         object to the given [outRegion]. 
