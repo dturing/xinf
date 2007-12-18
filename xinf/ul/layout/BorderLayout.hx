@@ -30,7 +30,7 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
         var W:Component;
         var C:Component;
         
-        for( c in parent.children ) {
+        for( c in parent.getComponents() ) {
             switch( getConstraints( c ) ) {
                 case North:
                     N=c;

@@ -8,7 +8,7 @@ import xinf.event.EventKind;
 import xinf.ul.ValueEvent;
 import xinf.ul.layout.Helper;
 import xinf.ul.FocusManager;
-import xinf.erno.Paint;
+import xinf.type.Paint;
 
 /**
     Button element.
@@ -49,7 +49,7 @@ class Button<Value> extends Widget {
 		
         super();
 
-		group.attach( textElement );
+		group.appendChild( textElement );
 		
         this.set_text(text);
         this.value = value;

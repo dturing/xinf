@@ -232,48 +232,6 @@ class Component extends StyledElement {
 		return element;
     }
 	
-	override public function matchSelector( s:Selector ) :Bool {
-		return switch(s) {
-		
-			case Parent(sel):
-				if( parent==null ) return false;
-				return parent.matchSelector(sel);
-				
-			case Ancestor(sel):
-				var p = this;
-				while( p.parent != null ) {
-					p = p.parent;
-					if( p.matchSelector(sel) ) return true;
-				}
-				return false;
-
-			case GrandAncestor(sel):
-				if( parent==null ) return false;
-				var p = parent;
-				while( p.parent != null ) {
-					p = p.parent;
-					if( p.matchSelector(sel) ) return true;
-				}
-				return false;
-
-			case Preceding(sel):
-				if( parent==null ) return false;
-				// FIXME: maybe implement children as a doubly-linked list?
-				var p:Component = null;
-				for( c in parent.children ) {
-					if( c==this ) {
-						if( p==null ) return false;
-						return( p.matchSelector(sel) );
-					}
-					p=c;
-				}
-				return false;
-
-			default:
-				super.matchSelector(s);
-		}
-	}
-		
 	public function toString() :String {
 		return( Type.getClassName(Type.getClass(this)) );
 	}

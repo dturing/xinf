@@ -36,7 +36,7 @@ class LineEdit extends Widget {
         super( traits );
 
 		textElement.editable = xinf.ony.Editable.Simple;
-		group.attach( textElement );
+		group.appendChild( textElement );
 		
 //		addEventListener( KeyboardEvent.KEY_DOWN, textElement.onKeyDown );
 //		group.addEventListener( MouseEvent.MOUSE_DOWN, textElement.onMouseDown );

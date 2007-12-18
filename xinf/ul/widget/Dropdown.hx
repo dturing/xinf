@@ -9,9 +9,9 @@ import xinf.ul.Popup;
 import xinf.ul.model.ListModel;
 import xinf.ul.list.ListView;
 import xinf.ul.list.PickEvent;
-import xinf.event.Event;
 import xinf.ul.layout.Helper;
-import xinf.erno.Paint;
+import xinf.event.Event;
+import xinf.type.Paint;
 
 
 typedef T=String
@@ -38,13 +38,13 @@ class Dropdown extends Widget {
         
 		textElement.text = model.getItemAt(selectedIndex=0);
 		
-        group.attach( textElement );
+        group.appendChild( textElement );
         
         button = new Rectangle();
         button.width = 20.;
 		button.height = 20.;
         
-        group.attach(button);
+        group.appendChild(button);
         
         group.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
         

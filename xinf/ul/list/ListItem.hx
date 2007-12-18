@@ -4,6 +4,7 @@
 package xinf.ul.list;
 
 import Xinf;
+import xinf.xml.Node;
 import xinf.ul.model.ISettable;
 
 class ListItem<T> implements ISettable<T> {

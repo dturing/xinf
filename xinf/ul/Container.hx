@@ -3,16 +3,16 @@
 	
 package xinf.ul;
 
-import xinf.ul.layout.Layout;
 import Xinf;
+import xinf.xml.Node;
+import xinf.ul.layout.Layout;
 
 class Container extends Component {
     var relayoutNeeded:Bool;
     public var layout:Layout;
-    
-    public var children(default,null):Array<Component>;    
 
     var group:Group;
+	var componentChildren:Array<Component>;
 
     public function new( ?g:Group, ?traits:Dynamic ) :Void {
 		group = g;
@@ -22,31 +22,40 @@ class Container extends Component {
 		_skin.attachBackground( group );
 		_skin.attachForeground( group );
 		
-        children = new Array<Component>();
         relayoutNeeded = true;
+		componentChildren = new Array<Component>();
     }
     
-    public function attach( child:Component ) :Void {
-        children.push( child );
-        
-        relayoutNeeded = true;
-        var l = child.addEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, onComponentResize );
-        child.__parentSizeListener = l;
-		child.attachedTo( this );
+    override public function appendChild( newChild:Node ) :Node {
+		super.appendChild( newChild );
 
-		_skin.detachForeground( group );
-        group.attach(child.getElement());
-		_skin.attachForeground( group );
+		if( Std.is( newChild, Component ) ) {
+			var child:Component = cast(newChild);
+			componentChildren.push( child );
+			child.__parentSizeListener = child.addEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, onComponentResize );
+
+			_skin.detachForeground( group );
+			group.appendChild( child.getElement() );
+			_skin.attachForeground( group );
+			
+			relayoutNeeded = true;
+			relayout();
+		}
 		
-		relayout();
+		return newChild;
     }
 
-    public function detach( child:Component ) :Void {
-        if( child==null ) throw("trying to detach null");
-        children.remove( child );
-        child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
-		child.detachedFrom( this );
-        group.detach(child.getElement());
+	override public function removeChild( oldChild:Node ) :Node {
+		super.removeChild( oldChild );
+
+		if( Std.is( oldChild, Component ) ) {
+			var child:Component = cast(oldChild);
+			componentChildren.remove( child );
+			child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
+			group.removeChild( child.getElement() );
+		}
+		
+		return oldChild;
     }
 
     function onComponentResize( e:ComponentSizeEvent ) :Void {
@@ -72,10 +81,10 @@ class Container extends Component {
     }
     
     public function getComponent( index:Int ) :Component {
-        return children[index];
+        return componentChildren[index];
     }
     public function getComponents() :Iterator<Component> {
-        return children.iterator();
+        return componentChildren.iterator();
     }
 
 }

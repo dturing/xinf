@@ -149,12 +149,12 @@ class SpringLayout implements Layout {
         var cs = initContainer( p );
         cs.dropCalcResult();
         
-        for( c in p.children ) {
+        for( c in p.getComponents() ) {
             getConstraints(c).dropCalcResult();
         }
         
         
-        for( c in p.children ) {
+        for( c in p.getComponents() ) {
             var constraints = getConstraints(c);
             //trace("child: "+constraints );
             

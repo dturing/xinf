@@ -67,7 +67,7 @@ class FlowLayout implements Layout {
         var max = 0.;
         var positions = new Array<{x:Float,y:Float}>();
         
-        for( c in parent.children ) {
+        for( c in parent.getComponents() ) {
             positions.push( o.get( acc, bPad ) );
             
             var s = Helper.clampSize( c.prefSize, c );
@@ -81,7 +81,7 @@ class FlowLayout implements Layout {
         var s = Helper.removePadding(parent.size,parent);
         var ashift = ( o.A( s ) - total ) * o.alignA( parent );
         var bshift = ( o.B( s ) - max   ) * o.alignB( parent );
-        for( c in parent.children ) {
+        for( c in parent.getComponents() ) {
             var p = positions.shift();
             var cshift = ( max - o.B( c.size ) ) * o.alignB( c );
             var q = o.get( o.A(p)+ashift, o.B(p)+bshift+cshift );

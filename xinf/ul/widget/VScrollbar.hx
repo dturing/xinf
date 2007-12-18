@@ -27,7 +27,7 @@ class VScrollbar extends Container {
         thumb.element.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
         thumb.size = { x:18., y:18. };
 		thumb.position = { x:0., y:0. };
-        attach(thumb);
+        appendChild(thumb);
         
         thumbHeight = thumb.size.y;
         

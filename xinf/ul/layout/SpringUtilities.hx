@@ -78,7 +78,7 @@ class SpringUtilities {
             var width = Spring.constant(0);
             for( r in 0...rows ) {
                 var comp = parent.getComponent( (r*cols)+c );
-                if( comp==null ) throw("Container does not contain enough components for "+cols+"x"+rows+", only "+parent.children.length );
+                if( comp==null ) throw("Container does not contain enough components for "+cols+"x"+rows );
                 var cons = layout.getConstraints( comp );
                 width = Spring.max( width,
                         cons.getWidth() );

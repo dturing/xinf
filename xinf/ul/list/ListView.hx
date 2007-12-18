@@ -11,7 +11,7 @@ import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
 
-import xinf.erno.Paint;
+import xinf.type.Paint;
 
 class ListView<T> extends Widget {
 
@@ -38,21 +38,21 @@ class ListView<T> extends Widget {
         }
 
         cropper = new Crop();
-        group.attach(cropper);
+        group.appendChild(cropper);
 
         rr = new RoundRobin<T,ISettable<T>>( model, createItem, itemStyle, this );
-        cropper.attach( rr );
+        cropper.appendChild( rr );
 
         cursor = new Rectangle();
 		cursor.width = 8; cursor.height = 18;
 		cursor.x = 0; cursor.y = -100;
 		cursor.fill = SolidColor(0,.5,0,.5);
-        cropper.attach( cursor );
+        cropper.appendChild( cursor );
 
         scrollbar = new VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
 //        scrollbar.visible=false;
-        attach( scrollbar );
+        appendChild( scrollbar );
 
         group.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
         scrollbar.addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
