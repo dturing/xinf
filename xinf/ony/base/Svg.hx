@@ -37,11 +37,8 @@ class Svg extends GroupImpl {
     function get_height() :Float { return getTrait("height",Length).value; }
     function set_height( v:Float ) :Float { setTrait("height",new Length(v)); return v; }
 
-    public var styleSheet(default,null):StyleSheet;
-	
 	public function new( ?traits:Dynamic ) :Void {
         super( traits );
- 		styleSheet = new StyleSheet();
     }
 
     override public function fromXml( xml:Xml ) :Void {

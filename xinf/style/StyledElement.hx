@@ -198,7 +198,7 @@ class StyledElement extends Element {
 				
 			case Ancestor(sel):
 				var p:StyledElement = this;
-				while( p.parentElement != null ) {
+				while( p != null ) {
 					p = p.getTypedParent( StyledElement );
 					if( Std.is( p, StyledElement )
 						&& cast(p).matchSelector(sel) ) return true;
@@ -209,7 +209,7 @@ class StyledElement extends Element {
 				var p = getTypedParent( StyledElement );
 				while( p!=null && p.parentElement != null ) {
 					p = p.getTypedParent( StyledElement );
-					if( p.matchSelector(sel) ) return true;
+					if( p!=null && p.matchSelector(sel) ) return true;
 				}
 				return false;
 

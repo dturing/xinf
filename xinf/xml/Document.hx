@@ -33,6 +33,7 @@ class Document extends Element {
 	public function new() :Void {
 		super();
         elementsById = new Hash<Node>();
+ 		styleSheet = new StyleSheet();
 	}
 	
     public function getElementById( id:String ) :Node {
@@ -82,8 +83,8 @@ class Document extends Element {
         binding.addInstantiator( i );
     }
 */
-	public static function instantiate( data:String, ?onLoad:Document->Void ) :Document {
-        var doc = new Document();
+	public static function instantiate( data:String, ?onLoad:Document->Void, ?doc ) :Document {
+        if( doc==null ) doc = new Document();
 		var xml = Xml.parse(data);
 		doc.ownerDocument = doc;
 		var e = doc.unmarshal( xml.firstElement(), doc );
@@ -99,10 +100,7 @@ class Document extends Element {
         var url = new URL(url_s);
         doc.base = url.pathString();
         url.fetch( function(data) {
-                var xml = Xml.parse(data);
-                doc.fromXml( xml.firstElement() );
-				doc.onLoad();
-                if( onLoad!=null ) onLoad( doc );
+				instantiate( data, onLoad, doc );
             }, function( error ) {
                 throw(error);
             } );

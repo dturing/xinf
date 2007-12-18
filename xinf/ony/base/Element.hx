@@ -178,8 +178,9 @@ class Element extends StyledElement {
 	}
 			
     override public function updateClassStyle() :Void {
-		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
-			_matchedStyle = ownerDocument.styleSheet.match(this);
+		var styleSheet = ownerDocument.styleSheet;
+		if( styleSheet!=null ) {
+			_matchedStyle = styleSheet.match(this);
 			styleChanged();
 		}
     }
@@ -219,7 +220,7 @@ class Element extends StyledElement {
         }
     }
 
-    public function toString() :String {
+    override public function toString() :String {
 		var s = "";
  		if( id!=null ) s += "#"+id;
  		if( name!=null ) s += "(\""+name+"\")";

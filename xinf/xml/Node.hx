@@ -8,13 +8,11 @@ class Node implements Serializable {
 	public var parentElement(default,null) :Element;
 	public var ownerDocument(default,null) :Document;
 
-    var mChildren(default,null):Array<Node>;   
-/*
-	public var children(get_children,null) :Iterator<Node>;
-    function get_children() :Iterator<Node> {
+    var mChildren(default,null):Array<Node>;
+	public var childNodes(get_childNodes,null) :Iterator<Node>;
+    function get_childNodes() :Iterator<Node> {
         return mChildren.iterator();
     }
-*/
 
     public function new() {
         mChildren = new Array<Node>();
@@ -89,6 +87,10 @@ class Node implements Serializable {
 		if( Std.is( parentElement, type ) ) return cast(parentElement);
 		return null;
 	}
+
+    public function toString() :String {
+		return( Type.getClassName( Type.getClass(this) ) );
+    }
 
 /* TinySVG1.2 uDOM: 
 		readonly attribute DOMString namespaceURI;

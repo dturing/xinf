@@ -124,8 +124,8 @@ class TestCase {
     
     public function cleanFinish( ?passed:Bool ) {
         var r = Root;
-        for( c in r.children ) {
-            r.detach(c);
+        for( c in r.getRootSvg().childNodes ) {
+            r.removeChild(c);
         }
 
         mouseMove( 0, 0 );

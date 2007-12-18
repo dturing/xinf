@@ -38,13 +38,13 @@ class Style extends ElementImpl {
 			}
 			
 			if( t.length>0 ) {
-				if( ownerDocument==null || ownerDocument.styleSheet==null ) {
-					throw("cannot parse style, no document.styleSheet");
+				var styleSheet = ownerDocument.styleSheet;
+				if( styleSheet==null ) {
+					throw("cannot parse style, document has no stylesheet");
 				}
 				
 				var r = StyleParser.parseRules( t, this );
-				trace("Parsed "+r.length+" rules" );
-				ownerDocument.styleSheet.addMany( r );
+				styleSheet.addMany( r );
 				
 				text = t;
 			}

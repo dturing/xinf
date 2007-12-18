@@ -116,14 +116,12 @@ class Gradient extends ElementImpl {
 			}
 		}
 
+		// FIXME, maybe: make these normal nodes?
 		for(i in xml.elementsNamed("stop")) {
-			try {
-				var s = new GradientStop();
-				s.fromXml(i);
-				stops.push(s);
-			} catch(e:Dynamic) {
-				throw("Error parsing GradientStop: "+e);
-			}
+			var s = new GradientStop();
+			untyped s.ownerDocument = ownerDocument;
+			s.fromXml(i);
+			stops.push(s);
 		}
 
 		if( xml.exists("xlink:href") ) 

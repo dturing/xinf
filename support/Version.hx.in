@@ -5,4 +5,8 @@ class Version {
 	public static var revision:String = "__REVISION__";
 	public static var built:String = "__DATE__";
 	public static var tagline:String = "__TAGLINE__";
+	
+	public static function fullVersion() :String {
+		return( "Xinf "+version+" '"+tagline+"' r"+revision+" built "+built );
+	}
 }

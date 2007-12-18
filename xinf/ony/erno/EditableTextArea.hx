@@ -49,7 +49,7 @@ class EditableTextArea extends TextArea {
 	}
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
-		if( editable==EditNone ) return;
+		if( editable==Editability.None ) return;
         if( e.code >= 32 && e.code < 127 ) {
             switch( e.code ) {
                 case 127: // Del

@@ -4,6 +4,6 @@
 package xinf.type;
 
 enum Editability {
-    EditNone;
-    EditSimple;
+    None;
+    Simple;
 }

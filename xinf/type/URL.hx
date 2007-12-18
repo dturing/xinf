@@ -45,7 +45,7 @@ class URL {
             var p = path.split("/");
             filename = p.pop();
             path = p.join("/");
-			if( p.length>1 ) path+="/";
+			if( p.length>0 ) path+="/";
         } else {
 			filename="";
 		}

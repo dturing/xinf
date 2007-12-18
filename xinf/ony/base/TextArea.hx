@@ -22,7 +22,7 @@ class TextArea extends ElementImpl {
 		width:new LengthTrait(),
 		height:new LengthTrait(),
 		text:new StringTrait(), // FIXME uDOM: "#text"?
-		editable:new EnumTrait<Editability>( Editability, "Edit", EditNone ),
+		editable:new EnumTrait<Editability>( Editability, "", Editability.None ),
 		line_increment:new LineIncrementTrait(),
 	}
 

@@ -45,6 +45,7 @@ class Element extends Node,
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
 		setTraitsFromXml( xml );
+		if( id!=null ) ownerDocument.elementsById.set(id,this);
 	}
 		
 	/**********************/

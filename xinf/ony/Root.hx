@@ -14,7 +14,7 @@ class Root {
 	public static var width:Float;
 	public static var height:Float;
 	
-	private static function getRoot() :Svg {
+	public static function getRootSvg() :Svg {
 		if( mRoot==null ) {
 			var r = new xinf.ony.erno.Root();
 			mRoot = new Svg();
@@ -30,11 +30,11 @@ class Root {
 	}
 	
     public static function appendChild( o:Node ) :Void {
-		getRoot().appendChild( o );
+		getRootSvg().appendChild( o );
 	}
 	
     public static function removeChild( o:Node ) :Void {
-		getRoot().removeChild( o );
+		getRootSvg().removeChild( o );
 	}
 
     public static function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {

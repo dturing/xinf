@@ -30,7 +30,7 @@ testenv : testd
 
 testi : $(SRC) testd
 	haxe $(HAXEFLAGS) -neko test.n -main xinf.test.svg.SVGTestsuite;
-	NEKOPATH=$(NEKOPATH) neko test.n static/svg/svg/shapes-rect-01-t.svg 
+	NEKOPATH=$(NEKOPATH) neko test.n static/SVG1.2/svg/shapes-rect-01-t.svg 
 
 test12 : $(SRC) testd
 	haxe $(HAXEFLAGS) -neko test.n -main xinf.test.svg.SVG12Testsuite;
