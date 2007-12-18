@@ -93,9 +93,9 @@ class TextFormat {
         #if neko
             return new xinf.inity.font.XTextFormat(family,size,bold,italic);
         #else flash
-            return new xinf.flash9.Flash9TextFormat(family,size,bold,italic);
+            return new xinf.erno.flash9.Flash9TextFormat(family,size,bold,italic);
         #else js
-            return new xinf.js.JSTextFormat(family,size,bold,italic);
+            return new xinf.erno.js.JSTextFormat(family,size,bold,italic);
         #end
     }
     

@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.flash9;
+package xinf.erno.flash9;
 
 import xinf.erno.SimpleRuntime;
 import xinf.erno.Renderer;

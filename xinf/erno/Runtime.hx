@@ -110,11 +110,11 @@ class Runtime extends SimpleEventDispatcher {
                 }
             }
         #else js
-            _renderer = new xinf.js.JSRenderer();
-            _runtime = new xinf.js.JSRuntime();
+            _renderer = new xinf.erno.js.JSRenderer();
+            _runtime = new xinf.erno.js.JSRuntime();
         #else flash
-            _renderer = new xinf.flash9.Flash9Renderer();
-            _runtime = new xinf.flash9.Flash9Runtime();
+            _renderer = new xinf.erno.flash9.Flash9Renderer();
+            _runtime = new xinf.erno.flash9.Flash9Runtime();
         #end
         
         if( runtime==null ) throw("unable to create runtime environment");

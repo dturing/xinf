@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.js;
+package xinf.erno.js;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;

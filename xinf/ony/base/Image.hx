@@ -78,18 +78,7 @@ class Image extends ElementImpl {
 	}
    
     public static function load( url:String ) :ImageData {
-        #if neko
-            return( xinf.inity.Texture.newByName( url ) );
-        #else js
-            return( new xinf.js.JSImageData(url) );
-        #else flash
-            if( StringTools.startsWith( url, "library://" ) ) {
-                return( new xinf.flash9.InternalImageData(url.substr(10)) );
-            } else {
-                return( new xinf.flash9.ExternalImageData(url) );
-            }
-        #else err
-        #end
+		return ImageData.load( url );
     }
 
 }

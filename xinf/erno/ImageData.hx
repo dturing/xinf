@@ -80,12 +80,12 @@ class ImageData extends SimpleEventDispatcher {
         #if neko
             return( xinf.inity.Texture.newByName( url ) );
         #else js
-            return( new xinf.js.JSImageData(url) );
+            return( new xinf.erno.js.JSImageData(url) );
         #else flash
             if( StringTools.startsWith( url, "library://" ) ) {
-                return( new xinf.flash9.InternalImageData(url.substr(10)) );
+                return( new xinf.erno.flash9.InternalImageData(url.substr(10)) );
             } else {
-                return( new xinf.flash9.ExternalImageData(url) );
+                return( new xinf.erno.flash9.ExternalImageData(url) );
             }
         #else err
         #end
@@ -93,7 +93,7 @@ class ImageData extends SimpleEventDispatcher {
 	
     #if flash9
 	public static function getRegion( image:ImageData, region:{ x:Float, y:Float, w:Float, h:Float } ) :ImageData {
-			return( new xinf.flash9.ImageDataRegion( image, region ) );
+			return( new xinf.erno.flash9.ImageDataRegion( image, region ) );
 	}
     #end
 }
