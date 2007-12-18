@@ -14,15 +14,19 @@ class SimpleSkin extends Skin {
 	override public function setTo( name:String ) :Void {
 		switch( name ) {
 			case "focus":
-				bg.fill = SolidColor(.8,.8,.8,.8);
+				bg.fill = SolidColor(.9,.9,.9,.8);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 2;
-			case "press":
-				bg.fill = SolidColor(.9,.9,.9,.9);
+			case "focus-bright":
+				bg.fill = SolidColor(.98,.98,.98,.9);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 2;
+			case "none":
+				bg.fill = Color.TRANSPARENT;
+				bg.stroke = Color.TRANSPARENT;
+				bg.strokeWidth = 0;
 			default:
-				bg.fill = SolidColor(.8,.8,.8,.8);
+				bg.fill = SolidColor(.9,.9,.9,.8);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 1;
 		}

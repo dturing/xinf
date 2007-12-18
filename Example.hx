@@ -23,14 +23,16 @@ class Example {
 		c.size = { x:120., y:250. };
 		Root.attach(c.getElement());
 		
-		var dumpButtonInfo = function(m:Dynamic) {
-			trace("Button press: "+m );
-		};
+		var l = new xinf.ul.widget.Label( "Hello Xinful" );
+		c.attach(l);
 
 		var ed = new xinf.ul.widget.LineEdit();
 		ed.text = "Edit me!";
 		c.attach( ed );
 		
+		var dumpButtonInfo = function(m:Dynamic) {
+			trace("Button press: "+m );
+		};
 		c.attach( xinf.ul.widget.Button.createSimple("Hello", dumpButtonInfo, "Hi!" ) );
 		c.attach( xinf.ul.widget.Button.createSimple("World", dumpButtonInfo, "World!" ) );
 

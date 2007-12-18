@@ -97,11 +97,14 @@ class XinfinityRuntime extends Runtime {
  
         endFrame();
 
- 		// TODO precise timing here
-
+		timing();
+		
+        GLUT.swapBuffers();
+    }
+	
+	function timing() :Void {
 		var now = neko.Sys.time();
 		while( time<now-(interval*.5) ) {
-			//trace("DROP "+((now-time)*1000)+"ms late");
 			time+=interval;
 			#if profile
 			xinf.test.Counter.count("frames dropped");
@@ -114,12 +117,8 @@ class XinfinityRuntime extends Runtime {
 			now = neko.Sys.time();
 			d=time-now;
 		}
-		
-        GLUT.swapBuffers();
-		
 		time+=interval;
-
-    }
+	}
 
     public function step_timer( v:Int ) :Void {
         GLUT.setTimerFunc( Math.round(interval*900), step, 0 );
@@ -131,10 +130,13 @@ class XinfinityRuntime extends Runtime {
         // post enter_frame event
         postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
         
-        //if( somethingChanged ) {
+        if( somethingChanged ) {
             //GLUT.postRedisplay();
 			display();
-       // }
+		} else {
+			timing();
+		}
+
 		
 		#if profile
 //			xinf.test.Counter.count("frames");

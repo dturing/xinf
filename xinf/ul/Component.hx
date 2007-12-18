@@ -27,15 +27,15 @@ class Component extends StyledNode {
 				padding: new Border(6,3,6,3),
 				border: new Border(1,1,1,1),
 				horizontal_align: 0.,
-				vertical_align: .5,
+				vertical_align: 0.,
 				font_family: new StringList(["sans"]),
 				font_size: 12,
 				text_color: Color.BLACK,
 				min_width: 100,
 			} },
 		{ selector:StyleClass("Container"), style:{
-				horizontal_align: .5,
-				vertical_align: .5,
+				horizontal_align: 0.,
+				vertical_align: 0.,
 			} },
 		{ selector:StyleClass("ListView"), style:{
 				min_width: 100.,
@@ -45,10 +45,11 @@ class Component extends StyledNode {
 				padding: new Border(2,2,2,2),
 				border: new Border(0,0,0,0),
 				horizontal_align: 0.,
-				vertical_align: .5,
+				vertical_align: 0.,
 				font_family: new StringList(["sans"]),
 				font_size: 12,
 				text_color: Color.BLACK,
+				skin: "none",
 			} },
 		{ selector:StyleClass("Button"), style:{
 				padding: new Border(6,3,6,3),
@@ -64,7 +65,7 @@ class Component extends StyledNode {
 				border: new Border(2,2,2,2),
 			} },
 		{ selector:AllOf([ StyleClass("Button"), StyleClass(":press") ]), style:{
-				skin: "press",
+				skin: "focus-bright",
 				padding: new Border(5,3,5,1),
 			} },
 		{ selector:StyleClass("ListView"), style:{
@@ -76,7 +77,7 @@ class Component extends StyledNode {
 				min_height: 10,
 			} },
 		{ selector:AllOf([ StyleClass("LineEdit"), StyleClass(":focus") ]), style:{
-				skin: "press",
+				skin: "focus-bright",
 			} },
 	]);
 	
@@ -242,7 +243,7 @@ class Component extends StyledNode {
     }
 	
 	override public function matchSelector( s:Selector ) :Bool {
-		switch(s) {
+		return switch(s) {
 		
 			case Parent(sel):
 				if( parent==null ) return false;
@@ -279,7 +280,7 @@ class Component extends StyledNode {
 				return false;
 
 			default:
-				return super.matchSelector(s);
+				super.matchSelector(s);
 		}
 	}
 		
