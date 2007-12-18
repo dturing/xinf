@@ -90,9 +90,9 @@ class Font extends xinf.support.Font {
         return( g );
     }
 
-    public function textSize( text:String, fontSize:Float ) :{x:Float,y:Float} {
+    public function textSize( text:String, fontSize:Float, ?lineHeight:Float ) :{x:Float,y:Float} {
         var lines=0;
-        var lineHeight = Math.round(height*fontSize)/fontSize;
+        if( lineHeight==null ) lineHeight = Math.round(height*fontSize)/fontSize;
         var w=0.0;
         var maxW=0.0;
         for( i in 0...text.length ) {

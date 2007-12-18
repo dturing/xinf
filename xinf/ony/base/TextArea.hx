@@ -66,6 +66,9 @@ class TextArea extends ElementImpl {
         super.fromXml(xml);
         text = textContent(xml);
     }
+	
+	public function focus( ?focus:Bool ) :Void {
+	}
 
 /* helpers *******************/
 

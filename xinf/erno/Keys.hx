@@ -50,6 +50,8 @@ class Keys {
         keys.set(127,"delete");
         
         #if neko
+            keys.set(SPECIAL+opengl.GLUT.KEY_HOME,"home");
+            keys.set(SPECIAL+opengl.GLUT.KEY_END,"end");
             keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_UP,"page up");
             keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_DOWN,"page down");
             keys.set(SPECIAL+opengl.GLUT.KEY_LEFT,"left");

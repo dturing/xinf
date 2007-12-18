@@ -54,11 +54,14 @@ class VScrollbar extends Container {
         else if( y < thumb.position.y ) delta = -1;
         else return;
 		
+		e.preventBubble=true;
+		
         postEvent( new ScrollEvent( ScrollEvent.SCROLL_LEAP, delta ) );
     }
         
     public function clickThumb( e:MouseEvent ) {
         new Drag<Float>( e, move, null, thumb.position.y );
+		e.preventBubble=true;
     }
     
     public function move( x:Float, y:Float, marker:Float ) {

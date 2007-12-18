@@ -26,10 +26,10 @@ class Container extends Component {
 
     var group:Group;
 
-    public function new( ?g:Group ) :Void {
+    public function new( ?g:Group, ?traits:Dynamic ) :Void {
 		group = g;
 		if( group==null ) group = new Group();
-        super( group );
+        super( group, traits );
 		
 		_skin.attachBackground( group );
 		_skin.attachForeground( group );

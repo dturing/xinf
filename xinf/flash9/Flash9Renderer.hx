@@ -260,7 +260,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					throw("Fill "+pen.fill+" not supported for text");
 			}
 			
-			tf.embedFonts = true;
+// FIXME			tf.embedFonts = true;
 	
             tf.defaultTextFormat = format.format;
             tf.selectable = false;

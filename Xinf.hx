@@ -33,6 +33,7 @@ typedef Line = xinf.ony.erno.Line
 typedef Polygon = xinf.ony.erno.Polygon
 typedef Polyline = xinf.ony.erno.Polyline
 typedef Text = xinf.ony.erno.Text
+typedef TextArea = xinf.ony.erno.EditableTextArea
 typedef Use = xinf.ony.erno.Use
 typedef Definitions = xinf.ony.erno.Definitions
 

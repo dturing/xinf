@@ -31,7 +31,7 @@ class TextArea extends xinf.ony.base.TextArea {
     var lines :Array<TextLine>;
 	var dirty :Bool;
 
-	// TODO: updatContents when setting width?
+	// TODO: updateContents when setting width?
     override function set_text( v:String ) :String { 
 		dirty=true;
 		redraw();
@@ -161,6 +161,19 @@ import xinf.ony.Editable;
 class TextArea extends xinf.ony.base.TextArea {
 
     var format:TextFormat;
+	var tf:flash.text.TextField;
+	
+	public function new( ?traits:Dynamic ) {
+		super(traits);
+		tf = new flash.text.TextField();
+		tf.wordWrap = true;
+		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
+	}
+
+	override public function focus( ?focus:Bool ) :Void {
+	//	throw("focus flash textfield");
+		flash.Lib.current.stage.focus = tf;
+	}
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
@@ -172,8 +185,6 @@ class TextArea extends xinf.ony.base.TextArea {
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 			format.assureLoaded();
 		}
-
-		var tf = new flash.text.TextField();
 		
 		switch( fill ) {
 			case SolidColor(r,g,b,a):
@@ -183,7 +194,7 @@ class TextArea extends xinf.ony.base.TextArea {
 				throw("Fill "+fill+" not supported for text");
 		}
 		
-		//tf.embedFonts = true;
+		//tf.embedFonts = true;  FIXME handle this somehow good..
 		if( editable != None ) {
 			tf.selectable = true;
 			tf.type = "input";
@@ -192,9 +203,6 @@ class TextArea extends xinf.ony.base.TextArea {
 			tf.selectable = false;
 		}
 
-		tf.wordWrap = true;
-		tf.autoSize = flash.text.TextFieldAutoSize.NONE;
-
 		tf.defaultTextFormat = format.format;
 		
 		tf.y=y-1;
@@ -202,7 +210,7 @@ class TextArea extends xinf.ony.base.TextArea {
 		tf.width=width;
 		tf.height=height;
 		
-		//tf.border=true;
+		//tf.border=true; FIXME exact placement (stupid flash padding)
 		
 		tf.text = text;
 

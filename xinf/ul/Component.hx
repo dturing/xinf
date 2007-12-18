@@ -63,12 +63,20 @@ class Component extends StyledNode {
 				padding: new Border(5,2,5,2),
 				border: new Border(2,2,2,2),
 			} },
-		{ selector:StyleClass(":press"), style:{
+		{ selector:AllOf([ StyleClass("Button"), StyleClass(":press") ]), style:{
 				skin: "press",
 				padding: new Border(5,3,5,1),
 			} },
 		{ selector:StyleClass("ListView"), style:{
 				padding: new Border( 3,1,0,1 ),
+			} },
+		{ selector:StyleClass("LineEdit"), style:{
+				padding: new Border(2,2,2,1),
+				min_width: 100,
+				min_height: 10,
+			} },
+		{ selector:AllOf([ StyleClass("LineEdit"), StyleClass(":focus") ]), style:{
+				skin: "press",
 			} },
 	]);
 	
@@ -234,7 +242,7 @@ class Component extends StyledNode {
     }
 	
 	override public function matchSelector( s:Selector ) :Bool {
-		return switch(s) {
+		switch(s) {
 		
 			case Parent(sel):
 				if( parent==null ) return false;
@@ -271,7 +279,7 @@ class Component extends StyledNode {
 				return false;
 
 			default:
-				super.matchSelector(s);
+				return super.matchSelector(s);
 		}
 	}
 		

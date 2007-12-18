@@ -25,7 +25,7 @@ import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.StringListTrait;
 import xinf.traits.StringChoiceTrait;
-// import xinf.traits.TransformTrait;
+// TODO import xinf.traits.TransformTrait;
 
 class Element extends StyledNode {
 
@@ -287,7 +287,8 @@ class Element extends StyledNode {
                 dispatched=true;
             }
         }
- 		if( !dispatched && parent != null && e.type.bubble==true ) {
+ 		// old logic is to bubble only if not handled:  if( !dispatched && 
+		if( parent != null && !e.preventBubble && e.type.bubble==true ) {
             parent.dispatchEvent(e);
         }
     }

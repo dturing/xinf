@@ -9,21 +9,40 @@ import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.geom.Types;
 import xinf.erno.Paint;
+import xinf.ony.Root;
 
 class EditableTextArea extends TextArea {
 
     var sel :{ from:Int, to:Int };
+	var keyboardL :Dynamic;
+	var mouseL :Dynamic;
+
+    override function set_width( v:Float ) :Float { dirty=true; return super.set_width(v); }
+    override function set_height( v:Float ) :Float { dirty=true; return super.set_height(v); }
 
 	public function new( ?traits:Dynamic ) {
 		super(traits);
         sel = { from:0, to:0 };
 		
-		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		//addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		
 		// FIXME: temporary!
 		//xinf.ony.Root.addEventListener( MouseEvent.MOUSE_MOVE, onMouseDown );
-		xinf.ony.Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		//xinf.ony.Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+	}
+
+	override public function focus( ?focus:Bool ) {
+		super.focus();
+		if( focus ) {
+			if( keyboardL==null ) 
+				keyboardL = Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		} else {
+			if( keyboardL!=null ) {
+				Root.removeEventListener( KeyboardEvent.KEY_DOWN, keyboardL );
+				keyboardL=null;
+			}
+		}
 	}
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
@@ -77,13 +96,13 @@ class EditableTextArea extends TextArea {
                 case "a":
                     selectAll();
                 default:
-                    trace("unhandled control key: "+e.key);
+                    trace("unhandled control key: "+e.key+" code "+e.code);
             }
         }
         redraw();
     }
 
-    private function onMouseDown( e:MouseEvent ) :Void {
+    public function onMouseDown( e:MouseEvent ) :Void {
         var p = globalToLocal( {x:1.*e.x, y:1.*e.y } );
 		p.x-=x; p.y-=y;
 		var ofs = getTextPositionAt(p);
@@ -97,6 +116,7 @@ class EditableTextArea extends TextArea {
     }
     
     public function moveCursor( to:Int, extendSelection:Bool ) :Void {
+		if( text==null ) return;
         sel.to=to; 
         if( sel.to < 0 ) sel.to=0;
         else if( sel.to > text.length ) sel.to=text.length;
@@ -141,7 +161,7 @@ class EditableTextArea extends TextArea {
     }
 
 	function getPositionOfText( pos:Int ) :TPoint {
-		if( lines.length==0 ) return { x:0., y:0. };
+		if( lines==null || lines.length==0 ) return { x:0., y:0. };
 		
 		if( dirty ) {
 			updateContents( text, width );		
@@ -187,16 +207,15 @@ class EditableTextArea extends TextArea {
     override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 
+		g.setStroke( xinf.erno.Paint.None, 0 );
 	
 	// assure we receive mouse events:
-		g.setStroke( 0 );
 		g.setFill( SolidColor(0,0,0,0) );
 		g.rect(x,y,width,height);
 
 	// draw caret
 		var p = getPositionOfText( sel.from );
 		
-		g.setStroke( 0 );
 		g.setFill( SolidColor(0,0,0,.5) );
 		g.rect( x+p.x-1, y+p.y, 2, format.size );
 

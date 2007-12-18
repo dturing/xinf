@@ -8,22 +8,21 @@ class SimpleSkin extends Skin {
 	
 	public function new() {
 		bg = new Rectangle();
-		bg.rx = 1;
 		setTo(null);
 	}
 
 	override public function setTo( name:String ) :Void {
 		switch( name ) {
 			case "focus":
-				bg.fill = SolidColor(.8,.8,.8,.6);
+				bg.fill = SolidColor(.8,.8,.8,.8);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 2;
 			case "press":
-				bg.fill = SolidColor(.9,.9,.9,.8);
+				bg.fill = SolidColor(.9,.9,.9,.9);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 2;
 			default:
-				bg.fill = SolidColor(.8,.8,.8,.6);
+				bg.fill = SolidColor(.8,.8,.8,.8);
 				bg.stroke = Color.BLACK;
 				bg.strokeWidth = 1;
 		}

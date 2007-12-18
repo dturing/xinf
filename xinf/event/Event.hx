@@ -24,9 +24,11 @@ class Event<T> {
     
     public var type(default,null) : EventKind<T>;
     public var origin:haxe.PosInfos; // FIXME if debug_events
+	public var preventBubble:Bool;
     
     public function new( t ) {
         type = t;
+		preventBubble = false;
     }
     
     public function toString() :String {
