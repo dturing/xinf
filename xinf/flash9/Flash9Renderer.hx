@@ -5,10 +5,12 @@ package xinf.flash9;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
-import xinf.erno.Paint;
+import xinf.type.Color;
+import xinf.type.Paint;
+import xinf.type.TGradientStop;
+import xinf.type.SpreadMethod;
 
 import xinf.geom.Transform;
 import xinf.geom.Types;

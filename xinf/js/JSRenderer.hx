@@ -5,9 +5,9 @@ package xinf.js;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.erno.Color;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
+import xinf.type.Color;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom

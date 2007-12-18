@@ -1,8 +1,9 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.xml;
+package xinf.type;
 
-interface IBinding {
-    function instantiate( xml:Xml ) :Node;
+typedef TGradientStop = {
+	color :Color,
+	offset :Float
 }

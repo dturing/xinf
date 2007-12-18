@@ -43,7 +43,7 @@ class DraggableRectangle extends Rectangle {
 class Demo {
 	
 	public function new() :Void {
-		Root.attach( new DraggableRectangle() );
+		Root.appendChild( new DraggableRectangle() );
 	}
 	
 	public static function main() :Void {

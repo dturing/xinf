@@ -158,6 +158,7 @@ class TextArea extends xinf.ony.base.TextArea {
 #else flash9
 
 import xinf.ony.Editable;
+import xinf.type.Color;
 
 class TextArea extends xinf.ony.base.TextArea {
 
@@ -223,6 +224,7 @@ class TextArea extends xinf.ony.base.TextArea {
 #else js
 
 import xinf.ony.Editable;
+import xinf.type.Color;
 
 class TextArea extends xinf.ony.base.TextArea {
 

@@ -5,7 +5,7 @@ class Viewer {
 	public function new( ?url:String ) :Void {
 	
 		var g = new Group();
-		Root.attach(g);
+		Root.appendChild(g);
 		
 		var doc:Document;
 		var stage = {x:100.,y:100.};
@@ -15,7 +15,7 @@ class Viewer {
 		} else {
 			doc = Document.load( url );
 		}
-		g.attach( doc );
+		g.appendChild( doc );
 
 
 		var scale = 1.;
