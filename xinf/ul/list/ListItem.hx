@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.list;
 
 import Xinf;
@@ -32,8 +35,8 @@ class ListItem<T> implements ISettable<T> {
 		text.styleChanged();
 	}
 	
-    public function attachTo( parent:Group ) :Void {
-        parent.attach(text);
+    public function attachTo( parent:Node ) :Void {
+        parent.appendChild(text);
     }
 
 	public function moveTo( x:Float, y:Float ) :Void {

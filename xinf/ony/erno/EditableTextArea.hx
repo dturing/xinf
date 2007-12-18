@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -8,7 +11,7 @@ import xinf.ony.Editable;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.geom.Types;
-import xinf.erno.Paint;
+import xinf.type.Paint;
 import xinf.ony.Root;
 
 class EditableTextArea extends TextArea {
@@ -207,7 +210,7 @@ class EditableTextArea extends TextArea {
     override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 
-		g.setStroke( xinf.erno.Paint.None, 0 );
+		g.setStroke( Paint.None, 0 );
 	
 	// assure we receive mouse events:
 		g.setFill( SolidColor(0,0,0,0) );

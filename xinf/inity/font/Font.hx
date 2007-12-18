@@ -1,23 +1,10 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.inity.font;
 
 import opengl.GL;
 import xinf.erno.Renderer;
-import xinf.erno.FontStyle;
 
 class Font extends xinf.support.Font {
     
@@ -113,14 +100,12 @@ class Font extends xinf.support.Font {
         return { x:maxW, y:(lines+1)*(lineHeight*fontSize) };
     }
     
-    public function renderText( text:String, fontSize:Float, style:FontStyle ) :Void {
+    public function renderText( text:String, fontSize:Float ) :Void {
         if( text == null ) text="[null]";
         
         var lines=0;
         var c_style=0;
         var r = { x:.0, y:.0 };
-        var nextStyle:FontStyleChange = null;
-        if( style!=null ) nextStyle = style[c_style];
         
         GL.pushMatrix();
         
@@ -132,12 +117,6 @@ class Font extends xinf.support.Font {
         var lineHeight = Math.round(height*fontSize)/fontSize;
 
         for( i in 0...text.length ) {
-            if( nextStyle != null && nextStyle.pos == i ) {
-                GL.color4( nextStyle.color.r, nextStyle.color.g, nextStyle.color.b, nextStyle.color.a );
-                c_style++;
-                nextStyle = style[c_style];
-            }
-            
             var c = text.charCodeAt(i);
             if( c == 10 ) { // \n
                 GL.popMatrix();

@@ -1,16 +1,20 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 
 import xinf.geom.Transform;
 import xinf.geom.Translate;
 import xinf.geom.Matrix;
-import xinf.erno.Paint;
 import xinf.geom.Types;
+import xinf.type.Paint;
+import xinf.ony.PaintProvider;
 
 import xinf.ony.base.Gradient;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 
-class RadialGradient extends Gradient {
+class RadialGradient extends Gradient, implements PaintProvider {
 	
 	static var TRAITS = {
 		cx:new FloatTrait(.5),
@@ -40,7 +44,7 @@ class RadialGradient extends Gradient {
     function get_fy() :Float { return getTrait("fy",Float); }
     function set_fy( v:Float ) :Float { return setTrait("fy",v); }
 
-	override public function getPaint( target:Element ) :Paint {	
+	public function getPaint( target:Element ) :Paint {	
 		var center = {x:cx,y:cy};
 		var focus = {x:fx,y:fy};
 		var pr = {x:r,y:0.}

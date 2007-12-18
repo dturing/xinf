@@ -1,6 +1,6 @@
 import xinf.geom.Types;
 
-typedef Color = xinf.erno.Color
+typedef Color = xinf.type.Color
 typedef TPoint = xinf.geom.TPoint
 
 import xinf.geom.Transform;
@@ -20,9 +20,11 @@ typedef GeometryEvent = xinf.event.GeometryEvent
 typedef SimpleEvent = xinf.event.SimpleEvent
 typedef ScrollEvent = xinf.event.ScrollEvent
 
+typedef Document = xinf.xml.Document
+
+typedef Svg = xinf.ony.erno.Svg
 typedef Root = xinf.ony.Root
 typedef Element = xinf.ony.erno.Element
-typedef Document = xinf.ony.erno.Document
 typedef Group = xinf.ony.erno.Group
 typedef Rectangle = xinf.ony.erno.Rectangle
 typedef Ellipse = xinf.ony.erno.Ellipse

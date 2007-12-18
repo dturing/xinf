@@ -1,14 +1,18 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
 import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
-import xinf.ony.URL;
+
+import xinf.type.URL;
+import xinf.type.Length;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.StringTrait;
 import xinf.traits.LengthTrait;
-import xinf.type.Length;
 
 class Image extends ElementImpl {
 
@@ -65,7 +69,7 @@ class Image extends ElementImpl {
 		super.onLoad();
 		if( href!=null ) {
 			var url:URL; var b;
-			if( document!=null ) b = base;
+			if( ownerDocument!=null ) b = ownerDocument.base;
 			if( b!=null ) url = new URL(b).getRelativeURL( href );
 			else url = new URL(href);
 			bitmap = load( url.toString() );

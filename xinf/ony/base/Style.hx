@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
@@ -14,11 +17,11 @@ class Style extends ElementImpl {
 
     public var type(get_type,set_type):String;
     function get_type() :String { return getTrait("type",String); }
-    function set_type( v:String ) :String { redraw(); return setTrait("type",v); }
+    function set_type( v:String ) :String { return setTrait("type",v); }
 
     public var text(get_text,set_text):String;
     function get_text() :String { return getTrait("text",String); }
-    function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
+    function set_text( v:String ) :String { return setTrait("text",v); }
 
 	var rules(default,null):Array<StyleRule>;
 	
@@ -35,13 +38,13 @@ class Style extends ElementImpl {
 			}
 			
 			if( t.length>0 ) {
-				if( document==null || document.styleSheet==null ) {
+				if( ownerDocument==null || ownerDocument.styleSheet==null ) {
 					throw("cannot parse style, no document.styleSheet");
 				}
 				
 				var r = StyleParser.parseRules( t, this );
 				trace("Parsed "+r.length+" rules" );
-				document.styleSheet.addMany( r );
+				ownerDocument.styleSheet.addMany( r );
 				
 				text = t;
 			}

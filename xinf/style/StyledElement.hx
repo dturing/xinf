@@ -1,9 +1,13 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.style;
 
 import xinf.xml.Node;
+import xinf.xml.Element;
 import xinf.traits.TraitException;
 
-class StyledNode extends Node {
+class StyledElement extends Element {
 
 	var styleClasses :Hash<Bool>;
 	var _style:Dynamic;
@@ -71,7 +75,7 @@ class StyledNode extends Node {
 		
 		// inherited.. (no update- FIXME/TODO/MAYBE)
 		if( inherit ) {
-			var p = getStyleParent();
+			var p:StyledElement = getTypedParent(StyledElement);
 			if( p!=null ) {
 				try {
 					v = p.getStyleTrait( name, type, inherit );
@@ -124,11 +128,6 @@ class StyledNode extends Node {
 		to._style = Reflect.copy(_style);
 	}
 
-	// hook
-	public function getStyleParent() :StyledNode {
-		return null;
-	}
-		
 	// hook
     public function styleChanged() :Void {
 	}
@@ -191,7 +190,43 @@ class StyledNode extends Node {
 					if( !matchSelector(sel) ) return false;
 				}
 				return true;
+
+			case Parent(sel):
+				var p = getTypedParent( StyledElement );
+				if( p==null ) return false;
+				return p.matchSelector(sel);
 				
+			case Ancestor(sel):
+				var p:StyledElement = this;
+				while( p.parentElement != null ) {
+					p = p.getTypedParent( StyledElement );
+					if( Std.is( p, StyledElement )
+						&& cast(p).matchSelector(sel) ) return true;
+				}
+				return false;
+
+			case GrandAncestor(sel):
+				var p = getTypedParent( StyledElement );
+				while( p!=null && p.parentElement != null ) {
+					p = p.getTypedParent( StyledElement );
+					if( p.matchSelector(sel) ) return true;
+				}
+				return false;
+
+			case Preceding(sel):
+				if( parentElement==null ) return false;
+				// FIXME: maybe implement children as a doubly-linked list?
+				var prev:Node = null;
+				for( c in parentElement.mChildren ) {
+					if( c==this ) {
+						if( prev==null ) return false;
+						return( Std.is( prev, StyledElement ) 
+							&& cast(prev).matchSelector(sel) );
+					}
+					prev=c;
+				}
+				return false;
+
 			default:
 				return false;
 				

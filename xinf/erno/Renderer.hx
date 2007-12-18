@@ -1,4 +1,11 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
+
+import xinf.type.Paint;
+import xinf.type.CapsStyle;
+import xinf.type.JoinStyle;
 
 #if flash
     typedef NativeObject = flash.display.DisplayObject

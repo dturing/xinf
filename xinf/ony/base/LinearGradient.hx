@@ -1,16 +1,19 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 
 import xinf.geom.Transform;
 import xinf.geom.Translate;
 import xinf.geom.Matrix;
-import xinf.erno.Paint;
 import xinf.geom.Types;
-
+import xinf.type.Paint;
+import xinf.ony.PaintProvider;
 import xinf.ony.base.Gradient;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 
-class LinearGradient extends Gradient {
+class LinearGradient extends Gradient, implements PaintProvider {
 
 	static var TRAITS = {
 		x1:new FloatTrait(),
@@ -35,7 +38,7 @@ class LinearGradient extends Gradient {
     function get_y2() :Float { return getTrait("y2",Float); }
     function set_y2( v:Float ) :Float { return setTrait("y2",v); }
 
-	override public function getPaint( target:Element ) :Paint {	
+	public function getPaint( target:Element ) :Paint {	
 		var p1 = {x:x1,y:y1};
 		var p2 = {x:x2,y:y2};
 

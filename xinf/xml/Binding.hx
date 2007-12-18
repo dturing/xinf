@@ -1,6 +1,9 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.xml;
 
-class Binding<T> {
+class Binding<T:Node> implements IBinding {
     var marshallers:Hash<Class<T>>;
     var instantiators:Array<Instantiator<T>>;
     
@@ -14,7 +17,7 @@ class Binding<T> {
     public function addInstantiator( i:Instantiator<T> ) :Void {
         instantiators.push( i );
     }
-    public function instantiate( xml:Xml ) :T {
+    public function instantiate( xml:Xml ) :Node {
         var m:Class<T>;
         for( i in instantiators ) {
             if( m==null && i.fits(xml) ) m=i.getClass(xml);

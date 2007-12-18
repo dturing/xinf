@@ -1,14 +1,16 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul;
 
 import Xinf;
-import xinf.event.SimpleEventDispatcher;
-import xinf.style.StyledNode;
+import xinf.style.StyledElement;
 import xinf.style.StyleSheet;
 import xinf.style.Selector;
 import xinf.event.SimpleEvent;
 
-import xinf.erno.Paint;
 import xinf.erno.TextFormat;
+import xinf.type.Paint;
 import xinf.type.Border;
 import xinf.type.StringList;
 import xinf.ul.skin.Skin;
@@ -19,7 +21,7 @@ import xinf.traits.FloatTrait;
 import xinf.traits.BorderTrait;
 import xinf.traits.PaintTrait;
 
-class Component extends StyledNode {
+class Component extends StyledElement {
 	public static var styleSheet:StyleSheet 
 		= new StyleSheet(
 	[
@@ -187,23 +189,11 @@ class Component extends StyledNode {
 		var format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 		return format;
 	}
-	
-    public function attachedTo( p:Container ) {
-        parent=p;
-    }
-
-    public function detachedFrom( p:Container ) {
-        parent=null;
-    }
-	
+		
     override public function styleChanged() :Void {
 		_skin.setTo( skin );
     }
 	
-	override public function getStyleParent() :StyledNode {
-		return parent;
-	}
-
     override public function updateClassStyle() :Void {
 		clearTraitsCache();
 		_matchedStyle = styleSheet.match(this);

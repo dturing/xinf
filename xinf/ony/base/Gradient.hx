@@ -1,14 +1,20 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 
-import xinf.erno.Paint;
 import xinf.geom.Transform;
+import xinf.ony.base.Implementation;
+import xinf.type.SpreadMethod;
+import xinf.type.TGradientStop;
+import xinf.type.Paint;
 
 enum GradientUnits {
 	UserSpaceOnUse;
 	ObjectBoundingBox;
 }
 
-class Gradient extends PaintElement {
+class Gradient extends ElementImpl {
 	
     public var href(default,set_href):String;
     public var peer(default,set_peer):Gradient;
@@ -62,7 +68,7 @@ class Gradient extends PaintElement {
     function set_href(v:String) {
 		href=v;
 		try {
-			peer=document.getTypedElementByURI( href, Gradient );
+			peer=ownerDocument.getTypedElementByURI( href, Gradient );
 		} catch(e:Dynamic) {
 			// will retry in onLoad
 		}
@@ -80,7 +86,7 @@ class Gradient extends PaintElement {
 	override public function onLoad() :Void {
 		super.onLoad();
 		if( href!=null && peer==null ) {
-			peer=document.getTypedElementByURI( href, Gradient );
+			peer=ownerDocument.getTypedElementByURI( href, Gradient );
 		}
 	}
 	

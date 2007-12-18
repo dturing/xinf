@@ -1,7 +1,10 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.skin;
 
 import Xinf;
-import xinf.erno.Paint;
+import xinf.type.Paint;
 
 class SimpleSkin extends Skin {
 	var bg:Rectangle;
@@ -38,11 +41,11 @@ class SimpleSkin extends Skin {
 	}
 
     override public function attachBackground( c:Group ) :Void {
-		c.attach( bg );
+		c.appendChild( bg );
     }
 
     override public function detachBackground( c:Group ) :Void {
-		c.detach( bg );
+		c.removeChild( bg );
     }
 
     override public function attachForeground( c:Group ) :Void {

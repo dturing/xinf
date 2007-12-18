@@ -1,17 +1,9 @@
-package xinf.erno;
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
+package xinf.type;
 
 import xinf.geom.Transform;
-
-typedef TGradientStop = {
-	color :Color,
-	offset :Float
-}
-
-enum SpreadMethod {
-	PadSpread;
-	ReflectSpread;
-	RepeatSpread;
-}
 
 enum Paint {
 	None;

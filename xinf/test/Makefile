@@ -1,4 +1,3 @@
-
 SRC=$(wildcard xinf/*/*.hx xinf/*/*/*.hx)
 
 INITYLIBS=cptr opengl xinfinity-support openvg

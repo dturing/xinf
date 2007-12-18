@@ -1,13 +1,14 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
 import xinf.erno.TextFormat;
 
 #if neko
 import opengl.GL;
 import xinf.geom.Types;
-import xinf.erno.Color;
 import xinf.erno.TextFormat;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;

@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
@@ -8,7 +11,7 @@ class Use extends ElementImpl {
     private function set_href(v:String) {
 		// for now, we dont support external references
 		var id = v.split("#")[1];
-		peer = document.getElementById( id );
+		peer = ownerDocument.getTypedElementById( id, ElementImpl );
 		if( peer==null ) throw("'Use' peer #"+id+" not found");
 		href = "#"+id;
 		

@@ -1,25 +1,24 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony;
 
 import Xinf;
 import xinf.event.EventKind;
 import xinf.event.Event;
+import xinf.xml.Node;
 
 class Root {
-    private static var mRoot:Document;
+    private static var mRoot:Svg;
 	
 	public static var width:Float;
 	public static var height:Float;
 	
-    public static var children(get_children,null) :Iterator<Element>;
-	static function get_children() :Iterator<Element> {
-		return cast mRoot.children;
-	}
-
-	private static function getRoot() :Document {
+	private static function getRoot() :Svg {
 		if( mRoot==null ) {
 			var r = new xinf.ony.erno.Root();
-			mRoot = new Document();
-			r.attach( mRoot );
+			mRoot = new Svg();
+			r.appendChild( mRoot );
 			
 			Root.width = Root.height = 100;
 			xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
@@ -30,12 +29,12 @@ class Root {
 		return mRoot;
 	}
 	
-    public static function attach( o:Element, ?after:Element ) :Void {
-		getRoot().attach( o, after );
+    public static function appendChild( o:Node ) :Void {
+		getRoot().appendChild( o );
 	}
 	
-    public static function detach( o:Element ) :Void {
-		getRoot().detach( o );
+    public static function removeChild( o:Node ) :Void {
+		getRoot().removeChild( o );
 	}
 
     public static function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {

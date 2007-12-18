@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
@@ -6,14 +9,14 @@ import xinf.geom.Transform;
 import xinf.geom.Matrix;
 import xinf.event.Event;
 
-import xinf.style.StyledNode;
+import xinf.style.StyledElement;
 import xinf.style.Selector;
 
 // these should probably be moved to some basic xinf.Types:
-import xinf.erno.Paint;
-import xinf.erno.JoinStyle;
-import xinf.erno.CapsStyle;
-import xinf.ony.Visibility;
+import xinf.type.Paint;
+import xinf.type.JoinStyle;
+import xinf.type.CapsStyle;
+import xinf.type.Visibility;
 import xinf.type.StringList;
 
 import xinf.traits.TraitDefinition;
@@ -27,10 +30,9 @@ import xinf.traits.StringListTrait;
 import xinf.traits.StringChoiceTrait;
 // TODO import xinf.traits.TransformTrait;
 
-class Element extends StyledNode {
+class Element extends StyledElement {
 
 	static var TRAITS = {
-		xml__base:		new StringTrait(),
 		opacity:		new BoundedFloatTrait(0,1,1),
 		
 		fill:			new PaintTrait(SolidColor(0,0,0,1)),
@@ -49,19 +51,6 @@ class Element extends StyledNode {
 		
 		visibility:		new EnumTrait<Visibility>( Visibility ),
 	}
-	
-    public var base(get_base,set_base):String; // FIXME: maybe, as xml: is not a "normal" namespace prefix, this might actually work... - although, it's not really a style trait, but is inherited...
-    function get_base() :String { 
-		var p=this;
-		var b:String=null;
-		while( p!=null ) {
-			var thisBase = p.getTrait("xml:base",String);
-			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
-			p = p.parent;
-		}
-		return b; 
-	} 
-    function set_base( v:String ) :String { redraw(); return setStyleTrait("xml:base",v); }
 	
     public var visibility(get_visibility,set_visibility):Visibility;
     function get_visibility() :Visibility { 
@@ -122,18 +111,12 @@ class Element extends StyledNode {
 
 
     override function set_id( v:String ) :String { 
-		if( document!=null ) {
-			document.elementsById.remove(id);
-			document.elementsById.set(v,untyped this); // FIXME gnaa
+		if( ownerDocument!=null ) {
+			ownerDocument.elementsById.remove(id);
+			ownerDocument.elementsById.set(v,this);
 		}
 		return super.set_id(v); 
 	}
-
-    /** Group that contains this Element, if any. **/
-    public var parent(default,null):Group;
-
-    /** Document that ultimately contains this Element **/
-    public var document(default,null):Document;		// FIXME: update elementsById
 
 	/** the Element's transformation **/
 	// FIXME: TransformTrait?
@@ -154,7 +137,7 @@ class Element extends StyledNode {
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties( to );
 		to.transform=transform; // FIXME: should dup.
-		to.document=document;
+		to.ownerDocument=ownerDocument; // FIXME: maybe not?
 	}
 
     /** read element data from xml */
@@ -188,74 +171,15 @@ class Element extends StyledNode {
     **/
 	public function redraw() :Void {
 	}
-
-    /** do something when attached to a parent Group **/
-    public function attachedTo( p:Group ) :Void {
-        parent=p;
-        document=parent.document;
-        styleChanged(); // FIXME not neccessarily...
-    }
-
-    /** do something when detached from a parent Group **/
-    function detachedFrom( p:Group ) :Void {
-        parent=null;
-        document=null;
-    }
-
+	
     override public function styleChanged() :Void {
 		super.styleChanged();
 		redraw();
 	}
-	
-	override public function getStyleParent() :StyledNode {
-		return parent;
-	}
-	
-	override public function matchSelector( s:Selector ) :Bool {
-		switch(s) {
-		
-			case Parent(sel):
-				if( parent==null ) return false;
-				return parent.matchSelector(sel);
-				
-			case Ancestor(sel):
-				var p = this;
-				while( p.parent != null ) {
-					p = p.parent;
-					if( p.matchSelector(sel) ) return true;
-				}
-				return false;
-
-			case GrandAncestor(sel):
-				if( parent==null ) return false;
-				var p = parent;
-				while( p.parent != null ) {
-					p = p.parent;
-					if( p.matchSelector(sel) ) return true;
-				}
-				return false;
-
-			case Preceding(sel):
-				if( parent==null ) return false;
-				// FIXME: maybe implement children as a doubly-linked list?
-				var p:Element = null;
-				for( c in parent.children ) {
-					if( c==this ) {
-						if( p==null ) return false;
-						return( p.matchSelector(sel) );
-					}
-					p=c;
-				}
-				return false;
-
-			default:
-				return super.matchSelector(s);
-		}
-	}
-		
+			
     override public function updateClassStyle() :Void {
-		if( document!=null && document.styleSheet!=null ) {
-			_matchedStyle = document.styleSheet.match(this);
+		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
+			_matchedStyle = ownerDocument.styleSheet.match(this);
 			styleChanged();
 		}
     }
@@ -263,6 +187,7 @@ class Element extends StyledNode {
     /** convert the given point from global to local coordinates **/
     public function globalToLocal( p:TPoint ) :TPoint {
         var q = { x:p.x, y:p.y };
+		var parent = getTypedParent( Element );
         if( parent!=null ) q = parent.globalToLocal(q);
         return( transform.applyInverse(q) );
     }
@@ -270,7 +195,8 @@ class Element extends StyledNode {
     /** convert the given point from local to global coordinates **/
     public function localToGlobal( p:TPoint ) :TPoint {
         var q = { x:p.x, y:p.y };
-        if( parent!=null ) q = parent.localToGlobal(q);
+		var p = getTypedParent( Element );
+        if( p!=null ) q = p.localToGlobal(q);
         return( transform.apply(q) );
     }
 
@@ -288,8 +214,8 @@ class Element extends StyledNode {
             }
         }
  		// old logic is to bubble only if not handled:  if( !dispatched && 
-		if( parent != null && !e.preventBubble && e.type.bubble==true ) {
-            parent.dispatchEvent(e);
+		if( parentElement != null && !e.preventBubble && e.type.bubble==true ) {
+            parentElement.dispatchEvent(e);
         }
     }
 

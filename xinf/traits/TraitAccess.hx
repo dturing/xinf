@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.traits;
 
 interface TraitAccess {
@@ -7,5 +10,5 @@ interface TraitAccess {
 	function setStyleTrait<T>( name:String, value:T ) :T;
 	function setTraitFromString( name:String, value:String, ?to:Dynamic ) :String;
 	
-	function getTraitDefinition( name:String ) :TraitDefinition;
+//	function getTraitDefinition( name:String ) :TraitDefinition;
 }

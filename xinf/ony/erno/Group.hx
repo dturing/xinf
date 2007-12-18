@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -8,8 +11,8 @@ class Group extends xinf.ony.base.Group {
     
     override public function destroy() :Void {
 		// destroy all children
-		for( child in children ) {
-			detach( child );
+		for( child in mChildren ) {
+			removeChild( child );
 			untyped child.destroy(); // FIXME
 		}
 		super.destroy();
@@ -19,8 +22,9 @@ class Group extends xinf.ony.base.Group {
         // super.drawContents(g);
         
         // draw children
-        for( child in children ) {
-            g.showObject( child.xid );
+        for( child in mChildren ) {
+			if( untyped child.xid != null ) 
+				g.showObject( untyped child.xid );
         }
     }
 

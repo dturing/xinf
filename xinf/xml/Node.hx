@@ -1,35 +1,98 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.xml;
 
-import xinf.traits.TraitsEventDispatcher;
-import xinf.traits.TraitDefinition;
-import xinf.traits.StringTrait;
+class Node implements Serializable {
 
-class Node extends TraitsEventDispatcher, implements Serializable {
+	public var parentElement(default,null) :Element;
+	public var ownerDocument(default,null) :Document;
 
-	static var TRAITS = {
-		id:new StringTrait(),
-		name:new StringTrait(),
+    var mChildren(default,null):Array<Node>;   
+/*
+	public var children(get_children,null) :Iterator<Node>;
+    function get_children() :Iterator<Node> {
+        return mChildren.iterator();
+    }
+*/
+
+    public function new() {
+        mChildren = new Array<Node>();
+    }
+
+    public function fromXml( xml:Xml ) :Void {
+        if( ownerDocument==null ) throw("Document not set.");
+        for( node in xml.elements() ) {
+            ownerDocument.unmarshal( node, this );
+        }
 	}
 
-    /** textual (XML) id **/
-    public var id(get_id,set_id):String;
-    function get_id() :String { return getTrait("id",String); } // FIXME: maybe directly return id? as no inheritance? same for name
-    function set_id( v:String ) :String { return setTrait("id",v); }
+	public function onLoad() :Void {
+		for( child in mChildren ) {
+			child.onLoad();
+		}
+	}
 
-    /** textual name (name attribute) **/
-    public var name(get_name,set_name):String;
-    function get_name() :String { return getTrait("name",String); }
-    function set_name( v:String ) :String { return setTrait("name",v); }
-
-    public function new( ?traits:Dynamic ) :Void {
-        super( traits );
+	function acquired( newChild:Node ) {
+		newChild.ownerDocument = ownerDocument;
 	}
 	
-    public function fromXml( xml:Xml ) :Void {
-		setTraitsFromXml( xml );
+	public function appendChild( newChild:Node ) :Node {
+		mChildren.push( newChild );
+		acquired(newChild);
+		return newChild;
+	}
+	
+	public function insertBefore( newChild:Node, refChild:Node ) :Node {
+		var pos=-1;
+		var i=0;
+		for( child in mChildren ) {
+			if( child==refChild ) pos=i;
+			i++;
+		}
+		if( pos==-1 )
+			mChildren.push( newChild );
+		else 
+			mChildren.insert( pos-1, newChild );
+			
+		acquired(newChild);
+				
+		return newChild;
 	}
 
-	/** called when the document is completely loaded **/
-	public function onLoad() :Void {
+	public function removeChild( oldChild:Node ) :Node {
+        mChildren.remove( oldChild );
+		oldChild.ownerDocument = null;
+		oldChild.parentElement = null;
+		return oldChild;
 	}
+
+	public function cloneNode( deep:Bool ) :Node {
+		var clone:Node = cast(Type.createInstance( Type.getClass(this), [ null ] ));
+		copyProperties( clone );
+		
+		if( deep ) {
+			clone.mChildren = new Array<Node>();
+			for( child in mChildren ) {
+				var c =  child.cloneNode(deep);
+				clone.appendChild( c );
+			}
+		}
+		
+		return clone;
+	}
+
+	function copyProperties( to:Dynamic ) :Void {
+	}
+	
+	public function getTypedParent<T>( type:Class<T> ) :T {
+		if( Std.is( parentElement, type ) ) return cast(parentElement);
+		return null;
+	}
+
+/* TinySVG1.2 uDOM: 
+		readonly attribute DOMString namespaceURI;
+        readonly attribute DOMString localName;
+        attribute DOMString textContent;
+	*/
 }

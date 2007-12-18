@@ -1,7 +1,9 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
 
 import xinf.ony.PathSegment;
 
@@ -13,7 +15,7 @@ class Path extends xinf.ony.base.Path  {
         
         g.startShape();
 
-		xinf.ony.base.Path.simplify( segments, untyped g );
+		xinf.ony.base.Path.simplify( segments, untyped g ); // FIXME
 
         g.endShape();
     }

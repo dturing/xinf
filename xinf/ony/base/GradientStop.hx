@@ -1,9 +1,12 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.base;
 
-import xinf.style.StyledNode;
+import xinf.style.StyledElement;
 
-import xinf.erno.Paint;
-import xinf.erno.Color;
+import xinf.type.Paint;
+import xinf.type.Color;
 
 import xinf.traits.FloatTrait;
 import xinf.traits.BoundedFloatTrait;
@@ -11,7 +14,7 @@ import xinf.traits.PaintTrait;
 import xinf.traits.LengthTrait;
 import xinf.type.Length;
 
-class GradientStop extends StyledNode {
+class GradientStop extends StyledElement {
 	static var TRAITS = {
 		offset:new LengthTrait(),
 		stop_opacity:new BoundedFloatTrait(0,1,1),

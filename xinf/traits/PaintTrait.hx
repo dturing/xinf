@@ -1,9 +1,12 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.traits;
 
-import xinf.erno.Paint;
-import xinf.erno.Color;
+import xinf.type.Paint;
+import xinf.type.Color;
 
-class PaintTrait extends TypedTrait<xinf.erno.Paint> {
+class PaintTrait extends TypedTrait<Paint> {
 
 	static var url = ~/url\((.*)\)/i;
     static var hexcolor = ~/^#([0-9a-f]+)$/i;

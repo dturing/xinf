@@ -1,7 +1,10 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Paint;
+import xinf.type.Paint;
 
 class Image extends xinf.ony.base.Image {
     

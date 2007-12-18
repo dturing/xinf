@@ -1,6 +1,9 @@
-package xinf.erno;
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
+package xinf.type;
 
-import xinf.erno.Paint;
+import xinf.type.Paint;
 
 /**
     Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).

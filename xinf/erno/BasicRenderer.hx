@@ -1,8 +1,13 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 import xinf.erno.Renderer;
 import xinf.geom.Matrix;
-import xinf.erno.FontStyle;
+import xinf.type.Paint;
+import xinf.type.CapsStyle;
+import xinf.type.JoinStyle;
 
 /**
     BasicRenderer implements all functions

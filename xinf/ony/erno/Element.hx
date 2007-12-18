@@ -1,13 +1,16 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.erno.Paint;
 import xinf.geom.Transform;
-import xinf.erno.CapsStyle;
-import xinf.erno.JoinStyle;
-import xinf.ony.base.PaintElement;
-import xinf.ony.Visibility;
+import xinf.type.CapsStyle;
+import xinf.type.JoinStyle;
+import xinf.type.Paint;
+import xinf.type.Visibility;
+import xinf.ony.PaintProvider;
 
 class Element extends xinf.ony.base.Element {
     
@@ -92,7 +95,7 @@ class Element extends xinf.ony.base.Element {
         if( fill!=null ) {
 			switch( fill ) {
 				case URLReference(url):
-					var r = document.getTypedElementByURI( url, PaintElement );
+					var r = ownerDocument.getTypedElementByURI( url, PaintProvider );
 					if( r==null ) throw("Referenced Paint not found: "+url );
 					g.setFill( r.getPaint(this) );
 				case SolidColor(r,green,b,a):
@@ -113,7 +116,7 @@ class Element extends xinf.ony.base.Element {
 			
 			switch( stroke ) {
 				case URLReference(url):
-					var r = document.getTypedElementByURI( url, PaintElement );
+					var r = ownerDocument.getTypedElementByURI( url, PaintProvider );
 					if( r==null ) throw("Referenced Paint not found: "+url );
 					g.setStroke( r.getPaint(this), w, caps, join, miterLimit, dashArray, dashOffset );
 				case SolidColor(r,green,b,a):

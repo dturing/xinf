@@ -1,7 +1,9 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
 
 class Ellipse extends xinf.ony.base.Ellipse  {
 
