@@ -7,11 +7,11 @@ import xinf.erno.Renderer;
 
 #if neko
 
-import xinf.ony.Editable;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.geom.Types;
 import xinf.type.Paint;
+import xinf.type.Editability;
 import xinf.ony.Root;
 
 class EditableTextArea extends TextArea {
@@ -49,7 +49,7 @@ class EditableTextArea extends TextArea {
 	}
 
     public function onKeyDown( e:KeyboardEvent ) :Void {
-		if( editable==None ) return;
+		if( editable==EditNone ) return;
         if( e.code >= 32 && e.code < 127 ) {
             switch( e.code ) {
                 case 127: // Del

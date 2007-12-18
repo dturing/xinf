@@ -10,7 +10,7 @@ import xinf.traits.LengthTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.LineIncrementTrait;
 import xinf.type.Length;
-import xinf.ony.Editable;
+import xinf.type.Editability;
 
 class TextArea extends ElementImpl {
 
@@ -22,7 +22,7 @@ class TextArea extends ElementImpl {
 		width:new LengthTrait(),
 		height:new LengthTrait(),
 		text:new StringTrait(), // FIXME uDOM: "#text"?
-		editable:new EnumTrait<Editable>( Editable, "", None ),
+		editable:new EnumTrait<Editability>( Editability, "Edit", EditNone ),
 		line_increment:new LineIncrementTrait(),
 	}
 
@@ -46,9 +46,9 @@ class TextArea extends ElementImpl {
     function get_text() :String { return getTrait("text",String); }
     function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
 
-    public var editable(get_editable,set_editable):Editable;
-    function get_editable() :Editable { return getTrait("editable",Editable); }
-    function set_editable( v:Editable ) :Editable { return setTrait("editable",v); }
+    public var editable(get_editable,set_editable):Editability;
+    function get_editable() :Editability { return getTrait("editable",Editability); }
+    function set_editable( v:Editability ) :Editability { return setTrait("editable",v); }
 
     public var lineIncrement(get_line_increment,set_line_increment):Float;
     function get_line_increment() :Float { 
