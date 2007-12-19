@@ -30,9 +30,15 @@ class Node implements Serializable {
 			child.onLoad();
 		}
 	}
+	
+	function setOwnerDocument( doc:Document ) {
+		ownerDocument = doc;
+		for( c in mChildren ) c.setOwnerDocument(doc);
+	}
 
 	function acquired( newChild:Node ) {
-		newChild.ownerDocument = ownerDocument;
+		if( ownerDocument != null )
+			newChild.setOwnerDocument( ownerDocument );
 	}
 	
 	public function appendChild( newChild:Node ) :Node {

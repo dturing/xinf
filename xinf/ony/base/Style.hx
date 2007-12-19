@@ -4,8 +4,6 @@
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
 
-import xinf.style.StyleSheet;
-import xinf.style.StyleParser;
 import xinf.traits.StringTrait;
 
 class Style extends ElementImpl {
@@ -23,8 +21,6 @@ class Style extends ElementImpl {
     function get_text() :String { return getTrait("text",String); }
     function set_text( v:String ) :String { return setTrait("text",v); }
 
-	var rules(default,null):Array<StyleRule>;
-	
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml(xml);
 		
@@ -38,14 +34,7 @@ class Style extends ElementImpl {
 			}
 			
 			if( t.length>0 ) {
-				var styleSheet = ownerDocument.styleSheet;
-				if( styleSheet==null ) {
-					throw("cannot parse style, document has no stylesheet");
-				}
-				
-				var r = StyleParser.parseRules( t, this );
-				styleSheet.addMany( r );
-				
+				ownerDocument.styleSheet.parseCSS( t, this );
 				text = t;
 			}
 		}

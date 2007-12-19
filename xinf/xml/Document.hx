@@ -5,6 +5,8 @@ package xinf.xml;
 
 import xinf.type.URL;
 import xinf.style.StyleSheet;
+import xinf.style.StyleParser;
+import xinf.traits.TraitAccess;
 import xinf.traits.StringTrait;
 
 class Document extends Element {
@@ -61,7 +63,7 @@ class Document extends Element {
 		if( !Std.is( r, cl ) ) throw("Element "+uri+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
         return cast(r);
 	}
-
+	
     public function unmarshal( xml:Xml, ?parent:Node ) :Node {
         var r:Node;
 		

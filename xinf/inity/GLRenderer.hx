@@ -325,7 +325,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         if( font==null ) trace("NULL font");
         if( pen.fill != null && font != null ) {
             GL.pushMatrix();
-                GL.translate( x, y, 0 );
+                GL.translate( Math.floor(x), Math.floor(y), 0 );
                 applyFillGL();
 				GL.enable(GL.BLEND);
 				font.renderText( text, format.size );

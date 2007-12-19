@@ -18,12 +18,18 @@ typedef Stylable = {
 
 class StyleSheet {
 
+    public static var DEFAULT:StyleSheet = new StyleSheet();
+	
 	private var rules :Array<StyleRule>;
 	
     public function new( ?d:Iterable<StyleRule> ) :Void {
         rules = new Array<StyleRule>();
 		if( d!=null ) addMany( d );
     }
+	
+	public function parseCSS( data:String, via:TraitAccess ) {
+		addMany( StyleParser.parseRules( data, via ) );
+	}
 	
     public function add( rule:StyleRule ) {
 		var s = Reflect.empty();
@@ -41,6 +47,14 @@ class StyleSheet {
 
     public function match( e:Stylable ) :Dynamic {
 		var a = new Array<Dynamic>();
+		
+		if( DEFAULT != null ) {
+			for( rule in DEFAULT.rules ) {
+				if( e.matchSelector( rule.selector ) ) {
+					a.push( rule.style );
+				}
+			}
+		}
 		
 		for( rule in rules ) {
 			if( e.matchSelector( rule.selector ) ) {

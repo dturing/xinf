@@ -22,6 +22,32 @@ import xinf.traits.BorderTrait;
 import xinf.traits.PaintTrait;
 
 class Component extends StyledElement {
+	public static function init() {
+		Root.getRootSvg();
+		StyleSheet.DEFAULT.parseCSS( "
+			.Button {
+				border: 1;
+				padding: 6 3 6 3;
+				min-height: 25;
+			}
+
+			.Container, .Interface {
+				padding: 5;
+			}
+			
+			.:focus {
+				skin: focus;
+				border: 2;
+				padding: 5 2 5 2;
+			}
+			
+			.Button.:press {
+				skin: focus-bright;
+				padding: 5 3 5 1;
+			}
+		", new Component() ); // FIXME: make styles "traits-independent"
+	}
+	/*
 	public static var styleSheet:StyleSheet 
 		= new StyleSheet(
 	[
@@ -80,11 +106,11 @@ class Component extends StyledElement {
 				skin: "focus-bright",
 			} },
 	]);
-	
+	*/
 	static var TRAITS = {
 		skin:			new StringTrait(),
 		font_family:	new StringListTrait(),
-		font_size:		new FloatTrait(10.),
+		font_size:		new FloatTrait(12.),
 		text_color:		new PaintTrait(Color.BLACK),
 		horizontal_align:	new FloatTrait(),
 		vertical_align:		new FloatTrait(),
@@ -187,15 +213,10 @@ class Component extends StyledElement {
 	}
 		
     override public function styleChanged() :Void {
+		super.styleChanged();
 		_skin.setTo( skin );
     }
 	
-    override public function updateClassStyle() :Void {
-		clearTraitsCache();
-		_matchedStyle = styleSheet.match(this);
-		styleChanged();
-    }
-
     public function getPrefSize() :TPoint {
         return( _prefSize );
     }

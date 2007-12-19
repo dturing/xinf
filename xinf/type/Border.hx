@@ -9,7 +9,10 @@ class Border {
 	public var r:Float;
 	public var b:Float;
 	
-	public function new( l:Float, t:Float, r:Float, b:Float ) :Void {
-		this.l=l; this.t=t; this.r=r; this.b=b;
+	public function new( ?l:Float, ?t:Float, ?r:Float, ?b:Float ) :Void {
+		this.l = if(l!=null) l else 0.;
+		this.t = if(t!=null) t else this.l;
+		this.r = if(r!=null) r else this.l;
+		this.b = if(b!=null) b else this.t;
 	}
 }

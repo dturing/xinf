@@ -141,7 +141,7 @@ class StyleParser {
 		return AllOf( all );
 	}
 
-	static var classSel = ~/\.([a-zA-Z0-9\-]*)/;
+	static var classSel = ~/\.([:a-zA-Z0-9\-]*)/; // FIXME: ':' is in there for now. parse :pseudos as StyleClass(:pseudo) 
 	static var idSel = ~/#([a-zA-Z0-9\-]*)/;
 	static function parseSingleSelector( text:String, list:Array<Selector> ) :Void {
 		if( classSel.match(text) ) {

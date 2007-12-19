@@ -132,12 +132,17 @@ class StyledElement extends Element {
     public function styleChanged() :Void {
 	}
 
-	// hook
-    public function updateClassStyle() :Void {
-    }
-	
 	// Style class functions
     
+	function updateClassStyle() :Void {
+		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
+			clearTraitsCache();
+			_matchedStyle = ownerDocument.styleSheet.match(this);
+//			trace(""+this+" matched: "+untyped _matchedStyle.padding );
+			styleChanged();
+		}
+    }
+	
     public function addStyleClass( name:String ) :Void {
         styleClasses.set( name, true );
         updateClassStyle();

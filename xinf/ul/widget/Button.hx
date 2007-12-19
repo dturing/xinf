@@ -65,12 +65,12 @@ class Button<Value> extends Widget {
 		textElement.fontFamily = fontFamily;
 		textElement.fill = textColor;
 		textElement.styleChanged();
-		if( size!=null ) set_size(size);
 		
 		// TODO: fontWeight
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
 		}
+		if( size!=null ) set_size(size);
     }
 	
     function onMouseDown( e:MouseEvent ) {

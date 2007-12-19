@@ -177,15 +177,6 @@ class Element extends StyledElement {
 		redraw();
 	}
 			
-    override public function updateClassStyle() :Void {
-		clearTraitsCache();
-		var styleSheet = ownerDocument.styleSheet;
-		if( styleSheet!=null ) {
-			_matchedStyle = styleSheet.match(this);
-			styleChanged();
-		}
-    }
-
     /** convert the given point from global to local coordinates **/
     public function globalToLocal( p:TPoint ) :TPoint {
         var q = { x:p.x, y:p.y };

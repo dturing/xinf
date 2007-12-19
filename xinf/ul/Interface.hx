@@ -29,6 +29,7 @@ class Interface extends Container {
 		Root.addEventListener( GeometryEvent.STAGE_SCALED, rootResized );
 		setPrefSize( size={ x:Root.width, y:Root.height } );
 		Root.appendChild( getElement() );
+		setOwnerDocument( Root.getRootSvg().ownerDocument ); // FIXME
 	}
 	
 	function rootResized( e ) {
