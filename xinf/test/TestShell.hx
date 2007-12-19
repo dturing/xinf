@@ -11,6 +11,7 @@ class TestShell {
     var cnx:haxe.remoting.AsyncConnection;
     var cases:Array<TestCase>;
     var caseIterator:Iterator<TestCase>;
+	var current:TestCase;
 	var suite:String;
     
     public function new( suite:String ) {
@@ -35,9 +36,9 @@ class TestShell {
             return;
         }
         
-        var testCase = caseIterator.next();
-        trace("run test "+testCase ); // FIXME handle exc?
-        testCase.run( cnx, runNextCase, suite );
+        current = caseIterator.next();
+        trace("run test "+current ); // FIXME handle exc?
+        current.run( cnx, runNextCase, suite );
     }
     
 
@@ -69,8 +70,11 @@ class TestShell {
 			try {
 				runNextCase();
 				Root.main();
-			} catch( e:Dynamic ) {
-				trace("EXCEPTION "+e );
+			} catch(e:Dynamic) {
+				if( current!=null ) {
+					current.result( false, "Exception: "+e );
+					current.cleanFinish();
+				} else throw(e);
 			}
 		}
     }

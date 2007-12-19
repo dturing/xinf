@@ -252,7 +252,7 @@ class TransformParser {
                     ty:Std.parseFloat(matrix.matched(6))
                 });
         } else if( rotate.match(text) ) {
-			if( rotate.matched(2)==null ) {
+			if( rotate.matched(2)==null || rotate.matched(2).length==0 ) {
 				r = new Rotate( 
 						Std.parseFloat(rotate.matched(1)) * D2R
 					);
@@ -263,7 +263,7 @@ class TransformParser {
 				r = new Concatenate(
 						new Translate(cx,cy),
 						new Concatenate(
-							new Rotate(a),
+							new Rotate(a*D2R),
 							new Translate(-cx,-cy)
 						)
 					);
