@@ -6,6 +6,13 @@ package xinf.ul.layout;
 import xinf.ul.Component;
 import xinf.ul.Container;
 import xinf.ul.layout.SpringLayout;
+import xinf.ul.layout.Spring;
+
+#if flash9
+typedef SpringHack = Dynamic
+#else true
+typedef SpringHack = Spring
+#end
 
 class SpringUtilities {
     public static function makeGrid( parent:Container, layout:SpringLayout,
@@ -17,7 +24,7 @@ class SpringUtilities {
         var max = rows * cols;
 
         // assure we have enough components
-        if( parent.getComponent(max-1) == null ) throw("Grid requires "+rows+"x"+cols+" children to be attached.");
+        if( parent.getComponent(max-1) == null ) throw("Grid requires "+cols+"x"+rows+" children to be attached ("+parent.getComponents().length+" are)");
 
         // Springs for assuring all cells have same size
         var maxWidth = layout.getConstraints(parent.getComponent(0)).getWidth();
@@ -69,12 +76,13 @@ class SpringUtilities {
 
     public static function makeCompactGrid( parent:Container, layout:SpringLayout,
         cols:Int, rows:Int, xPad:Float, yPad:Float ) {
+		
         var xPadSpring = Spring.constant(xPad);
         var yPadSpring = Spring.constant(yPad);
         
-        // Springs for assuring all cells in a column have same width
-        var x:Spring = new LeftSpring(parent);
-        for( c in 0...cols ) {
+		// Springs for assuring all cells in a column have same width
+        var x:SpringHack = new LeftSpring(parent);
+		for( c in 0...cols ) {
             var width = Spring.constant(0);
             for( r in 0...rows ) {
                 var comp = parent.getComponent( (r*cols)+c );
@@ -92,9 +100,9 @@ class SpringUtilities {
             }
             x = Spring.sum( x, Spring.sum( width, xPadSpring ) );
         }
-
+        
         // Springs for assuring all cells in a row have same height
-        var y:Spring = new TopSpring(parent);
+        var y:SpringHack = new TopSpring(parent);
         for( r in 0...rows ) {
             var height = Spring.constant(0);
             for( c in 0...cols ) {

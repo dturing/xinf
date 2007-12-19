@@ -4,17 +4,44 @@
 package xinf.ul;
 
 import Xinf;
-import xinf.geom.Types;
-import xinf.event.GeometryEvent;
 
 class Interface extends Container {
-	var area:TRectangle;
 
-	public function new( g:Group ) {
-		super( g );
+	static var TRAITS = {
+		width:new LengthTrait(),
+		height:new LengthTrait(),
+	}
 
-		var a = g.getTypedElementByName( "area", xinf.ony.Rectangle );
-		area = { l:a.x, t:a.y, r:a.x+a.width, b:a.y+a.height };
-		setPrefSize( { x:area.r-area.l, y:area.b-area.t } );
+	public var width(get_width,set_width):Float;
+    function get_width() :Float { return getTrait("width",Length).value; }
+    function set_width( v:Float ) :Float { setTrait("width",new Length(v)); setPrefSize({x:width,y:height}); return v; }
+	
+    public var height(get_height,set_height):Float;
+    function get_height() :Float { return getTrait("height",Length).value; }
+    function set_height( v:Float ) :Float { setTrait("height",new Length(v)); setPrefSize({x:width,y:height}); return v; }
+	
+	public function new( ?traits:Dynamic ) {
+		super(traits);
+		setPrefSize( size={x:width,y:height} );
+	}
+	
+	public function captureRoot() {
+		Root.addEventListener( GeometryEvent.STAGE_SCALED, rootResized );
+		setPrefSize( size={ x:Root.width, y:Root.height } );
+		Root.appendChild( getElement() );
+	}
+	
+	function rootResized( e ) {
+		setPrefSize( size=e );
+	}
+	
+	override public function onLoad() {
+		super.onLoad();
+		setPrefSize( size={x:width,y:height} );
+			trace("size: "+size );
+/*		
+		var svgParent = getTypedParent( Group );
+		if( svgParent!=null ) svgParent.appendChild( getElement() );
+		*/
 	}
 }

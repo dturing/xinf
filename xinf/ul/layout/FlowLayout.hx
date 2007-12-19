@@ -83,7 +83,7 @@ class FlowLayout implements Layout {
         var bshift = ( o.B( s ) - max   ) * o.alignB( parent );
         for( c in parent.getComponents() ) {
             var p = positions.shift();
-            var cshift = ( max - o.B( c.size ) ) * o.alignB( c );
+            var cshift = ( max - o.B( c.size ) ) * o.alignB( parent ); // FIXME, maybe, align by child alignment? (o.alignB(c))
             var q = o.get( o.A(p)+ashift, o.B(p)+bshift+cshift );
             c.position = { x:q.x, y:q.y };
         }

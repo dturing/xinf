@@ -5,6 +5,7 @@ package xinf.ul.widget;
 
 import Xinf;
 import xinf.ul.layout.Helper;
+import xinf.type.Editability;
 
 class LineEdit extends Widget {
     public var text(get_text,set_text) :String;
@@ -35,7 +36,7 @@ class LineEdit extends Widget {
         textElement = new TextArea();
         super( traits );
 
-		textElement.editable = xinf.ony.Editable.Simple;
+		textElement.editable = Editability.Simple;
 		group.appendChild( textElement );
 		
 //		addEventListener( KeyboardEvent.KEY_DOWN, textElement.onKeyDown );

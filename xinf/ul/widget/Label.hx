@@ -4,7 +4,7 @@
 package xinf.ul.widget;
 
 import Xinf;
-import xinf.ul.Container;
+import xinf.ul.Component;
 import xinf.ul.layout.Helper;
 import xinf.type.Paint;
 
@@ -12,14 +12,14 @@ import xinf.type.Paint;
     Simple Label element.
 **/
 
-class Label extends Container {
+class Label extends Component {
     
     public var text(get_text,set_text):String;
 	var textElement:Text;
     
     public function new( ?text:String, ?traits:Dynamic ) :Void {
 		textElement = new Text();
-        super( null, traits );
+		super( traits );
 		group.appendChild( textElement );
         if( text!=null ) this.text = text;
     }

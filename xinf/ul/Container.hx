@@ -11,13 +11,10 @@ class Container extends Component {
     var relayoutNeeded:Bool;
     public var layout:Layout;
 
-    var group:Group;
 	var componentChildren:Array<Component>;
 
-    public function new( ?g:Group, ?traits:Dynamic ) :Void {
-		group = g;
-		if( group==null ) group = new Group();
-        super( group, traits );
+    public function new( ?traits:Dynamic ) :Void {
+		super( traits );
 		
 		_skin.attachBackground( group );
 		_skin.attachForeground( group );
@@ -39,7 +36,7 @@ class Container extends Component {
 			_skin.attachForeground( group );
 			
 			relayoutNeeded = true;
-			relayout();
+//			relayout();
 		}
 		
 		return newChild;
@@ -53,10 +50,20 @@ class Container extends Component {
 			componentChildren.remove( child );
 			child.removeEventListener( ComponentSizeEvent.PREF_SIZE_CHANGED, child.__parentSizeListener );
 			group.removeChild( child.getElement() );
+			
+			relayoutNeeded = true;
+			relayout();
 		}
 		
 		return oldChild;
     }
+
+	override public function set_size( s:TPoint ) :TPoint {
+		var r = super.set_size(s);
+		relayoutNeeded=true;
+		relayout();
+		return s;
+	}
 
     function onComponentResize( e:ComponentSizeEvent ) :Void {
         if( layout==null ) {
@@ -83,8 +90,8 @@ class Container extends Component {
     public function getComponent( index:Int ) :Component {
         return componentChildren[index];
     }
-    public function getComponents() :Iterator<Component> {
-        return componentChildren.iterator();
+    public function getComponents() :Array<Component> {
+        return componentChildren;
     }
 
 }

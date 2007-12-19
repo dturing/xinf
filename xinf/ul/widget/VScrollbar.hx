@@ -20,11 +20,11 @@ class VScrollbar extends Container {
     public function new() :Void {
         super();
         
-        element.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
         
         thumb = new Container();
        // thumb.addStyleClass("Thumb");
-        thumb.element.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
+        thumb.group.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
         thumb.size = { x:18., y:18. };
 		thumb.position = { x:0., y:0. };
         appendChild(thumb);

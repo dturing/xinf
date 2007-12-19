@@ -28,16 +28,14 @@ class Component extends StyledElement {
 		{ selector:Any, style:{
 				padding: new Border(6,3,6,3),
 				border: new Border(1,1,1,1),
-				horizontal_align: 0.,
-				vertical_align: 0.,
 				font_family: new StringList(["sans"]),
 				font_size: 12,
 				text_color: Color.BLACK,
-				min_width: 100,
 			} },
-		{ selector:StyleClass("Container"), style:{
-				horizontal_align: 0.,
-				vertical_align: 0.,
+		{ selector:AnyOf([ StyleClass("Container"), StyleClass("Interface") ]), style:{
+				horizontal_align: .5,
+				vertical_align: .5,
+				padding: new Border( 5,5,5,5 ),
 			} },
 		{ selector:StyleClass("ListView"), style:{
 				min_width: 100.,
@@ -56,7 +54,7 @@ class Component extends StyledElement {
 		{ selector:StyleClass("Button"), style:{
 				padding: new Border(6,3,6,3),
 				border: new Border(1,1,1,1),
-				min_width: 100,
+				min_width: 75,
 				min_height: 10,
 				horizontal_align: .5,
 				vertical_align: .5,
@@ -163,19 +161,17 @@ class Component extends StyledElement {
 	
 	var _skin:Skin;
 	
-	public var size(default,set_size):TPoint;
+	public var size(get_size,set_size):TPoint;
 	public var position(default,set_position):TPoint; // TODO!
-	var element:Element;
+	var group:Group;
 
-    public function new( ?e:Element, ?traits:Dynamic ) :Void {
+    public function new( ?traits:Dynamic ) :Void {
 		super(traits);
-        _prefSize = { x:.0, y:.0 };
 		
-		element=e;
-		if( element==null ) {
-			element = new Group();
-		}
+		group = new Group();
 		
+		_prefSize = { x:.0, y:.0 };
+		position = { x:.0, y:.0 };
 		_skin = new xinf.ul.skin.SimpleSkin();
 		
 		// add our own class to the list of style classes
@@ -219,21 +215,21 @@ class Component extends StyledElement {
 		_skin.resize( s );
 		return s;
 	}
+	public function get_size() :TPoint {
+		if( size==null ) return _prefSize;
+		return size;
+	}
 	
 	public function set_position( p:TPoint ) :TPoint {
 		position = p;
-		if( element!=null ) {
-			element.transform = new Translate(p.x,p.y);
+		if( group!=null ) {
+			group.transform = new Translate(p.x,p.y);
 		}
 		return( p );
 	}
 
     public function getElement() :Element {
-		return element;
+		return group;
     }
-	
-	public function toString() :String {
-		return( Type.getClassName(Type.getClass(this)) );
-	}
 
 }
