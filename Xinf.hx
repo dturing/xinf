@@ -45,3 +45,6 @@ typedef TraitAccess = xinf.traits.TraitAccess;
 typedef FloatTrait = xinf.traits.FloatTrait;
 typedef IntTrait = xinf.traits.IntTrait;
 typedef StringTrait = xinf.traits.StringTrait;
+typedef LengthTrait = xinf.traits.LengthTrait;
+
+typedef Length = xinf.type.Length;
