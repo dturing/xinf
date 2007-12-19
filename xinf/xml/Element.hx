@@ -36,10 +36,10 @@ class Element extends Node,
     function set_name( v:String ) :String { return setTrait("name",v); }
 
     public function new( ?traits:Dynamic ) :Void {
-        super();
-		if( traits!=null ) _traits=traits; // FIXME: fromObject?
-		else _traits = Reflect.empty();
+		super();
+		_traits = Reflect.empty();
         listeners = new Hash<List<Dynamic->Void>>();
+		if( traits!=null ) setTraitsFromObject(traits);
 	}
 	
 	override public function fromXml( xml:Xml ) :Void {
@@ -84,6 +84,7 @@ class Element extends Node,
 
 	public function setTraitFromString( name:String, value:String, ?to:Dynamic ) :String {
 		var def = getTraitDefinition(name);
+		// FIXME: maybe, see if it has a setter?
 		if( to==null ) to=_traits;
 		Reflect.setField( to, name, def.parse(value) );
 		return value;

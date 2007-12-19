@@ -13,7 +13,11 @@ import xinf.xml.Instantiator;
 
 class Svg extends xinf.ony.base.Svg {
 
+	static var svgNamespace:String;
+	
 	static function __init__() :Void {
+		svgNamespace = "http://www.w3.org/2000/svg";
+	
         var binding = new Binding<Element>();
         
         binding.add( "g", Group );
@@ -36,6 +40,6 @@ class Svg extends xinf.ony.base.Svg {
         binding.add( "radialGradient", xinf.ony.base.RadialGradient );
 		binding.add( "style", xinf.ony.base.Style );
 		
-		xinf.xml.Document.binding = binding;
+		xinf.xml.Document.addBinding( svgNamespace, binding );
     }
 }

@@ -63,7 +63,15 @@ class Document extends Element {
 	}
 
     public function unmarshal( xml:Xml, ?parent:Node ) :Node {
-        var r = binding.instantiate( xml );
+        var r:Node;
+		
+		// TODO: for now, we ignore the namespace (there is none from haxe xml),
+		// and just search all known bindings for the localName
+		var ns = bindings.keys();
+		while( ns.hasNext() && r==null ) {
+			r = bindings.get(ns.next()).instantiate( xml );
+		}
+		
 //		trace("instantiate "+xml.nodeName+": "+r+", parent "+parent );
         if( r==null ) return null;
         
@@ -107,5 +115,10 @@ class Document extends Element {
         return doc;
     }
 	
-	public static var binding:IBinding;
+	static var bindings:Hash<IBinding>;
+	public static function addBinding( namespaceURI:String, binding:IBinding ) {
+		if( bindings==null ) bindings = new Hash<IBinding>();
+		bindings.set( namespaceURI, binding );
+	}
+	
 }

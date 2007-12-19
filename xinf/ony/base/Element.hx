@@ -178,6 +178,7 @@ class Element extends StyledElement {
 	}
 			
     override public function updateClassStyle() :Void {
+		clearTraitsCache();
 		var styleSheet = ownerDocument.styleSheet;
 		if( styleSheet!=null ) {
 			_matchedStyle = styleSheet.match(this);

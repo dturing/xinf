@@ -11,8 +11,8 @@ import xinf.xml.Node;
 class Root {
     private static var mRoot:Svg;
 	
-	public static var width:Float;
-	public static var height:Float;
+	public static var width:Float = 0.;
+	public static var height:Float = 0.;
 	
 	public static function getRootSvg() :Svg {
 		if( mRoot==null ) {
