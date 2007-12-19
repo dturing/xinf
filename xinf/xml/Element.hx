@@ -6,6 +6,7 @@ package xinf.xml;
 import xinf.traits.TraitAccess;
 import xinf.traits.TraitDefinition;
 import xinf.traits.TraitException;
+import xinf.traits.SpecialTraitValue;
 import xinf.traits.StringTrait;
 
 import xinf.event.EventDispatcher;
@@ -45,7 +46,9 @@ class Element extends Node,
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
 		setTraitsFromXml( xml );
-		if( id!=null ) ownerDocument.elementsById.set(id,this);
+		if( id!=null ) {
+			ownerDocument.elementsById.set(id,this);
+		}
 	}
 		
 	/**********************/
@@ -83,9 +86,15 @@ class Element extends Node,
 	}
 
 	public function setTraitFromString( name:String, value:String, ?to:Dynamic ) :String {
+		if( to==null ) to=_traits;
+		
+		if( value=="inherit" ) {
+			Reflect.setField( to, name, Inherit.inherit );
+			return value;
+		}
+		
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
-		if( to==null ) to=_traits;
 		Reflect.setField( to, name, def.parse(value) );
 		return value;
 	}
@@ -100,7 +109,11 @@ class Element extends Node,
 	public function setTraitsFromXml( xml:Xml ) {
 		for( field in xml.attributes() ) {
 			try {
-				setTraitFromString( field, xml.get(field) );
+				// for now, strip namespace...
+				var f2:String = field;
+				var a = field.split(":");
+				if( a.length>1 ) f2 = a[a.length-1];
+				setTraitFromString( f2, xml.get(field) );
 			} catch( e:TraitNotFoundException ) {
 //				trace("Trait not found: "+name );
 			}

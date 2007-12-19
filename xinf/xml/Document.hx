@@ -40,7 +40,7 @@ class Document extends Element {
 	
     public function getElementById( id:String ) :Node {
         var r = elementsById.get(id);
-        if( r==null ) throw("No such Element #"+id );
+        if( r==null ) throw("No such Element #"+id+" in "+this+", els: "+elementsById );
         return r;
     }
 
@@ -84,6 +84,10 @@ class Document extends Element {
 		
         return r;
     }
+
+	override public function toString() :String {
+		return("Document("+base+")");
+	}
 /*
     public static function overrideBinding( nodeName:String, cl:Class<Node> ) :Void {
         binding.add( nodeName, cl );

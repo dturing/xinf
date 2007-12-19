@@ -19,6 +19,7 @@ class Root {
 			var r = new xinf.ony.erno.Root();
 			mRoot = new Svg();
 			untyped r.ownerDocument = new Document(); // FIXME
+			untyped r.ownerDocument.set_base("");
 			r.appendChild( mRoot );
 			
 			Root.width = Root.height = 100;

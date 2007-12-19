@@ -55,4 +55,7 @@ class Svg extends GroupImpl {
         }
     }
 
+	override function setOwnerDocument( doc:xinf.xml.Document ) {
+	}
+
 }

@@ -6,6 +6,7 @@ package xinf.style;
 import xinf.xml.Node;
 import xinf.xml.Element;
 import xinf.traits.TraitException;
+import xinf.traits.SpecialTraitValue;
 
 class StyledElement extends Element {
 
@@ -44,48 +45,36 @@ class StyledElement extends Element {
 		
 		// lookup XML attribute
 		var v = Reflect.field(_traits,name);
-		if(v!=null) {
-			if( Std.is(v,type) ) {
-				Reflect.setField(_cache,name,v);
-				return v;
-			}
-			throw( new TraitTypeException( name, this, v, type ) );
-		}
 
-		// lookup in style attribute
-		v = Reflect.field(_style,name);
-		if(v!=null) {
-			if( Std.is(v,type) ) {
-				Reflect.setField(_cache,name,v);
-				return v;
-			}
-			throw( new TraitTypeException( name, this, v, type ) );
-		}
+		// lookup in style attribute FIXME: maybe, there is no difference between attributes and @style?
+		if( v==null ) v = Reflect.field(_style,name);
 		
 		// lookup in matched style
-		v = Reflect.field(_matchedStyle,name);
-		if(v!=null) {
-			if( Std.is(v,type) ) {
-				Reflect.setField(_cache,name,v);
-				return v;
-			}
-			throw( new TraitTypeException( name, this, v, type ) );
-		}
-		
+		if( v==null ) v = Reflect.field(_matchedStyle,name);
 		
 		// inherited.. (no update- FIXME/TODO/MAYBE)
-		if( inherit ) {
+		if( inherit && v==null ) {
 			var p:StyledElement = getTypedParent(StyledElement);
 			if( p!=null ) {
 				try {
 					v = p.getStyleTrait( name, type, inherit );
-					Reflect.setField(_cache,name,v);
-					return v;
 				} catch( e:TraitNotFoundException ) {
 				}
 			}
 		}
-		
+
+		if( v!=null ) {
+			if( Std.is(v,type) ) {
+				Reflect.setField(_cache,name,v);
+				return v;
+			}
+			if( Std.is(v,SpecialTraitValue) ) {
+				var v2:SpecialTraitValue = cast(v);
+				return( v2.get(name,type,this) );
+			}
+			throw( new TraitTypeException( name, this, v, type ) );
+		}
+
 		// default.
 		var def = getTraitDefinition(name);
 		if( def!=null ) {

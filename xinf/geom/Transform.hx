@@ -203,7 +203,6 @@ class TransformParser {
     public static var R2D = (360./(2.*Math.PI));
 
     /* TODO: 
-        rotate(angle,cx,cy)
         scale(sx [sy [cx [cy]]])
         fix translate( cx [cy] )
         inherit
@@ -211,7 +210,7 @@ class TransformParser {
     */
     static var splitNumbers = ~/[,\r\n\t]/g;
     static var translate = ~/translate\([ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n,]+[ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n]*\)/;
-    static var rotate = ~/rotate\(([0-9eE\.\-]+)\)/; 
+    static var rotate = ~/rotate\(([0-9eE\.\-]+)([ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n]?)?\)/; 
     static var matrix = ~/matrix\(([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+)\)/;
     static var scale = ~/scale\(([0-9eE\.\-, ]+)\)/;
     static var skewX = ~/skewX\((\-*[0-9eE\.]+)\)/;
@@ -253,9 +252,22 @@ class TransformParser {
                     ty:Std.parseFloat(matrix.matched(6))
                 });
         } else if( rotate.match(text) ) {
-            r = new Rotate( 
-                    Std.parseFloat(rotate.matched(1)) * D2R
-                );
+			if( rotate.matched(2)==null ) {
+				r = new Rotate( 
+						Std.parseFloat(rotate.matched(1)) * D2R
+					);
+			} else {
+				var a = Std.parseFloat(rotate.matched(1));
+				var cx = Std.parseFloat(rotate.matched(3));
+				var cy = Std.parseFloat(rotate.matched(4));
+				r = new Concatenate(
+						new Translate(cx,cy),
+						new Concatenate(
+							new Rotate(a),
+							new Translate(-cx,-cy)
+						)
+					);
+			}
         } else if( scale.match(text) ) {
             var s = splitNumbers.split(scale.matched(1));
             if( s.length==1 ) {

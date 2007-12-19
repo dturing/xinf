@@ -27,6 +27,6 @@ class TraitNotFoundException extends TraitException {
 
 class TraitTypeException extends TraitException {
 	public function new( name:String, obj:TraitAccess, value:Dynamic, expected:Class<Dynamic> ) {
-		super("Trait '"+name+"' in "+obj+" is of wrong type.");
+		super("Trait '"+name+"' in "+obj+" is of wrong type: "+value);
 	}
 }

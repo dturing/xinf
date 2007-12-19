@@ -5,12 +5,14 @@ package xinf.traits;
 
 import xinf.type.Paint;
 import xinf.type.Color;
+import xinf.traits.SpecialTraitValue;
 
 class PaintTrait extends TypedTrait<Paint> {
 
 	static var url = ~/url\((.*)\)/i;
     static var hexcolor = ~/^#([0-9a-f]+)$/i;
     static var rgbcolor = ~/^rgb\([\r\n\t ]*([0-9]+)[\r\n\t ]*,[\r\n\t ]*([0-9]+)[\r\n\t ]*,[\r\n\t ]*([0-9]+)[\r\n\t ]*\)$/;
+    static var rgbpercentcolor = ~/^rgb\([\r\n\t ]*([0-9\.]+)[\r\n\t ]*%[\r\n\t ]*,[\r\n\t ]*([0-9\.]+)[\r\n\t ]*%[\r\n\t ]*,[\r\n\t ]*([0-9\.]+)[\r\n\t ]*%[\r\n\t ]*\)$/;
     // TODO: rgb(r,g,b), others?
 
     static var colorNames:Hash<Color>;
@@ -167,6 +169,24 @@ class PaintTrait extends TypedTrait<Paint> {
             colorNames.set( "whitesmoke", Color.rgbI(245,245,245));
             colorNames.set( "yellow", Color.rgbI(255,255,0));
             colorNames.set( "yellowgreen", Color.rgbI(154,205,50));
+			
+            colorNames.set( "Background", Color.rgbI(200,200,200));
+            colorNames.set( "AppWorkspace", Color.rgbI(230,230,230));
+            colorNames.set( "Window", Color.rgbI(230,230,230));
+            colorNames.set( "WindowText", Color.rgbI(0,0,0) );
+            colorNames.set( "WindowFrame", Color.rgbI(0,0,0) );
+            colorNames.set( "Menu", Color.rgbI(200,200,200));
+            colorNames.set( "MenuText", Color.rgbI(0,0,0) );
+            colorNames.set( "ButtonFace", Color.rgbI(200,200,200));
+            colorNames.set( "ButtonShadow", Color.rgbI(150,150,150));
+            colorNames.set( "ButtonHighlight", Color.rgbI(240,240,240));
+            colorNames.set( "ThreeDFace", Color.rgbI(200,200,200));
+            colorNames.set( "ThreeDDarkShadow", Color.rgbI(150,150,150));
+            colorNames.set( "ThreeDLightShadow", Color.rgbI(240,240,240));
+            colorNames.set( "HighlightText", Color.rgbI(50,150,50));
+            colorNames.set( "CaptionText", Color.rgbI(0,0,0) );
+            colorNames.set( "ActiveBorder", Color.rgbI(50,150,50));
+            colorNames.set( "ActiveCaption", Color.rgbI(50,150,50));
         }
         return colorNames;
     }
@@ -183,7 +203,9 @@ class PaintTrait extends TypedTrait<Paint> {
         var v:Paint;
 		var color:Color;
         
-        if( hexcolor.match(value) ) {
+		if( value=="currentColor" ) {
+			return CurrentColor.currentColor;
+        } else if( hexcolor.match(value) ) {
             var w = hexcolor.matched(1);
             if( w.length==3 ) {
                 var c = Std.parseInt("0x"+w);
@@ -194,6 +216,10 @@ class PaintTrait extends TypedTrait<Paint> {
             } else if( w.length==6 ) {
                 color = new Color().fromRGBInt( Std.parseInt("0x"+w) );
             }
+        } else if( rgbpercentcolor.match(value) ) {
+            v = SolidColor( Std.parseFloat( rgbcolor.matched(1) )*2.55, 
+                            Std.parseFloat( rgbcolor.matched(2) )*2.55, 
+                            Std.parseFloat( rgbcolor.matched(3) )*2.55, 1. );
         } else if( rgbcolor.match(value) ) {
             v = SolidColor( Std.parseInt( rgbcolor.matched(1) ), 
                             Std.parseInt( rgbcolor.matched(2) ), 

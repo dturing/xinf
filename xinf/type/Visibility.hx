@@ -7,5 +7,4 @@ enum Visibility {
     Visible;
     Hidden;
     Collapse;
-    Inherit;
 }

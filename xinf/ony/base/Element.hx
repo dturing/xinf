@@ -35,6 +35,7 @@ class Element extends StyledElement {
 	static var TRAITS = {
 		opacity:		new BoundedFloatTrait(0,1,1),
 		
+		color:			new PaintTrait(null), // just for "currentColor"
 		fill:			new PaintTrait(SolidColor(0,0,0,1)),
 		fill_opacity:	new BoundedFloatTrait(0,1,1),
 
@@ -54,12 +55,7 @@ class Element extends StyledElement {
 	
     public var visibility(get_visibility,set_visibility):Visibility;
     function get_visibility() :Visibility { 
-        var v = getTrait("visibility",Visibility); 
-		// FIXME: this crap.
-        if( v==Visibility.Inherit ) {
             return getStyleTrait("visibility",Visibility);
-        }
-        return v;
     }
     function set_visibility( v:Visibility ) :Visibility { return setStyleTrait("visibility",v); }
 
