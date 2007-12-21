@@ -55,12 +55,12 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         lineTo( cx+p2.x, cy+p2.y );
     }
 
-	function applyFill() {
-		applyFillGL();
+	function applyFill() :Bool {
+		return applyFillGL();
 	}
 	
-	function applyFillGL() {
-		if( pen.fill==null ) return;
+	function applyFillGL() :Bool {
+		if( pen.fill==null ) return false;
 		switch( pen.fill ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
@@ -69,21 +69,25 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 				var c = stops.iterator().next().color;
 				GL.color4( c.r, c.g, c.b, c.a );
 			case None:
-				GL.color4(0,0,0,0);
+				return false;
 			default:
 				throw("unimplemented fill paint: "+pen.fill );
 		}
+		return true;
 	}
 
-	function applyStroke() {
-		if( pen.stroke==null ) return;
+	function applyStroke() :Bool {
+		if( pen.stroke==null ) return false;
 		switch( pen.stroke ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
+			case None:
+				return false;
 			default:
 				throw("unimplemented stroke paint: "+pen.stroke );
 		}
 		GL.lineWidth( pen.width );
+		return true;
 	}
 
     // erno.ObjectModelRenderer API

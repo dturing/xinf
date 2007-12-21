@@ -30,6 +30,7 @@ class GLObject {
 
 	public function destroy() :Void {
 		GL.deleteLists(id,1);
+		GL.deleteLists(inner,1);
 	}
 
     public function setTransform( transform:Matrix ) :Void {

@@ -37,10 +37,6 @@ class Svg extends GroupImpl {
     function get_height() :Float { return getTrait("height",Length).value; }
     function set_height( v:Float ) :Float { setTrait("height",new Length(v)); return v; }
 
-	public function new( ?traits:Dynamic ) :Void {
-        super( traits );
-    }
-
     override public function fromXml( xml:Xml ) :Void {
         super.fromXml(xml);
 
@@ -55,7 +51,7 @@ class Svg extends GroupImpl {
         }
     }
 
-	override function setOwnerDocument( doc:xinf.xml.Document ) {
-	}
+//	override function setOwnerDocument( doc:xinf.xml.Document ) {
+//	}
 
 }

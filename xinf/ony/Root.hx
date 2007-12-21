@@ -20,6 +20,7 @@ class Root {
 			mRoot = new Svg();
 			untyped r.ownerDocument = new Document(); // FIXME
 			untyped r.ownerDocument.set_base("");
+			untyped r.construct();
 			r.appendChild( mRoot );
 			
 			Root.width = Root.height = 100;
@@ -50,6 +51,10 @@ class Root {
     public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
 	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
     }
+
+	public static function setBackgroundColor( c:Color ) :Void {
+		xinf.erno.Runtime.runtime.setBackgroundColor(c);
+	}
 
     public static function main() {
         xinf.erno.Runtime.runtime.run();

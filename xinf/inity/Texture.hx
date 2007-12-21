@@ -25,7 +25,7 @@ class Texture extends ImageData {
 
         // generate texture id
         var t:Dynamic = CPtr.uint_alloc(1);
-        GL.genTextures(1,t);
+        GL.genTextures(1,t); // FIXME: delete this at some point...
         texture = CPtr.uint_get(t,0);
         var e:Int = GL.getError();
         if( e > 0 ) { throw("could not create texture"); }

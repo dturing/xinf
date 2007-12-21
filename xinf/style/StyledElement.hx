@@ -122,7 +122,12 @@ class StyledElement extends Element {
 	}
 
 	// Style class functions
-    
+
+	override function setOwnerDocument( doc:xinf.xml.Document ) {
+		super.setOwnerDocument(doc);
+		updateClassStyle();
+	}
+
 	function updateClassStyle() :Void {
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
 			clearTraitsCache();

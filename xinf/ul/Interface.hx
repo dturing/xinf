@@ -32,8 +32,9 @@ class Interface extends Container {
 		setOwnerDocument( Root.getRootSvg().ownerDocument ); // FIXME
 	}
 	
-	function rootResized( e ) {
+	function rootResized( e:GeometryEvent ) {
 		setPrefSize( size=e );
+		relayout();
 	}
 	
 	override public function onLoad() {

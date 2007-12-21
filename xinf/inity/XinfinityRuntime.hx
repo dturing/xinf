@@ -9,6 +9,7 @@ import xinf.event.FrameEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;
+import xinf.type.Color;
 
 import opengl.GL;
 import opengl.GLU;
@@ -24,7 +25,8 @@ class XinfinityRuntime extends Runtime {
     var root:GLObject;
 	var time:Float;
 	var interval:Float;
-    
+    var bgColor:Color;
+	
     private var _eventSource:GLEventSource;
 
     private static var selectBuffer = CPtr.uint_alloc(64);
@@ -41,6 +43,7 @@ class XinfinityRuntime extends Runtime {
         somethingChanged = true;
 		time = neko.Sys.time();
 		interval = 1/25;
+		bgColor = Color.rgba(1,1,1,0);
     
         _eventSource=new GLEventSource(this);
         
@@ -62,7 +65,7 @@ class XinfinityRuntime extends Runtime {
     }
 
     override public function getNextId() :Int {
-        return GL.genLists(2);
+        return GL.genLists(1);
     }
 
     override public function getDefaultRoot() :NativeContainer {
@@ -77,7 +80,11 @@ class XinfinityRuntime extends Runtime {
         somethingChanged = true;
         //    GLUT.postRedisplay();
     }
-    
+
+	override public function setBackgroundColor( c:Color ) :Void {
+		bgColor = c;
+	}
+
     public function display() :Void {
         startFrame();
 
@@ -107,7 +114,7 @@ class XinfinityRuntime extends Runtime {
 	
 	function timing() :Void {
 		var now = neko.Sys.time();
-		while( time<now-(interval*.5) ) {
+		while( time<now-(interval) ) {
 			time+=interval;
 			#if profile
 			xinf.test.Counter.count("frames dropped");
@@ -200,8 +207,16 @@ class XinfinityRuntime extends Runtime {
         GL.matrixMode( GL.MODELVIEW );
         GL.loadIdentity();
 
-        GL.clearColor( 1,1,1,0 );
-        GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
+		if( bgColor.a==0 ) {
+			GL.clearColor( bgColor.r,bgColor.g,bgColor.b,0 );
+			GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT | GL.STENCIL_BUFFER_BIT );
+		} else {
+			// relatively cheap motion-blur-like effect (only good when scene is continuously animated)
+			GL.enable(GL.BLEND);
+			GL.color4( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
+			GL.rect( -512,-384,1024,768 ); // FIXME
+			GL.disable(GL.BLEND);
+		}
             
         // FIXME depends on stage scale mode
         GL.translate( -1., 1., 0. );

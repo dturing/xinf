@@ -7,6 +7,7 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.event.EventKind;
 import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
+import xinf.type.Color;
 
 /**
     The Runtime class has static functions to request the global
@@ -178,5 +179,8 @@ class Runtime extends SimpleEventDispatcher {
     **/
     public function changed() :Void {
     }
+	
+	public function setBackgroundColor( c:Color ) :Void {
+	}
     
 }

@@ -13,6 +13,11 @@ import xinf.xml.Instantiator;
 
 class Svg extends xinf.ony.base.Svg {
 
+	public function new( ?traits:Dynamic ) {
+		super(traits);
+		//construct();
+	}
+
 	static var svgNamespace:String;
 	
 	static function __init__() :Void {

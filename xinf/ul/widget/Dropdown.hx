@@ -104,6 +104,7 @@ class Dropdown extends Widget {
     }
     
     private function close() :Void {
+		if( !isOpen ) return;
         if( popup!=null ) popup.close();
         isOpen=false;
         removeStyleClass(":open");

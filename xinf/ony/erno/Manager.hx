@@ -64,6 +64,9 @@ class Manager {
     public function unregister( id:Int) :Void {
         // TODO #if debug, check if set.
         objects.remove(id);
+		changed.remove(id);
+		moved.remove(id);
+		Runtime.renderer.destroyObject(id);
     }
 
     public function objectChanged( id:Int, o:Element ) :Void {

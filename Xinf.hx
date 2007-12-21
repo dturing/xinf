@@ -48,3 +48,4 @@ typedef StringTrait = xinf.traits.StringTrait;
 typedef LengthTrait = xinf.traits.LengthTrait;
 
 typedef Length = xinf.type.Length;
+typedef Paint = xinf.type.Paint;

@@ -28,11 +28,25 @@ class Component extends StyledElement {
 			.Button {
 				border: 1;
 				padding: 6 3 6 3;
-				min-height: 25;
 			}
-
+			
+			.Button, .Dropdown, .LineEdit {
+				min-height: 20;
+				min-width: 75;
+			}
+			
+			.Interface {
+				horizontal-align: .5;
+				vertical-align: .5;
+			}
+			
 			.Container, .Interface {
 				padding: 5;
+			}
+			
+			.ListView {
+				min-width: 100;
+				min-height: 75;
 			}
 			
 			.:focus {
@@ -45,6 +59,7 @@ class Component extends StyledElement {
 				skin: focus-bright;
 				padding: 5 3 5 1;
 			}
+			
 		", new Component() ); // FIXME: make styles "traits-independent"
 	}
 	/*
@@ -216,7 +231,12 @@ class Component extends StyledElement {
 		super.styleChanged();
 		_skin.setTo( skin );
     }
-	
+
+	override function setOwnerDocument( doc:Document ) {
+		super.setOwnerDocument(doc);
+		untyped group.setOwnerDocument(doc); //FIXME 
+	}
+
     public function getPrefSize() :TPoint {
         return( _prefSize );
     }

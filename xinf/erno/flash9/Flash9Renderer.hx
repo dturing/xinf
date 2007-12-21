@@ -48,9 +48,10 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
     
     override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		if( child.parent!=null && child.parent!=parent ) {
-			parent.addChild( child.duplicateMovieClip() );
-		} else
-			parent.addChild( child );
+			//parent.addChild( child.duplicateMovieClip() );
+			child.parent.removeChild(child);
+		} //else
+		parent.addChild( child );
     }
 
     /* our part of the drawing protocol */

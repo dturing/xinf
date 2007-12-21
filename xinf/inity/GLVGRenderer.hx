@@ -97,16 +97,17 @@ class GLVGRenderer extends GLRenderer {
 		return paint;
 	}
 
-	override function applyFill() {
-		if( pen.fill==null ) return;
+	override function applyFill() :Bool {
+		if( pen.fill==null || pen.fill==None ) return false;
 		
 		if( fill!=null ) VG.destroyPaint( fill );
 		fill = makePaint( pen.fill );
 		VG.setPaint( fill, VG.FILL_PATH );
+		return true;
 	}
 
-	override function applyStroke() {
-		if( pen.stroke==null ) return;
+	override function applyStroke() :Bool {
+		if( pen.stroke==null || pen.stroke==None ) return false;
 //		super.applyStroke();
 		
 		if( stroke!=null ) VG.destroyPaint( stroke );
@@ -133,16 +134,18 @@ class GLVGRenderer extends GLRenderer {
 
 		if( pen.miterLimit!=null )
 			VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
+			
+		return true;
 	}
 
 	function drawPath( f:Int->Void ) {
-		var path = VG.createPath( 0 /* VG.PATH_FORMAT_STANDARD */, VG.PATH_DATATYPE_F,
+		var path = VG.createPath( 0, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 		f(path);
-        applyFill();
-		applyStroke();
-		VG.drawPath( path, VG.FILL_PATH );
-		VG.drawPath( path, VG.STROKE_PATH );
+        
+		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
+		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
+		
 		VG.destroyPath(path);
 	}
 
@@ -202,6 +205,7 @@ class GLVGRenderer extends GLRenderer {
     }
 
     override public function arcTo( rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
+		throw("arcTo not implemented for GLVG");
 	}
 	
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {

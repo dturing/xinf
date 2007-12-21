@@ -50,7 +50,7 @@ class Element extends StyledElement {
 		font_size:		new UnitFloatTrait(10.),
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
 		
-		visibility:		new EnumTrait<Visibility>( Visibility ),
+		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 	}
 	
     public var visibility(get_visibility,set_visibility):Visibility;

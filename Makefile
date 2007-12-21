@@ -40,6 +40,10 @@ benchmark : $(VERSION_STUB) $(SRC)
 	haxe $(HAXEFLAGS) -D profile -neko bench.n -main Benchmark
 	NEKOPATH=$(NEKOPATH) neko bench.n
 
+memmark : $(VERSION_STUB) $(SRC) 
+	haxe $(HAXEFLAGS) -neko mem.n -main Memmark
+	NEKOPATH=$(NEKOPATH) neko mem.n
+
 #######################################################
 # generate version file
 .PHONY: FORCE

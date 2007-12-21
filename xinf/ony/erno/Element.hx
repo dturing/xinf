@@ -19,7 +19,7 @@ class Element extends xinf.ony.base.Element {
     
     /** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
         Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
-    public var xid(default,null):Int;
+    public var xid(default,null):Null<Int>;
 
 	private static function getManager() :Manager {
         if( _manager == null ) {
@@ -34,35 +34,40 @@ class Element extends xinf.ony.base.Element {
     
     public function new( ?traits:Dynamic ) :Void {
 		super( traits );
-		xid = Runtime.runtime.getNextId();
-        manager.register( xid, this );
-        redraw();
+		xid=null;
+	//	xid = Runtime.runtime.getNextId();
+    //    manager.register( xid, this );
+    //    redraw();
     }
 	
+
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
-		to.xid = Runtime.runtime.getNextId();
-        manager.register( to.xid, to );
-		to.redraw();
+	//	to.xid = Runtime.runtime.getNextId();
+	//	to.redraw();
 	}
-    
-    /** Object destructor<br/>
-        You must call this function if you want to get rid of this object and free
-        all associated memory. (Yes, is garbage-collected, but we need some
-        trigger to free all associated objects in the runtime. This is it.)
-        
-        Could this be done on deattach? we dont need it registered any more...
-    **/
-    public function destroy() :Void {
-        // how about deleting our associated Sprite/Div/GLObject?
-        // also: detach from parent
-        manager.unregister(xid);
+
+	function construct() :Void {
+		if( xid!=null ) throw("constructing an object that is already constructed");
+	//	trace("construct "+this );
+		xid = Runtime.runtime.getNextId();
+        manager.register( xid, this );
+		redraw();
+	}
+	
+    function destroy() :Void {
+		//if( xid==null ) throw("destroying an object that is already destroyed");
+		if( xid!=null ) {
+			manager.unregister(xid);
+			xid=null;
+		}
     }
 
     /** apply new transformation (position)<br/>
         This is an internal function, you should usually not care about it.
         **/
     public function reTransform( g:Renderer ) :Void {
+		if( xid==null ) throw("no xid: "+this);
         var m = transform.getMatrix();
         g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
     }
@@ -73,6 +78,7 @@ class Element extends xinf.ony.base.Element {
         override [drawContents()] to draw stuff.
         **/
     public function draw( g:Renderer ) :Void {
+		if( xid==null ) throw("no xid: "+this);
         g.startObject( xid );
             switch( visibility ) {
                 case Hidden:
@@ -128,11 +134,11 @@ class Element extends xinf.ony.base.Element {
     }
 
     override public function redraw() :Void {
-        manager.objectChanged( xid, this );
+		if( xid!=null ) manager.objectChanged( xid, this );
     }
     
     override public function retransform() :Void {
-        manager.objectMoved( xid, this );
+        if( xid!=null ) manager.objectMoved( xid, this );
     }
 
 }
