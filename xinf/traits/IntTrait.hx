@@ -10,7 +10,7 @@ class IntTrait extends TypedTrait<Int> {
     var def:Int;
     
     public function new( ?def:Null<Int> ) {
-		super();
+		super( Int );
 		if( def==null ) def=0;
         this.def = def;
     }

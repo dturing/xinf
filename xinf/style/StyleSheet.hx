@@ -27,8 +27,8 @@ class StyleSheet {
 		if( d!=null ) addMany( d );
     }
 	
-	public function parseCSS( data:String, via:TraitAccess ) {
-		addMany( StyleParser.parseRules( data, via ) );
+	public function parseCSS( data:String ) {
+		addMany( StyleParser.parseRules( data ) );
 	}
 	
     public function add( rule:StyleRule ) {

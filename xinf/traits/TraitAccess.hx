@@ -8,7 +8,9 @@ interface TraitAccess {
 	function setTrait<T>( name:String, value:T ) :T;
 	function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T;
 	function setStyleTrait<T>( name:String, value:T ) :T;
-	function setTraitFromString( name:String, value:String, ?to:Dynamic ) :String;
+	
+	function setTraitFromString( name:String, value:String, to:Dynamic ) :Void;
+	function setTraitFromDynamic( name:String, value:Dynamic, to:Dynamic ) :Void;
 	
 //	function getTraitDefinition( name:String ) :TraitDefinition;
 }

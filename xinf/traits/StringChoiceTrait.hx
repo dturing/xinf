@@ -8,7 +8,7 @@ class StringChoiceTrait extends TypedTrait<String> {
     var choices:Array<String>;
     
     public function new( choices:Array<String> ) {
-		super();
+		super( Array );
         this.choices=choices;
     }
     

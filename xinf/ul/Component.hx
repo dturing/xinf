@@ -55,12 +55,12 @@ class Component extends StyledElement {
 				padding: 5 2 5 2;
 			}
 			
-			.Button.:press {
+			.Button.:press, .LineEdit.:focus {
 				skin: focus-bright;
 				padding: 5 3 5 1;
 			}
 			
-		", new Component() ); // FIXME: make styles "traits-independent"
+		");
 	}
 	/*
 	public static var styleSheet:StyleSheet 

@@ -10,7 +10,7 @@ class FloatTrait extends TypedTrait<Float> {
     var def:Float;
     
     public function new( ?def:Null<Float> ) {
-		super();
+		super( Float );
 		if( def==null ) def=0.;
         this.def = def;
     }
@@ -26,7 +26,14 @@ class FloatTrait extends TypedTrait<Float> {
 
         return v;
     }
-	
+
+	override public function fromDynamic( value:Dynamic ) :Dynamic {
+		if( Std.is(value,Int) ) {
+			return (value*1.);
+		}
+		return( super.fromDynamic(value) );
+	}
+
 	override public function getDefault() :Dynamic {
 		return def;
 	}

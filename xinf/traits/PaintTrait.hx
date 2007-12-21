@@ -22,6 +22,8 @@ class PaintTrait extends TypedTrait<Paint> {
             colorNames.set( "none", Color.rgba(0,0,0,0) );
             
             // SVG colors
+			#if no-svg-colors
+			#else true
             colorNames.set( "aliceblue", Color.rgbI(240,248,255));
             colorNames.set( "antiquewhite", Color.rgbI(250,235,215));
             colorNames.set( "aqua", Color.rgbI(0,255,255));
@@ -187,14 +189,29 @@ class PaintTrait extends TypedTrait<Paint> {
             colorNames.set( "CaptionText", Color.rgbI(0,0,0) );
             colorNames.set( "ActiveBorder", Color.rgbI(50,150,50));
             colorNames.set( "ActiveCaption", Color.rgbI(50,150,50));
-        }
+			#end
+
+			#if no-tango-colors
+			#else true
+				colorNames.set( "yellow", Color.rgbI(0xfc,0xe9,0x4f) );
+				colorNames.set( "orange", Color.rgbI(0xfc,0xaf,0x3e) );
+				colorNames.set( "green", Color.rgbI(0x73,0xd2,0x16) );
+				colorNames.set( "lightblue", Color.rgbI(0x72,0x9f,0xcf) );
+				colorNames.set( "blue", Color.rgbI(0x34,0x65,0xa4) );
+				colorNames.set( "darkblue", Color.rgbI(0x20,0x4a,0x87) );
+				colorNames.set( "red", Color.rgbI(0xcc,0x00,0x00) );
+				colorNames.set( "lightgray", Color.rgbI(0xd3,0xd7,0xcf) );
+				colorNames.set( "gray", Color.rgbI(0xba,0xbd,0xb6) );
+				colorNames.set( "darkgray", Color.rgbI(0x55,0x57,0x53) );
+			#end
+		}
         return colorNames;
     }
  
 	var def:Paint;
 	
 	public function new( ?def:Paint ) {
-		super();
+		super( Paint );
 		this.def=def;
 		if( def==null ) this.def=None;
 	}

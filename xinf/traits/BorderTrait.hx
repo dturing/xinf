@@ -13,7 +13,7 @@ class BorderTrait extends TypedTrait<Border> {
 	var def:Border;
 	
 	public function new( ?def:Border ) {
-		super();
+		super(Border);
 		if( def==null ) def = new Border();
 		this.def = def;
 	}

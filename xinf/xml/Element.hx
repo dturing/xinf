@@ -8,6 +8,7 @@ import xinf.traits.TraitDefinition;
 import xinf.traits.TraitException;
 import xinf.traits.SpecialTraitValue;
 import xinf.traits.StringTrait;
+import xinf.style.StyleParser;
 
 import xinf.event.EventDispatcher;
 import xinf.event.Event;
@@ -85,27 +86,27 @@ class Element extends Node,
 		return setTrait(name,value);
 	}
 
-	public function setTraitFromString( name:String, value:String, ?to:Dynamic ) :String {
-		if( to==null ) to=_traits;
-		
+	public function setTraitFromString( name:String, value:String, to:Dynamic ) :Void {
 		if( value=="inherit" ) {
 			Reflect.setField( to, name, Inherit.inherit );
-			return value;
+			return;
 		}
 		
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
+		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
 		Reflect.setField( to, name, def.parse(value) );
-		return value;
+	}
+
+	public function setTraitFromDynamic( name:String, value:Dynamic, to:Dynamic ) :Void {
+		var def = getTraitDefinition(name);
+		Reflect.setField( to, name, def.fromDynamic(value) );
 	}
 	
 	public function setTraitsFromObject( o:Dynamic ) {
-		for( field in Reflect.fields(o) ) {
-			var field2 = StringTools.replace( field, "_", "-" );
-			setTrait( field2, Reflect.field(o,field) );
-		}
+		StyleParser.fromObject(o,this,_traits);
 	}
-
+	
 	public function setTraitsFromXml( xml:Xml ) {
 		for( field in xml.attributes() ) {
 			try {
@@ -113,7 +114,7 @@ class Element extends Node,
 				var f2:String = field;
 				var a = field.split(":");
 				if( a.length>1 ) f2 = a[a.length-1];
-				setTraitFromString( f2, xml.get(field) );
+				setTraitFromString( f2, xml.get(field), _traits );
 			} catch( e:TraitNotFoundException ) {
 //				trace("Trait not found: "+name );
 			}

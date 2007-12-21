@@ -21,6 +21,7 @@ typedef SimpleEvent = xinf.event.SimpleEvent
 typedef ScrollEvent = xinf.event.ScrollEvent
 
 typedef Document = xinf.xml.Document
+typedef Node = xinf.xml.Node;
 
 typedef Svg = xinf.ony.erno.Svg
 typedef Root = xinf.ony.Root

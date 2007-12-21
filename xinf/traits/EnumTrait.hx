@@ -10,7 +10,7 @@ class EnumTrait<T> extends TypedTrait<T> {
 	var sfx:String;
     
     public function new( enumClass:Dynamic, ?suffix:String, ?def:T ) {
-        super();
+        super(enumClass);
         this.enumClass = enumClass;
         this.def = def;
 		this.sfx = suffix;

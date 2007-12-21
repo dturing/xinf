@@ -18,7 +18,15 @@ class StyleParser {
 		uses the "via" argument for finding definitions,
 		sets values on "to".
 	**/
-    public static function parse( text:String, via:TraitAccess, to:Dynamic ) :Void {
+    public static function fromObject( s:Dynamic, via:TraitAccess, to:Dynamic ) :Void {
+		for( field in Reflect.fields(s) ) {
+			var field2 = StringTools.replace( field, "_", "-" );
+			via.setTraitFromDynamic( field2, Reflect.field(s,field), to );
+		}
+	}
+		
+    public static function parseToObject( text:String ) :Dynamic {
+		var to = Reflect.empty();
 		text = comment.replace(text,"");
         var properties = split.split(text);
         for( prop in properties ) {
@@ -26,16 +34,13 @@ class StyleParser {
             if( p.length==2 ) {
 				var name = StringTools.trim(p[0]);
 				var value = StringTools.trim(p[1]);
-				try {
-					via.setTraitFromString( name, value, to );
-				} catch( e:TraitNotFoundException ) {
-//					trace("ignore style property: "+name );
-				}
+				Reflect.setField( to, name, value );
             } else if( prop.length==0 ) {
             } else {
                 throw("invalid CSS: '"+prop+"'" );
             }
         }
+		return to;
     }
 
 	static var cssRules = ~/\W*(.*)\W{\W(.*)\W/g;
@@ -43,7 +48,7 @@ class StyleParser {
 	/** 
 		parse CSS style rules, as found in a <style type="text/css"> element.
 	**/
-	public static function parseRules( text:String, via:TraitAccess ) :Array<StyleRule> {
+	public static function parseRules( text:String ) :Array<StyleRule> {
 		//trace("should parse style: "+text+", defs "+definitions );
 		text = comment.replace(text,"");
 		
@@ -59,8 +64,7 @@ class StyleParser {
 				// TODO parse selector
 				var sel = parseSelectorGroup( selText );
 				
-				var s = Reflect.empty();
-				StyleParser.parse( styleText, via, s );
+				var s = parseToObject( styleText );
 				
 				trace(""+sel+" "+s );
 				rules.push( { selector:sel, style:s } );

@@ -34,7 +34,7 @@ class Style extends ElementImpl {
 			}
 			
 			if( t.length>0 ) {
-				ownerDocument.styleSheet.parseCSS( t, this );
+				ownerDocument.styleSheet.parseCSS( t );
 				text = t;
 			}
 		}

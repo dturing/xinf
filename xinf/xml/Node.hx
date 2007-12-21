@@ -32,6 +32,7 @@ class Node implements Serializable {
 	}
 	
 	function setOwnerDocument( doc:Document ) {
+		if( doc == ownerDocument ) return;
 		ownerDocument = doc;
 		for( c in mChildren ) c.setOwnerDocument(doc);
 	}

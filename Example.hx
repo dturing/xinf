@@ -11,18 +11,17 @@ class Example {
 		var g = new Group();
 		Root.appendChild(g);
 		
+		var doc:Node;
 		var stage = {x:100.,y:100.};
 		
 		if( url==null ) {
-			var node = Document.instantiate( Std.resource("test.svg") );
-			g.appendChild( node );
+			doc = Document.instantiate( Std.resource("test.svg") );
+			g.appendChild( doc );
 		} else {
-			Document.load( url, function(node) {
-				g.appendChild( node );
+			Document.load( url, function(doc) {
+				g.appendChild( doc );
 			});
 		}
-
-
 
 		var scale = 1.;
 		var offset={ x:0., y:0. };

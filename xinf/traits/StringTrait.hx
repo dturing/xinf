@@ -8,7 +8,7 @@ class StringTrait extends TypedTrait<String> {
 	var def:String;
 	
 	public function new( ?def:String ) {
-		super();
+		super( String );
 		this.def=def;
 	}
 

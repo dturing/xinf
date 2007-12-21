@@ -11,13 +11,11 @@ import xinf.traits.SpecialTraitValue;
 class StyledElement extends Element {
 
 	var styleClasses :Hash<Bool>;
-	var _style:Dynamic;
 	var _cache:Dynamic;
 	var _matchedStyle:Dynamic;
 	
 	public function new( traits:Dynamic ) {
 		super(traits);
-		_style = Reflect.empty();
 		_cache = Reflect.empty();
 		_matchedStyle = Reflect.empty();
 		styleClasses = new Hash<Bool>();
@@ -45,9 +43,6 @@ class StyledElement extends Element {
 		
 		// lookup XML attribute
 		var v = Reflect.field(_traits,name);
-
-		// lookup in style attribute FIXME: maybe, there is no difference between attributes and @style?
-		if( v==null ) v = Reflect.field(_style,name);
 		
 		// lookup in matched style
 		if( v==null ) v = Reflect.field(_matchedStyle,name);
@@ -91,7 +86,9 @@ class StyledElement extends Element {
 		super.fromXml( xml );
 
 		if( xml.exists("style") ) {
-			StyleParser.parse( xml.get("style"), this, _style );
+			StyleParser.fromObject( 
+				StyleParser.parseToObject( xml.get("style") ),
+				this, _traits );
 		}
 
 		if( xml.exists("class") ) {
@@ -110,13 +107,6 @@ class StyledElement extends Element {
 		updateClassStyle();
 	}
 
-	override function copyProperties( to:Dynamic ) :Void {
-		super.copyProperties(to);
-		
-		// copy style traits
-		to._style = Reflect.copy(_style);
-	}
-
 	// hook
     public function styleChanged() :Void {
 	}
@@ -131,7 +121,11 @@ class StyledElement extends Element {
 	function updateClassStyle() :Void {
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
 			clearTraitsCache();
-			_matchedStyle = ownerDocument.styleSheet.match(this);
+			var match = ownerDocument.styleSheet.match(this);
+			if( match!=null ) {
+				_matchedStyle = Reflect.empty();
+				StyleParser.fromObject( match, this, _matchedStyle );
+			} else _matchedStyle=null;
 			styleChanged();
 		}
     }
