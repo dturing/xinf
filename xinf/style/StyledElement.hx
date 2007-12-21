@@ -132,7 +132,6 @@ class StyledElement extends Element {
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
 			clearTraitsCache();
 			_matchedStyle = ownerDocument.styleSheet.match(this);
-//			trace(""+this+" matched: "+untyped _matchedStyle.padding );
 			styleChanged();
 		}
     }

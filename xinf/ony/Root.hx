@@ -14,6 +14,10 @@ class Root {
 	public static var width:Float = 0.;
 	public static var height:Float = 0.;
 	
+	public static function getDocument() :Document {
+		return getRootSvg().ownerDocument;
+	}
+	
 	public static function getRootSvg() :Svg {
 		if( mRoot==null ) {
 			var r = new xinf.ony.erno.Root();

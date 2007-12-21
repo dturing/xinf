@@ -36,6 +36,7 @@ class Document extends Element {
 		super();
         elementsById = new Hash<Node>();
  		styleSheet = new StyleSheet();
+		ownerDocument = this;
 	}
 	
     public function getElementById( id:String ) :Node {
@@ -74,7 +75,6 @@ class Document extends Element {
 			r = bindings.get(ns.next()).instantiate( xml );
 		}
 		
-//		trace("instantiate "+xml.nodeName+": "+r+", parent "+parent );
         if( r==null ) return null;
         
 		r.ownerDocument = this;
@@ -88,37 +88,25 @@ class Document extends Element {
 	override public function toString() :String {
 		return("Document("+base+")");
 	}
-/*
-    public static function overrideBinding( nodeName:String, cl:Class<Node> ) :Void {
-        binding.add( nodeName, cl );
-    }
-    
-    public static function addInstantiator( i:Instantiator<Node> ) :Void {
-        binding.addInstantiator( i );
-    }
-*/
-	public static function instantiate( data:String, ?onLoad:Document->Void, ?doc ) :Document {
-        if( doc==null ) doc = new Document();
+	
+	public static function instantiate( data:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Node {
+		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
 		var xml = Xml.parse(data);
-		doc.ownerDocument = doc;
-		var e = doc.unmarshal( xml.firstElement(), doc );
-		if( !Std.is(e,Element) ) throw("firstElement is not an Element?");
-		doc.documentElement = cast(e);
-		doc.onLoad();
-		if( onLoad!=null ) onLoad( doc );
-		return doc;
+		var e = parentDocument.unmarshal( xml.firstElement() );
+		e.onLoad();
+		if( onLoad!=null ) onLoad( parentDocument );
+		return e;
 	}
 	
-    public static function load( url_s:String, ?onLoad:Document->Void ) :Document {
-        var doc = new Document();
+    public static function load( url_s:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Void {
+		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
         var url = new URL(url_s);
-        doc.base = url.pathString();
+//        doc.base = url.pathString(); FIXME
         url.fetch( function(data) {
-				instantiate( data, onLoad, doc );
+				instantiate( data, parentDocument, onLoad );
             }, function( error ) {
                 throw(error);
             } );
-        return doc;
     }
 	
 	static var bindings:Hash<IBinding>;
