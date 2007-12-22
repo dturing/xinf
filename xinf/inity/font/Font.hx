@@ -57,11 +57,12 @@ class Font extends xinf.support.Font {
             c = new GlyphCache( this, Math.round(size), size<=12 );
             cache.set(""+Math.round(size),c);
 		}
-		trace("preload: "+this );
+		/*
+		trace("preload: "+this+" "+size );
 		for( i in 32...128 ) {
 			c.get(i);
 		}
-		
+		*/
     }
     
     public function getGlyph( character:Int, fontSize:Float ) :Glyph {
@@ -69,6 +70,7 @@ class Font extends xinf.support.Font {
         
         //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
         if( c==null ) {
+//			trace("not cached "+character+" sz "+fontSize );
             c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
             cache.set(""+Math.round(fontSize),c);
         }
@@ -126,7 +128,7 @@ class Font extends xinf.support.Font {
             } else {
                 var g = getGlyph(c,fontSize);
                 if( g != null ) {
-                    g.render(fontSize);
+                    GL.translate( g.render()/fontSize, 0, 0 );
                 }
             }
         }

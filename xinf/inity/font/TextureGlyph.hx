@@ -63,7 +63,7 @@ class TextureGlyph extends Glyph {
         #end
     }
     
-    override public function render( s:Float ) :Float {
+    override public function render() :Float {
         if( texture!=null ) {
             GL.pushAttrib( GL.ENABLE_BIT );
                 GL.enable( GL.TEXTURE_2D );
@@ -84,6 +84,6 @@ class TextureGlyph extends Glyph {
         } else {
             trace("Trying to render TextureGlyph, but no bitmap set.");
         }
-        return super.render(s);
+        return super.render();
     }
 }

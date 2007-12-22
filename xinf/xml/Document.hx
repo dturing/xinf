@@ -94,7 +94,7 @@ class Document extends Element {
 		var xml = Xml.parse(data);
 		var e = parentDocument.unmarshal( xml.firstElement() );
 		e.onLoad();
-		if( onLoad!=null ) onLoad( parentDocument );
+		if( onLoad!=null ) onLoad( e );
 		return e;
 	}
 	

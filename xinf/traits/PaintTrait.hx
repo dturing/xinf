@@ -191,7 +191,7 @@ class PaintTrait extends TypedTrait<Paint> {
             colorNames.set( "ActiveCaption", Color.rgbI(50,150,50));
 			#end
 
-			#if no-tango-colors
+			#if notango
 			#else true
 				colorNames.set( "yellow", Color.rgbI(0xfc,0xe9,0x4f) );
 				colorNames.set( "orange", Color.rgbI(0xfc,0xaf,0x3e) );

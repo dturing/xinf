@@ -29,6 +29,7 @@ class XinfinityRuntime extends Runtime {
 	
     private var _eventSource:GLEventSource;
 
+	public static var glyphReRenderHack:Bool;
     private static var selectBuffer = CPtr.uint_alloc(64);
     private static var view = CPtr.int_alloc(4);
 
@@ -45,6 +46,8 @@ class XinfinityRuntime extends Runtime {
 		interval = 1/25;
 		bgColor = Color.rgba(1,1,1,0);
     
+		glyphReRenderHack = false;
+	
         _eventSource=new GLEventSource(this);
         
         initGL();
@@ -106,6 +109,13 @@ class XinfinityRuntime extends Runtime {
  		#end
  
         endFrame();
+		
+		if( glyphReRenderHack ) {
+			glyphReRenderHack=false;
+			startFrame();
+			renderRoot();
+			endFrame();
+		}
 
 		timing();
 		

@@ -22,7 +22,7 @@ else
 		PROJECT_LIBS:=-lopengl32 -lglu32 bin/Windows/libOpenVG.dll
 	else
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lOpenVG
+		PROJECT_LIBS:=-lOpenVG -lGL -lGLU
 	endif
 endif
 

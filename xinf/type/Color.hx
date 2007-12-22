@@ -122,7 +122,7 @@ class Color {
     public static var PRIMARY_BLUE:Paint = SolidColor(0,0,1,1);
     public static var TRANSPARENT:Paint = SolidColor(0,0,0,0);
 
-#if no-tango-colors
+#if notango
 #else true
     public static var Butter:Array<Paint> = [ 
         SolidColor(0xfc/0xff,0xe9/0xff,0x4f/0xff,1.),

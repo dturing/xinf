@@ -12,11 +12,9 @@ class Glyph {
         advance = adv;
     }
     
-    public function render( s:Float ) :Float {
+    public function render() :Float {
 
         // "implement here"
-
-        GL.translate( advance/s, .0, .0 );
         
         #if gldebug
             var e:Int = GL.getError();
