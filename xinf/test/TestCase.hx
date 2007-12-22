@@ -10,14 +10,11 @@ import Xinf;
 class TestCase {
     var next:Void->Void;
     var cnx:haxe.remoting.AsyncConnection;
-    var iteration:Int;
 	var suite:String;
     var platform:String;
     var name:String;
-    var expectFail:Bool;
     
     public function new() {
-        iteration = 0;
         platform = 
                 #if neko
                     "inity";
@@ -27,23 +24,22 @@ class TestCase {
                     "js";
                 #end
         name = ""+this;
-        expectFail = false;
     }
     
     public function run( cnx:haxe.remoting.AsyncConnection, next:Void->Void, suite:String ) {
         this.next = next;
         this.cnx = cnx;
 		this.suite = suite;
-        test();
+		
+		var self=this;
+        cnx.test.startTest.call( [ name ], function(r) {
+			self.test();
+		} );
     }
     
     public function test() {
         // empty test
-        finish();
-    }
-
-    public function expectFailure( platform:String ) :Void {
-        if( platform==this.platform ) expectFail=true;
+		next();
     }
 
     public function runAtNextFrame( f:Void->Void ) {
@@ -53,39 +49,30 @@ class TestCase {
                 f();
             });
     }
-
+/*
     public function mouseMove( x:Int, y:Int ) {
         cnx.test.mouseMove.call( [x,y], function(r) { });
     }
     public function mouseButton( b:Int, press:Bool ) {
         cnx.test.mouseButton.call( [b, press], function(r) { });
     }
-
-    public function result( pass:Bool, message:String, ?expectFail:Bool ) :Void {
-        if( expectFail==null ) expectFail=this.expectFail;
-        cnx.test.result.call( [iteration++, name, platform, pass, message, expectFail, null ],
-            function(r) { } );
+*/
+    public function result( pass:Bool, message:String, next:Void->Void ) :Void {
+        cnx.test.result.call( [ pass, message ],
+            function(r) { next(); } );
     }
 
     public function info( message:String ) :Void {
-        cnx.test.info.call( [ name, platform, message],
+        cnx.test.info.call( [message],
             function(r) { } );
     }
 
 
-    public function assertDisplay( result:Bool->Void, width:Float, height:Float, ?targetEquality:Float, ?expectFail:Bool ) {
-        if( expectFail==null ) expectFail=this.expectFail;
-        if( targetEquality==null ) targetEquality=1.0;
-        
+    public function assertDisplay( width:Float, height:Float, result:Float->Void ) {
         var self=this;
-        var handler:Dynamic;
-        handler = xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function(e) {
-            xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
-            
+		runAtNextFrame( function() {
             try {
-                self.cnx.test.shoot.call([ self.iteration++, self.name, self.suite, self.platform, width, height, targetEquality, expectFail ], function( r:Dynamic ) {
-				        result( r>=targetEquality );
-                    } );
+                self.cnx.test.shoot.call([ self.name, self.suite, self.platform, width, height ], result);
             } catch(e:Dynamic) {
                 trace("Cannot make screenshot: "+Std.string(e) );
             }
@@ -93,7 +80,7 @@ class TestCase {
         } );
     }
 
-
+/*
     public function assertEvent<T>( obj:EventDispatcher, type :EventKind<T>, assert :T->Bool, result:Bool->Void, ?timeout:Int ) {
         var self=this;
         var t:Dynamic;
@@ -103,10 +90,11 @@ class TestCase {
                 timeout-=1;
                 if( timeout <= 0 ) {
                     trace("assert event timeout");
-                    self.result( false, "Event timed out" );
-                    xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, t );
-                    obj.removeEventListener( type, h );
-                    result( false );
+                    self.result( false, "Event timed out", function() {
+						xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, t );
+						obj.removeEventListener( type, h );
+						result( false );
+					});
                 }
             });
         
@@ -114,31 +102,26 @@ class TestCase {
                 if( assert(e) ) {
                     xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, t );
                     obj.removeEventListener( type, h );
-                    self.result( true, "Got expected event: "+e );
-                    result( true );
+                    self.result( true, "Got expected event: "+e, function() {
+						result( true );
+					});
                 } else {
                     self.info( "unexpected event: "+e );
                 }
             });
     }
-    
-    public function cleanFinish( ?passed:Bool ) {
+*/
+
+    public function cleanFinish() {
         var r = Root;
         for( c in r.getRootSvg().childNodes ) {
             r.removeChild(c);
         }
 
-        mouseMove( 0, 0 );
-        mouseButton( 1, false );
-        mouseButton( 2, false );
+    //    mouseMove( 0, 0 );
+    //    mouseButton( 1, false );
+    //    mouseButton( 2, false );
 
-        var self=this;
-        runAtNextFrame( function() {
-            self.finish(passed);
-        });
-    }
-
-    public function finish( ?passed:Bool ) {
         runAtNextFrame( next );
     }
 

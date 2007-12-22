@@ -41,35 +41,30 @@ class TestServer {
         out.close();
     }
 
-    static function result( testNumber:Int, testName:String, platform:String, pass:Bool, message:String, expectFail:Bool, imageUrl:String ) :Void {
-        var exp = if( expectFail!=null ) { ""+expectFail; } else { "false"; }
+    static function startTest( testName:String ) {
         var out = neko.io.File.append( resultDir+"/results.xml", false );
-        out.write(
-            "<result test=\""+testName
-            +"\" nr=\""+testNumber
-            +"\" platform=\""+platform
-            +"\" pass=\""+pass
-            +"\" expect-fail=\""+exp+"\"" );
-        if( imageUrl!=null ) {
-            out.write(" image=\""+imageUrl+"\"" );
-        }
-        out.write(
-            ">"+message
-            +"</result>\n");
+        out.write("<case name=\""+testName+"\">\n");
         out.close();
     }
 
-    static function info( testName:String, platform:String, message:String ) :Void {
+    static function result( pass:Bool, message:String ) :Void {
         var out = neko.io.File.append( resultDir+"/results.xml", false );
         out.write(
-            "<info test=\""+testName
-            +"\" platform=\""+platform
+            "\t<result pass=\""+pass 
             +"\">"+message
-            +"</info>\n");
+            +"</result>\n"
+		+"</case>\n");
         out.close();
     }
 
-    static function shoot( testNumber:Int, testName:String, suite:String, platform:String, width, height, targetEquality:Float, expectFail:Bool ) :Float {
+    static function info( message:String ) :Void {
+        var out = neko.io.File.append( resultDir+"/results.xml", false );
+        out.write(
+            "\t<info>"+message+"</info>\n");
+        out.close();
+    }
+
+    static function shoot( testName:String, suite:String, platform:String, width, height ) :Float {
         var baseName = resultDir+"/"+testName+"-";
         var img = baseName+platform+".pnm";
         var diff = baseName+platform+"-diff.pnm";
@@ -89,31 +84,19 @@ class TestServer {
             exitCode = neko.Sys.command("pamarith -difference "+ref+" "+img+" > "+diff );
             if( exitCode == 0 ) exitCode = neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
             if( exitCode != 0 ) {
-				info(testName,platform,"Could not compare reference image. Wrong Size?");
+				info("Could not compare reference image. Wrong Size?");
 				return 0.;
 			}
             
             var eq = 1.0 - Std.parseFloat( neko.io.File.getContent("/tmp/xinftest-diff") );
             
-            
             // convert images to png
             neko.Sys.command("pnmtopng -compression 7 "+img+" > "+baseName+platform+".png");
             neko.Sys.command("pnmtopng -compression 7 "+diff+" > "+baseName+platform+"-diff.png");
             
-            result( testNumber, testName, platform, eq>=targetEquality, ""+eq, expectFail, baseName+platform+".png" );
             return eq;
         } else {
-            info(testName,platform,"reference "+ref+" doesn't exist");
-
-            /*
-        } else {
-            // copy as reference
-            neko.Sys.command("cp "+img+" "+ref );
-            neko.Sys.command("pnmtopng -compression 7 "+ref+" > "+baseName+"reference.png");
-            
-            result( testNumber, testName, platform, false, "reference image generated", true, baseName+"reference.png" );
-            return -2.;
-            */
+            info("reference image '"+ref+"' does not exist");
         }
         return -1.;
     }

@@ -27,17 +27,16 @@ class TestShell {
 
     function runNextCase() {
         if( caseIterator==null || !caseIterator.hasNext() ) {
-            cnx.test.endRun.call([],function(r){ });
-            
-            // FIXME. app.quit()
-            #if neko
-                neko.Sys.exit(0);
-            #end
+            cnx.test.endRun.call([],function(r){ 
+				// FIXME. app.quit()
+				#if neko
+					neko.Sys.exit(0);
+				#end
+			});
             return;
         }
         
         current = caseIterator.next();
-        trace("run test "+current ); // FIXME handle exc?
         current.run( cnx, runNextCase, suite );
     }
     
@@ -60,20 +59,23 @@ class TestShell {
 
         
         // register trace-to-server
-        
+        /*
         var self=this;
         haxe.Log.trace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
             self.cnx.test.info.call(["trace", platform, Std.string(v)],function(r){ } );
         }
+		*/
 
+		runNextCase();
+		
 		while( true ) {
 			try {
-				runNextCase();
 				Root.main();
 			} catch(e:Dynamic) {
 				if( current!=null ) {
-					current.result( false, "Exception: "+e );
-					current.cleanFinish();
+					var cur=current;
+					trace("EXC: "+e );
+					current.result( false, "Exception: "+e,	cur.cleanFinish );
 				} else throw(e);
 			}
 		}

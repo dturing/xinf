@@ -28,17 +28,9 @@ testenv : testd
 	# and ratpoison
 	DISPLAY=$(TEST_DISPLAY) ratpoison &
 
-testi : $(SRC) testd
-	haxe $(HAXEFLAGS) -neko test.n -main xinf.test.svg.SVGTestsuite;
-	NEKOPATH=$(NEKOPATH) neko test.n static/SVG1.2/svg/shapes-rect-01-t.svg 
-
-test12 : $(SRC) testd
-	haxe $(HAXEFLAGS) -neko test.n -main xinf.test.svg.SVG12Testsuite;
-	DISPLAY=$(TEST_DISPLAY) NEKOPATH=$(NEKOPATH) neko test.n
-
 test : $(SRC) testd
-	haxe $(HAXEFLAGS) -neko test.n -main xinf.test.svg.SVG12Testsuite;
-	NEKOPATH=$(NEKOPATH) neko test.n
+	haxe $(HAXEFLAGS) -D notango -neko test.n -main xinf.test.svg.SVG12Testsuite;
+	DISPLAY=$(TEST_DISPLAY) NEKOPATH=$(NEKOPATH) neko test.n
 
 test-flash9 : $(SRC) testd
 	-ps ax | grep "xinf test" | awk '{ print $$1; }'  | xargs kill

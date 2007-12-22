@@ -23,7 +23,7 @@ class SVGTestsuite {
         
         if( runOnly!=null ) {
             #if neko
-            shell.add( new SVGTest( "file://"+runOnly ) );
+            shell.add( new SVGTest( "file://"+runOnly, null, true ) );
             #end
         } else {
 			shell.add( new SVGTest( base+"shapes-intro-01-t.svg" ) );
