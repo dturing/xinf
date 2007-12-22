@@ -23,7 +23,7 @@ class Image extends ElementImpl {
 		y:new LengthTrait(),
 		width:new LengthTrait(),
 		height:new LengthTrait(),
-		xlink__href:new StringTrait(), // FIXME proper namespaces
+		href:new StringTrait(), // FIXME proper namespaces
 	};
 
     public var x(get_x,set_x):Float;
@@ -43,9 +43,9 @@ class Image extends ElementImpl {
     function set_height( v:Float ) :Float { setTrait("height",new Length(v)); redraw(); return v; }
 	
     public var href(get_href,set_href):String; // TODO xlink namespace
-    function get_href() :String { return getTrait("xlink:href",String); }
+    function get_href() :String { return getTrait("href",String); }
     function set_href( v:String ) :String { 
-		setTrait("xlink:href",v);
+		setTrait("href",v);
         return href;
 	}
 
@@ -68,8 +68,7 @@ class Image extends ElementImpl {
 	override public function onLoad() :Void {
 		super.onLoad();
 		if( href!=null ) {
-			var url:URL; var b;
-			if( ownerDocument!=null ) b = ownerDocument.base;
+			var url:URL; var b=base;
 			if( b!=null ) url = new URL(b).getRelativeURL( href );
 			else url = new URL(href);
 			bitmap = load( url.toString() );

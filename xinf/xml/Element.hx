@@ -23,9 +23,23 @@ class Element extends Node,
     var filters :List<Dynamic->Bool>;
 
 	static var TRAITS = {
+		base:new StringTrait(),
 		id:new StringTrait(),
 		name:new StringTrait(),
 	}
+
+    public var base(get_base,set_base):String; // FIXME: maybe, as xml: is not a "normal" namespace prefix, this might actually work... - although, it's not really a style trait, but is inherited...
+    function get_base() :String { 
+		var p:Element=this;
+		var b:String=null;
+		while( p!=null ) {
+			var thisBase = p.getTrait("xml:base",String);
+			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
+			p = p.parentElement;
+		}
+		return b; 
+	} 
+    function set_base( v:String ) :String { return setStyleTrait("xml:base",v); }
 
     /** textual (XML) id **/
     public var id(get_id,set_id):String;

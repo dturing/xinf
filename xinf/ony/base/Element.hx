@@ -52,7 +52,7 @@ class Element extends StyledElement {
 		
 		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 	}
-	
+
     public var visibility(get_visibility,set_visibility):Visibility;
     function get_visibility() :Visibility { 
             return getStyleTrait("visibility",Visibility);

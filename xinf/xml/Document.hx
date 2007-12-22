@@ -10,24 +10,7 @@ import xinf.traits.TraitAccess;
 import xinf.traits.StringTrait;
 
 class Document extends Element {
-
-	static var TRAITS = {
-		xml__base:		new StringTrait(),
-	};
 	
-    public var base(get_base,set_base):String; // FIXME: maybe, as xml: is not a "normal" namespace prefix, this might actually work... - although, it's not really a style trait, but is inherited...
-    function get_base() :String { 
-		var p:Element=this;
-		var b:String=null;
-		while( p!=null ) {
-			var thisBase = p.getTrait("xml:base",String);
-			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
-			p = p.parentElement;
-		}
-		return b; 
-	} 
-    function set_base( v:String ) :String { return setStyleTrait("xml:base",v); }
-
 	public var documentElement(default,null):Element;
     public var elementsById(default,null):Hash<Node>;
     public var styleSheet(default,null):StyleSheet;
@@ -89,10 +72,14 @@ class Document extends Element {
 		return("Document("+base+")");
 	}
 	
-	public static function instantiate( data:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Node {
+	public static function instantiate( data:String, ?base:URL, ?parentDocument:Document, ?onLoad:Node->Void ) :Node {
 		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
 		var xml = Xml.parse(data);
 		var e = parentDocument.unmarshal( xml.firstElement() );
+		if( base!=null && Std.is(e,Element) ) {
+			var el:Element = cast(e);
+			el.base = base.pathString();
+		}
 		e.onLoad();
 		if( onLoad!=null ) onLoad( e );
 		return e;
@@ -101,9 +88,8 @@ class Document extends Element {
     public static function load( url_s:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Void {
 		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
         var url = new URL(url_s);
-//        doc.base = url.pathString(); FIXME
         url.fetch( function(data) {
-				instantiate( data, parentDocument, onLoad );
+				instantiate( data, url, parentDocument, onLoad );
             }, function( error ) {
                 throw(error);
             } );

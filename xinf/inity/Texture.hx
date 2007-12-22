@@ -16,11 +16,11 @@ import xinf.inity.ColorSpace;
 class Texture extends ImageData {
     // texture (id), twidth, theight, width and height are already defined in ImageData.
     
-    public function initialize( w:Int, h:Int, cspace:ColorSpace ) {
+    public function initialize( w:Int, stride:Int, h:Int, cspace:ColorSpace ) {
         width=w;
         height=h;
         
-        twidth = 2; while( twidth<w ) twidth<<=1;
+        twidth = 2; while( twidth<stride ) twidth<<=1;
         theight = 2; while( theight<h ) theight<<=1;
 
         // generate texture id
@@ -63,7 +63,7 @@ class Texture extends ImageData {
         #end
     }
     
-    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, ?cspace:ColorSpace ) :Void {
+    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, stride, ?cspace:ColorSpace ) :Void {
         if( cspace==null ) cspace=RGBA;
     
         GL.pushAttrib( GL.ENABLE_BIT );
@@ -141,11 +141,15 @@ class Texture extends ImageData {
         
         var w = pixbuf.getWidth();
         var h = pixbuf.getHeight();
-        var stride = pixbuf.getRowstride();
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
-        r.initialize( w, h, cs );
+        var stride = pixbuf.getRowstride();
+		trace("Width: "+w+", stride: "+(stride/3) );
+		if( pixbuf.getHasAlpha()>0 ) stride/=4;
+		else stride/=3;
+		
+        r.initialize( w, stride, h, cs );
         var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
-		r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
+		r.setData( d, {x:0, y:0}, {x:stride,y:h}, stride, cs );
         return r;
     }
 

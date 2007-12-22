@@ -16,7 +16,7 @@ class URL {
     }
     
     private function parse( s:String ) :Void {
-        var r:EReg = ~/([a-z]+):\/\/([a-zA-Z-\.]*)(:([0-9]+))?(.*)/;
+        var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
         if( r.match( s ) ) {
             protocol = r.matched(1);
             host = r.matched(2);
