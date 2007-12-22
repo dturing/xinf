@@ -94,13 +94,15 @@ class Element extends Node,
 		
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
-		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
-		Reflect.setField( to, name, def.parse(value) );
+//		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
+		if( def!=null )
+			Reflect.setField( to, name, def.parse(value) );
 	}
 
 	public function setTraitFromDynamic( name:String, value:Dynamic, to:Dynamic ) :Void {
 		var def = getTraitDefinition(name);
-		Reflect.setField( to, name, def.fromDynamic(value) );
+		if( def!=null )
+			Reflect.setField( to, name, def.fromDynamic(value) );
 	}
 	
 	public function setTraitsFromObject( o:Dynamic ) {
@@ -129,7 +131,7 @@ class Element extends Node,
 			t = getClassTrait( cl, name );
 			cl = Type.getSuperClass(cl);
 		}
-		if( t==null ) throw( new TraitNotFoundException(name,this) );
+//		if( t==null ) throw( new TraitNotFoundException(name,this) );
 		return t;
 	}
 	

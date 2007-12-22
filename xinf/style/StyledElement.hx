@@ -36,7 +36,7 @@ class StyledElement extends Element {
 		if( Reflect.hasField(_cache,name) ) return Reflect.field(_cache,name);
 		
 		#if profile
-			xinf.test.Counter.count("getStyleTrait("+name+")");
+//			xinf.test.Counter.count("getStyleTrait("+name+")");
 		#end
 
 		if( inherit==null ) inherit=true;
