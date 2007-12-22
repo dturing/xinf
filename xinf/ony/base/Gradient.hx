@@ -120,6 +120,7 @@ class Gradient extends ElementImpl {
 		for(i in xml.elementsNamed("stop")) {
 			var s = new GradientStop();
 			untyped s.ownerDocument = ownerDocument;
+			untyped s.parentElement = this;
 			s.fromXml(i);
 			stops.push(s);
 		}

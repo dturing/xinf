@@ -99,7 +99,6 @@ class GLVGRenderer extends GLRenderer {
 
 	override function applyFill() :Bool {
 		if( pen.fill==null || pen.fill==None ) return false;
-		
 		if( fill!=null ) VG.destroyPaint( fill );
 		fill = makePaint( pen.fill );
 		VG.setPaint( fill, VG.FILL_PATH );
@@ -143,8 +142,8 @@ class GLVGRenderer extends GLRenderer {
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 		f(path);
         
-		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
 		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
+		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
 		
 		VG.destroyPath(path);
 	}
@@ -160,10 +159,9 @@ class GLVGRenderer extends GLRenderer {
     override public function endShape() {
         if( path==null ) throw("no current Polygon");
 
-		applyFill();
-		applyStroke();
-		VG.drawPath( path, VG.FILL_PATH );
-		VG.drawPath( path, VG.STROKE_PATH );
+		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
+		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
+		
 		VG.destroyPath(path);
         path = null;
     }

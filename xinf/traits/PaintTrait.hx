@@ -172,23 +172,23 @@ class PaintTrait extends TypedTrait<Paint> {
             colorNames.set( "yellow", Color.rgbI(255,255,0));
             colorNames.set( "yellowgreen", Color.rgbI(154,205,50));
 			
-            colorNames.set( "Background", Color.rgbI(200,200,200));
-            colorNames.set( "AppWorkspace", Color.rgbI(230,230,230));
-            colorNames.set( "Window", Color.rgbI(230,230,230));
+            colorNames.set( "Background", Color.rgbI(58,110,165));
+            colorNames.set( "AppWorkspace", Color.rgbI(58,110,165));
+            colorNames.set( "Window", Color.rgbI(255,255,255));
             colorNames.set( "WindowText", Color.rgbI(0,0,0) );
             colorNames.set( "WindowFrame", Color.rgbI(0,0,0) );
-            colorNames.set( "Menu", Color.rgbI(200,200,200));
+            colorNames.set( "Menu", Color.rgbI(212,208,200));
             colorNames.set( "MenuText", Color.rgbI(0,0,0) );
-            colorNames.set( "ButtonFace", Color.rgbI(200,200,200));
-            colorNames.set( "ButtonShadow", Color.rgbI(150,150,150));
-            colorNames.set( "ButtonHighlight", Color.rgbI(240,240,240));
-            colorNames.set( "ThreeDFace", Color.rgbI(200,200,200));
-            colorNames.set( "ThreeDDarkShadow", Color.rgbI(150,150,150));
-            colorNames.set( "ThreeDLightShadow", Color.rgbI(240,240,240));
-            colorNames.set( "HighlightText", Color.rgbI(50,150,50));
-            colorNames.set( "CaptionText", Color.rgbI(0,0,0) );
-            colorNames.set( "ActiveBorder", Color.rgbI(50,150,50));
-            colorNames.set( "ActiveCaption", Color.rgbI(50,150,50));
+            colorNames.set( "ButtonFace", Color.rgbI(212,208,200));
+            colorNames.set( "ButtonShadow", Color.rgbI(64,64,64));
+            colorNames.set( "ButtonHighlight", Color.rgbI(255,255,255));
+            colorNames.set( "ThreeDFace", Color.rgbI(212,208,200));
+            colorNames.set( "ThreeDDarkShadow", Color.rgbI(64,64,64));
+            colorNames.set( "ThreeDLightShadow", Color.rgbI(255,255,255));
+            colorNames.set( "HighlightText", Color.rgbI(255,255,255));
+            colorNames.set( "CaptionText", Color.rgbI(255,255,255) );
+            colorNames.set( "ActiveBorder", Color.rgbI(0,0,0));
+            colorNames.set( "ActiveCaption", Color.rgbI(10,36,106));
 			#end
 
 			#if notango
@@ -234,13 +234,13 @@ class PaintTrait extends TypedTrait<Paint> {
                 color = new Color().fromRGBInt( Std.parseInt("0x"+w) );
             }
         } else if( rgbpercentcolor.match(value) ) {
-            v = SolidColor( Std.parseFloat( rgbcolor.matched(1) )*2.55, 
-                            Std.parseFloat( rgbcolor.matched(2) )*2.55, 
-                            Std.parseFloat( rgbcolor.matched(3) )*2.55, 1. );
+            v = SolidColor( Std.parseFloat( rgbpercentcolor.matched(1) )/100, 
+                            Std.parseFloat( rgbpercentcolor.matched(2) )/100, 
+                            Std.parseFloat( rgbpercentcolor.matched(3) )/100, 1. );
         } else if( rgbcolor.match(value) ) {
-            v = SolidColor( Std.parseInt( rgbcolor.matched(1) ), 
-                            Std.parseInt( rgbcolor.matched(2) ), 
-                            Std.parseInt( rgbcolor.matched(3) ), 1. );
+            v = SolidColor( Std.parseInt( rgbcolor.matched(1) )/255, 
+                            Std.parseInt( rgbcolor.matched(2) )/255, 
+                            Std.parseInt( rgbcolor.matched(3) )/255, 1. );
 		} else if( url.match(value) ) {
 			v = URLReference( url.matched(1) );
         } else if( (color=getColorNames().get(value)) !=null ) {

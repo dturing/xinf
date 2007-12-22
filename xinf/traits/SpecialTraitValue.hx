@@ -34,9 +34,9 @@ class CurrentColor extends SpecialTraitValue {
 	public static var currentColor:CurrentColor = new CurrentColor();
 	
 	override public function get<T>( name:String, type:Class<T>, c:Element ) :Dynamic {
-		var p = c;
+		var p = c; //.parentElement;
 		while( p!=null ) {
-			var v = p.getStyleTrait("color",type,false);
+			var v = p.getStyleTrait("color",type,true);
 			if( v!=null ) return v;
 			p=p.parentElement;
 		}
