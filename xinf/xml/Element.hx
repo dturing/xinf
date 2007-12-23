@@ -110,6 +110,7 @@ class Element extends Node,
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
 //		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
+		
 		if( def!=null )
 			Reflect.setField( to, name, def.parse(value) );
 	}

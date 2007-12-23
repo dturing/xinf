@@ -9,10 +9,12 @@ import xinf.event.ImageLoadEvent;
 
 import xinf.type.URL;
 import xinf.type.Length;
+import xinf.type.PreserveAspectRatio;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.StringTrait;
 import xinf.traits.LengthTrait;
+import xinf.traits.PreserveAspectRatioTrait;
 
 class Image extends ElementImpl {
 
@@ -24,6 +26,8 @@ class Image extends ElementImpl {
 		width:new LengthTrait(),
 		height:new LengthTrait(),
 		href:new StringTrait(), // FIXME proper namespaces
+		
+		preserveAspectRatio: new PreserveAspectRatioTrait( PreserveAspectRatio.None ),
 	};
 
     public var x(get_x,set_x):Float;
@@ -50,6 +54,10 @@ class Image extends ElementImpl {
         return href;
 	}
 
+    public var preserveAspectRatio(get_preserveAspectRatio,set_preserveAspectRatio):PreserveAspectRatio;
+    function get_preserveAspectRatio() :PreserveAspectRatio { return getStyleTrait("preserveAspectRatio",PreserveAspectRatio); }
+    function set_preserveAspectRatio( v:PreserveAspectRatio ) :PreserveAspectRatio { return setStyleTrait("preserveAspectRatio",v); }
+
     public var bitmap(default,set_bitmap):ImageData;
 
     private function set_bitmap(v:ImageData) {
@@ -73,7 +81,7 @@ class Image extends ElementImpl {
 	
 	function resolve() :Void {
 		var url:URL; var b=base;
-		trace("load img "+href+" base "+b+", in "+this );
+//		trace("load img "+href+" base "+b+", in "+this );
 		if( b!=null ) url = new URL(b).getRelativeURL( href );
 		else url = new URL(href);
 		bitmap = load( url.toString() );
