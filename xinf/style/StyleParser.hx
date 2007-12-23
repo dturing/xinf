@@ -64,7 +64,7 @@ class StyleParser {
 				// TODO parse selector
 				var sel = parseSelectorGroup( selText );
 				
-				var s = parseToObject( styleText );
+				var s:Dynamic = parseToObject( styleText );
 				
 				trace(""+sel+" "+s );
 				rules.push( { selector:sel, style:s } );

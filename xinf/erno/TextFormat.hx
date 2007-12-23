@@ -68,6 +68,10 @@ class TextFormat {
         return null;
     }
 
+	public function ascender() :Float {
+		return size;
+	}
+
 	public function assureGlyphs( text:String, size:Float ) :Void {
 	}
 

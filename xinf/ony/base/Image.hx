@@ -84,7 +84,12 @@ class Image extends ElementImpl {
 //		trace("load img "+href+" base "+b+", in "+this );
 		if( b!=null ) url = new URL(b).getRelativeURL( href );
 		else url = new URL(href);
-		bitmap = load( url.toString() );
+		
+		try {
+			bitmap = load( url.toString() );
+		} catch(e:Dynamic) {
+			trace( e );
+		}
 		redraw();
 	}
 

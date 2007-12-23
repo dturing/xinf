@@ -9,7 +9,7 @@ import xinf.erno.Runtime;
 
 class Use extends xinf.ony.base.Use {
 	var clone:ElementImpl;
-	var wrapper:Int;
+	var wrapper:Null<Int>;
 
 	override function set_peer(v:ElementImpl) :ElementImpl {
 		clone = cast(v.cloneNode(true));
