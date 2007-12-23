@@ -22,11 +22,11 @@ class GradientStop extends StyledElement {
 	};
 
     public var stopOpacity(get_stop_opacity,set_stop_opacity):Null<Float>;
-    function get_stop_opacity() :Null<Float> { return getStyleTrait("stop-opacity",Float); }
+    function get_stop_opacity() :Null<Float> { return getStyleTrait("stop-opacity",Float,false); }
     function set_stop_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stop-opacity",v); }
 
     public var stopColor(get_stop_color,set_stop_color):Paint;
-    function get_stop_color() :Paint { return getStyleTrait("stop-color",Paint); }
+    function get_stop_color() :Paint { return getStyleTrait("stop-color",Paint,false); }
     function set_stop_color( v:Paint ) :Paint { return setStyleTrait("stop-color",v); }
 
 	public var offset :Float;

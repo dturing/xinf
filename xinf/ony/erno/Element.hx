@@ -10,6 +10,7 @@ import xinf.type.CapsStyle;
 import xinf.type.JoinStyle;
 import xinf.type.Paint;
 import xinf.type.Visibility;
+import xinf.type.Display;
 import xinf.ony.PaintProvider;
 
 class Element extends xinf.ony.base.Element {
@@ -80,14 +81,10 @@ class Element extends xinf.ony.base.Element {
     public function draw( g:Renderer ) :Void {
 		if( xid==null ) throw("no xid: "+this);
         g.startObject( xid );
-            switch( visibility ) {
-                case Hidden:
-                    // nada
-                default:
-                    drawContents(g);
-            }
+			if( display != Display.None && visibility != Visibility.Hidden )
+				drawContents(g);
         g.endObject();
-        reTransform(g);
+        reTransform(g); // FIXME: needed?
     }
     
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>

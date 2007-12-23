@@ -17,6 +17,7 @@ import xinf.type.Paint;
 import xinf.type.JoinStyle;
 import xinf.type.CapsStyle;
 import xinf.type.Visibility;
+import xinf.type.Display;
 import xinf.type.StringList;
 import xinf.type.TextAnchor;
 
@@ -34,8 +35,10 @@ import xinf.traits.StringChoiceTrait;
 class Element extends StyledElement {
 
 	static var TRAITS = {
-		opacity:		new BoundedFloatTrait(0,1,1),
+		display:		new EnumTrait<Display>( Display, Inline ),
+		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 		
+		opacity:		new BoundedFloatTrait(0,1,1),
 		color:			new PaintTrait(null), // just for "currentColor"
 		fill:			new PaintTrait(SolidColor(0,0,0,1)),
 		fill_opacity:	new BoundedFloatTrait(0,1,1),
@@ -51,18 +54,18 @@ class Element extends StyledElement {
 		font_size:		new UnitFloatTrait(10.),
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
 		text_anchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
-		
-		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 	}
 
+    public var display(get_display,set_display):Display;
+    function get_display() :Display { return getStyleTrait("display",Display,false); }
+    function set_display( v:Display ) :Display { return setStyleTrait("display",v); }
+
     public var visibility(get_visibility,set_visibility):Visibility;
-    function get_visibility() :Visibility { 
-            return getStyleTrait("visibility",Visibility);
-    }
+    function get_visibility() :Visibility { return getStyleTrait("visibility",Visibility); }
     function set_visibility( v:Visibility ) :Visibility { return setStyleTrait("visibility",v); }
 
     public var opacity(get_opacity,set_opacity):Null<Float>;
-    function get_opacity() :Null<Float> { return getStyleTrait("opacity",Float); }
+    function get_opacity() :Null<Float> { return getStyleTrait("opacity",Float,false); }
     function set_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("opacity",v); }
 
     public var fill(get_fill,set_fill):Paint;
