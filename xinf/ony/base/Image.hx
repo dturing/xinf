@@ -46,13 +46,7 @@ class Image extends ElementImpl {
     function get_href() :String { return getTrait("href",String); }
     function set_href( v:String ) :String { 
 		setTrait("href",v);
-		
-			var url:URL; var b=base;
-			if( b!=null ) url = new URL(b).getRelativeURL( href );
-			else url = new URL(href);
-			bitmap = load( url.toString() );
-			redraw();
-			
+		resolve();
         return href;
 	}
 
@@ -72,9 +66,18 @@ class Image extends ElementImpl {
         redraw();
     }
 
-	override function copyProperties( to:Dynamic ) :Void {
-		super.copyProperties(to);
-		if( href!=null ) to.set_href( href );
+	override public function onLoad() :Void {
+		super.onLoad();
+		resolve();
+	}
+	
+	function resolve() :Void {
+		var url:URL; var b=base;
+		trace("load img "+href+" base "+b+", in "+this );
+		if( b!=null ) url = new URL(b).getRelativeURL( href );
+		else url = new URL(href);
+		bitmap = load( url.toString() );
+		redraw();
 	}
 
     public static function load( url:String ) :ImageData {

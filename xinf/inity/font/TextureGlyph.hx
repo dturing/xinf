@@ -51,7 +51,7 @@ class TextureGlyph extends Glyph {
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
             GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
-            GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
+			GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
 
         GL.popAttrib();
 

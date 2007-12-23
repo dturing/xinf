@@ -27,7 +27,7 @@ class Example {
 		var offset={ x:0., y:0. };
 		
 		var trans = function() {
-			return;
+		return;
 			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
 			g.transform = new Concatenate( 
 							new Concatenate(

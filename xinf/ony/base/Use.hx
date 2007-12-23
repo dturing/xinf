@@ -3,6 +3,7 @@
 	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
+import xinf.traits.StringTrait;
 import xinf.traits.LengthTrait;
 import xinf.type.Length;
 
@@ -10,6 +11,7 @@ class Use extends ElementImpl {
 	static var TRAITS = {
 		x:new LengthTrait(),
 		y:new LengthTrait(),
+		href:new StringTrait(),
 	};
 
     public var x(get_x,set_x):Float;
@@ -20,36 +22,33 @@ class Use extends ElementImpl {
     function get_y() :Float { return getTrait("y",Length).value; }
     function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
-    public var href(default,set_href):String;
-    public var peer(default,set_peer):ElementImpl;
+    public var href(get_href,set_href):String;
+    function get_href() :String { return getTrait("href",String); }
+    function set_href( v:String ) :String { resolve(); return setTrait("href",v); }
 
-    private function set_href(v:String) {
-		// for now, we dont support external references
-		var id = v.split("#")[1];
-		peer = ownerDocument.getTypedElementById( id, ElementImpl );
-		if( peer==null ) throw("'Use' peer #"+id+" not found");
-		href = "#"+id;
-		
+    var peer(default,set_peer):ElementImpl;
+
+	function set_peer( p:ElementImpl ) :ElementImpl {
+		peer=p;
+		// TODO: set href to something sensible?
+		//href=null;
 		redraw();
-        return href;
-    }
-	
-	private function set_peer(v:ElementImpl) :ElementImpl {
-		peer = v;
-		// FIXME: set id?
-		redraw();
-		return v;
+		return peer;
 	}
 	
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-		if( xml.exists("xlink:href") ) 
-			href = xml.get("xlink:href");
+    function resolve() {
+		if( href==null ) return;
+		
+		// for now, we dont support external references
+		var id = href.split("#")[1];
+		peer = ownerDocument.getTypedElementById( id, ElementImpl );
+		if( peer==null ) throw("'Use' peer #"+id+" not found");
+		redraw();
     }
-
-	override function copyProperties( to:Dynamic ) :Void {
-		super.copyProperties(to);
-		if( href!=null ) to.set_href( href );
+	
+	override public function onLoad() :Void {
+		super.onLoad();
+		resolve();
 	}
 
 }

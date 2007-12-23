@@ -12,7 +12,7 @@ class Group extends xinf.ony.base.Group {
     
     override function destroy() :Void {
 		// destroy all children
-		/* FIXME maybe? 
+		/* FIXME maybe yes? 
 		for( child in mChildren ) {
 			removeChild( child );
 			if( Std.is(child,Element) ) 

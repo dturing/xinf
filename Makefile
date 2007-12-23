@@ -25,7 +25,9 @@ default: test
 
 test : $(VERSION_STUB) $(SRC) 
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main Example
-	NEKOPATH=$(NEKOPATH) neko test.n
+	NEKOPATH=$(NEKOPATH) neko test.n  
+	#xinf/test/static/SVG1.2/svg/struct-use-01-t.svg 
+
 	
 flash : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main Example

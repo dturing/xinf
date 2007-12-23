@@ -28,11 +28,12 @@ class Element extends Node,
 		name:new StringTrait(),
 	}
 
-    public var base(get_base,set_base):String; // FIXME: maybe, as xml: is not a "normal" namespace prefix, this might actually work... - although, it's not really a style trait, but is inherited...
+    public var base(get_base,set_base):String; // FIXME: it's not really a style trait, but is "somehow" inherited...
     function get_base() :String { 
 		var p:Element=this;
 		var b:String=null;
 		while( p!=null ) {
+//			trace(""+this+" base "+base+" parent "+p.parentElement );
 			var thisBase = p.getTrait("xml:base",String);
 			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
 			p = p.parentElement;

@@ -83,7 +83,7 @@ class Node implements Serializable {
 				clone.appendChild( c );
 			}
 		}
-		
+
 		return clone;
 	}
 

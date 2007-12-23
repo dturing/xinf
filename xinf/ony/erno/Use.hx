@@ -15,22 +15,19 @@ class Use extends xinf.ony.base.Use {
 		clone = cast(v.cloneNode(true));
 		clone.parentElement = this;
 		clone.styleChanged();
+		clone.construct();
+		wrapper = Runtime.runtime.getNextId();
 		return super.set_peer(v);
 	}
 
 	override public function cloneNode( deep:Bool ) :xinf.xml.Node {
 		var n = super.cloneNode(deep);
-		var u:Use = cast(n);
-		u.set_peer(peer);
 		return n;
 	}
 
-	override function construct() :Void {
-		if( clone!=null ) {
-			clone.construct();
-			wrapper = Runtime.runtime.getNextId();
-		}
-		super.construct();
+	override public function onLoad() :Void {
+		super.onLoad();
+		if( clone!=null ) clone.onLoad();
 	}
 	
     override public function draw( g:Renderer ) :Void {

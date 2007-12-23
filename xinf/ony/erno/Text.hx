@@ -25,8 +25,7 @@ class Text extends xinf.ony.base.Text {
         // TODO: weight
 		
 		format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
-		//trace("text format: "+format+", fill: "+fill );
-		format.assureGlyphs( text, size );
+		format.assureGlyphs( text, format.size );
     }
     
     override public function drawContents( g:Renderer ) :Void {
@@ -35,13 +34,14 @@ class Text extends xinf.ony.base.Text {
         if( text!=null ) {
 			switch( textAnchor ) {
 				case Start:
-					g.text(x,y-format.size,text,format);
+					g.text( x,
+						y-(format.font.ascender*format.size),text,format);
 				case Middle:
 					g.text( x-( format.textSize(text).x/2 ),
-						y-format.size,text,format);
+						y-(format.font.ascender*format.size),text,format);
 				case End:
 					g.text( x-( format.textSize(text).x ),
-						y-format.size,text,format);
+						y-(format.font.ascender*format.size),text,format);
 			}
         }
     }

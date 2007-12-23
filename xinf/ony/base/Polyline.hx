@@ -53,7 +53,10 @@ class Polyline extends ElementImpl  {
     function parsePoints( str:String ) :Iterable<TPoint> {
         var ps = new Array<TPoint>();
         var s = pointSplit.split( str );
-        
+
+		// odd number of coordinates - invalid, shall not be rendered.
+		if( s.length % 2 != 0 ) return ps;
+
         while( s.length>1 ) {
             var x = Std.parseFloat( s.shift() );
             var y = Std.parseFloat( s.shift() );

@@ -15,13 +15,13 @@ class Font extends xinf.support.Font {
         if( weight==null ) weight=100;
         if( slant==null ) slant=0;
         
+		if( name=="_sans" || name=="" || name==null ) { name="FreeSans"; }
+        
         var font:Font;
         font = fonts.get(name);
         if( font != null ) return font;
         
         var data:String;
-        if( name=="_sans" ) { name=="sans"; }
-        
         var file = ""+xinf.support.Font.findFont(name,weight,slant,12.0);
         if( file==null || file=="" ) throw("Unable to load font "+name+": "+file );
 
@@ -31,7 +31,7 @@ class Font extends xinf.support.Font {
 			data = neko.io.File.getContent( file );
 			font = new Font( data, 12 );
 		} catch( e:Dynamic ) {
-			trace("Couldn't load font: using bundled Vera");
+			trace("Couldn't load font: using bundled Vera: "+e);
 			data = neko.io.File.getContent( xinf.support.DLLLoader.getXinfLibPath()+"/../vera.ttf" );
 			font = new Font( data, 12 );
 		}
@@ -50,25 +50,11 @@ class Font extends xinf.support.Font {
         var s = Math.round(size<<24);
         super( data, s, s );
         cache = new Hash<GlyphCache>();
-
-		// FIXME
-        var c = cache.get(""+Math.round(size));
-        if( c==null ) {
-            c = new GlyphCache( this, Math.round(size), size<=12 );
-            cache.set(""+Math.round(size),c);
-		}
-		/*
-		trace("preload: "+this+" "+size );
-		for( i in 32...128 ) {
-			c.get(i);
-		}
-		*/
     }
     
     public function getGlyph( character:Int, fontSize:Float ) :Glyph {
         var c = cache.get(""+Math.round(fontSize));
         
-        //if( c==null ) throw("no cache for fontsize "+fontSize+": Implement OutlineCache (TODO)");
         if( c==null ) {
 //			trace("not cached "+character+" sz "+fontSize );
             c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );

@@ -24,7 +24,7 @@ class Document extends Element {
 	
     public function getElementById( id:String ) :Node {
         var r = elementsById.get(id);
-        if( r==null ) throw("No such Element #"+id+" in "+this+", els: "+elementsById );
+        if( r==null ) throw("No such Element #"+id+" in "+this );
         return r;
     }
 

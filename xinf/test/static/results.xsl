@@ -37,7 +37,7 @@
                     <tr>
                         <td><xsl:value-of select="@name"/></td>
                         <td>
-                            <a href="static/{../@suite}/png/{@name}.png"><img width="40" height="30" style="background:white;" src="static/{../@suite}/png/{@name}.png"/></a>
+                            <a href="static/{../@suite}/png/{@name}.png"><img width="80" height="60" style="background:white;" src="static/{../@suite}/png/{@name}.png"/></a>
                             <!-- <a href="static/{../@suite}/svg/{@name}.svg">SVG</a> -->
                         </td>
                         <xsl:for-each select="//testrun">
@@ -65,14 +65,10 @@
         </xsl:choose>
         </xsl:variable>
 
-        <td style="{$style}"
-            title="{.}">
-            <a href="results/{@name}-{../@platform}.png"><img width="40" height="30" style="background:white;" src="results/{@name}-{../@platform}.png"/></a>
-			<a href="results/{@name}-{../@platform}-diff.png"><img width="40" height="30" style="background:white;" src="results/{@name}-{../@platform}-diff.png"/></a>
-            <xsl:if test="@image">
-                <a href="{@image}"><img width="40" height="30" src="{@image}"></img></a>
-                <a href="results/{@test}-{@platform}-diff.png"><img width="40" height="30" src="results/{@test}-{@platform}-diff.png"></img></a>
-            </xsl:if>
+        <td style="{$style}">
+            <a href="results/{@name}-{../@platform}.png"><img width="80" height="60" style="background:white;" src="results/{@name}-{../@platform}.png"/></a>
+			<a href="results/{@name}-{../@platform}-diff.png"><img width="80" height="60" style="background:white;" src="results/{@name}-{../@platform}-diff.png"/></a>
+			<div><xsl:value-of select="."/></div>
         </td>
     </xsl:template>
 
