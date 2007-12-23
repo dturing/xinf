@@ -211,7 +211,7 @@ class TransformParser {
     static var splitNumbers = ~/[,\r\n\t]/g;
     static var translate = ~/translate\([ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n,]+[ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n]*\)/;
     static var rotate = ~/rotate\(([0-9eE\.\-]+)([ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n]?)?\)/; 
-    static var matrix = ~/matrix\(([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+),([0-9eE\.\-]+)\)/;
+    static var matrix = ~/matrix\(([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)\)/;
     static var scale = ~/scale\(([0-9eE\.\-, ]+)\)/;
     static var skewX = ~/skewX\((\-*[0-9eE\.]+)\)/;
     static var skewY = ~/skewY\((\-*[0-9eE\.]+)\)/;

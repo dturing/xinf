@@ -19,11 +19,18 @@ class TestShell {
         cnx = haxe.remoting.AsyncConnection.urlConnect( serverUrl );
         cnx.onError = function(err) { throw( err ); };
         cases = new Array<TestCase>();
+		Root.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
     }
     
     public function add( t:TestCase ) {
         cases.push(t);
     }
+	
+	function onEnterFrame( e:FrameEvent ) {
+		if( current!=null && current.finished ) {
+			runNextCase();
+		}
+	}
 
     function runNextCase() {
         if( caseIterator==null || !caseIterator.hasNext() ) {
@@ -35,9 +42,9 @@ class TestShell {
 			});
             return;
         }
-        
-        current = caseIterator.next();
-        current.run( cnx, runNextCase, suite );
+
+		current = caseIterator.next();
+        current.run( cnx, function() { }, suite );
     }
     
 
@@ -74,8 +81,8 @@ class TestShell {
 			} catch(e:Dynamic) {
 				if( current!=null ) {
 					var cur=current;
-					trace("EXC: "+e );
-					current.result( false, "Exception: "+e,	cur.cleanFinish );
+				//	trace("EXC: "+e );
+					current.result( false, "Exception: "+e,	function() { cur.cleanFinish(); } );
 				} else throw(e);
 			}
 		}

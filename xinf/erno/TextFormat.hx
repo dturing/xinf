@@ -67,11 +67,9 @@ class TextFormat {
         // children should assureLoaded() if they expect load() to be called when dirty.
         return null;
     }
-    /*
-    public function applyToNative( n:NativeObject ) :Void {
-        // children should assureLoaded() if they expect load() to be called when dirty.
-    }
-    */
+
+	public function assureGlyphs( text:String, size:Float ) :Void {
+	}
 
     public function load() :Void {
         dirty=false;

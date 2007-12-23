@@ -16,12 +16,12 @@ class Polyline extends ElementImpl  {
         points=v; redraw(); return points;
     }
 
-    public function new() :Void {
-        super();
+    public function new(?traits:Dynamic) :Void {
+        super(traits);
         points = null;
     }
 
-	override function getBoundingBox() : TRectangle {
+	override public function getBoundingBox() : TRectangle {
 		var pi = points.iterator();
 		if( !pi.hasNext() ) {
 			return { l:0., t:0., r:0., b:0. };
@@ -44,6 +44,10 @@ class Polyline extends ElementImpl  {
             points = parsePoints( xml.get("points") );
     }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		if( points!=null ) to.points = points;
+	}
 
 	static var pointSplit = ~/[ ,]+/g;
     function parsePoints( str:String ) :Iterable<TPoint> {

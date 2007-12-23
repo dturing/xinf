@@ -9,7 +9,7 @@ import xinf.type.Paint;
 class Image extends xinf.ony.base.Image {
     
     override public function drawContents( g:Renderer ) :Void {
-        if( bitmap==null ) {
+		if( bitmap==null ) {
             // "empty"
             g.setStroke( SolidColor(1,0,0,1), 1 );
             g.setFill( SolidColor(.5,.5,.5,.5) );

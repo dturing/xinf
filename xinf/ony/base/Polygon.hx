@@ -43,11 +43,19 @@ class Polygon extends ElementImpl {
             points = parsePoints( xml.get("points") );
     }
 
+	override function copyProperties( to:Dynamic ) :Void {
+		super.copyProperties(to);
+		if( points!=null ) to.points = points;
+	}
+
     static var pointSplit = ~/[ ,]+/g;
     function parsePoints( str:String ) :Iterable<TPoint> {
         var ps = new Array<TPoint>();
         var s = pointSplit.split( str );
         
+		// odd number of coordinates - invalid, shall not be rendered.
+		if( s.length % 2 != 0 ) return ps;
+		
         while( s.length>1 ) {
             var x = Std.parseFloat( s.shift() );
             var y = Std.parseFloat( s.shift() );

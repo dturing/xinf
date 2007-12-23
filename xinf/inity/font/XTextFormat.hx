@@ -22,5 +22,12 @@ class XTextFormat extends xinf.erno.TextFormat {
             font = Font.getFont("_sans");
         }
     }
-    
+
+	override public function assureGlyphs( text:String, size:Float ) :Void {
+		assureLoaded();
+		for( i in 0...text.length ) {
+			font.getGlyph( text.charCodeAt(i), size );
+		}
+	}
+
 }

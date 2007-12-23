@@ -225,6 +225,7 @@ class Element extends Node,
 		
 		// copy traits
 		to._traits = Reflect.copy(_traits);
+		if( to._traits.id!=null ) to._traits.id+="'";
 		
 		// copy my event listeners
 		to.listeners = new Hash<List<Dynamic->Void>>();

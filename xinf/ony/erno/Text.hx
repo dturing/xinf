@@ -18,17 +18,18 @@ class Text extends xinf.ony.base.Text {
     override public function styleChanged() :Void {
         super.styleChanged();
         
-	//	format=null;
+		if( text==null ) return;
+		
+		var family = fontFamily;
+		var size = fontSize;
         // TODO: weight
+		
+		format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
+		//trace("text format: "+format+", fill: "+fill );
+		format.assureGlyphs( text, size );
     }
     
     override public function drawContents( g:Renderer ) :Void {
-		if( format==null ) {
-			var family = fontFamily;
-			var size = fontSize;
-			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
-			//trace("text format: "+format+", fill: "+fill );
-		}
 		
         super.drawContents(g);
         if( text!=null ) {

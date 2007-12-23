@@ -64,14 +64,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		switch( pen.fill ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
-			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
-				trace("Warning: Gradients not yet implemented");
-				var c = stops.iterator().next().color;
-				GL.color4( c.r, c.g, c.b, c.a );
-			case None:
-				return false;
 			default:
-				throw("unimplemented fill paint: "+pen.fill );
+				return false;
 		}
 		return true;
 	}
@@ -81,10 +75,8 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 		switch( pen.stroke ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
-			case None:
-				return false;
 			default:
-				throw("unimplemented stroke paint: "+pen.stroke );
+				return false;
 		}
 		GL.lineWidth( pen.width );
 		return true;

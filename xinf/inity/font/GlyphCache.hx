@@ -20,7 +20,7 @@ class GlyphCache {
     public function get( character:Int ) {
         var g = glyphs.get(character);
         if( g==null ) {
-			xinf.inity.XinfinityRuntime.glyphReRenderHack = true;
+//			trace("caching glyph "+character );
 			try {
 				g = new TextureGlyph( character, font, size, hint );
 				glyphs.set(character,g);

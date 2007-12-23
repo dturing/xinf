@@ -143,8 +143,7 @@ class Texture extends ImageData {
         var h = pixbuf.getHeight();
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
         var stride = pixbuf.getRowstride();
-		trace("Width: "+w+", stride: "+(stride/3) );
-		if( pixbuf.getHasAlpha()>0 ) stride/=4;
+		if( pixbuf.getHasAlpha()>0 ) stride/=4; // FIXME: no korrekt (check with software renderer)
 		else stride/=3;
 		
         r.initialize( w, stride, h, cs );

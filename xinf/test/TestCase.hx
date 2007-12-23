@@ -13,6 +13,7 @@ class TestCase {
 	var suite:String;
     var platform:String;
     var name:String;
+	public var finished:Bool;
     
     public function new() {
         platform = 
@@ -24,6 +25,7 @@ class TestCase {
                     "js";
                 #end
         name = ""+this;
+		finished=false;
     }
     
     public function run( cnx:haxe.remoting.AsyncConnection, next:Void->Void, suite:String ) {
@@ -32,7 +34,7 @@ class TestCase {
 		this.suite = suite;
 		
 		var self=this;
-        cnx.test.startTest.call( [ name ], function(r) {
+		cnx.test.startTest.call( [ name ], function(r) {
 			self.test();
 		} );
     }
@@ -44,9 +46,10 @@ class TestCase {
 
     public function runAtNextFrame( f:Void->Void ) {
         var handler:Dynamic;
+		var self=this;
         handler = xinf.erno.Runtime.addEventListener( xinf.event.FrameEvent.ENTER_FRAME, function(e) {
                 xinf.erno.Runtime.removeEventListener( xinf.event.FrameEvent.ENTER_FRAME, handler );
-                f();
+				if( !self.finished ) f();
             });
     }
 /*
@@ -57,9 +60,14 @@ class TestCase {
         cnx.test.mouseButton.call( [b, press], function(r) { });
     }
 */
-    public function result( pass:Bool, message:String, next:Void->Void ) :Void {
+    public function result( pass:Bool, message:String, tnext:Void->Void ) :Void {
+		if( finished ) {
+			return;
+		}
+		finished=true;
+		
         cnx.test.result.call( [ pass, message ],
-            function(r) { next(); } );
+            function(r) { tnext(); } );
     }
 
     public function info( message:String ) :Void {
@@ -71,12 +79,7 @@ class TestCase {
     public function assertDisplay( width:Float, height:Float, result:Float->Void ) {
         var self=this;
 		runAtNextFrame( function() {
-            try {
                 self.cnx.test.shoot.call([ self.name, self.suite, self.platform, width, height ], result);
-            } catch(e:Dynamic) {
-                trace("Cannot make screenshot: "+Std.string(e) );
-            }
-                
         } );
     }
 
@@ -122,7 +125,7 @@ class TestCase {
     //    mouseButton( 1, false );
     //    mouseButton( 2, false );
 
-        runAtNextFrame( next );
+        next();
     }
 
 

@@ -133,6 +133,7 @@ typedef SimplifiedPathRenderer = {
 	var quadraticTo:Float->Float->Float->Float->Void;
 	var cubicTo:Float->Float->Float->Float->Float->Float->Void;
 	var arcTo:Float->Float->Float->Bool->Bool->Float->Float->Void;
+	var close:Void->Void;
 	/* means:
 	public function startPath( x:Float, y:Float ) :Void;
 	public function endPath() :Void;
@@ -140,6 +141,7 @@ typedef SimplifiedPathRenderer = {
     public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) :Void;
     public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) :Void;
     public function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void;
+	public function close() :Void;
 	*/
 }
 
@@ -211,8 +213,7 @@ class Path extends ElementImpl {
 
                 case Close:
                     if( open ) {
-                        // FIXME depends on various things...
-                        g.lineTo( first.x, first.y );
+						g.close();
                         g.endPath();
                         last=first;
                     }

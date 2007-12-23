@@ -3,8 +3,23 @@
 	
 package xinf.ony.base;
 import xinf.ony.base.Implementation;
+import xinf.traits.LengthTrait;
+import xinf.type.Length;
 
 class Use extends ElementImpl {
+	static var TRAITS = {
+		x:new LengthTrait(),
+		y:new LengthTrait(),
+	};
+
+    public var x(get_x,set_x):Float;
+    function get_x() :Float { return getTrait("x",Length).value; }
+    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
+	
+    public var y(get_y,set_y):Float;
+    function get_y() :Float { return getTrait("y",Length).value; }
+    function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
+
     public var href(default,set_href):String;
     public var peer(default,set_peer):ElementImpl;
 
@@ -34,8 +49,7 @@ class Use extends ElementImpl {
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
-		if( href!=null ) to.href = href;
-		trace("clone use href: "+href+" "+peer );
+		if( href!=null ) to.set_href( href );
 	}
 
 }
