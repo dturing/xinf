@@ -33,7 +33,16 @@ class Text extends xinf.ony.base.Text {
 		
         super.drawContents(g);
         if( text!=null ) {
-			g.text(x,y-format.size,text,format);
+			switch( textAnchor ) {
+				case Start:
+					g.text(x,y-format.size,text,format);
+				case Middle:
+					g.text( x-( format.textSize(text).x/2 ),
+						y-format.size,text,format);
+				case End:
+					g.text( x-( format.textSize(text).x ),
+						y-format.size,text,format);
+			}
         }
     }
     

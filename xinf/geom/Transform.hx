@@ -261,10 +261,10 @@ class TransformParser {
 				var cx = Std.parseFloat(rotate.matched(3));
 				var cy = Std.parseFloat(rotate.matched(4));
 				r = new Concatenate(
-						new Translate(cx,cy),
+						new Translate(-cx,-cy),
 						new Concatenate(
 							new Rotate(a*D2R),
-							new Translate(-cx,-cy)
+							new Translate(cx,cy)
 						)
 					);
 			}

@@ -18,6 +18,7 @@ import xinf.type.JoinStyle;
 import xinf.type.CapsStyle;
 import xinf.type.Visibility;
 import xinf.type.StringList;
+import xinf.type.TextAnchor;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.BoundedFloatTrait;
@@ -49,6 +50,7 @@ class Element extends StyledElement {
 		font_family:	new StringListTrait(),
 		font_size:		new UnitFloatTrait(10.),
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
+		text_anchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
 		
 		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 	}
@@ -83,14 +85,6 @@ class Element extends StyledElement {
     function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke-opacity",Float); }
     function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-opacity",v); }
 
-    public var fontFamily(get_font_family,set_font_family):StringList;
-    function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
-    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
-
-    public var fontSize(get_font_size,set_font_size):Float;
-    function get_font_size() :Float { return getStyleTrait("font-size",Float); }
-    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",v); }
-
     public var lineJoin(get_line_join,set_line_join):JoinStyle;
     function get_line_join() :JoinStyle { return getStyleTrait("stroke-linejoin",JoinStyle); }
     function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("stroke-linejoin",v); }
@@ -103,8 +97,19 @@ class Element extends StyledElement {
     function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("stroke-miterlimit",Float); }
     function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-miterlimit",v); }
 
-	// TODO fontWeight
+	public var fontFamily(get_font_family,set_font_family):StringList;
+    function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
+    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
 
+    public var fontSize(get_font_size,set_font_size):Float;
+    function get_font_size() :Float { return getStyleTrait("font-size",Float); }
+    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",v); }
+
+	// TODO fontWeight, Slant, smallCaps
+
+    public var textAnchor(get_text_anchor,set_text_anchor):TextAnchor;
+    function get_text_anchor() :TextAnchor { return getStyleTrait("text-anchor",TextAnchor); }
+    function set_text_anchor( v:TextAnchor ) :TextAnchor { return setStyleTrait("text-anchor",v); }
 
     override function set_id( v:String ) :String { 
 		if( ownerDocument!=null ) {
