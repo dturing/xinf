@@ -49,6 +49,8 @@ class TextArea extends xinf.ony.base.TextArea {
 	override public function styleChanged() :Void {
         super.styleChanged();
 		format=null;
+		assureFormat();
+		updateContents( text );
     }
 
 	function assureFormat() {
@@ -61,58 +63,72 @@ class TextArea extends xinf.ony.base.TextArea {
 		}
 	}
 	
-    function updateContents( text:String, width:Float ) :Void {
+    function updateContents( text:String ) :Void {
 		if( text==null ) return;
 		dirty=false;
+		assureFormat();
 		
-        var x=0.;
-        assureFormat();
-		var _format = format;
-        var ls = lines = new Array<TextLine>();
-        var line = new StringBuf();
-        var word = new StringBuf();
-		var offset:Int = 0;
-		var lastOffset:Int = 0;
-        var nextLine = function() {
-				var t = line.toString();
-				if( t.length>0 ) {
-					offset = lastOffset+t.length;
-					ls.push( { offset:lastOffset, text:t } );
-					lastOffset = offset;
-					line = new StringBuf();
-					x=0.;
+		var ls = lines = new Array<TextLine>();
+
+		var font = format.font;
+		var lineHeight = lineIncrement;
+		var w=width;
+		var h=Math.floor(height/lineIncrement);
+
+		var start=0;
+		var lastOffset=0;
+		var lastSpace=0;
+		var lastSpaceX=0.;
+		var x=0.;
+		var spaceAdvance = font.getGlyph(32,format.size).advance;
+
+		var push = function( to:Int ) {
+			var t = text.substr(lastOffset,to-lastOffset);
+			if( t.length==0 ) return;
+			ls.push({ offset: lastOffset,
+						 text: t });
+			//trace("push '"+t+"'" );
+			lastOffset=to;
+		}
+		
+		for( i in 0...text.length ) {
+			var c = text.charCodeAt(i);
+			var g = font.getGlyph(c,format.size);
+		//	trace("char "+(String.fromCharCode(c))+", x "+x+"+"+g.advance );
+			if( x+g.advance > w && c!=32 ) {
+				if( lastSpace==0 ) { // split at character boundary
+				//	trace("char split");
+					push( i );
+					x=0;
+				} else { // split at word boundary
+				//	trace("word split at "+i+", lastSpace "+lastSpace);
+					push( lastSpace );
+					x-=lastSpaceX+spaceAdvance;
+					lastOffset++;
+					lastSpace=0;
 				}
-            }
-        var pushWord = function() {
-                var wd = word.toString()+" ";
-                var s = _format.textSize(wd);
-                if( s.x+x > width ) nextLine();
-                x+=s.x;
-                line.add( wd );
-                word = new StringBuf();
-            }
-        for( i in 0...text.length ) { 
-		//	offset=i;
-            var c = text.charCodeAt(i);
-            if( c==10 ) {
-                pushWord();
-                nextLine();
+			}
+			
+			if( c==10 ) {
+				push(i); lastOffset++;
             } else if( ( c>=9 && c<=13 ) || c==32 ) {
-                pushWord();
-            } else {
-				offset=i;
-                word.addChar(c);
-            }
-        }
-        pushWord();
-        nextLine();
-		
+				//trace("space at "+i+", last "+lastOffset );
+				lastSpaceX=x;
+				x+=g.advance;
+				lastSpace=i;
+			} else {
+				x+=g.advance;
+			}
+			if( ls.length>=h ) return;
+		}
+		push( text.length );
+
 		redraw();
     }
 
     override public function drawContents( g:Renderer ) :Void {
 		if( dirty ) {
-			updateContents( text, width );		
+			updateContents( text );	
 		}
 	
 		assureFormat();
@@ -132,20 +148,18 @@ class TextArea extends xinf.ony.base.TextArea {
             
             GL.pushMatrix();
             for( line in lines ) {
-				if( y < (this.y-format.size)+height ) {
-					GL.translate( .0, y, 0. );
-					var text = line.text;
-					for( i in 0...text.length ) {
-						var g = format.font.getGlyph( text.charCodeAt(i), format.size );
-						if( g!=null ) {
-							g.render();
-						}
+				GL.translate( .0, y, 0. );
+				var text = line.text;
+				for( i in 0...text.length ) {
+					var g = format.font.getGlyph( text.charCodeAt(i), format.size );
+					if( g!=null ) {
+						GL.translate( g.render()/format.size, 0, 0 );
 					}
-					
-					y+=lineHeight;
-					GL.popMatrix();
-					GL.pushMatrix();
 				}
+				
+				y+=lineHeight;
+				GL.popMatrix();
+				GL.pushMatrix();
             }
             GL.popMatrix();
             GL.popMatrix();

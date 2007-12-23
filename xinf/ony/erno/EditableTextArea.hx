@@ -167,7 +167,7 @@ class EditableTextArea extends TextArea {
 		if( lines==null || lines.length==0 ) return { x:0., y:0. };
 		
 		if( dirty ) {
-			updateContents( text, width );		
+			updateContents( text );
 		}
 		
 		var line:Int=1;
