@@ -16,6 +16,8 @@ enum GradientUnits {
 
 class Gradient extends ElementImpl {
 	
+	/* TODO: convert to traits */
+	
     public var href(default,set_href):String;
     public var peer(default,set_peer):Gradient;
 

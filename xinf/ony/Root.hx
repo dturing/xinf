@@ -20,18 +20,23 @@ class Root {
 	
 	public static function getRootSvg() :Svg {
 		if( mRoot==null ) {
-			var r = new xinf.ony.erno.Root();
 			mRoot = new Svg();
-			untyped r.ownerDocument = new Document(); // FIXME
-			untyped r.ownerDocument.set_base("");
-			untyped r.construct();
-			r.appendChild( mRoot );
+			untyped mRoot.ownerDocument = new Document(); // FIXME
+			untyped mRoot.ownerDocument.set_base("");
 			
-			Root.width = Root.height = 100;
-			xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
-				Root.width = e.x; Root.height = e.y;
-				mRoot.width = e.x; mRoot.height = e.y;
-			});
+			#if xinfony_null
+			#else true
+				var r = new xinf.ony.erno.Root();
+				untyped r.construct();
+				r.appendChild( mRoot );
+				
+				// FIXME: this is crap.
+				Root.width = Root.height = 100;
+				xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
+					Root.width = e.x; Root.height = e.y;
+					mRoot.width = e.x; mRoot.height = e.y;
+				});
+			#end
 		}
 		return mRoot;
 	}

@@ -110,8 +110,8 @@ class Element extends xinf.ony.base.Element {
 
 		if( stroke!=null ) {
 			var w = strokeWidth;
-			var caps = lineCap;
-			var join = lineJoin;
+			var caps = strokeLinecap;
+			var join = strokeLinejoin;
 			var miterLimit = strokeMiterlimit;
 			// TODO: dash
 			var dashArray:Iterable<Float> = null;

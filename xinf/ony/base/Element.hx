@@ -88,11 +88,11 @@ class Element extends StyledElement {
     function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke-opacity",Float); }
     function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-opacity",v); }
 
-    public var lineJoin(get_line_join,set_line_join):JoinStyle;
+    public var strokeLinejoin(get_line_join,set_line_join):JoinStyle;
     function get_line_join() :JoinStyle { return getStyleTrait("stroke-linejoin",JoinStyle); }
     function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("stroke-linejoin",v); }
 
-    public var lineCap(get_line_cap,set_line_cap):CapsStyle;
+    public var strokeLinecap(get_line_cap,set_line_cap):CapsStyle;
     function get_line_cap() :CapsStyle { return getStyleTrait("stroke-linecap",CapsStyle); }
     function set_line_cap( v:CapsStyle ) :CapsStyle { return setStyleTrait("stroke-linecap",v); }
 
