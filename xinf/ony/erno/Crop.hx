@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 
-class Crop extends xinf.ony.base.Crop  {
+class Crop extends xinf.ony.Crop  {
 
     override public function drawContents( g:Renderer ) :Void {
 		g.clipRect( width, height );

@@ -7,7 +7,7 @@ import xinf.erno.Renderer;
 import xinf.type.Paint;
 import xinf.traits.PreserveAspectRatioTrait;
 
-class Image extends xinf.ony.base.Image {
+class Image extends xinf.ony.Image {
     
     override public function drawContents( g:Renderer ) :Void {
 		if( bitmap==null ) {

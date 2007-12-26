@@ -13,7 +13,7 @@ import xinf.type.Visibility;
 import xinf.type.Display;
 import xinf.ony.PaintProvider;
 
-class Element extends xinf.ony.base.Element {
+class Element extends xinf.ony.Element {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;

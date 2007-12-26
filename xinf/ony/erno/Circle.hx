@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 
-class Circle extends xinf.ony.base.Circle  {
+class Circle extends xinf.ony.Circle  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( r!=0 ) {

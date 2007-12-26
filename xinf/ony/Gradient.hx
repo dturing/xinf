@@ -1,10 +1,10 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.ony.base;
+package xinf.ony;
 
 import xinf.geom.Transform;
-import xinf.ony.base.Implementation;
+import xinf.ony.Implementation;
 import xinf.type.SpreadMethod;
 import xinf.type.TGradientStop;
 import xinf.type.Paint;

@@ -6,7 +6,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.geom.Types;
 
-class Polygon extends xinf.ony.base.Polygon  {
+class Polygon extends xinf.ony.Polygon  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( points==null ) return;

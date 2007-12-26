@@ -26,7 +26,7 @@ typedef TextLine = {
     text: String
 }
 
-class TextArea extends xinf.ony.base.TextArea {
+class TextArea extends xinf.ony.TextArea {
 
     var contents :Array<FlowElement>;
     var lines :Array<TextLine>;
@@ -174,7 +174,7 @@ class TextArea extends xinf.ony.base.TextArea {
 import xinf.type.Editability;
 import xinf.type.Color;
 
-class TextArea extends xinf.ony.base.TextArea {
+class TextArea extends xinf.ony.TextArea {
 
     var format:TextFormat;
 	var tf:flash.text.TextField;
@@ -240,7 +240,7 @@ class TextArea extends xinf.ony.base.TextArea {
 import xinf.type.Editability;
 import xinf.type.Color;
 
-class TextArea extends xinf.ony.base.TextArea {
+class TextArea extends xinf.ony.TextArea {
 
     var format:TextFormat;
 

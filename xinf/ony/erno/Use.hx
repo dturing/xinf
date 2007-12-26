@@ -3,11 +3,11 @@
 	
 package xinf.ony.erno;
 
-import xinf.ony.base.Implementation;
+import xinf.ony.Implementation;
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 
-class Use extends xinf.ony.base.Use {
+class Use extends xinf.ony.Use {
 	var clone:ElementImpl;
 	var wrapper:Null<Int>;
 

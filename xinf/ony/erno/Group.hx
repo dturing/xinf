@@ -9,7 +9,7 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.xml.Node;
 import xinf.type.Display;
 
-class Group extends xinf.ony.base.Group {
+class Group extends xinf.ony.Group {
     
     override function destroy() :Void {
 		// destroy all children

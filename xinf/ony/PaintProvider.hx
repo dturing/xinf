@@ -3,7 +3,7 @@
 	
 package xinf.ony;
 
-import xinf.ony.base.Element;
+import xinf.ony.Element;
 import xinf.type.Paint;
 
 interface PaintProvider { 

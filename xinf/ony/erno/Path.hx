@@ -7,7 +7,7 @@ import xinf.erno.Renderer;
 
 import xinf.ony.PathSegment;
 
-class Path extends xinf.ony.base.Path  {
+class Path extends xinf.ony.Path  {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
@@ -15,7 +15,7 @@ class Path extends xinf.ony.base.Path  {
         
         g.startShape();
 
-		xinf.ony.base.Path.simplify( segments, untyped g ); // FIXME
+		xinf.ony.Path.simplify( segments, untyped g ); // FIXME
 
         g.endShape();
     }

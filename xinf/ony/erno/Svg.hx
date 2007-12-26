@@ -11,7 +11,7 @@ import xinf.xml.Document;
 import xinf.xml.Binding;
 import xinf.xml.Instantiator;
 
-class Svg extends xinf.ony.base.Svg {
+class Svg extends xinf.ony.Svg {
 
 	public function new( ?traits:Dynamic ) {
 		super(traits);
@@ -41,9 +41,9 @@ class Svg extends xinf.ony.base.Svg {
 		binding.add( "use", Use );
         binding.add( "defs", Definitions );
 		
-        binding.add( "linearGradient", xinf.ony.base.LinearGradient );
-        binding.add( "radialGradient", xinf.ony.base.RadialGradient );
-		binding.add( "style", xinf.ony.base.Style );
+        binding.add( "linearGradient", xinf.ony.LinearGradient );
+        binding.add( "radialGradient", xinf.ony.RadialGradient );
+		binding.add( "style", xinf.ony.Style );
 		
 		xinf.xml.Document.addBinding( svgNamespace, binding );
     }

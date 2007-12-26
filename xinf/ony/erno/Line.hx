@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 
-class Line extends xinf.ony.base.Line  {
+class Line extends xinf.ony.Line  {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);

@@ -6,7 +6,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.geom.Types;
 
-class Polyline extends xinf.ony.base.Polyline  {
+class Polyline extends xinf.ony.Polyline  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( points==null ) return;

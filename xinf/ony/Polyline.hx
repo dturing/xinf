@@ -1,21 +1,22 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.ony.base;
-import xinf.ony.base.Implementation;
+package xinf.ony;
+import xinf.ony.Implementation;
 
 import xinf.geom.Types;
 
-class Polygon extends ElementImpl {
+/* FIXME: overlap with Polygon; inherit? */
+class Polyline extends ElementImpl  {
 
-	static var tagName = "polygon";
+	static var tagName = "polyline";
 
     public var points(default,set_points):Iterable<TPoint>;
     private function set_points(v:Iterable<TPoint>) {
         points=v; redraw(); return points;
     }
 
-    public function new( traits:Dynamic ) :Void {
+    public function new(?traits:Dynamic) :Void {
         super(traits);
         points = null;
     }
@@ -48,14 +49,14 @@ class Polygon extends ElementImpl {
 		if( points!=null ) to.points = points;
 	}
 
-    static var pointSplit = ~/[ ,]+/g;
+	static var pointSplit = ~/[ ,]+/g;
     function parsePoints( str:String ) :Iterable<TPoint> {
         var ps = new Array<TPoint>();
         var s = pointSplit.split( str );
-        
+
 		// odd number of coordinates - invalid, shall not be rendered.
 		if( s.length % 2 != 0 ) return ps;
-		
+
         while( s.length>1 ) {
             var x = Std.parseFloat( s.shift() );
             var y = Std.parseFloat( s.shift() );
@@ -65,5 +66,4 @@ class Polygon extends ElementImpl {
         
         return ps;
     }
-
 }

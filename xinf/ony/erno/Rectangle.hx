@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 
-class Rectangle extends xinf.ony.base.Rectangle  {
+class Rectangle extends xinf.ony.Rectangle  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( width<=0 || height<=0 ) return;

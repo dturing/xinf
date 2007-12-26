@@ -1,8 +1,8 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.ony.base;
-import xinf.ony.base.Implementation;
+package xinf.ony;
+import xinf.ony.Implementation;
 
 import xinf.ony.PathSegment;
 import xinf.ony.PathParser;

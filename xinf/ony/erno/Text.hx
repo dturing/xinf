@@ -7,7 +7,7 @@ import xinf.erno.Renderer;
 import xinf.erno.TextFormat;
 import xinf.event.SimpleEvent;
 
-class Text extends xinf.ony.base.Text {
+class Text extends xinf.ony.Text {
     
     var format:TextFormat;
 	

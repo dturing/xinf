@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.ony.base;
+package xinf.ony;
 
 import xinf.geom.Transform;
 import xinf.geom.Translate;
@@ -10,7 +10,7 @@ import xinf.geom.Types;
 import xinf.type.Paint;
 import xinf.ony.PaintProvider;
 
-import xinf.ony.base.Gradient;
+import xinf.ony.Gradient;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 

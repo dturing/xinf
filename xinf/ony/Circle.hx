@@ -1,23 +1,22 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.ony.base;
-import xinf.ony.base.Implementation;
+package xinf.ony;
+import xinf.ony.Implementation;
 
 import xinf.geom.Types;
 import xinf.traits.TraitDefinition;
 import xinf.traits.LengthTrait;
 import xinf.type.Length;
 
-class Ellipse extends ElementImpl {
+class Circle extends ElementImpl {
 
-	static var tagName = "ellipse";
+	static var tagName = "circle";
 
 	static var TRAITS = {
 		cx:new LengthTrait(),
 		cy:new LengthTrait(),
-		rx:new LengthTrait(),
-		ry:new LengthTrait(),
+		 r:new LengthTrait(),
 	};
 
     public var cx(get_cx,set_cx):Float;
@@ -28,16 +27,12 @@ class Ellipse extends ElementImpl {
     function get_cy() :Float { return getTrait("cy",Length).value; }
     function set_cy( v:Float ) :Float { setTrait("cy",new Length(v)); redraw(); return v; }
 
-    public var rx(get_rx,set_rx):Float;
-    function get_rx() :Float { return getTrait("rx",Length).value; }
-    function set_rx( v:Float ) :Float { setTrait("rx",new Length(v)); redraw(); return v; }
-
-	public var ry(get_ry,set_ry):Float;
-    function get_ry() :Float { return getTrait("ry",Length).value; }
-    function set_ry( v:Float ) :Float { setTrait("ry",new Length(v)); redraw(); return v; }
+    public var r(get_r,set_r):Float;
+    function get_r() :Float { return getTrait("r",Length).value; }
+    function set_r( v:Float ) :Float { setTrait("r",new Length(v)); redraw(); return v; }
 
 	override public function getBoundingBox() : TRectangle {
-		return { l:cx-rx, t:cy-ry, r:cx+rx, b:cy+ry };
+		return { l:cx-r, t:cy-r, r:cx+r, b:cy+r };
 	}
 
 }
