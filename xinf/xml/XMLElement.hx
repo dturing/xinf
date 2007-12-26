@@ -22,7 +22,7 @@ import xinf.event.EventKind;
 	Element provides the basics to implement
 	$xinf.traits.TraitAccess$ and $xinf.event.EventDispatcher$.
 */
-class Element extends Node,
+class XMLElement extends Node,
 		implements TraitAccess,
 		implements EventDispatcher {
 
@@ -45,7 +45,7 @@ class Element extends Node,
 	// FIXME: it's not really a style trait, but is "somehow" inherited...
     public var base(get_base,set_base):String; 
 	function get_base() :String { 
-		var p:Element=this;
+		var p:XMLElement=this;
 		var b:String=null;
 		while( p!=null ) {
 //			trace(""+this+" base "+base+" parent "+p.parentElement );

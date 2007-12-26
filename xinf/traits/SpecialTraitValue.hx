@@ -4,14 +4,14 @@
 package xinf.traits;
 
 import xinf.type.Paint;
-import xinf.xml.Element;
+import xinf.xml.XMLElement;
 
 class SpecialTraitValue {
 	
 	public function new() {
 	}
 	
-	public function get<T>( name:String, type:Class<T>, c:Element ) :Dynamic {
+	public function get<T>( name:String, type:Class<T>, c:XMLElement ) :Dynamic {
 		return null;
 	}
 }
@@ -19,7 +19,7 @@ class SpecialTraitValue {
 class Inherit extends SpecialTraitValue {
 	public static var inherit:Inherit = new Inherit();
 	
-	override public function get<T>( name:String, type:Class<T>, c:Element ) :Dynamic {
+	override public function get<T>( name:String, type:Class<T>, c:XMLElement ) :Dynamic {
 		var p = c.parentElement;
 		if( p==null ) return null;
 		return( p.getStyleTrait(name,type,true) );
@@ -33,7 +33,7 @@ class Inherit extends SpecialTraitValue {
 class CurrentColor extends SpecialTraitValue {
 	public static var currentColor:CurrentColor = new CurrentColor();
 	
-	override public function get<T>( name:String, type:Class<T>, c:Element ) :Dynamic {
+	override public function get<T>( name:String, type:Class<T>, c:XMLElement ) :Dynamic {
 		var p = c; //.parentElement;
 		while( p!=null ) {
 			var v = p.getStyleTrait("color",type,true);

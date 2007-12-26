@@ -12,18 +12,18 @@ import xinf.traits.StringTrait;
 /**
 	XML-style Document class.
 */
-class Document extends Element {
+class Document extends XMLElement {
 	
 	/** The root Element of this Document.
 	*/
-	public var documentElement(default,null):Element;
+	public var documentElement(default,null):XMLElement;
 	
 	/** The id index of this document.
 	
 		Don't do lookups direcly on this Hash,
 		instead use getElementById().
 	*/
-    public var elementsById(default,null):Hash<Element>;
+    public var elementsById(default,null):Hash<XMLElement>;
 	
 	/** The Document's StyleSheet.
 	*/
@@ -33,7 +33,7 @@ class Document extends Element {
 	*/
 	public function new() :Void {
 		super();
-        elementsById = new Hash<Element>();
+        elementsById = new Hash<XMLElement>();
  		styleSheet = new StyleSheet();
 		ownerDocument = this;
 	}
@@ -43,7 +43,7 @@ class Document extends Element {
 		An exception will be thrown if no Node
 		with the given [id] exists.
 	*/
-    public function getElementById( id:String ) :Element {
+    public function getElementById( id:String ) :XMLElement {
         var r = elementsById.get(id);
         if( r==null ) throw("No such Element #"+id+" in "+this );
         return r;
@@ -72,7 +72,7 @@ class Document extends Element {
 		Element in an external document, or the Element
 		can not be found.
 	*/
-	public function getElementByURI( uri:String ) :Element {
+	public function getElementByURI( uri:String ) :XMLElement {
 		var u = uri.split("#");
 		if( u.length!=2 ) throw("invalid URI, or URI doesn't include fragment identifier: "+uri );
 		if( u[0] != "" ) throw("full URIs are not yet supported");
@@ -140,8 +140,8 @@ class Document extends Element {
 		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
 		var xml = Xml.parse(data);
 		var e = parentDocument.unmarshal( xml.firstElement() );
-		if( base!=null && Std.is(e,Element) ) {
-			var el:Element = cast(e);
+		if( base!=null && Std.is(e,XMLElement) ) {
+			var el:XMLElement = cast(e);
 			el.base = base.pathString();
 		}
 		e.onLoad();

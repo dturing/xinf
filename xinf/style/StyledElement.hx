@@ -4,7 +4,7 @@
 package xinf.style;
 
 import xinf.xml.Node;
-import xinf.xml.Element;
+import xinf.xml.XMLElement;
 import xinf.traits.TraitException;
 import xinf.traits.SpecialTraitValue;
 
@@ -16,7 +16,7 @@ import xinf.traits.SpecialTraitValue;
 	
 	Recognizes the "style" attribute when parsing from XML.
 */
-class StyledElement extends Element {
+class StyledElement extends XMLElement {
 
 	/* TODO: make "style" and "class" attributes a TRAIT? */
 

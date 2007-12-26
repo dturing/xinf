@@ -33,7 +33,7 @@ class Node implements Serializable {
 		The parent Element of this Node, if the
 		Node is attached.
 	*/
-	public var parentElement(default,null) :Element;
+	public var parentElement(default,null) :XMLElement;
 	
 	/**
 		The Document that ultimately contains this
