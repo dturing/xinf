@@ -8,13 +8,13 @@ import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 
 import xinf.type.URL;
-import xinf.type.Length;
-import xinf.type.PreserveAspectRatio;
+import xinf.ony.type.Length;
+import xinf.ony.type.PreserveAspectRatio;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.StringTrait;
-import xinf.traits.LengthTrait;
-import xinf.traits.PreserveAspectRatioTrait;
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.traits.PreserveAspectRatioTrait;
 
 class Image extends ElementImpl {
 

@@ -4,8 +4,8 @@
 package xinf.ony;
 import xinf.ony.Implementation;
 import xinf.traits.StringTrait;
-import xinf.traits.LengthTrait;
-import xinf.type.Length;
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.type.Length;
 
 class Use extends ElementImpl {
 	static var TRAITS = {

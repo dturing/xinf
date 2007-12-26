@@ -5,8 +5,6 @@ package xinf.erno;
 
 import xinf.erno.Renderer;
 import xinf.type.Paint;
-import xinf.type.CapsStyle;
-import xinf.type.JoinStyle;
 
 /**
     A Pen structure keeps the style with which to draw graphic objects
@@ -22,8 +20,8 @@ class Pen {
     
 	public var stroke:Paint;
 	public var width:Float;
-	public var caps:CapsStyle;
-	public var join:JoinStyle;
+	public var caps:Int;
+	public var join:Int;
 	public var miterLimit:Float;
 	public var dashArray:Iterable<Float>;
 	public var dashOffset:Float;
@@ -77,7 +75,7 @@ class PenRenderer extends BasicRenderer {
 		pen.fill = paint;
     }
     
-    override public function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+    override public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
 		pen.stroke = paint;
 		pen.width = width;
 		pen.caps = caps;

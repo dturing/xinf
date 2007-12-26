@@ -3,9 +3,10 @@
 	
 package xinf.inity;
 
+import xinf.geom.Matrix;
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.geom.Matrix;
+import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.type.Paint;
@@ -116,17 +117,17 @@ class GLVGRenderer extends GLRenderer {
 		VG.setf( VG.STROKE_LINE_WIDTH, pen.width );
 		
 		var join = switch( pen.join ) {
-				case MiterJoin: VG.JOIN_MITER;
-				case RoundJoin: VG.JOIN_ROUND;
-				case BevelJoin: VG.JOIN_BEVEL;
+				case Constants.JOIN_MITER: VG.JOIN_MITER;
+				case Constants.JOIN_ROUND: VG.JOIN_ROUND;
+				case Constants.JOIN_BEVEL: VG.JOIN_BEVEL;
 				default: VG.JOIN_BEVEL;
 			}
 		VG.seti( VG.STROKE_JOIN_STYLE, join );
 		
 		var caps = switch( pen.caps ) {
-				case ButtCaps: VG.CAP_BUTT;
-				case RoundCaps: VG.CAP_ROUND;
-				case SquareCaps: VG.CAP_SQUARE;
+				case Constants.CAPS_BUTT: VG.CAP_BUTT;
+				case Constants.CAPS_ROUND: VG.CAP_ROUND;
+				case Constants.CAPS_SQUARE: VG.CAP_SQUARE;
 				default: VG.CAP_BUTT;
 			}
 		VG.seti( VG.STROKE_CAP_STYLE, caps );

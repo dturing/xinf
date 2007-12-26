@@ -7,10 +7,10 @@ import xinf.ony.Implementation;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
-import xinf.traits.LengthTrait;
+import xinf.ony.traits.LengthTrait;
 
 import xinf.style.StyleSheet;
-import xinf.type.Length;
+import xinf.ony.type.Length;
 
 class Svg extends GroupImpl {
 

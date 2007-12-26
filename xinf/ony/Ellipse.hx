@@ -5,9 +5,8 @@ package xinf.ony;
 import xinf.ony.Implementation;
 
 import xinf.geom.Types;
-import xinf.traits.TraitDefinition;
-import xinf.traits.LengthTrait;
-import xinf.type.Length;
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.type.Length;
 
 class Ellipse extends ElementImpl {
 

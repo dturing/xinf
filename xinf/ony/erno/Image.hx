@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.type.Paint;
-import xinf.traits.PreserveAspectRatioTrait;
+import xinf.ony.traits.PreserveAspectRatioTrait;
 
 class Image extends xinf.ony.Image {
     

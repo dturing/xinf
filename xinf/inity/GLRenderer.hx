@@ -9,8 +9,6 @@ import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.type.Paint;
-import xinf.type.CapsStyle;
-import xinf.type.JoinStyle;
 
 import opengl.GL;
 import opengl.GLU;

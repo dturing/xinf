@@ -5,6 +5,7 @@ package xinf.erno.flash9;
 
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
+import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.type.Color;
@@ -160,15 +161,15 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 
 	function applyStroke() {
 		var caps:CapsStyle = switch( pen.caps ) {
-			case ButtCaps: CapsStyle.NONE;
-			case RoundCaps: CapsStyle.ROUND;
-			case SquareCaps: CapsStyle.SQUARE;
+			case Constants.CAPS_BUTT: CapsStyle.NONE;
+			case Constants.CAPS_ROUND: CapsStyle.ROUND;
+			case Constants.CAPS_SQUARE: CapsStyle.SQUARE;
 			default: CapsStyle.NONE;
 		}
 		var join:JointStyle = switch( pen.join ) {
-			case MiterJoin: JointStyle.MITER;
-			case RoundJoin: JointStyle.ROUND;
-			case BevelJoin: JointStyle.BEVEL;
+			case Constants.JOIN_MITER: JointStyle.MITER;
+			case Constants.JOIN_ROUND: JointStyle.ROUND;
+			case Constants.JOIN_BEVEL: JointStyle.BEVEL;
 			default: JointStyle.MITER;
 		}
 		switch( pen.stroke ) {

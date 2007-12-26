@@ -6,11 +6,11 @@ import xinf.ony.Implementation;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.StringTrait;
-import xinf.traits.LengthTrait;
 import xinf.traits.EnumTrait;
-import xinf.traits.LineIncrementTrait;
-import xinf.type.Length;
-import xinf.type.Editability;
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.traits.LineIncrementTrait;
+import xinf.ony.type.Length;
+import xinf.ony.type.Editability;
 
 class TextArea extends ElementImpl {
 

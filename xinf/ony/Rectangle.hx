@@ -5,10 +5,9 @@ package xinf.ony;
 import xinf.ony.Implementation;
 
 import xinf.geom.Types;
-import xinf.type.Length;
-import xinf.traits.TraitDefinition;
+import xinf.ony.type.Length;
 import xinf.traits.FloatTrait;
-import xinf.traits.LengthTrait;
+import xinf.ony.traits.LengthTrait;
 
 class Rectangle extends ElementImpl {
 

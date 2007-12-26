@@ -7,7 +7,7 @@ import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.event.SimpleEventDispatcher;
 import xinf.xml.Node;
-import xinf.type.Display;
+import xinf.ony.type.Display;
 
 class Group extends xinf.ony.Group {
     

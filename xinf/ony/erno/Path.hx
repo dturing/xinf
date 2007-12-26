@@ -4,7 +4,7 @@
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.type.PathSegment;
+import xinf.ony.type.PathSegment;
 
 class Path extends xinf.ony.Path  {
 

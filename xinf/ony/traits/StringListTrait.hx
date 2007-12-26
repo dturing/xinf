@@ -1,9 +1,10 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.traits;
+package xinf.ony.traits;
 
-import xinf.type.StringList;
+import xinf.traits.TypedTrait;
+import xinf.ony.type.StringList;
 
 class StringListTrait extends TypedTrait<StringList> {
 

@@ -1,7 +1,9 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.traits;
+package xinf.ony.traits;
+
+import xinf.traits.FloatTrait;
 
 class LineIncrementTrait extends FloatTrait {
 

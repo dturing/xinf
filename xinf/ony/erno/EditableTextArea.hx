@@ -11,7 +11,7 @@ import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.geom.Types;
 import xinf.type.Paint;
-import xinf.type.Editability;
+import xinf.ony.type.Editability;
 import xinf.ony.Root;
 
 class EditableTextArea extends TextArea {

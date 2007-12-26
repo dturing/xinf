@@ -11,8 +11,6 @@ typedef Rotate = xinf.geom.Rotate
 typedef Concatenate = xinf.geom.Concatenate
 typedef Matrix = xinf.geom.Matrix
 
-import xinf.type.PathSegment;
-
 typedef MouseEvent = xinf.event.MouseEvent
 typedef KeyboardEvent = xinf.event.KeyboardEvent
 typedef FrameEvent = xinf.event.FrameEvent
@@ -71,7 +69,7 @@ typedef TraitAccess = xinf.traits.TraitAccess;
 typedef FloatTrait = xinf.traits.FloatTrait;
 typedef IntTrait = xinf.traits.IntTrait;
 typedef StringTrait = xinf.traits.StringTrait;
-typedef LengthTrait = xinf.traits.LengthTrait;
+typedef LengthTrait = xinf.ony.traits.LengthTrait;
 
-typedef Length = xinf.type.Length;
+typedef Length = xinf.ony.type.Length;
 typedef Paint = xinf.type.Paint;

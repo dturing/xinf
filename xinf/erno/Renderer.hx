@@ -4,8 +4,6 @@
 package xinf.erno;
 
 import xinf.type.Paint;
-import xinf.type.CapsStyle;
-import xinf.type.JoinStyle;
 
 #if flash
     typedef NativeObject = flash.display.DisplayObject
@@ -110,7 +108,7 @@ interface Renderer {
         If you specify None for paint,
         or [0] width, shapes' won't be stroked.
     **/
-    function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
+    function setStroke( ?paint:Paint, width:Float, ?capsStyle:Int, ?joinStyle:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
     
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially

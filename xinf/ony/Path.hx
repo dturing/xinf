@@ -4,7 +4,7 @@
 package xinf.ony;
 import xinf.ony.Implementation;
 
-import xinf.type.PathSegment;
+import xinf.ony.type.PathSegment;
 import xinf.ony.PathParser;
 import xinf.geom.Types;
 

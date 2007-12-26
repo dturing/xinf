@@ -6,8 +6,6 @@ package xinf.erno;
 import xinf.erno.Renderer;
 import xinf.geom.Matrix;
 import xinf.type.Paint;
-import xinf.type.CapsStyle;
-import xinf.type.JoinStyle;
 
 /**
     BasicRenderer implements all functions
@@ -66,7 +64,7 @@ class BasicRenderer implements Renderer {
 		unimplemented("setFill");
 	}
     
-    public function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+    public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
 		unimplemented("setStroke");
 	}
         

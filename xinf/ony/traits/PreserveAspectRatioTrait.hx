@@ -1,9 +1,10 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.traits;
+package xinf.ony.traits;
 
-import xinf.type.PreserveAspectRatio;
+import xinf.traits.TypedTrait;
+import xinf.ony.type.PreserveAspectRatio;
 import xinf.geom.Types;
 
 typedef TRect = {

@@ -12,24 +12,25 @@ import xinf.event.Event;
 import xinf.style.StyledElement;
 import xinf.style.Selector;
 
-// these should probably be moved to some basic xinf.Types:
 import xinf.type.Paint;
-import xinf.type.JoinStyle;
-import xinf.type.CapsStyle;
-import xinf.type.Visibility;
-import xinf.type.Display;
-import xinf.type.StringList;
-import xinf.type.TextAnchor;
+import xinf.ony.type.Length;
+import xinf.ony.type.JoinStyle;
+import xinf.ony.type.CapsStyle;
+import xinf.ony.type.Visibility;
+import xinf.ony.type.Display;
+import xinf.ony.type.StringList;
+import xinf.ony.type.TextAnchor;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.BoundedFloatTrait;
 import xinf.traits.PaintTrait;
-import xinf.traits.UnitFloatTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
-import xinf.traits.StringListTrait;
-import xinf.traits.StringChoiceTrait;
+
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.traits.StringListTrait;
+import xinf.ony.traits.StringChoiceTrait;
 // TODO import xinf.traits.TransformTrait;
 
 class Element extends StyledElement {
@@ -44,14 +45,14 @@ class Element extends StyledElement {
 		fill_opacity:	new BoundedFloatTrait(0,1,1),
 
 		stroke:			new PaintTrait(None),
-		stroke_width:	new UnitFloatTrait(1),
+		stroke_width:	new LengthTrait(new Length(1)),
 		stroke_opacity:	new BoundedFloatTrait(0,1,1),
 		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
 		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", ButtCaps ),
 		stroke_miterlimit: new FloatTrait(4),
 		
 		font_family:	new StringListTrait(),
-		font_size:		new UnitFloatTrait(10.),
+		font_size:		new LengthTrait(new Length(10)),
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
 		text_anchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
 	}
@@ -81,8 +82,8 @@ class Element extends StyledElement {
     function set_stroke( v:Paint ) :Paint { return setStyleTrait("stroke",v); }
 
     public var strokeWidth(get_stroke_width,set_stroke_width):Null<Float>;
-    function get_stroke_width() :Null<Float> { return getStyleTrait("stroke-width",Float); }
-    function set_stroke_width( v:Float ) :Null<Float> { return setStyleTrait("stroke-width",v); }
+    function get_stroke_width() :Null<Float> { return getStyleTrait("stroke-width",Length).value; }
+    function set_stroke_width( v:Float ) :Null<Float> { setStyleTrait("stroke-width",new Length(v)); return v; }
 
     public var strokeOpacity(get_stroke_opacity,set_stroke_opacity):Null<Float>;
     function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke-opacity",Float); }
@@ -105,8 +106,8 @@ class Element extends StyledElement {
     function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
 
     public var fontSize(get_font_size,set_font_size):Float;
-    function get_font_size() :Float { return getStyleTrait("font-size",Float); }
-    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",v); }
+    function get_font_size() :Float { return getStyleTrait("font-size",Length).value; }
+    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",new Length(v)).value; }
 
 	// TODO fontWeight, Slant, smallCaps
 

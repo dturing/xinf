@@ -11,8 +11,8 @@ import xinf.type.Color;
 import xinf.traits.FloatTrait;
 import xinf.traits.BoundedFloatTrait;
 import xinf.traits.PaintTrait;
-import xinf.traits.LengthTrait;
-import xinf.type.Length;
+import xinf.ony.traits.LengthTrait;
+import xinf.ony.type.Length;
 
 class GradientStop extends StyledElement {
 	static var TRAITS = {
