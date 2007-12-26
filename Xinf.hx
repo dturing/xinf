@@ -11,7 +11,7 @@ typedef Rotate = xinf.geom.Rotate
 typedef Concatenate = xinf.geom.Concatenate
 typedef Matrix = xinf.geom.Matrix
 
-import xinf.ony.PathSegment;
+import xinf.type.PathSegment;
 
 typedef MouseEvent = xinf.event.MouseEvent
 typedef KeyboardEvent = xinf.event.KeyboardEvent

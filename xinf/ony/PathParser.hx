@@ -3,8 +3,8 @@
 	
 package xinf.ony;
 
-import xinf.ony.SVGPathSegment;
-typedef SimpleSegment = xinf.ony.PathSegment;
+import xinf.type.SVGPathSegment;
+typedef SimpleSegment = xinf.type.PathSegment;
 
 enum PathParserState {
     Empty;
