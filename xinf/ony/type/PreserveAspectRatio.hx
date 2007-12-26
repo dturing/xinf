@@ -1,11 +1,11 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.type;
+package xinf.ony.type;
 
 /**
 	Possible values for 
-	$xinf.type.PreserveAspectRatio$.Preserve(x,y).
+	$xinf.ony.type.PreserveAspectRatio$.Preserve(x,y).
 */
 enum Align {
 	/** align the graphic's left edge to the viewport's
