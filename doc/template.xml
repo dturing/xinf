@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Xinf API Reference</title>
+</head>
+
+<body>
+
+<script type="text/javascript">
+<!--
+	function toggle(id) {
+		var e = document.getElementById(id);
+		e.isopen = !e.isopen;
+		e.style.display = e.isopen?"block":"none";
+		return false;
+	}
+-->
+</script>
+
+<div class="document">
+
+<div class="title">
+    <!--<img src="http://xinf.org/img/header.gif"/>-->
+	Xinf API Reference
+</div>
+
+<data/>
+
+</div>
+
+</body>
+</html>

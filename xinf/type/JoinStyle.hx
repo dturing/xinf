@@ -3,6 +3,12 @@
 	
 package xinf.type;
 
+/**
+	Specifies the shape to be used at the corners
+	of shapes when they are stroked.
+	
+	$SVG painting#StrokeLinejoinProperty stroke-linecap$
+*/
 enum JoinStyle {
 	MiterJoin;
 	RoundJoin;

@@ -4,6 +4,8 @@
 package xinf.erno;
 
 /**
+	DOCME: out of date!
+	
     The Keys class provides a single global function ([get]) to 
     convert a runtime-specific numeric key code to a
     xinferno-standard key string.

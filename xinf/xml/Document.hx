@@ -9,32 +9,70 @@ import xinf.style.StyleParser;
 import xinf.traits.TraitAccess;
 import xinf.traits.StringTrait;
 
+/**
+	XML-style Document class.
+*/
 class Document extends Element {
 	
+	/** The root Element of this Document.
+	*/
 	public var documentElement(default,null):Element;
-    public var elementsById(default,null):Hash<Node>;
+	
+	/** The id index of this document.
+	
+		Don't do lookups direcly on this Hash,
+		instead use getElementById().
+	*/
+    public var elementsById(default,null):Hash<Element>;
+	
+	/** The Document's StyleSheet.
+	*/
     public var styleSheet(default,null):StyleSheet;
 
+	/** Create a new, empty Document.
+	*/
 	public function new() :Void {
 		super();
-        elementsById = new Hash<Node>();
+        elementsById = new Hash<Element>();
  		styleSheet = new StyleSheet();
 		ownerDocument = this;
 	}
+
+	/** Return the Element with the specified [id].
 	
-    public function getElementById( id:String ) :Node {
+		An exception will be thrown if no Node
+		with the given [id] exists.
+	*/
+    public function getElementById( id:String ) :Element {
         var r = elementsById.get(id);
         if( r==null ) throw("No such Element #"+id+" in "+this );
         return r;
     }
 
-	public function getTypedElementById<T>( id:String, cl:Class<T> ) :T {
+	/** Return the Element with the specified [id],
+		typed to the given [type].
+	
+		An exception will be thrown if no Node
+		with the given [id] exists, or the Node
+		is not of the specified [type].
+	*/
+	public function getTypedElementById<T>( id:String, type:Class<T> ) :T {
         var r = getElementById( id );
-		if( !Std.is( r, cl ) ) throw("Element #"+id+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+		if( !Std.is( r, type ) ) throw("Element #"+id+" is not of class "+Type.getClassName(type)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
         return cast(r);
     }
 	
-	public function getElementByURI( uri:String ) :Node {
+	/** Return the Element referenced by [uri].
+	
+		Currently, this is only good for finding Elements
+		by id (uri == "#id"), but in the future this might
+		return Elements of external Documents, too.
+		
+		An exception will be thrown if [uri] references an
+		Element in an external document, or the Element
+		can not be found.
+	*/
+	public function getElementByURI( uri:String ) :Element {
 		var u = uri.split("#");
 		if( u.length!=2 ) throw("invalid URI, or URI doesn't include fragment identifier: "+uri );
 		if( u[0] != "" ) throw("full URIs are not yet supported");
@@ -42,12 +80,28 @@ class Document extends Element {
 		return getElementById( id );
 	}
 	
+	/** Return the Element referenced by [uri],
+		typed to the given [type].
+	
+		See also getElementByURI.
+		An exception will be thrown if the Element
+		is not of the specified [type].
+	*/
 	public function getTypedElementByURI<T>( uri:String, cl:Class<T> ) :T {
         var r = getElementByURI( uri );
 		if( !Std.is( r, cl ) ) throw("Element "+uri+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
         return cast(r);
 	}
 	
+	/** Unmarshal (deserialize) a Node from the given
+		[xml], and attaches it to the given [parent] (if specified).
+		
+		If the Document's $xinf.xml.Binding$s don't support the
+		given Xml, [null] will be returned.
+		
+		Namespaces are currently ignored. This will look though
+		all given Bindings.
+	*/
     public function unmarshal( xml:Xml, ?parent:Node ) :Node {
         var r:Node;
 		
@@ -72,7 +126,17 @@ class Document extends Element {
 		return("Document("+base+")");
 	}
 	
+	/**
+		Instantiate the XML given in [data], and returns the root node.
+		
+		If [base] is given, it will be set as the document base on the new Element.
+		
+		If [parentDocument] is given, all new Nodes will be associated to the given
+		Document. If not, they will be associated to $xinf.ony.Root$'s Document.
+		(This might change a little in the future.)
+	*/
 	public static function instantiate( data:String, ?base:URL, ?parentDocument:Document, ?onLoad:Node->Void ) :Node {
+		// FIXME: this Root.getDocument() is really bad here..
 		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
 		var xml = Xml.parse(data);
 		var e = parentDocument.unmarshal( xml.firstElement() );
@@ -85,17 +149,32 @@ class Document extends Element {
 		return e;
 	}
 	
+	/**
+		Instantiate the XML found at the URL [url_s].
+		
+		If [onLoad] is given, it will be called with the instantiated root node
+		once the document is fully loaded (and after the Element's onLoad function
+		has been called).
+	*/
     public static function load( url_s:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Void {
-		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
         var url = new URL(url_s);
         url.fetch( function(data) {
-				instantiate( data, url, parentDocument, onLoad );
+				var doc = instantiate( data, url, parentDocument );
+				onLoad(doc);
             }, function( error ) {
                 throw(error);
             } );
     }
 	
 	static var bindings:Hash<IBinding>;
+	
+	/**
+		Add a new Binding to this Document.
+		
+		[namespaceURI] is currently disregarded, but you should pass in the
+		proper namespace anyway, to be safe for a future where we support
+		namespaces.
+	*/
 	public static function addBinding( namespaceURI:String, binding:IBinding ) {
 		if( bindings==null ) bindings = new Hash<IBinding>();
 		bindings.set( namespaceURI, binding );

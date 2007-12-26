@@ -63,7 +63,7 @@ class Texture extends ImageData {
         #end
     }
     
-    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, stride, ?cspace:ColorSpace ) :Void {
+    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, stride:Int, ?cspace:ColorSpace ) :Void {
         if( cspace==null ) cspace=RGBA;
     
         GL.pushAttrib( GL.ENABLE_BIT );

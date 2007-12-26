@@ -6,7 +6,26 @@ package xinf.type;
 import xinf.type.Paint;
 
 /**
-    Describes a RGBA Color. Component values are between 0.0 (dark) and 1.0 (bright).
+    Describes a RGBA Color (not a $xinf.type.Paint$). 
+	
+	Component values are between 0.0 (dark) and 1.0 (bright).
+	
+	Within Xinfony, the alpha value is mostly ignored in favor
+	of the opacity, fillOpacity and/or strokeOpacity traits.
+	
+	The Color class also provides some static convenience variables
+	that express commonly used colors (BLACK, WHITE, TRANSPARENT,
+	PRIMARY_RED,_GREEN,_BLUE).
+	
+	If the compilation flag "notango" is not set, it also provides
+	the colors of the 
+	<a href="http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines#Color_Palette">Tango palette</a>
+	as static arrays of three
+	(in case of Aluminium, 6) shades, plus shortcuts to some common
+	simple colors (RED, GREEN, (LIGHT_,DARK_)BLUE, (LIGHT_,DARK_)GRAY,
+	YELLOW). These colors are not primary colors.
+	
+	$SVG painting#Color Color in SVG$
 **/
 class Color {
     
@@ -46,13 +65,13 @@ class Color {
         0.0 is transparent, 1.0 opaque. **/
     public var a:Float;
 
-    /** Constructor. Initializes to (.5,.5,.5,.5). **/
+    /** Constructor. Initialize to (0,0,0,1). **/
     public function new() {
         r = b = 0.0;
         g = a = 1.0;
     }
     
-    /** Sets the R, G and B components from an integer (like 0x00ff00 for green) **/
+    /** Set the R, G and B components from an integer (like 0x00ff00 for green) **/
     public function fromRGBInt( c:Int ) :Color {
         r = ((c&0xff0000)>>16)/0xff;
         g = ((c&0xff00)>>8)/0xff;
@@ -61,31 +80,31 @@ class Color {
         return this;
     }
 
-    /** Sets the R, G, B and A components from individual 0-1 floats **/
+    /** Set the R, G, B and A components from individual 0-1 floats **/
     public function fromRGBA( r:Float, g:Float, b:Float, a:Float ) :Color {
         this.r=r; this.g=g; this.b=b;
         this.a=a;
         return this;
     }
 
-    /** Sets the R, G, and B components from individual 0-1 floats, a is 1 **/
-    public function fromRGB( r:Float, g:Float, b:Float, a:Float ) :Color {
+    /** Set the R, G, and B components from individual 0-1 floats, a is 1 **/
+    public function fromRGB( r:Float, g:Float, b:Float ) :Color {
         this.r=r; this.g=g; this.b=b;
         this.a=1;
         return this;
     }
 
-    /** Returns an integer value describing the RGB (not A) part of the color. **/
+    /** Return an integer value describing the RGB (not A) part of the color. **/
     public function toRGBInt() : Int {
         return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
     }
 
-    /** Returns a CSS-like string describing the color, in the form "rgb(r,g,b)". Values will be between 0 and 255.  **/
+    /** Return a CSS-like string describing the color, in the form "rgb(r,g,b)". Values will be between 0 and 255.  **/
     public function toRGBString() : String {
         return("rgb("+Math.round(r*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")");
     }
 
-    /** Returns a CSS-like hexadecimal string describing the color, in the form "#rrggbb". Values will be between 0 and 255.  **/
+    /** Return a CSS-like hexadecimal string describing the color, in the form "#rrggbb". Values will be between 0 and 255.  **/
     public function toHexString() : String {
         return("#"+intToString(Math.round(r*0xff),16,2)
                 +intToString(Math.round(g*0xff),16,2)
@@ -96,21 +115,24 @@ class Color {
         return("("+r+","+g+","+b+","+a+")");
     }
     
-    /** creates a new Color object from the given values for red, green, blue and alpha **/
+    /** create and returns a new Color object from the given values for red, green, blue and alpha **/
     public static function rgba(r:Float,g:Float,b:Float,a:Float) :Color {
         return new Color().fromRGBA(r,g,b,a);
     }
 
-    /** creates a new Color object from the given values for red, green and blue. alpha will be 1 (opaque) **/
+    /** create and returns a new Color object from the given values for red, green and blue. alpha will be 1 (opaque) **/
     public static function rgb(r:Float,g:Float,b:Float) :Color {
         return new Color().fromRGBA(r,g,b,1.0);
     }
 
-    /** creates a new Color object from the given 0-255 values for red, green and blue. alpha will be 1 (opaque) **/
+    /** create and returns a new Color object from the given 0-255 values for red, green and blue. alpha will be 1 (opaque) **/
     public static function rgbI(r:Int,g:Int,b:Int) :Color {
         return new Color().fromRGBA(r/255.,g/255.,b/255.,1.0);
     }
     
+	/** return a SolidColor $xinf.type.Paint$ that expresses
+		this Color.
+	*/
     public function toSolidColor() :Paint {
     	return SolidColor(r,g,b,a);
     }

@@ -7,6 +7,8 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.event.ImageLoadEvent;
 
 /**
+	DOCME: out of date!
+	
     ImageData represents the data of a bitmap image. It can be passed to a
     <a href="Renderer.html">Renderer</a>'s [image()] function to draw (part of) an image.
     <p>

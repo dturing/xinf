@@ -203,7 +203,7 @@ class GLVGRenderer extends GLRenderer {
     }
 
     override public function arcTo( rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
-		throw("arcTo not implemented for GLVG");
+		trace("arcTo not implemented for GLVG");
 	}
 	
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {

@@ -8,6 +8,7 @@ import xinf.event.EventKind;
 import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
 
+/** DOCME */
 class SimpleRuntime extends Runtime {
     
     private var nextId:Int;

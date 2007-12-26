@@ -28,6 +28,13 @@ test : $(VERSION_STUB) $(SRC)
 	NEKOPATH=$(NEKOPATH) neko test.n  
 	#xinf/test/static/SVG1.2/svg/struct-use-01-t.svg 
 
+doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx
+	cd doc/haxedoc-mod && haxe haxedoc.hxml
+	
+doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
+	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf.xml Xinf
+	cd doc && xsltproc xinfdoc.xsl xinf.xml > package-index.xml
+	cd doc && haxedoc-mod/haxedoc xinf.xml
 	
 flash : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main Example

@@ -7,6 +7,8 @@ import xinf.erno.PenRenderer;
 import xinf.erno.Renderer;
 
 /**
+	DOCME: out of date!
+	
     The ObjectModelRenderer class implements some functionality for
     Renderers that use an object-model based engine (which is currently
     true for all available renderers).

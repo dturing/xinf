@@ -9,14 +9,19 @@ import xinf.traits.TraitException;
 import xinf.style.StyleSheet;
 import xinf.style.Selector;
 
+/**
+	The StyleParser class provides static functions
+	to parse CSS-type style definitions, selectors
+	and rules into xinf types (and intermediate objects).
+*/
 class StyleParser {
 	static var comment = ~/\/\*[^\*]*\*\//g;
     static var split = ~/[ \r\n\t]*;[ \r\n\t]*/g;
 	
 	/** 
-		parse a single CSS style definition (as found in a 'style' attribute).
-		uses the "via" argument for finding definitions,
-		sets values on "to".
+		From a dynamic object with text values as returned by [parseToObject],
+		parse individual style properties as defined by [via]'s traits
+		definitions, and set the resulting typed values on [to].
 	**/
     public static function fromObject( s:Dynamic, via:TraitAccess, to:Dynamic ) :Void {
 		for( field in Reflect.fields(s) ) {
@@ -24,7 +29,15 @@ class StyleParser {
 			via.setTraitFromDynamic( field2, Reflect.field(s,field), to );
 		}
 	}
+
+	/**
+		Parse a single CSS style definition (as found in a "style" attribute)
+		into an dynamic object. The property values are not parsed, but
+		retained as Strings (use fromObject to parse/type them).
 		
+		For example, "[fill:red,stroke:#f00]" will be turned into
+		[{ style:"red", stroke:"#f00" }].
+	**/
     public static function parseToObject( text:String ) :Dynamic {
 		var to = Reflect.empty();
 		text = comment.replace(text,"");
@@ -46,7 +59,8 @@ class StyleParser {
 	static var cssRules = ~/\W*(.*)\W{\W(.*)\W/g;
 	
 	/** 
-		parse CSS style rules, as found in a <style type="text/css"> element.
+		parse CSS style rules, as found in a 
+		[<style type="text/css">] element.
 	**/
 	public static function parseRules( text:String ) :Array<StyleRule> {
 		//trace("should parse style: "+text+", defs "+definitions );
@@ -83,9 +97,9 @@ class StyleParser {
 	static var first_s = ~/([^ ]+) (([\*\+>]) )?(.+)/;
     
 	/**
-		parse a CSS selector
+		Parse a CSS selector
 	**/
-	public static function parseSelectorGroup( text:String ) :Selector {
+	static function parseSelectorGroup( text:String ) :Selector {
 		var anyTexts = comma_split.split(text);
 		var any = new Array<Selector>();
 		for( a in anyTexts ) {

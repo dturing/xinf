@@ -8,19 +8,37 @@ import xinf.xml.Element;
 import xinf.traits.TraitException;
 import xinf.traits.SpecialTraitValue;
 
+/**
+	An Element with style.
+	
+	Keeps a list of associated style classes, and automatically
+	matches against the ownerDocument's StyleSheet.
+	
+	Recognizes the "style" attribute when parsing from XML.
+*/
 class StyledElement extends Element {
+
+	/* TODO: make "style" and "class" attributes a TRAIT? */
 
 	var styleClasses :Hash<Bool>;
 	var _cache:Dynamic;
 	var _matchedStyle:Dynamic;
 	
+	/**
+		Create a new StyledElement with initially empty style classes.
+	*/
 	public function new( traits:Dynamic ) {
 		super(traits);
 		_cache = Reflect.empty();
 		_matchedStyle = Reflect.empty();
 		styleClasses = new Hash<Bool>();
 	}
-	
+
+	/**
+		Set the style trait [name] to [value]. 
+		Similar to $xinf.xml.Element$.setTrait, but also
+		calls styleChanged().
+	*/
 	override public function setStyleTrait<T>( name:String, value:T ) :T {
 		var r = setTrait( name, value );
 		Reflect.setField(_cache,name,r);
@@ -32,6 +50,24 @@ class StyledElement extends Element {
 		_cache = Reflect.empty();
 	}
 
+	/**
+		Return the value of the "style trait" [name]. Style traits
+		differ from normal traits in a few aspects:
+		<ul>
+			<li>they can come from $xinf.style.StyleSheet$s
+				</li>
+			<li>they can have $xinf.traits.SpecialTraitValue$s
+				</li>
+			<li>they can be inherited (when [inherit] is true or omitted,
+				or the trait has the special type $xinf.traits.Inherit$)
+				</li>
+			<li>their value is cached, so access should be relatively 
+				efficient even when the value is determined by inheritance.
+				</li>
+		</ul>
+		
+		DOCME: move this doc somewhere else?
+	*/
 	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
 		if( Reflect.hasField(_cache,name) ) return Reflect.field(_cache,name);
 		
@@ -107,7 +143,21 @@ class StyledElement extends Element {
 		updateClassStyle();
 	}
 
-	// hook
+	/**
+		Hook function. Derived classes can override this to do 
+		something when the element's style changes (like redraw).
+		
+		In reality, it is not strictly always called when the
+		style would change-- notably, if the style comes from
+		a StyleSheet, and either the StyleSheet changes or
+		this element would match different selectors (because
+		it changed in the display hierarchy), or similar things,
+		it will *not* be called, in the current implementation.
+		
+		Note, however, that setting any trait with setStyleTrait,
+		or changing a StyledElement's style classes does indeed 
+		trigger a call to styleChanged.
+	*/
     public function styleChanged() :Void {
 	}
 
@@ -130,24 +180,43 @@ class StyledElement extends Element {
 		}
     }
 	
+	/**
+		Add the style class [name], and re-match against ownerDocument's StyleSheet.
+	*/
     public function addStyleClass( name:String ) :Void {
         styleClasses.set( name, true );
         updateClassStyle();
     }
     
+	/**
+		Remove the style class [name], and re-match against ownerDocument's StyleSheet.
+	*/
     public function removeStyleClass( name:String ) :Void {
         styleClasses.remove( name );
         updateClassStyle();
     }
     
+	/**
+		Return [true] if [name] is in the list of style classes.
+	*/
     public function hasStyleClass( name:String ) :Bool {
         return styleClasses.get(name)!=null;
     }
 
+	/**
+		Return an iterator of the list of style classes.
+	*/
     public function getStyleClasses() :Iterator<String> {
         return styleClasses.keys();
     }
 	
+	/**
+		Return the element's XML tag name.
+		
+		FIXME: this needs rework. currently, tagName must be
+		set "manually" by deriving classes. $xinf.xml.Binding$
+		could/should take care of that.
+	*/
 	public function getTagName() :String {
 		var cl:Class<Dynamic> = Type.getClass(this);
 		while( cl!=null ) {
@@ -157,6 +226,10 @@ class StyledElement extends Element {
 		return null;
 	}
 	
+	/**
+		Return [true] if the object matches
+		the given Selector [s], false otherwise.
+	*/
 	public function matchSelector( s:Selector ) :Bool {
 		switch( s ) {
 			case Any:

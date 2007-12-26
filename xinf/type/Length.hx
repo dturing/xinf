@@ -3,9 +3,23 @@
 	
 package xinf.type;
 
-/*
-http://www.w3.org/TR/SVG11/types.html#InterfaceSVGLength
-http://www.w3.org/TR/REC-CSS2/syndata.html
+/**
+	An SVG-like Length value, a distance measurement.
+
+	This is currently mostly a stub, to allow for 
+	parsing length values with units. Conversion
+	is not correct.
+	
+	Proper documentation will follow here when it
+	is properly implemented.
+
+	$SVG types#DataTypeLength SVG Length$
+	$SVG coords#Units SVG Units$
+*/
+
+/* see also:
+	http://www.w3.org/TR/SVG11/types.html#InterfaceSVGLength
+	http://www.w3.org/TR/REC-CSS2/syndata.html
 */
 class Length {
 	// Length Unit Types.. originally numbers 0..10
@@ -51,7 +65,7 @@ class Length {
 		};
 	}
 
-	/**
+	/*
 	* in: inches -- 1 inch is equal to 2.54 centimeters.
 	* cm: centimeters
 	* mm: millimeters

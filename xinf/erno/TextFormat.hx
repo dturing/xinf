@@ -7,6 +7,7 @@ package xinf.erno;
     import js.Dom;
 #end
 
+/** DOCME */
 class TextFormat {
 
     public var family(default,setFamily):String;

@@ -29,6 +29,7 @@ class XTextFormat extends xinf.erno.TextFormat {
 	}
 
 	override public function assureGlyphs( text:String, size:Float ) :Void {
+		if( text==null ) return;
 		assureLoaded();
 		for( i in 0...text.length ) {
 			font.getGlyph( text.charCodeAt(i), size );

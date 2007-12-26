@@ -14,22 +14,37 @@ import xinf.event.EventDispatcher;
 import xinf.event.Event;
 import xinf.event.EventKind;
 
+/**
+	An Element, like a tag in an XML document, but
+	also the base class for all Xinfony 
+	$xinf.ony.Element$s.
+	
+	Element provides the basics to implement
+	$xinf.traits.TraitAccess$ and $xinf.event.EventDispatcher$.
+*/
 class Element extends Node,
 		implements TraitAccess,
 		implements EventDispatcher {
 
 	var _traits:Dynamic;
     var listeners :Hash<List<Dynamic->Void>>;
-    var filters :List<Dynamic->Bool>;
-
+    
 	static var TRAITS = {
 		base:new StringTrait(),
 		id:new StringTrait(),
 		name:new StringTrait(),
-	}
+	};
 
-    public var base(get_base,set_base):String; // FIXME: it's not really a style trait, but is "somehow" inherited...
-    function get_base() :String { 
+	/**
+		The current base URL/URI/IRI for this element.
+		Can be set to specify a different base URL,
+		possibly relative to an "inherited" base.
+		
+		$SVG struct#XMLBaseAttribute xml:base$
+	*/
+	// FIXME: it's not really a style trait, but is "somehow" inherited...
+    public var base(get_base,set_base):String; 
+	function get_base() :String { 
 		var p:Element=this;
 		var b:String=null;
 		while( p!=null ) {
@@ -42,16 +57,32 @@ class Element extends Node,
 	} 
     function set_base( v:String ) :String { return setStyleTrait("xml:base",v); }
 
-    /** textual (XML) id **/
+    /** Standard XML unique name ("id" attribute).
+	
+		As there is no namespace support at the moment,
+		this recognized both "id" and "xml:id", with
+		(not-standard-conformantly) the later attribute 
+		taking precedence.
+		
+		FIXME: should update the document's index when changed.
+	
+		$SVG struct#xmlIDAttribute xml:id$
+	*/
     public var id(get_id,set_id):String;
-    function get_id() :String { return getTrait("id",String); } // FIXME: maybe directly return id? as no inheritance? same for name
-    function set_id( v:String ) :String { return setTrait("id",v); }
+    function get_id() :String { return getTrait("id",String); } // FIXME: maybe directly return id? as no default.. same for name
+    function set_id( v:String ) :String { return setTrait("id",v); } // FIXME: update document index?
 
-    /** textual name (name attribute) **/
+    /** textual name of the Element
+		("name" attribute) **/
     public var name(get_name,set_name):String;
     function get_name() :String { return getTrait("name",String); }
     function set_name( v:String ) :String { return setTrait("name",v); }
 
+	/**
+		Create a new, empty Element.
+		
+		If [traits] is given, it will be set using setTraitsFromObject.
+	*/
     public function new( ?traits:Dynamic ) :Void {
 		super();
 		_traits = Reflect.empty();
@@ -67,9 +98,10 @@ class Element extends Node,
 		}
 	}
 		
-	/**********************/
-	/** Traits functions **/
+	/********************/
+	/* Traits functions */
 	
+	/** see $xinf.traits.TraitAccess$.getTrait */
 	public function getTrait<T>( name:String, type:Dynamic ) :T {
 		var v = Reflect.field(_traits,name);
 		if(v!=null) {
@@ -88,19 +120,28 @@ class Element extends Node,
 		return null;
 	}
 
+	/** see $xinf.traits.TraitAccess::setTrait$ */
 	public function setTrait<T>( name:String, value:T ) :T {
 		Reflect.setField(_traits,name,value);
 		return value;
 	}
 
+	/** see $xinf.traits.TraitAccess::setStyleTrait$
+	
+		On xinf.xml.Element, there is no difference
+		between get/setStyleTrait and get/setTrait,
+		but $xinf.style.StyledElement$ makes the
+		difference. */
 	public function setStyleTrait<T>( name:String, value:T ) :T {
 		return setTrait(name,value);
 	}
 
+	/** see $xinf.traits.TraitAccess::getStyleTrait$ */
 	public function getStyleTrait<T>( name:String, value:T, ?inherit:Bool ) :T {
 		return setTrait(name,value);
 	}
 
+	/** see $xinf.traits.TraitAccess::setTraitFromString$ */
 	public function setTraitFromString( name:String, value:String, to:Dynamic ) :Void {
 		if( value=="inherit" ) {
 			Reflect.setField( to, name, Inherit.inherit );
@@ -115,16 +156,32 @@ class Element extends Node,
 			Reflect.setField( to, name, def.parse(value) );
 	}
 
+	/** see $xinf.traits.TraitAccess::setTraitFromDynamic$ */
 	public function setTraitFromDynamic( name:String, value:Dynamic, to:Dynamic ) :Void {
 		var def = getTraitDefinition(name);
 		if( def!=null )
 			Reflect.setField( to, name, def.fromDynamic(value) );
 	}
 	
+	/** Set the traits of this Element from the 
+		dynamic object [o].  
+		Uses $xinf.style.StyleParser::fromObject$,
+		so the field values of [o] can be of any
+		type that can be converted by the respective
+		$xinf.traits.TraitDefinition$. Usually,
+		this includes String and the native type
+		of the Trait. 
+	*/
 	public function setTraitsFromObject( o:Dynamic ) {
 		StyleParser.fromObject(o,this,_traits);
 	}
 	
+	/** Set the traits of this object from the
+		given Xml's attribute values.
+		
+		Namespaces are currently ignored.
+		Internally, this uses $xinf.xml.Element::setTraitFromString$.
+	*/
 	public function setTraitsFromXml( xml:Xml ) {
 		for( field in xml.attributes() ) {
 			try {
@@ -139,6 +196,9 @@ class Element extends Node,
 		}
 	}
 	
+	/** Return the TraitDefinition of the trait named [_name],
+		or [null] if this Element doesn't have such a trait.
+	*/
 	function getTraitDefinition( _name:String ) :TraitDefinition {
 		var name = StringTools.replace( StringTools.replace(_name,"-","_"), ":", "__" );
 		var cl:Class<Dynamic> = Type.getClass( this );
@@ -157,9 +217,10 @@ class Element extends Node,
 		return null;
 	}
 	
-	/*******************************/
-	/** EventDispatcher functions **/
+	/*****************************/
+	/* EventDispatcher functions */
 
+	/** see $xinf.event.EventDispatcher::addEventListener$ */
     public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
         var t = type.toString();
         var l = listeners.get( t.toString() );
@@ -171,6 +232,7 @@ class Element extends Node,
         return h;
     }
 
+	/** see $xinf.event.EventDispatcher::removeEventListener$ */
     public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
         var l:List<Dynamic->Void> = listeners.get( type.toString() );
         if( l!=null ) {
@@ -179,24 +241,20 @@ class Element extends Node,
         return false;
     }
 
+	/** Convenience function to remove all listeners
+		of the given [type]. 
+	*/
     public function removeAllListeners<T>( type :EventKind<T> ) :Bool {
         return( listeners.remove( type.toString() ) );
     }
 
-    public function addEventFilter( f:Dynamic->Bool ) :Void {
-        if( filters==null ) filters=new List<Dynamic->Bool>();
-        filters.push(f);
-    }
-
-    public function dispatchEvent<T>( e : Event<T> ) :Void {
+	/** see $xinf.event.EventDispatcher::dispatchEvent$
+	
+		Do not use this function directly, instead use [postEvent()].
+	*/
+	public function dispatchEvent<T>( e : Event<T> ) :Void {
         var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
         var dispatched:Bool = false;
-        
-        if( filters!=null ) {
-            for( f in filters ) {
-                if( f(e)==false ) return;
-            }
-        }
         
         if( l != null ) {
             for( h in l ) {
@@ -206,6 +264,7 @@ class Element extends Node,
         }
     }
 
+	/** see $xinf.event.EventDispatcher::postEvent$ */
     public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
         // FIXME if debug_events
         e.origin = pos;
@@ -214,8 +273,8 @@ class Element extends Node,
         dispatchEvent(e);
     }
 
-	/********************/
-	/** Node functions **/
+	/******************/
+	/* Node functions */
 
 	override function acquired( newChild:Node ) :Void {
 		super.acquired(newChild);

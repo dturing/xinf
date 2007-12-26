@@ -10,6 +10,8 @@ import xinf.erno.Renderer;
 import xinf.type.Color;
 
 /**
+	DOCME: out of date!
+	
     The Runtime class has static functions to request the global
     Runtime instance (a singleton) and it's associated <a href="Renderer.html">Renderer</a>.
     <p>

@@ -3,19 +3,45 @@
 	
 package xinf.type;
 
+/**
+	A URL/URI/IRI.
+	
+	Describes a "universal|internationalized resource locator|identifier".
+	If you don't know (roughly) what that is, you're in the wrong movie.
+	
+	In terms of this class, a URL is built like: <br/>
+	[<protocol>://<host>:<port>/<path>/<filename>]
+
+	Fragments (#foo) and GET parameters (?foo=bar) are just part of the [filename] for now.
+
+	$SVG linking#IRIReference$
+*/
 class URL {
+	/** the protocol part of the URI, mostly "http" or "file" */
     public var protocol:String;
+	
+	/** the host part of the URI.
+		if the URI describes a file:// reference,
+		this is the first part of the path. */
     public var host:String;
+	
+	/** the port, if omitted it is automatically
+		set for some protocols: 80 for http, 443 for https and 21 for ftp.
+	*/
     public var port:Int;
+	
+	/** the path part of the URI*/
     public var path:String;
+	
+	/** the filename part of the URI */
 	public var filename:String;
-    // fragments (#foo) and GET parameters (?foo=bar) are just part of the path (for now)
-    
+
+	/** create a new URL by parsing from [s] */
     public function new( s:String ) :Void {
         parse(s);
     }
     
-    private function parse( s:String ) :Void {
+    function parse( s:String ) :Void {
         var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
         if( r.match( s ) ) {
             protocol = r.matched(1);
@@ -51,11 +77,29 @@ class URL {
 		}
     }
     
+	/**
+		Return a new URL that is the result of appending
+		[rel] to this URL.
+		
+		Currently, this actually just appends it, leaving
+		away the filename. A future	version should "compress" 
+		[foo/../bar] into [bar], and also handle absolute
+		URLs for rel. (TODO)
+	*/
     public function getRelativeURL( rel:String ) :URL {
         var url = new URL( this.pathString()+rel );
         return url;
     }
-    
+
+	/**
+		Load the file referenced by this resource
+		(potentially asynchronously), and call [onData] with the
+		loaded text. If [onError] is given, it will be called in
+		case of an error.
+		
+		On neko (Xinfinity), this also handles file:// URLs
+		(by using neko.io.File.getContent).
+	*/
     public function fetch( onData:String->Void, ?onError:String->Void ) {
         try {
         
@@ -79,6 +123,10 @@ class URL {
         }
     }
     
+	/**
+		Return a string representation of this URL up to but not including
+		the filename part.
+	*/
     public function pathString() :String {
         var h = "";
         if( host!=null ) {
@@ -90,6 +138,9 @@ class URL {
         return( protocol+"://"+h+path );
     }
 
+	/**
+		Return a complete string representation of this URL.
+	*/
 	public function toString() :String {
 		return( pathString()+filename );
     }
