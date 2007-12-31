@@ -5,7 +5,7 @@ package xinf.ul.widget;
 
 import Xinf;
 import xinf.ul.layout.Helper;
-import xinf.type.Editability;
+import xinf.ony.type.Editability;
 
 class LineEdit extends Widget {
     public var text(get_text,set_text) :String;

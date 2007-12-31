@@ -12,10 +12,10 @@ import xinf.event.SimpleEvent;
 import xinf.erno.TextFormat;
 import xinf.type.Paint;
 import xinf.type.Border;
-import xinf.type.StringList;
+import xinf.ony.type.StringList;
 import xinf.ul.skin.Skin;
 
-import xinf.traits.StringListTrait;
+import xinf.ony.traits.StringListTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.FloatTrait;
 import xinf.traits.BorderTrait;
@@ -42,6 +42,11 @@ class Component extends StyledElement {
 			
 			.Container, .Interface {
 				padding: 5;
+			}
+			
+			.Slider {
+				min-width: 100;
+				min-height: 25;
 			}
 			
 			.ListView {
@@ -125,7 +130,7 @@ class Component extends StyledElement {
 	static var TRAITS = {
 		skin:			new StringTrait(),
 		font_family:	new StringListTrait(),
-		font_size:		new FloatTrait(12.),
+		font_size:		new LengthTrait(new Length(10)),
 		text_color:		new PaintTrait(Color.BLACK),
 		horizontal_align:	new FloatTrait(),
 		vertical_align:		new FloatTrait(),
@@ -147,8 +152,8 @@ class Component extends StyledElement {
     function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
 
     public var fontSize(get_font_size,set_font_size):Float;
-    function get_font_size() :Float { return getStyleTrait("font-size",Float); }
-    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",v); }
+    function get_font_size() :Float { return getStyleTrait("font-size",Length).value; }
+    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",new Length(v)).value; }
 
     public var textColor(get_text_color,set_text_color):Paint;
     function get_text_color() :Paint { return getStyleTrait("text-color",Paint); }

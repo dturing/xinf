@@ -32,6 +32,12 @@ class Interface extends Container {
 		setOwnerDocument( Root.getRootSvg().ownerDocument ); // FIXME
 	}
 	
+	public function appendTo( e:Group, w:Float, h:Float ) {
+		setPrefSize( size={ x:w, y:h } );
+		e.appendChild( getElement() );
+		setOwnerDocument( e.ownerDocument ); // FIXME
+	}
+	
 	function rootResized( e:GeometryEvent ) {
 		setPrefSize( size=e );
 		relayout();

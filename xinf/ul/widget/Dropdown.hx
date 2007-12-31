@@ -153,4 +153,9 @@ class Dropdown extends Widget {
         super.blur();
         close();
     }
+	
+    public function setModel( m:ListModel<T> ) :Void {
+        menu.setModel(m);
+		model=m;
+    }
 }

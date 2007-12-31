@@ -15,7 +15,7 @@ class SimpleListModel<T> implements ListModel<T> {
         items.push( item );
     }
 
-    public function addItems( items:Array<T> ) :Void {
+    public function addItems( items:Iterator<T> ) :Void {
         for( item in items ) {
             this.items.push( item );
         }
@@ -33,7 +33,7 @@ class SimpleListModel<T> implements ListModel<T> {
         items.sort( f );
     }
     
-    public static function create<T>( items:Array<T> ) :SimpleListModel<T> {
+    public static function create<T>( items:Iterator<T> ) :SimpleListModel<T> {
         var r = new SimpleListModel<T>();
         r.addItems(items);
         return r;

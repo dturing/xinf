@@ -33,8 +33,6 @@ enum Align {
 	to apply the method to a given viewBox/viewport combination.
 
 	$SVG coords#PreserveAspectRatioAttribute The 'preserveAspectRatio' attribute$
-	
-	DOCME: just a test: $xinf.erno.Renderer::cubicTo$
 */
 enum PreserveAspectRatio {
 	/**
