@@ -135,7 +135,7 @@ class Document extends XMLElement {
 		Document. If not, they will be associated to $xinf.ony.Root$'s Document.
 		(This might change a little in the future.)
 	*/
-	public static function instantiate( data:String, ?base:URL, ?parentDocument:Document, ?onLoad:Node->Void ) :Node {
+	public static function instantiate<T>( data:String, ?base:URL, ?parentDocument:Document, ?onLoad:T->Void, ?type:Class<T> ) :Node {
 		// FIXME: this Root.getDocument() is really bad here..
 		if( parentDocument==null ) parentDocument = xinf.ony.Root.getDocument();
 		var xml = Xml.parse(data);
@@ -145,7 +145,10 @@ class Document extends XMLElement {
 			el.base = base.pathString();
 		}
 		e.onLoad();
-		if( onLoad!=null ) onLoad( e );
+		if( onLoad!=null ) {
+			if( type!=null && !Std.is(e,type) ) throw("Document root ("+e+") is not of expected type "+Type.getClassName(type)+".");
+			onLoad( cast(e) );
+		}
 		return e;
 	}
 	
@@ -156,11 +159,10 @@ class Document extends XMLElement {
 		once the document is fully loaded (and after the Element's onLoad function
 		has been called).
 	*/
-    public static function load( url_s:String, ?parentDocument:Document, ?onLoad:Node->Void ) :Void {
+    public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?type:Class<T> ) :Void {
         var url = new URL(url_s);
         url.fetch( function(data) {
-				var doc = instantiate( data, url, parentDocument );
-				onLoad(doc);
+				instantiate( data, url, parentDocument, onLoad, type );
             }, function( error ) {
                 throw(error);
             } );

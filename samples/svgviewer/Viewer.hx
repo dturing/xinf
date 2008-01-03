@@ -1,48 +1,66 @@
 import Xinf;
 
 class Viewer {
+
+	var doc:Svg;
+	var g:Group;
 	
+	var scale:Float;
+	var offset:TPoint;
+	var stage:TPoint;
+
 	public function new( ?url:String ) :Void {
-	
-		var g = new Group();
+
+		scale = 1.;
+		offset = { x:0., y:0. };
+		stage = { x:320., y:240. };
+
+		g = new Group();
 		Root.appendChild(g);
 		
-		var doc:Document;
-		var stage = {x:100.,y:100.};
-	
 		if( url==null ) {
-			doc = Document.instantiate( Std.resource("test.svg") );
+			Document.instantiate( Std.resource("test.svg"), loaded, Svg );
 		} else {
-			doc = Document.load( url );
+			Document.load( url, loaded );
 		}
+
+		Root.addEventListener( GeometryEvent.STAGE_SCALED, onStageScale );
+		Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		Root.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+	}
+	
+
+	function loaded(e:Svg) {
+		doc=e;
+		trace("loaded "+e);
 		g.appendChild( doc );
+		retransform();
+	}
 
-
-		var scale = 1.;
-		var offset={ x:0., y:0. };
+	function retransform() {
+		if( doc==null ) return;
 		
-		var trans = function() {
-			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
-			g.transform = new Concatenate( 
+		//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
+		g.transform = new Concatenate( 
+						new Concatenate(
+							new Translate( -doc.width/2, -doc.height/2 ),
 							new Concatenate(
-								new Translate( -doc.width/2, -doc.height/2 ),
-								new Concatenate(
-									new Scale(  (stage.x/doc.width)*scale, 
-												(stage.y/doc.height)*scale ),
-									new Translate(offset.x,offset.y)
-								)
-							),
-							new Translate( stage.x/2, stage.y/2 )
-							);
-		};
+								new Scale( scale, scale ),
+						//		new Scale(  (stage.x/doc.width)*scale, 
+						//					(stage.y/doc.height)*scale ),
+								new Translate(offset.x,offset.y)
+							)
+						),
+						new Translate( stage.x/2, stage.y/2 )
+					  );
+	}
 
-		Root.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
-			stage.x=e.x; stage.y=e.y;
-			trans();
-		});
-		
+	function onStageScale( e:GeometryEvent ) {
+		stage.x=e.x; stage.y=e.y;
+		retransform();
+	}
 
-		Root.addEventListener( KeyboardEvent.KEY_DOWN, function(e) {
+	function onKeyDown( e:KeyboardEvent ) {
 			var d=25;
 			trace("key "+e.key );
 			switch( e.key ) {
@@ -63,21 +81,21 @@ class Viewer {
 					scale = 1;
 			}
 			
-			trans();
-		});
+		retransform();
+	}
 		
-		Root.addEventListener( MouseEvent.MOUSE_DOWN, function(check) {
-			var upL:Dynamic;
-			var moveL:Dynamic;
-			var old = offset;
-			moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {
-				offset = { x:old.x-(check.x-e.x), y:old.y-(check.y-e.y) };
-				trans();
-			});
-			upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
-				Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
-				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
-			});
+	function onMouseDown( check:MouseEvent ) {
+		var upL:Dynamic;
+		var moveL:Dynamic;
+		var old = offset;
+		var self = this;
+		moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {
+			self.offset = { x:old.x-(check.x-e.x), y:old.y-(check.y-e.y) };
+			self.retransform();
+		});
+		upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
+			Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
+			Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
 		});
 	}
 	

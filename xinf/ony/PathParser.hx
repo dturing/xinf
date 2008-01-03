@@ -184,8 +184,6 @@ class PathParser {
             them if no commands sets the corresponding ?smooth2.
         */
 		
-		trace("before simpl: "+segments );
-
 		var out = new Array<SimpleSegment>();
         var last = { x:0., y:0. };
 		var first = { x:0., y:0. };

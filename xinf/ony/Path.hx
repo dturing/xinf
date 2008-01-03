@@ -77,7 +77,6 @@ class Path extends ElementImpl {
             segments = PathParser.simplify(
 				new PathParser().parse(xml.get("d")
 				));
-			trace("path segments: "+segments );
         }
     }
 	
