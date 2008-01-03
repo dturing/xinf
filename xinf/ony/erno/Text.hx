@@ -20,9 +20,8 @@ class Text extends xinf.ony.Text {
         
 		format = null;
     }
-    
-    override public function drawContents( g:Renderer ) :Void {
 
+	override public function draw( g:Renderer ) :Void {
 		if( format==null ) {
 			var family = fontFamily;
 			var size = fontSize;
@@ -31,6 +30,10 @@ class Text extends xinf.ony.Text {
 			format.assureGlyphs( text, format.size );
 		}
 		
+		super.draw(g);
+	}
+
+    override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
         if( text!=null ) {
 			switch( textAnchor ) {

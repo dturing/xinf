@@ -32,6 +32,7 @@ class XTextFormat extends xinf.erno.TextFormat {
 		if( text==null ) return;
 		assureLoaded();
 		for( i in 0...text.length ) {
+	//		trace("assure glyph "+text.charCodeAt(i) );
 			font.getGlyph( text.charCodeAt(i), size );
 		}
 	}

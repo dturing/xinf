@@ -10,6 +10,7 @@ import xinf.erno.Runtime;
 class Use extends xinf.ony.Use {
 	var clone:ElementImpl;
 	var wrapper:Null<Int>;
+	var cycleLock:Bool;
 
 	override function set_peer(v:ElementImpl) :ElementImpl {
 		clone = cast(v.cloneNode(true));
@@ -21,13 +22,18 @@ class Use extends xinf.ony.Use {
 	}
 
 	override public function cloneNode( deep:Bool ) :xinf.xml.Node {
+		if( cycleLock==true ) {
+			throw("Cycle in Use reference: "+href );
+		}
 		var n = super.cloneNode(deep);
 		return n;
 	}
 
 	override public function onLoad() :Void {
+		cycleLock = true;
 		super.onLoad();
 		if( clone!=null ) clone.onLoad();
+		cycleLock = false;
 	}
 	
     override public function draw( g:Renderer ) :Void {

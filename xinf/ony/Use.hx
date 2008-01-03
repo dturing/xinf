@@ -24,7 +24,7 @@ class Use extends ElementImpl {
 
     public var href(get_href,set_href):String;
     function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { resolve(); return setTrait("href",v); }
+    function set_href( v:String ) :String { setTrait("href",v); resolve(); return v; }
 
     var peer(default,set_peer):ElementImpl;
 
@@ -38,12 +38,12 @@ class Use extends ElementImpl {
 	
     function resolve() {
 		if( href==null ) return;
-		
 		// for now, we dont support external references
 		var id = href.split("#")[1];
 		peer = ownerDocument.getTypedElementById( id, ElementImpl );
 		if( peer==null ) throw("'Use' peer #"+id+" not found");
 		redraw();
+	
     }
 	
 	override public function onLoad() :Void {
