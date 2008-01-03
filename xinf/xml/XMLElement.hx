@@ -49,13 +49,13 @@ class XMLElement extends Node,
 		var b:String=null;
 		while( p!=null ) {
 //			trace(""+this+" base "+base+" parent "+p.parentElement );
-			var thisBase = p.getTrait("xml:base",String);
+			var thisBase = p.getTrait("base",String);
 			if( thisBase!=null ) b = if( b!=null ) thisBase+b else thisBase; // FIXME: actually, URL.relateTo
 			p = p.parentElement;
 		}
 		return b; 
 	} 
-    function set_base( v:String ) :String { return setStyleTrait("xml:base",v); }
+    function set_base( v:String ) :String { return setStyleTrait("base",v); }
 
     /** Standard XML unique name ("id" attribute).
 	
