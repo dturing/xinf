@@ -1,0 +1,51 @@
+Xinf Abstract
+	intro
+		haxe and neko
+		the "problem" xinf solves (/tries to solve)
+		design goals
+			pragmatism
+			balance simplicity and completeness
+			balance performance and conformance
+			
+	architecture overview
+		now forget all but Xinfony
+	
+	so xinf is not flash. "is" it SVG?
+		
+	
+	xml
+	basic SVG
+	traits
+	style
+	
+	implementation
+		xinf.ony.erno?
+		xinf.erno.flash9
+		xinf.erno.js
+		xinf.inity
+			openvg
+			opengl
+			xinfinty-support
+			cptr
+
+Xinf by Example
+
+	Using plain haXe
+		groups and rectangles
+		other basic shapes
+		paths
+		images
+		events
+		
+	Using SVG as the major asset
+		own Bindings and Instantiators
+		
+	Xinful UI Widgets
+		Component, component styles
+		Container, layout managers
+		Simple Widgets: Button, Checkbox, Radio
+		List Widgets
+		Tree Widgets
+	
+	High-Level tricks
+		Use Xinf to display SVG in Flash
