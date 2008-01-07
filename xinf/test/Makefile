@@ -32,6 +32,10 @@ test : $(SRC) testd
 	haxe $(HAXEFLAGS) -D notango -neko test.n -main xinf.test.svg.SVG12Testsuite;
 	DISPLAY=$(TEST_DISPLAY) NEKOPATH=$(NEKOPATH) neko test.n
 
+testa : $(SRC) testd
+	haxe $(HAXEFLAGS) -D notango -neko test.n -main xinf.test.LoadSuite;
+	DISPLAY=$(TEST_DISPLAY) NEKOPATH=$(NEKOPATH) neko test.n SVG1.2 metadata
+
 test-flash9 : $(SRC) testd
 	-ps ax | grep "xinf test" | awk '{ print $$1; }'  | xargs kill
 	haxe $(HAXEFLAGS) -swf test.swf -swf-header 480:360:25:ffffff -swf-version 9 -main xinf.test.svg.SVGTestsuite;

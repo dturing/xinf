@@ -33,7 +33,9 @@ doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx
 	
 doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
 	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf.xml Xinf
-	cd doc && xsltproc xinfdoc.xsl xinf.xml > package-index.xml
+	cd doc/consolidate && haxe -neko Consolidate.n -main Consolidate
+	cd doc/consolidate && neko Consolidate.n ../xinf.xml
+	cd doc && xsltproc xinfdoc.xsl consolidate/out.xml > package-index.xml
 	cd doc && haxedoc-mod/haxedoc xinf.xml
 	
 flash : $(SRC)

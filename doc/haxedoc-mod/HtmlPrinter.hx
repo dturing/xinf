@@ -160,7 +160,7 @@ class HtmlPrinter {
 		case TPackage(p,full,list):
 			processPackage(p,list);
 		default:
-			print( index_html );
+			print( StringTools.replace(index_html,"$baseUrl$",baseUrl) );
 			var head = '<a href="#" onclick="javascript:history.back(-1); return false" class="index">Back</a> | '+makeUrl(indexUrl,"Index","index");
 			print(head);
 			var inf = TypeApi.typeInfos(t);
