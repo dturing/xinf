@@ -29,7 +29,10 @@
 		</a>
 		<span class="package">
 			<ul id="index-{$package}">
-				<xsl:apply-templates select="*">
+				<xsl:apply-templates select="package">
+					<xsl:sort select="@path"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="class">
 					<xsl:sort select="@path"/>
 				</xsl:apply-templates>
 			</ul>

@@ -128,7 +128,7 @@ class XMLElement extends Node,
 
 	/** see $xinf.traits.TraitAccess::setStyleTrait$
 	
-		On xinf.xml.Element, there is no difference
+		On xinf.xml.XMLElement, there is no difference
 		between get/setStyleTrait and get/setTrait,
 		but $xinf.style.StyledElement$ makes the
 		difference. */
@@ -180,7 +180,7 @@ class XMLElement extends Node,
 		given Xml's attribute values.
 		
 		Namespaces are currently ignored.
-		Internally, this uses $xinf.xml.Element::setTraitFromString$.
+		Internally, this uses $xinf.xml.XMLElement::setTraitFromString$.
 	*/
 	public function setTraitsFromXml( xml:Xml ) {
 		for( field in xml.attributes() ) {

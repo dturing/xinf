@@ -32,10 +32,11 @@ doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx
 	cd doc/haxedoc-mod && haxe haxedoc.hxml
 	
 doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
-	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf.xml Xinf
+	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf-neko.xml Xinf
 	cd doc/consolidate && haxe -neko Consolidate.n -main Consolidate
 	cd doc/consolidate && neko Consolidate.n ../xinf.xml
-	cd doc && xsltproc xinfdoc.xsl consolidate/out.xml > package-index.xml
+	cd doc && xsltproc package-index.xsl consolidate/out.xml > package-index.xml
+	cd doc && xsltproc class-hierarchy.xsl xinf.xml > class-hierarchy.html
 	cd doc && haxedoc-mod/haxedoc xinf.xml
 	
 flash : $(SRC)

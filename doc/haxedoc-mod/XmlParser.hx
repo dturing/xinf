@@ -183,7 +183,7 @@ class XmlParser {
 					case TPackage(_,_,_):
 					}
 				// we already have a mapping, but which is incompatible
-				throw "Incompatibilities between "+tinf.path+" in "+tinf.platforms.join(",")+" and "+curplatform;
+				trace("Incompatibilities between "+tinf.path+" in "+tinf.platforms.join(",")+" and "+curplatform+" (ignored)");
 			}
 		}
 		cur.push(t);

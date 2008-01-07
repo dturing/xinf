@@ -29,7 +29,7 @@ enum Align {
 	For example, SVG's "defer xMinYMax meet" is expressed
 	as [Defer( Meet( Preserve( Min, Max ) )].
 	
-	$xinf.traits.PreserveAspectRatioTrait::align$ can be used
+	$xinf.ony.traits.PreserveAspectRatioTrait::align$ can be used
 	to apply the method to a given viewBox/viewport combination.
 
 	$SVG coords#PreserveAspectRatioAttribute The 'preserveAspectRatio' attribute$

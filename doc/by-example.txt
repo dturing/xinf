@@ -36,6 +36,7 @@ Xinf by Example
 		paths
 		images
 		events
+		animation
 		
 	Using SVG as the major asset
 		own Bindings and Instantiators
