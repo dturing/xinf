@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.style;
+package xinf.ony;
 
 import xinf.ony.type.Paint;
 
