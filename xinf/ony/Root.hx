@@ -61,8 +61,8 @@ class Root {
 	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
     }
 
-	public static function setBackgroundColor( c:Color ) :Void {
-		xinf.erno.Runtime.runtime.setBackgroundColor(c);
+	public static function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
+		xinf.erno.Runtime.runtime.setBackgroundColor(r,g,b,a);
 	}
 
     public static function main() {

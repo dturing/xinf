@@ -1,6 +1,5 @@
 import xinf.geom.Types;
 
-typedef Color = xinf.type.Color
 typedef TPoint = xinf.geom.TPoint
 
 import xinf.geom.Transform;

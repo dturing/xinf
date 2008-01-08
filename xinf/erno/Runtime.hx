@@ -7,7 +7,6 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.event.EventKind;
 import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
-import xinf.type.Color;
 
 /**
 	DOCME: out of date!
@@ -182,7 +181,7 @@ class Runtime extends SimpleEventDispatcher {
     public function changed() :Void {
     }
 	
-	public function setBackgroundColor( c:Color ) :Void {
+	public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
 	}
     
 }

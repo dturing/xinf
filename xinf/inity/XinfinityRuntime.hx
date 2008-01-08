@@ -9,7 +9,6 @@ import xinf.event.FrameEvent;
 import xinf.erno.Runtime;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;
-import xinf.type.Color;
 
 import opengl.GL;
 import opengl.GLU;
@@ -25,7 +24,7 @@ class XinfinityRuntime extends Runtime {
     var root:GLObject;
 	var time:Float;
 	var interval:Float;
-    var bgColor:Color;
+    var bgColor:{ r:Float, g:Float, b:Float, a:Float };
 	
     private var _eventSource:GLEventSource;
 
@@ -43,7 +42,7 @@ class XinfinityRuntime extends Runtime {
         somethingChanged = true;
 		time = neko.Sys.time();
 		interval = 1/25;
-		bgColor = Color.rgba(1,1,1,0);
+		bgColor = { r:1., g:1., b:1., a:0. };
     
 		_eventSource=new GLEventSource(this);
         
@@ -81,8 +80,8 @@ class XinfinityRuntime extends Runtime {
         //    GLUT.postRedisplay();
     }
 
-	override public function setBackgroundColor( c:Color ) :Void {
-		bgColor = c;
+	override public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
+		bgColor = { r:r, g:g, b:b, a:a };
 	}
 
     public function display() :Void {
@@ -207,7 +206,7 @@ class XinfinityRuntime extends Runtime {
         GL.matrixMode( GL.MODELVIEW );
         GL.loadIdentity();
 
-		if( bgColor.a==0 ) {
+		if( bgColor.a==0 || bgColor.a==null ) {
 			GL.clearColor( bgColor.r,bgColor.g,bgColor.b,0 );
 			GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT | GL.STENCIL_BUFFER_BIT );
 		} else {
