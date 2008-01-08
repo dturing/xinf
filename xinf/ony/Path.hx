@@ -8,7 +8,7 @@ import xinf.ony.type.PathSegment;
 import xinf.ony.PathParser;
 import xinf.geom.Types;
 
-class PathBBox {
+private class PathBBox {
 	public var l:Float;
 	public var t:Float;
 	public var r:Float;

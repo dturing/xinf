@@ -4,9 +4,10 @@
 package xinf.ony;
 
 import xinf.ony.type.SVGPathSegment;
-typedef SimpleSegment = xinf.ony.type.PathSegment;
 
-enum PathParserState {
+private typedef SimpleSegment = xinf.ony.type.PathSegment;
+
+private enum PathParserState {
     Empty;
     ParseCommand( cmd:String, nargs:Int );
     ParseFloat( s:String, old:PathParserState );

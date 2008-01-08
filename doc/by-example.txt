@@ -40,6 +40,7 @@ Xinf by Example
 		
 	Using SVG as the major asset
 		own Bindings and Instantiators
+		CSS
 		
 	Xinful UI Widgets
 		Component, component styles

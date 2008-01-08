@@ -17,6 +17,8 @@
 <xsl:template match="package[@path='xinf.support']"/>
 <xsl:template match="package[@path='xinf.inity']"/>
 <xsl:template match="package[@path='xinf.test']"/>
+<xsl:template match="package[@path='xinf.ony._Path']"/>
+<xsl:template match="package[@path='xinf.ony._PathParser']"/>
 
 <xsl:template match="package">
 	<xsl:variable name="package">
@@ -32,7 +34,7 @@
 				<xsl:apply-templates select="package">
 					<xsl:sort select="@path"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates select="class">
+				<xsl:apply-templates select="class|enum|typedef">
 					<xsl:sort select="@path"/>
 				</xsl:apply-templates>
 			</ul>
