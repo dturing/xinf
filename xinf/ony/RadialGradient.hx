@@ -3,18 +3,10 @@
 	
 package xinf.ony;
 
-import xinf.geom.Transform;
-import xinf.geom.Translate;
-import xinf.geom.Matrix;
-import xinf.geom.Types;
-import xinf.type.Paint;
-import xinf.ony.PaintProvider;
-
-import xinf.ony.Gradient;
 import xinf.traits.TraitDefinition;
 import xinf.traits.FloatTrait;
 
-class RadialGradient extends Gradient, implements PaintProvider {
+class RadialGradient extends Gradient {
 	
 	static var TRAITS = {
 		cx:new FloatTrait(.5),
@@ -43,37 +35,5 @@ class RadialGradient extends Gradient, implements PaintProvider {
     public var fy(get_fy,set_fy):Float;
     function get_fy() :Float { return getTrait("fy",Float); }
     function set_fy( v:Float ) :Float { return setTrait("fy",v); }
-
-	public function getPaint( target:Element ) :Paint {	
-		var center = {x:cx,y:cy};
-		var focus = {x:fx,y:fy};
-		var pr = {x:r,y:0.}
-		var _r = r;
-
-		var transform:Transform = null;
-		
-		if( gradientTransform != null ) {
-			transform = gradientTransform;
-		}
-
-		if( gradientUnits == ObjectBoundingBox ) {
-			var bbox = target.getBoundingBox();
-			var t = new Concatenate(
-							new Scale( bbox.r-bbox.l, bbox.b-bbox.t ),
-							new Translate( bbox.l, bbox.t ) ).getMatrix();
-			if( transform!=null ) transform = new Concatenate( transform, t );
-			else transform = t;
-		}
-
-		if( transform!=null ) {
-			var m = new Matrix(transform.getMatrix());
-			center = m.apply(center);
-			focus = m.apply(focus);
-			pr = m.apply(pr);
-			_r = Math.sqrt( (pr.x*pr.x)+(pr.y*pr.y) );
-		}
-
-		return PRadialGradient(stops,center.x,center.y,_r,focus.x,focus.y,spreadMethod);
-	}
 	
 }

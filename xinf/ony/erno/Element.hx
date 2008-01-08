@@ -10,8 +10,7 @@ import xinf.ony.type.CapsStyle;
 import xinf.ony.type.JoinStyle;
 import xinf.ony.type.Visibility;
 import xinf.ony.type.Display;
-import xinf.ony.PaintProvider;
-import xinf.type.Paint;
+import xinf.ony.type.Paint;
 import xinf.erno.Constants;
 
 class Element extends xinf.ony.Element {
@@ -99,13 +98,13 @@ class Element extends xinf.ony.Element {
         if( fill!=null ) {
 			switch( fill ) {
 				case URLReference(url):
-					var r = ownerDocument.getTypedElementByURI( url, PaintProvider );
+					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
 					if( r==null ) throw("Referenced Paint not found: "+url );
 					g.setFill( r.getPaint(this) );
-				case SolidColor(r,green,b,a):
-					g.setFill( SolidColor(r,green,b,a*fillOpacity*opacity) );
-				default:
-					g.setFill( fill );
+				case RGBColor(r,green,b):
+					g.setFill( xinf.erno.Paint.SolidColor(r,green,b,fillOpacity*opacity) );
+				case None:
+					g.setFill( xinf.erno.Paint.None );
 			}
 		} else g.setFill( null );
 
@@ -130,13 +129,13 @@ class Element extends xinf.ony.Element {
 			}
 			switch( stroke ) {
 				case URLReference(url):
-					var r = ownerDocument.getTypedElementByURI( url, PaintProvider );
+					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
 					if( r==null ) throw("Referenced Paint not found: "+url );
 					g.setStroke( r.getPaint(this), w, _caps, _join, miterLimit, dashArray, dashOffset );
-				case SolidColor(r,green,b,a):
-					g.setStroke( SolidColor(r,green,b,a*strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, dashOffset );
-				default:
-					g.setStroke( stroke, w, _caps, _join, miterLimit, dashArray, dashOffset );
+				case RGBColor(r,green,b):
+					g.setStroke( xinf.erno.Paint.SolidColor(r,green,b,strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, dashOffset );
+				case None:
+					g.setStroke( xinf.erno.Paint.None, 0 );
 			}
 		} else g.setStroke( 0 );
     }

@@ -172,6 +172,7 @@ class TextArea extends xinf.ony.TextArea {
 #else flash9
 
 import xinf.ony.type.Editability;
+import xinf.ony.type.Paint;
 import xinf.type.Color;
 
 class TextArea extends xinf.ony.TextArea {
@@ -203,9 +204,9 @@ class TextArea extends xinf.ony.TextArea {
 		}
 		
 		switch( fill ) {
-			case SolidColor(r,g,b,a):
+			case RGBColor(r,g,b):
 				format.format.color = Color.rgb(r,g,b).toRGBInt();
-				tf.alpha = a;
+				tf.alpha = 1;
 			default:
 				throw("Fill "+fill+" not supported for text");
 		}
@@ -238,6 +239,7 @@ class TextArea extends xinf.ony.TextArea {
 #else js
 
 import xinf.ony.type.Editability;
+import xinf.ony.type.Paint;
 import xinf.type.Color;
 
 class TextArea extends xinf.ony.TextArea {
@@ -246,6 +248,8 @@ class TextArea extends xinf.ony.TextArea {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
+		
+		if( fill == Paint.None ) return;
 
 		if( format==null ) {
 			var family = fontFamily;
@@ -271,9 +275,9 @@ class TextArea extends xinf.ony.TextArea {
         r.style.height = ""+Math.round(y);
 		
 		switch( fill ) {
-			case SolidColor(red,g,b,a):
-				r.style.color = Color.rgb(red,g,b).toRGBString();
-			//	untyped r.opacity = a;
+			case RGBColor(red,g,b):
+				r.style.color = 
+					"rgb("+Math.round(red*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")";
 			default:
 				throw("Fill "+fill+" not supported for text");
 		}

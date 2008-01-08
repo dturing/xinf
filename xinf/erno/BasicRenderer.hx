@@ -5,7 +5,6 @@ package xinf.erno;
 
 import xinf.erno.Renderer;
 import xinf.geom.Matrix;
-import xinf.type.Paint;
 
 /**
     BasicRenderer implements all functions

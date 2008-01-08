@@ -41,8 +41,8 @@ class Svg extends xinf.ony.Svg {
 		binding.add( "use", Use );
         binding.add( "defs", Definitions );
 		
-        binding.add( "linearGradient", xinf.ony.LinearGradient );
-        binding.add( "radialGradient", xinf.ony.RadialGradient );
+        binding.add( "linearGradient", LinearGradient );
+        binding.add( "radialGradient", RadialGradient );
 		binding.add( "style", xinf.ony.Style );
 		
 		xinf.xml.Document.addBinding( svgNamespace, binding );

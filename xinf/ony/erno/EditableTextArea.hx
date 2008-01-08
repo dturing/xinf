@@ -10,7 +10,7 @@ import xinf.erno.Renderer;
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
 import xinf.geom.Types;
-import xinf.type.Paint;
+import xinf.erno.Paint;
 import xinf.ony.type.Editability;
 import xinf.ony.Root;
 

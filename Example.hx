@@ -2,7 +2,6 @@ import Xinf;
 
 import xinf.style.Selector;
 import xinf.style.StyleSheet;
-import xinf.type.Paint;
 
 class Example {
 	

@@ -5,14 +5,13 @@ package xinf.ony;
 
 import xinf.style.StyledElement;
 
-import xinf.type.Paint;
-import xinf.type.Color;
 
 import xinf.traits.FloatTrait;
 import xinf.traits.BoundedFloatTrait;
-import xinf.traits.PaintTrait;
-import xinf.ony.traits.LengthTrait;
+import xinf.ony.type.Paint;
 import xinf.ony.type.Length;
+import xinf.ony.traits.PaintTrait;
+import xinf.ony.traits.LengthTrait;
 
 class GradientStop extends StyledElement {
 	static var TRAITS = {
@@ -29,12 +28,15 @@ class GradientStop extends StyledElement {
     function get_stop_color() :Paint { return getStyleTrait("stop-color",Paint,false); }
     function set_stop_color( v:Paint ) :Paint { return setStyleTrait("stop-color",v); }
 
+	public var r :Float;
+	public var g :Float;
+	public var b :Float;
+	public var a :Float;
 	public var offset :Float;
-	public var color :Color;
 
 	public function new( ?traits:Dynamic ) :Void {
 		super(traits);
-		color = Color.rgba(0,0,0,0);
+		r=g=b=a=0; offset=0;
 	}
 
 	override public function fromXml( xml:Xml ) :Void {
@@ -44,10 +46,10 @@ class GradientStop extends StyledElement {
 		
 		if( stopColor!=null ) {
 			switch( stopColor ) {
-				case SolidColor(r,g,b,a):
-					color = Color.rgba(r,g,b,a);
-					color.a = stopOpacity;
+				case RGBColor(r,g,b):
+					this.r=r; this.g=g; this.b=b; this.a=stopOpacity;
 				default:
+					// FIXME: could reference a SolidColor PaintServer...
 					throw("GradientStop stop-color must be a SolidColor");
 			}
 		}

@@ -9,9 +9,8 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
-import xinf.type.Paint;
-import xinf.type.SpreadMethod;
-import xinf.type.TGradientStop;
+import xinf.erno.Paint;
+import xinf.erno.TGradientStop;
 
 import opengl.GL;
 import opengl.GLU;
@@ -29,24 +28,24 @@ class GLVGRenderer extends GLRenderer {
 	var fill:Int;
 	var stroke:Int;
 
-	function setGradientParameters( paint:Int, _stops:Iterable<TGradientStop>, spread:SpreadMethod ) {
+	function setGradientParameters( paint:Int, _stops:Iterable<TGradientStop>, spread:Int ) {
 		var stops = Lambda.array(_stops);
 		var vg_stops = CPtr.float_alloc( stops.length*5 );
 		var n=0;
 		
 		for( stop in stops ) {
 			CPtr.float_set( vg_stops, n++, stop.offset );
-			CPtr.float_set( vg_stops, n++, stop.color.r );
-			CPtr.float_set( vg_stops, n++, stop.color.g );
-			CPtr.float_set( vg_stops, n++, stop.color.b );
-			CPtr.float_set( vg_stops, n++, stop.color.a );
+			CPtr.float_set( vg_stops, n++, stop.r );
+			CPtr.float_set( vg_stops, n++, stop.g );
+			CPtr.float_set( vg_stops, n++, stop.b );
+			CPtr.float_set( vg_stops, n++, stop.a );
 		}
 		VG.setParameterfv( paint, VG.PAINT_COLOR_RAMP_STOPS, stops.length*5, vg_stops );
 
 		var sprd = switch(spread) {
-			case PadSpread: VG.COLOR_RAMP_SPREAD_PAD;
-			case ReflectSpread: VG.COLOR_RAMP_SPREAD_REFLECT;
-			case RepeatSpread: VG.COLOR_RAMP_SPREAD_REPEAT;
+			case Constants.SPREAD_PAD: VG.COLOR_RAMP_SPREAD_PAD;
+			case Constants.SPREAD_REFLECT: VG.COLOR_RAMP_SPREAD_REFLECT;
+			case Constants.SPREAD_REPEAT: VG.COLOR_RAMP_SPREAD_REPEAT;
 			default: VG.COLOR_RAMP_SPREAD_PAD;
 		}
 		VG.setParameteri( paint, VG.PAINT_COLOR_RAMP_SPREAD_MODE, sprd );

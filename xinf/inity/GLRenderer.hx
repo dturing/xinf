@@ -3,12 +3,12 @@
 	
 package xinf.inity;
 
+import xinf.geom.Matrix;
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
-import xinf.type.Paint;
+import xinf.erno.Paint;
 
 import opengl.GL;
 import opengl.GLU;

@@ -5,14 +5,11 @@ package xinf.ony;
 
 import xinf.geom.Transform;
 import xinf.ony.Implementation;
-import xinf.type.SpreadMethod;
-import xinf.type.TGradientStop;
-import xinf.type.Paint;
+import xinf.ony.type.GradientUnits;
+import xinf.ony.type.SpreadMethod;
+import xinf.erno.TGradientStop;
 
-enum GradientUnits {
-	UserSpaceOnUse;
-	ObjectBoundingBox;
-}
+/* TODO: make independent from erno */
 
 class Gradient extends ElementImpl {
 	

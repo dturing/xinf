@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.type;
+package xinf.erno;
 
 import xinf.geom.Transform;
 
@@ -17,12 +17,6 @@ enum Paint {
 	*/
 	None;
 	
-	/** use the PaintServer specified by [url]. 
-		Currently, only references by id to Gradients
-		in the current Document are supported 
-	*/
-	URLReference( url:String );
-	
 	/** use the solid RGBA color described.
 	*/
 	SolidColor( r:Float, g:Float, b:Float, a:Float );
@@ -34,7 +28,7 @@ enum Paint {
 	
 		$SVG painting#LinearGradientElement Linear gradients in SVG$
 	*/
-	PLinearGradient( stops:Iterable<TGradientStop>, x1:Float, y1:Float, x2:Float, y2:Float, spread:SpreadMethod );
+	PLinearGradient( stops:Iterable<TGradientStop>, x1:Float, y1:Float, x2:Float, y2:Float, spread:Int );
 	
 	/** fill or stroke using the radial gradient described.
 
@@ -47,7 +41,7 @@ enum Paint {
 
 		$SVG painting#RadialGradientElement Radial gradients in SVG$
 	*/
-	PRadialGradient( stops:Iterable<TGradientStop>, cx:Float, cy:Float, r:Float, fx:Float, fy:Float, spread:SpreadMethod );
+	PRadialGradient( stops:Iterable<TGradientStop>, cx:Float, cy:Float, r:Float, fx:Float, fy:Float, spread:Int );
 	
 //	Pattern( ... );
 }

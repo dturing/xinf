@@ -4,7 +4,6 @@
 package xinf.erno;
 
 import xinf.erno.Renderer;
-import xinf.type.Paint;
 
 /**
     A Pen structure keeps the style with which to draw graphic objects

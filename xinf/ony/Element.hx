@@ -12,7 +12,7 @@ import xinf.event.Event;
 import xinf.style.StyledElement;
 import xinf.style.Selector;
 
-import xinf.type.Paint;
+import xinf.ony.type.Paint;
 import xinf.ony.type.Length;
 import xinf.ony.type.JoinStyle;
 import xinf.ony.type.CapsStyle;
@@ -23,7 +23,6 @@ import xinf.ony.type.TextAnchor;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.BoundedFloatTrait;
-import xinf.traits.PaintTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
@@ -31,6 +30,7 @@ import xinf.traits.StringTrait;
 import xinf.ony.traits.LengthTrait;
 import xinf.ony.traits.StringListTrait;
 import xinf.ony.traits.StringChoiceTrait;
+import xinf.ony.traits.PaintTrait;
 // TODO import xinf.traits.TransformTrait;
 
 class Element extends StyledElement {
@@ -41,10 +41,10 @@ class Element extends StyledElement {
 		
 		opacity:		new BoundedFloatTrait(0,1,1),
 		color:			new PaintTrait(null), // just for "currentColor"
-		fill:			new PaintTrait(SolidColor(0,0,0,1)),
+		fill:			new PaintTrait(Paint.None),
 		fill_opacity:	new BoundedFloatTrait(0,1,1),
 
-		stroke:			new PaintTrait(None),
+		stroke:			new PaintTrait(Paint.None),
 		stroke_width:	new LengthTrait(new Length(1)),
 		stroke_opacity:	new BoundedFloatTrait(0,1,1),
 		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),

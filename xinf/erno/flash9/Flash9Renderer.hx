@@ -8,10 +8,9 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
+import xinf.erno.Paint;
 import xinf.type.Color;
-import xinf.type.Paint;
-import xinf.type.TGradientStop;
-import xinf.type.SpreadMethod;
+import xinf.erno.TGradientStop;
 
 import xinf.geom.Transform;
 import xinf.geom.Types;
@@ -23,8 +22,7 @@ import flash.display.CapsStyle;
 import flash.display.JointStyle;
 import flash.display.GradientType;
 import flash.display.InterpolationMethod;
-
-typedef FlashSpreadMethod = flash.display.SpreadMethod;
+import flash.display.SpreadMethod;
 
 typedef Primitive = Dynamic // FIXME XinfSprite
 
@@ -77,23 +75,23 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         current.mask = crop;
     }
 
-	function flashGradient( stops:Iterable<TGradientStop>, spread:SpreadMethod ) {
+	function flashGradient( stops:Iterable<TGradientStop>, spread:Int ) {
 		var colors = new Array();
 		var alphas = new Array();
 		var ratios = new Array();
 		var lR=0.;
 		for( stop in stops ) {
-			colors.push(stop.color.toRGBInt());
-			alphas.push(stop.color.a);
+			colors.push( colorToRGBInt( stop.r, stop.g, stop.b ) );
+			alphas.push( stop.a );
 			if( stop.offset < lR ) throw("LinearGradient offset out of sequence");
 			lR = Math.max(0,Math.min(1,stop.offset));
 			ratios.push(lR*255);
 		}
 		var sprd = switch(spread) {
-			case PadSpread: FlashSpreadMethod.PAD;
-			case ReflectSpread: FlashSpreadMethod.REFLECT;
-			case RepeatSpread: FlashSpreadMethod.REPEAT;
-			default: FlashSpreadMethod.PAD;
+			case Constants.SPREAD_PAD: SpreadMethod.PAD;
+			case Constants.SPREAD_REFLECT: SpreadMethod.REFLECT;
+			case Constants.SPREAD_REPEAT: SpreadMethod.REPEAT;
+			default: SpreadMethod.PAD;
 		}
 		
 		return {
@@ -150,7 +148,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				var f = { x:fx-cx, y:fy-cy };
 				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) );
 				focalRatio = focalRatio/r;
-				trace("foc: "+focalRatio );
+//				trace("foc: "+focalRatio );
 //				var focalRatio = .5;
 				current.graphics.beginGradientFill( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
 				
@@ -318,4 +316,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         current.addChild(o);
     }
     
+    static function colorToRGBInt(r:Float,g:Float,b:Float) : Int {
+        return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
+    }
 }

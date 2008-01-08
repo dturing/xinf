@@ -1,12 +1,13 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.type;
+package xinf.erno;
 
 /**
 	Defines a color stop for a Gradient.
 	
-	[color] defines the Color to be used at the stop.
+	[r], [g], [b] and [a] define the RGBA color to be used at the stop,
+	with values from 0.0 to 1.0.
 	
 	[offset] defines the offset of the stop, 0 to 1.
 	
@@ -15,6 +16,9 @@ package xinf.type;
 	$SVG painting#StopElement The "stop" element in SVG$
 */
 typedef TGradientStop = {
-	color :Color,
+	r :Float,
+	g :Float,
+	b :Float,
+	a :Float,
 	offset :Float
 }

@@ -3,7 +3,7 @@
 	
 package xinf.type;
 
-import xinf.type.Paint;
+import xinf.erno.Paint;
 
 /**
     Describes a RGBA Color (not a $xinf.type.Paint$). 

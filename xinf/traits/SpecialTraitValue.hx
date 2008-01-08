@@ -3,7 +3,6 @@
 	
 package xinf.traits;
 
-import xinf.type.Paint;
 import xinf.xml.XMLElement;
 
 class SpecialTraitValue {

@@ -3,8 +3,6 @@
 	
 package xinf.erno;
 
-import xinf.type.Paint;
-
 #if flash
     typedef NativeObject = flash.display.DisplayObject
     typedef NativeContainer = flash.display.DisplayObjectContainer
