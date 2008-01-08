@@ -7,9 +7,14 @@ import xinf.geom.Transform;
 import xinf.ony.Implementation;
 import xinf.ony.type.GradientUnits;
 import xinf.ony.type.SpreadMethod;
-import xinf.erno.TGradientStop;
 
-/* TODO: make independent from erno */
+private typedef TGradientStop = {
+	r :Float,
+	g :Float,
+	b :Float,
+	a :Float,
+	offset :Float
+}
 
 class Gradient extends ElementImpl {
 	

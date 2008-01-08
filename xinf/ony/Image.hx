@@ -4,10 +4,6 @@
 package xinf.ony;
 import xinf.ony.Implementation;
 
-import xinf.erno.ImageData;
-import xinf.event.ImageLoadEvent;
-
-import xinf.type.URL;
 import xinf.ony.type.Length;
 import xinf.ony.type.PreserveAspectRatio;
 
@@ -48,53 +44,10 @@ class Image extends ElementImpl {
 	
     public var href(get_href,set_href):String; // TODO xlink namespace
     function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { 
-		setTrait("href",v);
-		resolve();
-        return href;
-	}
+    function set_href( v:String ) :String { return setTrait("href",v); }
 
     public var preserveAspectRatio(get_preserveAspectRatio,set_preserveAspectRatio):PreserveAspectRatio;
     function get_preserveAspectRatio() :PreserveAspectRatio { return getStyleTrait("preserveAspectRatio",PreserveAspectRatio); }
     function set_preserveAspectRatio( v:PreserveAspectRatio ) :PreserveAspectRatio { return setStyleTrait("preserveAspectRatio",v); }
-
-    public var bitmap(default,set_bitmap):ImageData;
-
-    private function set_bitmap(v:ImageData) {
-        // FIXME: if old bitmap, unregister...
-        bitmap=v;
-        bitmap.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-        bitmap.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-        bitmap.addEventListener( ImageLoadEvent.LOADED, dataChanged );
-        redraw();
-        return bitmap;
-    }
-    
-    private function dataChanged( e:ImageLoadEvent ) :Void {
-        redraw();
-    }
-
-	override public function onLoad() :Void {
-		super.onLoad();
-		resolve();
-	}
-	
-	function resolve() :Void {
-		var url:URL; var b=base;
-//		trace("load img "+href+" base "+b+", in "+this );
-		if( b!=null ) url = new URL(b).getRelativeURL( href );
-		else url = new URL(href);
-		
-		try {
-			bitmap = load( url.toString() );
-		} catch(e:Dynamic) {
-			trace( e );
-		}
-		redraw();
-	}
-
-    public static function load( url:String ) :ImageData {
-		return ImageData.load( url );
-    }
 
 }
