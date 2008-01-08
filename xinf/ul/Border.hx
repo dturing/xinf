@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.type;
+package xinf.ul;
 
 class Border {
 	public var l:Float;

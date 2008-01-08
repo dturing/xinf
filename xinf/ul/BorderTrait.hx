@@ -1,9 +1,9 @@
 /*  Copyright (c) the Xinf contributors.
     see http://xinf.org/copyright for license. */
 	
-package xinf.traits;
+package xinf.ul;
 
-import xinf.type.Border;
+import xinf.traits.TypedTrait;
 
 class BorderTrait extends TypedTrait<Border> {
 

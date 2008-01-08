@@ -18,8 +18,8 @@ import xinf.ul.skin.Skin;
 import xinf.ony.traits.StringListTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.FloatTrait;
-import xinf.traits.BorderTrait;
 import xinf.traits.PaintTrait;
+import xinf.ul.BorderTrait;
 
 class Component extends StyledElement {
 	public static function init() {
