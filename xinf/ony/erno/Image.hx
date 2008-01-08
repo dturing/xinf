@@ -3,7 +3,7 @@
 	
 package xinf.ony.erno;
 
-import xinf.type.URL;
+import xinf.xml.URL;
 import xinf.erno.ImageData;
 import xinf.event.ImageLoadEvent;
 import xinf.erno.Renderer;

@@ -3,7 +3,6 @@
 	
 package xinf.xml;
 
-import xinf.type.URL;
 import xinf.style.StyleSheet;
 import xinf.style.StyleParser;
 import xinf.traits.TraitAccess;

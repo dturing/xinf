@@ -5,7 +5,7 @@ package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.type.URL;
+import xinf.xml.URL;
 import xinf.xml.Node;
 import xinf.xml.Document;
 import xinf.xml.Binding;
