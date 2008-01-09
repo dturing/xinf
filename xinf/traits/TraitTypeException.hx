@@ -1,0 +1,17 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
+package xinf.traits;
+
+class TraitTypeException {
+	public var message:String;
+	
+	public function new( name:String, obj:TraitAccess, value:Dynamic, expected:Class<Dynamic> ) {
+		message = "Trait '"+name+"' in "+obj+" is of wrong type: "+value
+			+" ('"+value+"', expect "+expected+")";
+	}
+
+	public function toString() :String {
+		return( message );
+	}
+}

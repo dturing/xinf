@@ -5,8 +5,8 @@ package xinf.style;
 
 import xinf.xml.Node;
 import xinf.xml.XMLElement;
-import xinf.traits.TraitException;
 import xinf.traits.SpecialTraitValue;
+import xinf.traits.TraitTypeException;
 
 /**
 	An Element with style.
@@ -87,10 +87,7 @@ class StyledElement extends XMLElement {
 		if( inherit && v==null ) {
 			var p:StyledElement = getTypedParent(StyledElement);
 			if( p!=null ) {
-				try {
-					v = p.getStyleTrait( name, type, inherit );
-				} catch( e:TraitNotFoundException ) {
-				}
+				v = p.getStyleTrait( name, type, inherit );
 			}
 		}
 

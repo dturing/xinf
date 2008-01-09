@@ -5,9 +5,9 @@ package xinf.xml;
 
 import xinf.traits.TraitAccess;
 import xinf.traits.TraitDefinition;
-import xinf.traits.TraitException;
 import xinf.traits.SpecialTraitValue;
 import xinf.traits.StringTrait;
+import xinf.traits.TraitTypeException;
 import xinf.style.StyleParser;
 
 import xinf.event.EventDispatcher;
@@ -184,15 +184,11 @@ class XMLElement extends Node,
 	*/
 	public function setTraitsFromXml( xml:Xml ) {
 		for( field in xml.attributes() ) {
-			try {
-				// for now, strip namespace...
-				var f2:String = field;
-				var a = field.split(":");
-				if( a.length>1 ) f2 = a[a.length-1];
-				setTraitFromString( f2, xml.get(field), _traits );
-			} catch( e:TraitNotFoundException ) {
-//				trace("Trait not found: "+name );
-			}
+			// for now, strip namespace...
+			var f2:String = field;
+			var a = field.split(":");
+			if( a.length>1 ) f2 = a[a.length-1];
+			setTraitFromString( f2, xml.get(field), _traits );
 		}
 	}
 	
@@ -207,7 +203,6 @@ class XMLElement extends Node,
 			t = getClassTrait( cl, name );
 			cl = Type.getSuperClass(cl);
 		}
-//		if( t==null ) throw( new TraitNotFoundException(name,this) );
 		return t;
 	}
 	

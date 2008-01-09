@@ -4,7 +4,6 @@
 package xinf.style;
 
 import xinf.traits.TraitAccess;
-import xinf.traits.TraitException;
 
 import xinf.style.StyleSheet;
 import xinf.style.Selector;
