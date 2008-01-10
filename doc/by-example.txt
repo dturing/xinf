@@ -38,6 +38,8 @@ Xinf by Example
 		events
 		animation
 		
+		extending svg shapes
+		
 	Using SVG as the major asset
 		own Bindings and Instantiators
 		CSS
