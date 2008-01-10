@@ -34,9 +34,9 @@ class Path extends xinf.ony.Path  {
 				case CubicTo(x1,y1,x2,y2,x,y):
 					open=true;
 					g.cubicTo(x1,y1,x2,y2,x,y);
-				case ArcTo(rx,ry,rotation,largeArc,sweep,x,y):
+				case ArcTo(x1,y1,rx,ry,rotation,largeArc,sweep,x,y):
 					open=true;
-					g.arcTo(rx,ry,rotation,largeArc,sweep,x,y);
+					g.arcTo(x1,y1,rx,ry,rotation,largeArc,sweep,x,y);
 			}
 		}
 		if( open ) g.endPath();

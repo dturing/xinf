@@ -161,6 +161,8 @@ class PathParser {
                     SmoothQuadraticToR( a[0], a[1] );
                 case "A":
                     ArcTo( a[0], a[1], a[2], a[3]==0., a[4]==0., a[5], a[6] );
+                case "a":
+                    ArcToR( a[0], a[1], a[2], a[3]==0., a[4]==0., a[5], a[6] );
                 case "Z":
                     Close;
                 case "z":
@@ -282,9 +284,13 @@ class PathParser {
                     qsmooth2 = s;
 
                 case ArcTo(rx,ry,rotation,largeArc,sweep,x,y):
-                    out.push( SimpleSegment.ArcTo(rx,ry,rotation,largeArc,sweep,x,y) );
+                    out.push( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,x,y) );
                     last = { x:x, y:y };
-                    
+
+                case ArcToR(rx,ry,rotation,largeArc,sweep,x,y):
+                    out.push( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,last.x+x,last.y+y) );
+                    last = { x:last.x+x, y:last.y+y };
+
                 default:
                     throw("unimplemented path segment "+seg );
             }

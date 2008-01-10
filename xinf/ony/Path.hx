@@ -35,7 +35,7 @@ private class PathBBox {
                 case QuadraticTo(x1,y1,x,y):
 					proc(x1,y1); proc(x,y);
 					
-                case ArcTo(rx,ry,rotation,largeArc,sweep,x,y):
+                case ArcTo(x1,y1,rx,ry,rotation,largeArc,sweep,x,y):
 					proc(x,y);
                     
 				default:
