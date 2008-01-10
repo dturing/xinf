@@ -1,21 +1,10 @@
-/* 
-   xinf is not flash.
-   Copyr (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-																			
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU		
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.skin;
 
 import Xinf;
+import xinf.type.Paint;
 
 class SimpleSkin extends Skin {
 	var bg:Rectangle;
@@ -28,17 +17,21 @@ class SimpleSkin extends Skin {
 	override public function setTo( name:String ) :Void {
 		switch( name ) {
 			case "focus":
-				bg.style.fill = Color.rgba(.8,.8,.8,.6);
-				bg.style.stroke = Color.BLACK;
-				bg.style.strokeWidth = 2;
-			case "press":
-				bg.style.fill = Color.rgba(.9,.9,.9,.8);
-				bg.style.stroke = Color.BLACK;
-				bg.style.strokeWidth = 2;
+				bg.fill = SolidColor(.9,.9,.9,.8);
+				bg.stroke = Color.BLACK;
+				bg.strokeWidth = 2;
+			case "focus-bright":
+				bg.fill = SolidColor(.98,.98,.98,.9);
+				bg.stroke = Color.BLACK;
+				bg.strokeWidth = 2;
+			case "none":
+				bg.fill = Color.TRANSPARENT;
+				bg.stroke = Color.TRANSPARENT;
+				bg.strokeWidth = 0;
 			default:
-				bg.style.fill = Color.rgba(.8,.8,.8,.6);
-				bg.style.stroke = Color.BLACK;
-				bg.style.strokeWidth = 1;
+				bg.fill = SolidColor(.9,.9,.9,.8);
+				bg.stroke = Color.BLACK;
+				bg.strokeWidth = 1;
 		}
 	}
 
@@ -48,11 +41,11 @@ class SimpleSkin extends Skin {
 	}
 
     override public function attachBackground( c:Group ) :Void {
-		c.attach( bg );
+		c.appendChild( bg );
     }
 
     override public function detachBackground( c:Group ) :Void {
-		c.detach( bg );
+		c.removeChild( bg );
     }
 
     override public function attachForeground( c:Group ) :Void {

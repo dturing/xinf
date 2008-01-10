@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 #if flash
@@ -11,13 +14,13 @@ package xinf.erno;
     /**
         NativeObject is a typedef that is defined depending on the runtime you compile for.
         <ul>
-            <li>for Xinfinity, it is = <a href="../inity/GLObject.html">xinf.inity.GLObject</a></li>
-            <li>for Flash, it is = <a href="../../flash/display/DisplayObject.html">flash.display.DisplayObject</a></li>
-            <li>for JavaScript, it is = <a href="../../js/HtmlDom.html">js.HtmlDom</a></li>
+            <li>for Xinfinity, it is = $xinf.inity.GLObject$</li>
+            <li>for Flash, it is = $flash.display.DisplayObject$</li>
+            <li>for JavaScript, it is = $js.HtmlDom$</li>
         </ul>
         
         It is used to embed native objects into xinf content, 
-        similar to <a href="NativeContainer.html">NativeContainer</a>
+        similar to $xinf.erno.NativeContainer$
         
         <br/><br/>
         
@@ -28,15 +31,13 @@ package xinf.erno;
     /**
         NativeContainer is a typedef that is defined depending on the runtime you compile for.
         <ul>
-            <li>for Xinfinity, it is = <a href="../inity/GLObject.html">xinf.inity.GLObject</a></li>
-            <li>for Flash, it is = <a href="../../flash/display/DisplayObjectContainer.html">flash.display.DisplayObjectContainer</a></li>
-            <li>for JavaScript, it is = <a href="../../js/HtmlDom.html">js.HtmlDom</a></li>
+            <li>for Xinfinity, it is = $xinf.inity.GLObject$</li>
+            <li>for Flash, it is = $flash.display.DisplayObjectContainer$</li>
+            <li>for JavaScript, it is = $js.HtmlDom$</li>
         </ul>
         
         It is used to embed xinf content into native objects, 
-        similar to <a href="NativeObject.html">NativeObject</a>
-        
-        <br/><br/>
+        similar to $xinf.erno.NativeObject$
         
         (ignore the following, I haven't figured how to patch haxedoc to accept this construct).
     **/
@@ -45,28 +46,16 @@ package xinf.erno;
 
 
 /**
-    The xinferno Renderer interface describes the drawing protocol used within all of xinf.
-    <p>
-        You will likely be confronted with it mostly when overriding [xinf.ony.Object.drawContents()],
-        where you will be given a Renderer to use for drawing your stuff. In that case, the 
-        Renderer will already be set to the right context, and you shouldn't use the [*Object()] or 
-        [setTransform()] methods. Instead, you can start right away with setting color and font,
-        defining shapes, or drawing primitives.
-    </p>
-    <p>
-        <b>Warning:</b>
-        This documentation describes how the renderers <i>should</i> behave, it currently cannot
-        be guaranteed that everything works as specified on every renderer. Also, at least the
-        <a href="../js/JSRenderer.html">JavaScript renderer</a> will ignore shape instructions
-        and transformations other than translation (movement).
-    </p>
+    The xinferno Renderer interface describes the drawing protocol used within $wiki XinfErno Xinferno$.
 **/
 interface Renderer {
     
     /**
-        Start an object definition. Must be matched with a corresponding endObject().
+        Start an object definition. 
+		
+		Must be matched with a corresponding endObject().
         You can define only one object at a time. The ID must be globally unique, and
-        should be acquired with <a href="Runtime.html">Runtime</a>.getNextId().
+        should be acquired with $xinf.erno.Runtime::getNextId$.
         If no object with the ID exists, it will be created. If it does exist,
         it will be cleared. Until a matching endObject() is called, the object
         is the "current object".
@@ -113,17 +102,17 @@ interface Renderer {
     function setFill( ?paint:Paint ) :Void;
     
     /**
-        Set the stroke (line) paint and width (thickness) for following drawing operations. 
-        If you specify [null] for c,
-        [0] or [null] for width or leave away the arguments, shapes' contours won't be stroked.
+        Set the stroke (line) paint, width, and other stroke styles for following drawing operations. 
+        If you specify None for paint,
+        or [0] width, shapes' won't be stroked.
     **/
-    function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
+    function setStroke( ?paint:Paint, width:Float, ?capsStyle:Int, ?joinStyle:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
     
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially
         overlapping.
         Every [startShape] must be matched with a [endShape], within a shape definition only calls
-        to [startPath] and [endPath] may be used (and those allowed within them).
+        to [startPath] and [endPath] may be used (and those allowed within these).
     **/
     function startShape() :Void;
     
@@ -148,12 +137,12 @@ interface Renderer {
 
     /**
         Close the currently defined path. May only occur between calls to [startPath]/[endPath].
-        Effectively issues a [lineTo] to the path's origin that was specified with [startPath].
     **/
     function close() :Void;
 
     /**
         Adds a line to the specified absolute coordinates ([x],[y]) to the currently defined path.
+		
         May only occur between calls to [startPath]/[endPath].
     **/
     function lineTo( x:Float, y:Float ) :Void;
@@ -161,6 +150,7 @@ interface Renderer {
     /**
         Adds a quadratic Bezier curve to the specified absolute coordinates ([x],[y]) 
         to the currently defined path, using ([x1],[y1]) as the curve control point.
+		
         May only occur between calls to [startPath]/[endPath].
     **/
     function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) :Void;
@@ -168,6 +158,7 @@ interface Renderer {
     /**
         Adds a cubic Bezier curve to the specified absolute coordinates ([x],[y]) 
         to the currently defined path, using ([x1],[y1]) and ([x2],[y2]) as curve control points.
+		
         May only occure between calls to [startPath]/[endPath].
     **/
     function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) :Void;
@@ -207,13 +198,11 @@ interface Renderer {
 
     /**
         Draws a string of text at coordinates ([x],[y]) within the current object,
-        using the current font style (family, weight, slant and size) and the
-        current fill color. You can optionally pass in a <a href="FontStyle.html">FontStyle</a>
-        for changing the font color in the middle of the string. The string may contain
-        '\n's to span multiple lines.
+        using the given font style (family, weight, slant and size) and the
+        current fill color. The string may contain '\n's to span multiple lines.
     **/
     function text( x:Float, y:Float, text:String, format:TextFormat ) :Void;
-    
+
     /**
         Draw the specified [inRegion] of the given <a href="ImageData.html">ImageData</a> 
         object to the given [outRegion]. 
@@ -223,13 +212,10 @@ interface Renderer {
     function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) :Void;
     
     /**
-        Start redefining the contents of the given <a href="NativeContainer.html">NativeContainer</a>.
+        Start redefining the contents of the given $xinf.erno.NativeContainer$.
         Similar to [startObject()], this clears the given container, and must be matched
         by a corresponding [endNative()]. [startNative]/[endNative] allow you to use a
         Xinferno Renderer to fill a runtime-specific graphic object.
-        <br/><b>Note:</b> this functionality is experimental, and might well change.
-        You should probably stick to using <a href="../ony/Embed.html">xinf.ony.Embed</a>
-        to place your xinf content within native structures meanwhile.
     **/
     function startNative( o:NativeContainer ) :Void;
     
@@ -239,12 +225,9 @@ interface Renderer {
     function endNative() :Void;
 
     /**
-        Add the given <a href="NativeObject.html">NativeObject</a> to the current object.
+        Add the given $xinf.erno.NativeObject$ to the current object.
         This allows you to embed native content (i.e., arbitrary DisplayObjects in Flash,
         or arbitrary HTML content for JavaScript) within xinferno content.
-        <br/><b>Note:</b> this functionality is experimental, and might well change.
-        You should probably stick to using <a href="../ony/Native.html">xinf.ony.Native</a>
-        to place your native structures within xinf content meanwhile.
     **/
     function native( o:NativeObject ) :Void;
 }

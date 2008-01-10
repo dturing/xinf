@@ -1,21 +1,11 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 /**
+	DOCME: out of date!
+	
     The Keys class provides a single global function ([get]) to 
     convert a runtime-specific numeric key code to a
     xinferno-standard key string.
@@ -50,6 +40,8 @@ class Keys {
         keys.set(127,"delete");
         
         #if neko
+            keys.set(SPECIAL+opengl.GLUT.KEY_HOME,"home");
+            keys.set(SPECIAL+opengl.GLUT.KEY_END,"end");
             keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_UP,"page up");
             keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_DOWN,"page down");
             keys.set(SPECIAL+opengl.GLUT.KEY_LEFT,"left");

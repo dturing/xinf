@@ -1,23 +1,10 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.layout;
 
 import xinf.ul.Component;
 import xinf.ul.Container;
-import xinf.style.Style;
 
 enum Border {
     Center;
@@ -43,7 +30,7 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
         var W:Component;
         var C:Component;
         
-        for( c in parent.children ) {
+        for( c in parent.getComponents() ) {
             switch( getConstraints( c ) ) {
                 case North:
                     N=c;
@@ -59,40 +46,40 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
             }
         }
 
-        var p = parent.removePadding( parent.size );
-        var tl = parent.innerTopLeft();
+        var p = Helper.removePadding( parent.size, parent );
+        var tl = Helper.innerTopLeft( parent );
         var n=tl.y;
         var w=tl.x;
         var s=0.;
         var e=0.;
         
         if( N!=null ) {
-            var s = N.clampSize( {x:p.x, y:N.prefSize.y} );
+            var s = Helper.clampSize( {x:p.x, y:N.prefSize.y}, N );
             n += s.y;
-            N.resize( s.x, s.y );
-            N.moveTo( tl.x, tl.y );
+            N.set_size( {x:s.x, y:s.y} );
+            N.set_position( {x:tl.x, y:tl.y} );
         }
         if( S!=null ) {
-            var sz = S.clampSize( {x:p.x, y:S.prefSize.y} );
+            var sz = Helper.clampSize( {x:p.x, y:S.prefSize.y}, S );
             s = sz.y;
-            S.resize( sz.x, sz.y );
-            S.moveTo( tl.x, (tl.y+p.y) - s );
+            S.set_size( {x:sz.x, y:sz.y} );
+            S.set_position( {x:tl.x, y:(tl.y+p.y) - s} );
         }
         if( W!=null ) {
-            var s = W.clampSize( {x:W.prefSize.x, y:(tl.y+p.y) - (n+s)} );
+            var s = Helper.clampSize( {x:W.prefSize.x, y:(tl.y+p.y) - (n+s)}, W );
             w += s.x;
-            W.resize( s.x, s.y );
-            W.moveTo( tl.x, n );
+            W.set_size( {x:s.x, y:s.y} );
+            W.set_position( {x:tl.x, y:n} );
         }
         if( E!=null ) {
-            var s = E.clampSize( {x:E.prefSize.x, y:(tl.y+p.y) - (n+s)} );
+            var s = Helper.clampSize( {x:E.prefSize.x, y:(tl.y+p.y) - (n+s)}, E );
             e = s.x;
-            E.resize( s.x, s.y );
-            E.moveTo( (tl.x+p.x) - e, n );
+            E.set_size( {x:s.x, y:s.y} );
+            E.set_position( {x:(tl.x+p.x) - e, y:n} );
         }
         if( C!=null ) {
-            C.moveTo( w, n );
-            C.resize( (tl.x+p.x) - (w+e), (tl.y+p.y) - (n+s) );
+            C.set_position( {x:w, y:n} );
+            C.set_size( {x:(tl.x+p.x) - (w+e), y:(tl.y+p.y) - (n+s)} );
         }
     }
 }

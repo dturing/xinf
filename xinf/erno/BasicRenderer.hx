@@ -1,12 +1,14 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 import xinf.erno.Renderer;
 import xinf.geom.Matrix;
-import xinf.erno.FontStyle;
 
 /**
     BasicRenderer implements all functions
-    of the <a href="Renderer.html">Renderer</a> interface to throw exceptions.
+    of the $xinf.erno.Renderer$ interface to throw exceptions.
     It is used as a base class for other renderers (some, like JSRenderer,
     throw exceptions for functions that they cannot satisfy, like startShape()).
 **/
@@ -61,14 +63,10 @@ class BasicRenderer implements Renderer {
 		unimplemented("setFill");
 	}
     
-    public function setStroke( ?paint:Paint, width:Float, ?caps:CapsStyle, ?join:JoinStyle, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+    public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
 		unimplemented("setStroke");
 	}
         
-    public function setFont( face:String, italic:Bool, bold:Bool, size:Float ) :Void {
-        unimplemented("setFont");
-    }
-
     public function startShape() :Void {
         unimplemented("startShape");
     }

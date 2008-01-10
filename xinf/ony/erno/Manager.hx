@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -76,6 +64,9 @@ class Manager {
     public function unregister( id:Int) :Void {
         // TODO #if debug, check if set.
         objects.remove(id);
+		changed.remove(id);
+		moved.remove(id);
+		Runtime.renderer.destroyObject(id);
     }
 
     public function objectChanged( id:Int, o:Element ) :Void {
@@ -90,20 +81,33 @@ class Manager {
         var somethingChanged:Bool = false;
         var g:Renderer = Runtime.renderer;
         
-        var ch = moved;
+ 		#if profile
+ 			xinf.test.Profile.before("transform");
+ 		#end
+
+		var ch = moved;
         moved = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).reTransform( g );
             somethingChanged = true;
         }
-        
+
+ 		#if profile
+			xinf.test.Profile.after("transform");
+ 			xinf.test.Profile.before("draw");
+ 		#end
+
         var ch = changed;
         changed = new IntHash<Element>();
         for( id in ch.keys() ) {
             ch.get(id).draw( g );
             somethingChanged = true;
         }
-        
+
+ 		#if profile
+ 			xinf.test.Profile.after("draw");
+ 		#end
+
         if( somethingChanged ) Runtime.runtime.changed();
     }
     

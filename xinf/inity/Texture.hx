@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.inity;
 
 import xinf.support.Pixbuf;
@@ -28,16 +16,16 @@ import xinf.inity.ColorSpace;
 class Texture extends ImageData {
     // texture (id), twidth, theight, width and height are already defined in ImageData.
     
-    public function initialize( w:Int, h:Int, cspace:ColorSpace ) {
+    public function initialize( w:Int, stride:Int, h:Int, cspace:ColorSpace ) {
         width=w;
         height=h;
         
-        twidth = 2; while( twidth<w ) twidth<<=1;
+        twidth = 2; while( twidth<stride ) twidth<<=1;
         theight = 2; while( theight<h ) theight<<=1;
 
         // generate texture id
         var t:Dynamic = CPtr.uint_alloc(1);
-        GL.genTextures(1,t);
+        GL.genTextures(1,t); // FIXME: delete this at some point...
         texture = CPtr.uint_get(t,0);
         var e:Int = GL.getError();
         if( e > 0 ) { throw("could not create texture"); }
@@ -75,7 +63,7 @@ class Texture extends ImageData {
         #end
     }
     
-    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, ?cspace:ColorSpace ) :Void {
+    public function setData( data:Dynamic, pos:{x:Int,y:Int}, size:{x:Int,y:Int}, stride:Int, ?cspace:ColorSpace ) :Void {
         if( cspace==null ) cspace=RGBA;
     
         GL.pushAttrib( GL.ENABLE_BIT );
@@ -153,11 +141,14 @@ class Texture extends ImageData {
         
         var w = pixbuf.getWidth();
         var h = pixbuf.getHeight();
-        var stride = pixbuf.getRowstride();
         var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
-        r.initialize( w, h, cs );
+        var stride = pixbuf.getRowstride();
+		if( pixbuf.getHasAlpha()>0 ) stride/=4; // FIXME: no korrekt (check with software renderer)
+		else stride/=3;
+		
+        r.initialize( w, stride, h, cs );
         var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
-		r.setData( d, {x:0, y:0}, {x:w,y:h}, cs );
+		r.setData( d, {x:0, y:0}, {x:stride,y:h}, stride, cs );
         return r;
     }
 

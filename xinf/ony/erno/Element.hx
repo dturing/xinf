@@ -1,21 +1,26 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
-import xinf.erno.Paint;
 import xinf.geom.Transform;
-import xinf.erno.CapsStyle;
-import xinf.erno.JoinStyle;
-import xinf.ony.base.PaintElement;
+import xinf.ony.type.CapsStyle;
+import xinf.ony.type.JoinStyle;
+import xinf.ony.type.Visibility;
+import xinf.ony.type.Display;
+import xinf.ony.type.Paint;
+import xinf.erno.Constants;
 
-class Element extends xinf.ony.base.Element {
+class Element extends xinf.ony.Element {
     
     private static var _manager:Manager;
     private static var manager(getManager,null):Manager;
     
     /** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
         Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
-    public var xid(default,null):Int;
+    public var xid(default,null):Null<Int>;
 
 	private static function getManager() :Manager {
         if( _manager == null ) {
@@ -28,37 +33,42 @@ class Element extends xinf.ony.base.Element {
         return( manager.find(id) );
     }
     
-    public function new() :Void {
-		super();
-		xid = Runtime.runtime.getNextId();
-        manager.register( xid, this );
-        redraw();
+    public function new( ?traits:Dynamic ) :Void {
+		super( traits );
+		xid=null;
+	//	xid = Runtime.runtime.getNextId();
+    //    manager.register( xid, this );
+    //    redraw();
     }
 	
+
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
-		to.xid = Runtime.runtime.getNextId();
-        manager.register( to.xid, to );
-		to.redraw();
+	//	to.xid = Runtime.runtime.getNextId();
+	//	to.redraw();
 	}
-    
-    /** Object destructor<br/>
-        You must call this function if you want to get rid of this object and free
-        all associated memory. (Yes, is garbage-collected, but we need some
-        trigger to free all associated objects in the runtime. This is it.)
-        
-        Could this be done on deattach? we dont need it registered any more...
-    **/
-    public function destroy() :Void {
-        // how about deleting our associated Sprite/Div/GLObject?
-        // also: detach from parent
-        manager.unregister(xid);
+
+	function construct() :Void {
+		if( xid!=null ) throw("constructing an object that is already constructed");
+	//	trace("construct "+this );
+		xid = Runtime.runtime.getNextId();
+        manager.register( xid, this );
+		redraw();
+	}
+	
+    function destroy() :Void {
+		//if( xid==null ) throw("destroying an object that is already destroyed");
+		if( xid!=null ) {
+			manager.unregister(xid);
+			xid=null;
+		}
     }
 
     /** apply new transformation (position)<br/>
         This is an internal function, you should usually not care about it.
         **/
     public function reTransform( g:Renderer ) :Void {
+		if( xid==null ) throw("no xid: "+this);
         var m = transform.getMatrix();
         g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
     }
@@ -69,15 +79,12 @@ class Element extends xinf.ony.base.Element {
         override [drawContents()] to draw stuff.
         **/
     public function draw( g:Renderer ) :Void {
+		if( xid==null ) throw("no xid: "+this);
         g.startObject( xid );
-            switch( style.visibility ) {
-                case Hidden:
-                    // nada
-                default:
-                    drawContents(g);
-            }
+			if( display != Display.None && visibility != Visibility.Hidden )
+				drawContents(g);
         g.endObject();
-        reTransform(g);
+        reTransform(g); // FIXME: needed?
     }
     
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
@@ -85,56 +92,60 @@ class Element extends xinf.ony.base.Element {
         Everything you do will be in the Object's local coordinate space.
         **/
     public function drawContents( g:Renderer ) :Void {
-		var opacity = style.opacity;
-		var fillOpacity = style.fillOpacity;
-		
-        var fill = style.fill;
-		if( fill!=null ) {
+		#if profile
+			xinf.test.Counter.count("drawContents");
+		#end
+        if( fill!=null ) {
 			switch( fill ) {
 				case URLReference(url):
-					var r = document.getTypedElementByURI( url, PaintElement );
+					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
 					if( r==null ) throw("Referenced Paint not found: "+url );
 					g.setFill( r.getPaint(this) );
-				case SolidColor(r,green,b,a):
-					g.setFill( SolidColor(r,green,b,a*fillOpacity*opacity) );
-				default:
-					g.setFill( fill );
+				case RGBColor(r,green,b):
+					g.setFill( xinf.erno.Paint.SolidColor(r,green,b,fillOpacity*opacity) );
+				case None:
+					g.setFill( xinf.erno.Paint.None );
 			}
 		} else g.setFill( null );
 
-
-		var strokeOpacity = style.strokeOpacity;
-		
-		var stroke = style.stroke;
-        var w = style.strokeWidth;
-		
-		// TODO: gradients, dash
-		var caps = style.lineCap;
-		var join = style.lineJoin;
-		var miterLimit = style.strokeMiterlimit;
-		var dashArray:Iterable<Float> = null;
-		var dashOffset:Null<Float> = null;
-		
 		if( stroke!=null ) {
-			switch( stroke) {
+			var w = strokeWidth;
+			var caps = strokeLinecap;
+			var join = strokeLinejoin;
+			var miterLimit = strokeMiterlimit;
+			// TODO: dash
+			var dashArray:Iterable<Float> = null;
+			var dashOffset:Null<Float> = null;
+
+			var _caps = switch( caps ) {
+				case ButtCaps: Constants.CAPS_BUTT;
+				case RoundCaps: Constants.CAPS_ROUND;
+				case SquareCaps: Constants.CAPS_SQUARE;
+			}
+			var _join = switch( join ) {
+				case MiterJoin: Constants.JOIN_MITER;
+				case RoundJoin: Constants.JOIN_ROUND;
+				case BevelJoin: Constants.JOIN_BEVEL;
+			}
+			switch( stroke ) {
 				case URLReference(url):
-					var r = document.getTypedElementByURI( url, PaintElement );
+					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
 					if( r==null ) throw("Referenced Paint not found: "+url );
-					g.setStroke( r.getPaint(this), w, caps, join, miterLimit, dashArray, dashOffset );
-				case SolidColor(r,green,b,a):
-					g.setStroke( SolidColor(r,green,b,a*strokeOpacity*opacity), w, caps, join, miterLimit, dashArray, dashOffset );
-				default:
-					g.setStroke( stroke, w, caps, join, miterLimit, dashArray, dashOffset );
+					g.setStroke( r.getPaint(this), w, _caps, _join, miterLimit, dashArray, dashOffset );
+				case RGBColor(r,green,b):
+					g.setStroke( xinf.erno.Paint.SolidColor(r,green,b,strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, dashOffset );
+				case None:
+					g.setStroke( xinf.erno.Paint.None, 0 );
 			}
 		} else g.setStroke( 0 );
     }
 
     override public function redraw() :Void {
-        manager.objectChanged( xid, this );
+		if( xid!=null ) manager.objectChanged( xid, this );
     }
     
     override public function retransform() :Void {
-        manager.objectMoved( xid, this );
+        if( xid!=null ) manager.objectMoved( xid, this );
     }
 
 }

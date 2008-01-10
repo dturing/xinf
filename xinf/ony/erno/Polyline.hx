@@ -1,10 +1,12 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
 import xinf.geom.Types;
 
-class Polyline extends xinf.ony.base.Polygon  {
+class Polyline extends xinf.ony.Polyline  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( points==null ) return;

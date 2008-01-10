@@ -1,8 +1,8 @@
 #######################################################
 
 PROJECT:=xinf
-VERSION:=0.4.0
-TAGLINE:=iteration 4
+VERSION:=0.4.1
+TAGLINE:=traits
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
 REVISION:=$(shell svnversion)
@@ -17,7 +17,7 @@ INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
-HAXEFLAGS=--override $(INITYCP) -cp .
+HAXEFLAGS=--override $(INITYCP) -cp . -D profile
 
 default: test
 	
@@ -25,7 +25,19 @@ default: test
 
 test : $(VERSION_STUB) $(SRC) 
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main Example
-	NEKOPATH=$(NEKOPATH) neko test.n
+	NEKOPATH=$(NEKOPATH) neko test.n  
+	#xinf/test/static/SVG1.2/svg/struct-use-01-t.svg 
+
+doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx
+	cd doc/haxedoc-mod && haxe haxedoc.hxml
+	
+doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
+	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf.xml Xinf
+	cd doc/consolidate && haxe -neko Consolidate.n -main Consolidate
+	cd doc/consolidate && neko Consolidate.n ../xinf.xml
+	cd doc && xsltproc package-index.xsl consolidate/out.xml > package-index.xml
+	cd doc && xsltproc class-hierarchy.xsl xinf.xml > class-hierarchy.html
+	cd doc && haxedoc-mod/haxedoc xinf.xml
 	
 flash : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main Example
@@ -33,6 +45,16 @@ flash : $(SRC)
 js : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -js test.js -main Example
 
+
+# Benchmark
+
+benchmark : $(VERSION_STUB) $(SRC) 
+	haxe $(HAXEFLAGS) -D profile -neko bench.n -main Benchmark
+	NEKOPATH=$(NEKOPATH) neko bench.n
+
+memmark : $(VERSION_STUB) $(SRC) 
+	haxe $(HAXEFLAGS) -neko mem.n -main Memmark
+	NEKOPATH=$(NEKOPATH) neko mem.n
 
 #######################################################
 # generate version file

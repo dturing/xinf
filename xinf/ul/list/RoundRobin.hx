@@ -1,25 +1,13 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.list;
 
 import Xinf;
 import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
-import xinf.ul.ComponentStyle;
+import xinf.ul.Component;
 
 /*
 	TODO: when height is not an exact multiple of unit,
@@ -50,7 +38,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
     var model:ListModel<T>;
     var createItem:Void->Item;
 
-	var itemStyle:ElementStyle;
+	var itemStyle:Dynamic;
 	var itemOffset:TPoint;
 
     var n:Int;              // number of slots
@@ -63,7 +51,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
     var unit:Float;         // size of one unit (row height)
     var cOffset:Float;      // current negative offset in rows
     
-    public function new( model:ListModel<T>, createItem:Void->Item, eStyle:ElementStyle, cStyle:ComponentStyle, ?unit:Float ) :Void {
+    public function new( model:ListModel<T>, createItem:Void->Item, eStyle:Dynamic, c:Component, ?unit:Float ) :Void {
         super();
         
 		itemStyle = eStyle;
@@ -76,13 +64,12 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         rrstart = 0;
         
 		if( unit==null ) {
-			var s = Helper.addPadding( style.getTextFormat().textSize("Ag["), cStyle );
+			var s = Helper.addPadding( c.getTextFormat().textSize("Ag["), c );
 			unit = s.y;
 		}
-		itemOffset = Helper.innerTopLeft( cStyle );
+		itemOffset = Helper.innerTopLeft( c );
         this.unit = unit;
         cOffset = 0;
-
     }
 
 	public function resize( x:Float, y:Float ) :Void {
@@ -104,7 +91,6 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
             this.n = n;
         }
         
-    //    trace("resize items to "+w+"/"+unit );
         for( item in rr ) {
             item.resize( w, unit );
         }

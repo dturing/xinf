@@ -1,21 +1,8 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.layout;
 
-import xinf.ony.Object;
 import xinf.ul.Component;
 import xinf.ul.Container;
 import xinf.ul.layout.Spring;
@@ -35,21 +22,21 @@ class DeferredSpring extends SimpleSpring {
     function resolve() :Spring {
         return sl.getConstraints(o).getConstraint(edge);
     }
-    public function getMin() :Float {
+    override public function getMin() :Null<Float> {
         return resolve().getMin();
     }
-    public function getPref() :Float {
+    override public function getPref() :Null<Float> {
         return resolve().getPref();
     }
-    public function getMax() :Float {
+    override public function getMax() :Null<Float> {
         return resolve().getMax();
     }
-    public function getValue() :Float {
+    override public function getValue() :Null<Float> {
         _value = resolve().getValue();
         return _value;
     }
-    public function toString() :String {
-        return(""+o._id+edge+":"+resolve());
+    override public function toString() :String {
+        return(""+o.getElement().xid+edge+":"+resolve());
     }
 }
 
@@ -60,23 +47,23 @@ class WidthSpring extends SimpleSpring {
         super();
         c = component;
     }
-    public function getMin() :Float {
+    override public function getMin() :Null<Float> {
         return 0;
     }
-    public function getPref() :Float {
-        return c.clampSize( c.prefSize ).x;
+    override public function getPref() :Null<Float> {
+    	return Helper.clampSize( c.prefSize, c ).x;
     }
-    public function getMax() :Float {
+    override public function getMax() :Null<Float> {
         return Spring.MAX;
     }
-    public function toString() :String {
+    override public function toString() :String {
         return("W("+c+":"+getPref()+")");
     }
 }
 
 class HeightSpring extends WidthSpring {
-    override public function getPref() :Float {
-        return c.clampSize( c.prefSize ).y;
+    override public function getPref() :Null<Float> {
+    	return Helper.clampSize( c.prefSize, c ).y;
     }
     override public function toString() :String {
         return("H("+c+":"+getPref()+")");
@@ -84,32 +71,32 @@ class HeightSpring extends WidthSpring {
 }
 
 class LeftSpring extends WidthSpring {
-    override public function getPref() :Float {
-        return c.style.padding.l + c.style.border.l;
+    override public function getPref() :Null<Float> {
+        return c.padding.l + c.border.l;
     }
     override public function toString() :String {
         return("l("+c+":"+getPref()+")");
     }
 }
 class TopSpring extends WidthSpring {
-    override public function getPref() :Float {
-        return c.style.padding.t + c.style.border.t;
+    override public function getPref() :Null<Float> {
+        return c.padding.t + c.border.t;
     }
     override public function toString() :String {
         return("t("+c+":"+getPref()+")");
     }
 }
 class RightSpring extends WidthSpring {
-    override public function getPref() :Float {
-        return c.style.padding.r + c.style.border.r;
+    override public function getPref() :Null<Float> {
+        return c.padding.r + c.border.r;
     }
     override public function toString() :String {
         return("r("+c+":"+getPref()+")");
     }
 }
 class BottomSpring extends WidthSpring {
-    override public function getPref() :Float {
-        return c.style.padding.b + c.style.border.b;
+    override public function getPref() :Null<Float> {
+        return c.padding.b + c.border.b;
     }
     override public function toString() :String {
         return("b("+c+":"+getPref()+")");
@@ -131,14 +118,15 @@ class SpringLayout implements Layout {
     }
     
     public function getConstraints( comp:Component ) :Constraints {
-        var c:Constraints = index.get( comp._id );
+    	var compId = comp.getElement().xid;
+        var c:Constraints = index.get( compId );
         if( c==null ) {
             c = new Constraints();
             c.setWidth( new WidthSpring(comp) );
             c.setHeight( new HeightSpring(comp) );
             c.setX( Spring.constant(0) );
             c.setY( Spring.constant(0) );
-            index.set( comp._id, c );
+            index.set( compId, c );
         }
         return c;
     }
@@ -161,12 +149,11 @@ class SpringLayout implements Layout {
         var cs = initContainer( p );
         cs.dropCalcResult();
         
-        for( c in p.children ) {
+        for( c in p.getComponents() ) {
             getConstraints(c).dropCalcResult();
         }
         
-        
-        for( c in p.children ) {
+        for( c in p.getComponents() ) {
             var constraints = getConstraints(c);
             //trace("child: "+constraints );
             
@@ -175,9 +162,8 @@ class SpringLayout implements Layout {
             var width = constraints.getWidth().getValue();
             var height = constraints.getHeight().getValue();
             
-        //    trace("Layout "+c+": "+x+","+y+"-"+width+"x"+height );
-            if( c.position.x!=x || c.position.y!=y ) c.moveTo(x,y);
-            if( c.size.x!=width || c.size.y!=height ) c.resize(width,height);
+            if( c.position.x!=x || c.position.y!=y ) c.set_position({x:x,y:y});
+            if( c.size.x!=width || c.size.y!=height ) c.set_size({x:width,y:height});
 
         }
 
@@ -185,7 +171,7 @@ class SpringLayout implements Layout {
         var y = cs.getY().getValue();
         var width = cs.getWidth().getValue();
         var height = cs.getHeight().getValue();
-        p.setPrefSize( p.removePadding( {x:width,y:height} ));
+        p.setPrefSize( {x:width,y:height} );
     }
     
     public function putConstraint( e1:Edge, c1:Component, ?s:Spring, 

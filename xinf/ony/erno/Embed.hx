@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
@@ -26,8 +29,9 @@ class Embed extends Group {
     **/
     override public function draw( g:Renderer ) :Void {
         g.startNative( root );
-        for( child in children ) {
-            g.showObject( child.xid );
+        for( child in mChildren ) {
+			if( untyped child.xid!=null )
+				g.showObject( untyped child.xid );
         }
         g.endNative();
     }

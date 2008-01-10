@@ -1,34 +1,22 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.layout;
 
 class Spring {
-    public static var UNSET:Float = null;
+    public static var UNSET:Null<Float> = null;
     public static var MAX:Float = 1073741824;
     
-    public function getMin() :Float  { return UNSET; }
-    public function getPref() :Float { return UNSET; }
-    public function getMax() :Float  { return UNSET; }
-    public function getValue() :Float  { return UNSET; }
-    public function setValue(v:Float) :Float  { return UNSET; }
+    public function getMin() :Null<Float>  { return UNSET; }
+    public function getPref() :Null<Float> { return UNSET; }
+    public function getMax() :Null<Float>  { return UNSET; }
+    public function getValue() :Null<Float>  { return UNSET; }
+    public function setValue(v:Float) :Null<Float>  { return UNSET; }
 
     private function new() :Void {
     }
     
-    public static function constant( min:Float, ?pref:Float, ?max:Float ) :Spring {
+    public static function constant( min:Float, ?pref:Null<Float>, ?max:Null<Float> ) :Spring {
         if( pref==null ) pref=min;
         if( max==null ) max=pref;
         return new ConstantSpring( min, pref, max );
@@ -63,11 +51,11 @@ class SimpleSpring extends Spring {
         super();
         _value=Spring.UNSET;
     }
-    public function getValue() :Float {
+    override public function getValue() :Null<Float> {
         if( _value == Spring.UNSET ) _value = getPref();
         return _value;
     }
-    public function setValue( v:Float ) :Float {
+    override public function setValue( v:Float ) :Null<Float> {
         //v = Math.min(v,getMax());
         //v = Math.max(v,getMin());
         _value = v;
@@ -79,22 +67,22 @@ class ConstantSpring extends SimpleSpring {
     var _min:Float;
     var _pref:Float;
     var _max:Float;
-    public function new( min:Float, pref:Float, max:Float ) :Void { 
+    public function new( min:Null<Float>, pref:Null<Float>, max:Null<Float> ) :Void { 
         super();
         _min=min;
         _pref=pref;
         _max=max;
     }
-    public function getMin() :Float {
+    override public function getMin() :Null<Float> {
         return _min;
     }
-    public function getPref() :Float {
+    override public function getPref() :Null<Float> {
         return _pref;
     }
-    public function getMax() :Float {
+    override public function getMax() :Null<Float> {
         return _max;
     }
-    public function toString() :String {
+    override public function toString() :String {
         var s=if( _value==Spring.UNSET ) "" else ":"+_value;
         if( _min==_pref && _min==_max ) 
             return("const"+_pref+s);
@@ -111,16 +99,16 @@ class UnarySpring extends SimpleSpring {
         this.f=f;
         this.s=s;
     }
-    public function getMin() :Float {
+    override public function getMin() :Null<Float> {
         return f(s.getMin());
     }
-    public function getPref() :Float {
+    override public function getPref() :Null<Float> {
         return f(s.getPref());
     }
-    public function getMax() :Float {
+    override public function getMax() :Null<Float> {
         return f(s.getMax());
     }
-    public function toString() :String {
+    override public function toString() :String {
         var fs="Unary";
         if( f==Spring._minus ) fs="-";
         return(fs+"("+s+")");
@@ -131,10 +119,10 @@ class MinusSpring extends UnarySpring {
     public function new( s:Spring ) {
         super( s, MinusSpring.f );
     }
-    public static function f( v:Float ) :Float {
+    public static function f( v:Float ) :Null<Float> {
         return -v;
     }
-    public function toString() :String {
+    override public function toString() :String {
         return("-"+s);
     }
 }
@@ -144,22 +132,37 @@ class BinarySpring extends SimpleSpring {
     var a:Spring;
     var b:Spring;
     
-    public function new( a:Spring, b:Spring, f:Float->Float->Float ) {
+    public function new( a:Spring, b:Spring, f:Null<Float>->Null<Float>->Null<Float> ) {
         super();
         this.f=f;
         this.a=a;
         this.b=b;
     }
-    public function getMin() :Float {
-        return f(a.getMin(),b.getMin());
+    override public function getMin() :Null<Float> {
+		try {
+			return f(a.getMin(),b.getMin());
+		} catch(e:Dynamic) {
+			throw(""+e+" evaluating "+this+".getMin()" );
+			return null;
+		}
     }
-    public function getPref() :Float {
-        return f(a.getPref(),b.getPref());
+    override public function getPref() :Null<Float> {
+		try {
+			return f(a.getPref(),b.getPref());
+		} catch(e:Dynamic) {
+			throw(""+e+" evaluating "+this+".getPref()" );
+			return null;
+		}
     }
-    public function getMax() :Float {
-        return f(a.getMax(),b.getMax());
+    override public function getMax() :Null<Float> {
+		try {
+			return f(a.getMax(),b.getMax());
+		} catch(e:Dynamic) {
+			throw(""+e+" evaluating "+this+".getMax()" );
+			return null;
+		}
     }
-    public function toString() :String {
+    override public function toString() :String {
         return("Binary("+a+","+b+")");
     }
 }
@@ -168,10 +171,10 @@ class SumSpring extends BinarySpring {
     public function new( a:Spring, b:Spring ) {
         super( a, b, SumSpring.f );
     }
-    public static function f( a:Float, b:Float ) :Float {
-        return a+b;
+    public static function f( a:Null<Float>, b:Null<Float> ) :Null<Float> {
+		return a+b;
     }
-    public function toString() :String {
+    override public function toString() :String {
         return("sum( "+a+", "+b+" )");
     }
 }
@@ -180,10 +183,10 @@ class MaxSpring extends BinarySpring {
     public function new( a:Spring, b:Spring ) {
         super( a, b, MaxSpring.f );
     }
-    public static function f( a:Float, b:Float ) {
+    public static function f( a:Null<Float>, b:Null<Float> ) :Null<Float> {
         return Math.max(a,b);
     }
-    public function toString() :String {
+    override public function toString() :String {
         return("max( "+a+", "+b+" )");
     }
 }

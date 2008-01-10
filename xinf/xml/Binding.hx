@@ -1,42 +1,73 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.xml;
 
-class Binding<T> {
+/**
+	Represents a Binding of XML content to instantiated $xinf.xml.Node$s.
+	
+	Node classes can be bound either by simple 
+	TagName-to-Class association ([add()]) or more
+	complex $xinf.xml.Instantiator$s ([addInstantiator()]).
+	
+	Used primarily (if not only) by the $xinf.xml.Document$ class.
+*/
+class Binding<T:Node> implements IBinding {
     var marshallers:Hash<Class<T>>;
     var instantiators:Array<Instantiator<T>>;
     
+	/** Create a new, initially empty, Binding
+	*/
     public function new() :Void {
         marshallers = new Hash<Class<T>>();
         instantiators = new Array<Instantiator<T>>();
     }
-    public function add( nodeName:String, m:Class<T> ) :Void {
-        marshallers.set( nodeName, m );
+	
+	/** Bind the given [nodeName] (or tag name) to the class [cl].
+		
+		The class must have a constructor with only one, dynamic
+		argument, like $xinf.xml.Element$, or instantiation will fail.
+	*/
+    public function add( nodeName:String, cl:Class<T> ) :Void {
+        marshallers.set( nodeName, cl );
     }
+	
+	/** Add the given Instantiator [i] to this Binding.
+	*/
     public function addInstantiator( i:Instantiator<T> ) :Void {
         instantiators.push( i );
     }
-    public function instantiate( xml:Xml ) :T {
+	
+	/** Instantiate (unmarshal/deserialize) the given [xml],
+		and returns the instantiated Node.
+	
+		Looks through all added Instantiators first, then
+		through the list of nodeNames, and tries to construct
+		the Object. If nothing is bound to the given xml,
+		[null] is returned. If instantiation fails (for example,
+		because the bound class' constructor has less or more
+		than one argument), an exception is thrown.
+		
+		The returned Node will yet be empty ([fromXml] is not
+		yet called).
+		
+		You shouldn't use this function directly. Instead,
+		use $xinf.xml.Document$.instantiate() or .load().
+	*/
+    public function instantiate( xml:Xml ) :Node {
         var m:Class<T>;
         for( i in instantiators ) {
             if( m==null && i.fits(xml) ) m=i.getClass(xml);
         }
         if( m==null ) m = marshallers.get( xml.nodeName );
 		if( m==null ) return null;
-        var ret:T = Type.createInstance( m, [ ] );
+		
+		var ret:T;
+		try {
+			ret = Type.createInstance( m, [ null ] );
+		} catch( e:Dynamic ) {
+			throw("Could not create instance of "+Type.getClassName(m)+": "+e );
+		}
         return ret;
     }
 }

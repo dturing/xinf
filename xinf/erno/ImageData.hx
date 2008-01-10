@@ -1,24 +1,14 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 import xinf.event.SimpleEventDispatcher;
 import xinf.event.ImageLoadEvent;
 
 /**
+	DOCME: out of date!
+	
     ImageData represents the data of a bitmap image. It can be passed to a
     <a href="Renderer.html">Renderer</a>'s [image()] function to draw (part of) an image.
     <p>
@@ -92,12 +82,12 @@ class ImageData extends SimpleEventDispatcher {
         #if neko
             return( xinf.inity.Texture.newByName( url ) );
         #else js
-            return( new xinf.js.JSImageData(url) );
+            return( new xinf.erno.js.JSImageData(url) );
         #else flash
             if( StringTools.startsWith( url, "library://" ) ) {
-                return( new xinf.flash9.InternalImageData(url.substr(10)) );
+                return( new xinf.erno.flash9.InternalImageData(url.substr(10)) );
             } else {
-                return( new xinf.flash9.ExternalImageData(url) );
+                return( new xinf.erno.flash9.ExternalImageData(url) );
             }
         #else err
         #end
@@ -105,7 +95,7 @@ class ImageData extends SimpleEventDispatcher {
 	
     #if flash9
 	public static function getRegion( image:ImageData, region:{ x:Float, y:Float, w:Float, h:Float } ) :ImageData {
-			return( new xinf.flash9.ImageDataRegion( image, region ) );
+			return( new xinf.erno.flash9.ImageDataRegion( image, region ) );
 	}
     #end
 }

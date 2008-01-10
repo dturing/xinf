@@ -1,0 +1,16 @@
+-neko test.n
+-main Example
+-lib xinf
+--override
+
+--next
+-swf test.swf
+-swf-version 9
+-swf-header 640:480:25:000000
+-main Example
+-lib xinf
+
+--next
+-js test.js
+-main Example
+-lib xinf

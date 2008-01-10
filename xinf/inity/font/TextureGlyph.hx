@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.inity.font;
 
 import cptr.CPtr;
@@ -63,7 +51,7 @@ class TextureGlyph extends Glyph {
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
             GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
             GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
-            GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
+			GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
 
         GL.popAttrib();
 
@@ -75,7 +63,7 @@ class TextureGlyph extends Glyph {
         #end
     }
     
-    override public function render( s:Float ) :Float {
+    override public function render() :Float {
         if( texture!=null ) {
             GL.pushAttrib( GL.ENABLE_BIT );
                 GL.enable( GL.TEXTURE_2D );
@@ -96,6 +84,6 @@ class TextureGlyph extends Glyph {
         } else {
             trace("Trying to render TextureGlyph, but no bitmap set.");
         }
-        return super.render(s);
+        return super.render();
     }
 }

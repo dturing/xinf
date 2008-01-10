@@ -1,11 +1,12 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
+import xinf.ony.type.PathSegment;
 
-import xinf.ony.PathSegment;
-
-class Path extends xinf.ony.base.Path  {
+class Path extends xinf.ony.Path  {
 
     override public function drawContents( g:Renderer ) :Void {
         super.drawContents(g);
@@ -13,7 +14,32 @@ class Path extends xinf.ony.base.Path  {
         
         g.startShape();
 
-		xinf.ony.base.Path.simplify( segments, untyped g );
+		var open=false;
+		for( s in segments ) {
+			switch(s) {
+				case MoveTo(x,y):
+					if( open ) g.endPath();
+					open=true;
+					g.startPath(x,y);
+				case LineTo(x,y):
+					open=true;
+					g.lineTo(x,y);
+				case Close:
+					g.close();
+					g.endPath();
+					open=false;
+				case QuadraticTo(x1,y1,x,y):
+					open=true;
+					g.quadraticTo(x1,y1,x,y);
+				case CubicTo(x1,y1,x2,y2,x,y):
+					open=true;
+					g.cubicTo(x1,y1,x2,y2,x,y);
+				case ArcTo(rx,ry,rotation,largeArc,sweep,x,y):
+					open=true;
+					g.arcTo(rx,ry,rotation,largeArc,sweep,x,y);
+			}
+		}
+		if( open ) g.endPath();
 
         g.endShape();
     }

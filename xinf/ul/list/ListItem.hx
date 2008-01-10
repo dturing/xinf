@@ -1,21 +1,10 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.list;
 
 import Xinf;
+import xinf.xml.Node;
 import xinf.ul.model.ISettable;
 
 class ListItem<T> implements ISettable<T> {
@@ -42,17 +31,18 @@ class ListItem<T> implements ISettable<T> {
         text.text = if( value==null ) "" else ""+value;
     }
     
-	public function setStyle( style:ElementStyle ) :Void {
-		text.style = style;
+	public function setStyle( style:Dynamic ) :Void {
+		text.setTraitsFromObject(style);
+		text.styleChanged();
 	}
 	
-    public function attachTo( parent:Group ) :Void {
-        parent.attach(text);
+    public function attachTo( parent:Node ) :Void {
+        parent.appendChild(text);
     }
 
 	public function moveTo( x:Float, y:Float ) :Void {
 		text.x = x;
-		text.y = y;
+		text.y = y+text.fontSize;
 	}
 	
 	public function resize( x:Float, y:Float ) :Void {

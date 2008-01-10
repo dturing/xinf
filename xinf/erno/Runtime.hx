@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.erno;
 
 import xinf.event.SimpleEventDispatcher;
@@ -21,6 +9,8 @@ import xinf.event.FrameEvent;
 import xinf.erno.Renderer;
 
 /**
+	DOCME: out of date!
+	
     The Runtime class has static functions to request the global
     Runtime instance (a singleton) and it's associated <a href="Renderer.html">Renderer</a>.
     <p>
@@ -85,9 +75,10 @@ class Runtime extends SimpleEventDispatcher {
                 #if gldebug
                     _renderer = new xinf.inity.GLDebugRenderer();
                 #else true
-                    _renderer = new xinf.inity.GLRenderer();
+                  _renderer = new xinf.inity.GLRenderer();
                 #end
 				*/
+//				_renderer = new xinf.inity.GLRenderer();
 				_renderer = new xinf.inity.GLVGRenderer();
             } else {
                 /* experimental. */
@@ -122,11 +113,11 @@ class Runtime extends SimpleEventDispatcher {
                 }
             }
         #else js
-            _renderer = new xinf.js.JSRenderer();
-            _runtime = new xinf.js.JSRuntime();
+            _renderer = new xinf.erno.js.JSRenderer();
+            _runtime = new xinf.erno.js.JSRuntime();
         #else flash
-            _renderer = new xinf.flash9.Flash9Renderer();
-            _runtime = new xinf.flash9.Flash9Runtime();
+            _renderer = new xinf.erno.flash9.Flash9Renderer();
+            _runtime = new xinf.erno.flash9.Flash9Runtime();
         #end
         
         if( runtime==null ) throw("unable to create runtime environment");
@@ -189,5 +180,8 @@ class Runtime extends SimpleEventDispatcher {
     **/
     public function changed() :Void {
     }
+	
+	public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
+	}
     
 }

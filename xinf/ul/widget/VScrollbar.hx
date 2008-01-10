@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.widget;
 
 import Xinf;
@@ -32,14 +20,14 @@ class VScrollbar extends Container {
     public function new() :Void {
         super();
         
-        element.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
+        group.addEventListener( MouseEvent.MOUSE_DOWN, clickBar );
         
         thumb = new Container();
-        thumb.addStyleClass("Thumb");
-        thumb.element.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
+       // thumb.addStyleClass("Thumb");
+        thumb.group.addEventListener( MouseEvent.MOUSE_DOWN, clickThumb );
         thumb.size = { x:18., y:18. };
 		thumb.position = { x:0., y:0. };
-        attach(thumb);
+        appendChild(thumb);
         
         thumbHeight = thumb.size.y;
         
@@ -54,11 +42,14 @@ class VScrollbar extends Container {
         else if( y < thumb.position.y ) delta = -1;
         else return;
 		
+		e.preventBubble=true;
+		
         postEvent( new ScrollEvent( ScrollEvent.SCROLL_LEAP, delta ) );
     }
         
     public function clickThumb( e:MouseEvent ) {
         new Drag<Float>( e, move, null, thumb.position.y );
+		e.preventBubble=true;
     }
     
     public function move( x:Float, y:Float, marker:Float ) {

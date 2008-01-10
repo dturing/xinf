@@ -1,0 +1,169 @@
+body {
+	font-family: Arial, FreeSans, Bitstream Vera Sans, Helvetica, Arial, sans-serif;
+	font-size: 10pt;
+	background: #f0f0f0;
+	
+	background-position: top left;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-image: url(img/bg-api.png);
+
+    margin-top: 30px;
+	margin-left: 60px;
+    margin-right: 5em;
+}
+
+.title {
+    font-size: 14pt;
+}
+
+.title img {
+    position: relative;
+    left: -118;
+}
+
+.document {
+}
+
+ul.entry {
+	font-weight : bold;
+	padding-left : 3em;
+}
+
+li {
+	margin-left : 0;
+	padding-left : 0;
+	list-style-type: square;
+}
+
+.package_content {
+	display : none;
+}
+
+a {
+	color : #666;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+
+	
+a.xinf {
+	color : #204a87;
+}
+
+a.xinf_ony, a.xinf_ony_type, a.xinf_ony_traits {
+	color : #4e9a06;
+}
+
+a.xinf_erno, a.xinf_inity {
+	color : #c00;
+}
+
+
+a.svg, a.css {
+	background: url(img/w3c.png) no-repeat 0% 50%;
+	padding-left: 24px;
+}
+	
+.extref {
+	display: block;
+}
+	
+a:hover {
+	text-decoration : underline;
+}
+
+a.package {
+	color : black;
+}
+
+.index {
+	margin-top : 2em;
+}
+
+.kwd {
+	color : #666;
+}
+
+.member {
+	font-weight: bold;
+}
+
+.classname {
+	font-size : 24;
+	margin-top : 1em;
+}
+
+.classdoc {
+	margin-top : 1em;
+	color : #444;
+}
+
+.importmod, .extends, .implements, .typedef, .platforms {
+	color : #777;
+}
+
+dd {
+	margin-bottom : 2em;
+	margin-left: 0;
+	color : #444;
+}
+
+dt {
+    margin-top : 2em;
+	margin-bottom : 1em;
+	text-align : left;
+	text-indent : -2em;
+/*	font-family : Bitstream Vera Sans Mono, monospace; */
+}
+
+dl {
+	margin-left: 2em;
+}
+
+code {
+	font-family: Bitstream Vera Sans Mono, monospace;
+}
+
+/* index */
+#master_index {
+	position: fixed;
+	right:0;
+	top:0;
+	background: #fff;
+	padding: .5em;
+	max-height: 400px;
+	overflow: auto;
+}
+
+#master_index > ul {
+	padding-left: 0px;
+}
+
+li.xinf a {
+	color: #204a87;
+}
+
+li.xinf li, li.xinf {
+	list-style-type: none;
+}
+
+
+li.xinf span {
+	display: block;
+}
+
+#master_index li.xinf ul {
+	display: none;
+	margin-left: 0;
+	padding-left: 1em;
+}
+
+li.xinf_ony a {
+	color : #4e9a06;
+}
+
+li.xinf_erno a {
+	color : #c00;
+}

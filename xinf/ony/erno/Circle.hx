@@ -1,9 +1,11 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ony.erno;
 
 import xinf.erno.Renderer;
-import xinf.erno.Color;
 
-class Circle extends xinf.ony.base.Circle  {
+class Circle extends xinf.ony.Circle  {
 
     override public function drawContents( g:Renderer ) :Void {
         if( r!=0 ) {

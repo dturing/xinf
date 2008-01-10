@@ -1,125 +1,245 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul;
 
 import Xinf;
-import xinf.event.SimpleEventDispatcher;
-import xinf.style.Style;
-import xinf.style.Stylable;
+import xinf.style.StyledElement;
 import xinf.style.StyleSheet;
 import xinf.style.Selector;
-import xinf.style.Border;
-import xinf.style.StringList;
 import xinf.event.SimpleEvent;
+
+import xinf.erno.TextFormat;
+import xinf.type.Paint;
+import xinf.type.Border;
+import xinf.ony.type.StringList;
 import xinf.ul.skin.Skin;
 
-class Component extends SimpleEventDispatcher, implements Stylable {
-	public static var styleSheet:StyleSheet<ComponentStyle> 
-		= new StyleSheet<ComponentStyle>(
-			function( s:Style ) { return new ComponentStyleWrapper(s); },
+import xinf.ony.traits.StringListTrait;
+import xinf.traits.StringTrait;
+import xinf.traits.FloatTrait;
+import xinf.traits.PaintTrait;
+import xinf.ul.BorderTrait;
+
+class Component extends StyledElement {
+	public static function init() {
+		Root.getRootSvg();
+		StyleSheet.DEFAULT.parseCSS( "
+			.Button {
+				border: 1;
+				padding: 6 3 6 3;
+			}
+			
+			.Button, .Dropdown, .LineEdit {
+				min-height: 20;
+				min-width: 75;
+			}
+			
+			.Interface {
+				horizontal-align: .5;
+				vertical-align: .5;
+			}
+			
+			.Container, .Interface {
+				padding: 5;
+			}
+			
+			.Slider {
+				min-width: 100;
+				min-height: 25;
+			}
+			
+			.ListView {
+				min-width: 100;
+				min-height: 75;
+			}
+			
+			.:focus {
+				skin: focus;
+				border: 2;
+				padding: 5 2 5 2;
+			}
+			
+			.Button.:press, .LineEdit.:focus {
+				skin: focus-bright;
+				padding: 5 3 5 1;
+			}
+			
+		");
+	}
+	/*
+	public static var styleSheet:StyleSheet 
+		= new StyleSheet(
 	[
-		{ selector:Any, style:new ComponentStyle({
+		{ selector:Any, style:{
 				padding: new Border(6,3,6,3),
 				border: new Border(1,1,1,1),
-				horizontal_align: 0.,
-				vertical_align: .5,
 				font_family: new StringList(["sans"]),
 				font_size: 12,
 				text_color: Color.BLACK,
-				min_width: 100,
-			}) },
-		{ selector:StyleClass("Label"), style:new ComponentStyle({
+			} },
+		{ selector:AnyOf([ StyleClass("Container"), StyleClass("Interface") ]), style:{
+				horizontal_align: .5,
+				vertical_align: .5,
+				padding: new Border( 5,5,5,5 ),
+			} },
+		{ selector:StyleClass("ListView"), style:{
+				min_width: 100.,
+				min_height: 75.,
+			} },
+		{ selector:StyleClass("Label"), style:{
 				padding: new Border(2,2,2,2),
 				border: new Border(0,0,0,0),
 				horizontal_align: 0.,
-				vertical_align: .5,
+				vertical_align: 0.,
 				font_family: new StringList(["sans"]),
 				font_size: 12,
 				text_color: Color.BLACK,
-			}) },
-		{ selector:StyleClass("Button"), style:new ComponentStyle({
+				skin: "none",
+			} },
+		{ selector:StyleClass("Button"), style:{
 				padding: new Border(6,3,6,3),
 				border: new Border(1,1,1,1),
-				min_width: 100,
+				min_width: 75,
 				min_height: 10,
 				horizontal_align: .5,
 				vertical_align: .5,
-			}) },
-		{ selector:StyleClass(":focus"), style:new ComponentStyle({
+			} },
+		{ selector:StyleClass(":focus"), style:{
 				skin: "focus",
 				padding: new Border(5,2,5,2),
 				border: new Border(2,2,2,2),
-			}) },
-		{ selector:StyleClass(":press"), style:new ComponentStyle({
-				skin: "press",
-			}) },
-		{ selector:StyleClass("ListView"), style:new ComponentStyle({
+			} },
+		{ selector:AllOf([ StyleClass("Button"), StyleClass(":press") ]), style:{
+				skin: "focus-bright",
+				padding: new Border(5,3,5,1),
+			} },
+		{ selector:StyleClass("ListView"), style:{
 				padding: new Border( 3,1,0,1 ),
-			}) },
+			} },
+		{ selector:StyleClass("LineEdit"), style:{
+				padding: new Border(2,2,2,1),
+				min_width: 100,
+				min_height: 10,
+			} },
+		{ selector:AllOf([ StyleClass("LineEdit"), StyleClass(":focus") ]), style:{
+				skin: "focus-bright",
+			} },
 	]);
+	*/
+	static var TRAITS = {
+		skin:			new StringTrait(),
+		font_family:	new StringListTrait(),
+		font_size:		new LengthTrait(new Length(10)),
+		text_color:		new PaintTrait(Color.BLACK),
+		horizontal_align:	new FloatTrait(),
+		vertical_align:		new FloatTrait(),
+		border:				new BorderTrait(),
+		padding:			new BorderTrait(),
+		margin:				new BorderTrait(),
+		min_width:			new FloatTrait(),
+		max_width:			new FloatTrait(Math.POSITIVE_INFINITY),
+		min_height:			new FloatTrait(),
+		max_height:			new FloatTrait(Math.POSITIVE_INFINITY),
+	};
+
+	public var skin(get_skin,set_skin):String;
+    function get_skin() :String { return getStyleTrait("skin",String); }
+    function set_skin( v:String ) :String { return setStyleTrait("skin",v); }
+
+	public var fontFamily(get_font_family,set_font_family):StringList;
+    function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
+    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
+
+    public var fontSize(get_font_size,set_font_size):Float;
+    function get_font_size() :Float { return getStyleTrait("font-size",Length).value; }
+    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",new Length(v)).value; }
+
+    public var textColor(get_text_color,set_text_color):Paint;
+    function get_text_color() :Paint { return getStyleTrait("text-color",Paint); }
+    function set_text_color( v:Paint ) :Paint { return setStyleTrait("text-color",v); }
+
+	// TODO fontWeight (as in ElementStyle)
+
+    public var horizontalAlign(get_horizontal_align,set_horizontal_align):Float;
+    function get_horizontal_align() :Float { return getStyleTrait("horizontal-align",Float); }
+    function set_horizontal_align( v:Float ) :Float { return setStyleTrait("horizontal-align",v); }
+
+    public var verticalAlign(get_vertical_align,set_vertical_align):Float;
+    function get_vertical_align() :Float { return getStyleTrait("vertical-align",Float); }
+    function set_vertical_align( v:Float ) :Float { return setStyleTrait("vertical-align",v); }
+
+    public var border(get_border,set_border):Border;
+    function get_border() :Border { return getStyleTrait("border",Border); }
+    function set_border( v:Border ) :Border { return setStyleTrait("border",v); }
+
+    public var padding(get_padding,set_padding):Border;
+    function get_padding() :Border { return getStyleTrait("padding",Border); }
+    function set_padding( v:Border ) :Border { return setStyleTrait("padding",v); }
+
+    public var margin(get_margin,set_margin):Border;
+    function get_margin() :Border { return getStyleTrait("margin",Border); }
+    function set_margin( v:Border ) :Border { return setStyleTrait("margin",v); }
+
+    public var minWidth(get_min_width,set_min_width):Float;
+    function get_min_width() :Float { return getStyleTrait("min-width",Float); }
+    function set_min_width( v:Float ) :Float { return setStyleTrait("min-width",v); }
+
+    public var maxWidth(get_max_width,set_max_width):Float;
+    function get_max_width() :Float { return getStyleTrait("max-width",Float); }
+    function set_max_width( v:Float ) :Float { return setStyleTrait("max-width",v); }
+
+    public var minHeight(get_min_height,set_min_height):Float;
+    function get_min_height() :Float { return getStyleTrait("min-height",Float); }
+    function set_min_height( v:Float ) :Float { return setStyleTrait("min-height",v); }
+
+    public var maxHeight(get_max_height,set_max_height):Float;
+    function get_max_height() :Float { return getStyleTrait("max-height",Float); }
+    function set_max_height( v:Float ) :Float { return setStyleTrait("max-height",v); }
+
 
     public var __parentSizeListener:Dynamic;
 
     public var parent(default,null):Container;
-	public var style(default,null):ComponentStyle;
-    var styleClasses :Hash<Bool>;
-	var skin:Skin;
     
 	public var prefSize(getPrefSize,null):TPoint;
     var _prefSize:TPoint;
 	
-	public var size(default,set_size):TPoint;
+	var _skin:Skin;
+	
+	public var size(get_size,set_size):TPoint;
 	public var position(default,set_position):TPoint; // TODO!
-	var element:Element;
+	var group:Group;
 
-    public function new( ?e:Element ) :Void {
-		super();
-        _prefSize = { x:.0, y:.0 };
-		element=e;
-		if( element==null ) {
-			element = new Group();
-		}
+    public function new( ?traits:Dynamic ) :Void {
+		super(traits);
 		
-		skin = new xinf.ul.skin.SimpleSkin();
+		group = new Group();
 		
-        styleClasses = new Hash<Bool>();
+		_prefSize = { x:.0, y:.0 };
+		position = { x:.0, y:.0 };
+		_skin = new xinf.ul.skin.SimpleSkin();
 		
-		style = new ComponentStyle(this);
-		        
-        // add our own class to the list of style classes
+		// add our own class to the list of style classes
         var clNames:Array<String> = Type.getClassName(Type.getClass(this)).split(".");
         addStyleClass( clNames[ clNames.length-1 ] );
+    }
+	
+	public function getTextFormat() {
+		var family = fontFamily;
+		var size = fontSize;
+		var format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
+		return format;
+	}
 		
+    override public function styleChanged() :Void {
+		super.styleChanged();
+		_skin.setTo( skin );
     }
 
-    public function attachedTo( p:Container ) {
-        parent=p;
-    }
-
-    public function detachedFrom( p:Container ) {
-        parent=null;
-    }
-	
-    public function styleChanged() :Void {
-		skin.setTo( style.skin );
-    }
-	
-	public function getParentStyle() :xinf.style.Style {
-		if( parent!=null ) return parent.style;
-		return null;
+	override function setOwnerDocument( doc:Document ) {
+		super.setOwnerDocument(doc);
+		untyped group.setOwnerDocument(doc); //FIXME 
 	}
 
     public function getPrefSize() :TPoint {
@@ -138,87 +258,24 @@ class Component extends SimpleEventDispatcher, implements Stylable {
 	// perform the actual resizing, called by the layout manager
 	public function set_size( s:TPoint ) :TPoint {
 		size = s;
-		skin.resize( s );
+		_skin.resize( s );
 		return s;
+	}
+	public function get_size() :TPoint {
+		if( size==null ) return _prefSize;
+		return size;
 	}
 	
 	public function set_position( p:TPoint ) :TPoint {
 		position = p;
-		if( element!=null ) {
-			element.transform = new Translate(p.x,p.y);
+		if( group!=null ) {
+			group.transform = new Translate(p.x,p.y);
 		}
 		return( p );
 	}
 
     public function getElement() :Element {
-		return element;
+		return group;
     }
-
-	// Style class functions
-    public function updateClassStyle() :Void {
-		style = styleSheet.match(this);
-		//trace("Style: "+style );
-		styleChanged();
-    }
-    
-    public function addStyleClass( name:String ) :Void {
-        styleClasses.set( name, true );
-        updateClassStyle();
-    }
-    
-    public function removeStyleClass( name:String ) :Void {
-        styleClasses.remove( name );
-        updateClassStyle();
-    }
-    
-    public function hasStyleClass( name:String ) :Bool {
-        return styleClasses.get(name);
-    }
-
-    public function getStyleClasses() :Iterator<String> {
-        return styleClasses.keys();
-    }
-	
-	public function matchSelector( s:Selector ) :Bool {
-		switch( s ) {
-		
-			case Any:
-				return true;
-				
-			case StyleClass(name):
-				return hasStyleClass( name );
-				
-			case Parent(sel):
-				return parent.matchSelector(sel);
-				
-			case Ancestor(sel):
-				var p = this;
-				while( p.parent != null ) {
-					p = p.parent;
-					if( p.matchSelector(sel) ) return true;
-				}
-				return false;
-				
-			case AnyOf(a):
-				for( sel in a ) {
-					if( matchSelector(sel) ) return true;
-				}
-				return false;
-				
-			case AllOf(a):
-				for( sel in a ) {
-					if( !matchSelector(sel) ) return false;
-				}
-				return true;
-				
-			default:
-				return false;
-				
-		}
-	}
-	
-	public function toString() :String {
-		return( Type.getClassName(Type.getClass(this)) );
-	}
 
 }

@@ -1,23 +1,11 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.inity;
 
+import xinf.geom.Matrix;
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.geom.Matrix;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.erno.Paint;
@@ -65,33 +53,31 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         lineTo( cx+p2.x, cy+p2.y );
     }
 
-	function applyFill() {
-		applyFillGL();
+	function applyFill() :Bool {
+		return applyFillGL();
 	}
 	
-	function applyFillGL() {
-		if( pen.fill==null ) return;
+	function applyFillGL() :Bool {
+		if( pen.fill==null ) return false;
 		switch( pen.fill ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
-			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
-				trace("Warning: Gradients not yet implemented");
-				var c = stops.iterator().next().color;
-				GL.color4( c.r, c.g, c.b, c.a );
 			default:
-				throw("unimplemented fill paint: "+pen.fill );
+				return false;
 		}
+		return true;
 	}
 
-	function applyStroke() {
-		if( pen.stroke==null ) return;
+	function applyStroke() :Bool {
+		if( pen.stroke==null ) return false;
 		switch( pen.stroke ) {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
 			default:
-				throw("unimplemented stroke paint: "+pen.stroke );
+				return false;
 		}
 		GL.lineWidth( pen.width );
+		return true;
 	}
 
     // erno.ObjectModelRenderer API
@@ -333,10 +319,10 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         if( font==null ) trace("NULL font");
         if( pen.fill != null && font != null ) {
             GL.pushMatrix();
-                GL.translate( x, y, 0 );
+                GL.translate( Math.floor(x), Math.floor(y), 0 );
                 applyFillGL();
 				GL.enable(GL.BLEND);
-				font.renderText( text, format.size, null );
+				font.renderText( text, format.size );
 				GL.disable(GL.BLEND);
                 
             GL.popMatrix();
@@ -361,7 +347,9 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 
         GL.pushAttrib( GL.ENABLE_BIT );
             GL.enable( GL.TEXTURE_2D );
-            GL.bindTexture( GL.TEXTURE_2D, img.texture );
+			GL.enable( GL.BLEND );
+			
+			GL.bindTexture( GL.TEXTURE_2D, img.texture );
             
             GL.begin( GL.QUADS );
                 GL.texCoord2( tx1, ty1 );

@@ -1,11 +1,16 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.inity;
 
+import xinf.geom.Matrix;
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
-import xinf.geom.Matrix;
+import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.erno.Paint;
+import xinf.erno.TGradientStop;
 
 import opengl.GL;
 import opengl.GLU;
@@ -23,24 +28,24 @@ class GLVGRenderer extends GLRenderer {
 	var fill:Int;
 	var stroke:Int;
 
-	function setGradientParameters( paint:Int, _stops:Iterable<TGradientStop>, spread:SpreadMethod ) {
+	function setGradientParameters( paint:Int, _stops:Iterable<TGradientStop>, spread:Int ) {
 		var stops = Lambda.array(_stops);
 		var vg_stops = CPtr.float_alloc( stops.length*5 );
 		var n=0;
 		
 		for( stop in stops ) {
 			CPtr.float_set( vg_stops, n++, stop.offset );
-			CPtr.float_set( vg_stops, n++, stop.color.r );
-			CPtr.float_set( vg_stops, n++, stop.color.g );
-			CPtr.float_set( vg_stops, n++, stop.color.b );
-			CPtr.float_set( vg_stops, n++, stop.color.a );
+			CPtr.float_set( vg_stops, n++, stop.r );
+			CPtr.float_set( vg_stops, n++, stop.g );
+			CPtr.float_set( vg_stops, n++, stop.b );
+			CPtr.float_set( vg_stops, n++, stop.a );
 		}
 		VG.setParameterfv( paint, VG.PAINT_COLOR_RAMP_STOPS, stops.length*5, vg_stops );
 
 		var sprd = switch(spread) {
-			case PadSpread: VG.COLOR_RAMP_SPREAD_PAD;
-			case ReflectSpread: VG.COLOR_RAMP_SPREAD_REFLECT;
-			case RepeatSpread: VG.COLOR_RAMP_SPREAD_REPEAT;
+			case Constants.SPREAD_PAD: VG.COLOR_RAMP_SPREAD_PAD;
+			case Constants.SPREAD_REFLECT: VG.COLOR_RAMP_SPREAD_REFLECT;
+			case Constants.SPREAD_REPEAT: VG.COLOR_RAMP_SPREAD_REPEAT;
 			default: VG.COLOR_RAMP_SPREAD_PAD;
 		}
 		VG.setParameteri( paint, VG.PAINT_COLOR_RAMP_SPREAD_MODE, sprd );
@@ -92,16 +97,16 @@ class GLVGRenderer extends GLRenderer {
 		return paint;
 	}
 
-	override function applyFill() {
-		if( pen.fill==null ) return;
-		
+	override function applyFill() :Bool {
+		if( pen.fill==null || pen.fill==None ) return false;
 		if( fill!=null ) VG.destroyPaint( fill );
 		fill = makePaint( pen.fill );
 		VG.setPaint( fill, VG.FILL_PATH );
+		return true;
 	}
 
-	override function applyStroke() {
-		if( pen.stroke==null ) return;
+	override function applyStroke() :Bool {
+		if( pen.stroke==null || pen.stroke==None ) return false;
 //		super.applyStroke();
 		
 		if( stroke!=null ) VG.destroyPaint( stroke );
@@ -111,32 +116,35 @@ class GLVGRenderer extends GLRenderer {
 		VG.setf( VG.STROKE_LINE_WIDTH, pen.width );
 		
 		var join = switch( pen.join ) {
-				case MiterJoin: VG.JOIN_MITER;
-				case RoundJoin: VG.JOIN_ROUND;
-				case BevelJoin: VG.JOIN_BEVEL;
+				case Constants.JOIN_MITER: VG.JOIN_MITER;
+				case Constants.JOIN_ROUND: VG.JOIN_ROUND;
+				case Constants.JOIN_BEVEL: VG.JOIN_BEVEL;
 				default: VG.JOIN_BEVEL;
 			}
 		VG.seti( VG.STROKE_JOIN_STYLE, join );
 		
 		var caps = switch( pen.caps ) {
-				case ButtCaps: VG.CAP_BUTT;
-				case RoundCaps: VG.CAP_ROUND;
-				case SquareCaps: VG.CAP_SQUARE;
+				case Constants.CAPS_BUTT: VG.CAP_BUTT;
+				case Constants.CAPS_ROUND: VG.CAP_ROUND;
+				case Constants.CAPS_SQUARE: VG.CAP_SQUARE;
 				default: VG.CAP_BUTT;
 			}
 		VG.seti( VG.STROKE_CAP_STYLE, caps );
-		
-		VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
+
+		if( pen.miterLimit!=null )
+			VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
+			
+		return true;
 	}
 
 	function drawPath( f:Int->Void ) {
-		var path = VG.createPath( 0 /* VG.PATH_FORMAT_STANDARD */, VG.PATH_DATATYPE_F,
+		var path = VG.createPath( 0, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 		f(path);
-        applyFill();
-		applyStroke();
-		VG.drawPath( path, VG.FILL_PATH );
-		VG.drawPath( path, VG.STROKE_PATH );
+        
+		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
+		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
+		
 		VG.destroyPath(path);
 	}
 
@@ -151,10 +159,9 @@ class GLVGRenderer extends GLRenderer {
     override public function endShape() {
         if( path==null ) throw("no current Polygon");
 
-		applyFill();
-		applyStroke();
-		VG.drawPath( path, VG.FILL_PATH );
-		VG.drawPath( path, VG.STROKE_PATH );
+		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
+		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
+		
 		VG.destroyPath(path);
         path = null;
     }
@@ -196,6 +203,7 @@ class GLVGRenderer extends GLRenderer {
     }
 
     override public function arcTo( rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
+		trace("arcTo not implemented for GLVG");
 	}
 	
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {
@@ -215,7 +223,7 @@ class GLVGRenderer extends GLRenderer {
     override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
         current.mergeBBox( {l:x-rx,t:y-ry,r:x+rx,b:y+ry} );
 		drawPath( function(path) {
-			VGU.ellipse(path,x,y,rx,ry);
+			VGU.ellipse(path,x,y,rx*2,ry*2);
 		});
 	}
 }

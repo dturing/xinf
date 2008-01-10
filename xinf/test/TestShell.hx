@@ -1,4 +1,6 @@
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.test;
 
 import Xinf;
@@ -9,31 +11,40 @@ class TestShell {
     var cnx:haxe.remoting.AsyncConnection;
     var cases:Array<TestCase>;
     var caseIterator:Iterator<TestCase>;
+	var current:TestCase;
+	var suite:String;
     
-    public function new() {
+    public function new( suite:String ) {
+		this.suite=suite;
         cnx = haxe.remoting.AsyncConnection.urlConnect( serverUrl );
         cnx.onError = function(err) { throw( err ); };
         cases = new Array<TestCase>();
+		Root.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
     }
     
     public function add( t:TestCase ) {
         cases.push(t);
     }
+	
+	function onEnterFrame( e:FrameEvent ) {
+		if( current!=null && current.finished ) {
+			runNextCase();
+		}
+	}
 
     function runNextCase() {
         if( caseIterator==null || !caseIterator.hasNext() ) {
-            cnx.test.endRun.call([],function(r){ });
-            
-            // FIXME. app.quit()
-            #if neko
-                neko.Sys.exit(0);
-            #end
+            cnx.test.endRun.call([],function(r){ 
+				// FIXME. app.quit()
+				#if neko
+					neko.Sys.exit(0);
+				#end
+			});
             return;
         }
-        
-        var testCase = caseIterator.next();
-        trace("run test "+testCase );
-        testCase.run( cnx, runNextCase );
+
+		current = caseIterator.next();
+        current.run( cnx, function() { }, suite );
     }
     
 
@@ -47,7 +58,7 @@ class TestShell {
                     "js";
                 #end    
         try {
-            cnx.test.startRun.call([platform],function(r){ });
+            cnx.test.startRun.call([suite,platform],function(r){ });
         } catch(e:Dynamic) {
             trace("No connection to server: "+Std.string(e));
         }
@@ -55,14 +66,25 @@ class TestShell {
 
         
         // register trace-to-server
-        
+        /*
         var self=this;
         haxe.Log.trace = function( v:Dynamic, ?pos:haxe.PosInfos ) {
             self.cnx.test.info.call(["trace", platform, Std.string(v)],function(r){ } );
         }
+		*/
 
-        runNextCase();
-        
-        Root.main();
+		runNextCase();
+		
+		while( true ) {
+			try {
+				Root.main();
+			} catch(e:Dynamic) {
+				if( current!=null ) {
+					var cur=current;
+				//	trace("EXC: "+e );
+					current.result( false, "Exception: "+e,	function() { cur.cleanFinish(); } );
+				} else throw(e);
+			}
+		}
     }
 }

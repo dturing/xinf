@@ -1,18 +1,6 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
-
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.widget;
 
 import Xinf;
@@ -69,9 +57,8 @@ class Slider extends Widget {
         return v;
     }
     
-    public function new( ?max:Float, ?min:Float, ?increment:Float, ?initial:Float ) :Void {
+    public function new( ?min:Float, ?max:Float, ?increment:Float, ?initial:Float ) :Void {
         textElement = new Text();
-		
         super();
         precision=1000; this.min=0; this.max=1; this.increment=.1;
         if( min!=null ) this.min = min;
@@ -79,10 +66,10 @@ class Slider extends Widget {
         if( increment!=null ) this.increment = increment;
         else increment=0.1;
     
-		group.attach( textElement );
+		group.appendChild( textElement );
 	
         button = new Rectangle();
-        group.attach( button );
+        group.appendChild( button );
         
         slideBar = new Container();
         slideBar.addStyleClass("SliderBar");
@@ -90,7 +77,7 @@ class Slider extends Widget {
         slideThumb = new Container();
         slideThumb.addStyleClass("SliderThumb");
 		slideThumb.position = { x:0., y:1. };
-        slideBar.attach( slideThumb );
+        slideBar.appendChild( slideThumb );
 
         if( initial==0 || initial==null ) initial=0.;
         value = initial;
@@ -103,8 +90,8 @@ class Slider extends Widget {
     }
 
 	override public function set_size( s:TPoint ) :TPoint {
-		textElement.y = Helper.topOffsetAligned( this, s.y, .5 );
-		textElement.x = Helper.leftOffsetAligned( this, s.x, style.horizontalAlign );
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 )+fontSize;
+		textElement.x = Helper.leftOffsetAligned( this, s.x, horizontalAlign );
 		
 		button.x = s.x-s.y;
 		button.width = button.height = s.y;
@@ -118,14 +105,14 @@ class Slider extends Widget {
     override public function styleChanged() {
 		super.styleChanged();
 		
-		textElement.style.fontSize = style.fontSize;
-		textElement.style.fontFamily = style.fontFamily;
-		textElement.style.fill = style.textColor;
+		textElement.fontSize = fontSize;
+		textElement.fontFamily = fontFamily;
+		textElement.fill = textColor;
 		textElement.styleChanged();
 		
 		// TODO: fontWeight
 		if( textElement.text!=null ) {
-			var s = Helper.addPadding( style.getTextFormat().textSize(textElement.text), style );
+			var s = Helper.addPadding( getTextFormat().textSize(textElement.text), this );
 			s.x += s.y; // add button.width==height
 			setPrefSize( s );
 		}

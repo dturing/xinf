@@ -32,17 +32,18 @@
                     </xsl:for-each>
                 </tr>
                 
-                <xsl:for-each select="testrun[position()=1]/result">
-                    <xsl:variable name="name"><xsl:value-of select="@test"/></xsl:variable>
+                <xsl:for-each select="testrun[position()=1]/case">
+                    <xsl:variable name="name"><xsl:value-of select="@name"/></xsl:variable>
                     <tr>
-                        <td><xsl:value-of select="@test"/></td>
+                        <td><xsl:value-of select="@name"/></td>
                         <td>
-                            <a href="static/svg/png/basic-{@test}.png"><img width="40" height="30" src="static/svg/png/basic-{@test}.png"/></a>
+                            <a href="static/{../@suite}/png/{@name}.png"><img width="80" height="60" style="background:white;" src="static/{../@suite}/png/{@name}.png"/></a>
+                            <!-- <a href="static/{../@suite}/svg/{@name}.svg">SVG</a> -->
                         </td>
                         <xsl:for-each select="//testrun">
                             <xsl:choose>
-                                <xsl:when test="result/@test=$name">
-                                    <xsl:apply-templates select="result[@test=$name]" mode="pass"/>
+                                <xsl:when test="case/@name=$name">
+                                    <xsl:apply-templates select="case[@name=$name]"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <td>[no result]</td>
@@ -56,29 +57,18 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="result" mode="pass">
+  <xsl:template match="case">
         <xsl:variable name="style">
         <xsl:choose>
-            <xsl:when test="@pass='true'">background:#73d216;</xsl:when>
-            <xsl:when test="@expect-fail='true'">background:#fce94f;</xsl:when>
+            <xsl:when test="result/@pass='true'">background:#73d216;</xsl:when>
             <xsl:otherwise>background:#cc0000; color:#fff; font-weight:bold;</xsl:otherwise>
         </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="text">
-        <xsl:choose>
-            <xsl:when test="@pass='true'">passed</xsl:when>
-            <xsl:when test="@expect-fail='true'">exp fail</xsl:when>
-            <xsl:otherwise>FAIL</xsl:otherwise>
-        </xsl:choose>
-        </xsl:variable>
-
-        <td style="{$style}"
-            title="{.}">
-            <xsl:if test="@image">
-                <a href="{@image}"><img width="40" height="30" src="{@image}"></img></a>
-                <a href="results/{@test}-{@platform}-diff.png"><img width="40" height="30" src="results/{@test}-{@platform}-diff.png"></img></a>
-            </xsl:if>
+        <td style="{$style}">
+            <a href="results/{@name}-{../@platform}.png"><img width="80" height="60" style="background:white;" src="results/{@name}-{../@platform}.png"/></a>
+			<a href="results/{@name}-{../@platform}-diff.png"><img width="80" height="60" style="background:white;" src="results/{@name}-{../@platform}-diff.png"/></a>
+			<div><xsl:value-of select="."/></div>
         </td>
     </xsl:template>
 

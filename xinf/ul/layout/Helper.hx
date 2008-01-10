@@ -1,29 +1,31 @@
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
+	
 package xinf.ul.layout;
 
-import xinf.ul.ComponentStyle;
 import xinf.ul.Component;
 
 class Helper {
-    public static function removePadding( t:{x:Float,y:Float}, style:ComponentStyle ) :{x:Float,y:Float} {
-        if( style==null ) return t;
-        return({ x: t.x - (style.padding.l+style.padding.r + style.border.l+style.border.r),
-                 y: t.y - (style.padding.t+style.padding.b + style.border.t+style.border.b) });
+    public static function removePadding( t:{x:Float,y:Float}, c:Component ) :{x:Float,y:Float} {
+        if( c==null ) return t;
+        return({ x: t.x - (c.padding.l+c.padding.r + c.border.l+c.border.r),
+                 y: t.y - (c.padding.t+c.padding.b + c.border.t+c.border.b) });
     }
-    public static function addPadding( t:{x:Float,y:Float}, style:ComponentStyle ) :{x:Float,y:Float} {
-        if( style==null ) return t;
-        return({ x: t.x + (style.padding.l+style.padding.r + style.border.l+style.border.r), 
-                 y: t.y + (style.padding.t+style.padding.b + style.border.t+style.border.b) });
+    public static function addPadding( t:{x:Float,y:Float}, c:Component ) :{x:Float,y:Float} {
+        if( c==null ) return t;
+        return({ x: t.x + (c.padding.l+c.padding.r + c.border.l+c.border.r), 
+                 y: t.y + (c.padding.t+c.padding.b + c.border.t+c.border.b) });
     }
 
-    public static function clampSize( t:{x:Float,y:Float}, style:ComponentStyle ) :{x:Float,y:Float} {
-        if( style==null ) return t;
-        return({ x: Math.max( style.minWidth, Math.min( style.maxWidth, t.x )),
-                 y: Math.max( style.minHeight, Math.min( style.maxHeight, t.y )) });
+    public static function clampSize( t:{x:Float,y:Float}, c:Component ) :{x:Float,y:Float} {
+	    if( c==null ) return t;
+        return({ x: Math.max( c.minWidth, Math.min( c.maxWidth, t.x )),
+                 y: Math.max( c.minHeight, Math.min( c.maxHeight, t.y )) });
         
     }
 	
     public static function leftOffsetAligned( c:Component, space:Float, align:Float ) :Float {
-        var l = c.style.padding.l+c.style.border.l;
+        var l = c.padding.l+c.border.l;
         var iw = space;
 		var pref = c.prefSize.x;
         if( pref < iw ) {
@@ -33,7 +35,7 @@ class Helper {
     }
 
 	public static function topOffsetAligned( c:Component, space:Float, align:Float ) :Float {
-        var l = c.style.padding.t+c.style.border.t;
+        var l = c.padding.t+c.border.t;
         var iw = space;
 		var pref = c.prefSize.y;
         if( pref < iw ) {
@@ -42,8 +44,8 @@ class Helper {
         return l;
     }
 	
-    public static function innerTopLeft( style:ComponentStyle ) :{x:Float,y:Float} {
-        if( style==null ) return {x:0.,y:0.};
-        return({ x:style.padding.l+style.border.l, y:style.padding.t+style.border.t });
+    public static function innerTopLeft( c:Component ) :{x:Float,y:Float} {
+        if( c==null ) return {x:0.,y:0.};
+        return({ x:c.padding.l+c.border.l, y:c.padding.t+c.border.t });
     }
 }

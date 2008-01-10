@@ -1,22 +1,26 @@
 import Xinf;
 
+import xinf.style.Selector;
+import xinf.style.StyleSheet;
+
 class Example {
 	
 	public function new( ?url:String ) :Void {
 	
 		var g = new Group();
-		Root.attach(g);
+		Root.appendChild(g);
 		
-		var doc:Document;
+		var doc:Node;
 		var stage = {x:100.,y:100.};
-	
+		
 		if( url==null ) {
 			doc = Document.instantiate( Std.resource("test.svg") );
+			g.appendChild( doc );
 		} else {
-			doc = Document.load( url );
+			Document.load( url, function(doc) {
+				g.appendChild( doc );
+			});
 		}
-		g.attach( doc );
-
 
 		var scale = 1.;
 		var offset={ x:0., y:0. };
@@ -25,7 +29,7 @@ class Example {
 			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
 			g.transform = new Concatenate( 
 							new Concatenate(
-								new Translate( -doc.width/2, -doc.height/2 ),
+								new Translate( 0, 0 ), //-doc.width/2, -doc.height/2 ),
 								new Concatenate(
 //									new Scale(  (stage.x/doc.width)*scale, 
 //												(stage.y/doc.height)*scale ),
