@@ -99,7 +99,7 @@ class BasicRenderer implements Renderer {
         unimplemented("cubicTo");
     }
 
-    public function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void {
+    public function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void {
         unimplemented("arcTo");
     }
 

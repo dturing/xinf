@@ -260,6 +260,9 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				case SolidColor(r,g,b,a):
 					format.format.color = colorToRGBInt(r,g,b);
 					current.alpha = a;
+				case None:
+					format.format.color = 0;
+					current.alpha = 1;
 				default:
 					throw("Fill "+pen.fill+" not supported for text");
 			}

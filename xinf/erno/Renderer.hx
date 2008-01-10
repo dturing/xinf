@@ -175,7 +175,7 @@ interface Renderer {
         to the automatic calculations and help determine how the arc is drawn."
 
     **/
-    function arcTo( rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void;
+    function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArc:Bool, sweep:Bool, x:Float, y:Float ) :Void;
     
     /**
         Draws a rectangle with the current fill and stroke styles within the current
