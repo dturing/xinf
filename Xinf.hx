@@ -71,4 +71,4 @@ typedef StringTrait = xinf.traits.StringTrait;
 typedef LengthTrait = xinf.ony.traits.LengthTrait;
 
 typedef Length = xinf.ony.type.Length;
-typedef Paint = xinf.erno.Paint;
+typedef Paint = xinf.ony.type.Paint;
