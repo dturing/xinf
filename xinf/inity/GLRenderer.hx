@@ -63,7 +63,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
 			default:
-				return false;
+				GL.color4(0,0,0,1);
 		}
 		return true;
 	}
@@ -74,7 +74,7 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
 			case SolidColor(r,g,b,a):
 				GL.color4(r,g,b,a);
 			default:
-				return false;
+				GL.color4(0,0,0,1);
 		}
 		GL.lineWidth( pen.width );
 		return true;
@@ -222,9 +222,9 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         shape.cubicTo(x1,y1,x2,y2,x,y);
     }
     
-    override public function arcTo( rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
+    override public function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
         var a = (rotation/180)*Math.PI;
-        var A = shape.last();
+        var A = { x:x1, y:y1 };
         var B = { x:x, y:y };
         var P = { x:(A.x-B.x)/2, y:(A.y-B.y)/2 };
         P = rotatePoint( P, -a );
@@ -291,13 +291,13 @@ class GLRenderer extends ObjectModelRenderer<Primitive> {
         startPath( x+rx, y );
         for( i in 0...ELLIPSE_SEGMENTS ) {
             lineTo(x + w - rx, y);
-            arcTo(rx, ry, 0, false, true, x + w, y + ry);
+            arcTo(x+w-rx,y,rx, ry, 0, false, true, x + w, y + ry);
             lineTo(x + w, y + h - ry);
-            arcTo(rx, ry, 0, false, true, x + w - rx, y + h);
+            arcTo(x+w,y+h-ry,rx, ry, 0, false, true, x + w - rx, y + h);
             lineTo(x + rx, y + h);
-            arcTo(rx, ry, 0, false, true, x, y + h - ry);
+            arcTo(x+rx,y+h,rx, ry, 0, false, true, x, y + h - ry);
             lineTo(x, y + ry);
-            arcTo(rx, ry, 0, false, true, x + rx, y); 
+            arcTo(x,y+ry,rx, ry, 0, false, true, x + rx, y); 
         }
         endPath();
         endShape();

@@ -202,8 +202,43 @@ class GLVGRenderer extends GLRenderer {
 		append( VG.CUBIC_TO_ABS, [x1,y1,x2,y2,x,y] );
     }
 
-    override public function arcTo( rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
-		trace("arcTo not implemented for GLVG");
+    override public function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
+		if( x1==x && y1==y ) return;
+		if( rx==0 || ry==0 ) { lineTo( x,y ); return; }
+		
+        var a = (rotation/180)*Math.PI;
+        var A = { x:x1, y:y1 };
+        var B = { x:x, y:y };
+        var P = { x:(A.x-B.x)/2, y:(A.y-B.y)/2 };
+        P = rotatePoint( P, -a );
+
+        var lambda = (Math.pow(P.x,2)/Math.pow(rx,2)) + (Math.pow(P.y,2)/Math.pow(rx,2));
+        if( lambda>1 ) {
+            rx *= Math.sqrt(lambda);
+            ry *= Math.sqrt(lambda);
+        }
+        
+        var f = ( (Math.pow(rx,2)*Math.pow(ry,2))-(Math.pow(rx,2)*Math.pow(P.y,2))-Math.pow(ry,2)*Math.pow(P.x,2))
+            / ( (Math.pow(rx,2)*Math.pow(P.y,2)) + (Math.pow(ry,2)*Math.pow(P.x,2)) );
+        if( f<0 ) f=0 else f=Math.sqrt(f);
+        if( largeArcFlag==sweepFlag ) f*=-1;
+        
+        var C_ =  { x: rx/ry*P.y, y: -ry/rx*P.x };
+        C_.x*=f; C_.y*=f;
+        var C = C_;
+        
+        C = rotatePoint(C,a);
+        C = { x: C.x + ((A.x+B.x)/2),
+              y: C.y + ((A.y+B.y)/2) };
+        
+        var theta = Math.atan2( (P.y-C_.y)/ry, (P.x-C_.x)/rx );
+        var dTheta = Math.atan2( (-P.y-C_.y)/ry, (-P.x-C_.x)/rx)-theta;
+        
+        if( !sweepFlag && dTheta<0 ) dTheta += 2*Math.PI;
+        if( sweepFlag && dTheta>0 ) dTheta -= 2*Math.PI;
+
+		VGU.arc( path,
+			C.x, C.y, rx*2, ry*2, (theta/Math.PI)*180, (dTheta/Math.PI)*180, VGU.ARC_OPEN );
 	}
 	
     override public function rect( x:Float, y:Float, w:Float, h:Float ) {
