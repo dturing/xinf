@@ -7,7 +7,6 @@ import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
-import xinf.type.Color;
 
 import js.Dom;
 typedef Primitive = js.HtmlDom
@@ -61,7 +60,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         if( pen.fill != null ) {
 			switch( pen.fill ) {
 				case SolidColor(red,g,b,a):
-					r.style.background = Color.rgb(red,g,b).toRGBString();
+					r.style.background = colorToRGBString(red,g,b);
 					untyped r.style.opacity = a;
 				default:
 					untyped r.style.opacity = 0;
@@ -71,7 +70,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 			switch( pen.stroke ) {
 				case SolidColor(red,g,b,a):
 					// FIXME: a
-					r.style.border = ""+pen.width+"px solid "+Color.rgb(red,g,b).toRGBString();
+					r.style.border = ""+pen.width+"px solid "+colorToRGBString(red,g,b);
 					r.style.width = ""+Math.round(w+1-(pen.width*2));
 					r.style.height = ""+Math.round(h+1-(pen.width*2));
 				default:
@@ -103,7 +102,7 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
         if( pen.fill != null ) {
 			switch( pen.fill ) {
 				case SolidColor(red,g,b,a):
-					r.style.color = Color.rgb(red,g,b).toRGBString();
+					r.style.color = colorToRGBString(red,g,b);
 					untyped r.style.opacity = a;
 				default:
 					untyped r.style.opacity = 0;
@@ -154,5 +153,8 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
     override public function native( o:NativeObject ) {
         current.appendChild(o);
     }
-    
+
+	public static function colorToRGBString( r:Float, g:Float, b:Float ) :String {
+		return "rgb("+Math.round(r*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")";	
+	}
 }

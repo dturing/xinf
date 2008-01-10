@@ -173,7 +173,6 @@ class TextArea extends xinf.ony.TextArea {
 
 import xinf.ony.type.Editability;
 import xinf.ony.type.Paint;
-import xinf.type.Color;
 
 class TextArea extends xinf.ony.TextArea {
 
@@ -205,7 +204,7 @@ class TextArea extends xinf.ony.TextArea {
 		
 		switch( fill ) {
 			case RGBColor(r,g,b):
-				format.format.color = Color.rgb(r,g,b).toRGBInt();
+				format.format.color = xinf.erno.flash9.Flash9Renderer.colorToRGBInt(r,g,b);
 				tf.alpha = 1;
 			default:
 				throw("Fill "+fill+" not supported for text");
@@ -240,7 +239,6 @@ class TextArea extends xinf.ony.TextArea {
 
 import xinf.ony.type.Editability;
 import xinf.ony.type.Paint;
-import xinf.type.Color;
 
 class TextArea extends xinf.ony.TextArea {
 
@@ -276,8 +274,7 @@ class TextArea extends xinf.ony.TextArea {
 		
 		switch( fill ) {
 			case RGBColor(red,g,b):
-				r.style.color = 
-					"rgb("+Math.round(red*0xff)+","+Math.round(g*0xff)+","+Math.round(b*0xff)+")";
+				r.style.color = xinf.erno.js.JSRenderer.colorToRGBString(red,g,b);
 			default:
 				throw("Fill "+fill+" not supported for text");
 		}

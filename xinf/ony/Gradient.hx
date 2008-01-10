@@ -4,6 +4,8 @@
 package xinf.ony;
 
 import xinf.geom.Transform;
+import xinf.geom.TransformParser;
+import xinf.geom.Identity;
 import xinf.ony.Implementation;
 import xinf.ony.type.GradientUnits;
 import xinf.ony.type.SpreadMethod;

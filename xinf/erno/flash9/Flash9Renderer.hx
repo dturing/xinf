@@ -9,7 +9,6 @@ import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
 import xinf.erno.Paint;
-import xinf.type.Color;
 import xinf.erno.TGradientStop;
 
 import xinf.geom.Transform;
@@ -134,7 +133,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		
 			case SolidColor(r,g,b,a):
 				if( a>0 ) {
-					current.graphics.beginFill( Color.rgba(r,g,b,a).toRGBInt(), a );
+					current.graphics.beginFill( colorToRGBInt(r,g,b), a );
 				}
 				
 			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
@@ -174,11 +173,11 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 			case None:
 				current.graphics.lineStyle( pen.width, 0xff0000, 0, false );
 			case SolidColor(r,g,b,a):
-				current.graphics.lineStyle( pen.width, Color.rgba(r,g,b,a).toRGBInt(), a, false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
+				current.graphics.lineStyle( pen.width, colorToRGBInt(r,g,b), a, false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
 			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashLinearGradient( x1,y1,x2,y2 );
-				current.graphics.lineStyle( pen.width, Color.rgba(0,0,0,0).toRGBInt(), 1., false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
+				current.graphics.lineStyle( pen.width, 0, 1., false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
 				current.graphics.lineGradientStyle( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
 			default:
 				throw("stroke "+pen.stroke+" not implemented");
@@ -259,7 +258,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
             var tf = new flash.text.TextField();
 			switch( pen.fill ) {
 				case SolidColor(r,g,b,a):
-					format.format.color = Color.rgb(r,g,b).toRGBInt();
+					format.format.color = colorToRGBInt(r,g,b);
 					current.alpha = a;
 				default:
 					throw("Fill "+pen.fill+" not supported for text");
@@ -316,7 +315,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         current.addChild(o);
     }
     
-    static function colorToRGBInt(r:Float,g:Float,b:Float) : Int {
+    public static function colorToRGBInt(r:Float,g:Float,b:Float) : Int {
         return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
     }
 }

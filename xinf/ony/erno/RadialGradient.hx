@@ -5,6 +5,8 @@ package xinf.ony.erno;
 
 import xinf.geom.Transform;
 import xinf.geom.Translate;
+import xinf.geom.Concatenate;
+import xinf.geom.Scale;
 import xinf.geom.Matrix;
 import xinf.geom.Types;
 import xinf.ony.type.GradientUnits;

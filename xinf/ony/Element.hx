@@ -6,6 +6,8 @@ import xinf.ony.Implementation;
 
 import xinf.geom.Types;
 import xinf.geom.Transform;
+import xinf.geom.TransformParser;
+import xinf.geom.Identity;
 import xinf.geom.Matrix;
 import xinf.event.Event;
 
