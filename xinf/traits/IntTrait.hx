@@ -5,7 +5,7 @@ package xinf.traits;
 
 class IntTrait extends TypedTrait<Int> {
 
-    static var numeric = ~/^([0-9\.]+)$/;
+    static var numeric = ~/^([0-9\.\-]+)$/;
 
     var def:Int;
     
@@ -16,6 +16,7 @@ class IntTrait extends TypedTrait<Int> {
     }
 
 	override public function parse( value:String ) :Dynamic {
+		if( value=="none" ) return 0;
         var v:Null<Int> = null;
 
 		if( numeric.match(value) ) {

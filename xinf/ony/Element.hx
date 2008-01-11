@@ -76,6 +76,10 @@ class Element extends StyledElement {
     function get_opacity() :Null<Float> { return getStyleTrait("opacity",Float,false); }
     function set_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("opacity",v); }
 
+    public var color(get_color,set_color):Paint;
+    function get_color() :Paint { return getStyleTrait("color",Paint); }
+    function set_color( v:Paint ) :Paint{ return setStyleTrait("color",v); }
+	
     public var fill(get_fill,set_fill):Paint;
     function get_fill() :Paint { return getStyleTrait("fill",Paint); }
     function set_fill( v:Paint ) :Paint{ return setStyleTrait("fill",v); }
