@@ -21,6 +21,7 @@ import xinf.ony.type.CapsStyle;
 import xinf.ony.type.Visibility;
 import xinf.ony.type.Display;
 import xinf.ony.type.StringList;
+import xinf.ony.type.IntList;
 import xinf.ony.type.TextAnchor;
 
 import xinf.traits.TraitDefinition;
@@ -28,9 +29,11 @@ import xinf.traits.BoundedFloatTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
+import xinf.traits.IntTrait;
 
 import xinf.ony.traits.LengthTrait;
 import xinf.ony.traits.StringListTrait;
+import xinf.ony.traits.IntListTrait;
 import xinf.ony.traits.StringChoiceTrait;
 import xinf.ony.traits.PaintTrait;
 // TODO import xinf.traits.TransformTrait;
@@ -52,6 +55,8 @@ class Element extends StyledElement {
 		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
 		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", ButtCaps ),
 		stroke_miterlimit: new FloatTrait(4),
+		stroke_dasharray:  new IntListTrait(),
+		stroke_dashoffset: new IntTrait(),
 		
 		font_family:	new StringListTrait(),
 		font_size:		new LengthTrait(new Length(10)),
@@ -102,6 +107,14 @@ class Element extends StyledElement {
     public var strokeMiterlimit(get_stroke_miterlimit,set_stroke_miterlimit):Null<Float>;
     function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("stroke-miterlimit",Float); }
     function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-miterlimit",v); }
+
+    public var strokeDasharray(get_stroke_dasharray,set_stroke_dasharray):IntList;
+    function get_stroke_dasharray() :IntList { return getStyleTrait("stroke-dasharray",IntList); }
+    function set_stroke_dasharray( v:IntList ) :IntList { return setStyleTrait("stroke-dasharray",v); }
+
+    public var strokeDashoffset(get_stroke_dashoffset,set_stroke_dashoffset):Null<Int>;
+    function get_stroke_dashoffset() :Null<Int> { return getStyleTrait("stroke-dashoffset",Int); }
+    function set_stroke_dashoffset( v:Null<Int> ) :Null<Int> { return setStyleTrait("stroke-dashoffset",v); }
 
 	public var fontFamily(get_font_family,set_font_family):StringList;
     function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }

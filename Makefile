@@ -28,7 +28,7 @@ test : $(VERSION_STUB) $(SRC)
 	NEKOPATH=$(NEKOPATH) neko test.n  
 	#xinf/test/static/SVG1.2/svg/struct-use-01-t.svg 
 
-doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx
+doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx doc/haxedoc-mod/HtmlPrinter.hx
 	cd doc/haxedoc-mod && haxe haxedoc.hxml
 	
 doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc

@@ -106,7 +106,7 @@ interface Renderer {
         If you specify None for paint,
         or [0] width, shapes' won't be stroked.
     **/
-    function setStroke( ?paint:Paint, width:Float, ?capsStyle:Int, ?joinStyle:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void;
+    function setStroke( ?paint:Paint, width:Float, ?capsStyle:Int, ?joinStyle:Int, ?miterLimit:Float, ?dashArray:Array<Int>, ?dashOffset:Int ) :Void;
     
     /**
         Start a shape definition. A shape can consist of multiple polygons (paths) that are potentially

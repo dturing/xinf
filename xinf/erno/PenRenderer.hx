@@ -22,8 +22,8 @@ class Pen {
 	public var caps:Int;
 	public var join:Int;
 	public var miterLimit:Float;
-	public var dashArray:Iterable<Float>;
-	public var dashOffset:Float;
+	public var dashArray:Array<Int>;
+	public var dashOffset:Int;
 
     /**
         constructor, initializes a new Pen structure with default values.
@@ -74,7 +74,7 @@ class PenRenderer extends BasicRenderer {
 		pen.fill = paint;
     }
     
-    override public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+    override public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Array<Int>, ?dashOffset:Int ) :Void {
 		pen.stroke = paint;
 		pen.width = width;
 		pen.caps = caps;

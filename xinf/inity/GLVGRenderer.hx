@@ -134,6 +134,18 @@ class GLVGRenderer extends GLRenderer {
 		if( pen.miterLimit!=null )
 			VG.setf( VG.STROKE_MITER_LIMIT, pen.miterLimit );
 			
+		if( pen.dashArray!=null ) {
+			var l=0; for( i in pen.dashArray ) l++;
+			var dash = CPtr.float_alloc(l);
+			CPtr.float_from_array( dash, neko.Lib.haxeToNeko(pen.dashArray) );
+			
+			VG.setfv( VG.STROKE_DASH_PATTERN, l, dash );
+			VG.seti( VG.STROKE_DASH_PHASE_RESET, 1 );
+			VG.setf( VG.STROKE_DASH_PHASE, pen.dashOffset );
+		} else {
+			VG.setfv( VG.STROKE_DASH_PATTERN, 0, neko.Lib.haxeToNeko("") );
+		}
+			
 		return true;
 	}
 

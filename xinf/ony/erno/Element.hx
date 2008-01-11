@@ -113,9 +113,6 @@ class Element extends xinf.ony.Element {
 			var caps = strokeLinecap;
 			var join = strokeLinejoin;
 			var miterLimit = strokeMiterlimit;
-			// TODO: dash
-			var dashArray:Iterable<Float> = null;
-			var dashOffset:Null<Float> = null;
 
 			var _caps = switch( caps ) {
 				case ButtCaps: Constants.CAPS_BUTT;
@@ -127,13 +124,24 @@ class Element extends xinf.ony.Element {
 				case RoundJoin: Constants.JOIN_ROUND;
 				case BevelJoin: Constants.JOIN_BEVEL;
 			}
+			var dashArray:Array<Int> = null;
+			if( strokeDasharray != null ) {
+				dashArray = strokeDasharray.list;
+				if( dashArray.length % 2 == 1 &&
+					( dashArray.length!=1 || dashArray[0]!=0 ) ) {
+					var d2 = new Array<Int>();
+					for( i in dashArray ) d2.push(i);
+					for( i in dashArray ) d2.push(i);
+					dashArray = d2;
+				}
+			}
 			switch( stroke ) {
 				case URLReference(url):
 					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
 					if( r==null ) throw("Referenced Paint not found: "+url );
-					g.setStroke( r.getPaint(this), w, _caps, _join, miterLimit, dashArray, dashOffset );
+					g.setStroke( r.getPaint(this), w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
 				case RGBColor(r,green,b):
-					g.setStroke( xinf.erno.Paint.SolidColor(r,green,b,strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, dashOffset );
+					g.setStroke( xinf.erno.Paint.SolidColor(r,green,b,strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
 				case None:
 					g.setStroke( xinf.erno.Paint.None, 0 );
 			}

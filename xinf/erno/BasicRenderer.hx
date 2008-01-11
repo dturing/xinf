@@ -63,7 +63,7 @@ class BasicRenderer implements Renderer {
 		unimplemented("setFill");
 	}
     
-    public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Iterable<Float>, ?dashOffset:Float ) :Void {
+    public function setStroke( ?paint:Paint, width:Float, ?caps:Int, ?join:Int, ?miterLimit:Float, ?dashArray:Array<Int>, ?dashOffset:Int ) :Void {
 		unimplemented("setStroke");
 	}
         
