@@ -20,7 +20,7 @@ class LoadSuite {
 	
 	public function new() {
 		suite = "SVG1.2";
-		pkg="shapes";
+		pkg="paint";
 		dir = suite+"/svg/";
 		base="http://localhost:2000/static/";
 	}
