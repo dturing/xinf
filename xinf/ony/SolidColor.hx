@@ -7,7 +7,6 @@ import xinf.ony.Implementation;
 import xinf.ony.type.Paint;
 import xinf.traits.BoundedFloatTrait;
 import xinf.ony.traits.PaintTrait;
-import xinf.traits.SpecialTraitValue;
 
 class SolidColor extends ElementImpl {
 

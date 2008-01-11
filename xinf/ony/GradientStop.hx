@@ -43,17 +43,25 @@ class GradientStop extends StyledElement {
 		super.fromXml(xml);
 		
 		offset = getTrait("offset", Length ).value;
+		var o = stopOpacity;
+		if( o==null ) o=1;
 		
 		if( stopColor!=null ) {
 			switch( stopColor ) {
 				case RGBColor(r,g,b):
-					this.r=r; this.g=g; this.b=b; this.a=stopOpacity;
+					this.r=r; this.g=g; this.b=b; this.a=o;
+				case None:
+					this.r=this.g=this.b=this.a=0;
 				default:
 					// FIXME: could reference a SolidColor PaintServer...
-					throw("GradientStop stop-color must be a SolidColor");
+					throw("GradientStop stop-color must be a SolidColor (is: "+stopColor+")");
 			}
 		}
 		
+	}
+	
+	override public function toString() :String {
+		return("GradientStop("+r+","+g+","+b+","+a+")");
 	}
 	
 }
