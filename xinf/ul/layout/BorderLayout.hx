@@ -31,19 +31,22 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
         var C:Component;
         
         for( c in parent.getComponents() ) {
-            switch( getConstraints( c ) ) {
-                case North:
-                    N=c;
-                case East:
-                    E=c;
-                case South:
-                    S=c;
-                case West:
-                    W=c;
-                case Center:
-                    C=c;
-                default:
-            }
+			var con = getConstraints( c );
+			if( con!=null ) {
+				switch( con ) {
+					case North:
+						N=c;
+					case East:
+						E=c;
+					case South:
+						S=c;
+					case West:
+						W=c;
+					case Center:
+						C=c;
+					default:
+				}
+			}
         }
 
         var p = Helper.removePadding( parent.size, parent );

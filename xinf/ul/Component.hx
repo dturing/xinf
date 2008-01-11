@@ -137,7 +137,7 @@ class Component extends StyledElement {
     function get_max_height() :Float { return getStyleTrait("max-height",Float); }
     function set_max_height( v:Float ) :Float { return setStyleTrait("max-height",v); }
 
-
+	static var highestId:Int = 0;
     public var __parentSizeListener:Dynamic;
 
     public var parent(default,null):Container;
@@ -150,9 +150,12 @@ class Component extends StyledElement {
 	public var size(get_size,set_size):TPoint;
 	public var position(default,set_position):TPoint; // TODO!
 	var group:Group;
+	
+	public var cid(default,null):Int;
 
     public function new( ?traits:Dynamic ) :Void {
 		super(traits);
+		cid = highestId++;
 		
 		group = new Group();
 		

@@ -14,7 +14,7 @@ class ConstrainedLayout<Constraint> {
     }
     
     public function getConstraints( comp:Component ) :Constraint {
-    	var compId = comp.getElement().xid;
+    	var compId = comp.cid;
         var c:Constraint = index.get( compId );
         if( c==null ) {
             c = createConstraints();
@@ -24,7 +24,7 @@ class ConstrainedLayout<Constraint> {
     }
     
     public function setConstraint( comp:Component, c:Constraint ) :Void {
-        index.set( comp.getElement().xid, c );
+        index.set( comp.cid, c );
     }
     
     public function createConstraints() :Constraint {
