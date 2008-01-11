@@ -550,9 +550,9 @@ class HtmlPrinter {
 		var ref_begin='<span class="extref">See also: ';
 		var ref_end='</span>';
 		doc = ~/\$SVG ([^ #]+)(#?[^ ]*) (.*)\$/g.replace( doc, 
-			ref_begin+'<a class="svg" href="file:///mnt/data/doc/SVGMobile12/$1.html$2">$3</a>'+ref_end );
+			ref_begin+'<a class="svg" href="http://www.w3.org/TR/SVGMobile12//$1.html$2">$3</a>'+ref_end );
 		doc = ~/\$CSS ([^ #]+)(#?[^ ]*) (.*)\$/g.replace( doc, 
-			ref_begin+'<a class="css" href="file:///mnt/data/doc/CSS/$1.html$2">$3</a>'+ref_end );
+			ref_begin+'<a class="css" href="http://www.w3.org/TR/REC-CSS2//$1.html$2">$3</a>'+ref_end );
 			
 		// wiki and class references
 		doc = ~/\$wiki ([^ ]+)(.*)\$/g.replace( doc, 
