@@ -38,12 +38,12 @@ testa : $(SRC) testd
 
 test-flash9 : $(SRC) testd
 	-ps ax | grep "xinf test" | awk '{ print $$1; }'  | xargs kill
-	haxe $(HAXEFLAGS) -swf test.swf -swf-header 480:360:25:ffffff -swf-version 9 -main xinf.test.svg.SVGTestsuite;
+	haxe $(HAXEFLAGS) -swf test.swf -swf-header 480:360:25:ffffff -swf-version 9 -main xinf.test.svg.SVG12Testsuite;
 	DISPLAY=$(TEST_DISPLAY) firefox -P "xinf test" -chrome "javascript:void(window.open('http://localhost:2000/static/test-flash.html','','chrome'))" &
 
 test-js : $(SRC) testd
 	-ps ax | grep "xinf test" | awk '{ print $$1; }'  | xargs kill
-	haxe $(HAXEFLAGS) -js test.js -main xinf.test.svg.SVGTestsuite
+	haxe $(HAXEFLAGS) -js test.js -main xinf.test.svg.SVG12Testsuite
 	DISPLAY=$(TEST_DISPLAY) firefox -P "xinf test" -chrome "javascript:void(window.open('http://localhost:2000/static/test.html','','chrome'))" &
 	
 clean :
