@@ -8,7 +8,6 @@ import xinf.event.EventKind;
 import xinf.ul.ValueEvent;
 import xinf.ul.layout.Helper;
 import xinf.ul.FocusManager;
-import xinf.type.Paint;
 
 /**
     Button element.

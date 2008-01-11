@@ -6,7 +6,6 @@ package xinf.ul.widget;
 import Xinf;
 import xinf.ul.Component;
 import xinf.ul.layout.Helper;
-import xinf.type.Paint;
 
 /**
     Simple Label element.

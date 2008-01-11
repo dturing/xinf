@@ -1,7 +1,7 @@
 #######################################################
 
 PROJECT:=xinf
-VERSION:=0.4.1
+VERSION:=0.4.2
 TAGLINE:=the phantastic phour
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")

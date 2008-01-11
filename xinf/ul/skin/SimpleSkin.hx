@@ -4,7 +4,7 @@
 package xinf.ul.skin;
 
 import Xinf;
-import xinf.type.Paint;
+import xinf.ony.type.Paint;
 
 class SimpleSkin extends Skin {
 	var bg:Rectangle;
@@ -17,20 +17,23 @@ class SimpleSkin extends Skin {
 	override public function setTo( name:String ) :Void {
 		switch( name ) {
 			case "focus":
-				bg.fill = SolidColor(.9,.9,.9,.8);
-				bg.stroke = Color.BLACK;
+				bg.fill = RGBColor(.9,.9,.9);
+				bg.fillOpacity = .8;
+				bg.stroke = RGBColor(0,0,0);
 				bg.strokeWidth = 2;
 			case "focus-bright":
-				bg.fill = SolidColor(.98,.98,.98,.9);
-				bg.stroke = Color.BLACK;
+				bg.fill = RGBColor(.98,.98,.98);
+				bg.fillOpacity = .9;
+				bg.stroke = RGBColor(0,0,0);
 				bg.strokeWidth = 2;
 			case "none":
-				bg.fill = Color.TRANSPARENT;
-				bg.stroke = Color.TRANSPARENT;
+				bg.fill = Paint.None;
+				bg.stroke = Paint.None;
 				bg.strokeWidth = 0;
 			default:
-				bg.fill = SolidColor(.9,.9,.9,.8);
-				bg.stroke = Color.BLACK;
+				bg.fill = RGBColor(.9,.9,.9);
+				bg.fillOpacity = .8;
+				bg.stroke = RGBColor(0,0,0);
 				bg.strokeWidth = 1;
 		}
 	}

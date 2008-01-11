@@ -10,8 +10,7 @@ import xinf.ul.widget.VScrollbar;
 import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
-
-import xinf.type.Paint;
+import xinf.ony.type.Paint;
 
 class ListView<T> extends Widget {
 
@@ -46,7 +45,7 @@ class ListView<T> extends Widget {
         cursor = new Rectangle();
 		cursor.width = 8; cursor.height = 18;
 		cursor.x = 0; cursor.y = -100;
-		cursor.fill = SolidColor(0,.5,0,.5);
+		cursor.fill = RGBColor(0,.5,0); // FIXME
         cropper.appendChild( cursor );
 
         scrollbar = new VScrollbar();

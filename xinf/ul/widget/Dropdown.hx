@@ -11,7 +11,6 @@ import xinf.ul.list.ListView;
 import xinf.ul.list.PickEvent;
 import xinf.ul.layout.Helper;
 import xinf.event.Event;
-import xinf.type.Paint;
 
 
 typedef T=String

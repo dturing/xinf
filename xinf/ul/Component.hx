@@ -10,15 +10,14 @@ import xinf.style.Selector;
 import xinf.event.SimpleEvent;
 
 import xinf.erno.TextFormat;
-import xinf.type.Paint;
-import xinf.type.Border;
+import xinf.ony.type.Paint;
 import xinf.ony.type.StringList;
 import xinf.ul.skin.Skin;
 
 import xinf.ony.traits.StringListTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.FloatTrait;
-import xinf.traits.PaintTrait;
+import xinf.ony.traits.PaintTrait;
 import xinf.ul.BorderTrait;
 
 class Component extends StyledElement {
@@ -67,71 +66,12 @@ class Component extends StyledElement {
 			
 		");
 	}
-	/*
-	public static var styleSheet:StyleSheet 
-		= new StyleSheet(
-	[
-		{ selector:Any, style:{
-				padding: new Border(6,3,6,3),
-				border: new Border(1,1,1,1),
-				font_family: new StringList(["sans"]),
-				font_size: 12,
-				text_color: Color.BLACK,
-			} },
-		{ selector:AnyOf([ StyleClass("Container"), StyleClass("Interface") ]), style:{
-				horizontal_align: .5,
-				vertical_align: .5,
-				padding: new Border( 5,5,5,5 ),
-			} },
-		{ selector:StyleClass("ListView"), style:{
-				min_width: 100.,
-				min_height: 75.,
-			} },
-		{ selector:StyleClass("Label"), style:{
-				padding: new Border(2,2,2,2),
-				border: new Border(0,0,0,0),
-				horizontal_align: 0.,
-				vertical_align: 0.,
-				font_family: new StringList(["sans"]),
-				font_size: 12,
-				text_color: Color.BLACK,
-				skin: "none",
-			} },
-		{ selector:StyleClass("Button"), style:{
-				padding: new Border(6,3,6,3),
-				border: new Border(1,1,1,1),
-				min_width: 75,
-				min_height: 10,
-				horizontal_align: .5,
-				vertical_align: .5,
-			} },
-		{ selector:StyleClass(":focus"), style:{
-				skin: "focus",
-				padding: new Border(5,2,5,2),
-				border: new Border(2,2,2,2),
-			} },
-		{ selector:AllOf([ StyleClass("Button"), StyleClass(":press") ]), style:{
-				skin: "focus-bright",
-				padding: new Border(5,3,5,1),
-			} },
-		{ selector:StyleClass("ListView"), style:{
-				padding: new Border( 3,1,0,1 ),
-			} },
-		{ selector:StyleClass("LineEdit"), style:{
-				padding: new Border(2,2,2,1),
-				min_width: 100,
-				min_height: 10,
-			} },
-		{ selector:AllOf([ StyleClass("LineEdit"), StyleClass(":focus") ]), style:{
-				skin: "focus-bright",
-			} },
-	]);
-	*/
+	
 	static var TRAITS = {
 		skin:			new StringTrait(),
 		font_family:	new StringListTrait(),
 		font_size:		new LengthTrait(new Length(10)),
-		text_color:		new PaintTrait(Color.BLACK),
+		text_color:		new PaintTrait(RGBColor(0,0,0)),
 		horizontal_align:	new FloatTrait(),
 		vertical_align:		new FloatTrait(),
 		border:				new BorderTrait(),
