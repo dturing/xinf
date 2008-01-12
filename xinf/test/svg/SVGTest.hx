@@ -15,29 +15,40 @@ class SVGTest extends TestCase {
 
     public function new( url:String, ?targetEq:Float, ?interactive:Bool ) {
         this.url=url;
+        super();
         if( targetEq==null ) targetEq=.96;
         this.targetEquality=targetEq;
         this.interactive=interactive;
-        super();
     }
 
     override public function test() {
-        var self=this;
-
-		Document.load( url, function(doc:Svg) {
-			Root.appendChild( doc );
-			if( !self.interactive ) {
-				self.runAtNextFrame( function() {
-					var svg = cast( doc, xinf.ony.Svg );
-					self.assertDisplay(svg.width, svg.height, function( eq:Float ) {
-						self.result( eq>self.targetEquality, "Eq: "+eq, self.cleanFinish );
-					} );
-				} );
-			} // else just loop on...    
-		}, Svg );
+    
+		// we're not using Document.load to catch the exception.. hmm..
+	
+		var self=this;
+		var turl = new xinf.xml.URL(url);
+		turl.fetch( function(data) {
+			try {
+				Document.instantiate( data, turl, null, function(doc:Svg) {
+					Root.appendChild( doc );
+					if( !self.interactive ) {
+						self.runAtNextFrame( function() {
+							self.assertDisplay(doc.width, doc.height, function( eq:Float ) {
+								self.result( eq>self.targetEquality, "Eq: "+eq, self.cleanFinish );
+							} );
+						} );
+					} // else just loop on...    
+				}, Svg );
+			} catch( e:Dynamic ) {
+				self.result( false, "Exception: "+e, function() { self.cleanFinish(); } );
+			}
+		}, function( error ) {
+			throw(error);
+		} );
     }
 
     override public function toString() :String {
+		if( url==null ) return "[uninitialized]";
         return( url.split("/").pop().split(".").shift() );
     }
 }

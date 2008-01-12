@@ -34,6 +34,7 @@ class TestCase {
 		this.suite = suite;
 		
 		var self=this;
+			trace("call starTest");
 		cnx.test.startTest.call( [ name ], function(r) {
 			self.test();
 		} );
@@ -66,11 +67,13 @@ class TestCase {
 		}
 		finished=true;
 		
+			trace("call result");
         cnx.test.result.call( [ pass, message ],
             function(r) { tnext(); } );
     }
 
     public function info( message:String ) :Void {
+				trace("call info");
         cnx.test.info.call( [message],
             function(r) { } );
     }
@@ -79,7 +82,10 @@ class TestCase {
     public function assertDisplay( width:Float, height:Float, result:Float->Void ) {
         var self=this;
 		runAtNextFrame( function() {
-                self.cnx.test.shoot.call([ self.name, self.suite, self.platform, width, height ], result);
+				trace("call shoot");
+                self.cnx.test.shoot.call([ self.name, self.suite, self.platform, width, height ], function(d) {
+					result(d);
+				});
         } );
     }
 

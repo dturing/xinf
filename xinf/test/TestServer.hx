@@ -80,23 +80,22 @@ class TestServer {
 		if( exitCode != 0 ) throw("Could not take screenshot.");
 
         if( neko.FileSystem.exists( ref ) ) {
-            // compare to reference
+           // compare to reference
             exitCode = neko.Sys.command("pamarith -difference "+ref+" "+img+" > "+diff );
             if( exitCode == 0 ) exitCode = neko.Sys.command("pamsumm -mean -normalize -brief "+diff+" > /tmp/xinftest-diff");
             if( exitCode != 0 ) {
-				info("Could not compare reference image. Wrong Size?");
+//				info("Could not compare reference image. Wrong Size?");
 				return 0.;
 			}
-            
+          
             var eq = 1.0 - Std.parseFloat( neko.io.File.getContent("/tmp/xinftest-diff") );
             
             // convert images to png
             neko.Sys.command("pnmtopng -compression 7 "+img+" > "+baseName+platform+".png");
             neko.Sys.command("pnmtopng -compression 7 "+diff+" > "+baseName+platform+"-diff.png");
-            
             return eq;
         } else {
-            info("reference image '"+ref+"' does not exist");
+//            info("reference image '"+ref+"' does not exist");
         }
         return -1.;
     }

@@ -26,12 +26,12 @@ class SVG12Testsuite {
             shell.add( new SVGTest( "file://"+runOnly ) );
             #end
         } else {
-		
-			shell.add( new SVGTest( base+"coords-coord-01-t.svg" ) );
-			shell.add( new SVGTest( base+"coords-coord-02-t.svg" ) );
+		//	shell.add( new SVGTest( base+"coords-coord-01-t.svg" ) );
+		//	shell.add( new SVGTest( base+"coords-coord-02-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-pAR-201-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-trans-01-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-trans-02-t.svg" ) );
+			
 			shell.add( new SVGTest( base+"coords-trans-03-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-trans-04-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-trans-05-t.svg" ) );
@@ -183,6 +183,7 @@ class SVG12Testsuite {
 			shell.add( new SVGTest( base+"struct-svg-203-t.svg" ) );
 			shell.add( new SVGTest( base+"struct-use-01-t.svg" ) );
 			shell.add( new SVGTest( base+"struct-use-03-t.svg" ) );
+		// XXX
 			shell.add( new SVGTest( base+"struct-use-201-t.svg" ) );
 			shell.add( new SVGTest( base+"struct-use-202-t.svg" ) );
 			shell.add( new SVGTest( base+"struct-use-204-t.svg" ) );
@@ -219,7 +220,6 @@ class SVG12Testsuite {
 			shell.add( new SVGTest( base+"text-tselect-03-t.svg" ) );
 			shell.add( new SVGTest( base+"text-ws-01-t.svg" ) );
 			shell.add( new SVGTest( base+"text-ws-02-t.svg" ) );
-		
 
 
 		/*

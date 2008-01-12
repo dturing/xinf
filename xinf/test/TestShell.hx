@@ -13,13 +13,14 @@ class TestShell {
     var caseIterator:Iterator<TestCase>;
 	var current:TestCase;
 	var suite:String;
+	var enterFrameL:Dynamic;
     
     public function new( suite:String ) {
 		this.suite=suite;
         cnx = haxe.remoting.AsyncConnection.urlConnect( serverUrl );
-        cnx.onError = function(err) { throw( err ); };
+        cnx.onError = function(err:Dynamic) { throw( err ); };
         cases = new Array<TestCase>();
-		Root.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
+		enterFrameL = Root.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
     }
     
     public function add( t:TestCase ) {
@@ -34,13 +35,16 @@ class TestShell {
 
     function runNextCase() {
         if( caseIterator==null || !caseIterator.hasNext() ) {
-            cnx.test.endRun.call([],function(r){ 
+			trace("call endRun");
+			cnx.test.endRun.call([],function(r){ 
 				// FIXME. app.quit()
 				#if neko
 					neko.Sys.exit(0);
 				#end
+				return;
 			});
-            return;
+			Root.removeEventListener( FrameEvent.ENTER_FRAME, enterFrameL );
+			return;
         }
 
 		current = caseIterator.next();
@@ -56,14 +60,21 @@ class TestShell {
                     "flash9";
                 #else js
                     "js";
-                #end    
+                #end
+
+        caseIterator = cases.iterator();
+
+		var self=this;
         try {
-            cnx.test.startRun.call([suite,platform],function(r){ });
+ 			trace("call startRun");
+			cnx.test.startRun.call([suite,platform],function(r){
+				trace("returned startRun");
+				self.runNextCase();
+			});
+			trace("/call startRun");
         } catch(e:Dynamic) {
             trace("No connection to server: "+Std.string(e));
         }
-        caseIterator = cases.iterator();
-
         
         // register trace-to-server
         /*
@@ -72,10 +83,13 @@ class TestShell {
             self.cnx.test.info.call(["trace", platform, Std.string(v)],function(r){ } );
         }
 		*/
-
-		runNextCase();
 		
-		while( true ) {
+		//runNextCase();
+		var loop=false;
+		#if neko
+			loop=true;
+		#end
+		while( loop ) {
 			try {
 				Root.main();
 			} catch(e:Dynamic) {
