@@ -146,6 +146,14 @@ class XinfinityRuntime extends Runtime {
 			timing();
 		}
 
+		// for debug: run gc every second
+		/*
+		if( frame % 24 == null ) {
+			trace("gc_major");
+			neko.vm.Gc.run(true);
+			trace("/gc_major");
+		}
+		*/
 		
 		#if profile
 //			xinf.test.Counter.count("frames");
@@ -192,9 +200,8 @@ class XinfinityRuntime extends Runtime {
         GL.enable( GL.BLEND );
         GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
         GL.shadeModel( GL.FLAT );
-		
-		openvg.VG.createContextSH();
-		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_FASTER );
+
+		openvg.VG.createContextSH( 320, 240 ); // FIXME
 		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_BETTER );
     }
 

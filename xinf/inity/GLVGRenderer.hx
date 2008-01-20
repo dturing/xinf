@@ -52,18 +52,16 @@ class GLVGRenderer extends GLRenderer {
 	}
 
 	function makePaint( givenPaint:Paint ) {
-		var paint:Int;
+		var paint = VG.createPaint();
 		switch( givenPaint ) {
 			case None:
 				var c = CPtr.float_alloc( 4 );
 				CPtr.float_from_array( c, untyped [ 0,0,0,0 ].__a );
-				paint = VG.createPaint();
 				VG.setParameterfv( paint, VG.PAINT_COLOR, 4, c );
 		
 			case SolidColor(r,g,b,a):
 				var c = CPtr.float_alloc( 4 );
 				CPtr.float_from_array( c, untyped [ r,g,b,a ].__a );
-				paint = VG.createPaint();
 				VG.setParameterfv( paint, VG.PAINT_COLOR, 4, c );
 				
 			case PLinearGradient( _stops, x1, y1, x2, y2, spread ):
@@ -73,7 +71,6 @@ class GLVGRenderer extends GLRenderer {
 				CPtr.float_set(box,2,x2);
 				CPtr.float_set(box,3,y2);
 				
-				paint = VG.createPaint();
 				setGradientParameters( paint, _stops, spread );
 				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_LINEAR_GRADIENT );
 				VG.setParameterfv( paint, VG.PAINT_LINEAR_GRADIENT, 4, box );
@@ -86,7 +83,6 @@ class GLVGRenderer extends GLRenderer {
 				CPtr.float_set(box,3,fy);
 				CPtr.float_set(box,4,r);
 				
-				paint = VG.createPaint();
 				setGradientParameters( paint, _stops, spread );
 				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_RADIAL_GRADIENT );
 				VG.setParameterfv( paint, VG.PAINT_RADIAL_GRADIENT, 5, box );
@@ -107,8 +103,6 @@ class GLVGRenderer extends GLRenderer {
 
 	override function applyStroke() :Bool {
 		if( pen.stroke==null || pen.stroke==None ) return false;
-//		super.applyStroke();
-		
 		if( stroke!=null ) VG.destroyPaint( stroke );
 		stroke = makePaint( pen.stroke );
 		VG.setPaint( stroke, VG.STROKE_PATH );
@@ -152,6 +146,7 @@ class GLVGRenderer extends GLRenderer {
 	function drawPath( f:Int->Void ) {
 		var path = VG.createPath( 0, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
+			
 		f(path);
         
 		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
@@ -163,16 +158,18 @@ class GLVGRenderer extends GLRenderer {
    // erno.Renderer API
     
     override public function startShape() {
-        if( path != null ) throw("Can only define one path at a time");
+	    if( path != null ) throw("Can only define one path at a time");
 		path = VG.createPath( 0 /* VG.PATH_FORMAT_STANDARD */, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
-    }
+	}
     
     override public function endShape() {
-        if( path==null ) throw("no current Polygon");
+	    if( path==null ) throw("no current Polygon");
 
 		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
-		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
+		if( applyStroke() ) {
+			VG.drawPath( path, VG.STROKE_PATH );
+		}
 		
 		VG.destroyPath(path);
         path = null;
@@ -184,8 +181,11 @@ class GLVGRenderer extends GLRenderer {
         var t = CPtr.uchar_alloc(1);
 		CPtr.uchar_set(t,0,type);
 		
-		var d = CPtr.float_alloc( data.length );
-		CPtr.float_from_array( d, untyped data.__a );
+		var d=null;
+		if( data.length!=null ) {
+			d= CPtr.float_alloc( data.length );
+			CPtr.float_from_array( d, untyped data.__a );
+		}
 		
 		VG.appendPathData( path, 1, t, d );
 	}

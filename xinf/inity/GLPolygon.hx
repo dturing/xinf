@@ -164,7 +164,7 @@ class GLPolygon {
     public function draw( pen:Pen ) :Void {
         var coords = makeCPtr();
 
-		if( pen.fill!=null ) {
+		if( pen.fill!=null && pen.fill!=xinf.erno.Paint.None ) {
 			switch( pen.fill ) {
 				case SolidColor(r,g,b,a):
 					GL.color4(r,g,b,a);
