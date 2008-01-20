@@ -41,7 +41,7 @@ void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsi
     glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+        GL_LUMINANCE, GL_UNSIGNED_BYTE, (unsigned char *)data );
 
     glPopClientAttrib();    
 }
