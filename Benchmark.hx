@@ -1,28 +1,39 @@
 
 import Xinf;
 
-import xinf.type.Paint;
+import xinf.ony.type.Paint;
 
 class Benchmark {
 	public static function main() {
-		var n=100;
+		var xn=20;
+		var yn=20;
+		var w=1024;
+		var h=768;
 		
-		for( i in 0...n ) {
-			var r = new Rectangle();
-			r.fill = SolidColor(0,0,0,.3);
-			r.width=r.height=24;
-			r.x=r.y=-12;
-			r.rx=r.ry=0.;
-			var t = new Translate( Math.random()*800, Math.random()*600 );
-			Root.appendChild(r);
-			Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
-				r.transform = new Concatenate( new Rotate( e.frame/10 ), t );
-			//	r.x=-12;
-			});
+		for( yi in 0...yn ) {
+			var y = (h/yn)*yi;
+			for( xi in 0...xn ) {
+				var x = (w/xn)*xi;
+				
+				var r = new Rectangle();
+				r.fill = RGBColor(0,0,0);
+				r.fillOpacity = .3;
+				r.stroke = RGBColor(0,0,0);
+				r.strokeOpacity = .7;
+				r.width=r.height=24;
+				r.x=r.y=-12;
+				r.rx=r.ry=0.;
+				var t = new Translate( x, y );
+				Root.appendChild(r);
+				Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
+					r.transform = new Concatenate( new Rotate( e.frame/10 ), t );
+					//r.x=-12;
+				});
+			}
 		}
 		
 		var scanline = new Rectangle();
-		scanline.height=1; scanline.fill=SolidColor(0,0,0,1);
+		scanline.height=1; scanline.fill=RGBColor(0,0,0);
 		Root.appendChild( scanline );
 		Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
 			scanline.width = Root.width;
@@ -30,7 +41,7 @@ class Benchmark {
 		});
 		
 		var flicker = new Rectangle();
-		flicker.width=100; flicker.fill=SolidColor(0,0,0,1);
+		flicker.width=100; flicker.fill=RGBColor(0,0,0);
 		Root.appendChild( flicker );
 		Root.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
 			flicker.height = Root.height;
