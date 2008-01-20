@@ -24,11 +24,19 @@ class Component extends StyledElement {
 	public static function init() {
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
+			* {
+				font-size: 12;
+			}
+			
 			.Button {
 				border: 1;
 				padding: 6 3 6 3;
 			}
-			
+
+			.Label {
+				padding: 6 3 6 3;
+			}
+
 			.Button, .Dropdown, .LineEdit {
 				min-height: 20;
 				min-width: 75;
