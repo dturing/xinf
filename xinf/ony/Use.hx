@@ -40,8 +40,12 @@ class Use extends ElementImpl {
 		if( href==null ) return;
 		// for now, we dont support external references
 		var id = href.split("#")[1];
-		peer = ownerDocument.getTypedElementById( id, ElementImpl );
-		if( peer==null ) throw("'Use' peer #"+id+" not found");
+		try {
+			peer = ownerDocument.getTypedElementById( id, ElementImpl );
+			if( peer==null ) throw("#"+id+" not found");
+		} catch( e:Dynamic ) {
+			trace("'Use' peer '"+href+"' invalid: "+e+", ignored.");
+		}
 		redraw();
 	
     }

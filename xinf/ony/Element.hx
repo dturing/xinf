@@ -175,7 +175,7 @@ class Element extends StyledElement {
 	
 	/** the bounding box of the element **/
 	public function getBoundingBox() : TRectangle {
-		throw("unimplemented");
+		trace("getBoundingBox unimplemented for "+this);
 		return { l:0., t:0., r:0., b:0. };
 	}
 
