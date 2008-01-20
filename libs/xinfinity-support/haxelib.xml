@@ -1,4 +1,4 @@
-<project name="xinfinity-support" url="http://xinf.org/trac/XinfinitySupport" license="LGPL">
+<project name="xinfinity-support" url="http://xinf.org/trac/wiki/XinfinitySupport" license="LGPL">
     <user name="dfischer"/>
     <description>helper libraries for Xinfinity</description>
     <version name="0.4.0">Beta</version>
