@@ -13,7 +13,7 @@ package openvg;
         globalFinderCCFlags="-lOpenVG -lGL -lGLU"
         />
     <nekobind:cHeader>
-        #include &lt;VG/openvg.h&gt;
+        #include &lt;vg/openvg.h&gt;
     </nekobind:cHeader>
 **/
 
@@ -383,7 +383,8 @@ extern class VG {
 /*VG_API_CALL const VGubyte * vgGetString(VGStringID name);*/
 
 /* Extensions */
-	public static function createContextSH() :Bool;
+	public static function createContextSH( width:Int, height:Int ) :Bool;
+	public static function resizeSurfaceSH( width:Int, height:Int ) :Void;
 	public static function destroyContextSH() :Void;
 
 

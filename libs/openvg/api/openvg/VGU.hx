@@ -13,8 +13,8 @@ package openvg;
         globalFinderCCFlags="-lOpenVG -lGL -lGLU"
         />
     <nekobind:cHeader>
-        #include &lt;VG/openvg.h&gt;
-        #include &lt;VG/vgu.h&gt;
+        #include &lt;vg/openvg.h&gt;
+        #include &lt;vg/vgu.h&gt;
     </nekobind:cHeader>
 **/
 
