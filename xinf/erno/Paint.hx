@@ -28,7 +28,7 @@ enum Paint {
 	
 		$SVG painting#LinearGradientElement Linear gradients in SVG$
 	*/
-	PLinearGradient( stops:Iterable<TGradientStop>, x1:Float, y1:Float, x2:Float, y2:Float, spread:Int );
+	PLinearGradient( stops:Iterable<TGradientStop>, x1:Float, y1:Float, x2:Float, y2:Float, transform:Transform, spread:Int );
 	
 	/** fill or stroke using the radial gradient described.
 
@@ -41,7 +41,7 @@ enum Paint {
 
 		$SVG painting#RadialGradientElement Radial gradients in SVG$
 	*/
-	PRadialGradient( stops:Iterable<TGradientStop>, cx:Float, cy:Float, r:Float, fx:Float, fy:Float, spread:Int );
+	PRadialGradient( stops:Iterable<TGradientStop>, cx:Float, cy:Float, r:Float, fx:Float, fy:Float, transform:Transform, spread:Int );
 	
 //	Pattern( ... );
 }

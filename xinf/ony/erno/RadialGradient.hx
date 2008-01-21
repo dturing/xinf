@@ -35,22 +35,14 @@ class RadialGradient extends xinf.ony.RadialGradient, implements PaintServer {
 			if( transform!=null ) transform = new Concatenate( transform, t );
 			else transform = t;
 		}
-
-		if( transform!=null ) {
-			var m = new Matrix(transform.getMatrix());
-			center = m.apply(center);
-			focus = m.apply(focus);
-			pr = m.apply(pr);
-			_r = Math.sqrt( (pr.x*pr.x)+(pr.y*pr.y) );
-		}
-
+		
 		var spread:Int = switch( spreadMethod ) {
 			case PadSpread: Constants.SPREAD_PAD;
 			case ReflectSpread: Constants.SPREAD_REFLECT;
 			case RepeatSpread: Constants.SPREAD_REPEAT;
 		}
 
-		return PRadialGradient(stops,center.x,center.y,_r,focus.x,focus.y,spread);
+		return PRadialGradient(stops,center.x,center.y,_r,focus.x,focus.y,transform,spread);
 	}
 	
 }

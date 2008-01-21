@@ -136,19 +136,24 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					current.graphics.beginFill( colorToRGBInt(r,g,b), a );
 				}
 				
-			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
+			case PLinearGradient( stops, x1, y1, x2, y2, transform, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashLinearGradient( x1,y1,x2,y2 );
+				if( transform != null ) {
+					var m = transform.getMatrix();
+					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
+				}
 				current.graphics.beginGradientFill( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
 				
-			case PRadialGradient( stops, cx, cy, r, fx, fy, spread ):
+			case PRadialGradient( stops, cx, cy, r, fx, fy, transform, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashRadialGradient( cx,cy,r,fx,fy );
+				if( transform != null ) {
+					var m = transform.getMatrix();
+					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
+				}
 				var f = { x:fx-cx, y:fy-cy };
-				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) );
-				focalRatio = focalRatio/r;
-//				trace("foc: "+focalRatio );
-//				var focalRatio = .5;
+				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) )/r;
 				current.graphics.beginGradientFill( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
 				
 			default:
@@ -174,11 +179,25 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 				current.graphics.lineStyle( pen.width, 0xff0000, 0, false );
 			case SolidColor(r,g,b,a):
 				current.graphics.lineStyle( pen.width, colorToRGBInt(r,g,b), a, false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
-			case PLinearGradient( stops, x1, y1, x2, y2, spread ):
+			case PLinearGradient( stops, x1, y1, x2, y2, transform, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashLinearGradient( x1,y1,x2,y2 );
+				if( transform != null ) {
+					var m = transform.getMatrix();
+					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
+				}
 				current.graphics.lineStyle( pen.width, 0, 1., false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
 				current.graphics.lineGradientStyle( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
+			case PRadialGradient( stops, cx, cy, r, fx, fy, transform, spread ):
+				var gr = flashGradient( stops, spread );
+				var matrix = flashRadialGradient( cx,cy,r,fx,fy );
+				if( transform != null ) {
+					var m = transform.getMatrix();
+					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
+				}
+				var f = { x:fx-cx, y:fy-cy };
+				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) )/r;
+				current.graphics.lineGradientStyle( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
 			default:
 				throw("stroke "+pen.stroke+" not implemented");
 		}
@@ -264,7 +283,9 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 					format.format.color = 0;
 					current.alpha = 1;
 				default:
-					throw("Fill "+pen.fill+" not supported for text");
+					format.format.color = 0;
+					current.alpha = 1;
+					trace("Fill "+pen.fill+" not supported for text");
 			}
 			
 // FIXME			tf.embedFonts = true;

@@ -4,6 +4,9 @@
 package xinf.inity;
 
 import xinf.geom.Matrix;
+import xinf.geom.Types;
+import xinf.geom.Transform;
+
 import xinf.erno.Renderer;
 import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Constants;
@@ -50,8 +53,20 @@ class GLVGRenderer extends GLRenderer {
 		}
 		VG.setParameteri( paint, VG.PAINT_COLOR_RAMP_SPREAD_MODE, sprd );
 	}
+	
+	function setFillPaintTransform( transform:Transform ) {
+		VG.seti( VG.MATRIX_MODE, VG.MATRIX_FILL_PAINT_TO_USER );
+		if( transform==null ) VG.loadIdentity();
+		else VG.loadMatrix( matrixForVG( transform.getMatrix() ) );
+	}
 
-	function makePaint( givenPaint:Paint ) {
+	function setStrokePaintTransform( transform:Transform ) {
+		VG.seti( VG.MATRIX_MODE, VG.MATRIX_STROKE_PAINT_TO_USER );
+		if( transform==null ) VG.loadIdentity();
+		else VG.loadMatrix( matrixForVG( transform.getMatrix() ) );
+	}
+
+	function makePaint( givenPaint:Paint, fill:Bool ) {
 		var paint = VG.createPaint();
 		switch( givenPaint ) {
 			case None:
@@ -64,25 +79,31 @@ class GLVGRenderer extends GLRenderer {
 				CPtr.float_from_array( c, untyped [ r,g,b,a ].__a );
 				VG.setParameterfv( paint, VG.PAINT_COLOR, 4, c );
 				
-			case PLinearGradient( _stops, x1, y1, x2, y2, spread ):
+			case PLinearGradient( _stops, x1, y1, x2, y2, transform, spread ):
 				var box = CPtr.float_alloc(4);
 				CPtr.float_set(box,0,x1);
 				CPtr.float_set(box,1,y1);
 				CPtr.float_set(box,2,x2);
 				CPtr.float_set(box,3,y2);
 				
+				if( fill ) setFillPaintTransform( transform );
+				else setStrokePaintTransform( transform );
+				
 				setGradientParameters( paint, _stops, spread );
 				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_LINEAR_GRADIENT );
 				VG.setParameterfv( paint, VG.PAINT_LINEAR_GRADIENT, 4, box );
 
-			case PRadialGradient( _stops, cx, cy, r, fx, fy, spread ):
+			case PRadialGradient( _stops, cx, cy, r, fx, fy, transform, spread ):
 				var box = CPtr.float_alloc(5);
 				CPtr.float_set(box,0,cx);
 				CPtr.float_set(box,1,cy);
 				CPtr.float_set(box,2,fx);
 				CPtr.float_set(box,3,fy);
 				CPtr.float_set(box,4,r);
-				
+
+				if( fill ) setFillPaintTransform( transform );
+				else setStrokePaintTransform( transform );
+
 				setGradientParameters( paint, _stops, spread );
 				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_RADIAL_GRADIENT );
 				VG.setParameterfv( paint, VG.PAINT_RADIAL_GRADIENT, 5, box );
@@ -96,7 +117,7 @@ class GLVGRenderer extends GLRenderer {
 	override function applyFill() :Bool {
 		if( pen.fill==null || pen.fill==None ) return false;
 		if( fill!=null ) VG.destroyPaint( fill );
-		fill = makePaint( pen.fill );
+		fill = makePaint( pen.fill, true );
 		VG.setPaint( fill, VG.FILL_PATH );
 		return true;
 	}
@@ -104,7 +125,7 @@ class GLVGRenderer extends GLRenderer {
 	override function applyStroke() :Bool {
 		if( pen.stroke==null || pen.stroke==None ) return false;
 		if( stroke!=null ) VG.destroyPaint( stroke );
-		stroke = makePaint( pen.stroke );
+		stroke = makePaint( pen.stroke, false );
 		VG.setPaint( stroke, VG.STROKE_PATH );
 	
 		VG.setf( VG.STROKE_LINE_WIDTH, pen.width );
@@ -273,4 +294,24 @@ class GLVGRenderer extends GLRenderer {
 			VGU.ellipse(path,x,y,rx*2,ry*2);
 		});
 	}
+
+    /* helper functions */
+        
+    public static function matrixForVG( m:TMatrix ) :Dynamic {
+        var v = CPtr.float_alloc(9);
+        
+        CPtr.float_set(v,0,m.a);
+        CPtr.float_set(v,1,m.b);
+        CPtr.float_set(v,2,.0);
+
+        CPtr.float_set(v,3,m.c);
+        CPtr.float_set(v,4,m.d);
+        CPtr.float_set(v,5,.0);
+
+        CPtr.float_set(v,6,m.tx);
+        CPtr.float_set(v,7,m.ty);
+        CPtr.float_set(v,8,1.);
+        
+        return v;
+    }
 }
