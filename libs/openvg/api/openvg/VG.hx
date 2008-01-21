@@ -72,8 +72,8 @@ extern class VG {
 	public static var PIXEL_LAYOUT_BGR_HORIZONTAL:Int;
 	public static var MATRIX_PATH_USER_TO_SURFACE:Int;
 	public static var MATRIX_IMAGE_USER_TO_SURFACE:Int;
-	public static var MATRIX_FILL_PAINT_TO_USER:Int;
 	public static var MATRIX_STROKE_PAINT_TO_USER:Int;
+	public static var MATRIX_FILL_PAINT_TO_USER:Int;
 	public static var CLEAR_MASK:Int;
 	public static var FILL_MASK:Int;
 	public static var SET_MASK:Int;
@@ -284,11 +284,11 @@ extern class VG {
 
 /* Matrix Manipulation */
 	public static function loadIdentity() :Void;
-	/** <nekobind><cptr name="m" type="float" min-size="16"/></nekobind> **/
+	/** <nekobind><cptr name="m" type="float" min-size="9"/></nekobind> **/
 	public static function loadMatrix( m:String ) :Void;
-	/** <nekobind><cptr name="m" type="float" min-size="16"/></nekobind> **/
+	/** <nekobind><cptr name="m" type="float" min-size="9"/></nekobind> **/
 	public static function getMatrix( m:String ) :Void;
-	/** <nekobind><cptr name="m" type="float" min-size="16"/></nekobind> **/
+	/** <nekobind><cptr name="m" type="float" min-size="9"/></nekobind> **/
 	public static function multMatrix( m:String ) :Void;
 	public static function translate( tx:Float, ty:Float ) :Void;
 	public static function scale( sx:Float, sy:Float ) :Void;
