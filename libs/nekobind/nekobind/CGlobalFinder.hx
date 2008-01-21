@@ -27,6 +27,7 @@ class CGlobalFinder {
         var src = neko.io.File.write( srcName, false );
         
         src.write( settings.cHeader );
+		src.write("\n\n#include <stdio.h>\n");
         src.write( "\n\nint main() {\n");
             for( name in names ) {
                 src.write("\tprintf(\""+name+"=%i\\n\", "+settings.globalFinderPrefix+name+" );\n");
