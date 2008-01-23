@@ -44,7 +44,7 @@ class VideoSource extends Texture {
 			if( w!=width || h!=height ) {
 				width=w; height=h;
 				trace("video size: "+w+"x"+h );
-				initialize( Math.round(width), Math.round(width), Math.round(height), RGBA );
+				initialize( Math.round(width), Math.round(width), Math.round(height), BGRA );
 			}
 		
 			frameData( e.buffer.data() );
@@ -52,7 +52,7 @@ class VideoSource extends Texture {
     }
     
     private function frameData( data:Dynamic ) :Void {
-        setData( data, {x:0,y:0}, {x:Math.round(width),y:Math.round(height)}, Math.round(width), RGBA );
+        setData( data, {x:0,y:0}, {x:Math.round(width),y:Math.round(height)}, Math.round(width), BGRA );
         frameAvailable( data );
     }
 }
