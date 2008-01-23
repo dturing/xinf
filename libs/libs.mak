@@ -107,7 +107,7 @@ BINDING_HX_IMPL:=$(foreach CLASS, $(BINDING_CLASSES), $(CLASS)__impl.hx)
 
 # the neko implementation module
 $(BIN_PATH)/$(PROJECT).n: $(BINDING_HX_IMPL)
-	haxe $(HAXEFLAGS) -cp ../api -neko $@ $(BINDING_HX_IMPL)
+	haxe $(HAXEFLAGS) -cp api -neko $@ $(BINDING_HX_IMPL)
 
 
 
