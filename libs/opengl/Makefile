@@ -7,7 +7,7 @@
 
 # project name
 PROJECT:=opengl
-BINDING_CLASSES:=GL GLU GLUT Tesselator
+BINDING_CLASSES:=GL GLU GLUT
 XINF_PKG:=opengl
 XINF_PKG_PATH:=opengl
 

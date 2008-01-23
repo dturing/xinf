@@ -14,14 +14,15 @@ void gluVerticesOffset( int offset, int n, double *v ) {
 }
 
 void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glPixelStorei( GL_UNPACK_LSB_FIRST, GL_TRUE);
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
-	val_throw(alloc_string("glTexSubImageBGRA not implemented"));
-//    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-//        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+    glPixelStorei( GL_UNPACK_LSB_FIRST, GL_TRUE);
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {

@@ -34,15 +34,6 @@ class Helper {
         return untyped _getDouble( pname, 1 );
     }
 
-
-    public static function evaluateCubicBezier( ctrl:Array<Float>, n:Int, cb:Float->Float->Void ) :Void {
-        _evaluateCubicBezier( untyped ctrl.__a, n, cb );
-    }
-    
-    public static function evaluateQuadraticBezier( ctrl:Array<Float>, n:Int, cb:Float->Float->Void ) :Void {
-        _evaluateQuadraticBezier( untyped ctrl.__a, n, cb );
-    }
-    
     private static var _getBool;
     private static var _getInt;
     private static var _getFloat;
@@ -57,8 +48,6 @@ class Helper {
         _getInt = neko.Lib.load("opengl","opengl_get_int", 2 );
         _getFloat = neko.Lib.load("opengl","opengl_get_float", 2 );
         _getDouble = neko.Lib.load("opengl","opengl_get_double", 2 );
-        _evaluateCubicBezier = neko.Lib.load("opengl","gluEvaluateCubicBezier", 3 );
-        _evaluateQuadraticBezier = neko.Lib.load("opengl","gluEvaluateQuadraticBezier", 3 );
 
     }
 }
