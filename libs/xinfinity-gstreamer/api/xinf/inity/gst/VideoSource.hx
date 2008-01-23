@@ -1,17 +1,5 @@
-/* 
-   xinf is not flash.
-   Copyright (c) 2006, Daniel Fischer.
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-                                                                            
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU        
-   Lesser General Public License or the LICENSE file for more details.
-*/
+/*  Copyright (c) the Xinf contributors.
+    see http://xinf.org/copyright for license. */
 
 package xinf.inity.gst;
 
@@ -38,22 +26,27 @@ class VideoSource extends Texture {
         return pipeline.position;
     }
 
-    public function new( launch:String, ?w:Int, ?h:Int ) :Void {
+    public function new( launch:String ) :Void {
         super();
-        if( w==null ) w=320;
-        if( h==null ) h=240;
-        width=w; height=h;
-        initialize( w, w, h, RGBA );
         
-        launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32, width="+width+", height="+height+" ! rgbatobgra ! nekobus name=\"output\" sync=true";
-		trace("LAUNCH: "+launch );
+        launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32 ! nekobus name=\"output\" sync=true";
+		trace("Gstreamer Pipeline: "+launch );
         pipeline = new Pipeline( launch );
 
 		pipeline.addEventListener( NekobusData.DATA, onData );
     }
 
     private function onData(e:NekobusData) :Void {
-		if( e.element == "output" ) {
+		if( e.element == "output" && e.buffer!=null ) {
+		
+			var caps = e.buffer.caps();
+			var w:Int = caps.width; var h:Int = caps.height;
+			if( w!=width || h!=height ) {
+				width=w; height=h;
+				trace("video size: "+w+"x"+h );
+				initialize( Math.round(width), Math.round(width), Math.round(height), RGBA );
+			}
+		
 			frameData( e.buffer.data() );
 		}
     }

@@ -39,15 +39,19 @@ class Video extends xinf.ony.Video {
 		//source.pipeline.play();
 		
 		//source = new VideoSource("videotestsrc",
-		source = new VideoSource("gnomevfssrc name=src location=\""+href+"\" ! decodebin name=d ! audioconvert ! alsasink  d. ! videoscale",
-			320, 240 );
+		source = new VideoSource("gnomevfssrc name=src location=\""+href+"\" ! decodebin name=d ! queue ! audioconvert ! alsasink  d. ! queue" );
 		srcElement = source.pipeline.findChild("src");
-		//pipeTest = new xinf.inity.gst.Pipeline("fakesrc ! video/x-raw-yuv, framerate=(fraction)1 ! queue ! identity ! queue ! identity ! queue ! identity ! queue ! identity ! queue ! fakesink sync=true");
+        source.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
     }
-	
+
+    private function dataChanged( e:ImageLoadEvent ) :Void {
+        redraw();
+    }
+
 	override public function drawContents( g:Renderer ) :Void {
 
 		if( source==null ) return;
+		if( source.width==null || source.height==null ) return;
 
 		if( width<=0 ) width = source.width;
 		if( height<=0 ) height = source.height;
@@ -62,5 +66,10 @@ class Video extends xinf.ony.Video {
 			g.image( source, {x:0.,y:0.,w:source.width,h:source.height}, box );
 		}
      }
-    
+
+	static function __init__() :Void {
+		var svgns = "http://www.w3.org/2000/svg";
+	
+        xinf.xml.Document.addToBinding( svgns, "video", Video );
+	}
 }

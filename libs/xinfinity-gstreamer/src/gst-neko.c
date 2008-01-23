@@ -18,7 +18,7 @@ void raise_exception( const char *msg, const char *file, int line, ... ) {
 
 
 /* --------------------------------------------------
-    Helper
+    Object Helper
    -------------------------------------------------- */
 
 GObject *val_gobject( value obj ) {
@@ -38,8 +38,9 @@ value alloc_gobject( GObject * o ) {
     return alloc_abstract( k_GObject, o );
 }
 
-
-/* GstBuffer */
+/* --------------------------------------------------
+	GstBuffer Helper
+   -------------------------------------------------- */
 
 void neko_gst_buffer_gc( value b ) {
 	GstBuffer *buf = (GstBuffer*)val_data(b);
@@ -72,60 +73,9 @@ GstBuffer *val_gstbuffer( value obj ) {
     return o;
 }
 
-value gst_buffer_data( value b ) {
-	GstBuffer *buf = val_gstbuffer(b);
-	if( !buf ) return val_null;
-	value ret = copy_string( GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
-	return ret;
-}
-DEFINE_PRIM(gst_buffer_data,1);
-
-value gst_buffer_size( value b ) {
-	GstBuffer *buf = val_gstbuffer(b);
-	if( !buf ) return val_null;
-	return alloc_int( GST_BUFFER_SIZE(buf) );
-}
-DEFINE_PRIM(gst_buffer_size,1);
-
-value gst_buffer_free( value b ) {
-	GstBuffer *buf = val_gstbuffer(b);
-	if( !buf ) return val_null;
-	//gst_buffer_unref(buf);
-	// assure the abstract is unusable
-	val_kind(b)=NULL;
-	// and will not be garbage-collected
-	val_gc( b, NULL );
-	return val_null;
-}
-DEFINE_PRIM(gst_buffer_free,1);
-
-/* convert GValue to neko value */
-value gvalue_to_neko( const GValue *gv ) {
-	const gchar *str;
-    switch( G_VALUE_TYPE(gv) ) {
-        case G_TYPE_STRING:
-			str = g_value_get_string(gv);
-            return copy_string( str, strlen(str) );
-        case G_TYPE_BOOLEAN:
-            return alloc_bool( g_value_get_boolean(gv) );
-        case G_TYPE_INT:
-            return alloc_int( g_value_get_int(gv) );
-        case G_TYPE_FLOAT:
-            return alloc_float( g_value_get_float(gv) );
-        default:
-            if( g_type_is_a( G_VALUE_TYPE(gv), GST_TYPE_BUFFER ) ) {
-				return alloc_gstbuffer( (GstBuffer*)g_value_peek_pointer(gv) );
-            } else if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
-                return alloc_gobject( g_value_get_object(gv) );
-            } else {
-                //error("cannot convert GValue to neko value.",val_null);
-               // printf("WARNING: cannot convert GValue (type %s) to neko.\n", g_type_name( G_VALUE_TYPE(gv) ) );
-                return val_null;
-            }
-    }
-}
-
-/* convert neko value to GValue*/
+/* --------------------------------------------------
+	neko value->GValue and back
+   -------------------------------------------------- */
 void neko_to_gvalue( value v, GValue *gv ) {
     value s;
 	if( val_is_null(v) ) {
@@ -169,6 +119,101 @@ void neko_to_gvalue( value v, GValue *gv ) {
 	return;
 }
 
+value gvalue_to_neko( const GValue *gv ) {
+	const gchar *str;
+    switch( G_VALUE_TYPE(gv) ) {
+        case G_TYPE_STRING:
+			str = g_value_get_string(gv);
+            return copy_string( str, strlen(str) );
+        case G_TYPE_BOOLEAN:
+            return alloc_bool( g_value_get_boolean(gv) );
+        case G_TYPE_INT:
+            return alloc_int( g_value_get_int(gv) );
+        case G_TYPE_FLOAT:
+            return alloc_float( g_value_get_float(gv) );
+        default:
+            if( g_type_is_a( G_VALUE_TYPE(gv), GST_TYPE_BUFFER ) ) {
+				return alloc_gstbuffer( (GstBuffer*)g_value_peek_pointer(gv) );
+            } else if( g_type_is_a( G_VALUE_TYPE(gv), G_TYPE_OBJECT ) ) {
+                return alloc_gobject( g_value_get_object(gv) );
+            } else {
+                //error("cannot convert GValue to neko value.",val_null);
+               // printf("WARNING: cannot convert GValue (type %s) to neko.\n", g_type_name( G_VALUE_TYPE(gv) ) );
+                return val_null;
+            }
+    }
+}
+
+/* --------------------------------------------------
+    GstStructure helpers
+   -------------------------------------------------- */
+gboolean gst_structure_to_neko_value_iterate( GQuark field_id, const GValue *val, gpointer user_data ) {
+	value obj = (value)user_data;
+	value v = gvalue_to_neko( val );
+	if( v != val_null ) 
+		alloc_field( obj, val_id( g_quark_to_string(field_id) ), v);
+	return true;
+}
+
+value gst_structure_to_neko( value obj, GstStructure *struc ) {
+	const gchar *name = gst_structure_get_name(struc);
+	alloc_field( obj, val_id( "name" ), copy_string( name, strlen(name) ) );
+	gst_structure_foreach( struc, gst_structure_to_neko_value_iterate, obj );
+	return obj;
+}
+
+/* --------------------------------------------------
+	GstBuffer
+   -------------------------------------------------- */
+
+value gst_buffer_data( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	value ret = copy_string( GST_BUFFER_DATA(buf), GST_BUFFER_SIZE(buf) );
+	return ret;
+}
+DEFINE_PRIM(gst_buffer_data,1);
+
+value gst_buffer_size( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	return alloc_int( GST_BUFFER_SIZE(buf) );
+}
+DEFINE_PRIM(gst_buffer_size,1);
+
+value gst_buffer_caps( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	GstCaps *caps = GST_BUFFER_CAPS(buf);
+	if( !caps ) return val_null;
+
+	// TODO: capture all caps, not just #0
+	
+	GstStructure *s = gst_caps_get_structure(caps,0);
+	if( !s ) return val_null;
+		
+	value obj = alloc_object(NULL);
+	const gchar *name = gst_structure_get_name(s);
+	alloc_field( obj, val_id( "_name" ), copy_string( name, strlen(name) ));
+	gst_structure_to_neko( obj, s );
+	
+// XXX
+//		printf("buffer_caps: %s\n", gst_caps_to_string(caps) );
+	return obj;
+}
+DEFINE_PRIM(gst_buffer_caps,1);
+
+value gst_buffer_free( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	//gst_buffer_unref(buf);
+	// assure the abstract is unusable
+	val_kind(b)=NULL;
+	// and will not be garbage-collected
+	val_gc( b, NULL );
+	return val_null;
+}
+DEFINE_PRIM(gst_buffer_free,1);
 
 
 /* --------------------------------------------------
@@ -219,24 +264,6 @@ value object_set( value obj, value prop, value val ) {
 }
 DEFINE_PRIM(object_set,3);
 
-
-/* --------------------------------------------------
-    GstStructure helpers
-   -------------------------------------------------- */
-gboolean gst_structure_to_neko_value_iterate( GQuark field_id, const GValue *val, gpointer user_data ) {
-	value obj = (value)user_data;
-	value v = gvalue_to_neko( val );
-	if( v != val_null ) 
-		alloc_field( obj, val_id( g_quark_to_string(field_id) ), v);
-	return true;
-}
-
-value gst_structure_to_neko( value obj, GstStructure *struc ) {
-	const gchar *name = gst_structure_get_name(struc);
-	alloc_field( obj, val_id( "name" ), copy_string( name, strlen(name) ) );
-	gst_structure_foreach( struc, gst_structure_to_neko_value_iterate, obj );
-	return obj;
-}
 
 /* --------------------------------------------------
     GstBus
@@ -413,6 +440,10 @@ value pipeline_play( value obj ) {
 	return val_true;
 }
 DEFINE_PRIM(pipeline_play,1);
+
+
+/* --------------------------------------------------
+   -------------------------------------------------- */
 
 /* init */
 DEFINE_ENTRY_POINT(neko_gst_init);
