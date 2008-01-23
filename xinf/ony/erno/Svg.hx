@@ -17,35 +17,29 @@ class Svg extends xinf.ony.Svg {
 		super(traits);
 		//construct();
 	}
-
-	static var svgNamespace:String;
 	
 	static function __init__() :Void {
-		svgNamespace = "http://www.w3.org/2000/svg";
+		var svgns = "http://www.w3.org/2000/svg";
 	
-        var binding = new Binding<Element>();
-        
-        binding.add( "g", Group );
-        binding.add( "rect", Rectangle );
-        binding.add( "line", Line );
-        binding.add( "polygon", Polygon );
-        binding.add( "polyline", Polyline );
-        binding.add( "ellipse", Ellipse );
-        binding.add( "circle", Circle );
-        binding.add( "text", Text );
-        binding.add( "textArea", EditableTextArea );
-        binding.add( "path", Path );
-        binding.add( "image", Image );
+        xinf.xml.Document.addToBinding( svgns, "g", Group );
+        xinf.xml.Document.addToBinding( svgns,"rect", Rectangle );
+        xinf.xml.Document.addToBinding( svgns,"line", Line );
+        xinf.xml.Document.addToBinding( svgns,"polygon", Polygon );
+        xinf.xml.Document.addToBinding( svgns,"polyline", Polyline );
+        xinf.xml.Document.addToBinding( svgns,"ellipse", Ellipse );
+        xinf.xml.Document.addToBinding( svgns,"circle", Circle );
+        xinf.xml.Document.addToBinding( svgns,"text", Text );
+        xinf.xml.Document.addToBinding( svgns,"textArea", EditableTextArea );
+        xinf.xml.Document.addToBinding( svgns,"path", Path );
+        xinf.xml.Document.addToBinding( svgns,"image", Image );
 		
-		binding.add( "svg", Svg );
-		binding.add( "use", Use );
-        binding.add( "defs", Definitions );
+		xinf.xml.Document.addToBinding( svgns,"svg", Svg );
+		xinf.xml.Document.addToBinding( svgns,"use", Use );
+        xinf.xml.Document.addToBinding( svgns,"defs", Definitions );
 		
-        binding.add( "linearGradient", LinearGradient );
-        binding.add( "radialGradient", RadialGradient );
-        binding.add( "solidColor", SolidColor );
-		binding.add( "style", xinf.ony.Style );
-		
-		xinf.xml.Document.addBinding( svgNamespace, binding );
-    }
+        xinf.xml.Document.addToBinding( svgns,"linearGradient", LinearGradient );
+        xinf.xml.Document.addToBinding( svgns,"radialGradient", RadialGradient );
+        xinf.xml.Document.addToBinding( svgns,"solidColor", SolidColor );
+		xinf.xml.Document.addToBinding( svgns,"style", xinf.ony.Style );
+	}
 }

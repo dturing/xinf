@@ -131,7 +131,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 	svn --force export $(API_PATH) $(HAXELIB_PROJECT);
 	-@rm $(BIN_PATH)/Mac/*.ppc; 
 	-@rm $(BIN_PATH)/Mac/*.x86;
-		$(foreach PLATFORM, $(NEKO_PLATFORMS), \
+		-@$(foreach PLATFORM, $(NEKO_PLATFORMS), \
 			svn export $(BIN_PATH)/$(PLATFORM) $(HAXELIB_PROJECT)/ndll/$(PLATFORM); \
 			cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 			cp -r $(BIN_PATH)/$(PLATFORM)/*.ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
@@ -142,7 +142,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 		#	cp -r $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 	
 	# copy haXe API and Samples
-	svn --force export test $(HAXELIB_PROJECT)/test
+	-@svn --force export test $(HAXELIB_PROJECT)/test
 	
 	# create the final .zip
 	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)

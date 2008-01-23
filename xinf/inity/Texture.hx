@@ -16,6 +16,8 @@ import xinf.inity.ColorSpace;
 class Texture extends ImageData {
     // texture (id), twidth, theight, width and height are already defined in ImageData.
     
+	// FIXME: initialize might be called again and again to reinit; take care of memory handling!
+	
     public function initialize( w:Int, stride:Int, h:Int, cspace:ColorSpace ) {
         width=w;
         height=h;

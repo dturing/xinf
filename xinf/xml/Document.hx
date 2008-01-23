@@ -180,5 +180,19 @@ class Document extends XMLElement {
 		if( bindings==null ) bindings = new Hash<IBinding>();
 		bindings.set( namespaceURI, binding );
 	}
-	
+
+	/**
+		Bind the given class cl to the binding for the given namespace.
+		Create an empty binding if the namespace is yet unbound.
+	*/
+	public static function addToBinding( namespaceURI:String, nodeName:String, cl:Class<Node> ) {
+		if( bindings==null ) bindings = new Hash<IBinding>();
+		var binding = bindings.get( namespaceURI );
+		if( binding == null ) {
+			binding = new Binding();
+			bindings.set( namespaceURI, binding );
+		}
+		binding.add( nodeName, cl );
+	}
+
 }

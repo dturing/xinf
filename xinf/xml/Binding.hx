@@ -12,15 +12,15 @@ package xinf.xml;
 	
 	Used primarily (if not only) by the $xinf.xml.Document$ class.
 */
-class Binding<T:Node> implements IBinding {
-    var marshallers:Hash<Class<T>>;
-    var instantiators:Array<Instantiator<T>>;
+class Binding implements IBinding {
+    var marshallers:Hash<Class<Node>>;
+    var instantiators:Array<Instantiator<Node>>;
     
 	/** Create a new, initially empty, Binding
 	*/
     public function new() :Void {
-        marshallers = new Hash<Class<T>>();
-        instantiators = new Array<Instantiator<T>>();
+        marshallers = new Hash<Class<Node>>();
+        instantiators = new Array<Instantiator<Node>>();
     }
 	
 	/** Bind the given [nodeName] (or tag name) to the class [cl].
@@ -28,13 +28,13 @@ class Binding<T:Node> implements IBinding {
 		The class must have a constructor with only one, dynamic
 		argument, like $xinf.xml.Element$, or instantiation will fail.
 	*/
-    public function add( nodeName:String, cl:Class<T> ) :Void {
+    public function add( nodeName:String, cl:Class<Node> ) :Void {
         marshallers.set( nodeName, cl );
     }
 	
 	/** Add the given Instantiator [i] to this Binding.
 	*/
-    public function addInstantiator( i:Instantiator<T> ) :Void {
+    public function addInstantiator( i:Instantiator<Node> ) :Void {
         instantiators.push( i );
     }
 	
@@ -55,14 +55,14 @@ class Binding<T:Node> implements IBinding {
 		use $xinf.xml.Document$.instantiate() or .load().
 	*/
     public function instantiate( xml:Xml ) :Node {
-        var m:Class<T>;
+        var m:Class<Node>;
         for( i in instantiators ) {
             if( m==null && i.fits(xml) ) m=i.getClass(xml);
         }
         if( m==null ) m = marshallers.get( xml.nodeName );
 		if( m==null ) return null;
 		
-		var ret:T;
+		var ret:Node;
 		try {
 			ret = Type.createInstance( m, [ null ] );
 		} catch( e:Dynamic ) {
