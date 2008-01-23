@@ -29,12 +29,13 @@ extern class Path {
 	public function getPathCapabilities() :Int;
 	public function appendPath( src:Path ) :Void;
 	
-	/** <nekobind>
+	/** <nekobind functionName="appendPathData">
 		<cptr name="pathSegments" type="unsigned char" min-size="numSegments"/>
 		<cptr name="values" type="float" min-size="0"/></nekobind> **/
-	public function appendPathData( numSegments:Int, pathSegments:String, pathData:String ) :Void;
-	/** <nekobind><cptr name="values" type="float" min-size="0"/></nekobind> **/
-	public function modifyPathCoords( startIndex:Int, numSegments:Int, pathData:String ) :Void;
+	public function appendData( numSegments:Int, pathSegments:String, pathData:String ) :Void;
+	/** <nekobind functionName="modifyPathCoords">
+		<cptr name="values" type="float" min-size="0"/></nekobind> **/
+	public function modifyCoords( startIndex:Int, numSegments:Int, pathData:String ) :Void;
 	/** <nekobind suffix="Path"/> **/
 	public function transform( srcpath:Path ) :Void;
 	/** <nekobind suffix="Path"/> **/

@@ -83,7 +83,8 @@ class CWrapperGenerator extends Generator {
         
             // call
             var suffix = if( functionSettings.suffix!=null ) functionSettings.suffix else "";
-            var call = settings.prefix+translator.translate(f.name)+suffix+"(";
+			var fName = if( functionSettings.functionName!=null ) functionSettings.functionName else f.name;
+            var call = settings.prefix+translator.translate(fName)+suffix+"(";
                 // argument - self
                 if( self ) {
                     call += "self";

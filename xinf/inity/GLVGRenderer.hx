@@ -202,7 +202,7 @@ class GLVGRenderer extends GLRenderer {
 			CPtr.float_from_array( d, untyped data.__a );
 		}
 		
-		path.appendPathData( 1, t, d );
+		path.appendData( 1, t, d );
 	}
 
     override public function startPath( x:Float, y:Float) {
