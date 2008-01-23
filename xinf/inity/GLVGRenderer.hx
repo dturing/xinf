@@ -12,13 +12,14 @@ import xinf.erno.ObjectModelRenderer;
 import xinf.erno.Constants;
 import xinf.erno.ImageData;
 import xinf.erno.TextFormat;
-import xinf.erno.Paint;
 import xinf.erno.TGradientStop;
 
 import opengl.GL;
 import opengl.GLU;
 import openvg.VG;
 import openvg.VGU;
+import openvg.Path;
+import openvg.Paint;
 import cptr.CPtr;
 
 //typedef Primitive = GLObject
@@ -26,12 +27,12 @@ import xinf.inity.GLRenderer;
 
 class GLVGRenderer extends GLRenderer {
     
-    private var path:Int;
+    private var path:Path;
 	
-	var fill:Int;
-	var stroke:Int;
+	var fill:Paint;
+	var stroke:Paint;
 
-	function setGradientParameters( paint:Int, _stops:Iterable<TGradientStop>, spread:Int ) {
+	function setGradientParameters( paint:Paint, _stops:Iterable<TGradientStop>, spread:Int ) {
 		var stops = Lambda.array(_stops);
 		var vg_stops = CPtr.float_alloc( stops.length*5 );
 		var n=0;
@@ -43,7 +44,7 @@ class GLVGRenderer extends GLRenderer {
 			CPtr.float_set( vg_stops, n++, stop.b );
 			CPtr.float_set( vg_stops, n++, stop.a );
 		}
-		VG.setParameterfv( paint, VG.PAINT_COLOR_RAMP_STOPS, stops.length*5, vg_stops );
+		paint.setParameterfv( VG.PAINT_COLOR_RAMP_STOPS, stops.length*5, vg_stops );
 
 		var sprd = switch(spread) {
 			case Constants.SPREAD_PAD: VG.COLOR_RAMP_SPREAD_PAD;
@@ -51,7 +52,7 @@ class GLVGRenderer extends GLRenderer {
 			case Constants.SPREAD_REPEAT: VG.COLOR_RAMP_SPREAD_REPEAT;
 			default: VG.COLOR_RAMP_SPREAD_PAD;
 		}
-		VG.setParameteri( paint, VG.PAINT_COLOR_RAMP_SPREAD_MODE, sprd );
+		paint.setParameteri( VG.PAINT_COLOR_RAMP_SPREAD_MODE, sprd );
 	}
 	
 	function setFillPaintTransform( transform:Transform ) {
@@ -66,18 +67,18 @@ class GLVGRenderer extends GLRenderer {
 		else VG.loadMatrix( matrixForVG( transform.getMatrix() ) );
 	}
 
-	function makePaint( givenPaint:Paint, fill:Bool ) {
-		var paint = VG.createPaint();
+	function makePaint( givenPaint:xinf.erno.Paint, fill:Bool ) {
+		var paint = Paint.create();
 		switch( givenPaint ) {
 			case None:
 				var c = CPtr.float_alloc( 4 );
 				CPtr.float_from_array( c, untyped [ 0,0,0,0 ].__a );
-				VG.setParameterfv( paint, VG.PAINT_COLOR, 4, c );
+				paint.setParameterfv( VG.PAINT_COLOR, 4, c );
 		
 			case SolidColor(r,g,b,a):
 				var c = CPtr.float_alloc( 4 );
 				CPtr.float_from_array( c, untyped [ r,g,b,a ].__a );
-				VG.setParameterfv( paint, VG.PAINT_COLOR, 4, c );
+				paint.setParameterfv( VG.PAINT_COLOR, 4, c );
 				
 			case PLinearGradient( _stops, x1, y1, x2, y2, transform, spread ):
 				var box = CPtr.float_alloc(4);
@@ -90,8 +91,8 @@ class GLVGRenderer extends GLRenderer {
 				else setStrokePaintTransform( transform );
 				
 				setGradientParameters( paint, _stops, spread );
-				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_LINEAR_GRADIENT );
-				VG.setParameterfv( paint, VG.PAINT_LINEAR_GRADIENT, 4, box );
+				paint.setParameteri( VG.PAINT_TYPE, VG.PAINT_TYPE_LINEAR_GRADIENT );
+				paint.setParameterfv( VG.PAINT_LINEAR_GRADIENT, 4, box );
 
 			case PRadialGradient( _stops, cx, cy, r, fx, fy, transform, spread ):
 				var box = CPtr.float_alloc(5);
@@ -105,8 +106,8 @@ class GLVGRenderer extends GLRenderer {
 				else setStrokePaintTransform( transform );
 
 				setGradientParameters( paint, _stops, spread );
-				VG.setParameteri( paint, VG.PAINT_TYPE, VG.PAINT_TYPE_RADIAL_GRADIENT );
-				VG.setParameterfv( paint, VG.PAINT_RADIAL_GRADIENT, 5, box );
+				paint.setParameteri( VG.PAINT_TYPE, VG.PAINT_TYPE_RADIAL_GRADIENT );
+				paint.setParameterfv( VG.PAINT_RADIAL_GRADIENT, 5, box );
 
 			default:
 				throw("unimplemented paint: "+givenPaint );
@@ -115,18 +116,16 @@ class GLVGRenderer extends GLRenderer {
 	}
 
 	override function applyFill() :Bool {
-		if( pen.fill==null || pen.fill==None ) return false;
-		if( fill!=null ) VG.destroyPaint( fill );
+		if( pen.fill==null || pen.fill==xinf.erno.Paint.None ) return false;
 		fill = makePaint( pen.fill, true );
-		VG.setPaint( fill, VG.FILL_PATH );
+		fill.set( VG.FILL_PATH );
 		return true;
 	}
 
 	override function applyStroke() :Bool {
-		if( pen.stroke==null || pen.stroke==None ) return false;
-		if( stroke!=null ) VG.destroyPaint( stroke );
+		if( pen.stroke==null || pen.stroke==xinf.erno.Paint.None ) return false;
 		stroke = makePaint( pen.stroke, false );
-		VG.setPaint( stroke, VG.STROKE_PATH );
+		stroke.set( VG.STROKE_PATH );
 	
 		VG.setf( VG.STROKE_LINE_WIDTH, pen.width );
 		
@@ -164,35 +163,30 @@ class GLVGRenderer extends GLRenderer {
 		return true;
 	}
 
-	function drawPath( f:Int->Void ) {
-		var path = VG.createPath( 0, VG.PATH_DATATYPE_F,
+	function drawPath( f:Path->Void ) {
+		var path = Path.create( VG.PATH_FORMAT_STANDARD, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 			
 		f(path);
         
-		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
-		if( applyStroke() ) VG.drawPath( path, VG.STROKE_PATH );
-		
-		VG.destroyPath(path);
+		if( applyFill() )   path.draw( VG.FILL_PATH );
+		if( applyStroke() ) path.draw( VG.STROKE_PATH );
 	}
 
    // erno.Renderer API
     
     override public function startShape() {
 	    if( path != null ) throw("Can only define one path at a time");
-		path = VG.createPath( 0 /* VG.PATH_FORMAT_STANDARD */, VG.PATH_DATATYPE_F,
+		path = Path.create( VG.PATH_FORMAT_STANDARD, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 	}
     
     override public function endShape() {
 	    if( path==null ) throw("no current Polygon");
 
-		if( applyFill() )   VG.drawPath( path, VG.FILL_PATH );
-		if( applyStroke() ) {
-			VG.drawPath( path, VG.STROKE_PATH );
-		}
+		if( applyFill() ) path.draw( VG.FILL_PATH );
+		if( applyStroke() ) path.draw( VG.STROKE_PATH );
 		
-		VG.destroyPath(path);
         path = null;
     }
 
@@ -208,7 +202,7 @@ class GLVGRenderer extends GLRenderer {
 			CPtr.float_from_array( d, untyped data.__a );
 		}
 		
-		VG.appendPathData( path, 1, t, d );
+		path.appendPathData( 1, t, d );
 	}
 
     override public function startPath( x:Float, y:Float) {
@@ -216,7 +210,6 @@ class GLVGRenderer extends GLRenderer {
     }
 	
     override public function endPath() {
-//        path.endPath();
     }
     
     override public function close() {
