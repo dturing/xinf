@@ -2,27 +2,14 @@
 
 #include <string.h>
 
-
-/* FIXME: use proper GL vertex array, not this hacky crap! */
-void gluVerticesOffset( int offset, int n, double *v ) {
-	double *_v = v+offset;
-	int i;
-	for( i=0; i<n; i++ ) {
-		glVertex3dv( _v );
-		_v += 3;
-	}
-}
-
 void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
-    glPixelStorei( GL_UNPACK_LSB_FIRST, GL_TRUE);
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
-    glPixelStorei( GL_UNPACK_LSB_FIRST, GL_TRUE);
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
-        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+        GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
 void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
