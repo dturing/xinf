@@ -7,7 +7,7 @@
 
 # project name
 PROJECT:=openvg
-BINDING_CLASSES:=VG VGU
+BINDING_CLASSES:=Handle Path Paint VG VGU 
 XINF_PKG:=openvg
 XINF_PKG_PATH:=openvg
 

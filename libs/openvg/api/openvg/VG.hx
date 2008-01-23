@@ -11,6 +11,10 @@ package openvg;
         translator="Capitalize"
         globalFinderPrefix="VG_"
         globalFinderCCFlags="-lOpenVG -lGL -lGLU"
+		
+        friends="openvg.Handle:VGHandle>__h,
+				openvg.Path:VGPath>__h,
+				openvg.Paint:VGPaint>__h"
         />
     <nekobind:cHeader>
         #include &lt;vg/openvg.h&gt;
@@ -267,20 +271,20 @@ extern class VG {
 	/** <nekobind><cptr name="values" type="int" min-size="count"/></nekobind> **/
 	public static function getiv( type:Int, count:Int, values:String ) :Void;
 	
-	public static function setParameterf( object:Int, type:Int, value:Float ) :Void;
-	public static function setParameteri( object:Int, type:Int, value:Int ) :Void;
-	/** <nekobind><cptr name="values" type="float" min-size="count"/></nekobind> **/
-	public static function setParameterfv( object:Int, type:Float, count:Int, value:String ) :Void;
-	/** <nekobind><cptr name="values" type="int" min-size="count"/></nekobind> **/
-	public static function setParameteriv( object:Int, type:Float, count:Int, value:String ) :Void;
+	public static function setParameterf( object:Handle, type:Int, value:Float ) :Void;
+	public static function setParameteri( object:Handle, type:Int, value:Int ) :Void;
+	/** <nekobind><cptr name="value" type="float" min-size="count"/></nekobind> **/
+	public static function setParameterfv( object:Handle, type:Float, count:Int, value:String ) :Void;
+	/** <nekobind><cptr name="value" type="int" min-size="count"/></nekobind> **/
+	public static function setParameteriv( object:Handle, type:Float, count:Int, value:String ) :Void;
 
-	public static function getParameterf( object:Int, type:Int ) :Float;
-	public static function getParameteri( object:Int, type:Int ) :Int;
-	public static function getParameterVectorSize( object:Int, type:Int ) :Int;
+	public static function getParameterf( object:Handle, type:Int ) :Float;
+	public static function getParameteri( object:Handle, type:Int ) :Int;
+	public static function getParameterVectorSize( object:Handle, type:Int ) :Int;
 	/** <nekobind><cptr name="values" type="float" min-size="count"/></nekobind> **/
-	public static function getParameterfv( object:Int, type:Int, count:Int, values:String ) :Void;
+	public static function getParameterfv( object:Handle, type:Int, count:Int, values:String ) :Void;
 	/** <nekobind><cptr name="values" type="int" min-size="count"/></nekobind> **/
-	public static function getParameteriv( object:Int, type:Int, count:Int, values:String ) :Void;
+	public static function getParameteriv( object:Handle, type:Int, count:Int, values:String ) :Void;
 
 /* Matrix Manipulation */
 	public static function loadIdentity() :Void;
@@ -300,27 +304,27 @@ extern class VG {
 	public static function clear( x:Int, y:Int, width:Int, height:Int ) :Void;
 	
 /* Paths */
-	public static function createPath( format:Int, datatype:Int, scale:Float, bias:Float, segmentCapacityHint:Int, coordCapacityHint:Int, capabilities:Int ) :Int;
-	public static function clearPath( path:Int, capabilities:Int ) :Void;
-	public static function destroyPath( path:Int ) :Void;
-	public static function removePathCapabilities( path:Int, capabilities:Int ) :Void;
-	public static function getPathCapabilities( path:Int ) :Int;
+	//public static function createPath( format:Int, datatype:Int, scale:Float, bias:Float, segmentCapacityHint:Int, coordCapacityHint:Int, capabilities:Int ) :Path;
+	public static function clearPath( path:Path, capabilities:Int ) :Void;
+	//public static function destroyPath( path:Path ) :Void;
+	public static function removePathCapabilities( path:Path, capabilities:Int ) :Void;
+	public static function getPathCapabilities( path:Path ) :Int;
 	public static function appendPath( dst:Int, src:Int ) :Void;
 	/** <nekobind><cptr name="pathSegments" type="unsigned char" min-size="numSegments"/>
 		<cptr name="values" type="float" min-size="0"/></nekobind> **/
-	public static function appendPathData( path:Int, numSegments:Int, pathSegments:String, pathData:String ) :Void;
+	public static function appendPathData( path:Path, numSegments:Int, pathSegments:String, pathData:String ) :Void;
 	/** <nekobind><cptr name="values" type="float" min-size="0"/></nekobind> **/
-	public static function modifyPathCoords( path:Int, startIndex:Int, numSegments:Int, pathData:String ) :Void;
-	public static function transformPath( path:Int, srcPath:Int ) :Void;
-	public static function interpolatePath( path:Int, startPath:Int, endPath:Int, amount:Float ) :Bool;
-	// NYI public static function pathLength( path:Int, startSegment:Int, numSegments:Int ) :Float;
+	public static function modifyPathCoords( path:Path, startIndex:Int, numSegments:Int, pathData:String ) :Void;
+	public static function transformPath( path:Path, srcpath:Path ) :Void;
+	public static function interpolatePath( path:Path, startpath:Path, endpath:Path, amount:Float ) :Bool;
+	// NYI public static function pathLength( path:Path, startSegment:Int, numSegments:Int ) :Float;
 	/** <nekobind>
 		<cptr name="x" type="float" min-size="1"/>
 		<cptr name="y" type="float" min-size="1"/>
 		<cptr name="tangentX" type="float" min-size="1"/>
 		<cptr name="tangentY" type="float" min-size="1"/>
 		</nekobind> **/
-	// NYI public static function pointAlongPath( path:Int, startSegment:Int, numSegments:Int,
+	// NYI public static function pointAlongPath( path:Path, startSegment:Int, numSegments:Int,
 	//								distance:Float, x:String, y:String, tangentX:String, tangentY:String ) :Void;
 	/** <nekobind>
 		<cptr name="minX" type="float" min-size="1"/>
@@ -328,24 +332,24 @@ extern class VG {
 		<cptr name="width" type="float" min-size="1"/>
 		<cptr name="height" type="float" min-size="1"/>
 		</nekobind> **/
-	public static function pathBounds( path:Int, minX:String, minY:String, width:String, height:String ):Void;
+	public static function pathBounds( path:Path, minX:String, minY:String, width:String, height:String ):Void;
 	/** <nekobind>
 		<cptr name="minX" type="float" min-size="1"/>
 		<cptr name="minY" type="float" min-size="1"/>
 		<cptr name="width" type="float" min-size="1"/>
 		<cptr name="height" type="float" min-size="1"/>
 		</nekobind> **/
-	public static function pathTransformedBounds( path:Int, minX:String, minY:String, width:String, height:String ):Void;
-	public static function drawPath( path:Int, paintModes:Int ):Void;
+	public static function pathTransformedBounds( path:Path, minX:String, minY:String, width:String, height:String ):Void;
+	public static function drawPath( path:Path, paintModes:Int ):Void;
 	
 /* Paint */
-	public static function createPaint() :Int;
-	public static function destroyPaint( paint:Int ) :Void;
-	public static function setPaint( paint:Int, paintModes:Int ) :Void;
+	public static function createPaint() :Paint;
+	public static function destroyPaint( paint:Paint ) :Void;
+	public static function setPaint( paint:Paint, paintModes:Int ) :Void;
 	// NYI public static function getPaint( paintModes:Int ) :Int;
-	// NYI public static function setColor( paint:Int, rgba:Int ) :Void;
-	// NYI public static function getColor( paint:Int ) :Int;
-	// NYI public static function paintPattern( paint:Int, pattern:Int ) :Void;
+	// NYI public static function setColor( paint:Paint, rgba:Int ) :Void;
+	// NYI public static function getColor( paint:Paint ) :Int;
+	// NYI public static function paintPattern( paint:Paint, pattern:Int ) :Void;
 
 /* Images */
 	public static function createImage( format:Int, width:Int, height:Int, quality:Int ) :Int;
