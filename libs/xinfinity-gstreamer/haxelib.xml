@@ -1,0 +1,5 @@
+<project name="xinfinity-gstreamer" url="http://xinf.org/" license="LGPL">
+    <user name="dfischer"/>
+    <description>xinf gstreamer stuff</description>
+    <version name="__VERSION__">Pre-Alpha</version>
+</project>
