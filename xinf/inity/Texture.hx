@@ -43,8 +43,8 @@ class Texture extends ImageData {
         var internalFormat = switch( cspace ) {
 				case RGB: GL.RGB;
 				case RGBA: GL.RGBA;
-				case BGR: GL.BGR;
-				case BGRA: GL.BGRA;
+				case BGR: GL.RGB;
+				case BGRA: GL.RGBA;
 				default: GL.RGBA;
 			}
         
