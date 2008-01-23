@@ -73,7 +73,7 @@ class CWrapperGenerator extends Generator {
             
             if( self ) {
                 print("\tval_check_kind(n_self,k_"+settings.className+");\n");
-                print("\t"+settings.cStruct+"* self = ("+settings.cStruct+"*)val_data(n_self);\n");
+                print("\t"+settings.cStruct+" self = ("+settings.cStruct+")val_data(n_self);\n");
             }
 
             // assign neko argument values to local c primitives
@@ -135,8 +135,8 @@ class CWrapperGenerator extends Generator {
         print("\n");
         for( friend in friendClasses.keys() ) {
             print("extern value check_"+friend.split(".").pop()+"( value );\n");
-            print("extern "+friendClasses.get(friend)+"* val_"+friend.split(".").pop()+"( value );\n");
-            print("extern value alloc_"+friend.split(".").pop()+"( "+friendClasses.get(friend)+"* );\n");
+            print("extern "+friendClasses.get(friend).cStruct+" val_"+friend.split(".").pop()+"( value );\n");
+            print("extern value alloc_"+friend.split(".").pop()+"( "+friendClasses.get(friend).cStruct+" );\n");
         }
         print("\n");
 
@@ -154,22 +154,22 @@ class CWrapperGenerator extends Generator {
             print("}\n\n");
             
             // val_<cStruct>
-            print(cStruct+"* val_"+cl+"( value n_self ) {\n");
-            print("\treturn ("+cStruct+"*)val_data( n_self );\n" );
+            print(cStruct+" val_"+cl+"( value n_self ) {\n");
+            print("\treturn ("+cStruct+")val_data( n_self );\n" );
             print("}\n\n");
 
             // destructor (finalize method)
             if( settings.dtor != null ) {
                 print("void finalize_"+cl+"( value n_self ) {\n");
                 print("\tcheck_"+cl+"( n_self );\n" );
-                print("\t"+cStruct+"* self = val_"+cl+"( n_self );\n" );
+                print("\t"+cStruct+" self = val_"+cl+"( n_self );\n" );
                 print("\t"+settings.prefix+translator.translate(settings.dtor)+"( self );\n" );
                 print("}\n\n");
             }
             
             // alloc_<cStruct>
-            print("value alloc_"+cl+"( "+cStruct+"* self ) {\n");
-            print("\tvalue n_self = alloc_abstract( k_"+cl+", self );\n" );
+            print("value alloc_"+cl+"( "+cStruct+" self ) {\n");
+            print("\tvalue n_self = alloc_abstract( k_"+cl+", (void*)self );\n" );
             if( settings.dtor != null ) {
                 print("\tval_gc( n_self, finalize_"+cl+" );\n");
             }

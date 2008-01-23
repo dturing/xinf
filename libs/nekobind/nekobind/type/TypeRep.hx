@@ -70,16 +70,19 @@ class StringType extends TypeRep {
 class FriendClassType extends TypeRep {
     var className:String;
     var cStruct:String;
-    public function new( className:String, cStruct:String ) :Void {
+	var primitive:String;
+    public function new( className:String, cStruct:String, primitive:String ) :Void {
         this.className = className.split(".").pop();
         this.cStruct = cStruct;
-        super("abstract",className,cStruct+"*");
+		this.primitive = primitive;
+        super("abstract",className,cStruct);
     }
 
     public function cCheckAssign( c:String, n:String ) :String {
         return(
-                "check_"+className+"( "+n+" ); "
-                +cStruct+"* "+c+" = val_"+className+"("+n+");\n" );
+				n+" = val_field( "+n+", val_id(\""+primitive+"\") );"
+                +"check_"+className+"( "+n+" ); "
+                +cStruct+" "+c+" = val_"+className+"("+n+");\n" );
     }
     
     public function cNekoAlloc( c:String ) :String {

@@ -23,6 +23,11 @@ import nekobind.translator.Translator;
 import nekobind.type.TypeRep;
 import haxe.rtti.Type;
 
+typedef FriendClass = {
+	cStruct:String,
+	primitive:String
+}
+
 class Generator {
     public static var CALL_MAX_ARGS:Int = 5;
     
@@ -31,7 +36,7 @@ class Generator {
     
     var allGlobal:Bool;
     var prefix:String;
-    var friendClasses:Hash<String>;
+    var friendClasses:Hash<FriendClass>;
     var superClass:String;
 
     public function new() :Void {
@@ -39,7 +44,7 @@ class Generator {
         settings = new Settings();
         allGlobal = false;
         prefix = "";
-        friendClasses = new Hash<String>();
+        friendClasses = new Hash<FriendClass>();
     }
 
     function print( s:String ) {
@@ -76,9 +81,9 @@ class Generator {
                     case "Float":
                         r = _Float;
                     default:
-                        var cStruct=friendClasses.get(name);
-                        if( cStruct!=null ) {
-                            r = new FriendClassType(name,cStruct);
+                        var friend=friendClasses.get(name);
+                        if( friend!=null ) {
+							r = new FriendClassType(name,friend.cStruct,friend.primitive);
                         } else 
                             throw("unknown class: "+name );
                 }
@@ -124,8 +129,10 @@ class Generator {
             if( settings.friends != null ) {
                 for( f in new String(settings.friends).split(",") ) {
                     var fc = StringTools.trim(f).split(":");
-                    if( fc.length != 2 ) throw("Friends class definitions need 'HaxeClass:CStruct' syntax: '"+f+"' doesn't match");
-                    friendClasses.set( fc[0], fc[1] );
+                    if( fc.length != 2 ) throw("Friends class definitions need 'HaxeClass:CStruct>Primitive' syntax: '"+f+"' doesn't match");
+					var cp = fc[1].split(">");
+                    if( cp.length != 2 ) throw("Friends class definitions need 'HaxeClass:CStruct>Primitive' syntax: '"+f+"' doesn't match");
+                    friendClasses.set( fc[0], { cStruct:cp[0], primitive:cp[1] } );
                 }
             }
         }
@@ -168,7 +175,7 @@ class Generator {
     }
 
     public function handleClass( e:TypeInfos, c:Class ) {
-        friendClasses.set( e.path, settings.cStruct );
+	    friendClasses.set( e.path, { cStruct:settings.cStruct, primitive:settings.primitive } );
         if( c.superClass != null ) superClass = c.superClass.path.toString();
 
         // process fields

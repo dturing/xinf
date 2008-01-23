@@ -108,17 +108,19 @@ class HaxeImplGenerator extends Generator {
         
         // load the primitive
         var n:Int = args.length;
+        var nArgs = args.length;
+		if( n>Generator.CALL_MAX_ARGS ) n=1;
         print("\tprivate static var _"+f.name
             +" = neko.Lib.load(\""+settings.module+"\",\""
             +"bind_"+settings.className+"_"+f.name+"\", "+n+");\n");
         
         // haxe wrapper func
         print("\tpublic static function "+f.name+"( ");
-            // function arguments
-            iterateArguments( args, function( name, opt, t, r, last ) {
-                    _this.print( name+":"+r.asHaxe() );
-                    if( !last ) _this.print(", ");
-                } );
+                // arguments
+                iterateArguments( args, function( name, opt, t, r, last ) {
+                        _this.print( name );
+                        if( !last ) _this.print(", ");
+                    } );
         print(" ) ");
             // return value
             print( ":"+settings.className+"__impl " );
@@ -128,11 +130,18 @@ class HaxeImplGenerator extends Generator {
             print("\t\tvar self = new "+settings.className+"__impl();\n" );
             print("\t\tself."+settings.nekoAbstract+" = _"+f.name+"( ");
             
+                if( nArgs>Generator.CALL_MAX_ARGS ) {
+                    print("untyped [ ");
+                } 
                 // arguments
                 iterateArguments( args, function( name, opt, t, r, last ) {
                         _this.print( name );
                         if( !last ) _this.print(", ");
                     } );
+                    
+                if( nArgs>Generator.CALL_MAX_ARGS ) {
+                    print(" ].__a ");
+                } 
             
             print(" );\n");
             print("\t\tif( self==null ) throw(\"Could not create "+settings.className+"\");\n");
