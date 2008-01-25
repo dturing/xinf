@@ -9,10 +9,10 @@ import xinf.traits.FloatTrait;
 class LinearGradient extends Gradient {
 
 	static var TRAITS = {
-		x1:new FloatTrait(),
-		y1:new FloatTrait(),
+		x1:new FloatTrait(0),
+		y1:new FloatTrait(0),
 		x2:new FloatTrait(1),
-		y2:new FloatTrait(1),
+		y2:new FloatTrait(0),
 	};
 	
     public var x1(get_x1,set_x1):Float;

@@ -117,12 +117,13 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		var d = r*2;
 		var matr = new flash.geom.Matrix();
 		matr.createGradientBox( d, d, 0, 0., 0. );
-
+/*
 		var a = Math.atan2(fy-cy,fx-cx);
 		matr.translate( -cx, -cy );
 		matr.rotate( a );
 		matr.translate( cx, cy );
-		
+*/		
+		matr.translate( cx-r, cy-r );
 		return matr;
 	}
 

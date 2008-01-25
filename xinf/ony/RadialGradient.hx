@@ -27,7 +27,7 @@ class RadialGradient extends Gradient {
     public var r(get_r,set_r):Float;
     function get_r() :Float { return getTrait("r",Float); }
     function set_r( v:Float ) :Float { return setTrait("r",v); }
-
+/*
     public var fx(get_fx,set_fx):Float;
     function get_fx() :Float { return getTrait("fx",Float); }
     function set_fx( v:Float ) :Float { return setTrait("fx",v); }
@@ -35,5 +35,5 @@ class RadialGradient extends Gradient {
     public var fy(get_fy,set_fy):Float;
     function get_fy() :Float { return getTrait("fy",Float); }
     function set_fy( v:Float ) :Float { return setTrait("fy",v); }
-	
+*/	
 }

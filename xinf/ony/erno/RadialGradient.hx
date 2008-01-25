@@ -17,7 +17,7 @@ class RadialGradient extends xinf.ony.RadialGradient, implements PaintServer {
 	
 	public function getPaint( target:xinf.ony.Element ) :xinf.erno.Paint {	
 		var center = {x:cx,y:cy};
-		var focus = {x:fx,y:fy};
+		var focus = {x:cx,y:cy};
 		var pr = {x:r,y:0.}
 		var _r = r;
 
