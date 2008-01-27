@@ -5,10 +5,12 @@ package xinf.ony.erno;
 
 import xinf.xml.URL;
 import xinf.erno.Renderer;
-import xinf.inity.gst.VideoSource;
-import xinf.event.ImageLoadEvent;
 import xinf.erno.Paint;
 import xinf.ony.traits.PreserveAspectRatioTrait;
+
+#if neko
+import xinf.inity.gst.VideoSource;
+import xinf.event.ImageLoadEvent;
 
 class Video extends xinf.ony.Video {
 
@@ -73,3 +75,7 @@ class Video extends xinf.ony.Video {
         xinf.xml.Document.addToBinding( svgns, "video", Video );
 	}
 }
+#else true
+class Video extends xinf.ony.Video {
+}
+#end
