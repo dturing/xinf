@@ -15,8 +15,8 @@ class MouseEvent extends Event<MouseEvent> {
     static public var MOUSE_OVER = new EventKind<MouseEvent>("mouseOver",true);
     static public var MOUSE_OUT  = new EventKind<MouseEvent>("mouseOut",true);
 
-    public var x:Int;
-    public var y:Int;
+    public var x:Float;
+    public var y:Float;
     public var button:Int;
     public var targetId:Null<Int>;
     

@@ -25,11 +25,16 @@ class Image extends xinf.ony.Image {
         bitmap=v;
         bitmap.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
         bitmap.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-        bitmap.addEventListener( ImageLoadEvent.LOADED, dataChanged );
+        bitmap.addEventListener( ImageLoadEvent.LOADED, dataLoaded );
         redraw();
         return bitmap;
     }
     
+    private function dataLoaded( e:ImageLoadEvent ) :Void {
+		dataChanged(e);
+		postEvent(e);
+    }
+	
     private function dataChanged( e:ImageLoadEvent ) :Void {
         redraw();
     }
@@ -79,5 +84,9 @@ class Image extends xinf.ony.Image {
 			g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, box );
 		}
      }
-    
+
+	override public function toString() :String {
+		return("xinf.ony.erno.Image("+href+","+bitmap.width+"x"+bitmap.height+")");
+	}
+
 }
