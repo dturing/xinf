@@ -8,6 +8,8 @@ import cptr.CPtr;
 import opengl.GL;
 import opengl.GLU;
 import xinf.erno.ImageData;
+import xinf.event.FrameEvent;
+import xinf.event.ImageLoadEvent;
 import xinf.inity.ColorSpace;
 
 /** strictly any neko ImageData is already a texture. This class manages the texture though,
@@ -130,7 +132,14 @@ class Texture extends ImageData {
                 }
 				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
 				r = newFromPixbuf( p );
-                cache.set(url,r);
+                cache.set(url,r); // FIXME
+				
+				// trigger LOADED at next frame
+				var l:Dynamic;
+				l = xinf.erno.Runtime.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
+					xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
+					r.postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, r ) );
+				});
             }
             return r;
         } catch( e:Dynamic ) {
