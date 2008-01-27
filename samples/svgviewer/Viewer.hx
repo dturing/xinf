@@ -104,6 +104,7 @@ class Viewer {
 		#if neko
 			arg = neko.Sys.args()[0];
 		#end
+		Root.setBackgroundColor(0,0,0,0);
 		var d = new Viewer( arg );
 		Root.main();
 	}
