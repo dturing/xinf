@@ -2,13 +2,14 @@ import xinf.geom.Types;
 
 typedef TPoint = xinf.geom.TPoint
 
-import xinf.geom.Transform;
 typedef Translate = xinf.geom.Translate
 typedef Identity = xinf.geom.Identity
 typedef Scale = xinf.geom.Scale
 typedef Rotate = xinf.geom.Rotate
 typedef Concatenate = xinf.geom.Concatenate
 typedef Matrix = xinf.geom.Matrix
+typedef Transform = xinf.geom.TransformList
+typedef TransformList = xinf.geom.TransformList
 
 typedef MouseEvent = xinf.event.MouseEvent
 typedef KeyboardEvent = xinf.event.KeyboardEvent
