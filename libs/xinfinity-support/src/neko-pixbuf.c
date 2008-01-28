@@ -23,7 +23,6 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	int length = val_strlen(_data);
 	if( length==0 ) val_throw( alloc_string("data length is zero") );
 		
-	printf("load pixmap from data len %i\n", length );
 	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
     
 	GError *err = NULL;
