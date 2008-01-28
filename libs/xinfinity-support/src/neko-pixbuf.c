@@ -23,23 +23,26 @@ GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
 	int length = val_strlen(_data);
 	if( length==0 ) val_throw( alloc_string("data length is zero") );
 		
+	printf("load pixmap from data len %i\n", length );
 	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
     
-#ifdef GDK_PIXBUF_1
-	gdk_pixbuf_loader_write( loader, data, length );
-	gdk_pixbuf_loader_close( loader );
-#else
 	GError *err = NULL;
-	gdk_pixbuf_loader_write( loader, data, length, &err );
-	if( err!=NULL ) {
-		val_throw( alloc_string(err->message) );
+	
+	while( length>0 ) {
+		int l = 1024;
+		if( length<l ) l=length;
+		gdk_pixbuf_loader_write( loader, data, l, &err );
+		if( err!=NULL ) {
+			val_throw( alloc_string(err->message) );
+		}
+		length-=l;
+		data+=l;
 	}
 
 	gdk_pixbuf_loader_close( loader, &err );
 	if( err!=NULL ) {
-		val_throw( alloc_string("unable to decompress image") );
+		val_throw( alloc_string(err->message) );
 	}
-#endif
 	
 	GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
 	if( pixbuf==NULL ) {
