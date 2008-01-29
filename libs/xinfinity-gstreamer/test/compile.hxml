@@ -1,0 +1,5 @@
+-neko test.n
+-cp ../api
+-lib xinf
+-main Test
+-cmd neko test.n

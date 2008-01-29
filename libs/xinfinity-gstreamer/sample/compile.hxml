@@ -1,0 +1,6 @@
+-neko test.n
+-cp ../api
+-lib xinf
+-resource test.svg@test.svg
+-main Example
+-cmd NEKOPATH=$NEKOPATH:../bin/Linux neko test
