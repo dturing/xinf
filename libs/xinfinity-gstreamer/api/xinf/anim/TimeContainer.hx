@@ -43,10 +43,12 @@ class TimeContainer extends TimedElement {
 		activeElements.remove(e);
 	}
 
-	override function step( time:Float ) {
+	override function step( time:Float ) :Bool {
 		time-=started;
 		for( f in sched.until(time) ) f(time);
+		for( e in activeElements ) e.resetIteration( time );
 		for( e in activeElements ) e.step( time );
+		return true;
 	}
 
 }

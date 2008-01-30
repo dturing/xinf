@@ -36,17 +36,17 @@ class Schedule<T> {
 			first=cue;
 		} else {
 			var c=first;
-			var l;
-			while( c!=null && c.time<cue.time ) {
-				l=c;
+			var last;
+			while( c!=null && c.time<=cue.time ) {
+				last=c;
 				c=c.next;
 			}
-			if( l==null ) {
+			if( last==null ) {
 				cue.next=c;
 				first=cue;
 			} else {
-				cue.next=l.next;
-				l.next=cue;
+				cue.next=last.next;
+				last.next=cue;
 			}
 		}
 	}

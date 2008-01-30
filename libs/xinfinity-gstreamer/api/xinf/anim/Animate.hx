@@ -8,27 +8,26 @@ import xinf.traits.StringTrait;
 
 class Animate extends Animation {
 
-	function value( t:Float ) :Float {
-//		return from + ((to-from)*((t%dur)/dur));
-		return t*50;
-	}
-
 	override function stop( t:Float ) {
 		super.stop(t);
-		if( fill==Fill.Freeze || fill==Fill.Hold )
-			setOnTarget( value((t%simpleDuration)/simpleDuration) );
+		/*
+		if( fill==Fill.Freeze || fill==Fill.Hold ) {
+			if( t%simpleDuration==0 ) 
+				setOnTarget( animationFunction(1.) );
+			else
+				setOnTarget( animationFunction((t%simpleDuration)/simpleDuration) );
+		}
+		*/
 	}
 	
 	override function step( t:Float ) {
-		var cur = value( (t%simpleDuration)/simpleDuration );
-		
-		trace("Anim, dur "+dur+", repeat "+repeatCount );
-		trace("      "+from+"-"+to+" in "+dur );
+		if( !super.step(t) ) return false;
+
+		var cur = aaValue(t);
 		trace("      @"+t+": "+cur );
-		
 		setOnTarget(cur);
 		
-		super.step(t);
+		return true;
 	}
 
 	static function __init__() {

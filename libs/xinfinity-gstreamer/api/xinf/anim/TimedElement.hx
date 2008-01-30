@@ -70,6 +70,7 @@ class TimedElement extends XMLElement {
 	}
 
 	function start( t:Float ) {
+		trace("start "+this );
 		active = true;
 		timeContainer.activate(this);
 		started = t;
@@ -79,6 +80,17 @@ class TimedElement extends XMLElement {
 		trace("stop "+this );
 		timeContainer.deactivate( this );
 		active = false;
+	}
+
+	function resetIteration( time:Float ) {
+	}
+	
+	function step( time:Float ) :Bool {
+		if( time>started+activeDuration ) {
+			stop(started+activeDuration);
+			return false;
+		}
+		return true;
 	}
 
 	public function beginElementAt( offset:Float ) {
@@ -142,9 +154,12 @@ class TimedElement extends XMLElement {
 				activeDuration=end-begin;
 			}
 			simpleDuration=activeDuration/repeatCount;
-			// FIXME more: implicit durations? simpleDuration when end? etc..
 		}
-		
+		/* FIXME more: 
+			implicit durations? 
+			repeatDur
+			etc..
+		*/
 	}
 	
 	function resolveTime( time:Time ) :Float {
@@ -169,13 +184,7 @@ class TimedElement extends XMLElement {
 		}
 		return null;
 	}
-	
-	function step( time:Float ) {
-		if( time>started+activeDuration ) {
-			stop(started+activeDuration);
-		}
-	}
- 
+	 
     override public function toString() :String {
 		var s = "";
  		if( id!=null ) s += "#"+id;

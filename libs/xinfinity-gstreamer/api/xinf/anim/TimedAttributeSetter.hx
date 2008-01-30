@@ -32,9 +32,15 @@ class TimedAttributeSetter extends TimedElement {
 		else peer = parentElement;
 	}
 
-	function getFromTarget() :Dynamic {
+	function getFromTarget( ?presentation:Bool ) :Dynamic {
 		if( peer==null || attributeName==null ) return null;
-		return peer.getStyleTrait( attributeName, Dynamic );
+		return peer.getStyleTrait( attributeName, Dynamic, presentation );
+	}
+
+	function resetOnTarget() {
+		if( peer==null || attributeName==null ) return;
+		peer.setPresentationTrait( attributeName,
+				peer.getStyleTrait( attributeName, Dynamic, false, false ));
 	}
 
 	function setOnTarget( value:Dynamic ) {
@@ -42,8 +48,10 @@ class TimedAttributeSetter extends TimedElement {
 		
 		var tmp:Dynamic = Reflect.empty();
 		peer.setTraitFromDynamic( attributeName, value, tmp );
-		peer.setStyleTrait( attributeName, Reflect.field(tmp,attributeName) );
+		peer.setPresentationTrait( attributeName, 
+				Reflect.field(tmp,attributeName) );
 		untyped {
+			if( peer.styleChanged!=null ) peer.styleChanged();
 			if( peer.redraw!=null ) peer.redraw();
 		}
 	}
