@@ -1,4 +1,3 @@
-
 #
 # xinf libs Makefile include for (cross-)compiling on linux
 # the default target ("Linux" .ndll) should work on any gnu system
@@ -115,6 +114,9 @@ $(BIN_PATH)/$(PROJECT).n: $(BINDING_HX_IMPL)
 # build haxelib package
 HAXELIB_ROOT:=haxelib
 HAXELIB_PROJECT:=$(HAXELIB_ROOT)/$(PROJECT)
+
+haxelib-test : haxelib
+	haxelib test $(HAXELIB_PROJECT).zip
 
 haxelib : $(HAXELIB_PROJECT).zip
 		
