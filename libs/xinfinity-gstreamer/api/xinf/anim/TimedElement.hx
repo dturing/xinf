@@ -5,6 +5,11 @@ package xinf.anim;
 
 import xinf.xml.XMLElement;
 import xinf.traits.EnumTrait;
+import xinf.anim.type.Time;
+import xinf.anim.type.Fill;
+import xinf.anim.type.TimeTrait;
+import xinf.anim.type.DurationTrait;
+import xinf.anim.type.RepeatTrait;
 
 class TimedElement extends XMLElement {
 

@@ -7,6 +7,10 @@ import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.TraitDefinition;
+import xinf.anim.type.Additive;
+import xinf.anim.type.Accumulate;
+import xinf.anim.type.CalcMode;
+import xinf.anim.type.ValuesTrait;
 
 private typedef Step = { 
 	begin:Float, end:Float, 
