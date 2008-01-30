@@ -137,8 +137,8 @@ class XMLElement extends Node,
 	}
 
 	/** see $xinf.traits.TraitAccess::getStyleTrait$ */
-	public function getStyleTrait<T>( name:String, value:T, ?inherit:Bool ) :T {
-		return setTrait(name,value);
+	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
+		return getTrait(name,type);
 	}
 
 	/** see $xinf.traits.TraitAccess::setTraitFromString$ */
