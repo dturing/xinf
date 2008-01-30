@@ -11,16 +11,19 @@ class Example {
 		var g = new Group();
 		Root.appendChild(g);
 		
-		var doc:Node;
+		var doc:Svg;
 		var stage = {x:100.,y:100.};
 		
 		if( url==null ) {
-			doc = Document.instantiate( Std.resource("test.svg") );
-			g.appendChild( doc );
+			Document.instantiate( Std.resource("test.svg"), function(d:Svg) {
+				g.appendChild( d );
+				doc=d;
+			}, Svg );
 		} else {
-			Document.load( url, function(doc) {
-				g.appendChild( doc );
-			});
+			Document.load( url, function(d:Svg) {
+				g.appendChild( d );
+				doc=d;
+			}, Svg);
 		}
 
 		var scale = 1.;
@@ -29,7 +32,7 @@ class Example {
 		var trans = function() {
 			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
 			g.transform = new TransformList([
-								new Translate( 0, 0 ), //-doc.width/2, -doc.height/2 ),
+								new Translate( Math.floor(-doc.width/2), Math.floor(-doc.height/2) ),
 //									new Scale(  (stage.x/doc.width)*scale, 
 //												(stage.y/doc.height)*scale ),
 								new Scale(  scale, scale ),

@@ -32,15 +32,15 @@
   </defs> 
   <g xml:id="test-body-content" font-family="SVGFreeSansASCII,sans-serif" font-size="18">
     <g font-family="Arial" font-size="30"> 
+	  
       <g transform="translate(0, 0)"> 
         <rect x="60" y="20" width="50" height="200" fill="#dfdfdf" stroke="#dfdfdf" stroke-width="4" /> 
         <line x1="40" x2="100" y1="220" y2="220" fill="none" stroke="#880000" stroke-width="4" /> 
         <line x1="40" x2="100" y1="120" y2="120" fill="none" stroke="#880000" stroke-width="4" /> 
-        <rect x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
-          <animate xml:id="an5" attributeName="height" 
-		  calcMode="discrete" additive="replace" 
-		  accumulate="none" repeatCount="2" 
-		  from="200" to="20" begin="0s" dur="4s" fill="freeze" /> 
+        <rect id="r5" x="60" y="20" width="50" height="25" fill="#0f5" stroke="#085" stroke-width="4"> 
+          <animate xml:id="an5" attributeName="height" calcMode="linear" 
+		  additive="replace" accumulate="none" 
+		  repeatCount="2" from="200" to="20" begin="0s" dur="4s" fill="freeze" /> 
         </rect> 
         <text x="30" y="285" fill="navy">anim.5</text> 
       </g> 
@@ -48,17 +48,22 @@
         <rect x="60" y="20" width="50" height="200" fill="#dfdfdf" stroke="#dfdfdf" stroke-width="4" /> 
         <line x1="40" x2="100" y1="220" y2="220" fill="none" stroke="#880000" stroke-width="4" /> 
         <line x1="40" x2="100" y1="120" y2="120" fill="none" stroke="#880000" stroke-width="4" /> 
-        <rect x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
-          <animate xml:id="an6" attributeName="height" calcMode="discrete" additive="sum" accumulate="none" repeatCount="2" from="200" to="20" begin="0s" dur="4s" fill="freeze" /> 
+        <rect id="r6" x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
+          <animate xml:id="an6" attributeName="height" calcMode="linear" 
+		  additive="sum" accumulate="none" 
+		  repeatCount="2" from="180" to="0" begin="0s" dur="4s" fill="freeze" /> 
         </rect> 
         <text x="30" y="285" fill="navy">anim.6</text> 
       </g> 
+	  
       <g transform="translate(220, 0)"> 
         <rect x="60" y="20" width="50" height="200" fill="#dfdfdf" stroke="#dfdfdf" stroke-width="4" /> 
         <line x1="40" x2="100" y1="220" y2="220" fill="none" stroke="#880000" stroke-width="4" /> 
         <line x1="40" x2="100" y1="120" y2="120" fill="none" stroke="#880000" stroke-width="4" /> 
-        <rect x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
-          <animate xml:id="an7" attributeName="height" calcMode="discrete" additive="replace" accumulate="sum" repeatCount="2" from="200" to="20" begin="0s" dur="4s" fill="freeze" /> 
+        <rect id="r7" x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
+          <animate xml:id="an7" attributeName="height" calcMode="linear" 
+		  additive="replace" accumulate="sum" 
+		  repeatCount="2" from="200" to="110" begin="0s" dur="4s" fill="freeze" /> 
         </rect> 
         <text x="30" y="285" fill="navy">anim.7</text> 
       </g> 
@@ -66,11 +71,13 @@
         <rect x="60" y="20" width="50" height="200" fill="#dfdfdf" stroke="#dfdfdf" stroke-width="4" /> 
         <line x1="40" x2="100" y1="220" y2="220" fill="none" stroke="#880000" stroke-width="4" /> 
         <line x1="40" x2="100" y1="120" y2="120" fill="none" stroke="#880000" stroke-width="4" /> 
-        <rect x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
-          <animate xml:id="an8" attributeName="height" calcMode="discrete" additive="sum" accumulate="sum" repeatCount="2" from="200" to="20" begin="0s" dur="4s" fill="freeze" /> 
+        <rect id="r8" x="60" y="20" width="50" height="20" fill="#0f5" stroke="#085" stroke-width="4"> 
+          <animate xml:id="an8" attributeName="height" calcMode="linear" 
+		  additive="sum" accumulate="sum" 
+		  repeatCount="2" from="180" to="90" begin="0s" dur="4s" fill="freeze" /> 
         </rect> 
         <text x="30" y="285" fill="navy">anim.8</text> 
-      </g> 
+      </g>
     </g>
   </g> 
   <g font-family="SVGFreeSansASCII,sans-serif" font-size="32"> 
