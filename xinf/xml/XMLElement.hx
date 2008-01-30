@@ -27,6 +27,7 @@ class XMLElement extends Node,
 		implements EventDispatcher {
 
 	var _traits:Dynamic;
+	var _ptraits:Dynamic;
     var listeners :Hash<List<Dynamic->Void>>;
     
 	static var TRAITS = {
@@ -86,6 +87,7 @@ class XMLElement extends Node,
     public function new( ?traits:Dynamic ) :Void {
 		super();
 		_traits = Reflect.empty();
+        _ptraits = Reflect.empty();
         listeners = new Hash<List<Dynamic->Void>>();
 		if( traits!=null ) setTraitsFromObject(traits);
 	}
@@ -102,7 +104,17 @@ class XMLElement extends Node,
 	/* Traits functions */
 	
 	/** see $xinf.traits.TraitAccess$.getTrait */
-	public function getTrait<T>( name:String, type:Dynamic ) :T {
+	public function getTrait<T>( name:String, type:Dynamic, ?presentation:Bool ) :T {
+		if( presentation!=false ) {
+			var v = Reflect.field(_ptraits,name);
+			if(v!=null) {
+				if( Std.is(v,type) ) {
+					return v;
+				}
+				throw( new TraitTypeException( name, this, v, type ) );
+			}
+		}
+		
 		var v = Reflect.field(_traits,name);
 		if(v!=null) {
 			if( Std.is(v,type) ) {
@@ -123,6 +135,12 @@ class XMLElement extends Node,
 	/** see $xinf.traits.TraitAccess::setTrait$ */
 	public function setTrait<T>( name:String, value:T ) :T {
 		Reflect.setField(_traits,name,value);
+		Reflect.setField(_ptraits,name,value);
+		return value;
+	}
+
+	public function setPresentationTrait( name:String, value:Dynamic ) :Dynamic {
+		Reflect.setField(_ptraits,name,value);
 		return value;
 	}
 
@@ -137,8 +155,8 @@ class XMLElement extends Node,
 	}
 
 	/** see $xinf.traits.TraitAccess::getStyleTrait$ */
-	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
-		return getTrait(name,type);
+	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
+		return getTrait(name,type,presentation);
 	}
 
 	/** see $xinf.traits.TraitAccess::setTraitFromString$ */

@@ -68,7 +68,17 @@ class StyledElement extends XMLElement {
 		
 		DOCME: move this doc somewhere else?
 	*/
-	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool ) :T {
+	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
+		if( presentation!=false ) {
+			var v = Reflect.field(_ptraits,name);
+			if(v!=null) {
+				if( Std.is(v,type) ) {
+					return v;
+				}
+				throw( new TraitTypeException( name, this, v, type ) );
+			}
+		}
+
 		if( Reflect.hasField(_cache,name) ) return Reflect.field(_cache,name);
 		
 		#if profile

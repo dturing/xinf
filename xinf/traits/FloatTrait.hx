@@ -38,4 +38,16 @@ class FloatTrait extends TypedTrait<Float> {
 		return def;
 	}
 	
+	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+		return a + ((b-a)*f);
+	}
+	
+	override public function distance( a:Dynamic, b:Dynamic ) :Float {
+		return Math.abs(b-a);
+	}
+
+	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
+		return a+b;
+	}
+
 }

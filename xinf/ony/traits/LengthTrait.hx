@@ -31,4 +31,16 @@ class LengthTrait extends TypedTrait<Length> {
 		return def;
 	}
 	
+	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+		return new Length(null,a.value + ((b.value-a.value)*f));
+	}
+	
+	override public function distance( a:Dynamic, b:Dynamic ) :Float {
+		return Math.abs(b.value-a.value);
+	}
+
+	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
+		return new Length(null,a.value+b.value);
+	}
+
 }

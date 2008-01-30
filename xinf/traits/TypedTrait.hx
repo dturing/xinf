@@ -31,5 +31,17 @@ class TypedTrait<T> implements TraitDefinition {
 		throw( "unimplemented "+Type.getClassName(Type.getClass(this))+".getDefault()" );
 		return null;
 	}
+	
+	public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+		return f>=.5 ? a : b;
+	}
+	
+	public function distance( a:Dynamic, b:Dynamic ) :Float {
+		return 1.;
+	}
+
+	public function add( a:Dynamic, b:Dynamic ) :Dynamic {
+		return a;
+	}
 
 }
