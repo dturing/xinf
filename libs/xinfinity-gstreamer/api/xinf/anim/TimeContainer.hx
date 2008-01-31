@@ -14,7 +14,7 @@ class TimeContainer extends TimedElement {
 		sched = new Schedule<Float->Void>();
 		activeElements = new List<TimedElement>();
 		elements = new List<TimedElement>();
-		started=Date.now().getTime();
+		started=0;
 	}
 	
 	public function schedule( t:Float, f:Float->Void ) {
@@ -43,9 +43,26 @@ class TimeContainer extends TimedElement {
 		activeElements.remove(e);
 	}
 
+	// FIXME at least one of these is wrong! test with time shift!
+	public function localToGlobalTime( t:Float ) :Float {
+		var r = started + t;
+		if( timeContainer!=null ) 
+			r+=timeContainer.localToGlobalTime(r);
+		return r;
+	}
+	public function globalToLocalTime( t:Float ) :Float {
+		var r = t;
+		if( timeContainer!=null ) 
+			r=timeContainer.globalToLocalTime(r);
+		r-=started;
+		trace("global "+t+" - started "+started+" = "+r );
+		return r;
+	}
+
 	override function step( time:Float ) :Bool {
 		time-=started;
-		for( f in sched.until(time) ) f(time);
+//		trace(""+this+" @"+time );
+		sched.callUntil( time, function(f,t) f(t) );
 		for( e in activeElements ) e.resetIteration( time );
 		for( e in activeElements ) e.step( time );
 		return true;

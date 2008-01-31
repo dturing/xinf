@@ -40,7 +40,10 @@ class TimeTrait extends TypedTrait<Time> {
 	static function parseSingle( value:String ) :Time {
 		value = StringTools.trim(value);
 		
-		if( offset.match(value ) ) {
+		if( value=="indefinite" ) {
+			return Time.Indefinite;
+			
+		} else if( offset.match(value ) ) {
 			return Time.Offset( parseClockValue(offset.matched(1)) );
 			
 		} else if( wallclock.match(value ) ) {
@@ -69,16 +72,16 @@ class TimeTrait extends TypedTrait<Time> {
 	static function parseWallclockValue( value:String ) :Date {
 		if( dateTime.match(value) ) {
 			var d = parseDate(dateTime.matched(1));
-			var t = parseTime(dateTime.matched(2));
-			trace("date: "+d+", time: "+t );
-			var r = Date.fromTime(
-				d.getTime()+t.getTime() );
-			trace("  == "+r );
-			return r;
+			var t = parseTime(d,dateTime.matched(2));
+//			trace("date: "+d+", time: "+t );
+			return t;
+			
 		} else if( date.match(value) ) {
 			return parseDate(value);
+			
 		} else if( time.match(value) ) {
-			return parseTime(value);
+			return parseTime( Date.now(), value );
+			
 		} else {
 			throw("No Wallclock match: "+value );
 		}
@@ -95,7 +98,7 @@ class TimeTrait extends TypedTrait<Time> {
 		return Date.fromTime(0);
 	}
 
-	static function parseTime( value:String ) :Date {
+	static function parseTime( today:Date, value:String ) :Date {
 		if( time.match(value) ) {
 			var hours = Std.parseInt( time.matched(1) );
 			var minutes = Std.parseInt( time.matched(2) );
@@ -104,10 +107,8 @@ class TimeTrait extends TypedTrait<Time> {
 			var zone = time.matched(7);
 			var offset = if( zone=="Z" ) 0
 						 else 60*(Std.parseInt(time.matched(8))*60)+Std.parseInt(time.matched(9));
-			offset*=1000;
-			var r = new Date(1970,0,1,hours,minutes,seconds);
-			var d = Date.fromTime( r.getTime() + fraction - (offset*1000) );
-			trace(d);
+			var r = new Date(today.getFullYear(),today.getMonth(),today.getDate(),hours,minutes,seconds);
+			var d = Date.fromTime( r.getTime() + fraction + (offset*1000) );
 			return d;
 		}
 		return Date.fromTime(0);

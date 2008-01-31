@@ -28,8 +28,11 @@ class TimedAttributeSetter extends TimedElement {
 	override function reschedule() {
 		super.reschedule();
 		
-		if( href!=null ) peer = ownerDocument.getElementById(href);
-		else peer = parentElement;
+		if( href!=null ) {
+			// for now, we dont support external references
+			var id = href.split("#")[1];
+			peer = ownerDocument.getElementById( id );
+		} else peer = parentElement;
 	}
 
 	function getFromTarget( ?presentation:Bool ) :Dynamic {
@@ -41,6 +44,7 @@ class TimedAttributeSetter extends TimedElement {
 		if( peer==null || attributeName==null ) return;
 		peer.setPresentationTrait( attributeName,
 				peer.getStyleTrait( attributeName, Dynamic, false, false ));
+		updateTarget();
 	}
 
 	function setOnTarget( value:Dynamic ) {
@@ -50,10 +54,14 @@ class TimedAttributeSetter extends TimedElement {
 		peer.setTraitFromDynamic( attributeName, value, tmp );
 		peer.setPresentationTrait( attributeName, 
 				Reflect.field(tmp,attributeName) );
+		updateTarget();
+	}
+
+	function updateTarget() {
+		// FIXME: move these to TraitsDefinitions?
 		untyped {
-			if( peer.styleChanged!=null ) peer.styleChanged();
+			if( peer.styleChanged!=null ) peer.styleChanged(attributeName);
 			if( peer.redraw!=null ) peer.redraw();
 		}
 	}
-
 }

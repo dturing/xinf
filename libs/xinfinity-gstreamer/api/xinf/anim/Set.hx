@@ -7,6 +7,7 @@ import xinf.xml.XMLElement;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.EnumTrait;
+import xinf.anim.type.Fill;
 
 class Set extends TimedAttributeSetter {
 	
@@ -20,16 +21,15 @@ class Set extends TimedAttributeSetter {
 
 	var oldValue:Dynamic;
 
-	override function start() {
-		super.start(); // FIXME: Set doesnt need to be stepped! as well as video probably...
-		oldValue = getFromTarget();
+	override function start(t:Float) {
+		super.start(t); // FIXME: Set doesnt need to be stepped! as well as video probably...
 		setOnTarget( to );
 	}
 	
-	override function stop() {
-		super.stop();
+	override function stop(t:Float) {
+		super.stop(t);
 		if( fill!=Fill.Freeze && fill!=Fill.Hold )
-			setOnTarget( oldValue );
+			resetOnTarget();
 	}
 
 }

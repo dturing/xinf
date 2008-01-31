@@ -23,7 +23,7 @@ class Animation extends TimedAttributeSetter {
 	static var TRAITS = {
 		additive: new EnumTrait<Additive>( Additive, Additive.Replace ),
 		accumulate: new EnumTrait<Accumulate>( Accumulate, Accumulate.None ),
-		calcMode: new EnumTrait<CalcMode>( CalcMode, CalcMode.Discrete ),
+		calcMode: new EnumTrait<CalcMode>( CalcMode, CalcMode.Linear ),
 		
 	//	keySplines: new StringTrait(),
 	//	keyTimes: new FloatListTrait(),
@@ -55,23 +55,22 @@ class Animation extends TimedAttributeSetter {
     function set_from( v:String ) :String { setTrait("from",v); reschedule(); return v; }
 
     public var to(get_to,set_to):String;
-    function get_to() :String { return getTrait("to",String); }
-    function set_to( v:String ) :String { setTrait("to",v); reschedule(); return v; }
+    function get_to() :String { return getStyleTrait("to",String); }
+    function set_to( v:String ) :String { setStyleTrait("to",v); reschedule(); return v; }
 
     public var by(get_by,set_by):String;
-    function get_by() :String { return getTrait("by",String); }
-    function set_by( v:String ) :String { setTrait("by",v); reschedule(); return v; }
+    function get_by() :String { return getStyleTrait("by",String); }
+    function set_by( v:String ) :String { setStyleTrait("by",v); reschedule(); return v; }
 
 	var steps:Array<Step>;
 	var originalValue:Dynamic;
-	var lastValue:Dynamic;
 	var targetDefinition:TraitDefinition;
 	
 	function createSteps() :Void {
 		steps = new Array<Step>();
 		
 		var interpolate = null;
-		if( calcMode != CalcMode.Discrete ) {
+		if( calcMode != CalcMode.Discrete ) { 
 			interpolate = targetDefinition.interpolate;
 		}
 		
@@ -98,7 +97,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-		var totalLength = null;
+		var totalLength:Null<Float> = null;
 		if( calcMode == CalcMode.Paced ) {
 			totalLength=0.;
 			for( i in 0...(vals.length-1) ) {
@@ -144,13 +143,13 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-		trace("Animation steps: "+steps );
+//		trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {
 		var at2 = at%1.;
 		for( step in steps ) {
-			if( at2>=step.begin && at2<step.end ) {
+			if( at2>=step.begin && at2<=step.end ) {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
 					return step.interpolate( step.from, step.to, t );
@@ -170,30 +169,24 @@ class Animation extends TimedAttributeSetter {
 				t%simpleDuration;
 		}
 		
-		var cur = value( mod/simpleDuration );
-		
+		return additiveValue( value( mod/simpleDuration ) );
+	}
+	
+	function additiveValue( v:Dynamic ) {
 		if( additive==Additive.Sum ) {
 			var o = getFromTarget();
-			trace("cur: "+cur+", o: "+o );
-			if( o!=null ) cur = targetDefinition.add( o, cur );
-			
-		/* TODO
-			var d = cur;
-			if( lastValue!=null ) d = targetDefinition.subtract( cur, lastValue );
-			var o = getFromTarget();
-			trace("cur: "+cur+", o: "+o+", d: "+d );
-			if( o!=null ) cur = targetDefinition.add( o, d );
-		*/
+			if( o!=null ) v = targetDefinition.add( o, v );
 		}
-		
-		lastValue = cur;
-		return cur;
+		return v;
 	}
 	
 	override function start( t:Float ) {
 		if( peer==null ) throw("cannot create animation function, no peer set.");
 		targetDefinition = peer.getTraitDefinition( attributeName );
-		if( targetDefinition==null ) throw("no target attribute '"+attributeName+"' on "+peer );
+		if( targetDefinition==null ) {
+			trace("no target attribute '"+attributeName+"' on "+peer );
+			return;
+		}
 		
 		originalValue = getFromTarget();
 		createSteps();
@@ -201,7 +194,6 @@ class Animation extends TimedAttributeSetter {
 	}
 
 	override function resetIteration( time:Float ) {
-	trace("reset on "+peer+": "+getFromTarget() );
 		resetOnTarget();
 	}
 

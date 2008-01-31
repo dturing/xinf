@@ -11,10 +11,12 @@ import xinf.anim.type.TimeTrait;
 import xinf.anim.type.DurationTrait;
 import xinf.anim.type.RepeatTrait;
 
+import xinf.ony.Implementation;
+
 class TimedElement extends XMLElement {
 
 	static var TRAITS = {
-		begin: new TimeTrait(),
+		begin: new TimeTrait(Offset(0)),
 		end: new TimeTrait(),
 		dur: new DurationTrait(),
 	//	restart: new EnumTrait<Restart>( Restart, Restart.Default ),
@@ -53,8 +55,8 @@ class TimedElement extends XMLElement {
 	var timeContainer:TimeContainer;
 	
 	var started:Float;
-	var simpleDuration:Float;
-	var activeDuration:Float;
+	var simpleDuration:Null<Float>;
+	var activeDuration:Null<Float>;
 
     public function new( ?traits:Dynamic ) {
         super( traits );
@@ -67,22 +69,22 @@ class TimedElement extends XMLElement {
 	}
 
 	public function beginElement() {
-		start(-1);
+		start(0);
 	}
 	
 	public function endElement() {
-		stop(-1);
+		stop(0);
 	}
 
 	function start( t:Float ) {
-		trace("start "+this );
 		active = true;
 		timeContainer.activate(this);
 		started = t;
+		trace("start "+this+" at "+t+"="+(t-started) );
 	}
 	
 	function stop( t:Float ) {
-		trace("stop "+this );
+		trace("stop "+this+" at "+t );
 		timeContainer.deactivate( this );
 		active = false;
 	}
@@ -91,7 +93,7 @@ class TimedElement extends XMLElement {
 	}
 	
 	function step( time:Float ) :Bool {
-		if( time>started+activeDuration ) {
+		if( time>=started+activeDuration ) {
 			stop(started+activeDuration);
 			return false;
 		}
@@ -141,11 +143,12 @@ class TimedElement extends XMLElement {
 		scheduleHandles = new List<Dynamic>();
 		
 		// FIXME: begin and end attributes are really TimeLists! and there is no List() Time!
+		trace("schedule "+this+".start at "+begin );
 		scheduleHandles.add( _schedule( begin, start ) );
 		if( end!=null ) scheduleHandles.add( _schedule( end, stop ) );
 		
 		// calc (local, unconstrained by parent) simple and active duration
-		simpleDuration=null; // default: Indefinite
+		simpleDuration=Math.POSITIVE_INFINITY; // default: Indefinite
 		var dur=this.dur;
 		if( repeatCount==null ) {
 			simpleDuration=activeDuration=null;
@@ -157,8 +160,12 @@ class TimedElement extends XMLElement {
 			var begin=resolveTime(this.begin);
 			if( begin!=null && end!=null ) {
 				activeDuration=end-begin;
+			} else {
+				activeDuration=Math.POSITIVE_INFINITY;
 			}
 			simpleDuration=activeDuration/repeatCount;
+			if( Math.isNaN(simpleDuration) ) simpleDuration=Math.POSITIVE_INFINITY;
+			trace(""+this+" rep "+activeDuration+"/"+repeatCount+"="+simpleDuration );
 		}
 		/* FIXME more: 
 			implicit durations? 
@@ -167,7 +174,7 @@ class TimedElement extends XMLElement {
 		*/
 	}
 	
-	function resolveTime( time:Time ) :Float {
+	function resolveTime( time:Time ) :Null<Float> {
 		switch( time ) {
 			case Offset(t):
 				return t;
@@ -182,6 +189,11 @@ class TimedElement extends XMLElement {
 		switch( time ) {
 			case Offset(t):
 				return timeContainer.schedule(t,f);
+			case WallClock(date):
+				var t = timeContainer.globalToLocalTime(date.getTime()/1000.);
+				trace(""+date+", "+date.getTime()+" == local "+t );
+				return timeContainer.schedule(
+					t,f);
 			case Indefinite:
 				// do nothing
 			default:

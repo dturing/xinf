@@ -29,6 +29,13 @@ class Schedule<T> {
 			},
 		};
 	}
+	
+	public function callUntil( time:Float, f:T->Float->Void ) {
+		while( first!=null && first.time<time ) {
+			f(first.value,first.time);
+			first = first.next;
+		}
+	}
 			
 	public function insert( time:Float, value:T ) :Void {
 		var cue = { time:time, value:value, next:null };

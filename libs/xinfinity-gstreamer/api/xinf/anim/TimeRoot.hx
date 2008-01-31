@@ -18,6 +18,7 @@ class TimeRoot extends TimeContainer {
 		
 		time = 0;
 		rate = 1/25; // 1/Root.getFramerate();
+		started=Date.now().getTime()/1000;
 		
 		Root.addEventListener( FrameEvent.ENTER_FRAME, enterFrame );
 	}
