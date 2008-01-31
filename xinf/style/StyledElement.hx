@@ -5,7 +5,7 @@ package xinf.style;
 
 import xinf.xml.Node;
 import xinf.xml.XMLElement;
-import xinf.traits.SpecialTraitValue;
+//import xinf.traits.SpecialTraitValue;
 import xinf.traits.TraitTypeException;
 
 /**
@@ -75,7 +75,12 @@ class StyledElement extends XMLElement {
 				if( Std.is(v,type) ) {
 					return v;
 				}
-				throw( new TraitTypeException( name, this, v, type ) );
+/** REMOVEME SPECIAL_TRAITS
+				if( Std.is(v,SpecialTraitValue) ) {
+					var v2:SpecialTraitValue = cast(v);
+					return( v2.get(name,type,this) );
+				}
+*/				throw( new TraitTypeException( name, this, v, type ) );
 			}
 		}
 
@@ -95,7 +100,7 @@ class StyledElement extends XMLElement {
 		
 		// inherited.. (no update- FIXME/TODO/MAYBE)
 		if( inherit && v==null ) {
-			var p:StyledElement = getTypedParent(StyledElement);
+			var p = parentElement;
 			if( p!=null ) {
 				v = p.getStyleTrait( name, type, inherit );
 			}
@@ -106,10 +111,12 @@ class StyledElement extends XMLElement {
 				Reflect.setField(_cache,name,v);
 				return v;
 			}
+/** REMOVEME SPECIAL_TRAITS
 			if( Std.is(v,SpecialTraitValue) ) {
 				var v2:SpecialTraitValue = cast(v);
 				return( v2.get(name,type,this) );
 			}
+*/
 			throw( new TraitTypeException( name, this, v, type ) );
 		}
 
@@ -123,7 +130,17 @@ class StyledElement extends XMLElement {
 		
 		return null;
 	}
-	
+
+	public function hasOwnStyleTrait<T>( name:String ) :Bool {
+		// lookup XML attribute
+		var v = Reflect.field(_traits,name);
+		
+		// lookup in matched style
+		if( v==null ) v = Reflect.field(_matchedStyle,name);
+		
+		return v!=null;
+	}
+
 	static var ws_split = ~/[ \r\n\t]+/g;
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
@@ -165,7 +182,17 @@ class StyledElement extends XMLElement {
 		or changing a StyledElement's style classes does indeed 
 		trigger a call to styleChanged.
 	*/
-    public function styleChanged() :Void {
+    public function styleChanged( ?attribute:String ) :Void {
+//		trace("restyle "+this);
+		clearTraitsCache();
+		for( child in childNodes ) {
+			if( Std.is( child, StyledElement ) ) {
+				var s:StyledElement = cast(child);
+				if( attribute==null || !s.hasOwnStyleTrait(attribute) ) {
+					s.styleChanged( attribute );
+				}
+			}
+		}
 	}
 
 	// Style class functions
@@ -177,7 +204,7 @@ class StyledElement extends XMLElement {
 
 	function updateClassStyle() :Void {
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
-			clearTraitsCache();
+			//clearTraitsCache();
 			var match = ownerDocument.styleSheet.match(this);
 			if( match!=null ) {
 				_matchedStyle = Reflect.empty();
