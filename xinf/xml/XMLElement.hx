@@ -5,7 +5,6 @@ package xinf.xml;
 
 import xinf.traits.TraitAccess;
 import xinf.traits.TraitDefinition;
-import xinf.traits.SpecialTraitValue;
 import xinf.traits.StringTrait;
 import xinf.traits.TraitTypeException;
 import xinf.style.StyleParser;
@@ -161,11 +160,12 @@ class XMLElement extends Node,
 
 	/** see $xinf.traits.TraitAccess::setTraitFromString$ */
 	public function setTraitFromString( name:String, value:String, to:Dynamic ) :Void {
+/** REMOVEME SPECIAL_TRAITS
 		if( value=="inherit" ) {
 			Reflect.setField( to, name, Inherit.inherit );
 			return;
 		}
-		
+*/		
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
 //		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
