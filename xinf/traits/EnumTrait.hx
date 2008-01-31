@@ -24,7 +24,7 @@ class EnumTrait<T> extends TypedTrait<T> {
                 return v;
             }
         }
-        throw("Does not match an Enum value: '"+value+"'");
+        throw("Value '"+value+"' not in "+Type.getEnumConstructs(enumClass));
         return def;
     }
 
