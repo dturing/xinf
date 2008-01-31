@@ -31,6 +31,14 @@ class Scale implements Transform {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
 
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		if( Std.is(p,Identity) ) return new Scale(x*(1-f),y*(1-f));
+		if( !Std.is(p,Scale) ) return this;
+		var q:Scale = cast(p);
+		return( new Scale( x + ((q.x-x)*f),
+						   y + ((q.y-y)*f) ) );
+	}
+
     public function toString() {
         return("scale("+x+","+y+")");
     }

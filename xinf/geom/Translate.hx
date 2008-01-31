@@ -30,7 +30,15 @@ class Translate implements Transform {
     public function applyInverse( p:TPoint ) :TPoint {
         return { x:p.x-x, y:p.y-y };
     }
-    
+
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		if( Std.is(p,Identity) ) return new Translate(x*(1-f),y*(1-f));
+		if( !Std.is(p,Translate) ) return this;
+		var q:Translate = cast(p);
+		return( new Translate( x + ((q.x-x)*f),
+							   y + ((q.y-y)*f) ) );
+	}
+
     public function toString() {
         return("translate("+x+","+y+")");
     }

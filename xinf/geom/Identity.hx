@@ -26,7 +26,12 @@ class Identity implements Transform {
     public function applyInverse( p:TPoint ) :TPoint {
         return p;
     }
-    
+
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		if( Std.is(p,Identity) ) return this;
+		return p.interpolateWith( this, 1-f );
+	}
+
     public function toString() {
         return("identity");
     }

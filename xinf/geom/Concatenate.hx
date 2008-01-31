@@ -32,6 +32,10 @@ class Concatenate implements Transform {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
 
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		return this;
+	}
+
     public function toString() {
         return("concat( "+a+", "+b+" )");
     }

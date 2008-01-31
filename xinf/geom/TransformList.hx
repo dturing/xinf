@@ -40,6 +40,10 @@ class TransformList implements Transform {
         return m.applyInverse(p);
     }
 
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		return this;
+	}
+
     public function toString() {
 		var r = "(*";
 		for( item in l ) {

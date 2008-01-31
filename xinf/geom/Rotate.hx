@@ -31,6 +31,13 @@ class Rotate implements Transform {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
 
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		if( Std.is(p,Identity) ) return new Rotate(a*(1-f));
+		if( !Std.is(p,Rotate) ) return this;
+		var q:Rotate = cast(p);
+		return( new Rotate( a + ((q.a-a)*f) ) );
+	}
+
     public function toString() {
         return("rotate("+(a*TransformParser.R2D)+")");
     }

@@ -12,4 +12,6 @@ interface Transform {
     
     function apply( p:TPoint ) :TPoint;
     function applyInverse( p:TPoint ) :TPoint;
+	
+	function interpolateWith( p:Transform, f:Float ) :Transform;
 }

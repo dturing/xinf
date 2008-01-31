@@ -29,6 +29,13 @@ class SkewX implements Transform {
         return new Matrix( getMatrix() ).applyInverse(p);
     }
 
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		if( Std.is(p,Identity) ) return new SkewX(a*(1-f));
+		if( !Std.is(p,SkewX) ) return this;
+		var q:SkewX = cast(p);
+		return( new SkewX( a + ((q.a-a)*f) ) );
+	}
+
     public function toString() {
         return("skewX("+(a*TransformParser.R2D)+")");
     }

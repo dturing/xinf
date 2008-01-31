@@ -139,7 +139,11 @@ class Matrix implements Transform {
         c=-si; d=co;
         return this;
     }
-    
+
+	public function interpolateWith( p:Transform, f:Float ) :Transform {
+		return this;
+	}
+
     public function toString() {
         return("matrix("+a+","+b+","+c+","+d+","+tx+","+ty+")");
     }
