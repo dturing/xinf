@@ -23,4 +23,7 @@ enum Paint {
 	/** use the solid RGB color described.
 	*/
 	RGBColor( r:Float, g:Float, b:Float );
+
+	CurrentColor;
+	Inherit;
 }

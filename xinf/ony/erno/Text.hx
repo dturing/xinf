@@ -15,9 +15,8 @@ class Text extends xinf.ony.Text {
 		super(traits);
 	}
 
-    override public function styleChanged() :Void {
-        super.styleChanged();
-        
+    override public function styleChanged( ?attribute:String ) :Void {
+        super.styleChanged( attribute );
 		format = null;
     }
 

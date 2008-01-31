@@ -221,12 +221,14 @@ class Length {
 	}
 
 	public function toString() : String {
-		return "Length("+getDOMString()+")";
+		return "("+getDOMString()+")";
 	}
 	public function getDOMString() : String {
 		if(unitType == TYPE_UNKNOWN)
 			return "";
-		return(Std.string(value) + unitType);
+		var v = value;
+		if( v>.001 ) Math.round(value*100)/100;
+		return(Std.string( v ) + unitType);
 	}
 	public function setDOMString(s:String) : String {
 		

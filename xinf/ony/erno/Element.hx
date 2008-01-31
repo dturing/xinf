@@ -87,6 +87,25 @@ class Element extends xinf.ony.Element {
         reTransform(g); // FIXME: needed?
     }
     
+	function resolvePaint( paint:Paint, opacity:Float ) {
+        if( paint!=null ) {
+			switch( fill ) {
+				case URLReference(url):
+					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
+					if( r==null ) throw("Referenced Paint not found: "+url );
+					return r.getPaint(this);
+				case RGBColor(r,green,b):
+					return( xinf.erno.Paint.SolidColor(r,green,b,opacity) );
+				case Inherit:
+					return xinf.erno.Paint.None;
+				case CurrentColor:
+					return xinf.erno.Paint.None;
+				case None:
+					return xinf.erno.Paint.None;
+			}
+		} else return null;
+	}
+
     /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
         You can override this method, and call the [Renderer]'s methods to draw things.
         Everything you do will be in the Object's local coordinate space.
@@ -95,19 +114,9 @@ class Element extends xinf.ony.Element {
 		#if profile
 			xinf.test.Counter.count("drawContents");
 		#end
-        if( fill!=null ) {
-			switch( fill ) {
-				case URLReference(url):
-					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
-					if( r==null ) throw("Referenced Paint not found: "+url );
-					g.setFill( r.getPaint(this) );
-				case RGBColor(r,green,b):
-					g.setFill( xinf.erno.Paint.SolidColor(r,green,b,fillOpacity*opacity) );
-				case None:
-					g.setFill( xinf.erno.Paint.None );
-			}
-		} else g.setFill( null );
 
+		g.setFill( resolvePaint(fill,fillOpacity*opacity) );
+		
 		if( stroke!=null ) {
 			var w = strokeWidth;
 			var caps = strokeLinecap;
@@ -135,16 +144,8 @@ class Element extends xinf.ony.Element {
 					dashArray = d2;
 				}
 			}
-			switch( stroke ) {
-				case URLReference(url):
-					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
-					if( r==null ) throw("Referenced Paint not found: "+url );
-					g.setStroke( r.getPaint(this), w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
-				case RGBColor(r,green,b):
-					g.setStroke( xinf.erno.Paint.SolidColor(r,green,b,strokeOpacity*opacity), w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
-				case None:
-					g.setStroke( xinf.erno.Paint.None, 0 );
-			}
+			var paint = resolvePaint( stroke, strokeOpacity*opacity );
+			g.setStroke( paint, w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
 		} else g.setStroke( 0 );
     }
 

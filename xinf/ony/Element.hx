@@ -36,11 +36,12 @@ import xinf.ony.traits.StringListTrait;
 import xinf.ony.traits.IntListTrait;
 import xinf.ony.traits.StringChoiceTrait;
 import xinf.ony.traits.PaintTrait;
-// TODO import xinf.traits.TransformTrait;
+import xinf.ony.traits.TransformTrait;
 
 class Element extends StyledElement {
 
 	static var TRAITS = {
+		transform:		new TransformTrait(),
 		display:		new EnumTrait<Display>( Display, Inline ),
 		visibility:		new EnumTrait<Visibility>( Visibility, Visible ),
 		
@@ -63,6 +64,10 @@ class Element extends StyledElement {
 		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
 		text_anchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
 	}
+
+    public var transform(get_transform,set_transform):Transform;
+    function get_transform() :Transform { return getTrait("transform",Transform); }
+    function set_transform( v:Transform ) :Transform { setTrait("transform",v); retransform(); return v; }
 
     public var display(get_display,set_display):Display;
     function get_display() :Display { return getStyleTrait("display",Display,false); }
@@ -143,6 +148,7 @@ class Element extends StyledElement {
 	}
 
 	/** the Element's transformation **/
+	/*
 	// FIXME: TransformTrait?
     public var transform(default,set_transform):Transform;
 	function set_transform( t:Transform ) :Transform {
@@ -150,11 +156,9 @@ class Element extends StyledElement {
 		retransform();
 		return t;
 	}
-
+*/
     public function new( ?traits:Dynamic ) :Void {
         super( traits );
-		
-        transform = new Identity();
 		styleClasses = new Hash<Bool>();
 	}
 
@@ -163,15 +167,6 @@ class Element extends StyledElement {
 		to.transform=transform; // FIXME: should dup.
 		to.ownerDocument=ownerDocument; // FIXME: maybe not?
 	}
-
-    /** read element data from xml */
-    override public function fromXml( xml:Xml ) :Void {
-		super.fromXml( xml );
-		
-        if( xml.exists("transform") ) {
-            transform = TransformParser.parse( xml.get("transform") );
-        }
-    }
 	
 	/** the bounding box of the element **/
 	public function getBoundingBox() : TRectangle {
@@ -196,8 +191,8 @@ class Element extends StyledElement {
 	public function redraw() :Void {
 	}
 	
-    override public function styleChanged() :Void {
-		super.styleChanged();
+    override public function styleChanged( ?attribute:String ) :Void {
+		super.styleChanged(attribute);
 		redraw();
 	}
 			

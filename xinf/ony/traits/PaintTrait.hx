@@ -5,7 +5,6 @@ package xinf.ony.traits;
 
 import xinf.traits.TypedTrait;
 import xinf.ony.type.Paint;
-import xinf.traits.SpecialTraitValue;
 
 class PaintTrait extends TypedTrait<Paint> {
 
@@ -219,8 +218,12 @@ class PaintTrait extends TypedTrait<Paint> {
 	override public function parse( value:String ) :Dynamic {
         var v:Paint;
 		
-		if( value=="currentColor" ) {
-			return CurrentColor.currentColor;
+		if( value==null ) {
+			return null;
+		} else if( value=="currentColor" ) {
+			return CurrentColor;
+		} else if( value=="inherit" ) {
+			return Inherit;
         } else if( hexcolor.match(value) ) {
             var w = hexcolor.matched(1);
             if( w.length==3 ) {
@@ -290,4 +293,45 @@ class PaintTrait extends TypedTrait<Paint> {
         return RGBColor(r,g,b);
     }
 
+	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+		var aC:Paint = cast(a);
+		var bC:Paint = cast(b);
+		switch( aC ) {
+			case RGBColor(r1,g1,b1):
+				switch( bC ) {
+					case RGBColor(r2,g2,b2):
+						return RGBColor(
+								r1+((r2-r1)*f),
+								g1+((g2-g1)*f),
+								b1+((b2-b1)*f)
+							);
+					default:
+						return a;
+				}
+			default:
+				return a;
+		}
+	}
+	
+	override public function distance( a:Dynamic, b:Dynamic ) :Float {
+		var aC:Paint = cast(a);
+		var bC:Paint = cast(b);
+		switch( aC ) {
+			case RGBColor(r1,g1,b1):
+				switch( bC ) {
+					// FIXME: stupid color distance algorithm
+					case RGBColor(r2,g2,b2):
+						return Math.abs( (r2-r1)+(g2-g1)+(b2+b1) );
+					default:
+						return 1.;
+				}
+			default:
+				return 1.;
+		}
+	}
+
+	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
+		return interpolate(a,b,.5);
+	}
+	
 }
