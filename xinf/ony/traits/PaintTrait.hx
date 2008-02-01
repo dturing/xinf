@@ -5,6 +5,7 @@ package xinf.ony.traits;
 
 import xinf.traits.TypedTrait;
 import xinf.ony.type.Paint;
+import xinf.traits.SpecialTraitValue;
 
 class PaintTrait extends TypedTrait<Paint> {
 
@@ -221,9 +222,9 @@ class PaintTrait extends TypedTrait<Paint> {
 		if( value==null ) {
 			return null;
 		} else if( value=="currentColor" ) {
-			return CurrentColor;
+			return CurrentColor.currentColor;
 		} else if( value=="inherit" ) {
-			return Inherit;
+			return Inherit.inherit;
         } else if( hexcolor.match(value) ) {
             var w = hexcolor.matched(1);
             if( w.length==3 ) {

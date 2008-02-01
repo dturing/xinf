@@ -6,9 +6,9 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 
 class Rectangle extends xinf.ony.Rectangle  {
-
+	
     override public function drawContents( g:Renderer ) :Void {
-        if( width<=0 || height<=0 ) return;
+		if( width<=0 || height<=0 ) return;
         super.drawContents(g);
         if( rx==0 && ry==0 ) {
             g.rect( x, y, width, height );

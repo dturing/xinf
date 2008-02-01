@@ -24,6 +24,4 @@ enum Paint {
 	*/
 	RGBColor( r:Float, g:Float, b:Float );
 
-	CurrentColor;
-	Inherit;
 }

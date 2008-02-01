@@ -13,7 +13,7 @@ class SolidColor extends xinf.ony.SolidColor, implements PaintServer {
 		var o = solidOpacity;
 		
 		var v = Reflect.field( _traits, "solid-color" );
-		if( v == CurrentColor ) {
+		if( v == CurrentColor.currentColor ) {
 			c = target.color;
 		} else {
 			c = getTrait("solid-color",Paint);

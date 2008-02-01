@@ -5,7 +5,7 @@ package xinf.style;
 
 import xinf.xml.Node;
 import xinf.xml.XMLElement;
-//import xinf.traits.SpecialTraitValue;
+import xinf.traits.SpecialTraitValue;
 import xinf.traits.TraitTypeException;
 
 /**
@@ -21,7 +21,6 @@ class StyledElement extends XMLElement {
 	/* TODO: make "style" and "class" attributes a TRAIT? */
 
 	var styleClasses :Hash<Bool>;
-	var _cache:Dynamic;
 	var _matchedStyle:Dynamic;
 	
 	/**
@@ -29,7 +28,6 @@ class StyledElement extends XMLElement {
 	*/
 	public function new( traits:Dynamic ) {
 		super(traits);
-		_cache = Reflect.empty();
 		_matchedStyle = Reflect.empty();
 		styleClasses = new Hash<Bool>();
 	}
@@ -41,13 +39,14 @@ class StyledElement extends XMLElement {
 	*/
 	override public function setStyleTrait<T>( name:String, value:T ) :T {
 		var r = setTrait( name, value );
-		Reflect.setField(_cache,name,r);
 		styleChanged();
 		return r;
 	}
 
-	function clearTraitsCache() {
-		_cache = Reflect.empty();
+	override public function setPresentationTrait( name:String, value:Dynamic ) :Dynamic {
+		super.setPresentationTrait(name,value);
+		styleChanged(null);
+		return value;
 	}
 
 	/**
@@ -69,66 +68,51 @@ class StyledElement extends XMLElement {
 		DOCME: move this doc somewhere else?
 	*/
 	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
-		if( presentation!=false ) {
-			var v = Reflect.field(_ptraits,name);
-			if(v!=null) {
-				if( Std.is(v,type) ) {
-					return v;
-				}
-/** REMOVEME SPECIAL_TRAITS
-				if( Std.is(v,SpecialTraitValue) ) {
-					var v2:SpecialTraitValue = cast(v);
-					return( v2.get(name,type,this) );
-				}
-*/				throw( new TraitTypeException( name, this, v, type ) );
-			}
-		}
+		if( inherit==null ) inherit=true;
 
-		if( Reflect.hasField(_cache,name) ) return Reflect.field(_cache,name);
+		var v:T = null;
+		
+		// lookup presentation value
+		if( presentation!=false ) {
+			v = Reflect.field(_ptraits,name);
+			if( v!=null ) return v;
+		}
 		
 		#if profile
 //			xinf.test.Counter.count("getStyleTrait("+name+")");
 		#end
-
-		if( inherit==null ) inherit=true;
 		
 		// lookup XML attribute
-		var v = Reflect.field(_traits,name);
+		if( v==null )
+			v = Reflect.field(_traits,name);
 		
+// FIXME Code doubling before and after this, in XMLElement--
 		// lookup in matched style
-		if( v==null ) v = Reflect.field(_matchedStyle,name);
+		if( v==null ) 
+			v = Reflect.field(_matchedStyle,name);
 		
-		// inherited.. (no update- FIXME/TODO/MAYBE)
-		if( inherit && v==null ) {
+		// inherited..
+		if( v==null && inherit ) {
 			var p = parentElement;
 			if( p!=null ) {
 				v = p.getStyleTrait( name, type, inherit );
 			}
 		}
-
-		if( v!=null ) {
-			if( Std.is(v,type) ) {
-				Reflect.setField(_cache,name,v);
-				return v;
-			}
-/** REMOVEME SPECIAL_TRAITS
-			if( Std.is(v,SpecialTraitValue) ) {
-				var v2:SpecialTraitValue = cast(v);
-				return( v2.get(name,type,this) );
-			}
-*/
-			throw( new TraitTypeException( name, this, v, type ) );
-		}
+// --FIXME
 
 		// default.
-		var def = getTraitDefinition(name);
-		if( def!=null ) {
-			var d = def.getDefault();
-			Reflect.setField(_cache,name,d);
-			return d;
+		if( v==null ) {
+			var def = getTraitDefinition(name);
+			if( def!=null ) {
+				return def.getDefault();
+			}
 		}
 		
-		return null;
+		if( v!=null ) {
+			cacheTrait( name, v, type );
+		}
+		
+		return v;
 	}
 
 	public function hasOwnStyleTrait<T>( name:String ) :Bool {
@@ -184,7 +168,7 @@ class StyledElement extends XMLElement {
 	*/
     public function styleChanged( ?attribute:String ) :Void {
 //		trace("restyle "+this);
-		clearTraitsCache();
+	//	clearPresentationTraits();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);

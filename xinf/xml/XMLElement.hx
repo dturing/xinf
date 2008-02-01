@@ -7,6 +7,7 @@ import xinf.traits.TraitAccess;
 import xinf.traits.TraitDefinition;
 import xinf.traits.StringTrait;
 import xinf.traits.TraitTypeException;
+import xinf.traits.SpecialTraitValue;
 import xinf.style.StyleParser;
 
 import xinf.event.EventDispatcher;
@@ -101,34 +102,50 @@ class XMLElement extends Node,
 		
 	/********************/
 	/* Traits functions */
+
+	public function clearPresentationTraits() {
+		_ptraits = Reflect.empty();
+	}
+
+	function cacheTrait<T>( name:String, v:Dynamic, type:Class<T> ) {
+		// resolve specials and cache in ptraits
+		if( Std.is(v,type) ) {
+		} else if( Std.is(v,SpecialTraitValue) ) {
+			var v2:SpecialTraitValue = cast(v);
+			v = v2.get(name,type,this);
+		} else
+			throw( new TraitTypeException( name, this, v, type ) );
+			
+		Reflect.setField(_ptraits,name,v);
+	}
 	
 	/** see $xinf.traits.TraitAccess$.getTrait */
 	public function getTrait<T>( name:String, type:Dynamic, ?presentation:Bool ) :T {
+		var v:T = null;
+		
+		// lookup presentation value
 		if( presentation!=false ) {
-			var v = Reflect.field(_ptraits,name);
-			if(v!=null) {
-				if( Std.is(v,type) ) {
-					return v;
-				}
-				throw( new TraitTypeException( name, this, v, type ) );
+			v = Reflect.field(_ptraits,name);
+			if( v!=null ) return v;
+		}
+		
+		// lookup XML attribute
+		if( v==null )
+			v = Reflect.field(_traits,name);
+		
+		// default.
+		if( v==null ) {
+			var def = getTraitDefinition(name);
+			if( def!=null ) {
+				v = def.getDefault();
 			}
 		}
-		
-		var v = Reflect.field(_traits,name);
-		if(v!=null) {
-			if( Std.is(v,type) ) {
-				return v;
-			}
-			throw( new TraitTypeException( name, this, v, type ) );
+
+		if( v!=null ) {
+			cacheTrait( name, v, type );
 		}
-		
-		var def = getTraitDefinition(name);
-		if( def!=null ) {
-			var d = def.getDefault();
-			return d;
-		}
-		
-		return null;
+
+		return v;
 	}
 
 	/** see $xinf.traits.TraitAccess::setTrait$ */

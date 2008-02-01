@@ -173,7 +173,7 @@ class Element extends StyledElement {
 		trace("getBoundingBox unimplemented for "+this);
 		return { l:0., t:0., r:0., b:0. };
 	}
-
+	
     /**    
 		schedule this Object for redefining it's transformation<br/>
         You should usually not need to call this yourself, 
