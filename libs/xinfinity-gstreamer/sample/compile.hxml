@@ -1,5 +1,6 @@
 -neko test.n
 -cp ../api
+-D profile
 -lib xinf
 -resource test.svg@test.svg
 -main Example

@@ -1,6 +1,6 @@
 
-import xinf.anim.TimeTrait;
-import xinf.anim.Time;
+import xinf.anim.type.TimeTrait;
+import xinf.anim.type.Time;
 import xinf.anim.Schedule;
 import haxe.PosInfos;
 
@@ -104,6 +104,17 @@ class TestSchedule extends haxe.unit.TestCase {
 			assertEquals( i++, v() );
 	}
 
+	function testScheduleSameTime() {
+		var s = new Schedule<String>();
+		
+		for( i in 0...values.length )
+			s.insert( 1., values[i] );
+		
+		var i = 0;
+		for( v in s.until( 1. ) )
+			assertEquals( values[i++], v );
+	}
+
 }
 
 class TestTime extends haxe.unit.TestCase {
@@ -111,7 +122,7 @@ class TestTime extends haxe.unit.TestCase {
 	
 	function assertTime( a:Time, b:Time, ?c:PosInfos ) {
 		currentTest.done = true;
-		trace(" --> test "+a+" == "+b );
+//		trace(" --> test "+a+" == "+b );
 		switch( a ) {
 			case Offset(ofs):
 				switch(b) {
@@ -149,7 +160,7 @@ class TestTime extends haxe.unit.TestCase {
 		throw currentTest;
 	}
 	
-	function dont_testOffset() {
+	function testOffset() {
 		assertTime(
 			trait.parse("+23"),
 			Time.Offset(23.));
@@ -196,7 +207,7 @@ class TestTime extends haxe.unit.TestCase {
 			Time.Offset(-.0101));
 	}
 	
-	function dont_testSyncbase() {
+	function testSyncbase() {
 		assertTime(
 			trait.parse(".begin"),
 			Time.SyncBase("",false,0));
@@ -244,7 +255,7 @@ class TestTime extends haxe.unit.TestCase {
 			Time.SyncBase("foo",false,.0015));
 	}
 
-	function dont_testEvent() {
+	function testEvent() {
 		assertTime(
 			trait.parse("foo.click"),
 			Time.Event("foo","click",0));
@@ -253,22 +264,27 @@ class TestTime extends haxe.unit.TestCase {
 			Time.Event("foo","mouseDown",-90));
 	}
 	
-	function dont_testWallclock() {
-	/*
+	function testWallclock() {
+		var now = Date.now();
+		var today = DateTools.format(now,"%Y-%m-%d");
+	
 		assertTime(
 			trait.parse("wallclock(1976-05-05)"),
-			Time.WallClock(Date.fromString("1976-05-05")));
+			Time.WallClock(Date.fromString("1976-05-05 00:00:00")));
 			
 		assertTime(
+			trait.parse("wallclock(12:34)"),
+			Time.WallClock(Date.fromString(today+" 12:34:00")));
+		assertTime(
 			trait.parse("wallclock(12:34:56)"),
-			Time.WallClock(Date.fromString("1970-01-01 12:34:56")));
+			Time.WallClock(Date.fromString(today+" 12:34:56")));
 		assertTime(
 			trait.parse("wallclock(12:34:56Z)"),
-			Time.WallClock(Date.fromString("1970-01-01 12:34:56")));
+			Time.WallClock(Date.fromString(today+" 12:34:56")));
 		assertTime(
 			trait.parse("wallclock(08:00:00+00:00)"),
-			Time.WallClock(Date.fromString("1970-01-01 08:00:00")));
-			*/
+			Time.WallClock(Date.fromString(today+" 08:00:00")));
+			
 		assertTime(
 			trait.parse("wallclock(1976-05-05T16:20:23)"),
 			Time.WallClock(Date.fromString("1976-05-05 16:20:23")));
@@ -291,7 +307,7 @@ class TestTime extends haxe.unit.TestCase {
 
 class Test {
 	public static function main() {
-        var r = new haxe.unit.TestRunner();
+       var r = new haxe.unit.TestRunner();
         r.add( new TestTime() );
         r.add( new TestSchedule() );
         r.run();

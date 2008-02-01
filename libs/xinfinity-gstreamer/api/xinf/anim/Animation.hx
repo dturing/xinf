@@ -97,6 +97,12 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
+		var vals2 = new Array<Dynamic>();
+		for( val in vals ) {
+			vals2.push( resolve(attributeName,val) );
+		}
+		vals=vals2;
+		
 		var totalLength:Null<Float> = null;
 		if( calcMode == CalcMode.Paced ) {
 			totalLength=0.;
