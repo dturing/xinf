@@ -57,7 +57,7 @@ class Button<Value> extends Widget {
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
-	override public function styleChanged() :Void {
+	override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged();
 		
 		textElement.fontSize = fontSize;

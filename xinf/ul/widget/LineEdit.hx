@@ -43,8 +43,8 @@ class LineEdit extends Widget {
 //		group.addEventListener( MouseEvent.MOUSE_DOWN, textElement.onMouseDown );
 	}
 
-	override public function styleChanged() :Void {
-		super.styleChanged();
+	override public function styleChanged( ?attr:String ) :Void {
+		super.styleChanged(attr);
 		
 		textElement.fontSize = fontSize;
 		textElement.fontFamily = fontFamily;

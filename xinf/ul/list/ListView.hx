@@ -81,8 +81,8 @@ class ListView<T> extends Widget {
 		return size;
     }
 
-	override public function styleChanged() :Void {
-		super.styleChanged();
+	override public function styleChanged( ?attr:String ) :Void {
+		super.styleChanged(attr);
 		
 		itemStyle.font_size = fontSize;
 		itemStyle.font_family = fontFamily;

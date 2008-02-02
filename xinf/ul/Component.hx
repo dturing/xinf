@@ -37,23 +37,18 @@ class Component extends StyledElement {
 				padding: 6 3 6 3;
 			}
 
-			.Button, .Dropdown, .LineEdit {
-				min-height: 20;
+			.Button, .Dropdown, .LineEdit, .Slider {
+				min-height: 16;
 				min-width: 75;
 			}
 			
 			.Interface {
-				horizontal-align: .5;
-				vertical-align: .5;
+				horizontal-align: 0.;
+				vertical-align: 0.;
 			}
 			
 			.Container, .Interface {
 				padding: 5;
-			}
-			
-			.Slider {
-				min-width: 100;
-				min-height: 25;
 			}
 			
 			.ListView {
@@ -183,8 +178,8 @@ class Component extends StyledElement {
 		return format;
 	}
 		
-    override public function styleChanged() :Void {
-		super.styleChanged();
+    override public function styleChanged( ?attr:String ) :Void {
+		super.styleChanged( attr );
 		_skin.setTo( skin );
     }
 

@@ -42,8 +42,8 @@ class Label extends Component {
 		return super.set_size(s);
 	}
 
-    override public function styleChanged() {
-		super.styleChanged();
+    override public function styleChanged( ?attr:String ) {
+		super.styleChanged( attr );
 		
 		textElement.fontSize = fontSize;
 		textElement.fontFamily = fontFamily;
