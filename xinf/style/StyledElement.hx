@@ -168,7 +168,7 @@ class StyledElement extends XMLElement {
 	*/
     public function styleChanged( ?attribute:String ) :Void {
 //		trace("restyle "+this);
-	//	clearPresentationTraits();
+	
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);
@@ -188,7 +188,7 @@ class StyledElement extends XMLElement {
 
 	function updateClassStyle() :Void {
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
-			//clearTraitsCache();
+			clearPresentationTraits();
 			var match = ownerDocument.styleSheet.match(this);
 			if( match!=null ) {
 				_matchedStyle = Reflect.empty();
