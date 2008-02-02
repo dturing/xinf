@@ -65,7 +65,7 @@ class TimedAttributeSetter extends TimedElement {
 		if( Std.is( value, SpecialTraitValue ) ) {
 			var v2:SpecialTraitValue = cast(value);
 			var v = v2.get(name,Dynamic,peer);
-			trace("RESOLVE "+value+" -> "+v );
+	//		trace("RESOLVE "+value+" -> "+v );
 			return v;
 		}
 		/*

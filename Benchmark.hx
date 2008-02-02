@@ -5,8 +5,8 @@ import xinf.ony.type.Paint;
 
 class Benchmark {
 	public static function main() {
-		var xn=20;
-		var yn=20;
+		var xn=10;
+		var yn=10;
 		var w=1024;
 		var h=768;
 		
