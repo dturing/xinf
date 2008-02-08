@@ -7,6 +7,7 @@ import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.EnumTrait;
 import xinf.ony.PathParser;
+import xinf.ony.type.PathSegment;
 import xinf.geom.Transform;
 import xinf.geom.TransformList;
 import xinf.geom.Rotate;
@@ -17,9 +18,6 @@ import xinf.anim.tools.FlatPathIterator;
 import xinf.anim.tools.PacedPathIterator;
 import xinf.anim.type.RotateMotion;
 import xinf.anim.type.RotateMotionTrait;
-
-// FIXME:remove, just debugging:
-import Xinf;
 
 class AnimateMotion extends TimedAttributeSetter {
 
@@ -45,13 +43,21 @@ class AnimateMotion extends TimedAttributeSetter {
 
 	var originalValue:Transform;
 	var iterator:FlatPathIterator;
-	var l:Line;
 	
 	function createIterator() {
-		var segments = PathParser.simplify(new PathParser().parse(path));
+		var segments:Iterable<PathSegment>;
+		for( child in childNodes ) {
+			if( Std.is( child, MPath ) ) {
+				var mpath:MPath = cast(child);
+				segments = mpath.getPath().segments;
+			}
+		}
+		if( segments==null && path!=null )
+			segments = PathParser.simplify(new PathParser().parse(path));
+			
+		if( segments==null ) return;
 		var flat = new FlatPath(); flat.flatten(segments);
 		var step = flat.length() / (simpleDuration*25);
-		trace("step: "+step );
 		iterator = new PacedPathIterator( flat, step );
 	}
 	
@@ -61,8 +67,6 @@ class AnimateMotion extends TimedAttributeSetter {
 		originalValue = cast(getFromTarget());
 		createIterator();
 		super.start(t);
-		l = new Line({ stroke:"red", stroke_width:"1" });
-		Root.appendChild(l);
 	}
 
 	override function resetIteration( time:Float ) {
@@ -71,7 +75,9 @@ class AnimateMotion extends TimedAttributeSetter {
 
 	override function step( t:Float ) {
 		if( !super.step(t) ) return false;
-
+		
+		if( iterator==null ) return false;
+		
 		if( !iterator.hasNext() ) iterator.reset();
 
 		var r = 0.;
