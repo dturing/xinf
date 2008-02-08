@@ -7,8 +7,6 @@ import xinf.xml.XMLElement;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 
-//import xinf.ony.type.Paint; // FIXME this is a bad un-orthogonality!
-//import xinf.ony.Element;
 import xinf.traits.SpecialTraitValue;
 
 class TimedAttributeSetter extends TimedElement {
@@ -48,7 +46,6 @@ class TimedAttributeSetter extends TimedElement {
 		if( peer==null || attributeName==null ) return;
 		peer.setPresentationTrait( attributeName,
 				peer.getStyleTrait( attributeName, Dynamic, false, false ));
-//		updateTarget();
 	}
 
 	function setOnTarget( value:Dynamic ) {
@@ -58,37 +55,15 @@ class TimedAttributeSetter extends TimedElement {
 		peer.setTraitFromDynamic( attributeName, value, tmp );
 		peer.setPresentationTrait( attributeName, 
 				Reflect.field(tmp,attributeName) );
-//		updateTarget();
 	}
 	
 	function resolve( name:String, value:Dynamic ) :Dynamic {
 		if( Std.is( value, SpecialTraitValue ) ) {
 			var v2:SpecialTraitValue = cast(value);
 			var v = v2.get(name,Dynamic,peer);
-	//		trace("RESOLVE "+value+" -> "+v );
 			return v;
 		}
-		/*
-	// FIXME: sth similar is needed for relative units!...
-		if( peer==null || attributeName==null ) return value;
-		if( Std.is( value, Paint ) 
-			&& Std.is( peer, Element ) ) {
-			var e:Element = cast(peer);
-			var p:Paint = cast(value);
-			var r = e.resolvePaint(p);
-			trace("RESOLVE "+p+" -> "+r );
-			return r;
-		}
-		*/
 		return value;
 	}
-/*
-	function updateTarget() {
-		// FIXME: move these to TraitsDefinitions?
-		untyped {
-		//	if( peer.styleChanged!=null ) peer.styleChanged(attributeName);
-		//	if( peer.redraw!=null ) peer.redraw();
-		}
-	}
-	*/
+	
 }
