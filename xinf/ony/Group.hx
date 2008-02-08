@@ -22,18 +22,4 @@ class Group extends ElementImpl {
 		return super.removeChild( oldChild );
     }
 
-/*
-	public function getElementByName( name:String ) :ElementImpl {
-		for( child in children ) {
-			if( child.name == name ) return child;
-		}
-		throw( "no child with name '"+name+"'" );
-	}
-	
-	public function getTypedElementByName<T>( name:String, cl:Class<T> ) :T {
-		var r = getElementByName( name );
-		if( !Std.is( r, cl ) ) throw("ElementImpl '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
-        return cast(r);
-	}
-*/	
 }

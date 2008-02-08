@@ -86,7 +86,7 @@ class Image extends xinf.ony.Image {
      }
 
 	override public function toString() :String {
-		return("xinf.ony.erno.Image("+href+","+bitmap.width+"x"+bitmap.height+")");
+		return("xinf.ony.erno.Image("+href+")");
 	}
 
 }
