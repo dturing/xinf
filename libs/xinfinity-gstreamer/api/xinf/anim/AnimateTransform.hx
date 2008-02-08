@@ -29,6 +29,7 @@ class AnimateTransform extends Animate {
         xinf.xml.Document.addToBinding( svgns, "animate", Animate );
         xinf.xml.Document.addToBinding( svgns, "animateColor", Animate );
         xinf.xml.Document.addToBinding( svgns, "animateTransform", AnimateTransform );
+        xinf.xml.Document.addToBinding( svgns, "animateMotion", AnimateMotion );
         xinf.xml.Document.addToBinding( svgns, "set", Set );
         xinf.xml.Document.addToBinding( svgns, "par", ParallelTimeContainer );
 	}

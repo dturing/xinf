@@ -3,6 +3,8 @@
 	
 package xinf.anim.tools;
 
+import xinf.geom.Types;
+
 class Spline {
 	var A:Float;
 	var B:Float;

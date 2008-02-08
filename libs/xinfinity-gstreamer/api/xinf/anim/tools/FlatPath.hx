@@ -3,6 +3,9 @@
 	
 package xinf.anim.tools;
 
+import xinf.geom.Types;
+import xinf.ony.type.PathSegment;
+
 class FlatPath {
 	public var segments:Array<LineSegment>;
 	public var lengths:Array<Float>;

@@ -3,6 +3,8 @@
 	
 package xinf.anim.tools;
 
+import xinf.geom.Types;
+
 class LineSegment {
 	public var a:TPoint;
 	public var b:TPoint;
