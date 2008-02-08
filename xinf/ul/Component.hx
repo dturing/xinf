@@ -25,11 +25,12 @@ class Component extends StyledElement {
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
 			* {
-				font-size: 12;
+				font-size: 14;
+				font-family: Textra LT Book;
 			}
 			
 			.Button {
-				border: 1;
+				border: 5;
 				padding: 6 3 6 3;
 			}
 
@@ -38,7 +39,7 @@ class Component extends StyledElement {
 			}
 
 			.Button, .Dropdown, .LineEdit, .Slider {
-				min-height: 16;
+				min-height: 10;
 				min-width: 75;
 			}
 			
@@ -58,7 +59,6 @@ class Component extends StyledElement {
 			
 			.:focus {
 				skin: focus;
-				border: 2;
 				padding: 5 2 5 2;
 			}
 			
