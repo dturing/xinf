@@ -320,9 +320,10 @@ class PaintTrait extends TypedTrait<Paint> {
 		switch( aC ) {
 			case RGBColor(r1,g1,b1):
 				switch( bC ) {
-					// FIXME: stupid color distance algorithm
 					case RGBColor(r2,g2,b2):
-						return Math.abs( (r2-r1)+(g2-g1)+(b2+b1) );
+						return Math.sqrt( ((r2-r1)*(r2-r1))
+										+((g2-g1)*(g2-g1))
+										+((b2+b1)*(b2+b1)) );
 					default:
 						return 1.;
 				}

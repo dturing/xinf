@@ -37,11 +37,11 @@ class TransformTrait extends TypedTrait<Transform> {
 	}
 	
 	override public function distance( a:Dynamic, b:Dynamic ) :Float {
-		return a;
+		return a.distanceTo(b);
 	}
 
 	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
-		return new Concatenate(a,b);
+		return new Concatenate(b,a);
 	}
 
     static var D2R = ((2.*Math.PI)/360.);
@@ -53,7 +53,7 @@ class TransformTrait extends TypedTrait<Transform> {
         inherit
         fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
     */
-    static var splitNumbers = ~/[,\r\n\t]/g;
+    static var splitNumbers = ~/[ ,\r\n\t]/g;
     static var translate = ~/translate\([ \t\r\n]*([0-9eE\.\-]+)([ \t\r\n,]+[ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n]*)?\)/;
     static var rotate = ~/rotate\(([0-9eE\.\-]+)([ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n]?)?\)/; 
     static var matrix = ~/matrix\(([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)\)/;
