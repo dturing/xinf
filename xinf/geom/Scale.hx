@@ -39,6 +39,12 @@ class Scale implements Transform {
 						   y + ((q.y-y)*f) ) );
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		if( Std.is(p,Identity) || !Std.is(p,Scale) ) return Math.abs(x)+Math.abs(y);
+		var q:Scale = cast(p);
+		return( Math.abs(q.x-x)+Math.abs(q.y-y) );
+	}
+
     public function toString() {
         return("scale("+x+","+y+")");
     }

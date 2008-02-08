@@ -32,6 +32,11 @@ class Identity implements Transform {
 		return p.interpolateWith( this, 1-f );
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		if( Std.is(p,Identity) ) return 0.;
+		return p.distanceTo( this );
+	}
+
     public function toString() {
         return("identity");
     }

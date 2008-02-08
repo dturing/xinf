@@ -38,6 +38,13 @@ class Rotate implements Transform {
 		return( new Rotate( a + ((q.a-a)*f) ) );
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		if( Std.is(p,Identity) || !Std.is(p,Rotate) ) 
+			return Math.abs(a);
+		var q:Rotate = cast(p);
+		return( Math.abs(q.a-a) );
+	}
+
     public function toString() {
         return("rotate("+(a*TransformParser.R2D)+")");
     }

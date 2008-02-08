@@ -144,6 +144,10 @@ class Matrix implements Transform {
 		return this;
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		return 1.;
+	}
+
     public function toString() {
         return("matrix("+a+","+b+","+c+","+d+","+tx+","+ty+")");
     }

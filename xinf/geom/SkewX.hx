@@ -36,6 +36,13 @@ class SkewX implements Transform {
 		return( new SkewX( a + ((q.a-a)*f) ) );
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		if( Std.is(p,Identity) || !Std.is(p,SkewX) ) 
+			return Math.abs(a);
+		var q:SkewX = cast(p);
+		return( Math.abs(q.a-a) );
+	}
+
     public function toString() {
         return("skewX("+(a*TransformParser.R2D)+")");
     }

@@ -39,6 +39,13 @@ class Translate implements Transform {
 							   y + ((q.y-y)*f) ) );
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		if( Std.is(p,Identity) || !Std.is(p,Translate) ) 
+			return Math.sqrt( (x*x)+(y*y) );
+		var q:Translate = cast(p);
+		return( Math.sqrt( Math.pow(q.x-x,2)+Math.pow(q.y-y,2) ) );
+	}
+
     public function toString() {
         return("translate("+x+","+y+")");
     }

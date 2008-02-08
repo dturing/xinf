@@ -44,6 +44,10 @@ class TransformList implements Transform {
 		return this;
 	}
 
+	public function distanceTo( p:Transform ) :Float {
+		return 1.;
+	}
+
     public function toString() {
 		var r = "(*";
 		for( item in l ) {
