@@ -28,18 +28,10 @@ class Animate extends Animation {
 		if( !super.step(t) ) return false;
 
 		var cur = aaValue(t-started);
-		//trace(""+peer+"."+attributeName+" @"+(Math.round(100*(t-started))/100)+": "+cur );
+//		trace(""+peer+"."+attributeName+" @"+(Math.round(100*(t-started))/100)+": "+cur );
 		setOnTarget(cur);
 		
 		return true;
 	}
 
-	static function __init__() {
-		var svgns = "http://www.w3.org/2000/svg"; //FIXME: smil?
-	
-        xinf.xml.Document.addToBinding( svgns, "animate", Animate );
-        xinf.xml.Document.addToBinding( svgns, "animateColor", Animate );
-        xinf.xml.Document.addToBinding( svgns, "set", Set );
-        xinf.xml.Document.addToBinding( svgns, "par", ParallelTimeContainer );
-	}
 }

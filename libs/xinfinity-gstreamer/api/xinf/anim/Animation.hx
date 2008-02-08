@@ -32,7 +32,7 @@ class Animation extends TimedAttributeSetter {
 		from: new StringTrait(),
 		to: new StringTrait(),
 		by: new StringTrait(),
-	}
+	};
 
     public var additive(get_additive,set_additive):Additive;
     function get_additive() :Additive { return getStyleTrait("additive",Additive); }
@@ -66,6 +66,10 @@ class Animation extends TimedAttributeSetter {
 	var originalValue:Dynamic;
 	var targetDefinition:TraitDefinition;
 	
+	function fromDynamic( value:Dynamic ) :Dynamic {
+		return targetDefinition.fromDynamic(value);
+	}
+	
 	function createSteps() :Void {
 		steps = new Array<Step>();
 		
@@ -78,22 +82,22 @@ class Animation extends TimedAttributeSetter {
 		
 		if( from!=null ) {
 			if( to!=null ) {
-				vals = [ targetDefinition.fromDynamic(from), targetDefinition.fromDynamic(to) ];
+				vals = [ fromDynamic(from), fromDynamic(to) ];
 			} else if( by!=null ) {
-				vals = [ targetDefinition.fromDynamic(from), 
-					targetDefinition.add( targetDefinition.fromDynamic(from), targetDefinition.fromDynamic(by) ) ];
+				vals = [ fromDynamic(from), 
+					targetDefinition.add( fromDynamic(from), fromDynamic(by) ) ];
 			} else {
 				trace("invalid animation: only from is given");
 				return;
 			}
 		} else if( by!=null ) {
-			vals = [ originalValue, targetDefinition.add(originalValue,targetDefinition.fromDynamic(by)) ];
+			vals = [ originalValue, targetDefinition.add(originalValue,fromDynamic(by)) ];
 		} else if( to!=null ) {
-			vals = [ originalValue, targetDefinition.fromDynamic(to) ]; // FIXME: 0, not targetDefinitionault...
+			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefinitionault...
 		} else {
 			vals = new Array<Dynamic>();
 			for( v in values ) {
-				vals.push( targetDefinition.fromDynamic(v) );
+				vals.push( fromDynamic(v) );
 			}
 		}
 		
