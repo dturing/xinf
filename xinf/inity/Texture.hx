@@ -105,7 +105,9 @@ class Texture extends ImageData {
 
     /* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
     public static var cache:Hash<Texture> = new Hash<Texture>();
-    
+
+	static var BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
     public static function newByName( url:String ) :Texture {
 	    try {
             var r = cache.get(url);
@@ -118,7 +120,15 @@ class Texture extends ImageData {
                 } else {
                     switch( u[0] ) {
                         case "file":
-                            data = neko.io.File.getContent( u[1] );
+							if( StringTools.startsWith( u[1], "data:" )) {
+								var d = u[1].substr( 5 ).split(",");
+								if( d.length!=2 ) throw("Unhandled data: URL: "+data );
+								var format = d[0].split(";");
+								if( format[format.length-1] != "base64" ) throw("data: URL of format "+format+" not understood. Can only handle base64.");
+								var base64 = d[1];
+								data = StringTools.baseDecode( base64, BASE64 );
+							} else
+								data = neko.io.File.getContent( u[1] );
                         case "resource":
                             data = Std.resource(u[1]);
                         case "http":
@@ -143,7 +153,7 @@ class Texture extends ImageData {
             }
             return r;
         } catch( e:Dynamic ) {
-            throw("Error loading '"+url+": "+e );
+            throw("Error loading '"+url+"': "+e );
         }
     }
     
