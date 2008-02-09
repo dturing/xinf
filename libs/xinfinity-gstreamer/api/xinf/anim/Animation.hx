@@ -48,19 +48,19 @@ class Animation extends TimedAttributeSetter {
 
     public var values(get_values,set_values):Array<String>;
     function get_values() :Array<String> { return getTrait("values",Array); }
-    function set_values( v:Array<String> ) :Array<String> { setTrait("values",v); reschedule(); return v; }
+    function set_values( v:Array<String> ) :Array<String> { setTrait("values",v); return v; }
 
     public var from(get_from,set_from):String;
     function get_from() :String { return getTrait("from",String); }
-    function set_from( v:String ) :String { setTrait("from",v); reschedule(); return v; }
+    function set_from( v:String ) :String { setTrait("from",v); return v; }
 
     public var to(get_to,set_to):String;
     function get_to() :String { return getStyleTrait("to",String); }
-    function set_to( v:String ) :String { setStyleTrait("to",v); reschedule(); return v; }
+    function set_to( v:String ) :String { setStyleTrait("to",v); return v; }
 
     public var by(get_by,set_by):String;
     function get_by() :String { return getStyleTrait("by",String); }
-    function set_by( v:String ) :String { setStyleTrait("by",v); reschedule(); return v; }
+    function set_by( v:String ) :String { setStyleTrait("by",v); return v; }
 
 	var steps:Array<Step>;
 	var originalValue:Dynamic;

@@ -11,4 +11,6 @@ interface FlatPathIterator {
 	function rotation() :Float;
 	function reset() :Void;
 	function jumpTo( t:Float ) :Void;
+	function finalPoint() :TPoint;
+	function finalRotation() :Float;
 }

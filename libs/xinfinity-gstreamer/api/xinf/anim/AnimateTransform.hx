@@ -15,11 +15,10 @@ class AnimateTransform extends Animate {
 
     public var type(get_type,set_type):String;
     function get_type() :String { return getStyleTrait("type",String); }
-    function set_type( v:String ) :String { setStyleTrait("type",v); reschedule(); return v; }
+    function set_type( v:String ) :String { setStyleTrait("type",v); return v; }
 
 	override function fromDynamic( value:Dynamic ) :Dynamic {
 		var s = type+"("+value+")";
-//		trace("AnimateTransform: "+s );
 		return targetDefinition.fromDynamic( s );
 	}
 

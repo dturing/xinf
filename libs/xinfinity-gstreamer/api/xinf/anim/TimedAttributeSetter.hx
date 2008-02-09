@@ -19,11 +19,11 @@ class TimedAttributeSetter extends TimedElement {
 
     public var href(get_href,set_href):String;
     function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { setTrait("href",v); reschedule(); return v; }
+    function set_href( v:String ) :String { setTrait("href",v); return v; }
 
     public var attributeName(get_attribute_name,set_attribute_name):String;
     function get_attribute_name() :String { return getTrait("attributeName",String); }
-    function set_attribute_name( v:String ) :String { setTrait("attributeName",v); reschedule(); return v; }
+    function set_attribute_name( v:String ) :String { setTrait("attributeName",v); return v; }
 
 	var peer:XMLElement;
 

@@ -9,19 +9,13 @@ import xinf.anim.type.Fill;
 
 class Animate extends Animation {
 
-	override function stop( t:Float ) {
-		super.stop(t);
-		
-		if( fill==Fill.Freeze || fill==Fill.Hold ) {
-			if( (t-started)%simpleDuration==0 ) {
-				// not modulo simpleDuration even if accumulate=None.
-				var freezeVal = additiveValue(value(1.));
-				setOnTarget( freezeVal ); 
-			}
+	override function frozen( t:Float ) {
+		if( (t-started)%simpleDuration==0 ) {
+			// not modulo simpleDuration even if accumulate=None.
+			setOnTarget( additiveValue(value(1.)) ); 
 		} else {
-			resetIteration(t);
+			setOnTarget( aaValue(t) ); 
 		}
-		
 	}
 	
 	override function step( t:Float ) {

@@ -17,7 +17,7 @@ class Set extends TimedAttributeSetter {
 
     public var to(get_to,set_to):String;
     function get_to() :String { return getTrait("to",String); }
-    function set_to( v:String ) :String { setTrait("to",v); reschedule(); return v; }
+    function set_to( v:String ) :String { setTrait("to",v); return v; }
 
 	var oldValue:Dynamic;
 

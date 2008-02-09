@@ -75,4 +75,13 @@ class PacedPathIterator implements FlatPathIterator {
 		while( (r2-r1)<-Math.PI ) r2+=Math.PI;
 		return( r1 + (i*(r2-r1)) );
 	}
+	
+	public function finalPoint() :TPoint {
+		return path.segments[path.segments.length-1].b;
+	}
+
+	public function finalRotation() :Float {
+		return rot( path.segments[path.segments.length-1] );
+	}
+
 }

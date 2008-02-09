@@ -35,7 +35,7 @@ class AnimateMotion extends TimedAttributeSetter {
 
     public var path(get_path,set_path):String;
     function get_path() :String { return getStyleTrait("path",String); }
-    function set_path( v:String ) :String { setStyleTrait("path",v); reschedule(); return v; }
+    function set_path( v:String ) :String { setStyleTrait("path",v); return v; }
 
     public var rotate(get_rotate,set_rotate):RotateMotion;
     function get_rotate() :RotateMotion { return getTrait("rotate",RotateMotion); }
@@ -43,6 +43,7 @@ class AnimateMotion extends TimedAttributeSetter {
 
 	var originalValue:Transform;
 	var iterator:FlatPathIterator;
+	var transform:Transform;
 	
 	function createIterator() {
 		var segments:Iterable<PathSegment>;
@@ -68,16 +69,31 @@ class AnimateMotion extends TimedAttributeSetter {
 		createIterator();
 		super.start(t);
 	}
-
-	override function resetIteration( time:Float ) {
-		resetOnTarget();
+	
+	override function frozen( t:Float ) {
+		if( (t-started)%simpleDuration==0 ) {
+			var r = 0.;
+			switch( rotate ) {
+				case Fixed(rot):
+					r=rot;
+				case Auto:
+					r = iterator.finalRotation();
+				case AutoOffset(rot):
+					r = iterator.finalRotation()+rot;
+			}
+			var cur = iterator.finalPoint();
+			transform = new TransformList([
+					new Rotate( r ),
+					new Translate( cur.x, cur.y ),
+					originalValue
+				]);
+		}
+		setOnTarget( transform ); 
 	}
 
 	override function step( t:Float ) {
 		if( !super.step(t) ) return false;
-		
 		if( iterator==null ) return false;
-		
 		if( !iterator.hasNext() ) iterator.reset();
 
 		var r = 0.;
@@ -92,7 +108,7 @@ class AnimateMotion extends TimedAttributeSetter {
 
 		var cur = iterator.next();
 		
-		var transform = new TransformList([
+		transform = new TransformList([
 				new Rotate( r ),
 				new Translate( cur.x, cur.y ),
 				originalValue

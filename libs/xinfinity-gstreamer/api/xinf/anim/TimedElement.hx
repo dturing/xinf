@@ -29,15 +29,15 @@ class TimedElement extends XMLElement {
 	
     public var begin(get_begin,set_begin):Time;
     function get_begin() :Time { return getTrait("begin",Time); }
-    function set_begin( v:Time ) :Time { setTrait("begin",v); reschedule(); return v; }
+    function set_begin( v:Time ) :Time { setTrait("begin",v); return v; }
 
     public var end(get_end,set_end):Time;
     function get_end() :Time { return getTrait("end",Time); }
-    function set_end( v:Time ) :Time { setTrait("end",v); reschedule(); return v; }
+    function set_end( v:Time ) :Time { setTrait("end",v); return v; }
 
     public var dur(get_dur,set_dur):Null<Float>;
     function get_dur() :Null<Float> { return getTrait("dur",Float); }
-    function set_dur( v:Null<Float> ) :Null<Float> { setTrait("dur",v); reschedule(); return v; }
+    function set_dur( v:Null<Float> ) :Null<Float> { setTrait("dur",v); return v; }
 
     public var fill(get_fill,set_fill):Fill;
     function get_fill() :Fill { return getStyleTrait("fill",Fill); }
@@ -45,7 +45,7 @@ class TimedElement extends XMLElement {
 	
 	public var repeatCount(get_repeat_count,set_repeat_count):Null<Float>;
     function get_repeat_count() :Null<Float> { return getTrait("repeatCount",Float); }
-    function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatCount",v); reschedule(); return v; }
+    function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatCount",v); return v; }
 
 	/** active is the timeline's "Run" object
 		if null, the element is not active.
@@ -55,6 +55,7 @@ class TimedElement extends XMLElement {
 	var timeContainer:TimeContainer;
 	
 	var started:Float;
+	var freezeTime:Float;
 	var simpleDuration:Null<Float>;
 	var activeDuration:Null<Float>;
 
@@ -80,6 +81,7 @@ class TimedElement extends XMLElement {
 		active = true;
 		timeContainer.activate(this);
 		started = t;
+		freezeTime = null;
 		trace("start "+this+" at "+t+"="+(t-started) );
 	}
 	
@@ -92,9 +94,17 @@ class TimedElement extends XMLElement {
 	function resetIteration( time:Float ) {
 	}
 	
+	function frozen( time:Float ) {
+	}
+	
 	function step( time:Float ) :Bool {
 		if( time>=started+activeDuration ) {
-			stop(started+activeDuration);
+			if( fill==Fill.Freeze || fill==Fill.Hold ) {
+				if( freezeTime==null ) freezeTime=started+activeDuration;
+				frozen( freezeTime );
+			} else {
+				stop(started+activeDuration);
+			}
 			return false;
 		}
 		return true;
