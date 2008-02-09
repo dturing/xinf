@@ -31,11 +31,17 @@ class Instantiator<T> {
         return false;
     }
     
-	/** Return the class this Instantiator represents.
+	/** Instaniate an object of the Instantiator's type.
 	*/
-    public function getClass( xml:Xml ) :Class<T> {
-        return myClass;
-    }
+	public function instantiate() :Dynamic  {
+		var ret;
+		try {
+			ret = Type.createInstance( myClass, [ null ] );
+		} catch( e:Dynamic ) {
+			throw("Could not create instance of "+Type.getClassName(myClass)+": "+e );
+		}
+		return ret;
+	}
 }
 
 /**

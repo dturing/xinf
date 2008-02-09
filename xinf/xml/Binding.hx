@@ -55,14 +55,16 @@ class Binding implements IBinding {
 		use $xinf.xml.Document$.instantiate() or .load().
 	*/
     public function instantiate( xml:Xml ) :Node {
-        var m:Class<Node>;
+		var ret:Node;
         for( i in instantiators ) {
-            if( m==null && i.fits(xml) ) m=i.getClass(xml);
+            if( i.fits(xml) ) {
+				return( i.instantiate() );
+			}
         }
-        if( m==null ) m = marshallers.get( xml.nodeName );
+		
+        var m:Class<Node> = marshallers.get( xml.nodeName );
 		if( m==null ) return null;
 		
-		var ret:Node;
 		try {
 			ret = Type.createInstance( m, [ null ] );
 		} catch( e:Dynamic ) {

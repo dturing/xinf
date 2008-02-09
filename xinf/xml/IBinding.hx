@@ -26,4 +26,8 @@ interface IBinding {
 	*/
     function add( nodeName:String, cl:Class<Node> ) :Void;
 
+	/** Add the given Instantiator [i] to this Binding.
+	*/
+    function addInstantiator( i:Instantiator<Node> ) :Void;
+
 }

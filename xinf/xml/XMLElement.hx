@@ -189,6 +189,8 @@ class XMLElement extends Node,
 		
 		if( def!=null )
 			Reflect.setField( to, name, def.parse(value) );
+		else
+			Reflect.setField( to, name, value );
 	}
 
 	/** see $xinf.traits.TraitAccess::setTraitFromDynamic$ */
@@ -196,6 +198,8 @@ class XMLElement extends Node,
 		var def = getTraitDefinition(name);
 		if( def!=null )
 			Reflect.setField( to, name, def.fromDynamic(value) );
+		else
+			Reflect.setField( to, name, value );
 	}
 	
 	/** Set the traits of this Element from the 
@@ -302,6 +306,38 @@ class XMLElement extends Node,
         // for now, FIXME (maybe, put them thru a global queue)
         dispatchEvent(e);
     }
+
+	public function typedChildren<T>( cl:Class<T> ) :Iterator<T> {
+		var i=-1;
+		var children=mChildren;
+		return({
+			hasNext: function () :Bool {
+				var j=i+1;
+				while( j<children.length && !Std.is(children[j],cl) ) j++;
+				return j<children.length;
+			},
+			next: function() :T {
+				i++;
+				while( i<children.length && !Std.is(children[i],cl) ) i++;
+				if( i<children.length ) return cast(children[i]);
+				return null;
+			}});
+	}
+
+	public function getElementByName( name:String ) :XMLElement {
+		for( child in typedChildren( XMLElement ) ) {
+			if( child.name == name ) return child;
+		}
+		throw( "no child with name '"+name+"'" );
+		return null;
+	}
+	
+	public function getTypedElementByName<T>( name:String, cl:Class<T> ) :T {
+		var r = getElementByName( name );
+		if( !Std.is( r, cl ) ) throw("Element '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
+        return cast(r);
+	}
+
 
 	/******************/
 	/* Node functions */
