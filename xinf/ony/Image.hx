@@ -23,7 +23,7 @@ class Image extends ElementImpl {
 		height:new LengthTrait(),
 		href:new StringTrait(), // FIXME proper namespaces
 		
-		preserveAspectRatio: new PreserveAspectRatioTrait( PreserveAspectRatio.None ),
+		preserveAspectRatio: new PreserveAspectRatioTrait( PreserveAspectRatio.Preserve(Mid,Mid) ),
 	};
 
     public var x(get_x,set_x):Float;
