@@ -17,6 +17,8 @@ typedef FrameEvent = xinf.event.FrameEvent
 typedef GeometryEvent = xinf.event.GeometryEvent
 typedef SimpleEvent = xinf.event.SimpleEvent
 typedef ScrollEvent = xinf.event.ScrollEvent
+typedef UIEvent = xinf.event.UIEvent
+typedef LinkEvent = xinf.event.LinkEvent
 
 typedef Document = xinf.xml.Document
 typedef Node = xinf.xml.Node;

@@ -9,6 +9,7 @@ import xinf.event.ScrollEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.GeometryEvent;
 import xinf.event.FrameEvent;
+import xinf.event.UIEvent;
 
 import xinf.erno.Keys;
 
@@ -17,6 +18,7 @@ class Flash9EventSource {
     private var runtime:Flash9Runtime;
     private var frame:Int;
     private var currentOver:Null<Int>;
+	private var currentDown:Null<Int>;
     
     public function new( r:Flash9Runtime ) :Void {
         runtime = r;
@@ -49,12 +51,7 @@ class Flash9EventSource {
         var t:XinfSprite = cast(s,XinfSprite);
         return t.xinfId;
     }
-    
-    private function postMouseEvent( e:flash.events.MouseEvent, type:EventKind<MouseEvent> ) :Void {
-        var targetId:Int = findTarget(e);
-        postMouseEventTo( e, type, targetId );
-    }
-    
+        
     private function postMouseEventTo( e:flash.events.MouseEvent, type:EventKind<MouseEvent>, targetId:Int ) :Void {
   //  trace("post Mouse "+type+", to "+targetId );
         runtime.postEvent( new MouseEvent( type, Math.round(e.stageX), Math.round(e.stageY), if(e.buttonDown) 1 else 0, targetId, e.shiftKey, e.altKey, e.ctrlKey ) );
@@ -62,11 +59,18 @@ class Flash9EventSource {
     }
 
     private function mouseDown( e:flash.events.MouseEvent ) :Void {
-        return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
+        var targetId:Int = findTarget(e);
+		currentDown = targetId;
+        postMouseEventTo( e, MouseEvent.MOUSE_DOWN, targetId );
     }
     
     private function mouseUp( e:flash.events.MouseEvent ) :Void {
-        return postMouseEvent( e, MouseEvent.MOUSE_UP );
+        var targetId:Int = findTarget(e);
+        postMouseEventTo( e, MouseEvent.MOUSE_UP, targetId );
+		if( targetId == currentDown ) {
+			runtime.postEvent( new UIEvent( UIEvent.ACTIVATE, targetId ) );
+		}
+		currentDown = null;
     }
     
     private function mouseMove( e:flash.events.MouseEvent ) :Void {

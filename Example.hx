@@ -4,30 +4,24 @@ import xinf.style.Selector;
 import xinf.style.StyleSheet;
 
 class Example {
+
+	var g:Group;
+	var doc:Svg;
 	
 	public function new( ?url:String ) :Void {
 	
-		var g = new Group();
+		g = new Group();
 		Root.appendChild(g);
 		
-		var doc:Node;
 		var stage = {x:100.,y:100.};
-		
-		if( url==null ) {
-			doc = Document.instantiate( Std.resource("test.svg") );
-			g.appendChild( doc );
-		} else {
-			Document.load( url, function(doc) {
-				g.appendChild( doc );
-			});
-		}
 
 		var scale = 1.;
 		var offset={ x:0., y:0. };
+		var self=this;
 		
 		var trans = function() {
 			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
-			g.transform = new Concatenate( 
+			self.g.transform = new Concatenate( 
 							new Concatenate(
 								new Translate( 0, 0 ), //-doc.width/2, -doc.height/2 ),
 								new Concatenate(
@@ -84,6 +78,30 @@ class Example {
 				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
 			});
 		});
+
+		load( url );
+
+	}
+	
+	public function load( url:String ) :Void {
+		if( doc!=null ) {
+			g.removeChild(doc);
+		}
+		
+		var self=this;
+		var onLoad = function(doc:Svg) {
+				self.g.appendChild( doc );
+				doc.addEventListener( LinkEvent.ACTUATE, function(e) {
+					self.load(e.href);
+				});
+			};
+		
+		if( url==null ) {
+			Document.instantiate( Std.resource("test.svg"), onLoad, Svg );
+		} else {
+			Document.load( url, onLoad, Svg );
+		}
+
 	}
 	
 	public static function main() :Void {

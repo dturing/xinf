@@ -8,6 +8,7 @@ import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.GeometryEvent;
+import xinf.event.UIEvent;
 
 import xinf.erno.Keys;
 
@@ -17,6 +18,7 @@ class JSEventSource {
     
     private var runtime:JSRuntime;
     private var currentOver:Int;
+	private var currentDown:Int;
 
     public function new( r:JSRuntime ) :Void {
         runtime = r;
@@ -70,11 +72,21 @@ class JSEventSource {
     }
 
     private function mouseDown( e:js.Event ) :Bool {
-        return postMouseEvent( e, MouseEvent.MOUSE_DOWN );
+        var targetId:Int = findTarget(e);
+        if( targetId == null ) targetId = 0;
+		currentDown = targetId;
+        return postMouseEventTo( e, MouseEvent.MOUSE_DOWN, targetId );
     }
 
     private function mouseUp( e:js.Event ) :Bool {
-        return postMouseEvent( e, MouseEvent.MOUSE_UP );
+        var targetId:Int = findTarget(e);
+        if( targetId == null ) targetId = 0;
+        var r = postMouseEventTo( e, MouseEvent.MOUSE_UP, targetId );
+		if( targetId == currentDown ) {
+			runtime.postEvent( new UIEvent( UIEvent.ACTIVATE, targetId ) );
+		}
+		currentDown = null;
+		return r;
     }
 
     private function mouseMove( e:js.Event ) :Bool {
@@ -106,12 +118,6 @@ class JSEventSource {
             targetNode = targetNode.parentNode;
         }
         return untyped targetNode.xinfId;
-    }
-    
-    private function postMouseEvent( e:js.Event, type:EventKind<MouseEvent> ) :Bool {
-        var targetId:Int = findTarget(e);
-        if( targetId == null ) targetId = 0;
-        return postMouseEventTo( e, type, targetId );
     }
     
     private function postMouseEventTo( e:js.Event, type:EventKind<MouseEvent>, targetId:Int ) :Bool {

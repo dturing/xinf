@@ -13,6 +13,7 @@ import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
+import xinf.event.UIEvent;
 
 import xinf.erno.Keys;
 
@@ -21,6 +22,7 @@ class GLEventSource {
     private var frame:Int;
     private var runtime:XinfinityRuntime;
     private var currentOver:Int;
+	private var currentDown:Int;
 
     public function new( runtime:XinfinityRuntime ) :Void {
         frame=0;
@@ -97,8 +99,13 @@ class GLEventSource {
 
         if( state==0 ) {
             runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_DOWN, x, y, button, target, shift, alt, ctrl ) );
+			currentDown = target;
         } else {
             runtime.postEvent( new MouseEvent( MouseEvent.MOUSE_UP, x, y, button, target, shift, alt, ctrl ) );
+			if( target==currentDown ) {
+				runtime.postEvent( new UIEvent( UIEvent.ACTIVATE, target ) );
+			}
+			currentDown==null;
         }
     }
 

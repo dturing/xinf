@@ -8,6 +8,7 @@ import xinf.erno.Runtime;
 import xinf.event.FrameEvent;
 import xinf.event.MouseEvent;
 import xinf.event.ScrollEvent;
+import xinf.event.UIEvent;
 
 /**
     Xinfony creates one singleton Manager object as a static private member of Element.
@@ -47,6 +48,7 @@ class Manager {
         Runtime.addEventListener( MouseEvent.MOUSE_OVER, dispatchToTarget );
         Runtime.addEventListener( MouseEvent.MOUSE_OUT, dispatchToTarget );
         Runtime.addEventListener( ScrollEvent.SCROLL_STEP, dispatchToTarget );
+        Runtime.addEventListener( UIEvent.ACTIVATE, dispatchToTarget );
     }
 
     private function dispatchToTarget( e:Dynamic ) :Void {
