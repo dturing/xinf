@@ -38,8 +38,6 @@ class Helper {
     private static var _getInt;
     private static var _getFloat;
     private static var _getDouble;
-    private static var _evaluateCubicBezier;
-    private static var _evaluateQuadraticBezier;
     
     public static function __init__() : Void {
         DLLLoader.addLibToPath("opengl");
