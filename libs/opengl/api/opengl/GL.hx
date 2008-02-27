@@ -26,7 +26,7 @@ extern class GL {
     public static var VERSION_1_1:Int;
     public static var VERSION_1_2:Int;
     public static var VERSION_1_3:Int;
-    public static var ARB_imaging:Int;
+//  public static var ARB_imaging:Int;
     public static var FALSE:Int;
     public static var TRUE:Int;
     public static var BYTE:Int;
@@ -556,9 +556,11 @@ extern class GL {
     public static var RGBA16:Int;
     public static var CLIENT_PIXEL_STORE_BIT:Int;
     public static var CLIENT_VERTEX_ARRAY_BIT:Int;
-    public static var ALL_CLIENT_ATTRIB_BITS:Int;
+	
+/* fail on nvidia-linux?
+	public static var ALL_CLIENT_ATTRIB_BITS:Int;
     public static var CLIENT_ALL_ATTRIB_BITS:Int;
-    
+*/
     
     public static function clearIndex( c:Float ):Void;
     public static function clearColor( red:Float, green:Float, blue:Float, alpha:Float ):Void;
