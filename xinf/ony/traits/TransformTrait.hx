@@ -53,7 +53,7 @@ class TransformTrait extends TypedTrait<Transform> {
         inherit
         fit( l t r b [ preserve-aspect-ratio [left|center|right][top|middle|bottom]] )
     */
-    static var splitNumbers = ~/[ ,\r\n\t]/g;
+    static var splitNumbers = ~/[ ,\r\n\t]+/g;
     static var translate = ~/translate\([ \t\r\n]*([0-9eE\.\-]+)([ \t\r\n,]+[ \t\r\n]*([0-9eE\.\-]+)[ \t\r\n]*)?\)/;
     static var rotate = ~/rotate\(([0-9eE\.\-]+)([ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n]?)?\)/; 
     static var matrix = ~/matrix\(([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)[ \t\r\n,]+([0-9eE\.\-]+)\)/;

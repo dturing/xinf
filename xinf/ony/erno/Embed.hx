@@ -21,6 +21,7 @@ class Embed extends Group {
     public function new( o:NativeContainer ) :Void {
         super();
         root = o;
+		construct();
     }
 
     /**
@@ -28,11 +29,10 @@ class Embed extends Group {
         you passed to the constructor.
     **/
     override public function draw( g:Renderer ) :Void {
-        g.startNative( root );
-        for( child in mChildren ) {
-			if( untyped child.xid!=null )
-				g.showObject( untyped child.xid );
-        }
+		if( xid==null ) throw("no xid: "+this);
+		g.startNative( root );
+			drawContents(g);
         g.endNative();
+        reTransform(g); // FIXME: needed
     }
 }

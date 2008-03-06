@@ -41,6 +41,7 @@ typedef Text = xinf.ony.Text
 typedef TextArea = xinf.ony.TextArea
 typedef Use = xinf.ony.Use
 typedef Definitions = xinf.ony.Definitions
+typedef Link = xinf.ony.Link
 
 typedef Crop = xinf.ony.Crop
 
@@ -63,6 +64,7 @@ typedef Text = xinf.ony.erno.Text
 typedef TextArea = xinf.ony.erno.EditableTextArea
 typedef Use = xinf.ony.erno.Use
 typedef Definitions = xinf.ony.erno.Definitions
+typedef Link = xinf.ony.Link
 
 typedef Crop = xinf.ony.erno.Crop
 #end

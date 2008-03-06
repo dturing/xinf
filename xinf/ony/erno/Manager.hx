@@ -86,7 +86,7 @@ class Manager {
  		#if profile
  			xinf.test.Profile.before("transform");
  		#end
-
+		
 		var ch = moved;
         moved = new IntHash<Element>();
         for( id in ch.keys() ) {

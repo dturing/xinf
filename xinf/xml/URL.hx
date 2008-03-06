@@ -62,7 +62,7 @@ class URL {
 				host=""; 
 			}
         } else {
-            protocol="file";
+//            protocol="file";
             host=null;
             port=0;
             path=s;
@@ -110,7 +110,15 @@ class URL {
                 return;
             }
         #end
-        
+
+            if( protocol=="resource" ) {
+				var rname = if( host!=null ) host+path+filename else path+filename;
+                var data = Std.resource( rname );
+				if( data==null ) throw("Resource not found: "+rname );
+                onData( data );
+                return;
+            }
+
             var request = new haxe.Http(toString());
             request.onError = onError;
             request.onData = onData;
@@ -129,13 +137,16 @@ class URL {
 	*/
     public function pathString() :String {
         var h = "";
+		if( protocol!=null ) {
+			h = protocol+"://";
+		}
         if( host!=null ) {
-            h = host;
+            h = h+host;
         }
         if( port!=0 ) {
             h = h+":"+port;
         }
-        return( protocol+"://"+h+path );
+        return( h+path );
     }
 
 	/**

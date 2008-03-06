@@ -47,6 +47,7 @@ class Texture extends ImageData {
 				case RGBA: GL.RGBA;
 				case BGR: GL.RGB;
 				case BGRA: GL.RGBA;
+				case GRAY: GL.LUMINANCE;
 				default: GL.RGBA;
 			}
         

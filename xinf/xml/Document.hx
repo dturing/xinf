@@ -99,7 +99,7 @@ class Document extends XMLElement {
 		given Xml, [null] will be returned.
 		
 		Namespaces are currently ignored. This will look though
-		all given Bindings.
+		all (static) bindings.
 	*/
     public function unmarshal( xml:Xml, ?parent:Node ) :Node {
         var r:Node;
