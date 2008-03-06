@@ -1,0 +1,5 @@
+-swf svgviewer.swf
+-swf-version 9
+-swf-header 320:240:25:ffffff
+-lib xinf
+-main FlashSvgViewer
