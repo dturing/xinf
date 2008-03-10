@@ -13,7 +13,7 @@ class FlashSvgViewer {
 		var stage = flash.Lib.current.stage;
 		var menu = new flash.ui.ContextMenu();
 		flash.Lib.current.contextMenu = menu;
-		var aboutItem = new flash.ui.ContextMenuItem("About Xinf SVG Viewer "+xinf.Version.version+"..." );
+		var aboutItem = new flash.ui.ContextMenuItem("About Xinf SVG Viewer "+xinf.Version.version+" (r"+xinf.Version.revision+")..." );
 		aboutItem.addEventListener( flash.events.ContextMenuEvent.MENU_ITEM_SELECT, function(e) {
 				flash.Lib.getURL( new flash.net.URLRequest("http://xinf.org/trac/wiki/SvgViewer") );
 			});
