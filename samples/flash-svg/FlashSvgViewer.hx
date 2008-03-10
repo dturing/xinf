@@ -33,43 +33,56 @@ class FlashSvgViewer {
 			bg.width = stage.stageWidth;
 			bg.height = stage.stageHeight;
 		
-		var loading = new flash.text.TextField();
-			loading.textColor=loadMessageColor;
-			var format = loading.getTextFormat();
+		var message = new flash.text.TextField();
+			message.textColor=loadMessageColor;
+			var format = message.getTextFormat();
 			format.font = "_sans";
-			loading.defaultTextFormat = format;
-			loading.selectable = false;
-			loading.autoSize = flash.text.TextFieldAutoSize.RIGHT;
-			loading.mouseEnabled = false;
-			loading.text=loadMessage;
-			loading.x = (stage.stageWidth-loading.width)/2;
-			loading.y = stage.stageHeight/2;
-			flash.Lib.current.addChild( loading );
+			message.defaultTextFormat = format;
+			message.selectable = false;
+			message.autoSize = flash.text.TextFieldAutoSize.CENTER;
+			message.mouseEnabled = false;
+			message.text=loadMessage;
+			message.x = (stage.stageWidth-message.width)/2;
+			message.y = (stage.stageHeight/2)-5;
+			flash.Lib.current.addChild( message );
 
 		var mc = new flash.display.Sprite();
 		flash.Lib.current.addChild( mc );
 		
 		var embed = new Embed( mc );
 
-		Document.load( args.src, function(doc:Svg) {
-		
-			flash.Lib.current.removeChild( loading );
-			
-			var scale = function(?e:Dynamic) {
-				// scale to stage size
-				if( doc.width>0 && doc.height>0 )
-					doc.transform = new Scale( mc.stage.stageWidth/doc.width,
-												mc.stage.stageHeight/doc.height );
-				bg.width = mc.stage.stageWidth;
-				bg.height = mc.stage.stageHeight;
-			};
-			
-			mc.stage.addEventListener( flash.events.Event.RESIZE, scale );
-			scale();
-			embed.appendChild( doc );
-		
-		}, Svg );
+		var onError = function(e:String) {
+			message.text = "Could not load SVG source.\n"+e;
+		};
 
-		xinf.ony.Root.main();
+		try {
+			if( args==null || args.src==null ) {
+				//throw("No document source given.");
+				args = { src:"test.svg" };
+			}
+			
+			Document.load( args.src, function(doc:Svg) {
+			
+				flash.Lib.current.removeChild( message );
+				
+				var scale = function(?e:Dynamic) {
+					// scale to stage size
+					if( doc.width>0 && doc.height>0 )
+						doc.transform = new Scale( mc.stage.stageWidth/doc.width,
+													mc.stage.stageHeight/doc.height );
+					bg.width = mc.stage.stageWidth;
+					bg.height = mc.stage.stageHeight;
+				};
+				
+				mc.stage.addEventListener( flash.events.Event.RESIZE, scale );
+				scale();
+				embed.appendChild( doc );
+			
+			}, onError, Svg );
+			
+			xinf.ony.Root.main();
+		} catch(e:Dynamic) {
+			onError(""+e);
+		}
 	}
 }
