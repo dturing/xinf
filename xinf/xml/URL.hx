@@ -43,7 +43,10 @@ class URL {
     
     function parse( s:String ) :Void {
         var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
-        if( r.match( s ) ) {
+		
+		if( s==null ) throw("URL is null");
+
+		if( r.match( s ) ) {
             protocol = r.matched(1);
             host = r.matched(2);
             port = Std.parseInt(r.matched(4));

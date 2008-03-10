@@ -158,13 +158,15 @@ class Document extends XMLElement {
 		once the document is fully loaded (and after the Element's onLoad function
 		has been called).
 	*/
-    public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?type:Class<T> ) :Void {
+    public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?onError:String->Void, ?type:Class<T> ) :Void {
         var url = new URL(url_s);
         url.fetch( function(data) {
-				instantiate( data, url, parentDocument, onLoad, type );
-            }, function( error ) {
-                throw(error);
-            } );
+				try {
+					instantiate( data, url, parentDocument, onLoad, type );
+				} catch( e:Dynamic ) {
+					onError(""+e);
+				}
+            }, onError );
     }
 	
 	static var bindings:Hash<IBinding>;
