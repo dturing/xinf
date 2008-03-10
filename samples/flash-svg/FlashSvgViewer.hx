@@ -7,6 +7,7 @@ import xinf.xml.Document;
 class FlashSvgViewer {
 
 	public static function main() {
+
 		var args:Dynamic = flash.Lib.current.root.loaderInfo.parameters;
 
 		var stage = flash.Lib.current.stage;
@@ -39,18 +40,20 @@ class FlashSvgViewer {
 			format.font = "_sans";
 			message.defaultTextFormat = format;
 			message.selectable = false;
-			message.autoSize = flash.text.TextFieldAutoSize.CENTER;
+			message.autoSize = flash.text.TextFieldAutoSize.NONE;
+			message.wordWrap=true;
 			message.mouseEnabled = false;
 			message.text=loadMessage;
-			message.x = (stage.stageWidth-message.width)/2;
-			message.y = (stage.stageHeight/2)-5;
+			message.x = message.y = 10;
 			flash.Lib.current.addChild( message );
+			message.width=message.stage.stageWidth-20;
+			message.height=message.stage.stageHeight-20;
 
 		var mc = new flash.display.Sprite();
 		flash.Lib.current.addChild( mc );
 		
 		var embed = new Embed( mc );
-
+		
 		var onError = function(e:String) {
 			message.text = "Could not load SVG source.\n"+e;
 		};
@@ -58,7 +61,7 @@ class FlashSvgViewer {
 		try {
 			if( args==null || args.src==null ) {
 				//throw("No document source given.");
-				args = { src:"test.svg" };
+				args = { src:"http://localhost/~dan/test.svg" };
 			}
 			
 			Document.load( args.src, function(doc:Svg) {
@@ -72,6 +75,8 @@ class FlashSvgViewer {
 													mc.stage.stageHeight/doc.height );
 					bg.width = mc.stage.stageWidth;
 					bg.height = mc.stage.stageHeight;
+					message.width = mc.stage.stageWidth-20;
+					message.height = mc.stage.stageHeight-20;
 				};
 				
 				mc.stage.addEventListener( flash.events.Event.RESIZE, scale );
