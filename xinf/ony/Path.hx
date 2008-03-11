@@ -5,7 +5,7 @@ package xinf.ony;
 import xinf.ony.Implementation;
 
 import xinf.ony.type.PathSegment;
-import xinf.ony.PathParser;
+import xinf.ony.traits.PathTrait;
 import xinf.geom.Types;
 
 private class PathBBox {
@@ -54,30 +54,22 @@ private class PathBBox {
 
 class Path extends ElementImpl {
 
+	static var TRAITS = {
+		d: new PathTrait(),
+	};
+	
 	static var tagName = "path";
 
-    public var segments(default,set_segments):Iterable<PathSegment>;
-
-    private function set_segments(v:Iterable<PathSegment>) {
-        segments=v; redraw(); return segments;
+    public var segments(get_segments,set_segments):List<PathSegment>;
+    function get_segments() :List<PathSegment> {
+        return getTrait("d",List);
     }
-
-	override function copyProperties( to:Dynamic ) :Void {
-		super.copyProperties(to);
-		if( segments!=null ) to.segments = Lambda.array(segments);
-	}
+    function set_segments( v:List<PathSegment> ) {
+        setTrait("d",v); redraw(); return v;
+    }
 
 	override public function getBoundingBox() : TRectangle {
 		return new PathBBox(segments);
 	}
 
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        if( xml.exists("d") ) {
-            segments = PathParser.simplify(
-				new PathParser().parse(xml.get("d")
-				));
-        }
-    }
-	
 }

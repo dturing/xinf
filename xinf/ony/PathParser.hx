@@ -174,7 +174,7 @@ class PathParser {
         g.push(op);
     }
 	
-	public static function simplify( segments:Iterable<SVGPathSegment> ) :Array<SimpleSegment> {
+	public static function simplify( segments:Iterable<SVGPathSegment> ) :List<SimpleSegment> {
         /*
             REC-SVG-1.1 8.3.6:
                 If there is no previous command or if the previous command 
@@ -187,7 +187,7 @@ class PathParser {
             them if no commands sets the corresponding ?smooth2.
         */
 		
-		var out = new Array<SimpleSegment>();
+		var out = new List<SimpleSegment>();
         var last = { x:0., y:0. };
 		var first = { x:0., y:0. };
         var csmooth = null;
@@ -200,95 +200,95 @@ class PathParser {
             switch( seg ) {
 
                 case MoveTo(x,y):
-                    out.push( SimpleSegment.MoveTo(x,y) );
+                    out.add( SimpleSegment.MoveTo(x,y) );
                     last = { x:x, y:y };
                     first = { x:x, y:y };
 
                 case MoveToR(x,y):
                     first = { x:last.x+x, y:last.y+y };
                     last = { x:last.x+x, y:last.y+y };
-                    out.push( SimpleSegment.MoveTo( last.x,last.y ));
+                    out.add( SimpleSegment.MoveTo( last.x,last.y ));
 
                 case Close:
-					out.push( SimpleSegment.Close );
+					out.add( SimpleSegment.Close );
 					last = first;
                     
                 case LineTo(x,y):
-                    out.push( SimpleSegment.LineTo( x, y ));
+                    out.add( SimpleSegment.LineTo( x, y ));
                     last = { x:x, y:y };
 
                 case LineToR(x,y):
                     last = { x:last.x+x, y:last.y+y };
-                    out.push( SimpleSegment.LineTo( last.x, last.y ));
+                    out.add( SimpleSegment.LineTo( last.x, last.y ));
 
                 case HorizontalTo(x):
-                    out.push( SimpleSegment.LineTo( x, last.y ));
+                    out.add( SimpleSegment.LineTo( x, last.y ));
                     last.x=x;
 
                 case HorizontalToR(x):
                     last = { x:last.x+x, y:last.y };
-                    out.push( SimpleSegment.LineTo( last.x, last.y ));
+                    out.add( SimpleSegment.LineTo( last.x, last.y ));
 
                 case VerticalTo(y):
-                    out.push( SimpleSegment.LineTo( last.x, y ));
+                    out.add( SimpleSegment.LineTo( last.x, y ));
                     last.y=y;
 
                 case VerticalToR(y):
                     last = { x:last.x, y:last.y+y };
-                    out.push( SimpleSegment.LineTo( last.x, last.y ));
+                    out.add( SimpleSegment.LineTo( last.x, last.y ));
 
                 case CubicTo(x1,y1,x2,y2,x,y):
-                    out.push( SimpleSegment.CubicTo(x1,y1,x2,y2,x,y) );
+                    out.add( SimpleSegment.CubicTo(x1,y1,x2,y2,x,y) );
                     last = { x:x, y:y };
                     csmooth2 = { x:x2, y:y2 };
 
                 case CubicToR(x1,y1,x2,y2,x,y):
-                    out.push( SimpleSegment.CubicTo(last.x+x1,last.y+y1,last.x+x2,last.y+y2,last.x+x,last.y+y) );
+                    out.add( SimpleSegment.CubicTo(last.x+x1,last.y+y1,last.x+x2,last.y+y2,last.x+x,last.y+y) );
                     csmooth2 = { x:last.x+x2, y:last.y+y2 };
                     last = { x:last.x+x, y:last.y+y };
 
                 case SmoothCubicTo(x2,y2,x,y):
                     if( csmooth==null ) csmooth=last;
-                    out.push( SimpleSegment.CubicTo( last.x + (last.x-csmooth.x), last.y + (last.y-csmooth.y), x2, y2, x, y ));
+                    out.add( SimpleSegment.CubicTo( last.x + (last.x-csmooth.x), last.y + (last.y-csmooth.y), x2, y2, x, y ));
                     last = { x:x, y:y };
                     csmooth2 = { x:x2, y:y2 };
 
                 case SmoothCubicToR(x2,y2,x,y):
                     if( csmooth==null ) csmooth=last;
-                    out.push( SimpleSegment.CubicTo( last.x + (last.x-csmooth.x), last.y + (last.y-csmooth.y), last.x+x2, last.y+y2, last.x+x, last.y+y ));
+                    out.add( SimpleSegment.CubicTo( last.x + (last.x-csmooth.x), last.y + (last.y-csmooth.y), last.x+x2, last.y+y2, last.x+x, last.y+y ));
                     csmooth2 = { x:last.x+x2, y:last.y+y2 };
                     last = { x:last.x+x, y:last.y+y };
                     
                 case QuadraticTo(x1,y1,x,y):
-                    out.push( SimpleSegment.QuadraticTo(x1,y1,x,y) );
+                    out.add( SimpleSegment.QuadraticTo(x1,y1,x,y) );
                     last = { x:x, y:y };
                     qsmooth2 = { x:x1, y:y1 };
 
                 case QuadraticToR(x1,y1,x,y):
-                    out.push( SimpleSegment.QuadraticTo(last.x+x1,last.y+y1,last.x+x,last.y+y) );
+                    out.add( SimpleSegment.QuadraticTo(last.x+x1,last.y+y1,last.x+x,last.y+y) );
                     qsmooth2 = { x:last.x+x1, y:last.y+y1 };
                     last = { x:last.x+x, y:last.y+y };
 
                 case SmoothQuadraticTo(x,y):
                     if( qsmooth==null ) qsmooth=last;
                     var s = { x:last.x + (last.x-qsmooth.x), y:last.y + (last.y-qsmooth.y) };
-                    out.push( SimpleSegment.QuadraticTo( s.x, s.y, x, y ) );
+                    out.add( SimpleSegment.QuadraticTo( s.x, s.y, x, y ) );
                     last = { x:x, y:y };
                     qsmooth2 = { x:s.x, y:s.y };
 
                 case SmoothQuadraticToR(x,y):
                     if( qsmooth==null ) qsmooth=last;
                     var s = { x:last.x + (last.x-qsmooth.x), y:last.y + (last.y-qsmooth.y) };
-                    out.push( SimpleSegment.QuadraticTo( s.x, s.y, last.x+x, last.y+y ) );
+                    out.add( SimpleSegment.QuadraticTo( s.x, s.y, last.x+x, last.y+y ) );
                     last = { x:last.x+x, y:last.y+y };
                     qsmooth2 = s;
 
                 case ArcTo(rx,ry,rotation,largeArc,sweep,x,y):
-                    out.push( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,x,y) );
+                    out.add( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,x,y) );
                     last = { x:x, y:y };
 
                 case ArcToR(rx,ry,rotation,largeArc,sweep,x,y):
-                    out.push( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,last.x+x,last.y+y) );
+                    out.add( SimpleSegment.ArcTo(last.x,last.y,rx,ry,rotation,largeArc,sweep,last.x+x,last.y+y) );
                     last = { x:last.x+x, y:last.y+y };
 
                 default:
