@@ -148,15 +148,6 @@ class Element extends StyledElement {
 	}
 
 	/** the Element's transformation **/
-	/*
-	// FIXME: TransformTrait?
-    public var transform(default,set_transform):Transform;
-	function set_transform( t:Transform ) :Transform {
-		transform=t;
-		retransform();
-		return t;
-	}
-*/
     public function new( ?traits:Dynamic ) :Void {
         super( traits );
 		styleClasses = new Hash<Bool>();

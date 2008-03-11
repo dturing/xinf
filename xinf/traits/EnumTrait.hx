@@ -18,8 +18,9 @@ class EnumTrait<T> extends TypedTrait<T> {
     }
     
     override public function parse( value:String ) :Dynamic {
+		var v = value.toLowerCase();
         for( choice in Type.getEnumConstructs(enumClass) ) {
-            if( choice.toLowerCase() == value+sfx ) {
+            if( choice.toLowerCase() == v+sfx ) {
                 var v = Reflect.field(enumClass,choice);
                 return v;
             }

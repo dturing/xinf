@@ -6,6 +6,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.Runtime;
 import xinf.geom.Transform;
+import xinf.geom.Identity;
 import xinf.ony.type.CapsStyle;
 import xinf.ony.type.JoinStyle;
 import xinf.ony.type.Visibility;
@@ -69,7 +70,9 @@ class Element extends xinf.ony.Element {
         **/
     public function reTransform( g:Renderer ) :Void {
 		if( xid==null ) throw("no xid: "+this);
-        var m = transform.getMatrix();
+		var t = transform;
+		if( t==null ) t = new Identity();
+        var m = t.getMatrix();
         g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
     }
     

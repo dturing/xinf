@@ -10,6 +10,9 @@ import xinf.ony.Implementation;
 import xinf.ony.type.GradientUnits;
 import xinf.ony.type.SpreadMethod;
 
+import xinf.traits.EnumTrait;
+import xinf.ony.traits.TransformTrait;
+
 private typedef TGradientStop = {
 	r :Float,
 	g :Float,
@@ -20,42 +23,34 @@ private typedef TGradientStop = {
 
 class Gradient extends ElementImpl {
 	
-	/* TODO: convert to traits */
+	/* TODO: traitify stops */
+	
+	static var TRAITS = {
+		gradientTransform:	new TransformTrait(),
+		gradientUnits:		new EnumTrait<GradientUnits>( GradientUnits, null ),
+		spreadMethod:		new EnumTrait<SpreadMethod>( SpreadMethod, "spread", null ),
+	}
 	
     public var href(default,set_href):String;
     public var peer(default,set_peer):Gradient;
 
-	public var gradientTransform(get_gradientTransform,null) :Transform;
-	public var gradientUnits(get_gradientUnits,null) :GradientUnits;
-	public var spreadMethod(get_spreadMethod,null) :SpreadMethod;
+    public var gradientTransform(get_gradientTransform,set_gradientTransform):Transform;
+    function get_gradientTransform() :Transform { var r = getTrait("gradientTransform",Transform);
+    		if( r==null ) return( if( peer!=null ) peer.gradientTransform else new Identity() ); return r; }
+    function set_gradientTransform( v:Transform ) :Transform { setTrait("gradientTransform",v); return v; }
+
+    public var gradientUnits(get_gradientUnits,set_gradientUnits):GradientUnits;
+    function get_gradientUnits() :GradientUnits { var r = getTrait("gradientUnits",GradientUnits,false);
+			if( r==null ) return( if( peer!=null ) peer.gradientUnits else ObjectBoundingBox ); return r; }
+    function set_gradientUnits( v:GradientUnits ) :GradientUnits { return setTrait("gradientUnits",v); }
+
+    public var spreadMethod(get_spreadMethod,set_spreadMethod):SpreadMethod;
+    function get_spreadMethod() :SpreadMethod { var r = getTrait("spreadMethod",SpreadMethod,false);
+    		if( r==null ) return( if( peer!=null ) peer.spreadMethod else PadSpread ); return r; }
+    function set_spreadMethod( v:SpreadMethod ) :SpreadMethod { return setTrait("spreadMethod",v); }
+
 	public var stops(get_stops,null): Array<TGradientStop>;
 
-	function get_gradientTransform() :Transform {
-		if( gradientTransform == null && peer != null)
-			return peer.get_gradientTransform();
-		return gradientTransform;
-	}
-	
-	function get_gradientUnits() :GradientUnits {
-		if( gradientUnits == null ) {
-			if( peer != null )
-				return peer.gradientUnits;
-			else
-				return ObjectBoundingBox;
-		}
-		return gradientUnits;
-	}
-	
-	function get_spreadMethod() :SpreadMethod {
-		if( spreadMethod == null ) {
-			if( peer != null )
-				return peer.spreadMethod;
-			else
-				return PadSpread;
-		}
-		return spreadMethod;
-	}
-	
 	function get_stops() :Array<TGradientStop> {
 		if( stops.length == 0 && peer != null) {
 			return peer.get_stops();
@@ -65,9 +60,6 @@ class Gradient extends ElementImpl {
 
 	public function new( ?traits:Dynamic ) {
 		super( traits );
-		gradientUnits = null;
-		spreadMethod = null;
-		transform = new Identity();
 		stops = new Array<TGradientStop>();
 	}
 	
@@ -99,29 +91,6 @@ class Gradient extends ElementImpl {
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml(xml);
 
-        if( xml.exists("gradientTransform") ) {
-            gradientTransform = TransformParser.parse( xml.get("gradientTransform") );
-        }
-
-		if( xml.exists("gradientUnits") )
-			if(xml.get("gradientUnits") == "userSpaceOnUse")
-				gradientUnits = UserSpaceOnUse;
-			else
-				gradientUnits = ObjectBoundingBox;
-
-		if( xml.exists("spreadMethod") ) {
-			switch(xml.get("spreadMethod")) {
-				case "reflect":
-					spreadMethod = ReflectSpread;
-				case "pad":
-					spreadMethod = PadSpread;
-				case "repeat":
-					spreadMethod = RepeatSpread;
-				default:
-					trace("Unknown spreadMethod "+xml.get("spreadMethod"));
-			}
-		}
-
 		// FIXME, maybe: make these normal nodes?
 		for(i in xml.elementsNamed("stop")) {
 			var s = new GradientStop();
@@ -133,6 +102,5 @@ class Gradient extends ElementImpl {
 
 		if( xml.exists("xlink:href") ) 
 			href = xml.get("xlink:href");
-
 	}
 }

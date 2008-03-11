@@ -29,7 +29,7 @@ class TransformTrait extends TypedTrait<Transform> {
 	}
 
 	override public function getDefault() :Dynamic {
-		return new Identity();
+		return null;
 	}
 	
 	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
