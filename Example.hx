@@ -60,6 +60,10 @@ class Example {
 				case "1":
 					offset = { x:0., y:0. };
 					scale = 1;
+				case "s":
+					var o = neko.io.File.write("out.svg",false);
+					o.write( xinf.xml.PrettyPrinter.pretty( self.doc.toXml() ) );
+					o.close();
 			}
 			
 			trans();
@@ -90,6 +94,7 @@ class Example {
 		
 		var self=this;
 		var onLoad = function(doc:Svg) {
+				self.doc=doc;
 				self.g.appendChild( doc );
 				doc.addEventListener( LinkEvent.ACTUATE, function(e) {
 					self.load(e.href);
