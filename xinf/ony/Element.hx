@@ -155,7 +155,6 @@ class Element extends StyledElement {
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties( to );
-		to.transform=transform; // FIXME: should dup.
 		to.ownerDocument=ownerDocument; // FIXME: maybe not?
 	}
 	

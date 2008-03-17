@@ -15,6 +15,8 @@ class LinearGradient extends Gradient {
 		y2:new FloatTrait(0),
 	};
 	
+	static var tagName = "linearGradient";
+	
     public var x1(get_x1,set_x1):Float;
     function get_x1() :Float { return getTrait("x1",Float); }
     function set_x1( v:Float ) :Float { return setTrait("x1",v); }

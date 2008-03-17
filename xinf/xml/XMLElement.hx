@@ -91,13 +91,45 @@ class XMLElement extends Node,
         listeners = new Hash<List<Dynamic->Void>>();
 		if( traits!=null ) setTraitsFromObject(traits);
 	}
-	
+
+	/**
+		Return the element's XML tag name.
+		
+		FIXME: this needs rework. currently, tagName must be
+		set "manually" by deriving classes. $xinf.xml.Binding$
+		could/should take care of that.
+	*/
+	public function getTagName() :String {
+		var cl:Class<Dynamic> = Type.getClass(this);
+		while( cl!=null ) {
+			if( Reflect.hasField(cl,"tagName") ) return Reflect.field(cl,"tagName");
+			cl = Type.getSuperClass(cl);
+		}
+		return null;
+	}
+
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml( xml );
 		setTraitsFromXml( xml );
 		if( id!=null ) {
 			ownerDocument.elementsById.set(id,this);
 		}
+	}
+	
+	override public function toXml() :Xml {
+		var xml = Xml.createElement( getTagName() );
+		for( name in Reflect.fields(_traits) ) {
+			var def = getTraitDefinition(name);
+			if( def!=null ) {
+				var v = def.write( Reflect.field(_traits,name) );
+				if( v.length>0 ) xml.set(name,v);
+			}
+		}
+		for( child in mChildren ) {
+			var c = child.toXml();
+			if( c!=null ) xml.addChild(c);
+		}
+		return xml;
 	}
 		
 	/********************/

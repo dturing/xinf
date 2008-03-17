@@ -21,6 +21,8 @@ class Svg extends GroupImpl {
 		height:new LengthTrait(),
 	}
 
+	static var tagName = "svg";
+
     public var x(get_x,set_x):Float;
     function get_x() :Float { return getTrait("x",Float); }
     function set_x( v:Float ) :Float { retransform(); return setTrait("x",v); }

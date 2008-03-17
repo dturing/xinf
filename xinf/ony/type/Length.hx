@@ -221,7 +221,7 @@ class Length {
 	}
 
 	public function toString() : String {
-		return "("+getDOMString()+")";
+		return getDOMString();
 	}
 	public function getDOMString() : String {
 		if(unitType == TYPE_UNKNOWN)

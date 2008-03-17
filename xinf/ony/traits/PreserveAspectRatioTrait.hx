@@ -119,4 +119,19 @@ class PreserveAspectRatioTrait extends TypedTrait<PreserveAspectRatio> {
 		}
 		return out;
 	}
+	
+
+	override public function write( value:Dynamic ) :String {
+		var v:PreserveAspectRatio = cast(value);
+		return switch( v ) {
+			case Preserve(x,y):
+				"x"+x+"Y"+y;
+			case Defer(o):
+				""+write(o)+" defer";
+			case Meet(o):
+				""+write(o)+" meet";
+			case None:
+				"none";
+		}
+	}
 }

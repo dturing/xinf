@@ -257,6 +257,18 @@ class PaintTrait extends TypedTrait<Paint> {
         return v;
     }
 
+	override public function write( value:Dynamic ) :String {
+		var v:Paint = cast(value);
+		switch( v ) {
+			case RGBColor(r,g,b):
+				return( "rgb("+(r*0xff)+","+(g*0xff)+","+(b*0xff)+")" );
+			case URLReference(url):
+				return( "url("+url+")" );
+			case None:
+				return( "none" );
+		}
+	}
+
 	override public function getDefault() :Dynamic {
 		return def;
 	}

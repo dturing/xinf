@@ -22,7 +22,11 @@ class BoolTrait extends TypedTrait<Bool> {
 
         return v;
     }
-	
+
+	override public function write( value:Dynamic ) :String {
+		return value==true ? "1" : "0";
+	}
+
 	override public function getDefault() :Dynamic {
 		return def;
 	}

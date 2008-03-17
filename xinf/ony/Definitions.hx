@@ -5,5 +5,5 @@ package xinf.ony;
 import xinf.ony.Implementation;
 
 class Definitions extends GroupImpl {
-
+	static var tagName = "defs";
 }

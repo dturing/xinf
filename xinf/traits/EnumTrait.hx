@@ -29,6 +29,12 @@ class EnumTrait<T> extends TypedTrait<T> {
         return def;
     }
 
+	override public function write( value:Dynamic ) :String {
+		var r = Std.string(value);
+		if( sfx!=null ) r = r.substr(0,r.length-sfx.length);
+		return r;
+	}
+
 	override public function getDefault() :Dynamic {
 		return def;
 	}

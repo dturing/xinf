@@ -24,6 +24,10 @@ class IntListTrait extends TypedTrait<IntList> {
         return new IntList( l2 );
     }
 
+	override public function write( value:Dynamic ) :String {
+		return value.join(",");
+	}
+
 	override public function interpolate( _a:Dynamic, _b:Dynamic, f:Float ) :Dynamic {
 		var a:Array<Int> = cast(_a).list;
 		var b:Array<Int> = cast(_b).list;

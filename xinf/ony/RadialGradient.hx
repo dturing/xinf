@@ -15,7 +15,9 @@ class RadialGradient extends Gradient {
 		fx:new FloatTrait(.5),
 		fy:new FloatTrait(.5),
 	};
-	
+
+	static var tagName = "radialGradient";
+
     public var cx(get_cx,set_cx):Float;
     function get_cx() :Float { return getTrait("cx",Float); }
     function set_cx( v:Float ) :Float { return setTrait("cx",v); }

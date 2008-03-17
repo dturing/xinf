@@ -229,22 +229,6 @@ class StyledElement extends XMLElement {
     }
 	
 	/**
-		Return the element's XML tag name.
-		
-		FIXME: this needs rework. currently, tagName must be
-		set "manually" by deriving classes. $xinf.xml.Binding$
-		could/should take care of that.
-	*/
-	public function getTagName() :String {
-		var cl:Class<Dynamic> = Type.getClass(this);
-		while( cl!=null ) {
-			if( Reflect.hasField(cl,"tagName") ) return Reflect.field(cl,"tagName");
-			cl = Type.getSuperClass(cl);
-		}
-		return null;
-	}
-	
-	/**
 		Return [true] if the object matches
 		the given Selector [s], false otherwise.
 	*/

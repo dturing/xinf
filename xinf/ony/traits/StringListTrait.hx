@@ -18,6 +18,10 @@ class StringListTrait extends TypedTrait<StringList> {
         return new StringList( value.split(",") );
     }
 
+	override public function write( value:Dynamic ) :String {
+		return value.join(",");
+	}
+
 	override public function getDefault() :Dynamic {
 		return new StringList( [""] );
 	}

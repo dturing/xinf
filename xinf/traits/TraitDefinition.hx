@@ -7,6 +7,7 @@ interface TraitDefinition {
     function parse( value:String ) :Dynamic;
 	function fromDynamic( value:Dynamic ) :Dynamic;
 	function getDefault() :Dynamic;
+	function write( value:Dynamic ) :String;
 	
 	// FIXME: these really here?
 	function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic;

@@ -76,6 +76,11 @@ class Node implements Serializable {
         }
 	}
 
+	public function toXml() :Xml {
+		throw("unimplemented");
+		return null;
+	}
+
 	/**
 		Called after the Document has been fully loaded
 		(not including external references like images)

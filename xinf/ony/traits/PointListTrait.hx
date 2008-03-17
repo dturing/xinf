@@ -30,6 +30,15 @@ class PointListTrait extends TypedTrait<List<TPoint>> {
         return ps;
     }
 
+	override public function write( value:Dynamic ) :String {
+		var r="";
+		var v:List<TPoint> = cast(value);
+		for( p in v ) {
+			r+=p.x+","+p.y+" ";
+		}
+		return r;
+	}
+	
 	override public function getDefault() :Dynamic {
 		return new List<TPoint>();
 	}

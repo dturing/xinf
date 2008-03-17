@@ -19,6 +19,10 @@ class TypedTrait<T> implements TraitDefinition {
 		throw( "unimplemented" );
     }
 	
+	public function write( value:Dynamic ) :String {
+		return Std.string(value);
+	}
+	
 	public function fromDynamic( value:Dynamic ) :Dynamic {
 		if( Std.is(value,type) ) {
 			return value;
