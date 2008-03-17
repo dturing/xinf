@@ -104,10 +104,15 @@ class URL {
 		(by using neko.io.File.getContent).
 	*/
     public function fetch( onData:String->Void, ?onError:String->Void ) {
+	
+		if( onError==null ) {
+			onError = function(e) { throw(e); };
+		}
+		
         try {
         
         #if neko
-            if( protocol=="file" ) {
+            if( protocol=="file" || protocol==null ) {
                 var data = neko.io.File.getContent( if( host!=null ) host+path+filename else path+filename );
                 onData( data );
                 return;
@@ -121,17 +126,17 @@ class URL {
                 onData( data );
                 return;
             }
-
-            var request = new haxe.Http(toString());
+	
+			var request = new haxe.Http(toString());
             request.onError = onError;
             request.onData = onData;
             request.request(false);
-            
+           
         } catch( e:Dynamic ) {
             var msg = "Could not load document '"+this+"': "+e;
-            if( onError!=null ) onError(msg);
-            else throw(msg);
+            onError(msg);
         }
+		
     }
     
 	/**
