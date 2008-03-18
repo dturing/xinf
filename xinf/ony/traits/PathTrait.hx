@@ -7,7 +7,7 @@ import xinf.traits.TypedTrait;
 import xinf.ony.type.PathSegment;
 import xinf.ony.PathParser;
 
-class PathTrait extends TypedTrait<List<PathSegment>> {
+class PathTrait extends TypedTrait<Iterable<PathSegment>> {
 
 	public function new() {
 		super( new List<PathSegment>() );
@@ -21,7 +21,7 @@ class PathTrait extends TypedTrait<List<PathSegment>> {
 
 	override public function write( value:Dynamic ) :String {
 		var r = "";
-		var v:List<PathSegment> = cast(value);
+		var v:Iterable<PathSegment> = cast(value);
 		for( s in v ) {
 			switch( s ) {
 				case MoveTo(x,y):

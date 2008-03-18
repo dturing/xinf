@@ -7,7 +7,6 @@ import xinf.ony.Implementation;
 import xinf.geom.Types;
 import xinf.ony.traits.PointListTrait;
 
-/* FIXME: overlap with Polygon; inherit? */
 class Polyline extends ElementImpl  {
 
 	static var TRAITS = {
@@ -16,11 +15,11 @@ class Polyline extends ElementImpl  {
 	
 	static var tagName = "polyline";
 
-    public var points(get_points,set_points):List<TPoint>;
-    function get_points() :List<TPoint> {
-        return getTrait("points",List);
+    public var points(get_points,set_points):Iterable<TPoint>;
+    function get_points() :Iterable<TPoint> {
+        return getTrait("points",Dynamic);
     }
-    function set_points( v:List<TPoint> ) {
+    function set_points( v:Iterable<TPoint> ) {
         setTrait("points",v); redraw(); return v;
     }
 

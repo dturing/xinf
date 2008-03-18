@@ -6,7 +6,7 @@ package xinf.ony.traits;
 import xinf.traits.TypedTrait;
 import xinf.geom.Types;
 
-class PointListTrait extends TypedTrait<List<TPoint>> {
+class PointListTrait extends TypedTrait<Iterable<TPoint>> {
 
 	public function new() {
 		super( new List<TPoint>() );
@@ -24,7 +24,6 @@ class PointListTrait extends TypedTrait<List<TPoint>> {
             var x = Std.parseFloat( s.shift() );
             var y = Std.parseFloat( s.shift() );
             ps.add( {x:x, y:y} );
-            
         }
         
         return ps;
@@ -32,7 +31,7 @@ class PointListTrait extends TypedTrait<List<TPoint>> {
 
 	override public function write( value:Dynamic ) :String {
 		var r="";
-		var v:List<TPoint> = cast(value);
+		var v:Iterable<TPoint> = cast(value);
 		for( p in v ) {
 			r+=p.x+","+p.y+" ";
 		}
