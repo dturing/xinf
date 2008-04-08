@@ -26,6 +26,10 @@ class XinfinityRuntime extends Runtime {
 	var interval:Float;
     var bgColor:{ r:Float, g:Float, b:Float, a:Float };
 	
+	var lastMeasure:Float;
+	var rateAcc:Float;
+	var rates:Int;
+	
     private var _eventSource:GLEventSource;
 
 	private static var selectBuffer = CPtr.uint_alloc(64);
@@ -36,12 +40,16 @@ class XinfinityRuntime extends Runtime {
     public function new() :Void {
         super();
         
+		lastMeasure = neko.Sys.time();
+		rates=0;
+		rateAcc=0;
+		
         frame=0;
         width = 320;
         height = 240;
         somethingChanged = true;
 		time = neko.Sys.time();
-		interval = 1/25;
+		interval = 1./25.;
 		bgColor = { r:1., g:1., b:1., a:0. };
     
 		_eventSource=new GLEventSource(this);
@@ -84,6 +92,10 @@ class XinfinityRuntime extends Runtime {
 		bgColor = { r:r, g:g, b:b, a:a };
 	}
 
+	override public function setFramerate( rate:Float ) :Void {
+		interval = 1./rate;
+	}
+
     public function display() :Void {
         startFrame();
 
@@ -108,6 +120,7 @@ class XinfinityRuntime extends Runtime {
 
 		timing();
 		
+		
         GLUT.swapBuffers();
     }
 	
@@ -126,6 +139,7 @@ class XinfinityRuntime extends Runtime {
 			now = neko.Sys.time();
 			d=time-now;
 		}
+		
 		time+=interval;
 	}
 
@@ -145,6 +159,17 @@ class XinfinityRuntime extends Runtime {
 		} else {
 			timing();
 		}
+
+		// measure framerate
+		var now = neko.Sys.time();
+		rates++;
+		rateAcc += (now-lastMeasure);
+		if( rates>=30 ) {
+			trace( ""+(1./(rateAcc/rates))+" fps" );
+			rates=0;
+			rateAcc=0;
+		}
+		lastMeasure=now;
 
 		// for debug: run gc every second
 		/*

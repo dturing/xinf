@@ -161,11 +161,11 @@ class Document extends XMLElement {
     public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?onError:String->Void, ?type:Class<T> ) :Void {
         var url = new URL(url_s);
         url.fetch( function(data) {
-				try {
+//				try {
 					instantiate( data, url, parentDocument, onLoad, type );
-				} catch( e:Dynamic ) {
-					onError(""+e);
-				}
+//				} catch( e:Dynamic ) {
+//					onError(""+e);
+//				}
             }, onError );
     }
 	

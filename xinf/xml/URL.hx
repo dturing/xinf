@@ -106,7 +106,13 @@ class URL {
     public function fetch( onData:String->Void, ?onError:String->Void ) {
 	
 		if( onError==null ) {
-			onError = function(e) { throw(e); };
+			onError = function(e) { 
+				trace("Error fetching document:\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()));
+				#if neko
+					neko.Sys.exit(-1);
+				#end
+					throw("Could not load document" );
+			};
 		}
 		
         try {
@@ -133,8 +139,7 @@ class URL {
             request.request(false);
            
         } catch( e:Dynamic ) {
-            var msg = "Could not load document '"+this+"': "+e;
-            onError(msg);
+            if( onError!=null ) onError(e);
         }
 		
     }

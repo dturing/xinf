@@ -65,6 +65,10 @@ class Root {
 		xinf.erno.Runtime.runtime.setBackgroundColor(r,g,b,a);
 	}
 
+	public static function setFramerate( r:Float ) :Void {
+		xinf.erno.Runtime.runtime.setFramerate(r);
+	}
+
     public static function main() {
         xinf.erno.Runtime.runtime.run();
     }

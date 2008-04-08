@@ -183,5 +183,8 @@ class Runtime extends SimpleEventDispatcher {
 	
 	public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
 	}
-    
+
+	public function setFramerate( rate:Float ) :Void {
+	}
+
 }
