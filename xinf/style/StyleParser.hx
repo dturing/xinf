@@ -79,7 +79,7 @@ class StyleParser {
 				
 				var s:Dynamic = parseToObject( styleText );
 				
-				trace(""+sel+" "+s );
+//				trace(""+sel+" "+s );
 				rules.push( { selector:sel, style:s } );
 
 			} else {

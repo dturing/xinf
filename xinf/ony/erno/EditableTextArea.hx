@@ -137,11 +137,13 @@ class EditableTextArea extends TextArea {
         if( sel.to<sel.from ) sel.to=sel.from;
     
         var t = text;
-        var u = t.substr(0,sel.from);
-        u += str;
-        u += t.substr(sel.to, t.length-sel.to);
-        sel.to=sel.from=sel.from+str.length;
-        text=u;
+		if( t==null ) text=str else {
+			var u = t.substr(0,sel.from);
+			u += str;
+			u += t.substr(sel.to, t.length-sel.to);
+			sel.to=sel.from=sel.from+str.length;
+			text=u;
+		}
     }
 
     public function findLeftWordBoundary() :Int {

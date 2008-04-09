@@ -3,5 +3,5 @@
 -D profile
 -lib xinf
 -resource test.svg@test.svg
--main Example
+-main AnimExample
 -cmd NEKOPATH=$NEKOPATH:../bin/Linux neko test

@@ -91,8 +91,8 @@ class TextBox extends Widget {
             GL.pushMatrix();
 
             GL.translate( Math.round(
-                            leftOffsetAligned(prefSize.x,style.get("hAlign",0.))), 
-                            topOffsetAligned(prefSize.y,style.get("vAlign",0.)), 
+                            leftOffsetAligned(prefSize.x,horizontalAlign)), 
+                            topOffsetAligned(prefSize.y,verticalAlign), 
                             .0 );
             GL.scale( format.size, format.size, 1.0 );
             GL.translate( .0, format.font.ascender, .0 );

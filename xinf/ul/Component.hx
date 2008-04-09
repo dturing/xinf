@@ -25,8 +25,8 @@ class Component extends StyledElement {
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
 			* {
-				font-size: 14;
-				font-family: Textra LT Book;
+				font-size: 12;
+				font-family: Bitstream Vera Sans;
 			}
 			
 			.Button {
@@ -36,6 +36,7 @@ class Component extends StyledElement {
 
 			.Label {
 				padding: 6 3 6 3;
+				horizontal-align: 0.;
 			}
 
 			.Button, .Dropdown, .LineEdit, .Slider {
@@ -62,7 +63,15 @@ class Component extends StyledElement {
 				padding: 5 2 5 2;
 			}
 			
-			.Button.:press, .LineEdit.:focus {
+			.LineEdit {
+				padding: 5 2 5 2;
+			}
+		
+			.LineEdit.:focus {
+				skin: focus-bright;
+			}
+			
+			.Button.:press {
 				skin: focus-bright;
 				padding: 5 3 5 1;
 			}

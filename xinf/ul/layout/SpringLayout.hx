@@ -162,8 +162,8 @@ class SpringLayout implements Layout {
             var width = constraints.getWidth().getValue();
             var height = constraints.getHeight().getValue();
             
-            if( c.position.x!=x || c.position.y!=y ) c.set_position({x:x,y:y});
-            if( c.size.x!=width || c.size.y!=height ) c.set_size({x:width,y:height});
+			c.set_position({x:x,y:y});
+            c.set_size({x:width,y:height});
 
         }
 
