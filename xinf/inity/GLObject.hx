@@ -41,7 +41,7 @@ class GLObject {
 
     public function redoTransform() :Void {
         GL.newList( id, GL.COMPILE );
-        GL.pushName(id);
+//        GL.pushName(id);
         GL.pushMatrix();
         GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes FIXME: still needed?
         
@@ -52,7 +52,7 @@ class GLObject {
             
         GL.popAttrib();
         GL.popMatrix();
-        GL.popName();
+//        GL.popName();
         GL.endList();
 
         #if gldebug

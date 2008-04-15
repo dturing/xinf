@@ -29,6 +29,7 @@ class XinfinityRuntime extends Runtime {
 	var lastMeasure:Float;
 	var rateAcc:Float;
 	var rates:Int;
+	var measuredFps:Float;
 	
     private var _eventSource:GLEventSource;
 
@@ -96,6 +97,10 @@ class XinfinityRuntime extends Runtime {
 		interval = 1./rate;
 	}
 
+	override public function getMeasuredFramerate() :Float {
+		return measuredFps;
+	}
+
     public function display() :Void {
         startFrame();
 
@@ -125,6 +130,8 @@ class XinfinityRuntime extends Runtime {
     }
 	
 	function timing() :Void {
+		if( interval==-1 ) return; // as fast as possible...
+	
 		var now = neko.Sys.time();
 		while( time<now-(interval) ) {
 			time+=interval;
@@ -164,8 +171,8 @@ class XinfinityRuntime extends Runtime {
 		var now = neko.Sys.time();
 		rates++;
 		rateAcc += (now-lastMeasure);
-		if( rates>=30 ) {
-			trace( ""+(1./(rateAcc/rates))+" fps" );
+		if( rateAcc>1. ) {
+			measuredFps = (1./(rateAcc/rates));
 			rates=0;
 			rateAcc=0;
 		}
@@ -287,87 +294,4 @@ class XinfinityRuntime extends Runtime {
         else return -1;
     }
 
-/*
-    public function startPick( x:Float, y:Float ) : Void {
-        GL.viewport( 0, 0, Math.round(width), Math.round(height) );
-        GL.matrixMode( GL.PROJECTION );
-        GL.loadIdentity();
-        GL.matrixMode( GL.MODELVIEW );
-        GL.loadIdentity();
-
-            // FIXME depends on stage scale mode
-            GL.translate( -1., 1., 0. );
-            GL.scale( (2./width), (-2./height), 1. );
-
-            GL.selectBuffer( 64, selectBuffer );
-            
-            var v:Array<Int> = opengl.Helper.getInts( GL.VIEWPORT, 4 );
-            CPtr.int_set( view, 0, v[0] );
-            CPtr.int_set( view, 1, v[1] );
-            CPtr.int_set( view, 2, v[2] );
-            CPtr.int_set( view, 3, v[3] );
-            
-            GL.renderMode( GL.SELECT );
-            GL.initNames();
-
-            GL.matrixMode( GL.PROJECTION );
-                
-            GL.pushMatrix();
-                GL.loadIdentity();
-                GLU.pickMatrix( x, y, 1.0, 1.0, view );
-            
-            GL.matrixMode( GL.MODELVIEW );
-
-                GL.disable( GL.BLEND );
-    }
-    
-    public function endPick() : Array<Array<Int>> {
-        GL.matrixMode( GL.PROJECTION );
-        GL.popMatrix();
-
-        var n_hits = GL.renderMode( GL.RENDER );
-        
-        // process the GL SelectBuffer into a simple array of arrays of names.
-        var stacks = new Array<Array<Int>>();
-        if( n_hits > 0 ) {
-            var i=0; 
-            var j=0;
-            while( i<n_hits && j<64 ) {
-                var n : Int = CPtr.uint_get( selectBuffer, j);
-                var objs = new Array<Int>();
-                j+=3;
-                for( k in 0...n ) {
-                    objs.push( Math.round(CPtr.uint_get( selectBuffer, j )));
-                    j++;
-                }
-                i++;
-                stacks.push(objs);
-            }
-        }
-        
-        GL.matrixMode( GL.MODELVIEW );
-        GL.enable( GL.BLEND );
-        return stacks;
-    }
-    
-    
-    public function getObjectsUnderPoint( x:Float, y:Float ) : Array<Int> {
-        startPick( x, height-y );
-
-        renderRoot();
-                    
-        var hits:Array<Array<Int>> = endPick();
-        var os = new Array<Int>();
-        for( hit in hits ) {
-            os.push( hit.pop() );
-        }
-        
-        return os;
-    }
- 
-    public function findIdAt( x:Float, y:Float ) :Int {
-        return getObjectsUnderPoint( x, y ).pop();
-    }
-    
-    */
 }
