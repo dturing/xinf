@@ -26,11 +26,11 @@ class GridLayout extends SpringLayout {
             var count = p.getComponents().length;
 			var rows = Math.ceil( count/cols );
             if( compact ) {
-                trace("MakeCompactGrid "+cols+"x"+rows+" pad "+xPad+"/"+yPad );
+//                trace("MakeCompactGrid "+cols+"x"+rows+" pad "+xPad+"/"+yPad );
                 SpringUtilities.makeCompactGrid(
                     p, this, cols, rows, xPad, yPad );
             } else {
-                trace("MakeGrid "+cols+"x"+rows+" pad "+xPad+"/"+yPad );
+//                trace("MakeGrid "+cols+"x"+rows+" pad "+xPad+"/"+yPad );
                 SpringUtilities.makeGrid(
                     p, this, cols, rows, xPad, yPad );
             }

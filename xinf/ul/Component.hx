@@ -22,6 +22,7 @@ import xinf.ul.BorderTrait;
 
 class Component extends StyledElement {
 	public static function init() {
+		trace("INIT components");
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
 			* {
@@ -56,6 +57,11 @@ class Component extends StyledElement {
 			.ListView {
 				min-width: 100;
 				min-height: 75;
+			}
+			
+			.Slider {
+				padding: 5 2 5 2;
+				/* horizontal-align: 1.; */
 			}
 			
 			.:focus {
