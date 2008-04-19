@@ -38,12 +38,11 @@ class VideoSource extends Texture {
 
     private function onData(e:NekobusData) :Void {
 		if( e.element == "output" && e.buffer!=null ) {
-		
+
 			var caps = e.buffer.caps();
 			var w:Int = caps.width; var h:Int = caps.height;
 			if( w!=width || h!=height ) {
 				width=w; height=h;
-				trace("video size: "+w+"x"+h );
 				initialize( Math.round(width), Math.round(width), Math.round(height), BGRA );
 			}
 		
