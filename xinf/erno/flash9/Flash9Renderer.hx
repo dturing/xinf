@@ -297,10 +297,13 @@ class Flash9Renderer extends ObjectModelRenderer {
         if( img.bitmapData == null ) {
             return;
         }
-        var bm : flash.display.Bitmap;
+		
+		var bm : flash.display.Bitmap;
         if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
             bm = new flash.display.Bitmap( img.bitmapData );
         } else {
+			/* this works, but i feel it's not the most efficient way. 
+			  if you can think of a better one, please submit a patch. */
             var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
             bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
             bm = new flash.display.Bitmap( bd );
