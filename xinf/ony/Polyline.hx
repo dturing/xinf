@@ -15,11 +15,11 @@ class Polyline extends ElementImpl  {
 	
 	static var tagName = "polyline";
 
-    public var points(get_points,set_points):Iterable<TPoint>;
-    function get_points() :Iterable<TPoint> {
-        return getTrait("points",Dynamic);
+    public var points(get_points,set_points):List<TPoint>;
+    function get_points() :List<TPoint> {
+        return getTrait("points",List); // FIXME: messy
     }
-    function set_points( v:Iterable<TPoint> ) {
+    function set_points( v:List<TPoint> ) {
         setTrait("points",v); redraw(); return v;
     }
 

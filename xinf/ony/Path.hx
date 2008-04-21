@@ -60,11 +60,11 @@ class Path extends ElementImpl {
 	
 	static var tagName = "path";
 
-    public var segments(get_segments,set_segments):Iterable<PathSegment>;
-    function get_segments() :Iterable<PathSegment> {
-        return getTrait("d",Dynamic);
+    public var segments(get_segments,set_segments):List<PathSegment>;
+    function get_segments() :List<PathSegment> {
+        return getTrait("d",List);
     }
-    function set_segments( v:Iterable<PathSegment> ) {
+    function set_segments( v:List<PathSegment> ) {
         setTrait("d",v); redraw(); return v;
     }
 
