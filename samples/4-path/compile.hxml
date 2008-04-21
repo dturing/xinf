@@ -6,7 +6,7 @@
 --next
 -swf test.swf
 -swf-version 9
--swf-header 640:480:25:000000
+-swf-header 640:480:25:ffffff
 -main Example
 -lib xinf
 

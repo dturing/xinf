@@ -36,16 +36,20 @@ class Example {
 		   that a Polygon is always closed. */
 
 		var polyline = new Polyline({ stroke:"red", stroke_width:2, fill:"green" });
-		polyline.points.add( { x:0., y:100. } );
-		polyline.points.add( { x:80., y:120. } );
-		polyline.points.add( { x:100., y:200. } );
+		var points = new List<TPoint>();
+		points.add( { x:0., y:100. } );
+		points.add( { x:80., y:120. } );
+		points.add( { x:100., y:200. } );
+		polyline.points = points;
 		Root.appendChild( polyline );
 
 
 		var polygon = new Polygon({ stroke:"red", stroke_width:2, fill:"green" });
-		polygon.points.add( { x:100., y:100. } );
-		polygon.points.add( { x:180., y:120. } );
-		polygon.points.add( { x:200., y:200. } );
+		var points2 = new List<TPoint>();
+		points2.add( { x:100., y:100. } );
+		points2.add( { x:180., y:120. } );
+		points2.add( { x:200., y:200. } );
+		polygon.points = points2;
 		Root.appendChild( polygon );
 
 

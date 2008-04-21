@@ -1,19 +1,16 @@
--cp .
 -neko test.n
 -main Example
 -lib xinf
 --override
 
 --next
--cp .
 -swf test.swf
 -swf-version 9
--swf-header 640:480:25:000000
+-swf-header 640:480:25:ffffff
 -main Example
 -lib xinf
 
 --next
--cp .
 -js test.js
 -main Example
 -lib xinf
