@@ -28,7 +28,17 @@ import xinf.erno.Renderer;
         being (re-)defined.
     </p>
 **/
-class ObjectModelRenderer<Primitive> extends PenRenderer {
+
+#if neko
+typedef Primitive = xinf.inity.GLObject
+#else js
+import js.Dom;
+typedef Primitive = js.HtmlDom
+#else true
+typedef Primitive = Dynamic
+#end
+
+class ObjectModelRenderer extends PenRenderer {
     
     private var objects:IntHash<Primitive>;
     

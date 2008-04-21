@@ -17,7 +17,7 @@ import cptr.CPtr;
 
 typedef Primitive = GLObject
 
-class GLRenderer extends ObjectModelRenderer<Primitive> {
+class GLRenderer extends ObjectModelRenderer {
     
     private var circle_fill:Int;
     private var circle_stroke:Int;

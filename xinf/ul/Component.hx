@@ -22,7 +22,6 @@ import xinf.ul.BorderTrait;
 
 class Component extends StyledElement {
 	public static function init() {
-		trace("INIT components");
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
 			* {

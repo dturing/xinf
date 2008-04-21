@@ -25,8 +25,7 @@ import flash.display.SpreadMethod;
 
 typedef Primitive = Dynamic // FIXME XinfSprite
 
-class Flash9Renderer extends ObjectModelRenderer<Primitive> {
-
+class Flash9Renderer extends ObjectModelRenderer {
 	var last		: { x:Float, y:Float };
 	var first		: { x:Float, y:Float };
 
@@ -51,8 +50,6 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 		} //else
 		parent.addChild( child );
     }
-
-    /* our part of the drawing protocol */
     
     override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
         p.x=0; p.y=0;
@@ -116,13 +113,7 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
 	function flashRadialGradient( cx:Float, cy:Float, r:Float, fx:Float, fy:Float ) {
 		var d = r*2;
 		var matr = new flash.geom.Matrix();
-		matr.createGradientBox( d, d, 0, 0., 0. );
-/*
-		var a = Math.atan2(fy-cy,fx-cx);
-		matr.translate( -cx, -cy );
-		matr.rotate( a );
-		matr.translate( cx, cy );
-*/		
+		matr.createGradientBox( d, d, 0, 0., 0. );	
 		matr.translate( cx-r, cy-r );
 		return matr;
 	}
@@ -306,9 +297,6 @@ class Flash9Renderer extends ObjectModelRenderer<Primitive> {
         if( img.bitmapData == null ) {
             return;
         }
-        /* this works, but i feel it's not the most efficient way.
-            if you can think of a better one, please submit a patch.
-            else, we should at least make an exception for the default case ("natural" image size)*/
         var bm : flash.display.Bitmap;
         if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
             bm = new flash.display.Bitmap( img.bitmapData );

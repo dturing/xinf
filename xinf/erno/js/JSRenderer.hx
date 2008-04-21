@@ -11,7 +11,7 @@ import xinf.erno.TextFormat;
 import js.Dom;
 typedef Primitive = js.HtmlDom
 
-class JSRenderer extends ObjectModelRenderer<Primitive> {
+class JSRenderer extends ObjectModelRenderer {
     
     override public function createPrimitive(id:Int) :Primitive {
         // create new object
@@ -76,11 +76,11 @@ class JSRenderer extends ObjectModelRenderer<Primitive> {
 				default:
 					r.style.border = 0;
 			}
-		} else {
-            r.style.width = ""+Math.round(w);
-            r.style.height = ""+Math.round(h);
         }
-        current.appendChild( r );
+		
+		r.style.width = ""+Math.round(w);
+		r.style.height = ""+Math.round(h);
+		current.appendChild( r );
     }
 
     override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
