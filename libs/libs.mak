@@ -138,7 +138,7 @@ $(HAXELIB_PROJECT).zip: $(NDLL)
 			cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 			cp -r $(BIN_PATH)/$(PLATFORM)/*.ndll $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 		)
-		cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
+		-@cp $(BIN_PATH)/$(PROJECT).n $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \
 		#	cp $(BIN_PATH)/*.ttf $(HAXELIB_PROJECT)/ndll/; \
 		#	cp $(BIN_PATH)/README $(HAXELIB_PROJECT)/ndll/; \
 		#	cp -r $(BIN_PATH)/$(PLATFORM)/* $(HAXELIB_PROJECT)/ndll/$(PLATFORM)/; \

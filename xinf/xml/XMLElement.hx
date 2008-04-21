@@ -82,7 +82,7 @@ class XMLElement extends Node,
 	/**
 		Create a new, empty Element.
 		
-		If [traits] is given, it will be set using setTraitsFromObject.
+		If [traits] is given, it will be set using $xinf.traits.TraitAccess.setTraitsFromObject()$.
 	*/
     public function new( ?traits:Dynamic ) :Void {
 		super();

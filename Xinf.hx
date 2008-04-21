@@ -46,7 +46,7 @@ typedef Link = xinf.ony.Link
 typedef Crop = xinf.ony.Crop
 
 //tmp, for doc
-typedef Binding<T:Node> = xinf.xml.Binding<T>;
+typedef Binding = xinf.xml.Binding;
 
 #else true
 typedef Svg = xinf.ony.erno.Svg
@@ -77,3 +77,4 @@ typedef LengthTrait = xinf.ony.traits.LengthTrait;
 
 typedef Length = xinf.ony.type.Length;
 typedef Paint = xinf.ony.type.Paint;
+typedef PreserveAspectRatio = xinf.ony.type.PreserveAspectRatio;

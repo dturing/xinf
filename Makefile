@@ -21,10 +21,10 @@ HAXEFLAGS=--override $(INITYCP) -cp . -D profile
 
 default: test
 	
-# Example.hx test
+# XinfTest.hx test
 
 test : $(VERSION_STUB) $(SRC) 
-	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main Example
+	haxe $(HAXEFLAGS) -resource test.svg@test.svg -neko test.n -main XinfTest
 	NEKOPATH=$(NEKOPATH) neko test.n  
 	#xinf/test/static/SVG1.2/svg/struct-use-01-t.svg 
 

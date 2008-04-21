@@ -3,7 +3,8 @@ import Xinf;
 /**
 	Example 2: Groups and Transforms.
 	
-	This example demonstrates using Groups to construct a display hierarchy 
+	This example demonstrates using Groups to 
+	construct a display hierarchy 
 	and using some simple transformations.
 */
 

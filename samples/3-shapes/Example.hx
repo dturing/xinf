@@ -3,8 +3,8 @@ import Xinf;
 /**
 	Example 3: Other Shapes.
 	
-	This example demonstrates the simple SVG shapes 
-	that are not presented in any other example.
+	This example demonstrates those simple SVG shapes 
+	which are not presented in any other example.
 */
 
 class Example {
@@ -36,16 +36,16 @@ class Example {
 		   that a Polygon is always closed. */
 
 		var polyline = new Polyline({ stroke:"red", stroke_width:2, fill:"green" });
-		polyline.points = [ { x:0., y:100. },
-							{ x:80., y:120. },
-							{ x:100., y:200. } ];
+		polyline.points.add( { x:0., y:100. } );
+		polyline.points.add( { x:80., y:120. } );
+		polyline.points.add( { x:100., y:200. } );
 		Root.appendChild( polyline );
 
 
 		var polygon = new Polygon({ stroke:"red", stroke_width:2, fill:"green" });
-		polygon.points = [ { x:100., y:100. },
-							{ x:180., y:120. },
-							{ x:200., y:200. } ];
+		polygon.points.add( { x:100., y:100. } );
+		polygon.points.add( { x:180., y:120. } );
+		polygon.points.add( { x:200., y:200. } );
 		Root.appendChild( polygon );
 
 

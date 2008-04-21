@@ -21,8 +21,7 @@ class Example {
 		firstRect.height = 100;
 		firstRect.fill = Paint.RGBColor( 1, 0, 0 );
 		Root.appendChild( firstRect );
-		
-		
+
 		/* Most properties of svg shapes are so-called "Traits",
 		   and all shapes accept a dynamic object in the constructor
 		   to set those traits. */
@@ -49,7 +48,6 @@ class Example {
 					fill: "blue" 
 				});
 		Root.appendChild( thirdRect );
-
 
 		/* Finally, we have to pass control to the xinf main loop.
 		   Note that this might return immediately (on flash), 
