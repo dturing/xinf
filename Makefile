@@ -40,10 +40,10 @@ doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
 	cd doc && haxedoc-mod/haxedoc xinf.xml
 	
 flash : $(SRC)
-	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main Example
+	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main XinfTest
 	
 js : $(SRC)
-	haxe $(HAXEFLAGS) -resource test.svg@test.svg -js test.js -main Example
+	haxe $(HAXEFLAGS) -resource test.svg@test.svg -js test.js -main XinfTest
 
 
 # Benchmark

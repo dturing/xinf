@@ -1,112 +1,83 @@
 import Xinf;
+import xinf.ul.layout.SpringUtilities;
+import xinf.ul.layout.BorderLayout;
+import xinf.ul.widget.Widget;
+import xinf.ul.Component;
 
 class XinfTest {
-
-	var g:Group;
-	var doc:Svg;
 	
-	public function new( ?url:String ) :Void {
+	public function new() :Void {
+		xinf.ul.Component.init();
 	
-		g = new Group();
-		Root.appendChild(g);
+		var lm = xinf.ul.model.SimpleListModel.create([
+			"one",
+			"two",
+			"three",
+			"four",
+			"five",
+			"six",
+			"seven"
+		].iterator());
 		
-		var stage = {x:100.,y:100.};
+		var c = new xinf.ul.Interface();
+		c.layout = xinf.ul.layout.FlowLayout.Vertical5;
+		c.captureRoot();
+		
+		var l = new xinf.ul.widget.Label( "Hello Xinful" );
+		c.appendChild(l);
 
-		var scale = 1.;
-		var offset={ x:0., y:0. };
-		var self=this;
+		var s = new xinf.ul.widget.Slider( 0, 100, 1 );
+		c.appendChild(s);
+
+		var ed = new xinf.ul.widget.LineEdit();
+		ed.text = "Edit me!";
+		c.appendChild( ed );
 		
-		var trans = function() {
-			//doc.transform = new Scale( stage.x/doc.width, stage.y/doc.height );
-			self.g.transform = new Concatenate( 
-							new Concatenate(
-								new Translate( 0, 0 ), //-doc.width/2, -doc.height/2 ),
-								new Concatenate(
-//									new Scale(  (stage.x/doc.width)*scale, 
-//												(stage.y/doc.height)*scale ),
-									new Scale(  scale, scale ),
-									new Translate(offset.x,offset.y)
-								)
-							),
-							new Translate( stage.x/2, stage.y/2 )
-							);
+		var dumpButtonInfo = function(m:Dynamic) {
+			trace("Button press: "+m );
 		};
+		c.appendChild( xinf.ul.widget.Button.createSimple("Hello", dumpButtonInfo, "Hi!" ) );
+		c.appendChild( xinf.ul.widget.Button.createSimple("World", dumpButtonInfo, "World!" ) );
 
-		Root.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
-			stage.x=e.x; stage.y=e.y;
-			trans();
-		});
+		var l = new xinf.ul.list.ListView(lm);
+		c.appendChild(l);
 		
+		var d = new xinf.ul.widget.Dropdown(lm);
+		c.appendChild(d);
 
-		Root.addEventListener( KeyboardEvent.KEY_DOWN, function(e) {
-			var d=25;
-			trace("key "+e.key );
-			switch( e.key ) {
-				case "up":
-					offset.y += d;
-				case "down":
-					offset.y -= d;
-				case "left":
-					offset.x += d;
-				case "right":
-					offset.x -= d;
-				case "-":
-					scale*=.9;
-				case "+":
-					scale*=1./.9;
-				case "1":
-					offset = { x:0., y:0. };
-					scale = 1;
-			}
-			
-			trans();
-		});
+		c.relayout();
+		/*
+		*/
+		/*
+		var layout = new xinf.ul.layout.BorderLayout();
+		//var layout = new xinf.ul.layout.SpringLayout();
 		
-		Root.addEventListener( MouseEvent.MOUSE_DOWN, function(check) {
-			var upL:Dynamic;
-			var moveL:Dynamic;
-			var old = offset;
-			moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {
-				offset = { x:old.x-(check.x-e.x), y:old.y-(check.y-e.y) };
-				trans();
-			});
-			upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
-				Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
-				Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
-			});
-		});
-
-		load( url );
-
-	}
-	
-	public function load( url:String ) :Void {
-		if( doc!=null ) {
-			g.removeChild(doc);
-		}
+		var c = new xinf.ul.widget.Pane();
+		c.set_size({x:300.,y:300.});
+		var arr = ["one","two","three","four","five"];//,"six","seven","eight","nine"];
+		var borders = [West,North,East,South,Center];
+		var count = 0;
+		for( t in arr ) {
+            var l :Component = if (count%2==0) {
+            	if (count==4) cast(new xinf.ul.widget.CheckBox(t),Component);
+            	else cast(new xinf.ul.widget.Label(t),Component);
+            } else {
+            	cast(new xinf.ul.widget.Button(t),Component);
+            }
+            l.set_size(l.prefSize);
+            layout.setConstraint(l,borders[count++]);
+            c.appendChild(l);
+            
+        }
 		
-		var self=this;
-		var onLoad = function(doc:Svg) {
-				self.g.appendChild( doc );
-				doc.addEventListener( LinkEvent.ACTUATE, function(e) {
-					self.load(e.href);
-				});
-			};
-		
-		if( url==null ) {
-			Document.instantiate( Std.resource("test.svg"), onLoad, Svg );
-		} else {
-			Document.load( url, onLoad, Svg );
-		}
-
+        c.layout = layout;
+        c.relayout();
+        Root.appendChild(c.getElement());
+        */
 	}
 	
 	public static function main() :Void {
-		var arg:String;
-		#if neko
-			arg = neko.Sys.args()[0];
-		#end
-		var d = new XinfTest( arg );
+		var d = new XinfTest();
 		Root.main();
 	}
 }
