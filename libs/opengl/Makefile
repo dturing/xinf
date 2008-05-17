@@ -7,7 +7,7 @@
 
 # project name
 PROJECT:=opengl
-BINDING_CLASSES:=GL GLU GLUT
+BINDING_CLASSES:=GL GLU GLFW
 XINF_PKG:=opengl
 XINF_PKG_PATH:=opengl
 
@@ -19,10 +19,10 @@ ifeq ($(NEKO_PLATFORM),Mac)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lopengl32 -lglu32 -L/opt/mingw/lib -lfreeglut
+		PROJECT_LIBS:=-lopengl32 -lglu32 bin/Windows/glfw.dll
 	else
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lGL -lGLU -lglut
+		PROJECT_LIBS:=-lGL -lGLU -lglut -lglfw
 	endif
 endif
 

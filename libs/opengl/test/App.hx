@@ -1,15 +1,86 @@
 
 import opengl.GL;
 import opengl.GLU;
-import opengl.GLUT;
+import opengl.GLFW;
 
 class App {
     public static var i=0;
-    public static function step( n:Int ) {
-        GLUT.postRedisplay();
-		GLUT.setTimerFunc( Math.round(1000/25), step, i );
-    }
-    
+	
+	public static function wireCube( dSize:Float ) {
+		var s = dSize*.5;
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3( s,-s, s);
+			GL.vertex3( s,-s,-s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3( s, s, s);
+		GL.end();
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3( s, s, s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3(-s, s, s);
+		GL.end();
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3( s, s, s);
+			GL.vertex3(-s, s, s);
+			GL.vertex3(-s,-s, s);
+			GL.vertex3( s,-s, s);
+		GL.end();
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3(-s,-s, s);
+			GL.vertex3(-s, s, s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3(-s,-s,-s);
+		GL.end();
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3(-s,-s, s);
+			GL.vertex3(-s,-s,-s);
+			GL.vertex3( s,-s,-s);
+			GL.vertex3( s,-s, s);
+		GL.end();
+		GL.begin( GL.LINE_LOOP );
+			GL.vertex3(-s,-s,-s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3( s,-s,-s);
+		GL.end();
+	}
+
+	public static function solidCube( dSize:Float ) {
+		var s = dSize*.5;
+		GL.begin( GL.QUADS );
+			GL.vertex3( s,-s, s);
+			GL.vertex3( s,-s,-s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3( s, s, s);
+
+			GL.vertex3( s, s, s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3(-s, s, s);
+
+			GL.vertex3( s, s, s);
+			GL.vertex3(-s, s, s);
+			GL.vertex3(-s,-s, s);
+			GL.vertex3( s,-s, s);
+
+			GL.vertex3(-s,-s, s);
+			GL.vertex3(-s, s, s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3(-s,-s,-s);
+
+			GL.vertex3(-s,-s, s);
+			GL.vertex3(-s,-s,-s);
+			GL.vertex3( s,-s,-s);
+			GL.vertex3( s,-s, s);
+
+			GL.vertex3(-s,-s,-s);
+			GL.vertex3(-s, s,-s);
+			GL.vertex3( s, s,-s);
+			GL.vertex3( s,-s,-s);
+		GL.end();
+	}
+
     public static function display() {
         i++;
         GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
@@ -26,75 +97,47 @@ class App {
         GL.rotate( r*.2352, 0., 0., 1. );
         
         GL.color3( 1., 0., 0. );
-        // solidCube(1.0);
-        GLUT.solidCube( 1 );
+		solidCube( 1. );
 
         GL.color3( 1., 1., 1. );
-        GLUT.wireCube(2.0);
-    
+        wireCube(2.0);
         
         GL.flush();
-        GLUT.swapBuffers();
+        GLFW.swapBuffers();
     }
-                        
+
     public static function main() {
-	    GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
-        var d = GLUT.createWindow("Hello World");
-	
-		GLUT.setOption( GLUT.ACTION_ON_WINDOW_CLOSE, GLUT.ACTION_GLUTMAINLOOP_RETURNS );
-
-        GLUT.setDisplayFunc( display );
-        GLUT.setTimerFunc( Math.round(1000/25), step, 0 );
-    
-        GLUT.setReshapeFunc( function( w:Int, h:Int ) {
-                GL.viewport( 0, 0, w, h );
-            } );
-        GLUT.setMouseFunc( function( btn:Int, state:Int, x:Int, y:Int ) {
-                trace("mouse btn "+btn+" "+state+" @ "+x+","+y );
-            } );
-        GLUT.setMotionFunc( function( x:Int, y:Int ) {
-                trace("motion: "+x+","+y );
-            } );
-        GLUT.setPassiveMotionFunc( function( x:Int, y:Int ) {
-                trace("passive motion: "+x+","+y );
-            } );
-        GLUT.setEntryFunc( function( state:Int ) {
-                trace("entry: "+state );
-            } );
-        
-// FIXME: setting this consumes CPU when window invisible...		
-        GLUT.setVisibilityFunc( function( state:Int ) {
-                trace("window visibility: "+state );
-            } );
-			
-        GLUT.setKeyboardFunc( function( key:Int, x:Int, y:Int ) {
-                var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
-                
-                trace("key "+key+k+" @"+x+","+y );
-            } );
-        GLUT.setSpecialFunc( function( key:Int, x:Int, y:Int ) {
-                var k = if( key>=32 && key <= 128 ) " ('"+String.fromCharCode( key )+"')" else "";
-                
-                trace("special key "+key+k+" @"+x+","+y );
-            } );
-        GLUT.setExitFunc( function() {
-                trace("quit");
-            } );
-
-        GLUT.setCloseFunc( function() {
-                trace("close");
-            } );
-        GLUT.setWMCloseFunc( function() {
-                trace("wmClose");
-            } );
-  
-		GLUT.setMouseWheelFunc( function( wheel:Int, direction:Int, x:Int, y:Int ) {
-                trace("wheel "+wheel+" "+direction+" "+x+" "+y);
-            } );
-
-        GLUT.showWindow();
-        GLUT.postRedisplay();
-
+		var close = false;
+		
+		GLFW.openWindow( 320, 240, 8,8,8, 8,8,0, GLFW.WINDOW );
+		
+		GLFW.setWindowSizeFunction( function( w:Int, h:Int ) {
+			trace("window resize: "+w+"x"+h );
+		});
+		GLFW.setWindowCloseFunction( function() {
+			trace("window close" );
+			close = true;
+			return 1;
+		});
+		GLFW.setWindowRefreshFunction( function() {
+			trace("window refresh" );
+		});
+		GLFW.setKeyFunction( function( a:Int, b:Int ) {
+			trace("key: "+a+", "+b );
+		});
+		GLFW.setCharFunction( function( a:Int, b:Int ) {
+			trace("char: "+a+", "+b );
+		});
+		GLFW.setMouseButtonFunction( function( a:Int, b:Int ) {
+			trace("mouseButton: "+a+", "+b );
+		});
+		GLFW.setMousePosFunction( function( a:Int, b:Int ) {
+			trace("mousePos: "+a+", "+b );
+		});
+		GLFW.setMouseWheelFunction( function( a:Int ) {
+			trace("mouseWheel: "+a );
+		});
+		
 
         GL.clearColor( 0, 0, 0, 0 );
         GL.shadeModel( GL.FLAT );
@@ -105,10 +148,12 @@ class App {
         GL.matrixMode( GL.MODELVIEW );
         
         GL.enable( GL.DEPTH_TEST );
-
-
-        GLUT.mainLoop();
+		while(!close) {
+			GLFW.pollEvents();
+			display();
+			neko.Sys.sleep(1./25);
+		}
+		GLFW.terminate();
 		
-		trace("Exit mainLoop. Sweet!");
     }
 }
