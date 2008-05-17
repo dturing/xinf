@@ -19,7 +19,7 @@ ifeq ($(NEKO_PLATFORM),Mac)
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lopengl32 -lglu32 -lglut32
+		PROJECT_LIBS:=-lopengl32 -lglu32 -L/opt/mingw/lib -lfreeglut
 	else
 		PROJECT_CFLAGS:=
 		PROJECT_LIBS:=-lGL -lGLU -lglut

@@ -258,7 +258,7 @@ extern class GLU {
         
 /* additions */
     /** <nekobind><cptr name="v" type="double" min-size="(offset+(n*3))"/></nekobind> **/
-    public static function verticesOffset( offset:Int, n:Int, v:Dynamic  ) :Void;
+    // public static function verticesOffset( offset:Int, n:Int, v:Dynamic  ) :Void;
     
     
     public static function __init__() : Void {

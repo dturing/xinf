@@ -19,7 +19,8 @@ package opengl;
     #else
         #include &lt;GL/gl.h&gt;
         #include &lt;GL/glu.h&gt;
-        #include &lt;GL/glut.h&gt;
+        #include &lt;GL/freeglut_std.h&gt;
+        #include &lt;GL/freeglut_ext.h&gt;
     #endif
     </nekobind:cHeader>
 **/
@@ -63,6 +64,7 @@ extern class GLUT {
     /** <nekobind><cptr name="argv" null-allowed="true" type="char*"/>
                 <cptr name="argn" null-allowed="true" type="int"/></nekobind> **/
     public static function init(argn:Dynamic,argv:Dynamic) :Void;
+    public static function initEmpty() :Void;
     
     public static function setDisplayFunc( func:Dynamic ) :Void; // Void->Void
     public static function setReshapeFunc( func:Dynamic ) :Void; // Int->Int->Void
@@ -108,7 +110,20 @@ extern class GLUT {
     public static function solidTeapot( size:Float ) :Void;
     public static function wireOctahedron() :Void;
     public static function solidOctahedron() :Void;
-    
+
+
+	/* freeglut ext */
+    public static function setMouseWheelFunc( func:Dynamic ) :Void; // Int->Int->Int->Int->Void
+    public static function setCloseFunc( func:Dynamic ) :Void; // Void->Void
+    public static function setWMCloseFunc( func:Dynamic ) :Void; // Void->Void
+
+    public static function setOption( option:Int, value:Int ) :Void;
+
+    public static var ACTION_ON_WINDOW_CLOSE:Int;
+    public static var ACTION_EXIT:Int;
+    public static var ACTION_GLUTMAINLOOP_RETURNS:Int;
+    public static var ACTION_CONTINUE_EXECUTION:Int;
+
     public static function __init__() : Void {
         DLLLoader.addLibToPath("opengl");
         untyped {

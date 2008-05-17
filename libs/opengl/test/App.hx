@@ -7,7 +7,7 @@ class App {
     public static var i=0;
     public static function step( n:Int ) {
         GLUT.postRedisplay();
-		GLUT.setTimerFunc( Math.round(1000/1), step, i );
+		GLUT.setTimerFunc( Math.round(1000/25), step, i );
     }
     
     public static function display() {
@@ -38,9 +38,11 @@ class App {
     }
                         
     public static function main() {
-        GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
+	    GLUT.initDisplayMode( GLUT.DOUBLE | GLUT.RGB | GLUT.DEPTH );
         var d = GLUT.createWindow("Hello World");
-		
+	
+		GLUT.setOption( GLUT.ACTION_ON_WINDOW_CLOSE, GLUT.ACTION_GLUTMAINLOOP_RETURNS );
+
         GLUT.setDisplayFunc( display );
         GLUT.setTimerFunc( Math.round(1000/25), step, 0 );
     
@@ -78,7 +80,18 @@ class App {
         GLUT.setExitFunc( function() {
                 trace("quit");
             } );
-        
+
+        GLUT.setCloseFunc( function() {
+                trace("close");
+            } );
+        GLUT.setWMCloseFunc( function() {
+                trace("wmClose");
+            } );
+  
+		GLUT.setMouseWheelFunc( function( wheel:Int, direction:Int, x:Int, y:Int ) {
+                trace("wheel "+wheel+" "+direction+" "+x+" "+y);
+            } );
+
         GLUT.showWindow();
         GLUT.postRedisplay();
 
@@ -95,5 +108,7 @@ class App {
 
 
         GLUT.mainLoop();
+		
+		trace("Exit mainLoop. Sweet!");
     }
 }
