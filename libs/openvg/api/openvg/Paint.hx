@@ -44,6 +44,7 @@ extern class Paint {
 	public function getParameteriv( type:Int, count:Int, values:String ) :Void;
 
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("openvg");
         untyped {
             var loader = untyped __dollar__loader;
             Paint = loader.loadmodule("openvg".__s,loader).Paint__impl;

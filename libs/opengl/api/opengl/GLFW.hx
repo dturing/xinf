@@ -9,7 +9,7 @@ package opengl;
         global="true"
         translator="Capitalize"
         globalFinderPrefix="GLFW_"
-        globalFinderCCFlags="-lGL -lGLU -lglfw"
+        globalFinderCCFlags="-lGL -lGLU -lglfw -Isrc"
         />
     <nekobind:cHeader>
     #ifdef NEKO_OSX
@@ -20,6 +20,7 @@ package opengl;
         #include &lt;GL/gl.h&gt;
         #include &lt;GL/glu.h&gt;
         #include &lt;GL/glfw.h&gt;
+        #include "additions.h"
     #endif
     </nekobind:cHeader>
 **/
@@ -193,7 +194,7 @@ extern class GLFW {
 	
 	public static function getKey( key:Int ) :Int;
 	public static function getMouseButton( button:Int ) :Int;
-	//public static function getMousePos() :Void;
+	public static function getMousePosition() :{ x:Int, y:Int };
 	public static function setMousePos( x:Int, y:Int ) :Void;
 	public static function getMouseWheel() :Int;
 	public static function setMouseWheel( pos:Int ) :Void;

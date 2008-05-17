@@ -65,6 +65,7 @@ extern class Path {
 	public function pathTransformedBounds( minX:String, minY:String, width:String, height:String ):Void;
 
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("openvg");
         untyped {
             var loader = untyped __dollar__loader;
             Path = loader.loadmodule("openvg".__s,loader).Path__impl;

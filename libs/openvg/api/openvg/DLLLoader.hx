@@ -36,7 +36,7 @@ class DLLLoader {
         libPath += pathSep+version+pathSep+"ndll"+pathSep+neko.Sys.systemName();
         return libPath;
     }
-/*    
+
     public static function addToEnvironment( name:String, separator:String, value:String ) {
         var cur = neko.Sys.getEnv(name);
         if( cur==null || cur.length==0 )
@@ -45,9 +45,9 @@ class DLLLoader {
             cur = value+separator+cur;
             
         neko.Sys.putEnv( name, cur );
-        trace("prefixed "+name+" with: "+value+", now: "+neko.Sys.getEnv( name ) );
+		trace("Environment: "+name+" now: "+cur );
     }
-*/
+	
     public static function checkEnvironment( name:String, separator:String, value:String ) {
         var value = StringTools.replace( StringTools.replace( value, "//", "/" ), "\\\\", "\\" );
     
@@ -58,8 +58,8 @@ class DLLLoader {
                 if( i==value ) return;
             }
         }
-        
-        trace("If things fail, please add '"+value+"' to your environment variable '"+name+"' and try again.");
+		
+		addToEnvironment("PATH",separator,value);
     }
 
     public static function addLibToPath( lib:String ) :Void {

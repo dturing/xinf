@@ -45,7 +45,6 @@ class DLLLoader {
             cur = value+separator+cur;
             
         neko.Sys.putEnv( name, cur );
-        trace("prefixed "+name+" with: "+value+", now: "+neko.Sys.getEnv( name ) );
     }
 
     public static function checkEnvironment( name:String, separator:String, value:String ) {
@@ -59,7 +58,6 @@ class DLLLoader {
             }
         }
         
-        trace("If things fail, please add '"+value+"' to your environment variable '"+name+"' and try again.");
 		addToEnvironment("PATH",separator,value);
     }
 

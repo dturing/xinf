@@ -66,8 +66,10 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
     glPopClientAttrib();    
 }
 
+/* GLFW helpers */
 
-/* GLFW callback helpers */
+static field f_x;
+static field f_y; 
 
 static field f_WindowSize;
 static field f_WindowClose;
@@ -85,7 +87,10 @@ void glfw_setup() {
 	int i=0;
 	glfwCallbacks = alloc_root(1);
 	glfwCallbacks[0] = alloc_object(NULL);
-		
+	
+	f_x = val_id("x");
+	f_y = val_id("y");
+	
 	f_WindowSize = val_id("windowSize");
 	f_WindowClose = val_id("windowClose");
 	f_WindowRefresh = val_id("windowRefresh");
@@ -98,6 +103,15 @@ void glfw_setup() {
 	glfwInit();
 }
 DEFINE_ENTRY_POINT(glfw_setup);
+
+value glfwGetMousePosition() {
+	int x,y;
+	glfwGetMousePos( &x, &y );
+	value r = alloc_object(NULL);
+	alloc_field( r, f_x, alloc_int(x) );
+	alloc_field( r, f_y, alloc_int(y) );
+	return r;
+}
 
 
 value glfw_get_callback( field which ) {

@@ -15,7 +15,7 @@
    
 ***********************************************************************/
 
-#include <neko.h>
+#include <neko/neko.h>
 #ifdef NEKO_OSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -29,10 +29,12 @@
 #ifndef __ADDITIONS_H
 #define __ADDITIONS_H
 
+value glfwGetMousePosition();
+
+/*
 void gluVerticesOffset( int offset, int n, double *v );
-
 void glTexSubImage2D_RGBA_BYTE( unsigned int tex, int x, int y, int width, int height, const unsigned int *data );
-
+*/
 
 
 #endif //__ADDITIONS_H

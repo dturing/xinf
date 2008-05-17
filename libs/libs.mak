@@ -120,7 +120,7 @@ haxelib-test : haxelib
 
 haxelib : $(HAXELIB_PROJECT).zip
 		
-$(HAXELIB_PROJECT).zip: $(NDLL)
+$(HAXELIB_PROJECT).zip: $(NDLL) $(TARGETS)
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	
@@ -161,4 +161,5 @@ all:
 	
 clean:
 	-@rm $(BIN_PATH)/Mac/*.ndll $(BIN_PATH)/Windows/*.ndll $(BIN_PATH)/Linux/*.ndll
+	-@rm $(BIN_PATH)/*.n $(BIN_PATH)/Mac/*.n $(BIN_PATH)/Windows/*.n $(BIN_PATH)/Linux/*.n
 	-@rm $(PROJECT)-tmp.n $(PROJECT).xml $(foreach CLASS,$(BINDING_CLASSES),bind_$(CLASS).c $(CLASS)__impl.hx)

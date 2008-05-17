@@ -8,7 +8,7 @@ package xinf.support;
 		translator="CamelCaseToMinuscleUnderscore"
 		prefix="gdk_pixbuf_"
 		nekoAbstract="__pixbuf"
-		cStruct="GdkPixbuf"
+		cStruct="GdkPixbuf*"
 		dtor="unref"
 		module="xinfinity-support"
 		/>
@@ -38,16 +38,24 @@ extern class Pixbuf {
     public static function __init__() : Void {
         DLLLoader.addLibToPath("xinf");
         var ext="so";
-        if( neko.Sys.systemName()=="Windows" ) ext="dll";
+		var sep="/";
+        if( neko.Sys.systemName()=="Windows" ) {
+			ext="dll";
+			sep="\\";
+		}
         if( neko.Sys.systemName()=="Mac" || neko.Sys.systemName()=="Windows" ) {
-            var path = DLLLoader.getXinfLibPath()+"/loaders/";
+            var path = DLLLoader.getXinfLibPath()+sep+"loaders"+sep;
             var fileName = path+"gdk-pixbuf.loaders";
             
             if( !neko.FileSystem.exists( fileName ) ) {
                 try {
+				/*
 					if( !neko.FileSystem.exists(path) ) {
+						trace("path "+path+" no existe, create");
 						neko.FileSystem.createDirectory(path);
+						trace("created "+path );
 					}
+					*/
                     var out = neko.io.File.write(fileName,false);
                     
                     var data = '# GdkPixbuf Image Loader Modules file

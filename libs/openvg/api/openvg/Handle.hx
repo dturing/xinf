@@ -20,6 +20,7 @@ extern class Handle {
 	public static function createPaint() :Handle;
 
     public static function __init__() : Void {
+        DLLLoader.addLibToPath("openvg");
         untyped {
             var loader = untyped __dollar__loader;
             Handle = loader.loadmodule("openvg".__s,loader).Handle__impl;
