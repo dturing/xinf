@@ -30,25 +30,27 @@ class Keys {
     private static var keys:IntHash<String>;
     
     private static function __init__() :Void {
-        SPECIAL = 255;
         keys = new IntHash<String>();
         
-        keys.set(8,"backspace");
-        keys.set(9,"tab");
-        keys.set(27,"escape");
-        keys.set(32,"space");
-        keys.set(127,"delete");
-        
         #if neko
-            keys.set(SPECIAL+opengl.GLUT.KEY_HOME,"home");
-            keys.set(SPECIAL+opengl.GLUT.KEY_END,"end");
-            keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_UP,"page up");
-            keys.set(SPECIAL+opengl.GLUT.KEY_PAGE_DOWN,"page down");
-            keys.set(SPECIAL+opengl.GLUT.KEY_LEFT,"left");
-            keys.set(SPECIAL+opengl.GLUT.KEY_UP,"up");
-            keys.set(SPECIAL+opengl.GLUT.KEY_RIGHT,"right");
-            keys.set(SPECIAL+opengl.GLUT.KEY_DOWN,"down");
+			keys.set(opengl.GLFW.KEY_BACKSPACE,"backspace");
+			keys.set(opengl.GLFW.KEY_TAB,"tab");
+			keys.set(opengl.GLFW.KEY_ESC,"escape");
+			keys.set(opengl.GLFW.KEY_DEL,"delete");
+            keys.set(opengl.GLFW.KEY_HOME,"home");
+            keys.set(opengl.GLFW.KEY_END,"end");
+            keys.set(opengl.GLFW.KEY_PAGEUP,"page up");
+            keys.set(opengl.GLFW.KEY_PAGEDOWN,"page down");
+            keys.set(opengl.GLFW.KEY_LEFT,"left");
+            keys.set(opengl.GLFW.KEY_UP,"up");
+            keys.set(opengl.GLFW.KEY_RIGHT,"right");
+            keys.set(opengl.GLFW.KEY_DOWN,"down");
         #else true
+			keys.set(8,"backspace");
+			keys.set(9,"tab");
+			keys.set(27,"escape");
+			keys.set(32,"space");
+			keys.set(127,"delete");
             keys.set(33,"page up");
             keys.set(34,"page down");
             keys.set(37,"left");

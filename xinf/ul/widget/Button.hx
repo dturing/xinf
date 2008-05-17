@@ -88,12 +88,12 @@ class Button<Value> extends Widget {
     
     function onKeyDown( e:KeyboardEvent ) {
 		switch( e.key ) {
-            case "space":
+            case " ":
 				if( _keyUp!=null ) return;
 				addStyleClass(":press");
 				var self=this;
 				_keyUp = addEventListener( KeyboardEvent.KEY_UP, function(e) {
-					if( e.key=="space" ) {
+					if( e.key==" " ) {
 						self.removeStyleClass(":press");
 						self.postEvent( new ValueEvent( PRESS, self.value ) );
 						self.removeEventListener( KeyboardEvent.KEY_UP, self._keyUp );

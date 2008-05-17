@@ -84,7 +84,7 @@ class Slider extends Widget {
 
         group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-        addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
+        group.addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
 		
 		styleChanged();
     }

@@ -52,7 +52,7 @@ class Dropdown extends Widget {
         menu.focusable = false;
         
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-        addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
+        group.addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
 		
 		styleChanged();
     }
@@ -124,6 +124,7 @@ class Dropdown extends Widget {
     }
     
     private function onKeyDown( e:KeyboardEvent ) {
+	trace(e);
         if( isOpen ) {
             if( e.key == "escape" ) {
                 close();
@@ -137,7 +138,7 @@ class Dropdown extends Widget {
                 select( selectedIndex-1 );
             case "down":
                 select( selectedIndex+1 );
-            case "space":
+            case " ":
                 toggle(e);
         }
     }

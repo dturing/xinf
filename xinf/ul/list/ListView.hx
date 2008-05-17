@@ -54,7 +54,7 @@ class ListView<T> extends Widget {
         appendChild( scrollbar );
 
         group.addEventListener( MouseEvent.MOUSE_DOWN, entryClicked );
-        scrollbar.addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
+        group.addEventListener( ScrollEvent.SCROLL_STEP, scrollStep );
         scrollbar.addEventListener( ScrollEvent.SCROLL_LEAP, scrollLeap );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
         
@@ -143,7 +143,7 @@ class ListView<T> extends Widget {
                 rr.assureVisible( i );
                 setCursor( i );
                 if( e.shiftMod ) pick( cursorPosition, false, true );
-            case "space":
+            case " ":
                 pick( cursorPosition, true );
                 setCursor( cursorPosition );
         }

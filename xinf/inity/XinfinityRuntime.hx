@@ -12,7 +12,7 @@ import xinf.inity.font.Font;
 
 import opengl.GL;
 import opengl.GLU;
-import opengl.GLUT;
+import opengl.GLFW;
 import cptr.CPtr;
 
 class XinfinityRuntime extends Runtime {
@@ -54,10 +54,9 @@ class XinfinityRuntime extends Runtime {
 		bgColor = { r:1., g:1., b:1., a:0. };
     
 		_eventSource=new GLEventSource(this);
-        
         initGL();
-
         root = new GLObject( getNextId() );
+
 
 		addEventListener( GeometryEvent.STAGE_SCALED, resized );
         
@@ -81,12 +80,21 @@ class XinfinityRuntime extends Runtime {
     }
 
     override public function run() :Void {
-        GLUT.mainLoop();
+		var close=false;
+
+		GLFW.setWindowCloseFunction( function() {
+			close = true;
+			return 1;
+		});
+
+		while( !close ) {
+			GLFW.pollEvents();
+			step();
+		}
     }
 
     override public function changed() :Void {
         somethingChanged = true;
-        //    GLUT.postRedisplay();
     }
 
 	override public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
@@ -124,9 +132,7 @@ class XinfinityRuntime extends Runtime {
         endFrame();
 
 		timing();
-		
-		
-        GLUT.swapBuffers();
+		GLFW.swapBuffers();
     }
 	
 	function timing() :Void {
@@ -150,11 +156,6 @@ class XinfinityRuntime extends Runtime {
 		time+=interval;
 	}
 
-    public function step_timer( v:Int ) :Void {
-        GLUT.setTimerFunc( Math.round(interval*900), step, 0 );
-		step();
-	}
-	
     public function step() :Void {
     
         // post enter_frame event
@@ -200,34 +201,19 @@ class XinfinityRuntime extends Runtime {
 
     /* internal functions */
     private function initGL() :Void {
-        // init GLUT Window
-        GLUT.initDisplayMode( GLUT.RGBA | GLUT.DOUBLE | GLUT.STENCIL );
-		GLUT.createWindow("Xinfinity");
-        
+        // init GLFW Window
+        GLFW.openWindow( 320,240, 8,8,8, 8,8,8, GLFW.WINDOW );
+		GLFW.setWindowTitle("Xinfinity");
+
         // TODO: set some kind of preferred size (style??)
     
         // init GLUT Callbacks
         var self=this;
-        GLUT.setDisplayFunc( display );
-   //    GLUT.setTimerFunc( 0, step_timer, 0 );
-		GLUT.setIdleFunc( step );
-        GLUT.setReshapeFunc( function( width:Int, height:Int ) {
+        GLFW.setWindowSizeFunction( function( width:Int, height:Int ) {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
             });
-		/* consumes CPU when window invisible (GLUT problem? see opengl test)
-        GLUT.setVisibilityFunc( function( state:Int ) {
-                if( state>0 ) self.changed();
-            });
-		*/
-        GLUT.setEntryFunc( function( state:Int ) {
-                self.changed();
-                GLUT.postRedisplay();
-            });
-        _eventSource.attach();
+		_eventSource.attach();
         
-        
-        GLUT.showWindow();
-
         // init GL parameters
         GL.enable( GL.BLEND );
         GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
@@ -255,12 +241,12 @@ class XinfinityRuntime extends Runtime {
 			GL.rect( -512,-384,1024,768 ); // FIXME
 			GL.disable(GL.BLEND);
 		}
-            
+		
         // FIXME depends on stage scale mode
         GL.translate( -1., 1., 0. );
         GL.scale( (2./width), (-2./height), 1. );
       //  GL.translate( .5, .5, 0. );
-      
+
         #if gldebug
             var e:Int = GL.getError();
             if( e > 0 ) {
@@ -286,6 +272,7 @@ class XinfinityRuntime extends Runtime {
        ------------------------------------------------------ */
        
     public function findIdAt( x:Float, y:Float ) :Int {
+		if( root==null ) return 0;
         var found = new Array<GLObject>();
         root.hit( {x:x,y:y}, found );
 //        trace("findId("+x+","+y+"): "+found);

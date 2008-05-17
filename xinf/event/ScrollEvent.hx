@@ -8,8 +8,8 @@ package xinf.event;
 **/
 class ScrollEvent extends Event<ScrollEvent> {
     
-    static public var SCROLL_STEP = new EventKind<ScrollEvent>("scrollStep");
-    static public var SCROLL_LEAP = new EventKind<ScrollEvent>("scrollLeap");
+    static public var SCROLL_STEP = new EventKind<ScrollEvent>("scrollStep",true);
+    static public var SCROLL_LEAP = new EventKind<ScrollEvent>("scrollLeap",true);
     static public var SCROLL_TO   = new EventKind<ScrollEvent>("scrollTo");
 
     public var value:Float; // delta (+-1.0) or absolute (0..1) - depending on the kind

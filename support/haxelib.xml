@@ -3,7 +3,7 @@
     <description>xinf is not flash: cross-runtime, cross-platform graphics.</description>
     <version name="__VERSION__">Beta</version>
     <depends name="cptr"/>
-    <depends name="opengl"/>
+    <depends name="opengl" version="0.2.0"/>
     <depends name="xinfinity-support"/>
-    <depends name="openvg"/>
+    <depends name="openvg" version="0.2.0"/>
 </project>

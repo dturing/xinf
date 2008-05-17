@@ -77,6 +77,7 @@ class XinfTest {
 	}
 	
 	public static function main() :Void {
+		Root.setBackgroundColor(.3,.3,.3,0);
 		var d = new XinfTest();
 		Root.main();
 	}
