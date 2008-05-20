@@ -29,10 +29,9 @@ class VideoSource extends Texture {
     public function new( launch:String ) :Void {
         super();
         
-        launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32 ! nekobus name=\"output\" sync=true";
+        launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32 ! nekobus name=\"output\" sync=false";
 		trace("Gstreamer Pipeline: "+launch );
         pipeline = new Pipeline( launch );
-
 		pipeline.addEventListener( NekobusData.DATA, onData );
     }
 
@@ -41,6 +40,7 @@ class VideoSource extends Texture {
 
 			var caps = e.buffer.caps();
 			var w:Int = caps.width; var h:Int = caps.height;
+//			trace("image, width: "+w+", height "+h );
 			if( w!=width || h!=height ) {
 				width=w; height=h;
 				initialize( Math.round(width), Math.round(width), Math.round(height), BGRA );

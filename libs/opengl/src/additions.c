@@ -10,11 +10,9 @@ void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsi
 }
 
 void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
-	printf("GL_BGRA is not valid on Windows, thus disabled.\n");
-	/*
+//	printf("GL_BGRA is not valid on Windows, thus disabled.\n");
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
-	*/
 }
 
 void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {

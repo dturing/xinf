@@ -255,6 +255,7 @@ class GLRenderer extends ObjectModelRenderer {
     
     override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
         if( img.theight==0 || img.twidth==0 ) return;
+        if( img.theight==null || img.twidth==null ) return;
         current.mergeBBox( {l:outRegion.x,t:outRegion.y,r:outRegion.x+outRegion.w,b:outRegion.y+outRegion.h} );
     
         var tx1:Float = (inRegion.x/img.twidth);
