@@ -8,7 +8,7 @@ class TraitTypeException {
 	
 	public function new( name:String, obj:TraitAccess, value:Dynamic, expected:Class<Dynamic> ) {
 		message = "Trait '"+name+"' in "+obj+" is of wrong type: "+Type.getClassName(Type.getClass(value))
-			+" ('"+value+"'), expect "+Type.getClassName(expected);
+			+" ('"+value+"'), expect "+expected;
 	}
 
 	public function toString() :String {

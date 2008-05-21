@@ -13,7 +13,7 @@ class LineIncrementTrait extends FloatTrait {
 
 	override public function parse( value:String ) :Dynamic {
 		if( value=="auto" ) return -1.;
-		
+
 		var v:Null<Float> = super.parse(value);
 		if( v<0 ) throw("line-increment needs to be positive");
         return v;

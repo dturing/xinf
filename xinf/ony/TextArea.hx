@@ -52,12 +52,12 @@ class TextArea extends ElementImpl {
 
     public var lineIncrement(get_line_increment,set_line_increment):Float;
     function get_line_increment() :Float { 
-		var r:Float = getTrait("line-increment",Float);
+		var r:Float = getStyleTrait("line-increment",Float);
 		if( r==-1 ) // auto
 			r = fontSize*1.1;
 		return r; 
 	}
-    function set_line_increment( v:Float ) :Float { setTrait("line-increment",v); redraw(); return v; }
+    function set_line_increment( v:Float ) :Float { setStyleTrait("line-increment",v); redraw(); return v; }
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);

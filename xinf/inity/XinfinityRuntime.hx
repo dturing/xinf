@@ -207,10 +207,13 @@ class XinfinityRuntime extends Runtime {
 
         // TODO: set some kind of preferred size (style??)
     
-        // init GLUT Callbacks
+        // init GLFW Callbacks
         var self=this;
         GLFW.setWindowSizeFunction( function( width:Int, height:Int ) {
                 self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
+            });
+        GLFW.setWindowRefreshFunction( function() {
+                self.changed();
             });
 		_eventSource.attach();
         

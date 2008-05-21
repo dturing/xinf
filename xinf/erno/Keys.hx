@@ -49,7 +49,7 @@ class Keys {
 			keys.set(8,"backspace");
 			keys.set(9,"tab");
 			keys.set(27,"escape");
-			keys.set(32,"space");
+			keys.set(32," ");
 			keys.set(127,"delete");
             keys.set(33,"page up");
             keys.set(34,"page down");

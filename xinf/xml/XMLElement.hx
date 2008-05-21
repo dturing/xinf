@@ -375,8 +375,8 @@ class XMLElement extends Node,
 	/* Node functions */
 
 	override function acquired( newChild:Node ) :Void {
-		super.acquired(newChild);
 		newChild.parentElement = this;
+		super.acquired(newChild);
 	}
 	
 	override function copyProperties( to:Dynamic ) :Void {

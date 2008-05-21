@@ -106,10 +106,11 @@ class Node implements Serializable {
 	function acquired( newChild:Node ) {
 		if( ownerDocument != null )
 			newChild.setOwnerDocument( ownerDocument );
+		newChild.added(this);
 	}
 	
 	/**
-		Appendsthe Node [newChild] to the end
+		Appends the Node [newChild] to the end
 		of the list of children of this node.
 	*/
 	public function appendChild( newChild:Node ) :Node {
@@ -119,7 +120,7 @@ class Node implements Serializable {
 	}
 	
 	/**
-		Insertsthe Node [newChild] into the list of
+		Inserts the Node [newChild] into the list of
 		children of this node, immediately before
 		[refChild].
 	*/
@@ -141,13 +142,22 @@ class Node implements Serializable {
 	}
 
 	/**
-		Removesthe Node [oldChild] from the list of children.
+		Removes the Node [oldChild] from the list of children.
 	*/
 	public function removeChild( oldChild:Node ) :Node {
         mChildren.remove( oldChild );
 		oldChild.ownerDocument = null;
 		oldChild.parentElement = null;
+		oldChild.removed(this);
 		return oldChild;
+	}
+
+	/** Hook DOCME */
+	public function added( parent:Node ) :Void {
+	}
+
+	/** Hook DOCME */
+	public function removed( parent:Node ) :Void {
 	}
 
 	/**

@@ -207,7 +207,7 @@ class TextArea extends xinf.ony.TextArea {
 				format.format.color = xinf.erno.flash9.Flash9Renderer.colorToRGBInt(r,g,b);
 				tf.alpha = 1;
 			default:
-				throw("Fill "+fill+" not supported for text");
+			//	throw("Fill "+fill+" not supported for text");
 		}
 		
 		//tf.embedFonts = true;  FIXME handle this somehow good..

@@ -39,13 +39,13 @@ class StyledElement extends XMLElement {
 	*/
 	override public function setStyleTrait<T>( name:String, value:T ) :T {
 		var r = setTrait( name, value );
-		styleChanged();
+		styleChanged(name);
 		return r;
 	}
 
 	override public function setPresentationTrait( name:String, value:Dynamic ) :Dynamic {
 		super.setPresentationTrait(name,value);
-		styleChanged(null);
+		styleChanged(name);
 		return value;
 	}
 
@@ -142,8 +142,6 @@ class StyledElement extends XMLElement {
 				if( ct.length>0 ) addStyleClass(ct);
 			}
         }
-
-		styleChanged();
 	}
 	
 	override public function onLoad() :Void {
@@ -167,14 +165,13 @@ class StyledElement extends XMLElement {
 		trigger a call to styleChanged.
 	*/
     public function styleChanged( ?attribute:String ) :Void {
-//		trace("restyle "+this);
-	
+		clearPresentationTraits();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);
-				if( attribute==null || !s.hasOwnStyleTrait(attribute) ) {
+				//if( attribute==null || !s.hasOwnStyleTrait(attribute) ) {
 					s.styleChanged( attribute );
-				}
+				//}
 			}
 		}
 	}
@@ -187,15 +184,15 @@ class StyledElement extends XMLElement {
 	}
 
 	function updateClassStyle() :Void {
-		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) {
-			clearPresentationTraits();
-			var match = ownerDocument.styleSheet.match(this);
-			if( match!=null ) {
-				_matchedStyle = Reflect.empty();
-				StyleParser.fromObject( match, this, _matchedStyle );
-			} else _matchedStyle=null;
-			styleChanged();
-		}
+		var css = StyleSheet.DEFAULT;
+		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) css = ownerDocument.styleSheet;
+		clearPresentationTraits();
+		_matchedStyle = Reflect.empty();
+		var match = css.match(this);
+		if( match!=null ) {
+			StyleParser.fromObject( match, this, _matchedStyle );
+		} else _matchedStyle=null;
+		styleChanged();
     }
 	
 	/**
