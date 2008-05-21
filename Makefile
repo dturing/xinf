@@ -17,7 +17,7 @@ INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
-HAXEFLAGS=--override $(INITYCP) -cp . -D profile
+HAXEFLAGS=--override $(INITYCP) -cp . #-D profile
 
 default: test
 	
