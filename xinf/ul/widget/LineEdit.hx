@@ -20,7 +20,7 @@ class LineEdit extends Widget {
 		setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
         return t;
     }
-
+	
 	override public function set_size( s:TPoint ) :TPoint {
 		// FIXME: text-anchor center, set center here.
 		var s2 = Helper.removePadding( s, this );
@@ -45,15 +45,6 @@ class LineEdit extends Widget {
 
 	override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged(attr);
-		
-		textElement.fontSize = fontSize;
-		textElement.fontFamily = fontFamily;
-		// TODO: fontWeight
-		textElement.fill = textColor;
-		textElement.styleChanged();
-		/*
-		if( size!=null ) set_size(size);
-		*/
 		
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );

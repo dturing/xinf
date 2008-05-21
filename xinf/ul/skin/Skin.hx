@@ -4,10 +4,11 @@
 package xinf.ul.skin;
 
 import Xinf;
+import xinf.ul.Component;
 
 class Skin {
 
-	public function setTo( name:String ) :Void {
+	public function setTo( name:String, component:Component ) :Void {
 	}
 
 	public function resize( s:TPoint ) :Void {

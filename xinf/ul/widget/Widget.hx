@@ -35,11 +35,13 @@ class Widget extends Container {
             return false;
         }
         addStyleClass(":focus");
+        group.addStyleClass(":focus");
         return true;
     }
 
     public function blur() :Void {
         removeStyleClass(":focus");
+		group.removeStyleClass(":focus");
     }
     
 }

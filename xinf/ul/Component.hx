@@ -24,21 +24,65 @@ class Component extends StyledElement {
 	public static function init() {
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
-			* {
+			.xinful {
 				font-size: 12;
-				font-family: Bitstream Vera Sans;
+				font-family: sans-serif;
 			}
 			
-			.Button {
-				border: 5;
+			* {
+				focus-color: #4e9a06;;
+				min-width: 75px;
+			}
+			
+			TextArea {
+				fill: black;
+			}
+			
+			RoundRobin {
+				line-increment: 18.;
+			}
+			
+			.Container, .Interface, .ListView {
+				padding: 3;
+			}
+
+			.:focus {
+				skin: focus;
+			}
+			
+			.Cursor {
+				fill: #4e9a06;
+			}
+
+			.Button, .Dropdown {
 				padding: 6 3 6 3;
 			}
 
+			.Button.:press {
+				skin: focus-bright;
+				padding: 6 4 6 2;
+			}
+
+			.CheckBox {
+				border: 0;
+				padding: 0 3 6 3;
+				skin: none;
+			}
+
+			.ListView {
+				min-height: 75px;
+				padding: 6 3;
+			}
+			
+			.VScrollbar {
+				skin: ;
+			}
+/*
 			.Label {
 				padding: 6 3 6 3;
 				horizontal-align: 0.;
 			}
-
+			
 			.Button, .Dropdown, .LineEdit, .Slider {
 				min-height: 10;
 				min-width: 75;
@@ -49,22 +93,7 @@ class Component extends StyledElement {
 				vertical-align: 0.;
 			}
 			
-			.Container, .Interface {
-				padding: 5;
-			}
-			
-			.ListView {
-				min-width: 100;
-				min-height: 75;
-			}
-			
 			.Slider {
-				padding: 5 2 5 2;
-				/* horizontal-align: 1.; */
-			}
-			
-			.:focus {
-				skin: focus;
 				padding: 5 2 5 2;
 			}
 			
@@ -76,47 +105,28 @@ class Component extends StyledElement {
 				skin: focus-bright;
 			}
 			
-			.Button.:press {
-				skin: focus-bright;
-				padding: 5 3 5 1;
-			}
-			
+
+*/
 		");
 	}
 	
 	static var TRAITS = {
 		skin:			new StringTrait(),
-		font_family:	new StringListTrait(),
-		font_size:		new LengthTrait(new Length(10)),
-		text_color:		new PaintTrait(RGBColor(0,0,0)),
 		horizontal_align:	new FloatTrait(),
 		vertical_align:		new FloatTrait(),
 		border:				new BorderTrait(),
 		padding:			new BorderTrait(),
 		margin:				new BorderTrait(),
-		min_width:			new FloatTrait(),
-		max_width:			new FloatTrait(Math.POSITIVE_INFINITY),
-		min_height:			new FloatTrait(),
-		max_height:			new FloatTrait(Math.POSITIVE_INFINITY),
+		min_width:			new LengthTrait(),
+		max_width:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
+		min_height:			new LengthTrait(),
+		max_height:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
+		focus_color:		new PaintTrait(Paint.None),
 	};
 
 	public var skin(get_skin,set_skin):String;
     function get_skin() :String { return getStyleTrait("skin",String); }
     function set_skin( v:String ) :String { return setStyleTrait("skin",v); }
-
-	public var fontFamily(get_font_family,set_font_family):StringList;
-    function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
-    function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
-
-    public var fontSize(get_font_size,set_font_size):Float;
-    function get_font_size() :Float { return getStyleTrait("font-size",Length).value; }
-    function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",new Length(v)).value; }
-
-    public var textColor(get_text_color,set_text_color):Paint;
-    function get_text_color() :Paint { return getStyleTrait("text-color",Paint); }
-    function set_text_color( v:Paint ) :Paint { return setStyleTrait("text-color",v); }
-
-	// TODO fontWeight (as in ElementStyle)
 
     public var horizontalAlign(get_horizontal_align,set_horizontal_align):Float;
     function get_horizontal_align() :Float { return getStyleTrait("horizontal-align",Float); }
@@ -139,20 +149,24 @@ class Component extends StyledElement {
     function set_margin( v:Border ) :Border { return setStyleTrait("margin",v); }
 
     public var minWidth(get_min_width,set_min_width):Float;
-    function get_min_width() :Float { return getStyleTrait("min-width",Float); }
-    function set_min_width( v:Float ) :Float { return setStyleTrait("min-width",v); }
+    function get_min_width() :Float { return getStyleTrait("min-width",Length).value; }
+    function set_min_width( v:Float ) :Float { setStyleTrait("min-width",new Length(v)); return v; }
 
     public var maxWidth(get_max_width,set_max_width):Float;
-    function get_max_width() :Float { return getStyleTrait("max-width",Float); }
-    function set_max_width( v:Float ) :Float { return setStyleTrait("max-width",v); }
+    function get_max_width() :Float { return getStyleTrait("max-width",Length).value; }
+    function set_max_width( v:Float ) :Float { setStyleTrait("max-width",new Length(v)); return v; }
 
     public var minHeight(get_min_height,set_min_height):Float;
-    function get_min_height() :Float { return getStyleTrait("min-height",Float); }
-    function set_min_height( v:Float ) :Float { return setStyleTrait("min-height",v); }
+    function get_min_height() :Float { return getStyleTrait("min-height",Length).value; }
+    function set_min_height( v:Float ) :Float { setStyleTrait("min-height",new Length(v)); return v; }
 
     public var maxHeight(get_max_height,set_max_height):Float;
-    function get_max_height() :Float { return getStyleTrait("max-height",Float); }
-    function set_max_height( v:Float ) :Float { return setStyleTrait("max-height",v); }
+    function get_max_height() :Float { return getStyleTrait("max-height",Length).value; }
+    function set_max_height( v:Float ) :Float { setStyleTrait("max-height",new Length(v)); return v; }
+
+    public var focusColor(get_focus_color,set_focus_color):Paint;
+    function get_focus_color() :Paint { return getStyleTrait("focus-color",Paint); }
+    function set_focus_color( v:Paint ) :Paint{ return setStyleTrait("focus-color",v); }
 
 	static var highestId:Int = 0;
     public var __parentSizeListener:Dynamic;
@@ -175,26 +189,30 @@ class Component extends StyledElement {
 		cid = highestId++;
 		
 		group = new Group();
-		
+
 		_prefSize = { x:.0, y:.0 };
 		position = { x:.0, y:.0 };
 		_skin = new xinf.ul.skin.SimpleSkin();
-		
+
 		// add our own class to the list of style classes
         var clNames:Array<String> = Type.getClassName(Type.getClass(this)).split(".");
         addStyleClass( clNames[ clNames.length-1 ] );
-    }
+		// and for the group, too
+        group.addStyleClass( clNames[ clNames.length-1 ] );
+		// and have the group be of "xinful" class
+		group.addStyleClass( "xinful" );
+	}
 	
 	public function getTextFormat() {
-		var family = fontFamily;
-		var size = fontSize;
+		var family = group.fontFamily;
+		var size = group.fontSize;
 		var format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 		return format;
 	}
 		
     override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged( attr );
-		_skin.setTo( skin );
+		_skin.setTo( skin, this );
     }
 
 	override function setOwnerDocument( doc:Document ) {

@@ -64,7 +64,7 @@ class Slider extends Widget {
         if( min!=null ) this.min = min;
         if( max!=null ) this.max = max;
         if( increment!=null ) this.increment = increment;
-        else increment=0.1;
+        else increment=(this.max-this.min)/100;
     
 		group.appendChild( textElement );
 	
@@ -90,7 +90,7 @@ class Slider extends Widget {
     }
 
 	override public function set_size( s:TPoint ) :TPoint {
-		textElement.y = Helper.topOffsetAligned( this, s.y, .5 )+fontSize;
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 )+textElement.fontSize;
 		textElement.x = Helper.leftOffsetAligned( this, s.x, horizontalAlign );
 		
 		button.x = s.x-s.y;
@@ -105,12 +105,6 @@ class Slider extends Widget {
     override public function styleChanged( ?attr:String ) {
 		super.styleChanged(attr);
 		
-		textElement.fontSize = fontSize;
-		textElement.fontFamily = fontFamily;
-		textElement.fill = textColor;
-		textElement.styleChanged();
-		
-		// TODO: fontWeight
 		if( textElement.text!=null ) {
 			var s = Helper.addPadding( getTextFormat().textSize(textElement.text), this );
 			s.x += s.y; // add button.width==height

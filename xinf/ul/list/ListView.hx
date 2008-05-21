@@ -17,18 +17,16 @@ class ListView<T> extends Widget {
     var model:ListModel<T>;
     var rr:RoundRobin<T,ISettable<T>>;
     
+	var rrgroup:Group;
     var cursor:Rectangle;
     var cropper:Crop;
     var scrollbar:VScrollbar;
     
     var cursorPosition:Int;
     var lastCursorItem:ISettable<T>;
-	var itemStyle:Dynamic;
-    
+	
     public function new( model:ListModel<T>, ?createItem:Null<Void->ISettable<T>> ) :Void {
-		itemStyle = Reflect.empty();
-		
-        super();
+		super();
         this.model = model;
         if( createItem==null ) {
             createItem = function() :ISettable<T> {
@@ -39,14 +37,18 @@ class ListView<T> extends Widget {
         cropper = new Crop();
         group.appendChild(cropper);
 
-        rr = new RoundRobin<T,ISettable<T>>( model, createItem, itemStyle, this );
-        cropper.appendChild( rr );
+		rrgroup = new Group();
+		cropper.appendChild( rrgroup );
 
-        cursor = new Rectangle();
-		cursor.width = 8; cursor.height = 18;
-		cursor.x = 0; cursor.y = -100;
-		cursor.fill = RGBColor(0,.5,0); // FIXME
-        cropper.appendChild( cursor );
+        cursor = new Rectangle({ y:-100 });
+		cursor.addStyleClass("Cursor");
+//		cursor.width = 8; cursor.height = 2;
+//		cursor.x = 0; cursor.y = -100;
+//		cursor.fill = focusColor;
+        rrgroup.appendChild( cursor );
+		
+        rr = new RoundRobin<T,ISettable<T>>( model, createItem, this );
+        rrgroup.appendChild( rr );
 
         scrollbar = new VScrollbar();
         scrollbar.addEventListener( ScrollEvent.SCROLL_TO, scroll );
@@ -60,33 +62,27 @@ class ListView<T> extends Widget {
         
         setCursor(-2);
     }
-    
+
     override public function set_size( s:TPoint ) :TPoint {
         super.set_size( s );
 
         scrollbar.position = {  x:size.x-scrollbar.size.x, y:0. };
         scrollbar.size = { x:scrollbar.size.x, y:size.y };
     
-		cursor.width = s.x;
+		cursor.width = s.x-scrollbar.size.x;
+		cursor.height = rr.lineIncrement;
+		cursor.x = -padding.l;
 	
+        cropper.width = s.x-scrollbar.size.x;
+		cropper.height = s.y-1;
+
         var rrs = Helper.removePadding( size, this );
 		rrs.x -= scrollbar.size.x;
-        cropper.width = rrs.x;
-		cropper.height = rrs.y;
-
         var itl = Helper.innerTopLeft( this );
-		cropper.transform = new Translate( itl.x, itl.y );
-        rr.resize( rrs.x, rrs.y );
+		rrgroup.transform = new Translate( itl.x, itl.y );
+		rr.resize( rrs.x, rrs.y );
 		
 		return size;
-    }
-
-	override public function styleChanged( ?attr:String ) :Void {
-		super.styleChanged(attr);
-		
-		itemStyle.font_size = fontSize;
-		itemStyle.font_family = fontFamily;
-		itemStyle.fill = textColor;
     }
 	
     function scrollBy( value:Float ) {
@@ -111,11 +107,10 @@ class ListView<T> extends Widget {
     }
     
     function entryClicked( e:MouseEvent ) :Void {
-        var y = cropper.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
+        var y = rrgroup.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
         var i = rr.indexAt( y );
         setCursor( i );
         pick( i, e.ctrlMod, e.shiftMod );
-    //    setCursor( i ); // hmmm FIXME
     }
 
     function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
@@ -174,7 +169,8 @@ class ListView<T> extends Widget {
     
     public function assureVisible( i:Int ) :Void {
         rr.assureVisible(i);
-        setCursor(i);
+        setCursor(cursorPosition);
+		updateScrollbar();
     }
     
     public function getCurrentItem() :T {

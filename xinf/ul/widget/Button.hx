@@ -5,7 +5,7 @@ package xinf.ul.widget;
 
 import Xinf;
 import xinf.event.EventKind;
-import xinf.ul.ValueEvent;
+import xinf.event.SimpleEvent;
 import xinf.ul.layout.Helper;
 import xinf.ul.FocusManager;
 
@@ -13,15 +13,18 @@ import xinf.ul.FocusManager;
     Button element.
 **/
 
-class Button<Value> extends Widget {
+class Button extends Widget {
     
-    public static var PRESS = new EventKind<ValueEvent<Value>>("buttonPress");
+    public static var PRESS = new EventKind<SimpleEvent>("buttonPress");
 
     public var text(get_text,set_text):String;
+	
 	var textElement:Text;
-    var value:Value;
+	var _pressedOver:Dynamic;
     var _mouseUp:Dynamic;
-	var _keyUp:Dynamic;
+    var _mouseOver:Dynamic;
+	var _mouseOut:Dynamic;
+    var _keyUp:Dynamic;
 
     function get_text() :String {
         return(text);
@@ -37,35 +40,25 @@ class Button<Value> extends Widget {
     }
 
 	override public function set_size( s:TPoint ) :TPoint {
-		// FIXME: text-anchor center, set center here.
-		textElement.y = Helper.topOffsetAligned( this, s.y, .5 ) + fontSize;
+		textElement.y = Helper.topOffsetAligned( this, s.y, .5 ) + textElement.fontSize;
 		textElement.x = Helper.leftOffsetAligned( this, s.x, .5 );
 		return super.set_size(s);
 	}
 
-    public function new( ?text:String, ?value:Value ) :Void {
+    public function new( ?text:String ) :Void {
 		textElement = new Text();
-		
+    	
         super();
 
+	    this.set_text(text);
 		group.appendChild( textElement );
-		
-        this.set_text(text);
-        this.value = value;
-		
+        
         group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
         addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
     }
         
 	override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged();
-		
-		textElement.fontSize = fontSize;
-		textElement.fontFamily = fontFamily;
-		textElement.fill = textColor;
-		textElement.styleChanged();
-		
-		// TODO: fontWeight
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
 		}
@@ -74,39 +67,51 @@ class Button<Value> extends Widget {
 	
     function onMouseDown( e:MouseEvent ) {
 		addStyleClass(":press");
+		_pressedOver = true;
         _mouseUp = Root.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+        _mouseOver = group.addEventListener( MouseEvent.MOUSE_OVER, onMouseOver );
+        _mouseOut = group.addEventListener( MouseEvent.MOUSE_OUT, onMouseOut );
     }
-    
+
+	function onMouseOver( e:MouseEvent ) {
+		_pressedOver = true;
+		addStyleClass(":press");
+	}
+
+	function onMouseOut( e:MouseEvent ) {
+		_pressedOver = false;
+		removeStyleClass(":press");
+	}
+
     function onMouseUp( e:MouseEvent ) {
-        //if( this._id==e.targetId )
-		// TODO: onMouseOut?
-		    postEvent( new ValueEvent( PRESS, value ) );
+        if( _pressedOver )
+		    postEvent( new SimpleEvent( PRESS ) );
         
         removeStyleClass(":press");
         Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+        group.removeEventListener( MouseEvent.MOUSE_OVER, _mouseOver );
+        group.removeEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
     }
     
     function onKeyDown( e:KeyboardEvent ) {
-		switch( e.key ) {
-            case " ":
-				if( _keyUp!=null ) return;
-				addStyleClass(":press");
-				var self=this;
-				_keyUp = addEventListener( KeyboardEvent.KEY_UP, function(e) {
-					if( e.key==" " ) {
-						self.removeStyleClass(":press");
-						self.postEvent( new ValueEvent( PRESS, self.value ) );
-						self.removeEventListener( KeyboardEvent.KEY_UP, self._keyUp );
-						self._keyUp = null;
-					}
-				});
-        }
+		if( e.key==" " ) {
+			addStyleClass(":press");
+			_keyUp = addEventListener( KeyboardEvent.KEY_UP, onKeyUp );
+		}
+	}
+		
+	function onKeyUp( e:KeyboardEvent ) {
+		if( e.key==" " ) {
+			removeStyleClass(":press");
+			postEvent( new SimpleEvent( PRESS ) );
+			removeEventListener( KeyboardEvent.KEY_UP, _keyUp );
+		}
     }
 
-	public static function createSimple<Value>( text:String, f:Value->Void, ?value:Value ) :Button<Value> {
-        var b = new Button<Value>( text, value );
+	public static function createSimple( text:String, f:Void->Void ) :Button {
+        var b = new Button( text );
         b.addEventListener( PRESS, function( e ) {
-                f(untyped e.value); // FIXME: this untyped should really not be neccessary, haxe bug?
+                f();
             } );
         return b;
     } 

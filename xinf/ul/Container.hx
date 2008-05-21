@@ -25,7 +25,7 @@ class Container extends Component {
     
     override public function appendChild( newChild:Node ) :Node {
 		super.appendChild( newChild );
-
+	
 		if( Std.is( newChild, Component ) ) {
 			var child:Component = cast(newChild);
 			componentChildren.push( child );

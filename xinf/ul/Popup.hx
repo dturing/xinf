@@ -35,6 +35,7 @@ class Popup {
 				if( o.position.y+o.size.y >= Root.height ) 
 					o.size = { x:o.size.x, y:Root.height - (o.position.y+1) };
         }
+		
 		Root.appendChild(object.getElement());
     }
     

@@ -12,6 +12,7 @@ class ListItem<T> implements ISettable<T> {
     var cursor:Bool;
 	var text:Text;
     var value:T;
+	var size:TPoint;
     
     public function setCursor( isCursor:Bool ) :Bool {
         if( isCursor!=cursor ) {
@@ -42,9 +43,10 @@ class ListItem<T> implements ISettable<T> {
 
 	public function moveTo( x:Float, y:Float ) :Void {
 		text.x = x;
-		text.y = y+text.fontSize;
+		text.y = y+text.fontSize; //+((size.y-text.fontSize)/2);
 	}
 	
 	public function resize( x:Float, y:Float ) :Void {
+		size = { x:x, y:y };
 	}
 }

@@ -8,9 +8,10 @@ import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
 import xinf.ul.Component;
+import xinf.ony.traits.LineIncrementTrait;
 
 /*
-	TODO: when height is not an exact multiple of unit,
+	TODO: when height is not an exact multiple of lineIncrement,
 	scroll better.
 */
 
@@ -35,26 +36,41 @@ import xinf.ul.Component;
 
 class RoundRobin<T,Item:ISettable<T>> extends Group {
 
+	static var tagName = "RoundRobin";
+
+	static var TRAITS = {
+		line_increment:new LineIncrementTrait(),
+	}
+
+    public var lineIncrement(get_line_increment,set_line_increment):Float;
+    function get_line_increment() :Float { 
+		var r:Float = getStyleTrait("line-increment",Float);
+		if( r==-1 ) // auto
+			r = fontSize*1.1;
+		return r; 
+	}
+    function set_line_increment( v:Float ) :Float { setStyleTrait("line-increment",v); redraw(); return v; }
+
     var model:ListModel<T>;
     var createItem:Void->Item;
 
-	var itemStyle:Dynamic;
-	var itemOffset:TPoint;
-
-    var n:Int;              // number of slots
+	var n:Int;              // number of slots
     var rr:Array<Item>;     // the round-robin array
     var rrofs:Int;
     var rrstart:Int;
 	
-	public var height:Float; // pixel height of display crop
+	var height:Float; // pixel height of display crop
+	var width:Float; // pixel width of display crop
     
-    var unit:Float;         // size of one unit (row height)
+    var unit:Float;         // size of one lineIncrement (row height)
     var cOffset:Float;      // current negative offset in rows
-    
-    public function new( model:ListModel<T>, createItem:Void->Item, eStyle:Dynamic, c:Component, ?unit:Float ) :Void {
+	var umod:Float;			// crop height % lineIncrement
+	
+    var component:Component; // reference component (for padding)
+	
+    public function new( model:ListModel<T>, createItem:Void->Item, c:Component ) :Void {
         super();
         
-		itemStyle = eStyle;
 		this.model = model;
         this.createItem = createItem;
         
@@ -63,27 +79,29 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         rrofs = 0;
         rrstart = 0;
         
-		if( unit==null ) {
-			var s = Helper.addPadding( c.getTextFormat().textSize("Ag["), c );
-			unit = s.y;
-		}
-		itemOffset = Helper.innerTopLeft( c );
-        this.unit = unit;
+		component = c;
         cOffset = 0;
     }
 
 	public function resize( x:Float, y:Float ) :Void {
+		width=x; height=y;
         setup( x, y );
     }
-    
+
+	override public function styleChanged( ?a:String ) {
+		super.styleChanged(a);
+		redoAll();
+	}
+
     function setup( w:Float, total:Float ) :Void {
+		umod = 2-((total % lineIncrement)/lineIncrement);
+		
         // adjust n.
-        var n = Math.ceil( total/unit )+1;
+        var n = Math.ceil( total/lineIncrement )+1;
         if( n != this.n ) {
             for( i in this.n...n ) {
                 var item = createItem();
-				item.setStyle( itemStyle );
-                item.attachTo(this);
+				item.attachTo(this);
                 rr.push( item );
             }
             // TODO: remove superfluous items in rr
@@ -92,7 +110,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         }
         
         for( item in rr ) {
-            item.resize( w, unit );
+            item.resize( w, lineIncrement );
         }
         
         redoAll();
@@ -102,21 +120,21 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         rrstart = Math.floor( cOffset ); // FIXME: spare
         rrofs = 0;
         
-        var pos = rrstart*unit;
+        var pos = rrstart*lineIncrement;
         var i = rrstart;
         var j = 0;
         for( item in rr ) {
-            item.moveTo( itemOffset.x, itemOffset.y+pos );
+            item.moveTo( 0, pos );
             var value = if( i>=model.getLength() ) null else model.getItemAt(i);
             item.set( value );
             i++;
-            pos+=unit;
+            pos+=lineIncrement;
         }
     }
     
     function shiftDown() :Void {
         var item = rr[rrofs];
-        item.moveTo( itemOffset.x, itemOffset.y + ((rrstart+n)*unit) );
+        item.moveTo( 0, ((rrstart+n)*lineIncrement) );
         item.set( model.getItemAt(rrstart+n) );
         
         rrstart++;
@@ -129,34 +147,37 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         if( rrofs<0 ) rrofs+=n;
         
         var item = rr[rrofs];
-        item.moveTo( 0, (rrstart)*unit );
+        item.moveTo( 0, (rrstart)*lineIncrement );
         item.set( model.getItemAt(rrstart) );
     }
 
     public function scrollTo( offset:Float ) :Void {
         cOffset = offset;
-		transform = new Translate( 0, -(cOffset*unit) );
+		var s = cOffset*lineIncrement;
+		//if( s>height ) s=height;
+		//trace("scroll "+s+", h "+height );
+		transform = new Translate( 0, -s );
         redoAll();
     }
     
     public function scrollToNormalized( offset:Float ) :Void {
-        scrollBy( (offset * (model.getLength()-(n-1))) - cOffset );
+        scrollBy( (offset * (model.getLength()-(n-umod))) - cOffset );
     }
 
     public function assureVisible( index:Int ) :Void {
-        var l = cOffset+n-1;
+        var l = cOffset+n-umod;
         if( index < cOffset ) {
             scrollBy( index-cOffset );
-        } else if( index >= l ) {
+        } else if( index >= l-1 ) {
             scrollBy( (index-l)+1 );
         }
-        var ofs = Math.max( 0, Math.min( (model.getLength()-(n-1)), cOffset ) );
-        if( ofs != cOffset ) scrollBy( cOffset-ofs );
+        //var ofs = Math.max( 0, Math.min( (model.getLength()-(n-umod)), cOffset ) );
+        //if( ofs != cOffset ) scrollBy( cOffset-ofs );
     }
 
     public function scrollBy( offset:Float ) :Void {
         var ofs = cOffset+offset;
-        ofs = Math.max( 0, Math.min( (model.getLength()-(n-2)), ofs ) );
+        ofs = Math.max( 0, Math.min( (model.getLength()-(n-umod)), ofs ) );
 
             scrollTo( ofs );
 		return; // FIXME
@@ -165,7 +186,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
         } else {
             // some items will remain the same. do the robin.
             cOffset = ofs;
-			transform = new Translate( 0, -(cOffset*unit) ); 
+			transform = new Translate( 0, -(cOffset*lineIncrement) ); 
             while( (rrstart+1) < ofs ) {
                 shiftDown();
             }
@@ -176,7 +197,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
     }
 
     public function getPositionNormalized() :Float {
-        return( cOffset / (model.getLength()-(n-1)) );
+        return( cOffset / (model.getLength()-(n-umod)) );
     }
     
     public function getPageSize() :Int {
@@ -194,11 +215,11 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
     }
     
     public function indexAt( offset:Float ) :Int {
-        return Math.floor( (offset/unit)+cOffset );
+        return Math.floor( (offset/lineIncrement)+cOffset );
     }
 
     public function positionOf( index:Int ) :Float {
-        return( (index-cOffset)*unit );
+        return( (index-cOffset)*lineIncrement );
     }
 
     public function setModel( m:ListModel<T> ) :Void {

@@ -37,20 +37,13 @@ class Label extends Component {
     }
 
 	override public function set_size( s:TPoint ) :TPoint {
-		textElement.y = Helper.topOffsetAligned( this, s.y, verticalAlign )+fontSize;
+		textElement.y = Helper.topOffsetAligned( this, s.y, verticalAlign )+textElement.fontSize;
 		textElement.x = Helper.leftOffsetAligned( this, s.x, horizontalAlign );
 		return super.set_size(s);
 	}
 
     override public function styleChanged( ?attr:String ) {
 		super.styleChanged( attr );
-		
-		textElement.fontSize = fontSize;
-		textElement.fontFamily = fontFamily;
-		textElement.fill = textColor;
-		textElement.styleChanged();
-		// TODO: fontWeight
-		
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
 		}

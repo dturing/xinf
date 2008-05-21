@@ -9,6 +9,7 @@ import xinf.ul.ValueEvent;
 import xinf.ul.widget.Label;
 import xinf.ul.widget.LineEdit;
 import xinf.ul.widget.Slider;
+import xinf.ul.widget.CheckBox;
 import xinf.ul.layout.GridLayout;
 
 class Magic extends Interface {
@@ -37,7 +38,9 @@ class Magic extends Interface {
 			case Textual( initial ):
 				widget = new Label( initial );
 			case Numeric( from, to, initial ):
-				widget = new Slider( from, to, null, initial );
+				widget = new Slider( from, to, (to-from)/200, initial );
+			case Switch( initial ):
+				widget = new CheckBox("");
 			default:
 				widget = new Label();
 		};
@@ -54,6 +57,8 @@ class Magic extends Interface {
 		switch( Type.typeof(value) ) {
 			case TFloat:
 				return cast(value);
+			case TBool:
+				return cast(value)?1.:0.;
 			default:
 				return Std.parseFloat( Std.string(value) );
 		}
@@ -70,6 +75,8 @@ class Magic extends Interface {
 				cast(widget,Label).text = Std.string(value);
 			case Numeric( from, to, initial ):
 				cast(widget,Slider).value = toFloat(value);
+			case Switch(initial):
+				cast(widget,CheckBox).selected = cast(value);
 			default:
 				cast(widget,Label).text = Std.string(value);
 		}
@@ -85,6 +92,9 @@ class Magic extends Interface {
 			
 			case Numeric(from,to,initial):
 				widget.addEventListener( ValueEvent.VALUE, function( v ) { listener(cast(v.value)); } );
+				
+			case Switch(initial):
+				widget.addEventListener( CheckBox.CHANGED, function( v ) { listener(cast(v)); } );
 				
 			default:
 				// do nothing
