@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.style;
 
@@ -15,14 +15,14 @@ import xinf.style.Selector;
 */
 class StyleParser {
 	static var comment = ~/\/\*[^\*]*\*\//g;
-    static var split = ~/[ \r\n\t]*;[ \r\n\t]*/g;
+	static var split = ~/[ \r\n\t]*;[ \r\n\t]*/g;
 	
 	/** 
 		From a dynamic object with text values as returned by [parseToObject],
 		parse individual style properties as defined by [via]'s traits
 		definitions, and set the resulting typed values on [to].
 	**/
-    public static function fromObject( s:Dynamic, via:TraitAccess, to:Dynamic ) :Void {
+	public static function fromObject( s:Dynamic, via:TraitAccess, to:Dynamic ) :Void {
 		for( field in Reflect.fields(s) ) {
 			var field2 = StringTools.replace( field, "_", "-" );
 			via.setTraitFromDynamic( field2, Reflect.field(s,field), to );
@@ -37,23 +37,23 @@ class StyleParser {
 		For example, "[fill:red,stroke:#f00]" will be turned into
 		[{ style:"red", stroke:"#f00" }].
 	**/
-    public static function parseToObject( text:String ) :Dynamic {
+	public static function parseToObject( text:String ) :Dynamic {
 		var to = Reflect.empty();
 		text = comment.replace(text,"");
-        var properties = split.split(text);
-        for( prop in properties ) {
-            var p = prop.split(":");
-            if( p.length==2 ) {
+		var properties = split.split(text);
+		for( prop in properties ) {
+			var p = prop.split(":");
+			if( p.length==2 ) {
 				var name = StringTools.trim(p[0]);
 				var value = StringTools.trim(p[1]);
 				Reflect.setField( to, name, value );
-            } else if( prop.length==0 ) {
-            } else {
-                throw("invalid CSS: '"+prop+"'" );
-            }
-        }
+			} else if( prop.length==0 ) {
+			} else {
+				throw("invalid CSS: '"+prop+"'" );
+			}
+		}
 		return to;
-    }
+	}
 
 	static var cssRules = ~/\W*(.*)\W{\W(.*)\W/g;
 	
@@ -91,10 +91,10 @@ class StyleParser {
 		return rules;
 	}
 
-    static var comma_split = ~/[ \r\n\t]*,[ \r\n\t]*/g;
-    static var ws_split = ~/[ \r\n\t]+/g;
+	static var comma_split = ~/[ \r\n\t]*,[ \r\n\t]*/g;
+	static var ws_split = ~/[ \r\n\t]+/g;
 	static var first_s = ~/([^ ]+) (([\*\+>]) )?(.+)/;
-    
+	
 	/**
 		Parse a CSS selector
 	**/

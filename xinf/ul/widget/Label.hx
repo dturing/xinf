@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul.widget;
 
@@ -8,33 +8,33 @@ import xinf.ul.Component;
 import xinf.ul.layout.Helper;
 
 /**
-    Simple Label element.
+	Simple Label element.
 **/
 
 class Label extends Component {
-    
-    public var text(get_text,set_text):String;
+	
+	public var text(get_text,set_text):String;
 	var textElement:Text;
-    
-    public function new( ?text:String, ?traits:Dynamic ) :Void {
+	
+	public function new( ?text:String, ?traits:Dynamic ) :Void {
 		textElement = new Text();
 		super( traits );
 		group.appendChild( textElement );
-        if( text!=null ) this.text = text;
-    }
-    
-    function get_text() :String {
-        return(text);
-    }
-    
-    function set_text( t:String ) :String {
-        if( t != text ) {
-            text = t;
-            textElement.text = text;
+		if( text!=null ) this.text = text;
+	}
+	
+	function get_text() :String {
+		return(text);
+	}
+	
+	function set_text( t:String ) :String {
+		if( t != text ) {
+			text = t;
+			textElement.text = text;
 			styleChanged();
-        }
-        return(t);
-    }
+		}
+		return(t);
+	}
 
 	override public function set_size( s:TPoint ) :TPoint {
 		textElement.y = Helper.topOffsetAligned( this, s.y, verticalAlign )+textElement.fontSize;
@@ -42,10 +42,10 @@ class Label extends Component {
 		return super.set_size(s);
 	}
 
-    override public function styleChanged( ?attr:String ) {
+	override public function styleChanged( ?attr:String ) {
 		super.styleChanged( attr );
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
 		}
-    }
+	}
 }

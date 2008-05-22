@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -14,9 +14,9 @@ class MPath extends XMLElement {
 		href:new StringTrait(),
 	}
 
-    public var href(get_href,set_href):String;
-    function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { setTrait("href",v); return v; }
+	public var href(get_href,set_href):String;
+	function get_href() :String { return getTrait("href",String); }
+	function set_href( v:String ) :String { setTrait("href",v); return v; }
 
 	public function getPath() :Path {
 		if( href==null ) return null;

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -19,17 +19,17 @@ class Text extends ElementImpl {
 		text:new StringTrait(), // FIXME uDOM: "#text"?
 	}
 
-    public var x(get_x,set_x):Float;
-    function get_x() :Float { return getTrait("x",Length).value; }
-    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
+	public var x(get_x,set_x):Float;
+	function get_x() :Float { return getTrait("x",Length).value; }
+	function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
 
-    public var y(get_y,set_y):Float;
-    function get_y() :Float { return getTrait("y",Length).value; }
-    function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
+	public var y(get_y,set_y):Float;
+	function get_y() :Float { return getTrait("y",Length).value; }
+	function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
-    public var text(get_text,set_text):String;
-    function get_text() :String { return getTrait("text",String); }
-    function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
+	public var text(get_text,set_text):String;
+	function get_text() :String { return getTrait("text",String); }
+	function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
@@ -37,27 +37,27 @@ class Text extends ElementImpl {
 		to.text=text;
 	}
 
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        text = textContent(xml);
-    }
+	override public function fromXml( xml:Xml ) :Void {
+		super.fromXml(xml);
+		text = textContent(xml);
+	}
 
 /* helpers *******************/
 
-    function textContent( xml:Xml ) :String {
-        var text = "";
-        for( child in xml ) {
-            switch( child.nodeType ) {
-                case Xml.PCData:
-                    text+=child.nodeValue;
-                case Xml.Element:
-                    text+=textContent(child)+"\n";
-                default:
-            }
-        }
-        return xmlUnescape(StringTools.trim( text ));
-    }
-    
+	function textContent( xml:Xml ) :String {
+		var text = "";
+		for( child in xml ) {
+			switch( child.nodeType ) {
+				case Xml.PCData:
+					text+=child.nodeValue;
+				case Xml.Element:
+					text+=textContent(child)+"\n";
+				default:
+			}
+		}
+		return xmlUnescape(StringTools.trim( text ));
+	}
+	
 	/**
 		Unescape XML special characters of the string.
 	**/

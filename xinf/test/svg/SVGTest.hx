@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.test.svg;
 
@@ -9,20 +9,20 @@ import Xinf;
 
 class SVGTest extends TestCase {
 
-    var interactive:Bool;
-    var url:String;
-    var targetEquality:Float;
+	var interactive:Bool;
+	var url:String;
+	var targetEquality:Float;
 
-    public function new( url:String, ?targetEq:Float, ?interactive:Bool ) {
-        this.url=url;
-        super();
-        if( targetEq==null ) targetEq=.96;
-        this.targetEquality=targetEq;
-        this.interactive=interactive;
-    }
+	public function new( url:String, ?targetEq:Float, ?interactive:Bool ) {
+		this.url=url;
+		super();
+		if( targetEq==null ) targetEq=.96;
+		this.targetEquality=targetEq;
+		this.interactive=interactive;
+	}
 
-    override public function test() {
-    
+	override public function test() {
+	
 		// we're not using Document.load to catch the exception.. hmm..
 	
 		var self=this;
@@ -37,7 +37,7 @@ class SVGTest extends TestCase {
 								self.result( eq>self.targetEquality, "Eq: "+eq, self.cleanFinish );
 							} );
 						} );
-					} // else just loop on...    
+					} // else just loop on...	
 				}, Svg );
 			} catch( e:Dynamic ) {
 				self.result( false, "Exception: "+e, function() { self.cleanFinish(); } );
@@ -45,10 +45,10 @@ class SVGTest extends TestCase {
 		}, function( error ) {
 			throw(error);
 		} );
-    }
+	}
 
-    override public function toString() :String {
+	override public function toString() :String {
 		if( url==null ) return "[uninitialized]";
-        return( url.split("/").pop().split(".").shift() );
-    }
+		return( url.split("/").pop().split(".").shift() );
+	}
 }

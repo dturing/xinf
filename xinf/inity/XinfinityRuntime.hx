@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.inity;
 
@@ -16,70 +16,70 @@ import opengl.GLFW;
 import cptr.CPtr;
 
 class XinfinityRuntime extends Runtime {
-    
-    var frame:Int;
-    var width:Int;
-    var height:Int;
-    var somethingChanged:Bool;
-    var root:GLObject;
+	
+	var frame:Int;
+	var width:Int;
+	var height:Int;
+	var somethingChanged:Bool;
+	var root:GLObject;
 	var time:Float;
 	var interval:Float;
-    var bgColor:{ r:Float, g:Float, b:Float, a:Float };
+	var bgColor:{ r:Float, g:Float, b:Float, a:Float };
 	
 	var lastMeasure:Float;
 	var rateAcc:Float;
 	var rates:Int;
 	var measuredFps:Float;
 	
-    private var _eventSource:GLEventSource;
+	private var _eventSource:GLEventSource;
 
 	private static var selectBuffer = CPtr.uint_alloc(64);
-    private static var view = CPtr.int_alloc(4);
+	private static var view = CPtr.int_alloc(4);
 
-    /* public API */
-    
-    public function new() :Void {
-        super();
-        
+	/* public API */
+	
+	public function new() :Void {
+		super();
+		
 		lastMeasure = neko.Sys.time();
 		rates=0;
 		rateAcc=0;
 		
-        frame=0;
-        width = 320;
-        height = 240;
-        somethingChanged = true;
+		frame=0;
+		width = 320;
+		height = 240;
+		somethingChanged = true;
 		time = neko.Sys.time();
 		interval = 1./25.;
 		bgColor = { r:1., g:1., b:1., a:0. };
-    
+	
 		_eventSource=new GLEventSource(this);
-        initGL();
-        root = new GLObject( getNextId() );
+		initGL();
+		root = new GLObject( getNextId() );
 
 
 		addEventListener( GeometryEvent.STAGE_SCALED, resized );
-        
-        startFrame();
-    }
+		
+		startFrame();
+	}
 
-    function renderRoot() :Void {
-        Runtime.renderer.showObject( root.id );
-    }
+	function renderRoot() :Void {
+		Runtime.renderer.showObject( root.id );
+	}
 
-    function resized( e:GeometryEvent ) :Void {
-        width = Math.round(e.x); height=Math.round(e.y);
-    }
+	function resized( e:GeometryEvent ) :Void {
+		width = Math.round(e.x); height=Math.round(e.y);
+	}
 
-    override public function getNextId() :Int {
-        return GL.genLists(1);
-    }
+	override public function getNextId() :Int {
+		return GL.genLists(1);
+	}
 
-    override public function getDefaultRoot() :NativeContainer {
-        return root;
-    }
+	override public function getDefaultRoot() :NativeContainer {
+		return root;
+	}
 
-    override public function run() :Void {
+	override public function run() :Void {
 		var close=false;
 
 		GLFW.setWindowCloseFunction( function() {
@@ -91,11 +91,11 @@ class XinfinityRuntime extends Runtime {
 			GLFW.pollEvents();
 			step();
 		}
-    }
+	}
 
-    override public function changed() :Void {
-        somethingChanged = true;
-    }
+	override public function changed() :Void {
+		somethingChanged = true;
+	}
 
 	override public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
 		bgColor = { r:r, g:g, b:b, a:a };
@@ -109,17 +109,17 @@ class XinfinityRuntime extends Runtime {
 		return measuredFps;
 	}
 
-    public function display() :Void {
-        startFrame();
+	public function display() :Void {
+		startFrame();
 
-        #if gldebug
-            var e:Int = GL.getError();
-            if( e > 0 ) {
-                throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
-            }
-        #end
+		#if gldebug
+			var e:Int = GL.getError();
+			if( e > 0 ) {
+				throw( "OpenGL Error: "+opengl.GLU.errorString(e) );
+			}
+		#end
 
-        somethingChanged = false;
+		somethingChanged = false;
 		
  		#if profile
  			xinf.test.Profile.before("render");
@@ -129,11 +129,11 @@ class XinfinityRuntime extends Runtime {
  			xinf.test.Profile.after("render");
  		#end
  
-        endFrame();
+		endFrame();
 
 		timing();
 		GLFW.swapBuffers();
-    }
+	}
 	
 	function timing() :Void {
 		if( interval==-1 ) return; // as fast as possible...
@@ -156,13 +156,13 @@ class XinfinityRuntime extends Runtime {
 		time+=interval;
 	}
 
-    public function step() :Void {
-    
-        // post enter_frame event
-        postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
-        
-        if( somethingChanged ) {
-            //GLUT.postRedisplay();
+	public function step() :Void {
+	
+		// post enter_frame event
+		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
+		
+		if( somethingChanged ) {
+			//GLUT.postRedisplay();
 			display();
 		} else {
 			timing();
@@ -197,42 +197,42 @@ class XinfinityRuntime extends Runtime {
 				xinf.test.Profile.dump();
 			}
 		#end
-    }
+	}
 
-    /* internal functions */
-    private function initGL() :Void {
-        // init GLFW Window
-        GLFW.openWindow( 320,240, 8,8,8, 8,8,8, GLFW.WINDOW );
+	/* internal functions */
+	private function initGL() :Void {
+		// init GLFW Window
+		GLFW.openWindow( 320,240, 8,8,8, 8,8,8, GLFW.WINDOW );
 		GLFW.setWindowTitle("Xinfinity");
 
-        // TODO: set some kind of preferred size (style??)
-    
-        // init GLFW Callbacks
-        var self=this;
-        GLFW.setWindowSizeFunction( function( width:Int, height:Int ) {
-                self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
-            });
-        GLFW.setWindowRefreshFunction( function() {
-                self.changed();
-            });
+		// TODO: set some kind of preferred size (style??)
+	
+		// init GLFW Callbacks
+		var self=this;
+		GLFW.setWindowSizeFunction( function( width:Int, height:Int ) {
+				self.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
+			});
+		GLFW.setWindowRefreshFunction( function() {
+				self.changed();
+			});
 		_eventSource.attach();
-        
-        // init GL parameters
-        GL.enable( GL.BLEND );
-        GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
-        GL.shadeModel( GL.FLAT );
+		
+		// init GL parameters
+		GL.enable( GL.BLEND );
+		GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
+		GL.shadeModel( GL.FLAT );
 
 		openvg.VG.createContextSH( 320, 240 ); // FIXME
 		openvg.VG.seti( openvg.VG.RENDERING_QUALITY, openvg.VG.RENDERING_QUALITY_BETTER );
-    }
+	}
 
-    private function startFrame() :Void {
-        GL.pushMatrix();
-        GL.viewport( 0, 0, Math.round(width), Math.round(height) );
-        GL.matrixMode( GL.PROJECTION );
-        GL.loadIdentity();
-        GL.matrixMode( GL.MODELVIEW );
-        GL.loadIdentity();
+	private function startFrame() :Void {
+		GL.pushMatrix();
+		GL.viewport( 0, 0, Math.round(width), Math.round(height) );
+		GL.matrixMode( GL.PROJECTION );
+		GL.loadIdentity();
+		GL.matrixMode( GL.MODELVIEW );
+		GL.loadIdentity();
 
 		if( bgColor.a==0 || bgColor.a==null ) {
 			GL.clearColor( bgColor.r,bgColor.g,bgColor.b,0 );
@@ -245,43 +245,43 @@ class XinfinityRuntime extends Runtime {
 			GL.disable(GL.BLEND);
 		}
 		
-        // FIXME depends on stage scale mode
-        GL.translate( -1., 1., 0. );
-        GL.scale( (2./width), (-2./height), 1. );
-      //  GL.translate( .5, .5, 0. );
+		// FIXME depends on stage scale mode
+		GL.translate( -1., 1., 0. );
+		GL.scale( (2./width), (-2./height), 1. );
+	  //  GL.translate( .5, .5, 0. );
 
-        #if gldebug
-            var e:Int = GL.getError();
-            if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
-            }
-        #end
-    }
-    
-    private function endFrame() :Void {
-        GL.popMatrix();
-        GL.flush();
-        
-        #if gldebug
-            var e:Int = GL.getError();
-            if( e > 0 ) {
-                throw( "OpenGL Error: "+GLU.errorString(e) );
-            }
-        #end
-    }
-    
-    /* ------------------------------------------------------
-       HitTest Functions 
-       ------------------------------------------------------ */
-       
-    public function findIdAt( x:Float, y:Float ) :Int {
+		#if gldebug
+			var e:Int = GL.getError();
+			if( e > 0 ) {
+				throw( "OpenGL Error: "+GLU.errorString(e) );
+			}
+		#end
+	}
+	
+	private function endFrame() :Void {
+		GL.popMatrix();
+		GL.flush();
+		
+		#if gldebug
+			var e:Int = GL.getError();
+			if( e > 0 ) {
+				throw( "OpenGL Error: "+GLU.errorString(e) );
+			}
+		#end
+	}
+	
+	/* ------------------------------------------------------
+	   HitTest Functions 
+	   ------------------------------------------------------ */
+	   
+	public function findIdAt( x:Float, y:Float ) :Int {
 		if( root==null ) return 0;
-        var found = new Array<GLObject>();
-        root.hit( {x:x,y:y}, found );
-//        trace("findId("+x+","+y+"): "+found);
-        if( found.length>0 )
-            return found.pop().id;
-        else return -1;
-    }
+		var found = new Array<GLObject>();
+		root.hit( {x:x,y:y}, found );
+//		trace("findId("+x+","+y+"): "+found);
+		if( found.length>0 )
+			return found.pop().id;
+		else return -1;
+	}
 
 }

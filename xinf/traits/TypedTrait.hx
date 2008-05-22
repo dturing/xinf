@@ -1,23 +1,23 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.traits;
 
 class TypedTrait<T> implements TraitDefinition {
-    
+	
 	var type:Dynamic;
 	
-    public function new( type:Dynamic ) {
+	public function new( type:Dynamic ) {
 		this.type=type;
-    }
+	}
 
 	/* actually, parse() should return T
 	  but that fails in flash9 currently.
 	  see http://lists.motion-twin.com/pipermail/haxe/2007-July/010658.html
 	*/
-    public function parse( value:String ) :Dynamic {
+	public function parse( value:String ) :Dynamic {
 		throw( "unimplemented" );
-    }
+	}
 	
 	public function write( value:Dynamic ) :String {
 		return Std.string(value);

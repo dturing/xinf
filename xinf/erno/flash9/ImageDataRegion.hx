@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.erno.flash9;
 
@@ -13,5 +13,5 @@ class ImageDataRegion extends ImageData {
 		bitmapData = new flash.display.BitmapData( Math.round( region.w ), Math.round( region.h ) );
 		bitmapData.copyPixels( original.bitmapData, new flash.geom.Rectangle( Math.round( region.x ), Math.round( region.y ), Math.round( region.w ), Math.round( region.h ) ), new flash.geom.Point( 0, 0 ) );
 	}
-    
+	
 }

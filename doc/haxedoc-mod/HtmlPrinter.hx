@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 import haxe.rtti.Type;
 
 class HtmlPrinter {
@@ -594,7 +597,7 @@ class HtmlPrinter {
 				tmp.add("<pre>");
 				tmp.add(tag);
 				tmp.add("</pre>");
-				codes.add(code.split("\t").join("    "));
+				codes.add(code.split("\t").join("	"));
 			} else {
 				tmp.add("<code>");
 				tmp.add(tag);

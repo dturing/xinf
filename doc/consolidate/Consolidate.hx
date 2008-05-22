@@ -1,3 +1,5 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
 
 class Package {
 	public var name:String;

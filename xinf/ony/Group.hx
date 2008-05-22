@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -11,15 +11,15 @@ class Group extends ElementImpl {
 	static var tagName = "g";
 
 	override public function appendChild( newChild:Node ) :Node {
-        redraw();
+		redraw();
 		return super.appendChild( newChild );
-    }
+	}
 
 	// TODO: insertChild
 
-    override public function removeChild( oldChild:Node ) :Node {
-        redraw();
+	override public function removeChild( oldChild:Node ) :Node {
+		redraw();
 		return super.removeChild( oldChild );
-    }
+	}
 
 }

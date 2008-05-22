@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.inity;
 
@@ -26,8 +26,8 @@ import cptr.CPtr;
 import xinf.inity.GLRenderer;
 
 class GLVGRenderer extends GLRenderer {
-    
-    private var path:Path;
+	
+	private var path:Path;
 	
 	var fill:Paint;
 	var stroke:Paint;
@@ -168,32 +168,32 @@ class GLVGRenderer extends GLRenderer {
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 			
 		f(path);
-        
+		
 		if( applyFill() )   path.draw( VG.FILL_PATH );
 		if( applyStroke() ) path.draw( VG.STROKE_PATH );
 	}
 
    // erno.Renderer API
-    
-    override public function startShape() {
-	    if( path != null ) throw("Can only define one path at a time");
+	
+	override public function startShape() {
+		if( path != null ) throw("Can only define one path at a time");
 		path = Path.create( VG.PATH_FORMAT_STANDARD, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 	}
-    
-    override public function endShape() {
-	    if( path==null ) throw("no current Polygon");
+	
+	override public function endShape() {
+		if( path==null ) throw("no current Polygon");
 
 		if( applyFill() ) path.draw( VG.FILL_PATH );
 		if( applyStroke() ) path.draw( VG.STROKE_PATH );
 		
-        path = null;
-    }
+		path = null;
+	}
 
 	function append( type:Int, data:Array<Float> ) {
 		if( path==null ) throw("no current Polygon");
 		
-        var t = CPtr.uchar_alloc(1);
+		var t = CPtr.uchar_alloc(1);
 		CPtr.uchar_set(t,0,type);
 		
 		var d=null;
@@ -205,106 +205,106 @@ class GLVGRenderer extends GLRenderer {
 		path.appendData( 1, t, d );
 	}
 
-    override public function startPath( x:Float, y:Float) {
+	override public function startPath( x:Float, y:Float) {
 		append( VG.MOVE_TO_ABS, [x,y] );
-    }
+	}
 	
-    override public function endPath() {
-    }
-    
-    override public function close() {
+	override public function endPath() {
+	}
+	
+	override public function close() {
 		append( VG.CLOSE_PATH, [] );
-    }
-    
-    override public function lineTo( x:Float, y:Float ) {
+	}
+	
+	override public function lineTo( x:Float, y:Float ) {
 		append( VG.LINE_TO_ABS, [x,y] );
-    }
-    
-    override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+	}
+	
+	override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
 		append( VG.QUAD_TO_ABS, [x1,y1,x,y] );
-    }
-    
-    override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+	}
+	
+	override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		append( VG.CUBIC_TO_ABS, [x1,y1,x2,y2,x,y] );
-    }
+	}
 
-    override public function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
+	override public function arcTo( x1:Float, y1:Float, rx:Float, ry:Float, rotation:Float, largeArcFlag:Bool, sweepFlag:Bool, x:Float, y:Float ) {
 		if( x1==x && y1==y ) return;
 		if( rx==0 || ry==0 ) { lineTo( x,y ); return; }
 		
-        var a = (rotation/180)*Math.PI;
-        var A = { x:x1, y:y1 };
-        var B = { x:x, y:y };
-        var P = { x:(A.x-B.x)/2, y:(A.y-B.y)/2 };
-        P = rotatePoint( P, -a );
+		var a = (rotation/180)*Math.PI;
+		var A = { x:x1, y:y1 };
+		var B = { x:x, y:y };
+		var P = { x:(A.x-B.x)/2, y:(A.y-B.y)/2 };
+		P = rotatePoint( P, -a );
 
-        var lambda = (Math.pow(P.x,2)/Math.pow(rx,2)) + (Math.pow(P.y,2)/Math.pow(rx,2));
-        if( lambda>1 ) {
-            rx *= Math.sqrt(lambda);
-            ry *= Math.sqrt(lambda);
-        }
-        
-        var f = ( (Math.pow(rx,2)*Math.pow(ry,2))-(Math.pow(rx,2)*Math.pow(P.y,2))-Math.pow(ry,2)*Math.pow(P.x,2))
-            / ( (Math.pow(rx,2)*Math.pow(P.y,2)) + (Math.pow(ry,2)*Math.pow(P.x,2)) );
-        if( f<0 ) f=0 else f=Math.sqrt(f);
-        if( largeArcFlag==sweepFlag ) f*=-1;
-        
-        var C_ =  { x: rx/ry*P.y, y: -ry/rx*P.x };
-        C_.x*=f; C_.y*=f;
-        var C = C_;
-        
-        C = rotatePoint(C,a);
-        C = { x: C.x + ((A.x+B.x)/2),
-              y: C.y + ((A.y+B.y)/2) };
-        
-        var theta = Math.atan2( (P.y-C_.y)/ry, (P.x-C_.x)/rx );
-        var dTheta = Math.atan2( (-P.y-C_.y)/ry, (-P.x-C_.x)/rx)-theta;
-        
-        if( !sweepFlag && dTheta<0 ) dTheta += 2*Math.PI;
-        if( sweepFlag && dTheta>0 ) dTheta -= 2*Math.PI;
+		var lambda = (Math.pow(P.x,2)/Math.pow(rx,2)) + (Math.pow(P.y,2)/Math.pow(rx,2));
+		if( lambda>1 ) {
+			rx *= Math.sqrt(lambda);
+			ry *= Math.sqrt(lambda);
+		}
+		
+		var f = ( (Math.pow(rx,2)*Math.pow(ry,2))-(Math.pow(rx,2)*Math.pow(P.y,2))-Math.pow(ry,2)*Math.pow(P.x,2))
+			/ ( (Math.pow(rx,2)*Math.pow(P.y,2)) + (Math.pow(ry,2)*Math.pow(P.x,2)) );
+		if( f<0 ) f=0 else f=Math.sqrt(f);
+		if( largeArcFlag==sweepFlag ) f*=-1;
+		
+		var C_ =  { x: rx/ry*P.y, y: -ry/rx*P.x };
+		C_.x*=f; C_.y*=f;
+		var C = C_;
+		
+		C = rotatePoint(C,a);
+		C = { x: C.x + ((A.x+B.x)/2),
+			  y: C.y + ((A.y+B.y)/2) };
+		
+		var theta = Math.atan2( (P.y-C_.y)/ry, (P.x-C_.x)/rx );
+		var dTheta = Math.atan2( (-P.y-C_.y)/ry, (-P.x-C_.x)/rx)-theta;
+		
+		if( !sweepFlag && dTheta<0 ) dTheta += 2*Math.PI;
+		if( sweepFlag && dTheta>0 ) dTheta -= 2*Math.PI;
 
 		VGU.arc( path,
 			C.x, C.y, rx*2, ry*2, (theta/Math.PI)*180, (dTheta/Math.PI)*180, VGU.ARC_OPEN );
 	}
 	
-    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
-        current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
+	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
 		drawPath( function(path) {
 			VGU.rect(path,x,y,w,h);
 		});
 	}
 	
-    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
-        current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
+	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
 		drawPath( function(path) {
 			VGU.roundRect(path,x,y,w,h,rx*2,ry*2);
 		});
 	}
 
-    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
-        current.mergeBBox( {l:x-rx,t:y-ry,r:x+rx,b:y+ry} );
+	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+		current.mergeBBox( {l:x-rx,t:y-ry,r:x+rx,b:y+ry} );
 		drawPath( function(path) {
 			VGU.ellipse(path,x,y,rx*2,ry*2);
 		});
 	}
 
-    /* helper functions */
-        
-    public static function matrixForVG( m:TMatrix ) :Dynamic {
-        var v = CPtr.float_alloc(9);
-        
-        CPtr.float_set(v,0,m.a);
-        CPtr.float_set(v,1,m.b);
-        CPtr.float_set(v,2,.0);
+	/* helper functions */
+		
+	public static function matrixForVG( m:TMatrix ) :Dynamic {
+		var v = CPtr.float_alloc(9);
+		
+		CPtr.float_set(v,0,m.a);
+		CPtr.float_set(v,1,m.b);
+		CPtr.float_set(v,2,.0);
 
-        CPtr.float_set(v,3,m.c);
-        CPtr.float_set(v,4,m.d);
-        CPtr.float_set(v,5,.0);
+		CPtr.float_set(v,3,m.c);
+		CPtr.float_set(v,4,m.d);
+		CPtr.float_set(v,5,.0);
 
-        CPtr.float_set(v,6,m.tx);
-        CPtr.float_set(v,7,m.ty);
-        CPtr.float_set(v,8,1.);
-        
-        return v;
-    }
+		CPtr.float_set(v,6,m.tx);
+		CPtr.float_set(v,7,m.ty);
+		CPtr.float_set(v,8,1.);
+		
+		return v;
+	}
 }

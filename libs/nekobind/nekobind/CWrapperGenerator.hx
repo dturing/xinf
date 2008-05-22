@@ -1,21 +1,5 @@
-/* 
-   nekobind - nekovm-C binding generator
-   Copyright (c) 2006, Daniel Fischer.
- 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
 
 package nekobind;
 
@@ -23,161 +7,161 @@ import haxe.rtti.Type;
 import nekobind.type.TypeRep;
 
 class CWrapperGenerator extends Generator {
-    public function handleFunction( f:ClassField, args:Array<{ name:String, opt:Bool, t:Type, r:TypeRep }>, ret:TypeRep, functionSettings:Settings ) {
-        var _this=this;
-        
-        // dont handle the haxe constructor
-        if( f.name == "new" ) return;
-    
-        var self = !allGlobal;
-        if( functionSettings.isStatic || functionSettings.ctor == "true" ) self=false;
-    
-        // c function header
-        print( "static value bind_"+settings.className+"_"+f.name+"( " );
-            var nArgs = args.length;
-            if( self ) nArgs++;
-            
-            if( nArgs>Generator.CALL_MAX_ARGS ) {
-                // variable arguments
-                print("value n_args");
-            } else {
-                // class reference
-                if( self ) {
-                    print("value n_self");
-                    if( args.length>0 ) print(", ");
-                }
-            
-                iterateArguments( args, function( name, opt, t, r, last ) {
-                        _this.print( "value n_"+name );
-                        if( !last ) _this.print(", ");
-                    } );
-            }
-        print( " ) {\n" );
+	public function handleFunction( f:ClassField, args:Array<{ name:String, opt:Bool, t:Type, r:TypeRep }>, ret:TypeRep, functionSettings:Settings ) {
+		var _this=this;
+		
+		// dont handle the haxe constructor
+		if( f.name == "new" ) return;
+	
+		var self = !allGlobal;
+		if( functionSettings.isStatic || functionSettings.ctor == "true" ) self=false;
+	
+		// c function header
+		print( "static value bind_"+settings.className+"_"+f.name+"( " );
+			var nArgs = args.length;
+			if( self ) nArgs++;
+			
+			if( nArgs>Generator.CALL_MAX_ARGS ) {
+				// variable arguments
+				print("value n_args");
+			} else {
+				// class reference
+				if( self ) {
+					print("value n_self");
+					if( args.length>0 ) print(", ");
+				}
+			
+				iterateArguments( args, function( name, opt, t, r, last ) {
+						_this.print( "value n_"+name );
+						if( !last ) _this.print(", ");
+					} );
+			}
+		print( " ) {\n" );
 
-            if( nArgs>Generator.CALL_MAX_ARGS ) {
-                print("\tval_check(n_args,array); int nargs = val_array_size(n_args); value *args = val_array_ptr(n_args);\n");
-                // assure correct number of arguments
-                print("\tif( nargs != "+nArgs+" ) ");
-                print( "val_throw( alloc_string( \""+f.name+" expects "+nArgs+" arguments\" ));\n");
-                // assign argument array to local vars.
-                var i=0;
-                if( self ) {
-                    print("\tvalue n_self = args[0];\n");
-                    i++;
-                }
-                iterateArguments( args, function( name, opt, t, r, last ) {
-                        _this.print( "\tvalue n_"+name+" = args["+i+"];\n" );
-                        i++;
-                    } );
-            }
-            
-            if( self ) {
-                print("\tval_check_kind(n_self,k_"+settings.className+");\n");
-                print("\t"+settings.cStruct+" self = ("+settings.cStruct+")val_data(n_self);\n");
-            }
+			if( nArgs>Generator.CALL_MAX_ARGS ) {
+				print("\tval_check(n_args,array); int nargs = val_array_size(n_args); value *args = val_array_ptr(n_args);\n");
+				// assure correct number of arguments
+				print("\tif( nargs != "+nArgs+" ) ");
+				print( "val_throw( alloc_string( \""+f.name+" expects "+nArgs+" arguments\" ));\n");
+				// assign argument array to local vars.
+				var i=0;
+				if( self ) {
+					print("\tvalue n_self = args[0];\n");
+					i++;
+				}
+				iterateArguments( args, function( name, opt, t, r, last ) {
+						_this.print( "\tvalue n_"+name+" = args["+i+"];\n" );
+						i++;
+					} );
+			}
+			
+			if( self ) {
+				print("\tval_check_kind(n_self,k_"+settings.className+");\n");
+				print("\t"+settings.cStruct+" self = ("+settings.cStruct+")val_data(n_self);\n");
+			}
 
-            // assign neko argument values to local c primitives
-            iterateArguments( args, function( name, opt, t, r, last ) {
-                    _this.print( "\t"+r.cCheckAssign( name, "n_"+name )+"\n" );
-                } );
-        
-            // call
-            var suffix = if( functionSettings.suffix!=null ) functionSettings.suffix else "";
+			// assign neko argument values to local c primitives
+			iterateArguments( args, function( name, opt, t, r, last ) {
+					_this.print( "\t"+r.cCheckAssign( name, "n_"+name )+"\n" );
+				} );
+		
+			// call
+			var suffix = if( functionSettings.suffix!=null ) functionSettings.suffix else "";
 			var fName = if( functionSettings.functionName!=null ) functionSettings.functionName else f.name;
-            var call = settings.prefix+translator.translate(fName)+suffix+"(";
-                // argument - self
-                if( self ) {
-                    call += "self";
-                    if( args.length>0 ) call += ", ";
-                }
-                // arguments
-                iterateArguments( args, function( name, opt, t, r, last ) {
-                        call += name;
-                        if( !last ) call += ", ";
-                    } );
-            call += ")";
-            
-            print( "\t"+ret.cReturn( call )+"\n");
+			var call = settings.prefix+translator.translate(fName)+suffix+"(";
+				// argument - self
+				if( self ) {
+					call += "self";
+					if( args.length>0 ) call += ", ";
+				}
+				// arguments
+				iterateArguments( args, function( name, opt, t, r, last ) {
+						call += name;
+						if( !last ) call += ", ";
+					} );
+			call += ")";
+			
+			print( "\t"+ret.cReturn( call )+"\n");
 
-        // c function footer
-        var n:Int = args.length;
-        if( self ) n++;
-        if( n > Generator.CALL_MAX_ARGS ) {
-//            print( "}\nDEFINE_PRIM_MULT(bind_"+settings.className+"_"+f.name+");\n\n" );
-            print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+",1);\n\n" );
-        } else {
-            print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+","+n+");\n\n" );
-        }
-    }
+		// c function footer
+		var n:Int = args.length;
+		if( self ) n++;
+		if( n > Generator.CALL_MAX_ARGS ) {
+//			print( "}\nDEFINE_PRIM_MULT(bind_"+settings.className+"_"+f.name+");\n\n" );
+			print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+",1);\n\n" );
+		} else {
+			print( "}\nDEFINE_PRIM(bind_"+settings.className+"_"+f.name+","+n+");\n\n" );
+		}
+	}
 
-    public function handleClass( e:TypeInfos, c:Class ) {
-        print("/* c binding for class "+e.path+" - generated by nekobind. do not edit directly */\n\n");
-        
-        parseSettings( settings, c.doc );
-        if( settings.global == "true" ) {
-            allGlobal = true;
-        }
-        settings.className = e.path.split(".").pop();
+	public function handleClass( e:TypeInfos, c:Class ) {
+		print("/* c binding for class "+e.path+" - generated by nekobind. do not edit directly */\n\n");
+		
+		parseSettings( settings, c.doc );
+		if( settings.global == "true" ) {
+			allGlobal = true;
+		}
+		settings.className = e.path.split(".").pop();
 
-        if( settings.cHeader!=null ) {
-            print( settings.cHeader+"\n\n" );
-        }
+		if( settings.cHeader!=null ) {
+			print( settings.cHeader+"\n\n" );
+		}
 
-        print("/* nekobind class settings:\n   "+settings+"\n*/\n\n" );
-        print("#include <neko.h>\n\n");
+		print("/* nekobind class settings:\n   "+settings+"\n*/\n\n" );
+		print("#include <neko.h>\n\n");
 
-        // beautify val_check and val_check_kind (throws a readable exception)
-        print("#ifdef val_check\n#undef val_check\n#endif\n");
-        print("#define val_check(v,t) if( !val_is_##t(v) ) failure(\"argument \" #v \" is not a \" #t );\n");
-        print("#ifdef val_check_kind\n#undef val_check_kind\n#endif\n");
-        print("#define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure(\"argument \" #v \" is not of kind \" #k );\n");
+		// beautify val_check and val_check_kind (throws a readable exception)
+		print("#ifdef val_check\n#undef val_check\n#endif\n");
+		print("#define val_check(v,t) if( !val_is_##t(v) ) failure(\"argument \" #v \" is not a \" #t );\n");
+		print("#ifdef val_check_kind\n#undef val_check_kind\n#endif\n");
+		print("#define val_check_kind(v,k) if( !val_is_kind(v,k) ) failure(\"argument \" #v \" is not of kind \" #k );\n");
 
-        // extern kinds for friend classes (must be in the same ndll!)
-        print("\n");
-        for( friend in friendClasses.keys() ) {
-            print("extern value check_"+friend.split(".").pop()+"( value );\n");
-            print("extern "+friendClasses.get(friend).cStruct+" val_"+friend.split(".").pop()+"( value );\n");
-            print("extern value alloc_"+friend.split(".").pop()+"( "+friendClasses.get(friend).cStruct+" );\n");
-        }
-        print("\n");
+		// extern kinds for friend classes (must be in the same ndll!)
+		print("\n");
+		for( friend in friendClasses.keys() ) {
+			print("extern value check_"+friend.split(".").pop()+"( value );\n");
+			print("extern "+friendClasses.get(friend).cStruct+" val_"+friend.split(".").pop()+"( value );\n");
+			print("extern value alloc_"+friend.split(".").pop()+"( "+friendClasses.get(friend).cStruct+" );\n");
+		}
+		print("\n");
 
-        if( settings.cStruct != null ) {
-            var cl = settings.className;
-            var cStruct = settings.cStruct;
+		if( settings.cStruct != null ) {
+			var cl = settings.className;
+			var cStruct = settings.cStruct;
 
-            // DEFINE_KIND
-            print("DEFINE_KIND( k_"+cl+" );\n\n");
-            
-            // check_<cStruct>
-            print("value check_"+cl+"( value n_self ) {\n");
-            print("\tval_check_kind( n_self, k_"+cl+" );\n" );
-            print("\treturn val_true;\n");
-            print("}\n\n");
-            
-            // val_<cStruct>
-            print(cStruct+" val_"+cl+"( value n_self ) {\n");
-            print("\treturn ("+cStruct+")val_data( n_self );\n" );
-            print("}\n\n");
+			// DEFINE_KIND
+			print("DEFINE_KIND( k_"+cl+" );\n\n");
+			
+			// check_<cStruct>
+			print("value check_"+cl+"( value n_self ) {\n");
+			print("\tval_check_kind( n_self, k_"+cl+" );\n" );
+			print("\treturn val_true;\n");
+			print("}\n\n");
+			
+			// val_<cStruct>
+			print(cStruct+" val_"+cl+"( value n_self ) {\n");
+			print("\treturn ("+cStruct+")val_data( n_self );\n" );
+			print("}\n\n");
 
-            // destructor (finalize method)
-            if( settings.dtor != null ) {
-                print("void finalize_"+cl+"( value n_self ) {\n");
-                print("\tcheck_"+cl+"( n_self );\n" );
-                print("\t"+cStruct+" self = val_"+cl+"( n_self );\n" );
-                print("\t"+settings.prefix+translator.translate(settings.dtor)+"( self );\n" );
-                print("}\n\n");
-            }
-            
-            // alloc_<cStruct>
-            print("value alloc_"+cl+"( "+cStruct+" self ) {\n");
-            print("\tvalue n_self = alloc_abstract( k_"+cl+", (void*)self );\n" );
-            if( settings.dtor != null ) {
-                print("\tval_gc( n_self, finalize_"+cl+" );\n");
-            }
-            print("\treturn n_self;\n");
-            print("}\n\n");
-        }
-        
-        super.handleClass(e,c);
-    }
+			// destructor (finalize method)
+			if( settings.dtor != null ) {
+				print("void finalize_"+cl+"( value n_self ) {\n");
+				print("\tcheck_"+cl+"( n_self );\n" );
+				print("\t"+cStruct+" self = val_"+cl+"( n_self );\n" );
+				print("\t"+settings.prefix+translator.translate(settings.dtor)+"( self );\n" );
+				print("}\n\n");
+			}
+			
+			// alloc_<cStruct>
+			print("value alloc_"+cl+"( "+cStruct+" self ) {\n");
+			print("\tvalue n_self = alloc_abstract( k_"+cl+", (void*)self );\n" );
+			if( settings.dtor != null ) {
+				print("\tval_gc( n_self, finalize_"+cl+" );\n");
+			}
+			print("\treturn n_self;\n");
+			print("}\n\n");
+		}
+		
+		super.handleClass(e,c);
+	}
 }

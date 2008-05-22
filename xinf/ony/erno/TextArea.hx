@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -15,31 +15,31 @@ import xinf.inity.font.Font;
 import xinf.inity.GLRenderer;
 
 enum FlowElement {
-    Word( t:String );
-    Whitespace( t:String );
-    Return;
-    FormatChange( f:TextFormat );
+	Word( t:String );
+	Whitespace( t:String );
+	Return;
+	FormatChange( f:TextFormat );
 }
 
 typedef TextLine = {
 	offset: Int,
-    text: String
+	text: String
 }
 
 class TextArea extends xinf.ony.TextArea {
 
-    var contents :Array<FlowElement>;
-    var lines :Array<TextLine>;
+	var contents :Array<FlowElement>;
+	var lines :Array<TextLine>;
 	var dirty :Bool;
 
 	// TODO: updateContents when setting width?
-    override function set_text( v:String ) :String { 
+	override function set_text( v:String ) :String { 
 		dirty=true;
 		redraw();
 		return setTrait("text",v); 
 	}
 
-    var format:TextFormat;
+	var format:TextFormat;
 	
 	public function new( ?traits:Dynamic ) {
 		super(traits);
@@ -47,23 +47,23 @@ class TextArea extends xinf.ony.TextArea {
 	}
 
 	override public function styleChanged( ?attribute:String ) :Void {
-        super.styleChanged( attribute );
+		super.styleChanged( attribute );
 		format=null;
 		assureFormat();
 		updateContents( text );
-    }
+	}
 
 	function assureFormat() {
 		if( format==null ) {
 			var family = fontFamily;
 			var size = fontSize;
-        // TODO: weight
+		// TODO: weight
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 			format.assureLoaded();
 		}
 	}
 	
-    function updateContents( text:String ) :Void {
+	function updateContents( text:String ) :Void {
 		if( text==null ) return;
 		dirty=false;
 		assureFormat();
@@ -111,7 +111,7 @@ class TextArea extends xinf.ony.TextArea {
 			
 			if( c==10 ) {
 				push(i); lastOffset++;
-            } else if( ( c>=9 && c<=13 ) || c==32 ) {
+			} else if( ( c>=9 && c<=13 ) || c==32 ) {
 				//trace("space at "+i+", last "+lastOffset );
 				lastSpaceX=x;
 				x+=g.advance;
@@ -124,30 +124,30 @@ class TextArea extends xinf.ony.TextArea {
 		push( text.length );
 
 		redraw();
-    }
+	}
 
-    override public function drawContents( g:Renderer ) :Void {
+	override public function drawContents( g:Renderer ) :Void {
 		if( dirty ) {
 			updateContents( text );	
 		}
 	
 		assureFormat();
-        super.drawContents(g);
+		super.drawContents(g);
 		
-        if( lines!=null ) {
-            var y = (this.y/format.size) + (format.font.descender/2);
+		if( lines!=null ) {
+			var y = (this.y/format.size) + (format.font.descender/2);
 			var lineHeight = lineIncrement/format.size;
 
-            GL.pushMatrix();
+			GL.pushMatrix();
 
 			GL.enable(GL.BLEND);
-            GL.translate( x, y, 0. );
-            GL.scale( format.size, format.size, 1.0 );
-            GL.translate( .0, format.font.ascender, .0 );
-            untyped g.applyFillGL();
-            
-            GL.pushMatrix();
-            for( line in lines ) {
+			GL.translate( x, y, 0. );
+			GL.scale( format.size, format.size, 1.0 );
+			GL.translate( .0, format.font.ascender, .0 );
+			untyped g.applyFillGL();
+			
+			GL.pushMatrix();
+			for( line in lines ) {
 				GL.translate( .0, y, 0. );
 				var text = line.text;
 				for( i in 0...text.length ) {
@@ -160,13 +160,13 @@ class TextArea extends xinf.ony.TextArea {
 				y+=lineHeight;
 				GL.popMatrix();
 				GL.pushMatrix();
-            }
-            GL.popMatrix();
-            GL.popMatrix();
+			}
+			GL.popMatrix();
+			GL.popMatrix();
 			GL.disable(GL.BLEND);
-        }
-    }
-    
+		}
+	}
+	
 }
 
 #else flash9
@@ -176,7 +176,7 @@ import xinf.ony.type.Paint;
 
 class TextArea extends xinf.ony.TextArea {
 
-    var format:TextFormat;
+	var format:TextFormat;
 	var tf:flash.text.TextField;
 	
 	public function new( ?traits:Dynamic ) {
@@ -191,13 +191,13 @@ class TextArea extends xinf.ony.TextArea {
 		flash.Lib.current.stage.focus = tf;
 	}
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
+	override public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
 
 		if( format==null ) {
 			var family = fontFamily;
 			var size = fontSize;
-        // TODO: weight
+		// TODO: weight
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 			format.assureLoaded();
 		}
@@ -231,7 +231,7 @@ class TextArea extends xinf.ony.TextArea {
 		tf.text = text;
 
 		g.native( tf );
-    }
+	}
 	
 }
 
@@ -242,35 +242,35 @@ import xinf.ony.type.Paint;
 
 class TextArea extends xinf.ony.TextArea {
 
-    var format:TextFormat;
+	var format:TextFormat;
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
+	override public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
 		
 		if( fill == Paint.None ) return;
 
 		if( format==null ) {
 			var family = fontFamily;
 			var size = fontSize;
-        // TODO: weight
+		// TODO: weight
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 			format.assureLoaded();
 		}
 
-        var r = js.Lib.document.createElement("div");
-        r.style.position="absolute";
-//        r.style.whiteSpace="nowrap";
+		var r = js.Lib.document.createElement("div");
+		r.style.position="absolute";
+//		r.style.whiteSpace="nowrap";
 		r.style.overflow = "hidden";
-        
+		
 		if( editable != None ) {
 		} else {
 			r.style.cursor="default";
 		}
 		
-        r.style.left = ""+Math.round(x);
-        r.style.top = ""+Math.round(y);
-        r.style.width = ""+Math.round(x);
-        r.style.height = ""+Math.round(y);
+		r.style.left = ""+Math.round(x);
+		r.style.top = ""+Math.round(y);
+		r.style.width = ""+Math.round(x);
+		r.style.height = ""+Math.round(y);
 		
 		switch( fill ) {
 			case RGBColor(red,g,b):
@@ -278,12 +278,12 @@ class TextArea extends xinf.ony.TextArea {
 			default:
 				throw("Fill "+fill+" not supported for text");
 		}
-        format.apply(r);
+		format.apply(r);
 		
-        r.innerHTML=text.split("\n").join("<br/>");
+		r.innerHTML=text.split("\n").join("<br/>");
 
 		g.native( r );
-    }
+	}
 	
 }
 

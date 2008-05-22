@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 import haxe.rtti.Type;
 import haxe.xml.Fast;
 

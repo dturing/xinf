@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.test.svg;
 
@@ -8,24 +8,24 @@ import xinf.test.TestShell;
 import Xinf;
 
 class SVG12Testsuite {
-    static function main() {
+	static function main() {
 		var suite = "SVG1.2";
-        var shell = new TestShell(suite);
-        var base="http://localhost:2000/static/"+suite+"/svg/";
-        
-        var runOnly:String;
-        
-        #if neko
-            if( neko.Sys.args().length==1 ) {
-                runOnly = neko.Sys.args()[0];
-            }
-        #end
-        
-        if( runOnly!=null ) {
-            #if neko
-            shell.add( new SVGTest( "file://"+runOnly ) );
-            #end
-        } else {
+		var shell = new TestShell(suite);
+		var base="http://localhost:2000/static/"+suite+"/svg/";
+		
+		var runOnly:String;
+		
+		#if neko
+			if( neko.Sys.args().length==1 ) {
+				runOnly = neko.Sys.args()[0];
+			}
+		#end
+		
+		if( runOnly!=null ) {
+			#if neko
+			shell.add( new SVGTest( "file://"+runOnly ) );
+			#end
+		} else {
 		//	shell.add( new SVGTest( base+"coords-coord-01-t.svg" ) );
 		//	shell.add( new SVGTest( base+"coords-coord-02-t.svg" ) );
 			shell.add( new SVGTest( base+"coords-pAR-201-t.svg" ) );
@@ -466,7 +466,7 @@ class SVG12Testsuite {
 			shell.add( new SVGTest( base+"udom-traitaccess-207-t.svg" ) );
 		*/
 		}
-        
-        shell.run();
-    }
+		
+		shell.run();
+	}
 }

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -15,32 +15,32 @@ import xinf.ony.type.Paint;
 import xinf.erno.Constants;
 
 class Element extends xinf.ony.Element {
-    
-    private static var _manager:Manager;
-    private static var manager(getManager,null):Manager;
-    
-    /** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
-        Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
-    public var xid(default,null):Null<Int>;
+	
+	private static var _manager:Manager;
+	private static var manager(getManager,null):Manager;
+	
+	/** Unique (to the runtime environment) ID of this object. Will be set automatically, in the constructor. 
+		Note that this has nothing to do with the SVG 'id' property (which is a String, while this is numeric) **/
+	public var xid(default,null):Null<Int>;
 
 	private static function getManager() :Manager {
-        if( _manager == null ) {
-            _manager = new Manager();
-        }
-        return _manager;
-    }
+		if( _manager == null ) {
+			_manager = new Manager();
+		}
+		return _manager;
+	}
 
-    public static function findById(id:Int) :Element {
-        return( manager.find(id) );
-    }
-    
-    public function new( ?traits:Dynamic ) :Void {
+	public static function findById(id:Int) :Element {
+		return( manager.find(id) );
+	}
+	
+	public function new( ?traits:Dynamic ) :Void {
 		super( traits );
 		xid=null;
 	//	xid = Runtime.runtime.getNextId();
-    //    manager.register( xid, this );
-    //    redraw();
-    }
+	//	manager.register( xid, this );
+	//	redraw();
+	}
 	
 
 	override function copyProperties( to:Dynamic ) :Void {
@@ -53,45 +53,45 @@ class Element extends xinf.ony.Element {
 		if( xid!=null ) throw("constructing an object that is already constructed");
 	//	trace("construct "+this );
 		xid = Runtime.runtime.getNextId();
-        manager.register( xid, this );
+		manager.register( xid, this );
 		redraw();
 	}
 	
-    function destroy() :Void {
+	function destroy() :Void {
 		//if( xid==null ) throw("destroying an object that is already destroyed");
 		if( xid!=null ) {
 			manager.unregister(xid);
 			xid=null;
 		}
-    }
+	}
 
-    /** apply new transformation (position)<br/>
-        This is an internal function, you should usually not care about it.
-        **/
-    public function reTransform( g:Renderer ) :Void {
+	/** apply new transformation (position)<br/>
+		This is an internal function, you should usually not care about it.
+		**/
+	public function reTransform( g:Renderer ) :Void {
 		if( xid==null ) throw("no xid: "+this);
 		var t = transform;
 		if( t==null ) t = new Identity();
-        var m = t.getMatrix();
-        g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
-    }
-    
-    /** draw the Object to the given [Renderer]<br/>
-        You should usually neither call nor override this function,
-        instead, schedule a redraw with [redraw()] and 
-        override [drawContents()] to draw stuff.
-        **/
-    public function draw( g:Renderer ) :Void {
+		var m = t.getMatrix();
+		g.setTransform( xid, m.tx, m.ty, m.a, m.b, m.c, m.d );
+	}
+	
+	/** draw the Object to the given [Renderer]<br/>
+		You should usually neither call nor override this function,
+		instead, schedule a redraw with [redraw()] and 
+		override [drawContents()] to draw stuff.
+		**/
+	public function draw( g:Renderer ) :Void {
 		if( xid==null ) throw("no xid: "+this);
-        g.startObject( xid );
+		g.startObject( xid );
 			if( display != Display.None && visibility != Visibility.Hidden )
 				drawContents(g);
-        g.endObject();
-        reTransform(g); // FIXME: needed?
-    }
-    
+		g.endObject();
+		reTransform(g); // FIXME: needed?
+	}
+	
 	function convertPaint( paint:Paint, opacity:Float ) {
-        if( paint!=null ) {
+		if( paint!=null ) {
 			switch( paint ) {
 				case URLReference(url):
 					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
@@ -106,11 +106,11 @@ class Element extends xinf.ony.Element {
 		return null;
 	}
 
-    /** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
-        You can override this method, and call the [Renderer]'s methods to draw things.
-        Everything you do will be in the Object's local coordinate space.
-        **/
-    public function drawContents( g:Renderer ) :Void {
+	/** draw the Object's 'own' contents (not it's children) to the given [Renderer]<br/>
+		You can override this method, and call the [Renderer]'s methods to draw things.
+		Everything you do will be in the Object's local coordinate space.
+		**/
+	public function drawContents( g:Renderer ) :Void {
 		#if profile
 			xinf.test.Counter.count("drawContents");
 		#end
@@ -147,14 +147,14 @@ class Element extends xinf.ony.Element {
 			var paint = convertPaint( stroke, strokeOpacity*opacity );
 			g.setStroke( paint, w, _caps, _join, miterLimit, dashArray, strokeDashoffset );
 		} else g.setStroke( 0 );
-    }
+	}
 
-    override public function redraw() :Void {
+	override public function redraw() :Void {
 		if( xid!=null ) manager.objectChanged( xid, this );
-    }
-    
-    override public function retransform() :Void {
-        if( xid!=null ) manager.objectMoved( xid, this );
-    }
+	}
+	
+	override public function retransform() :Void {
+		if( xid!=null ) manager.objectMoved( xid, this );
+	}
 
 }

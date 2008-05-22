@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul;
 
@@ -13,12 +13,12 @@ class Interface extends Container {
 	}
 
 	public var width(get_width,set_width):Float;
-    function get_width() :Float { return getTrait("width",Length).value; }
-    function set_width( v:Float ) :Float { setTrait("width",new Length(v)); setPrefSize({x:width,y:height}); return v; }
+	function get_width() :Float { return getTrait("width",Length).value; }
+	function set_width( v:Float ) :Float { setTrait("width",new Length(v)); setPrefSize({x:width,y:height}); return v; }
 	
-    public var height(get_height,set_height):Float;
-    function get_height() :Float { return getTrait("height",Length).value; }
-    function set_height( v:Float ) :Float { setTrait("height",new Length(v)); setPrefSize({x:width,y:height}); return v; }
+	public var height(get_height,set_height):Float;
+	function get_height() :Float { return getTrait("height",Length).value; }
+	function set_height( v:Float ) :Float { setTrait("height",new Length(v)); setPrefSize({x:width,y:height}); return v; }
 	
 	public function new( ?traits:Dynamic ) {
 		super(traits);

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -25,8 +25,8 @@ class Node implements Serializable {
 
 	/* TinySVG1.2 uDOM: 
 		readonly attribute DOMString namespaceURI;
-        readonly attribute DOMString localName;
-        attribute DOMString textContent;
+		readonly attribute DOMString localName;
+		attribute DOMString textContent;
 	*/
 
 	/**
@@ -43,24 +43,24 @@ class Node implements Serializable {
 	*/
 	public var ownerDocument(default,null) :Document;
 
-    var mChildren(default,null):Array<Node>;
+	var mChildren(default,null):Array<Node>;
 	
 	/**
 		An iterator of the child Nodes contained in	this Node.
 	*/
 	public var childNodes(get_childNodes,null) :Iterator<Node>;
-    function get_childNodes() :Iterator<Node> {
-        return mChildren.iterator();
-    }
+	function get_childNodes() :Iterator<Node> {
+		return mChildren.iterator();
+	}
 
 	/**
 		Create a new, empty Node.
 		
 		FIXME: should be associated to the root document?
 	*/
-    public function new() {
-        mChildren = new Array<Node>();
-    }
+	public function new() {
+		mChildren = new Array<Node>();
+	}
 
 	/**
 		De-serialize the node content and attributes
@@ -69,11 +69,11 @@ class Node implements Serializable {
 		You'll usually not call this. Instead, use
 		$xinf.xml.Document$.instantiate or .load.
 	*/
-    public function fromXml( xml:Xml ) :Void {
-        if( ownerDocument==null ) throw("Document not set.");
-        for( node in xml.elements() ) {
-            ownerDocument.unmarshal( node, this );
-        }
+	public function fromXml( xml:Xml ) :Void {
+		if( ownerDocument==null ) throw("Document not set.");
+		for( node in xml.elements() ) {
+			ownerDocument.unmarshal( node, this );
+		}
 	}
 
 	public function toXml() :Xml {
@@ -145,7 +145,7 @@ class Node implements Serializable {
 		Removes the Node [oldChild] from the list of children.
 	*/
 	public function removeChild( oldChild:Node ) :Node {
-        mChildren.remove( oldChild );
+		mChildren.remove( oldChild );
 		oldChild.ownerDocument = null;
 		oldChild.parentElement = null;
 		oldChild.removed(this);
@@ -199,7 +199,7 @@ class Node implements Serializable {
 		The string will be the class name of this individual
 		instance.
 	*/
-    public function toString() :String {
+	public function toString() :String {
 		return( Type.getClassName( Type.getClass(this) ) );
-    }
+	}
 }

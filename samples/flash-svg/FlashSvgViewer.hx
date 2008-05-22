@@ -1,3 +1,5 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
 
 import xinf.ony.erno.Svg;
 import xinf.ony.erno.Embed;

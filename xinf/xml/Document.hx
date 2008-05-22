@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -22,17 +22,17 @@ class Document extends XMLElement {
 		Don't do lookups direcly on this Hash,
 		instead use getElementById().
 	*/
-    public var elementsById(default,null):Hash<XMLElement>;
+	public var elementsById(default,null):Hash<XMLElement>;
 	
 	/** The Document's StyleSheet.
 	*/
-    public var styleSheet(default,null):StyleSheet;
+	public var styleSheet(default,null):StyleSheet;
 
 	/** Create a new, empty Document.
 	*/
 	public function new() :Void {
 		super();
-        elementsById = new Hash<XMLElement>();
+		elementsById = new Hash<XMLElement>();
  		styleSheet = new StyleSheet();
 		ownerDocument = this;
 	}
@@ -42,11 +42,11 @@ class Document extends XMLElement {
 		An exception will be thrown if no Node
 		with the given [id] exists.
 	*/
-    public function getElementById( id:String ) :XMLElement {
-        var r = elementsById.get(id);
-        if( r==null ) throw("No such Element #"+id+" in "+this );
-        return r;
-    }
+	public function getElementById( id:String ) :XMLElement {
+		var r = elementsById.get(id);
+		if( r==null ) throw("No such Element #"+id+" in "+this );
+		return r;
+	}
 
 	/** Return the Element with the specified [id],
 		typed to the given [type].
@@ -56,10 +56,10 @@ class Document extends XMLElement {
 		is not of the specified [type].
 	*/
 	public function getTypedElementById<T>( id:String, type:Class<T> ) :T {
-        var r = getElementById( id );
+		var r = getElementById( id );
 		if( !Std.is( r, type ) ) throw("Element #"+id+" is not of class "+Type.getClassName(type)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
-        return cast(r);
-    }
+		return cast(r);
+	}
 	
 	/** Return the Element referenced by [uri].
 	
@@ -87,9 +87,9 @@ class Document extends XMLElement {
 		is not of the specified [type].
 	*/
 	public function getTypedElementByURI<T>( uri:String, cl:Class<T> ) :T {
-        var r = getElementByURI( uri );
+		var r = getElementByURI( uri );
 		if( !Std.is( r, cl ) ) throw("Element "+uri+" is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
-        return cast(r);
+		return cast(r);
 	}
 	
 	/** Unmarshal (deserialize) a Node from the given
@@ -101,8 +101,8 @@ class Document extends XMLElement {
 		Namespaces are currently ignored. This will look though
 		all (static) bindings.
 	*/
-    public function unmarshal( xml:Xml, ?parent:Node ) :Node {
-        var r:Node;
+	public function unmarshal( xml:Xml, ?parent:Node ) :Node {
+		var r:Node;
 		
 		// TODO: for now, we ignore the namespace (there is none from haxe xml),
 		// and just search all known bindings for the localName
@@ -111,15 +111,15 @@ class Document extends XMLElement {
 			r = bindings.get(ns.next()).instantiate( xml );
 		}
 		
-        if( r==null ) return null;
-        
-		r.ownerDocument = this;
-        r.fromXml( xml );
-
-        if( parent!=null ) parent.appendChild(r);
+		if( r==null ) return null;
 		
-        return r;
-    }
+		r.ownerDocument = this;
+		r.fromXml( xml );
+
+		if( parent!=null ) parent.appendChild(r);
+		
+		return r;
+	}
 
 	override public function toString() :String {
 		return("Document("+base+")");
@@ -158,16 +158,16 @@ class Document extends XMLElement {
 		once the document is fully loaded (and after the Element's onLoad function
 		has been called).
 	*/
-    public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?onError:String->Void, ?type:Class<T> ) :Void {
-        var url = new URL(url_s);
-        url.fetch( function(data) {
+	public static function load<T>( url_s:String, ?parentDocument:Document, ?onLoad:T->Void, ?onError:String->Void, ?type:Class<T> ) :Void {
+		var url = new URL(url_s);
+		url.fetch( function(data) {
 //				try {
 					instantiate( data, url, parentDocument, onLoad, type );
 //				} catch( e:Dynamic ) {
 //					onError(""+e);
 //				}
-            }, onError );
-    }
+			}, onError );
+	}
 	
 	static var bindings:Hash<IBinding>;
 	

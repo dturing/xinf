@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.erno.flash9;
 
@@ -29,47 +29,47 @@ class Flash9Renderer extends ObjectModelRenderer {
 	var last		: { x:Float, y:Float };
 	var first		: { x:Float, y:Float };
 
-    override public function createPrimitive(id:Int) :Primitive {
-        // create new object
-        var o = new XinfSprite(); // FIXME Primitive();
-        o.xinfId = id;
-        return o;
-    }
-    
-    override public function clearPrimitive( p:Primitive ) {
-        p.graphics.clear();
-        for( i in 0...p.numChildren ) {
-            p.removeChildAt(0);
-        }
-    }
-    
-    override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
+	override public function createPrimitive(id:Int) :Primitive {
+		// create new object
+		var o = new XinfSprite(); // FIXME Primitive();
+		o.xinfId = id;
+		return o;
+	}
+	
+	override public function clearPrimitive( p:Primitive ) {
+		p.graphics.clear();
+		for( i in 0...p.numChildren ) {
+			p.removeChildAt(0);
+		}
+	}
+	
+	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		if( child.parent!=null && child.parent!=parent ) {
 			//parent.addChild( child.duplicateMovieClip() );
 			child.parent.removeChild(child);
 		} //else
 		parent.addChild( child );
-    }
-    
-    override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
-        p.x=0; p.y=0;
-        p.transform.matrix = new flash.geom.Matrix( a,b,c,d,x,y );
-    }
+	}
+	
+	override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {
+		p.x=0; p.y=0;
+		p.transform.matrix = new flash.geom.Matrix( a,b,c,d,x,y );
+	}
 
-    override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
-        p.x = x;
-        p.y = y;
-    }
+	override public function setPrimitiveTranslation( p:Primitive, x:Float, y:Float ) :Void {
+		p.x = x;
+		p.y = y;
+	}
 
-    override public function clipRect( w:Float, h:Float ) {
-        var crop = new Sprite();
-        var g = crop.graphics;
-        g.beginFill( 0xff0000, 1 );
-        g.drawRect(0,0,w+1,h+1);
-        g.endFill();
-        current.addChild(crop);
-        current.mask = crop;
-    }
+	override public function clipRect( w:Float, h:Float ) {
+		var crop = new Sprite();
+		var g = crop.graphics;
+		g.beginFill( 0xff0000, 1 );
+		g.drawRect(0,0,w+1,h+1);
+		g.endFill();
+		current.addChild(crop);
+		current.mask = crop;
+	}
 
 	function flashGradient( stops:Iterable<TGradientStop>, spread:Int ) {
 		var colors = new Array();
@@ -195,78 +195,78 @@ class Flash9Renderer extends ObjectModelRenderer {
 		}
 	}
 
-    override public function startShape() {
+	override public function startShape() {
 		applyFill();
-    }
-    
-    override public function endShape() {
+	}
+	
+	override public function endShape() {
 		current.graphics.endFill();
-    }
-    
-    override public function startPath( x:Float, y:Float) {
+	}
+	
+	override public function startPath( x:Float, y:Float) {
 		applyStroke();
-        current.graphics.moveTo(x,y);
-        last = { x:x, y:y };
-        first = { x:x, y:y };
-    }
-    
-    override public function endPath() {
-        current.graphics.lineStyle( 0, 0, 0 );
-    }
-    
-    override public function close() {
-        // FIXME
-    }
-    
-    override public function lineTo( x:Float, y:Float ) {
-        current.graphics.lineTo(x,y);
+		current.graphics.moveTo(x,y);
+		last = { x:x, y:y };
+		first = { x:x, y:y };
+	}
+	
+	override public function endPath() {
+		current.graphics.lineStyle( 0, 0, 0 );
+	}
+	
+	override public function close() {
+		// FIXME
+	}
+	
+	override public function lineTo( x:Float, y:Float ) {
+		current.graphics.lineTo(x,y);
 		last = { x:x, y:y };
 	}
-    
-    override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
-        current.graphics.curveTo( x1,y1,x,y );
+	
+	override public function quadraticTo( x1:Float, y1:Float, x:Float, y:Float ) {
+		current.graphics.curveTo( x1,y1,x,y );
 		last = { x:x, y:y };
-    }
-    
-    override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
+	}
+	
+	override public function cubicTo( x1:Float, y1:Float, x2:Float, y2:Float, x:Float, y:Float ) {
 		var s = xinf.geom.Lib.cubicBezierFM(last, {x:x1,y:y1}, {x:x2,y:y2}, {x:x,y:y});
 		current.graphics.curveTo(s.control[0].x, s.control[0].y, s.anchor[0].x, s.anchor[0].y);
 		current.graphics.curveTo(s.control[1].x, s.control[1].y, s.anchor[1].x, s.anchor[1].y);
 		current.graphics.curveTo(s.control[2].x, s.control[2].y, s.anchor[2].x, s.anchor[2].y);
 		current.graphics.curveTo(s.control[3].x, s.control[3].y, s.anchor[3].x, s.anchor[3].y);
 		last = { x:x, y:y };
-    }
-        
-    override public function rect( x:Float, y:Float, w:Float, h:Float ) {
-        var g = current.graphics;
+	}
+		
+	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
+		var g = current.graphics;
 		applyStroke();
 		applyFill();
-        g.drawRect( x,y,w,h );
-        g.endFill();
-    }
+		g.drawRect( x,y,w,h );
+		g.endFill();
+	}
 
-    override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
-        var g = current.graphics;
+	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
+		var g = current.graphics;
 		applyStroke();
 		applyFill();
-        g.drawRoundRect( x,y,w,h, 2*rx, 2*ry );
-        g.endFill();
-    }
-    
-    override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
-        var g = current.graphics;
-        applyStroke();
+		g.drawRoundRect( x,y,w,h, 2*rx, 2*ry );
+		g.endFill();
+	}
+	
+	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
+		var g = current.graphics;
+		applyStroke();
 		applyFill();
-        g.drawEllipse( x-rx,y-ry,rx*2,ry*2 );
-        g.endFill();
-    }
-    
-    override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
-        format.assureLoaded();
-        
-        // FIXME: textStyles
+		g.drawEllipse( x-rx,y-ry,rx*2,ry*2 );
+		g.endFill();
+	}
+	
+	override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
+		format.assureLoaded();
+		
+		// FIXME: textStyles
 		if( pen.fill != null ) {
-            var tf = new flash.text.TextField();
+			var tf = new flash.text.TextField();
 			switch( pen.fill ) {
 				case SolidColor(r,g,b,a):
 					format.format.color = colorToRGBInt(r,g,b);
@@ -282,34 +282,34 @@ class Flash9Renderer extends ObjectModelRenderer {
 			
 // FIXME			tf.embedFonts = true;
 	
-            tf.defaultTextFormat = format.format;
-            tf.selectable = false;
-            tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
-            tf.y=y-1;
-            tf.x=x;
-            tf.text = text;
+			tf.defaultTextFormat = format.format;
+			tf.selectable = false;
+			tf.autoSize = flash.text.TextFieldAutoSize.LEFT;
+			tf.y=y-1;
+			tf.x=x;
+			tf.text = text;
 			
-            current.addChild(tf);
+			current.addChild(tf);
 		}
-    }
-    
-    override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
-        if( img.bitmapData == null ) {
-            return;
-        }
+	}
+	
+	override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
+		if( img.bitmapData == null ) {
+			return;
+		}
 		
 		var bm : flash.display.Bitmap;
-        if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
-            bm = new flash.display.Bitmap( img.bitmapData );
-        } else {
+		if( (inRegion == null) || (inRegion.x == 0 && inRegion.y == 0 && inRegion.w == img.width && inRegion.h == img.height) ) {
+			bm = new flash.display.Bitmap( img.bitmapData );
+		} else {
 			/* this works, but i feel it's not the most efficient way. 
 			  if you can think of a better one, please submit a patch. */
-            var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
-            bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
-            bm = new flash.display.Bitmap( bd );
-        }
+			var bd = new flash.display.BitmapData( Math.round( inRegion.w ), Math.round( inRegion.h ) );
+			bd.copyPixels( img.bitmapData, new flash.geom.Rectangle( inRegion.x, inRegion.y, inRegion.w, inRegion.h ), new flash.geom.Point( 0, 0 ) );
+			bm = new flash.display.Bitmap( bd );
+		}
 
-        if( pen.fill!=null ) {
+		if( pen.fill!=null ) {
 			switch( pen.fill ) {
 				case SolidColor(r,g,b,a):
 					current.alpha = a;
@@ -317,21 +317,21 @@ class Flash9Renderer extends ObjectModelRenderer {
 			}
 		}
 			
-     	current.addChild( bm );
-     	
-     	if( (outRegion != null)  && (outRegion != inRegion) ) {
-	     	bm.width = outRegion.w;
-    	 	bm.height = outRegion.h;
-     		bm.x = outRegion.x;
-     		bm.y = outRegion.y;
-     	}
-    }
+	 	current.addChild( bm );
+	 	
+	 	if( (outRegion != null)  && (outRegion != inRegion) ) {
+		 	bm.width = outRegion.w;
+		 	bm.height = outRegion.h;
+	 		bm.x = outRegion.x;
+	 		bm.y = outRegion.y;
+	 	}
+	}
 
-    override public function native( o:NativeObject ) {
-        current.addChild(o);
-    }
-    
-    public static function colorToRGBInt(r:Float,g:Float,b:Float) : Int {
-        return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
-    }
+	override public function native( o:NativeObject ) {
+		current.addChild(o);
+	}
+	
+	public static function colorToRGBInt(r:Float,g:Float,b:Float) : Int {
+		return ( Math.round(r*0xff) << 16 ) | ( Math.round(g*0xff) << 8 ) | Math.round(b*0xff);
+	}
 }

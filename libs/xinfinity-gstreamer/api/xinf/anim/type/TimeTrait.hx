@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim.type;
 
@@ -31,7 +31,7 @@ class TimeTrait extends TypedTrait<Time> {
 			return parseSingle(value);
 		}
 		return null;
-    }
+	}
 
 	static var offset = ~/^([\r\n\t ]*[\+\-]?[\r\n\t ]*[0-9\.]+[\r\n\t ]*(h|min|s|ms)?)$/;
 	static var syncbase = ~/^(.+)?\.(begin|end)[\r\n\t ]*([\+\-][\r\n\t ]*.+)?$/;

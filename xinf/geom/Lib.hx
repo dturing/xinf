@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.geom;
 
@@ -71,13 +71,13 @@ class Lib {
 				y: (Math.sin(radAngle)*p.x) + (Math.cos(radAngle)*p.y)
 			};
 	}
-    public static function rotatePoints( p:Array<TPoint>, radAngle:Float ) : Array<TPoint> {
+	public static function rotatePoints( p:Array<TPoint>, radAngle:Float ) : Array<TPoint> {
 		var newPoints = new Array<TPoint>();
 		for(i in 0...p.length) {
-        	newPoints[i] = rotatePoint(p[i], radAngle);
+			newPoints[i] = rotatePoint(p[i], radAngle);
 		}
 		return newPoints;
-    }
+	}
 
 	public static function translatePoint(p:TPoint, tx:Float, ty:Float):TPoint {
 		if(Math.isNaN(tx))
@@ -93,10 +93,10 @@ class Lib {
 	{
 		var newPoints = new Array<TPoint>();
 		for(i in 0...p.length) {
-        	newPoints[i] = translatePoint(p[i], tx, ty);
+			newPoints[i] = translatePoint(p[i], tx, ty);
 		}
 		return newPoints;
-    }
+	}
 
 	/*
 		These are part of the arcTo using cubic beziers.

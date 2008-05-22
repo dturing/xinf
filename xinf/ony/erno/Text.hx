@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -8,17 +8,17 @@ import xinf.erno.TextFormat;
 import xinf.event.SimpleEvent;
 
 class Text extends xinf.ony.Text {
-    
-    var format:TextFormat;
+	
+	var format:TextFormat;
 	
 	public function new(?traits:Dynamic) :Void {
 		super(traits);
 	}
 
-    override public function styleChanged( ?attribute:String ) :Void {
-        super.styleChanged( attribute );
+	override public function styleChanged( ?attribute:String ) :Void {
+		super.styleChanged( attribute );
 		format = null;
-    }
+	}
 
 	override public function draw( g:Renderer ) :Void {
 		if( format==null ) {
@@ -32,9 +32,9 @@ class Text extends xinf.ony.Text {
 		super.draw(g);
 	}
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-        if( text!=null ) {
+	override public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
+		if( text!=null ) {
 			switch( textAnchor ) {
 				case Start:
 					g.text( x,
@@ -46,7 +46,7 @@ class Text extends xinf.ony.Text {
 					g.text( x-( format.textSize(text).x ),
 						y-(format.ascender()),text,format);
 			}
-        }
-    }
-    
+		}
+	}
+	
 }

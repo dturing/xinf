@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -13,9 +13,9 @@ class AnimateTransform extends Animate {
 		type: new StringTrait(),
 	};
 
-    public var type(get_type,set_type):String;
-    function get_type() :String { return getStyleTrait("type",String); }
-    function set_type( v:String ) :String { setStyleTrait("type",v); return v; }
+	public var type(get_type,set_type):String;
+	function get_type() :String { return getStyleTrait("type",String); }
+	function set_type( v:String ) :String { setStyleTrait("type",v); return v; }
 
 	override function fromDynamic( value:Dynamic ) :Dynamic {
 		var s = type+"("+value+")";
@@ -25,12 +25,12 @@ class AnimateTransform extends Animate {
 	static function __init__() {
 		var svgns = "http://www.w3.org/2000/svg"; //FIXME: smil?
 	
-        xinf.xml.Document.addToBinding( svgns, "animate", Animate );
-        xinf.xml.Document.addToBinding( svgns, "animateColor", Animate );
-        xinf.xml.Document.addToBinding( svgns, "animateTransform", AnimateTransform );
-        xinf.xml.Document.addToBinding( svgns, "animateMotion", AnimateMotion );
-        xinf.xml.Document.addToBinding( svgns, "mpath", MPath );
-        xinf.xml.Document.addToBinding( svgns, "set", Set );
-        xinf.xml.Document.addToBinding( svgns, "par", ParallelTimeContainer );
+		xinf.xml.Document.addToBinding( svgns, "animate", Animate );
+		xinf.xml.Document.addToBinding( svgns, "animateColor", Animate );
+		xinf.xml.Document.addToBinding( svgns, "animateTransform", AnimateTransform );
+		xinf.xml.Document.addToBinding( svgns, "animateMotion", AnimateMotion );
+		xinf.xml.Document.addToBinding( svgns, "mpath", MPath );
+		xinf.xml.Document.addToBinding( svgns, "set", Set );
+		xinf.xml.Document.addToBinding( svgns, "par", ParallelTimeContainer );
 	}
 }

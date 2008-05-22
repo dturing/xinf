@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -17,17 +17,17 @@ interface IBinding {
 		The returned Node will yet be empty ([fromXml] is not
 		yet called).
 	*/
-    function instantiate( xml:Xml ) :Node;
+	function instantiate( xml:Xml ) :Node;
 	
 	/** Bind the given [nodeName] (or tag name) to the class [cl].
 		
 		The class must have a constructor with only one, dynamic
 		argument, like $xinf.xml.Element$, or instantiation will fail.
 	*/
-    function add( nodeName:String, cl:Class<Node> ) :Void;
+	function add( nodeName:String, cl:Class<Node> ) :Void;
 
 	/** Add the given Instantiator [i] to this Binding.
 	*/
-    function addInstantiator( i:Instantiator<Node> ) :Void;
+	function addInstantiator( i:Instantiator<Node> ) :Void;
 
 }

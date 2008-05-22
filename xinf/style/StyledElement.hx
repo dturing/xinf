@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.style;
 
@@ -141,7 +141,7 @@ class StyledElement extends XMLElement {
 				var ct = StringTools.trim(c);
 				if( ct.length>0 ) addStyleClass(ct);
 			}
-        }
+		}
 	}
 	
 	override public function onLoad() :Void {
@@ -164,7 +164,7 @@ class StyledElement extends XMLElement {
 		or changing a StyledElement's style classes does indeed 
 		trigger a call to styleChanged.
 	*/
-    public function styleChanged( ?attribute:String ) :Void {
+	public function styleChanged( ?attribute:String ) :Void {
 		clearPresentationTraits();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
@@ -193,37 +193,37 @@ class StyledElement extends XMLElement {
 			StyleParser.fromObject( match, this, _matchedStyle );
 		} else _matchedStyle=null;
 		styleChanged();
-    }
+	}
 	
 	/**
 		Add the style class [name], and re-match against ownerDocument's StyleSheet.
 	*/
-    public function addStyleClass( name:String ) :Void {
-        styleClasses.set( name, true );
-        updateClassStyle();
-    }
-    
+	public function addStyleClass( name:String ) :Void {
+		styleClasses.set( name, true );
+		updateClassStyle();
+	}
+	
 	/**
 		Remove the style class [name], and re-match against ownerDocument's StyleSheet.
 	*/
-    public function removeStyleClass( name:String ) :Void {
-        styleClasses.remove( name );
-        updateClassStyle();
-    }
-    
+	public function removeStyleClass( name:String ) :Void {
+		styleClasses.remove( name );
+		updateClassStyle();
+	}
+	
 	/**
 		Return [true] if [name] is in the list of style classes.
 	*/
-    public function hasStyleClass( name:String ) :Bool {
-        return styleClasses.get(name)!=null;
-    }
+	public function hasStyleClass( name:String ) :Bool {
+		return styleClasses.get(name)!=null;
+	}
 
 	/**
 		Return an iterator of the list of style classes.
 	*/
-    public function getStyleClasses() :Iterator<String> {
-        return styleClasses.keys();
-    }
+	public function getStyleClasses() :Iterator<String> {
+		return styleClasses.keys();
+	}
 	
 	/**
 		Return [true] if the object matches

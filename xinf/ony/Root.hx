@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 
@@ -9,7 +9,7 @@ import xinf.event.Event;
 import xinf.xml.Node;
 
 class Root {
-    private static var mRoot:Svg;
+	private static var mRoot:Svg;
 	
 	public static var width:Float = 0.;
 	public static var height:Float = 0.;
@@ -41,25 +41,25 @@ class Root {
 		return mRoot;
 	}
 	
-    public static function appendChild( o:Node ) :Void {
+	public static function appendChild( o:Node ) :Void {
 		getRootSvg().appendChild( o );
 	}
 	
-    public static function removeChild( o:Node ) :Void {
+	public static function removeChild( o:Node ) :Void {
 		getRootSvg().removeChild( o );
 	}
 
-    public static function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
-        return xinf.erno.Runtime.runtime.addEventListener(type,h);
-    }
-    
-    public static function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
-        return xinf.erno.Runtime.runtime.removeEventListener(type,h);
-    }
+	public static function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
+		return xinf.erno.Runtime.runtime.addEventListener(type,h);
+	}
 	
-    public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
-	    return xinf.erno.Runtime.runtime.postEvent(e,pos);
-    }
+	public static function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
+		return xinf.erno.Runtime.runtime.removeEventListener(type,h);
+	}
+	
+	public static function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
+		return xinf.erno.Runtime.runtime.postEvent(e,pos);
+	}
 
 	public static function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
 		xinf.erno.Runtime.runtime.setBackgroundColor(r,g,b,a);
@@ -73,8 +73,8 @@ class Root {
 		return xinf.erno.Runtime.runtime.getMeasuredFramerate();
 	}
 
-    public static function main() {
-        xinf.erno.Runtime.runtime.run();
-    }
+	public static function main() {
+		xinf.erno.Runtime.runtime.run();
+	}
 
 }

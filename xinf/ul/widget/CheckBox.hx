@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul.widget;
 
@@ -11,29 +11,29 @@ import xinf.ul.FocusManager;
 
 class CheckBox extends Widget {
 
-    public static var CHANGED = new EventKind<ValueEvent<Bool>>("checkboxChange");
+	public static var CHANGED = new EventKind<ValueEvent<Bool>>("checkboxChange");
 
-    public var text(get_text,set_text):String;
+	public var text(get_text,set_text):String;
 	var textElement:Text;
 	var outerRect:Rectangle;
 	var innerRect:Rectangle;
-    var _mouseUp:Dynamic;
+	var _mouseUp:Dynamic;
 	var _keyUp:Dynamic;
 
 	public var selected(default,set_selected) :Bool;
 	
-    function get_text() :String {
-        return(text);
-    }
-    
-    function set_text( t:String ) :String {
-        if( t != text ) {
-            text = t;
+	function get_text() :String {
+		return(text);
+	}
+	
+	function set_text( t:String ) :String {
+		if( t != text ) {
+			text = t;
 			textElement.text = text;
 			styleChanged();
 		}
-        return(t);
-    }
+		return(t);
+	}
 
 	public function set_selected( sel:Bool ) :Bool {
 		if( sel != selected) {
@@ -58,21 +58,21 @@ class CheckBox extends Widget {
 		return super.set_size(s);
 	}
 
-    public function new( text:String ) :Void {
+	public function new( text:String ) :Void {
 		textElement = new Text();
 		outerRect = new Rectangle({ width:13, height:13, x:1, y:1, fill:"gray", stroke:"black", stroke_thickness:1. });
 		innerRect = new Rectangle({ width:8, height:8, x:2, y:5 });
 		
-        super();
+		super();
 
 		group.appendChild( textElement );
 		group.appendChild( outerRect );
 		group.appendChild( innerRect );
 		
-        this.set_text(text);
+		this.set_text(text);
 		
-        group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
-        addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+		group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		
 		selected = false;
 	}
@@ -89,24 +89,24 @@ class CheckBox extends Widget {
 			setPrefSize( Helper.addPadding( s, this ) );
 		}
 		if( size!=null ) set_size(size);
-    }
+	}
 
-    function onMouseDown( e:MouseEvent ) {
+	function onMouseDown( e:MouseEvent ) {
 		addStyleClass(":press");
-        _mouseUp = Root.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
-    }
-    
-    function onMouseUp( e:MouseEvent ) {
+		_mouseUp = Root.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+	}
+	
+	function onMouseUp( e:MouseEvent ) {
 		selected = !selected;
-//		    postEvent( new ValueEvent( PRESS, value ) );
-        
-        removeStyleClass(":press");
-        Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
-    }
-    
-    function onKeyDown( e:KeyboardEvent ) {
+//			postEvent( new ValueEvent( PRESS, value ) );
+		
+		removeStyleClass(":press");
+		Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
+	}
+	
+	function onKeyDown( e:KeyboardEvent ) {
 		switch( e.key ) {
-            case " ":
+			case " ":
 				if( _keyUp!=null ) return;
 				addStyleClass(":press");
 				var self=this;
@@ -118,15 +118,15 @@ class CheckBox extends Widget {
 						self._keyUp = null;
 					}
 				});
-        }
-    }
+		}
+	}
 
-    public static function createSimple( text:String, f:Bool->Void ) :CheckBox {
-        var b = new CheckBox( text );
-        b.addEventListener( CheckBox.CHANGED, function(e) {
+	public static function createSimple( text:String, f:Bool->Void ) :CheckBox {
+		var b = new CheckBox( text );
+		b.addEventListener( CheckBox.CHANGED, function(e) {
 			f(e.value);
 		} );
-        return b;
-    }
-    
+		return b;
+	}
+	
 }

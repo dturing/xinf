@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -28,8 +28,8 @@ class XMLElement extends Node,
 
 	var _traits:Dynamic;
 	var _ptraits:Dynamic;
-    var listeners :Hash<List<Dynamic->Void>>;
-    
+	var listeners :Hash<List<Dynamic->Void>>;
+	
 	static var TRAITS = {
 		base:new StringTrait(),
 		id:new StringTrait(),
@@ -44,7 +44,7 @@ class XMLElement extends Node,
 		$SVG struct#XMLBaseAttribute xml:base$
 	*/
 	// FIXME: it's not really a style trait, but is "somehow" inherited...
-    public var base(get_base,set_base):String; 
+	public var base(get_base,set_base):String; 
 	function get_base() :String { 
 		var p:XMLElement=this;
 		var b:String=null;
@@ -56,9 +56,9 @@ class XMLElement extends Node,
 		}
 		return b; 
 	} 
-    function set_base( v:String ) :String { return setStyleTrait("base",v); }
+	function set_base( v:String ) :String { return setStyleTrait("base",v); }
 
-    /** Standard XML unique name ("id" attribute).
+	/** Standard XML unique name ("id" attribute).
 	
 		As there is no namespace support at the moment,
 		this recognized both "id" and "xml:id", with
@@ -69,26 +69,26 @@ class XMLElement extends Node,
 	
 		$SVG struct#xmlIDAttribute xml:id$
 	*/
-    public var id(get_id,set_id):String;
-    function get_id() :String { return getTrait("id",String); } // FIXME: maybe directly return id? as no default.. same for name
-    function set_id( v:String ) :String { return setTrait("id",v); } // FIXME: update document index?
+	public var id(get_id,set_id):String;
+	function get_id() :String { return getTrait("id",String); } // FIXME: maybe directly return id? as no default.. same for name
+	function set_id( v:String ) :String { return setTrait("id",v); } // FIXME: update document index?
 
-    /** textual name of the Element
+	/** textual name of the Element
 		("name" attribute) **/
-    public var name(get_name,set_name):String;
-    function get_name() :String { return getTrait("name",String); }
-    function set_name( v:String ) :String { return setTrait("name",v); }
+	public var name(get_name,set_name):String;
+	function get_name() :String { return getTrait("name",String); }
+	function set_name( v:String ) :String { return setTrait("name",v); }
 
 	/**
 		Create a new, empty Element.
 		
 		If [traits] is given, it will be set using $xinf.traits.TraitAccess.setTraitsFromObject()$.
 	*/
-    public function new( ?traits:Dynamic ) :Void {
+	public function new( ?traits:Dynamic ) :Void {
 		super();
 		_traits = Reflect.empty();
-        _ptraits = Reflect.empty();
-        listeners = new Hash<List<Dynamic->Void>>();
+		_ptraits = Reflect.empty();
+		listeners = new Hash<List<Dynamic->Void>>();
 		if( traits!=null ) setTraitsFromObject(traits);
 	}
 
@@ -287,57 +287,57 @@ class XMLElement extends Node,
 	/* EventDispatcher functions */
 
 	/** see $xinf.event.EventDispatcher::addEventListener$ */
-    public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
-        var t = type.toString();
-        var l = listeners.get( t.toString() );
-        if( l==null ) {
-            l = new List<Dynamic->Void>();
-            listeners.set( t, l );
-        }
-        l.push( h );
-        return h;
-    }
+	public function addEventListener<T>( type :EventKind<T>, h :T->Void ) :T->Void {
+		var t = type.toString();
+		var l = listeners.get( t.toString() );
+		if( l==null ) {
+			l = new List<Dynamic->Void>();
+			listeners.set( t, l );
+		}
+		l.push( h );
+		return h;
+	}
 
 	/** see $xinf.event.EventDispatcher::removeEventListener$ */
-    public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
-        var l:List<Dynamic->Void> = listeners.get( type.toString() );
-        if( l!=null ) {
-            return( l.remove(h) );
-        }
-        return false;
-    }
+	public function removeEventListener<T>( type :EventKind<T>, h :T->Void ) :Bool {
+		var l:List<Dynamic->Void> = listeners.get( type.toString() );
+		if( l!=null ) {
+			return( l.remove(h) );
+		}
+		return false;
+	}
 
 	/** Convenience function to remove all listeners
 		of the given [type]. 
 	*/
-    public function removeAllListeners<T>( type :EventKind<T> ) :Bool {
-        return( listeners.remove( type.toString() ) );
-    }
+	public function removeAllListeners<T>( type :EventKind<T> ) :Bool {
+		return( listeners.remove( type.toString() ) );
+	}
 
 	/** see $xinf.event.EventDispatcher::dispatchEvent$
 	
 		Do not use this function directly, instead use [postEvent()].
 	*/
 	public function dispatchEvent<T>( e : Event<T> ) :Void {
-        var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
-        var dispatched:Bool = false;
-        
-        if( l != null ) {
-            for( h in l ) {
-                h(e);
-                dispatched=true;
-            }
-        }
-    }
+		var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
+		var dispatched:Bool = false;
+		
+		if( l != null ) {
+			for( h in l ) {
+				h(e);
+				dispatched=true;
+			}
+		}
+	}
 
 	/** see $xinf.event.EventDispatcher::postEvent$ */
-    public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
-        // FIXME if debug_events
-        e.origin = pos;
-        
-        // for now, FIXME (maybe, put them thru a global queue)
-        dispatchEvent(e);
-    }
+	public function postEvent<T>( e : Event<T>, ?pos:haxe.PosInfos ) :Void {
+		// FIXME if debug_events
+		e.origin = pos;
+		
+		// for now, FIXME (maybe, put them thru a global queue)
+		dispatchEvent(e);
+	}
 
 	public function typedChildren<T>( cl:Class<T> ) :Iterator<T> {
 		var i=-1;
@@ -367,7 +367,7 @@ class XMLElement extends Node,
 	public function getTypedElementByName<T>( name:String, cl:Class<T> ) :T {
 		var r = getElementByName( name );
 		if( !Std.is( r, cl ) ) throw("Element '"+name+"' is not of class "+Type.getClassName(cl)+" (but instead "+Type.getClassName(Type.getClass(r))+")" );
-        return cast(r);
+		return cast(r);
 	}
 
 
@@ -390,11 +390,11 @@ class XMLElement extends Node,
 		to.listeners = new Hash<List<Dynamic->Void>>();
 		for( e in listeners.keys() ) {
 			var v = listeners.get(e);
-            var l = new List<Dynamic->Void>();
+			var l = new List<Dynamic->Void>();
 			for( i in v ) {
 				l.add(i);
 			}
-            to.listeners.set( e, l );
+			to.listeners.set( e, l );
 		}
 	}
 	

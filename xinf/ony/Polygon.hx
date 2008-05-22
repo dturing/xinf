@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -15,13 +15,13 @@ class Polygon extends ElementImpl {
 	
 	static var tagName = "polygon";
 
-    public var points(get_points,set_points):List<TPoint>;
-    function get_points() :List<TPoint> {
-        return getTrait("points",List); // FIXME: messy, as in polyline
-    }
-    function set_points( v:List<TPoint> ) {
-        setTrait("points",v); redraw(); return v;
-    }
+	public var points(get_points,set_points):List<TPoint>;
+	function get_points() :List<TPoint> {
+		return getTrait("points",List); // FIXME: messy, as in polyline
+	}
+	function set_points( v:List<TPoint> ) {
+		setTrait("points",v); redraw(); return v;
+	}
 
 	// FIXME: double code with Polyline
 	override public function getBoundingBox() : TRectangle {

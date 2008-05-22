@@ -1,22 +1,25 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package openvg;
 
 /**
-    <nekobind 
-        translator="Capitalize"
-        prefix="vg"
-        nekoAbstract="__h"
-        cStruct="VGPaint"
-        dtor="destroyPaint"
-        module="openvg"
-        friends="openvg.Handle:VGHandle>__h"
-        />
-    <nekobind:cHeader>
-        #include &lt;vg/openvg.h&gt;
-    </nekobind:cHeader>
+	<nekobind 
+		translator="Capitalize"
+		prefix="vg"
+		nekoAbstract="__h"
+		cStruct="VGPaint"
+		dtor="destroyPaint"
+		module="openvg"
+		friends="openvg.Handle:VGHandle>__h"
+		/>
+	<nekobind:cHeader>
+		#include &lt;vg/openvg.h&gt;
+	</nekobind:cHeader>
 **/
 
 extern class Paint {
-    private function new() :Void;
+	private function new() :Void;
 
 	/** <nekobind ctor="true" suffix="Paint"/> **/
 	public static function create() :Paint;
@@ -43,11 +46,11 @@ extern class Paint {
 	/** <nekobind><cptr name="values" type="int" min-size="count"/></nekobind> **/
 	public function getParameteriv( type:Int, count:Int, values:String ) :Void;
 
-    public static function __init__() : Void {
-        DLLLoader.addLibToPath("openvg");
-        untyped {
-            var loader = untyped __dollar__loader;
-            Paint = loader.loadmodule("openvg".__s,loader).Paint__impl;
-        }
-    }
+	public static function __init__() : Void {
+		DLLLoader.addLibToPath("openvg");
+		untyped {
+			var loader = untyped __dollar__loader;
+			Paint = loader.loadmodule("openvg".__s,loader).Paint__impl;
+		}
+	}
 }

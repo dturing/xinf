@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -29,15 +29,15 @@ private class PathBBox {
 					proc(x,y);
 					
 		/* FIXME curve and arc bboxes are not precise **/
-                case CubicTo(x1,y1,x2,y2,x,y):
+				case CubicTo(x1,y1,x2,y2,x,y):
 					proc(x1,y1); proc(x2,y2); proc(x,y);
 
-                case QuadraticTo(x1,y1,x,y):
+				case QuadraticTo(x1,y1,x,y):
 					proc(x1,y1); proc(x,y);
 					
-                case ArcTo(x1,y1,rx,ry,rotation,largeArc,sweep,x,y):
+				case ArcTo(x1,y1,rx,ry,rotation,largeArc,sweep,x,y):
 					proc(x,y);
-                    
+					
 				default:
 			}
 		}
@@ -60,13 +60,13 @@ class Path extends ElementImpl {
 	
 	static var tagName = "path";
 
-    public var segments(get_segments,set_segments):List<PathSegment>;
-    function get_segments() :List<PathSegment> {
-        return getTrait("d",List);
-    }
-    function set_segments( v:List<PathSegment> ) {
-        setTrait("d",v); redraw(); return v;
-    }
+	public var segments(get_segments,set_segments):List<PathSegment>;
+	function get_segments() :List<PathSegment> {
+		return getTrait("d",List);
+	}
+	function set_segments( v:List<PathSegment> ) {
+		setTrait("d",v); redraw(); return v;
+	}
 
 	override public function getBoundingBox() : TRectangle {
 		return new PathBBox(segments);

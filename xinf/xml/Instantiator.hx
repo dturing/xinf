@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -15,22 +15,22 @@ package xinf.xml;
 	$xinf.xml.ByAttributeValue$ and $xinf.xml.HasAttribute$.
 */
 class Instantiator<T> {
-    var myClass : Class<T>;
+	var myClass : Class<T>;
 	
 	/** Create a new Instantiator for class [cl].
 	*/
-    public function new( cl:Class<T> ) {
-        myClass = cl;
-    }
-    
+	public function new( cl:Class<T> ) {
+		myClass = cl;
+	}
+	
 	/** Return [true] if the Instantiator fits the
 		given [xml]. The default implementation always
 		returns false.
 	*/
-    public function fits( xml:Xml ) :Bool {
-        return false;
-    }
-    
+	public function fits( xml:Xml ) :Bool {
+		return false;
+	}
+	
 	/** Instaniate an object of the Instantiator's type.
 	*/
 	public function instantiate() :Dynamic  {
@@ -50,9 +50,9 @@ class Instantiator<T> {
 	a certain value.
 */
 class ByAttributeValue<T> extends Instantiator<T> {
-    var attributeName:String;
-    var attributeValue:String;
-    
+	var attributeName:String;
+	var attributeValue:String;
+	
 	/**
 		Create a new ByAttributeValue Instantiator
 		that matches XML elements that have an
@@ -64,15 +64,15 @@ class ByAttributeValue<T> extends Instantiator<T> {
 		matches <br/>
 			[   <anyNode name="foo"/>]
 	*/
-    public function new( attributeName:String, attributeValue:String, cl:Class<T> ) {
-        super(cl);
-        this.attributeName = attributeName;
-        this.attributeValue = attributeValue;
-    }
-    
-    override public function fits( xml:Xml ) :Bool {
-        return( xml.get(attributeName) == attributeValue );
-    }
+	public function new( attributeName:String, attributeValue:String, cl:Class<T> ) {
+		super(cl);
+		this.attributeName = attributeName;
+		this.attributeValue = attributeValue;
+	}
+	
+	override public function fits( xml:Xml ) :Bool {
+		return( xml.get(attributeName) == attributeValue );
+	}
 }
 
 /**
@@ -83,8 +83,8 @@ class ByAttributeValue<T> extends Instantiator<T> {
 	the attribute's value is not regarded.
 */
 class HasAttribute<T> extends Instantiator<T> {
-    var attributeName:String;
-    
+	var attributeName:String;
+	
 	/**
 		Create a new HasAttribute Instantiator
 		that matches xml elements that have an
@@ -95,13 +95,13 @@ class HasAttribute<T> extends Instantiator<T> {
 			[  var i = new HasAttribute("name");] <br/>
 		matches <br/>
 			[  <anyNode name="anyValue"/>]
-	*/    
+	*/	
 	public function new( attributeName:String, cl:Class<T> ) {
-        super(cl);
-        this.attributeName = attributeName;
-    }
-    
-    override public function fits( xml:Xml ) :Bool {
-        return( xml.get(attributeName) != null );
-    }
+		super(cl);
+		this.attributeName = attributeName;
+	}
+	
+	override public function fits( xml:Xml ) :Bool {
+		return( xml.get(attributeName) != null );
+	}
 }

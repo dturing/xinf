@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul.skin;
 
@@ -44,19 +44,19 @@ class SimpleSkin extends Skin {
 		bg.height = s.y;
 	}
 
-    override public function attachBackground( c:Group ) :Void {
+	override public function attachBackground( c:Group ) :Void {
 		c.appendChild( bg );
-    }
+	}
 
-    override public function detachBackground( c:Group ) :Void {
+	override public function detachBackground( c:Group ) :Void {
 		c.removeChild( bg );
-    }
+	}
 
-    override public function attachForeground( c:Group ) :Void {
+	override public function attachForeground( c:Group ) :Void {
 		// disabled as simple rectangle drains all mouse events
-    }
+	}
 
-    override public function detachForeground( c:Group ) :Void {
-    }
+	override public function detachForeground( c:Group ) :Void {
+	}
 
 }

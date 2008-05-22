@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.style;
 
@@ -13,8 +13,8 @@ import xinf.traits.TraitAccess;
 	as returned by $xinf.style.StyleParser$.parseToObject.
 */
 typedef StyleRule = {
-    var selector:Selector;
-    var style:Dynamic;
+	var selector:Selector;
+	var style:Dynamic;
 }
 
 
@@ -43,7 +43,7 @@ class StyleSheet {
 		The default stylesheet. It is always applied,
 		with lowest priority.
 	*/
-    public static var DEFAULT:StyleSheet = new StyleSheet();
+	public static var DEFAULT:StyleSheet = new StyleSheet();
 	
 	private var rules :Array<StyleRule>;
 	
@@ -51,10 +51,10 @@ class StyleSheet {
 		Create a new StyleSheet, either empty or filled
 		with the rules given in [rules]. 
 	*/
-    public function new( ?_rules:Iterable<StyleRule> ) :Void {
-        rules = new Array<StyleRule>();
+	public function new( ?_rules:Iterable<StyleRule> ) :Void {
+		rules = new Array<StyleRule>();
 		if( _rules!=null ) addMany( _rules );
-    }
+	}
 	
 	/**
 		Parse a textual CSS stylesheet to the end 
@@ -67,14 +67,14 @@ class StyleSheet {
 	/**
 		Add a single StyleRule to the end of this StyleSheet.
 	*/
-    public function add( rule:StyleRule ) {
+	public function add( rule:StyleRule ) {
 		var s = Reflect.empty();
 		for( field in Reflect.fields(rule.style) ) {
 			var field2 = StringTools.replace( field, "_", "-" );
 			Reflect.setField( s, field2, Reflect.field(rule.style,field) );
 		}
 		rules.push( { selector:rule.selector, style:s } );
-    }
+	}
 	
 	/**
 		Add a number of StyleRules to the end of this StyleSheet.
@@ -98,7 +98,7 @@ class StyleSheet {
 		Rules from the DEFAULT StyleSheet are also applied (with
 		lower priority than the ones found in this StyleSheet).
 	*/
-    public function match( e:Stylable ) :Dynamic {
+	public function match( e:Stylable ) :Dynamic {
 		var a = new Array<Dynamic>();
 		
 		if( DEFAULT != null ) {
@@ -123,7 +123,7 @@ class StyleSheet {
 					Reflect.field( style, field ));
 			}
 		}
-        return r;
-    }
+		return r;
+	}
 	
 }

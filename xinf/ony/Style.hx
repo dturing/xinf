@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -13,13 +13,13 @@ class Style extends ElementImpl {
 		text:new StringTrait(),
 	}
 
-    public var type(get_type,set_type):String;
-    function get_type() :String { return getTrait("type",String); }
-    function set_type( v:String ) :String { return setTrait("type",v); }
+	public var type(get_type,set_type):String;
+	function get_type() :String { return getTrait("type",String); }
+	function set_type( v:String ) :String { return setTrait("type",v); }
 
-    public var text(get_text,set_text):String;
-    function get_text() :String { return getTrait("text",String); }
-    function set_text( v:String ) :String { return setTrait("text",v); }
+	public var text(get_text,set_text):String;
+	function get_text() :String { return getTrait("text",String); }
+	function set_text( v:String ) :String { return setTrait("text",v); }
 
 	override public function fromXml( xml:Xml ) :Void {
 		super.fromXml(xml);

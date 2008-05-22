@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -23,10 +23,10 @@ class Video extends xinf.ony.Video {
 		super(traits);
 	}
 
-    override function set_href( v:String ) :String { 
+	override function set_href( v:String ) :String { 
 		setTrait("href",v);
 		applyHref();
-        return href;
+		return href;
 	}
 
 	override public function onLoad() :Void {
@@ -43,12 +43,12 @@ class Video extends xinf.ony.Video {
 		//source = new VideoSource("videotestsrc",
 		source = new VideoSource("gnomevfssrc name=src location=\""+href+"\" ! decodebin name=d ! queue ! audioconvert ! alsasink  d. ! queue" );
 		srcElement = source.pipeline.findChild("src");
-        source.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-    }
+		source.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
+	}
 
-    private function dataChanged( e:ImageLoadEvent ) :Void {
-        redraw();
-    }
+	private function dataChanged( e:ImageLoadEvent ) :Void {
+		redraw();
+	}
 
 	override public function drawContents( g:Renderer ) :Void {
 
@@ -67,12 +67,12 @@ class Video extends xinf.ony.Video {
 		if( opacity > 0 || opacity==null ) {
 			g.image( source, {x:0.,y:0.,w:source.width,h:source.height}, box );
 		}
-     }
+	 }
 
 	static function __init__() :Void {
 		var svgns = "http://www.w3.org/2000/svg";
 	
-        xinf.xml.Document.addToBinding( svgns, "video", Video );
+		xinf.xml.Document.addToBinding( svgns, "video", Video );
 	}
 }
 #else true

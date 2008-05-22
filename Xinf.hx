@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 import xinf.geom.Types;
 
 typedef TPoint = xinf.geom.TPoint

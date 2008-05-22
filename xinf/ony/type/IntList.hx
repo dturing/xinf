@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 
 package xinf.ony.type;
 
@@ -9,14 +9,14 @@ package xinf.ony.type;
 	Used mainly for the stroke-dasharray property.
 */
 class IntList {
-    public var list:Array<Int>;
-    
-    public function new( l:Array<Int> ) {
-        list=l;
-    }
-    
-    public function toString() {
+	public var list:Array<Int>;
+	
+	public function new( l:Array<Int> ) {
+		list=l;
+	}
+	
+	public function toString() {
 		if( list==null ) return "";
-        return list.join(",");
-    }
+		return list.join(",");
+	}
 }

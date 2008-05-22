@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul;
 
@@ -8,22 +8,22 @@ import xinf.xml.Node;
 import xinf.ul.layout.Layout;
 
 class Container extends Component {
-    var relayoutNeeded:Bool;
-    public var layout:Layout;
+	var relayoutNeeded:Bool;
+	public var layout:Layout;
 
 	var componentChildren:Array<Component>;
 
-    public function new( ?traits:Dynamic ) :Void {
+	public function new( ?traits:Dynamic ) :Void {
 		super( traits );
 		
 		_skin.attachBackground( group );
 		_skin.attachForeground( group );
 		
-        relayoutNeeded = true;
+		relayoutNeeded = true;
 		componentChildren = new Array<Component>();
-    }
-    
-    override public function appendChild( newChild:Node ) :Node {
+	}
+	
+	override public function appendChild( newChild:Node ) :Node {
 		super.appendChild( newChild );
 	
 		if( Std.is( newChild, Component ) ) {
@@ -40,7 +40,7 @@ class Container extends Component {
 		}
 		
 		return newChild;
-    }
+	}
 
 	override public function removeChild( oldChild:Node ) :Node {
 		super.removeChild( oldChild );
@@ -56,7 +56,7 @@ class Container extends Component {
 		}
 		
 		return oldChild;
-    }
+	}
 
 	override public function set_size( s:TPoint ) :TPoint {
 		var r = super.set_size(s);
@@ -65,33 +65,33 @@ class Container extends Component {
 		return s;
 	}
 
-    function onComponentResize( e:ComponentSizeEvent ) :Void {
-        if( layout==null ) {
-            e.component.size = e;
-        } else {
-            relayoutNeeded=true;
+	function onComponentResize( e:ComponentSizeEvent ) :Void {
+		if( layout==null ) {
+			e.component.size = e;
+		} else {
+			relayoutNeeded=true;
 			relayout();
-        }
-    }
+		}
+	}
 
-    public function relayout() :Void {
-        if( layout!=null && relayoutNeeded ) {
-            var oldSize = size;
-//            trace("relayout "+this);
-            layout.layoutContainer( this );
-            relayoutNeeded = false;
-        }
-    }
-    
-    override public function getElement() :Element {
-        return group;
-    }
-    
-    public function getComponent( index:Int ) :Component {
-        return componentChildren[index];
-    }
-    public function getComponents() :Array<Component> {
-        return componentChildren;
-    }
+	public function relayout() :Void {
+		if( layout!=null && relayoutNeeded ) {
+			var oldSize = size;
+//			trace("relayout "+this);
+			layout.layoutContainer( this );
+			relayoutNeeded = false;
+		}
+	}
+	
+	override public function getElement() :Element {
+		return group;
+	}
+	
+	public function getComponent( index:Int ) :Component {
+		return componentChildren[index];
+	}
+	public function getComponents() :Array<Component> {
+		return componentChildren;
+	}
 
 }

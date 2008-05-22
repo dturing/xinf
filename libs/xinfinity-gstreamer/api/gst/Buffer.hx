@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package gst;
 
 class Buffer {
@@ -8,28 +11,28 @@ class Buffer {
 	
 	private var _b:Dynamic;
 
-    public function new( b : Dynamic ) {
+	public function new( b : Dynamic ) {
 		_b = b;
-    }
-    
-    public function data() : Dynamic {
-        return _data( _b );
-    }
+	}
+	
+	public function data() : Dynamic {
+		return _data( _b );
+	}
 
-    public function size() :Int {
-        return _size( _b );
-    }
+	public function size() :Int {
+		return _size( _b );
+	}
 
-    public function caps() :Dynamic {
-        return _caps( _b );
-    }
+	public function caps() :Dynamic {
+		return _caps( _b );
+	}
 
-    public function free() :Void {
-        _free( _b );
+	public function free() :Void {
+		_free( _b );
 		_b=null;
-    }
+	}
 
-    public function toString() :String {
-        return("Buffer("+size()+")");
-    }
+	public function toString() :String {
+		return("Buffer("+size()+")");
+	}
 }

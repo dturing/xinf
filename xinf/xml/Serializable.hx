@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -18,5 +18,5 @@ interface Serializable {
 		You'll usually not call this. Instead, use
 		$xinf.xml.Document$.instantiate or .load.
 	*/
-    function fromXml( xml:Xml ) :Void;
+	function fromXml( xml:Xml ) :Void;
 }

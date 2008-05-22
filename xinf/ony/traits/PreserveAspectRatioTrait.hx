@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.traits;
 
@@ -28,7 +28,7 @@ class PreserveAspectRatioTrait extends TypedTrait<PreserveAspectRatio> {
 		return def;
 	}
 
-    static var ws = ~/[ \r\n\t]+/g;
+	static var ws = ~/[ \r\n\t]+/g;
 	static var par = ~/x(M[indax]+)Y(M[indax]+)/;
 	override public function parse( value:String ) :Dynamic {
 		if( value=="none" ) return PreserveAspectRatio.None;
@@ -60,7 +60,7 @@ class PreserveAspectRatioTrait extends TypedTrait<PreserveAspectRatio> {
 			throw("invalid PreserveAspectRatio value: '"+p+"'");
 		}
 		return null;
-    }
+	}
 	
 	function parsePart( s ) :Align {
 		switch( s ) {

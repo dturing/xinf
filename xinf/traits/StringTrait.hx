@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.traits;
 
@@ -13,8 +13,8 @@ class StringTrait extends TypedTrait<String> {
 	}
 
 	override public function parse( value:String ) :Dynamic {
-        return StringTools.trim(value);
-    }
+		return StringTools.trim(value);
+	}
 
 	override public function getDefault() :Dynamic {
 		return def;

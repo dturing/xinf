@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -16,11 +16,11 @@ class Crop extends GroupImpl {
 	};
 
 	public var width(get_width,set_width):Float;
-    function get_width() :Float { return getTrait("width",Float); }
-    function set_width( v:Float ) :Float { redraw(); return setTrait("width",v); }
+	function get_width() :Float { return getTrait("width",Float); }
+	function set_width( v:Float ) :Float { redraw(); return setTrait("width",v); }
 	
-    public var height(get_height,set_height):Float;
-    function get_height() :Float { return getTrait("height",Float); }
-    function set_height( v:Float ) :Float { redraw(); return setTrait("height",v); }
+	public var height(get_height,set_height):Float;
+	function get_height() :Float { return getTrait("height",Float); }
+	function set_height( v:Float ) :Float { redraw(); return setTrait("height",v); }
 
 }

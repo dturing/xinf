@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.type;
 
@@ -14,6 +14,6 @@ package xinf.ony.type;
 	$SVG text#editable-attribute The "editable" attribute$
 */
 enum Editability {
-    None;
-    Simple;
+	None;
+	Simple;
 }

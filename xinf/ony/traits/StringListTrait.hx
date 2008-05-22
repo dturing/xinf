@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.traits;
 
@@ -12,11 +12,11 @@ class StringListTrait extends TypedTrait<StringList> {
 		super( StringList );
 	}
 
-    // FIXME: use an ereg to split. - [,\ \t\r\n]
-    // maybe: remove quotes ['"], trim
-    override public function parse( value:String ) :Dynamic {
-        return new StringList( value.split(",") );
-    }
+	// FIXME: use an ereg to split. - [,\ \t\r\n]
+	// maybe: remove quotes ['"], trim
+	override public function parse( value:String ) :Dynamic {
+		return new StringList( value.split(",") );
+	}
 
 	override public function write( value:Dynamic ) :String {
 		return value.join(",");

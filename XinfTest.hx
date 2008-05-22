@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 import Xinf;
 import xinf.ul.layout.SpringUtilities;
 import xinf.ul.layout.BorderLayout;

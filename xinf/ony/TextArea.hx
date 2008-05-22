@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -26,38 +26,38 @@ class TextArea extends ElementImpl {
 		line_increment:new LineIncrementTrait(),
 	}
 
-    public var x(get_x,set_x):Float;
-    function get_x() :Float { return getTrait("x",Length).value; }
-    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
+	public var x(get_x,set_x):Float;
+	function get_x() :Float { return getTrait("x",Length).value; }
+	function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
 
-    public var y(get_y,set_y):Float;
-    function get_y() :Float { return getTrait("y",Length).value; }
-    function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
+	public var y(get_y,set_y):Float;
+	function get_y() :Float { return getTrait("y",Length).value; }
+	function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
 	public var width(get_width,set_width):Float;
-    function get_width() :Float { return getTrait("width",Length).value; }
-    function set_width( v:Float ) :Float { setTrait("width",new Length(v)); redraw(); return v; }
+	function get_width() :Float { return getTrait("width",Length).value; }
+	function set_width( v:Float ) :Float { setTrait("width",new Length(v)); redraw(); return v; }
 	
-    public var height(get_height,set_height):Float;
-    function get_height() :Float { return getTrait("height",Length).value; }
-    function set_height( v:Float ) :Float { setTrait("height",new Length(v)); redraw(); return v; }
+	public var height(get_height,set_height):Float;
+	function get_height() :Float { return getTrait("height",Length).value; }
+	function set_height( v:Float ) :Float { setTrait("height",new Length(v)); redraw(); return v; }
 
-    public var text(get_text,set_text):String;
-    function get_text() :String { return getTrait("text",String); }
-    function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
+	public var text(get_text,set_text):String;
+	function get_text() :String { return getTrait("text",String); }
+	function set_text( v:String ) :String { redraw(); return setTrait("text",v); }
 
-    public var editable(get_editable,set_editable):Editability;
-    function get_editable() :Editability { return getTrait("editable",Editability); }
-    function set_editable( v:Editability ) :Editability { return setTrait("editable",v); }
+	public var editable(get_editable,set_editable):Editability;
+	function get_editable() :Editability { return getTrait("editable",Editability); }
+	function set_editable( v:Editability ) :Editability { return setTrait("editable",v); }
 
-    public var lineIncrement(get_line_increment,set_line_increment):Float;
-    function get_line_increment() :Float { 
+	public var lineIncrement(get_line_increment,set_line_increment):Float;
+	function get_line_increment() :Float { 
 		var r:Float = getStyleTrait("line-increment",Float);
 		if( r==-1 ) // auto
 			r = fontSize*1.1;
 		return r; 
 	}
-    function set_line_increment( v:Float ) :Float { setStyleTrait("line-increment",v); redraw(); return v; }
+	function set_line_increment( v:Float ) :Float { setStyleTrait("line-increment",v); redraw(); return v; }
 
 	override function copyProperties( to:Dynamic ) :Void {
 		super.copyProperties(to);
@@ -65,30 +65,30 @@ class TextArea extends ElementImpl {
 		to.text=text;
 	}
 
-    override public function fromXml( xml:Xml ) :Void {
-        super.fromXml(xml);
-        text = textContent(xml);
-    }
+	override public function fromXml( xml:Xml ) :Void {
+		super.fromXml(xml);
+		text = textContent(xml);
+	}
 	
 	public function focus( ?focus:Bool ) :Void {
 	}
 
 /* helpers *******************/
 
-    function textContent( xml:Xml ) :String {
-        var text = "";
-        for( child in xml ) {
-            switch( child.nodeType ) {
-                case Xml.PCData:
-                    text+=child.nodeValue;
-                case Xml.Element:
-                    text+=textContent(child)+"\n";
-                default:
-            }
-        }
-        return xmlUnescape(StringTools.trim( text ));
-    }
-    
+	function textContent( xml:Xml ) :String {
+		var text = "";
+		for( child in xml ) {
+			switch( child.nodeType ) {
+				case Xml.PCData:
+					text+=child.nodeValue;
+				case Xml.Element:
+					text+=textContent(child)+"\n";
+				default:
+			}
+		}
+		return xmlUnescape(StringTools.trim( text ));
+	}
+	
 	/**
 		Unescape XML special characters of the string.
 	**/

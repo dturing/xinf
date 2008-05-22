@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -15,9 +15,9 @@ class Set extends TimedAttributeSetter {
 		to: new StringTrait(),
 	}
 
-    public var to(get_to,set_to):String;
-    function get_to() :String { return getTrait("to",String); }
-    function set_to( v:String ) :String { setTrait("to",v); return v; }
+	public var to(get_to,set_to):String;
+	function get_to() :String { return getTrait("to",String); }
+	function set_to( v:String ) :String { setTrait("to",v); return v; }
 
 	var oldValue:Dynamic;
 

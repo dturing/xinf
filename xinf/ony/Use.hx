@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -14,19 +14,19 @@ class Use extends ElementImpl {
 		href:new StringTrait(),
 	};
 
-    public var x(get_x,set_x):Float;
-    function get_x() :Float { return getTrait("x",Length).value; }
-    function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
+	public var x(get_x,set_x):Float;
+	function get_x() :Float { return getTrait("x",Length).value; }
+	function set_x( v:Float ) :Float { setTrait("x",new Length(v)); redraw(); return v; }
 	
-    public var y(get_y,set_y):Float;
-    function get_y() :Float { return getTrait("y",Length).value; }
-    function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
+	public var y(get_y,set_y):Float;
+	function get_y() :Float { return getTrait("y",Length).value; }
+	function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
-    public var href(get_href,set_href):String;
-    function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { setTrait("href",v); resolve(); return v; }
+	public var href(get_href,set_href):String;
+	function get_href() :String { return getTrait("href",String); }
+	function set_href( v:String ) :String { setTrait("href",v); resolve(); return v; }
 
-    var peer(default,set_peer):ElementImpl;
+	var peer(default,set_peer):ElementImpl;
 
 	function set_peer( p:ElementImpl ) :ElementImpl {
 		peer=p;
@@ -36,7 +36,7 @@ class Use extends ElementImpl {
 		return peer;
 	}
 	
-    function resolve() {
+	function resolve() {
 		if( href==null ) return;
 		// for now, we dont support external references
 		var id = href.split("#")[1];
@@ -48,7 +48,7 @@ class Use extends ElementImpl {
 		}
 		redraw();
 	
-    }
+	}
 	
 	override public function onLoad() :Void {
 		super.onLoad();

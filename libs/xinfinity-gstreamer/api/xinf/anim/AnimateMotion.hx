@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -29,17 +29,17 @@ class AnimateMotion extends TimedAttributeSetter {
 	//	keyTimes: new FloatListTrait(),
 	};
 
-    public var calcMode(get_calc_mode,set_calc_mode):CalcMode;
-    function get_calc_mode() :CalcMode { return getTrait("calcMode",CalcMode); }
-    function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcMode",v); }
+	public var calcMode(get_calc_mode,set_calc_mode):CalcMode;
+	function get_calc_mode() :CalcMode { return getTrait("calcMode",CalcMode); }
+	function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcMode",v); }
 
-    public var path(get_path,set_path):String;
-    function get_path() :String { return getStyleTrait("path",String); }
-    function set_path( v:String ) :String { setStyleTrait("path",v); return v; }
+	public var path(get_path,set_path):String;
+	function get_path() :String { return getStyleTrait("path",String); }
+	function set_path( v:String ) :String { setStyleTrait("path",v); return v; }
 
-    public var rotate(get_rotate,set_rotate):RotateMotion;
-    function get_rotate() :RotateMotion { return getTrait("rotate",RotateMotion); }
-    function set_rotate( v:RotateMotion ) :RotateMotion { return setTrait("rotate",v); }
+	public var rotate(get_rotate,set_rotate):RotateMotion;
+	function get_rotate() :RotateMotion { return getTrait("rotate",RotateMotion); }
+	function set_rotate( v:RotateMotion ) :RotateMotion { return setTrait("rotate",v); }
 
 	var originalValue:Transform;
 	var iterator:FlatPathIterator;

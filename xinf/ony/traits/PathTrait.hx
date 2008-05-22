@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.traits;
 
@@ -13,11 +13,11 @@ class PathTrait extends TypedTrait<Iterable<PathSegment>> {
 		super( new List<PathSegment>() );
 	}
 
-    override public function parse( value:String ) :Dynamic {
+	override public function parse( value:String ) :Dynamic {
 		var d = PathParser.simplify(
 				new PathParser().parse(value));
 		return d;
-    }
+	}
 
 	override public function write( value:Dynamic ) :String {
 		var r = "";

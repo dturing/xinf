@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul;
 
@@ -7,7 +7,7 @@ import xinf.event.SimpleEventDispatcher;
 import xinf.ul.model.ISelectable;
 
 /*
-    NOTE: about to be removed.
+	NOTE: about to be removed.
 */
 class SelectableGroup<T:ISelectable> extends SimpleEventDispatcher {
 	
@@ -17,7 +17,7 @@ class SelectableGroup<T:ISelectable> extends SimpleEventDispatcher {
 	public var selectedItems(getSelectedItems,null) :Array<T>;
 	
 	public function new() {
-        super();
+		super();
 		maxSelections = 1;
 		items = new Array<T>();
 	}

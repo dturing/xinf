@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul.widget;
 
@@ -8,18 +8,18 @@ import xinf.ul.layout.Helper;
 import xinf.ony.type.Editability;
 
 class LineEdit extends Widget {
-    public var text(get_text,set_text) :String;
-    private var textElement:TextArea;
+	public var text(get_text,set_text) :String;
+	private var textElement:TextArea;
 
-    private function get_text() :String {
-        return textElement.text;
-    }
-    
-    private function set_text(t:String) :String {
-        textElement.text = t;
+	private function get_text() :String {
+		return textElement.text;
+	}
+	
+	private function set_text(t:String) :String {
+		textElement.text = t;
 		setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
-        return t;
-    }
+		return t;
+	}
 	
 	override public function set_size( s:TPoint ) :TPoint {
 		// FIXME: text-anchor center, set center here.
@@ -32,9 +32,9 @@ class LineEdit extends Widget {
 		return super.set_size(s);
 	}
 
-    public function new( ?traits:Dynamic ) :Void {
-        textElement = new TextArea();
-        super( traits );
+	public function new( ?traits:Dynamic ) :Void {
+		textElement = new TextArea();
+		super( traits );
 
 		textElement.editable = Editability.Simple;
 		group.appendChild( textElement );
@@ -49,9 +49,9 @@ class LineEdit extends Widget {
 		if( text!=null ) {
 			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
 		}
-    }
+	}
 
-    override public function focus() :Bool {
+	override public function focus() :Bool {
 		if( !super.focus() ) return false;
 		textElement.focus(true);
 		return true;
@@ -60,5 +60,5 @@ class LineEdit extends Widget {
 	override public function blur() :Void {
 		super.blur();
 		textElement.focus(false);
-    }
+	}
 }

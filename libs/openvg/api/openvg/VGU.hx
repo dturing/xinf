@@ -1,24 +1,27 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package openvg;
 
 /**
-    Global OpenVG functions. 
-    Make sure you create (and makeCurrent) a Display before using any of these.
-    
-    <nekobind 
-        prefix="vgu"
-        module="openvg"
-        global="true"
-        translator="Capitalize"
-        globalFinderPrefix="VGU_"
-        globalFinderCCFlags="-lOpenVG -lGL -lGLU"
+	Global OpenVG functions. 
+	Make sure you create (and makeCurrent) a Display before using any of these.
+	
+	<nekobind 
+		prefix="vgu"
+		module="openvg"
+		global="true"
+		translator="Capitalize"
+		globalFinderPrefix="VGU_"
+		globalFinderCCFlags="-lOpenVG -lGL -lGLU"
 		
-        friends="openvg.Path:VGPath>__h,
+		friends="openvg.Path:VGPath>__h,
 				openvg.Handle:VGHandle>__h"
-        />
-    <nekobind:cHeader>
-        #include &lt;vg/openvg.h&gt;
-        #include &lt;vg/vgu.h&gt;
-    </nekobind:cHeader>
+		/>
+	<nekobind:cHeader>
+		#include &lt;vg/openvg.h&gt;
+		#include &lt;vg/vgu.h&gt;
+	</nekobind:cHeader>
 **/
 
 extern class VGU {
@@ -44,11 +47,11 @@ extern class VGU {
 	public static function arc( path:Path, x:Float, y:Float, width:Float, height:Float, startAngle:Float, angleExtent:Float, type:Int ) :Int;
 
 
-    public static function __init__() : Void {
-        DLLLoader.addLibToPath("openvg");
-        untyped {
-            var loader = untyped __dollar__loader;
-            VGU = loader.loadmodule("openvg".__s,loader).VGU__impl;
-        }
-    }
+	public static function __init__() : Void {
+		DLLLoader.addLibToPath("openvg");
+		untyped {
+			var loader = untyped __dollar__loader;
+			VGU = loader.loadmodule("openvg".__s,loader).VGU__impl;
+		}
+	}
 }

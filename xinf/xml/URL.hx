@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.xml;
 
@@ -18,68 +18,68 @@ package xinf.xml;
 */
 class URL {
 	/** the protocol part of the URI, mostly "http" or "file" */
-    public var protocol:String;
+	public var protocol:String;
 	
 	/** the host part of the URI.
 		if the URI describes a file:// reference,
 		this is the first part of the path. */
-    public var host:String;
+	public var host:String;
 	
 	/** the port, if omitted it is automatically
 		set for some protocols: 80 for http, 443 for https and 21 for ftp.
 	*/
-    public var port:Int;
+	public var port:Int;
 	
 	/** the path part of the URI*/
-    public var path:String;
+	public var path:String;
 	
 	/** the filename part of the URI */
 	public var filename:String;
 
 	/** create a new URL by parsing from [s] */
-    public function new( s:String ) :Void {
-        parse(s);
-    }
-    
-    function parse( s:String ) :Void {
-        var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
+	public function new( s:String ) :Void {
+		parse(s);
+	}
+	
+	function parse( s:String ) :Void {
+		var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
 		
 		if( s==null ) throw("URL is null");
 
 		if( r.match( s ) ) {
-            protocol = r.matched(1);
-            host = r.matched(2);
-            port = Std.parseInt(r.matched(4));
-            if( port==0 ) {
-                switch(protocol) {
-                    case "http": port=80;
-                    case "https": port=443;
-                    case "ftp": port=21;
-                    default: port=0;
-                }
-            }
-            path = r.matched(5);
+			protocol = r.matched(1);
+			host = r.matched(2);
+			port = Std.parseInt(r.matched(4));
+			if( port==0 ) {
+				switch(protocol) {
+					case "http": port=80;
+					case "https": port=443;
+					case "ftp": port=21;
+					default: port=0;
+				}
+			}
+			path = r.matched(5);
 			if( protocol=="file" ) {
 				if( path!="" ) path=host+"/"+path; 
 				else path=host;
 				host=""; 
 			}
-        } else {
-//            protocol="file";
-            host=null;
-            port=0;
-            path=s;
-        }
-        if( path.charAt(path.length-1)!="/" ) {
-            var p = path.split("/");
-            filename = p.pop();
-            path = p.join("/");
+		} else {
+//			protocol="file";
+			host=null;
+			port=0;
+			path=s;
+		}
+		if( path.charAt(path.length-1)!="/" ) {
+			var p = path.split("/");
+			filename = p.pop();
+			path = p.join("/");
 			if( p.length>0 ) path+="/";
-        } else {
+		} else {
 			filename="";
 		}
-    }
-    
+	}
+	
 	/**
 		Return a new URL that is the result of appending
 		[rel] to this URL.
@@ -89,10 +89,10 @@ class URL {
 		[foo/../bar] into [bar], and also handle absolute
 		URLs for rel. (TODO)
 	*/
-    public function getRelativeURL( rel:String ) :URL {
-        var url = new URL( this.pathString()+rel );
-        return url;
-    }
+	public function getRelativeURL( rel:String ) :URL {
+		var url = new URL( this.pathString()+rel );
+		return url;
+	}
 
 	/**
 		Load the file referenced by this resource
@@ -103,7 +103,7 @@ class URL {
 		On neko (Xinfinity), this also handles file:// URLs
 		(by using neko.io.File.getContent).
 	*/
-    public function fetch( onData:String->Void, ?onError:String->Void ) {
+	public function fetch( onData:String->Void, ?onError:String->Void ) {
 	
 		if( onError==null ) {
 			onError = function(e) { 
@@ -115,57 +115,57 @@ class URL {
 			};
 		}
 		
-        try {
-        
-        #if neko
-            if( protocol=="file" || protocol==null ) {
-                var data = neko.io.File.getContent( if( host!=null ) host+path+filename else path+filename );
-                onData( data );
-                return;
-            }
-        #end
+		try {
+		
+		#if neko
+			if( protocol=="file" || protocol==null ) {
+				var data = neko.io.File.getContent( if( host!=null ) host+path+filename else path+filename );
+				onData( data );
+				return;
+			}
+		#end
 
-            if( protocol=="resource" ) {
+			if( protocol=="resource" ) {
 				var rname = if( host!=null ) host+path+filename else path+filename;
-                var data = Std.resource( rname );
+				var data = Std.resource( rname );
 				if( data==null ) throw("Resource not found: "+rname );
-                onData( data );
-                return;
-            }
+				onData( data );
+				return;
+			}
 	
 			var request = new haxe.Http(toString());
-            request.onError = onError;
-            request.onData = onData;
-            request.request(false);
-           
-        } catch( e:Dynamic ) {
-            if( onError!=null ) onError(e);
-        }
+			request.onError = onError;
+			request.onData = onData;
+			request.request(false);
+		   
+		} catch( e:Dynamic ) {
+			if( onError!=null ) onError(e);
+		}
 		
-    }
-    
+	}
+	
 	/**
 		Return a string representation of this URL up to but not including
 		the filename part.
 	*/
-    public function pathString() :String {
-        var h = "";
+	public function pathString() :String {
+		var h = "";
 		if( protocol!=null ) {
 			h = protocol+"://";
 		}
-        if( host!=null ) {
-            h = h+host;
-        }
-        if( port!=0 ) {
-            h = h+":"+port;
-        }
-        return( h+path );
-    }
+		if( host!=null ) {
+			h = h+host;
+		}
+		if( port!=0 ) {
+			h = h+":"+port;
+		}
+		return( h+path );
+	}
 
 	/**
 		Return a complete string representation of this URL.
 	*/
 	public function toString() :String {
 		return( pathString()+filename );
-    }
+	}
 }

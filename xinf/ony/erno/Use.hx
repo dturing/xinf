@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -36,7 +36,7 @@ class Use extends xinf.ony.Use {
 		cycleLock = false;
 	}
 	
-    override public function draw( g:Renderer ) :Void {
+	override public function draw( g:Renderer ) :Void {
 		if( clone!=null ) {
 			clone.draw(g);
 			g.setTransform( wrapper, x, y, 1, 0, 0, 1 );
@@ -47,7 +47,7 @@ class Use extends xinf.ony.Use {
 		super.draw(g);
 	}
 	
-    override public function drawContents( g:Renderer ) :Void {
+	override public function drawContents( g:Renderer ) :Void {
 		if( wrapper!=null ) {
 			g.showObject(wrapper);
 		}

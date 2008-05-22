@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -34,33 +34,33 @@ class Animation extends TimedAttributeSetter {
 		by: new StringTrait(),
 	};
 
-    public var additive(get_additive,set_additive):Additive;
-    function get_additive() :Additive { return getStyleTrait("additive",Additive); }
-    function set_additive( v:Additive ) :Additive { return setStyleTrait("additive",v); }
+	public var additive(get_additive,set_additive):Additive;
+	function get_additive() :Additive { return getStyleTrait("additive",Additive); }
+	function set_additive( v:Additive ) :Additive { return setStyleTrait("additive",v); }
 
-    public var accumulate(get_accumulate,set_accumulate):Accumulate;
-    function get_accumulate() :Accumulate { return getTrait("accumulate",Accumulate); }
-    function set_accumulate( v:Accumulate ) :Accumulate { return setTrait("accumulate",v); }
+	public var accumulate(get_accumulate,set_accumulate):Accumulate;
+	function get_accumulate() :Accumulate { return getTrait("accumulate",Accumulate); }
+	function set_accumulate( v:Accumulate ) :Accumulate { return setTrait("accumulate",v); }
 
-    public var calcMode(get_calc_mode,set_calc_mode):CalcMode;
-    function get_calc_mode() :CalcMode { return getTrait("calcMode",CalcMode); }
-    function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcMode",v); }
+	public var calcMode(get_calc_mode,set_calc_mode):CalcMode;
+	function get_calc_mode() :CalcMode { return getTrait("calcMode",CalcMode); }
+	function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcMode",v); }
 
-    public var values(get_values,set_values):Array<String>;
-    function get_values() :Array<String> { return getTrait("values",Array); }
-    function set_values( v:Array<String> ) :Array<String> { setTrait("values",v); return v; }
+	public var values(get_values,set_values):Array<String>;
+	function get_values() :Array<String> { return getTrait("values",Array); }
+	function set_values( v:Array<String> ) :Array<String> { setTrait("values",v); return v; }
 
-    public var from(get_from,set_from):String;
-    function get_from() :String { return getTrait("from",String); }
-    function set_from( v:String ) :String { setTrait("from",v); return v; }
+	public var from(get_from,set_from):String;
+	function get_from() :String { return getTrait("from",String); }
+	function set_from( v:String ) :String { setTrait("from",v); return v; }
 
-    public var to(get_to,set_to):String;
-    function get_to() :String { return getStyleTrait("to",String); }
-    function set_to( v:String ) :String { setStyleTrait("to",v); return v; }
+	public var to(get_to,set_to):String;
+	function get_to() :String { return getStyleTrait("to",String); }
+	function set_to( v:String ) :String { setStyleTrait("to",v); return v; }
 
-    public var by(get_by,set_by):String;
-    function get_by() :String { return getStyleTrait("by",String); }
-    function set_by( v:String ) :String { setStyleTrait("by",v); return v; }
+	public var by(get_by,set_by):String;
+	function get_by() :String { return getStyleTrait("by",String); }
+	function set_by( v:String ) :String { setStyleTrait("by",v); return v; }
 
 	var steps:Array<Step>;
 	var originalValue:Dynamic;
@@ -121,7 +121,7 @@ class Animation extends TimedAttributeSetter {
 				begin: 0.,
 				end:   1.,
 				from:  v,
-				to:    v,
+				to:	v,
 				interpolate: null
 			};
 			steps.push(step);
@@ -146,7 +146,7 @@ class Animation extends TimedAttributeSetter {
 					begin: begin,
 					end:   end,
 					from:  vals[i],
-					to:    vals[i+1],
+					to:	vals[i+1],
 					interpolate: interpolate
 				};
 				steps.push(step);

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.erno;
 
@@ -10,16 +10,16 @@ import xinf.erno.Renderer;
 
 /** DOCME */
 class SimpleRuntime extends Runtime {
-    
-    private var nextId:Int;
-    
-    public function new() :Void {
-        super();
-        nextId=1;
-    }
-    
-    override public function getNextId() :Int {
-        return nextId++;
-    }
-    
+	
+	private var nextId:Int;
+	
+	public function new() :Void {
+		super();
+		nextId=1;
+	}
+	
+	override public function getNextId() :Int {
+		return nextId++;
+	}
+	
 }

@@ -1,3 +1,5 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
 
 import xinf.anim.type.TimeTrait;
 import xinf.anim.type.Time;
@@ -307,9 +309,9 @@ class TestTime extends haxe.unit.TestCase {
 
 class Test {
 	public static function main() {
-       var r = new haxe.unit.TestRunner();
-        r.add( new TestTime() );
-        r.add( new TestSchedule() );
-        r.run();
+	   var r = new haxe.unit.TestRunner();
+		r.add( new TestTime() );
+		r.add( new TestSchedule() );
+		r.run();
 	}
 }

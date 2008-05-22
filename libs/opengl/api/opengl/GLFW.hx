@@ -1,28 +1,31 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package opengl;
 
 /**
-    GLFW functions. 
-    
-    <nekobind 
-        prefix="glfw"
-        module="opengl"
-        global="true"
-        translator="Capitalize"
-        globalFinderPrefix="GLFW_"
-        globalFinderCCFlags="-lGL -lGLU -lglfw -Isrc"
-        />
-    <nekobind:cHeader>
-    #ifdef NEKO_OSX
-        #include &lt;OpenGL/gl.h&gt;
-        #include &lt;OpenGL/glu.h&gt;
-        #include &lt;GLUT/glut.h&gt;
-    #else
-        #include &lt;GL/gl.h&gt;
-        #include &lt;GL/glu.h&gt;
-        #include &lt;GL/glfw.h&gt;
-        #include "additions.h"
-    #endif
-    </nekobind:cHeader>
+	GLFW functions. 
+	
+	<nekobind 
+		prefix="glfw"
+		module="opengl"
+		global="true"
+		translator="Capitalize"
+		globalFinderPrefix="GLFW_"
+		globalFinderCCFlags="-lGL -lGLU -lglfw -Isrc"
+		/>
+	<nekobind:cHeader>
+	#ifdef NEKO_OSX
+		#include &lt;OpenGL/gl.h&gt;
+		#include &lt;OpenGL/glu.h&gt;
+		#include &lt;GLUT/glut.h&gt;
+	#else
+		#include &lt;GL/gl.h&gt;
+		#include &lt;GL/glu.h&gt;
+		#include &lt;GL/glfw.h&gt;
+		#include "additions.h"
+	#endif
+	</nekobind:cHeader>
 **/
 
 extern class GLFW {
@@ -162,11 +165,11 @@ extern class GLFW {
 	public static var ALPHA_MAP_BIT:Int;
 	public static var INFINITY:Int;
 
-//    public static function init() :Bool; // done in additions::glfw_setup
-    public static function terminate() :Void;
-//    public static function getVersion() :Void;
+//	public static function init() :Bool; // done in additions::glfw_setup
+	public static function terminate() :Void;
+//	public static function getVersion() :Void;
 
-    public static function openWindow( width:Int, height:Int, redBits:Int, greenBits:Int, blueBits:Int, alphaBits:Int, depthBits:Int, stencilBits:Int, mode:Int ) :Bool;
+	public static function openWindow( width:Int, height:Int, redBits:Int, greenBits:Int, blueBits:Int, alphaBits:Int, depthBits:Int, stencilBits:Int, mode:Int ) :Bool;
 	public static function openWindowHint( target:Int, hint:Int ) :Void;
 	public static function closeWindow() :Void;
 	public static function setWindowTitle( title:String ) :Void;
@@ -212,11 +215,11 @@ extern class GLFW {
 	
 	//public static function () :Void;
 
-    public static function __init__() : Void {
-        DLLLoader.addLibToPath("opengl");
-        untyped {
-            var loader = untyped __dollar__loader;
-            GLFW = loader.loadmodule("opengl".__s,loader).GLFW__impl;
-        }
-    }
+	public static function __init__() : Void {
+		DLLLoader.addLibToPath("opengl");
+		untyped {
+			var loader = untyped __dollar__loader;
+			GLFW = loader.loadmodule("opengl".__s,loader).GLFW__impl;
+		}
+	}
 }

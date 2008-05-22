@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -12,32 +12,32 @@ import xinf.ony.traits.PreserveAspectRatioTrait;
 
 class Image extends xinf.ony.Image {
 
-    public var bitmap(default,set_bitmap):ImageData;
+	public var bitmap(default,set_bitmap):ImageData;
 
-    override function set_href( v:String ) :String { 
+	override function set_href( v:String ) :String { 
 		setTrait("href",v);
 		resolve();
-        return href;
+		return href;
 	}
 
-    private function set_bitmap(v:ImageData) {
-        // FIXME: if old bitmap, unregister...
-        bitmap=v;
-        bitmap.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
-        bitmap.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
-        bitmap.addEventListener( ImageLoadEvent.LOADED, dataLoaded );
-        redraw();
-        return bitmap;
-    }
-    
-    private function dataLoaded( e:ImageLoadEvent ) :Void {
+	private function set_bitmap(v:ImageData) {
+		// FIXME: if old bitmap, unregister...
+		bitmap=v;
+		bitmap.addEventListener( ImageLoadEvent.FRAME_AVAILABLE, dataChanged );
+		bitmap.addEventListener( ImageLoadEvent.PART_LOADED, dataChanged );
+		bitmap.addEventListener( ImageLoadEvent.LOADED, dataLoaded );
+		redraw();
+		return bitmap;
+	}
+	
+	private function dataLoaded( e:ImageLoadEvent ) :Void {
 		dataChanged(e);
 		postEvent(e);
-    }
+	}
 	
-    private function dataChanged( e:ImageLoadEvent ) :Void {
-        redraw();
-    }
+	private function dataChanged( e:ImageLoadEvent ) :Void {
+		redraw();
+	}
 
 	override public function onLoad() :Void {
 		super.onLoad();
@@ -58,18 +58,18 @@ class Image extends xinf.ony.Image {
 		redraw();
 	}
 
-    public static function load( url:String ) :ImageData {
+	public static function load( url:String ) :ImageData {
 		return ImageData.load( url );
-    }
-    
-    override public function drawContents( g:Renderer ) :Void {
+	}
+	
+	override public function drawContents( g:Renderer ) :Void {
 		if( bitmap==null ) {
-            // "empty"
-            g.setStroke( SolidColor(1,0,0,1), 1 );
-            g.setFill( SolidColor(.5,.5,.5,.5) );
-            g.rect( x, y, width, height );
+			// "empty"
+			g.setStroke( SolidColor(1,0,0,1), 1 );
+			g.setFill( SolidColor(.5,.5,.5,.5) );
+			g.rect( x, y, width, height );
 			return;
-        }
+		}
 
 		if( width<=0 ) width = bitmap.width;
 		if( height<=0 ) height = bitmap.height;
@@ -83,7 +83,7 @@ class Image extends xinf.ony.Image {
 		if( opacity > 0 || opacity==null ) {
 			g.image( bitmap, {x:0.,y:0.,w:bitmap.width,h:bitmap.height}, box );
 		}
-     }
+	 }
 
 	override public function toString() :String {
 		return("xinf.ony.erno.Image("+href+")");

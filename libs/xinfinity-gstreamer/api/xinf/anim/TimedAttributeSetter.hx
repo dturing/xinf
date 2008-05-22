@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -17,13 +17,13 @@ class TimedAttributeSetter extends TimedElement {
 /*		attributeType:new StringTrait(), - no difference in xinf! DOCME */
 	}
 
-    public var href(get_href,set_href):String;
-    function get_href() :String { return getTrait("href",String); }
-    function set_href( v:String ) :String { setTrait("href",v); return v; }
+	public var href(get_href,set_href):String;
+	function get_href() :String { return getTrait("href",String); }
+	function set_href( v:String ) :String { setTrait("href",v); return v; }
 
-    public var attributeName(get_attribute_name,set_attribute_name):String;
-    function get_attribute_name() :String { return getTrait("attributeName",String); }
-    function set_attribute_name( v:String ) :String { setTrait("attributeName",v); return v; }
+	public var attributeName(get_attribute_name,set_attribute_name):String;
+	function get_attribute_name() :String { return getTrait("attributeName",String); }
+	function set_attribute_name( v:String ) :String { setTrait("attributeName",v); return v; }
 
 	var peer:XMLElement;
 

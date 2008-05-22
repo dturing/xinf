@@ -1,22 +1,25 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package openvg;
 
 /**
-    <nekobind 
-        translator="Capitalize"
-        prefix="vg"
-        nekoAbstract="__h"
-        cStruct="VGPath"
-        dtor="destroyPath"
-        module="openvg"
-        />
-    <nekobind:cHeader>
-        #include &lt;vg/openvg.h&gt;
-    </nekobind:cHeader>
+	<nekobind 
+		translator="Capitalize"
+		prefix="vg"
+		nekoAbstract="__h"
+		cStruct="VGPath"
+		dtor="destroyPath"
+		module="openvg"
+		/>
+	<nekobind:cHeader>
+		#include &lt;vg/openvg.h&gt;
+	</nekobind:cHeader>
 **/
 
 extern class Path {
 	
-    private function new( format:Int, datatype:Int, scale:Float, bias:Float, segmentCapacityHint:Int, coordCapacityHint:Int, capabilities:Int) :Void;
+	private function new( format:Int, datatype:Int, scale:Float, bias:Float, segmentCapacityHint:Int, coordCapacityHint:Int, capabilities:Int) :Void;
 
 	/** <nekobind ctor="true" suffix="Path"/> **/
 	public static function create( format:Int, datatype:Int, scale:Float, bias:Float, segmentCapacityHint:Int, coordCapacityHint:Int, capabilities:Int ) :Path;
@@ -64,11 +67,11 @@ extern class Path {
 		</nekobind> **/
 	public function pathTransformedBounds( minX:String, minY:String, width:String, height:String ):Void;
 
-    public static function __init__() : Void {
-        DLLLoader.addLibToPath("openvg");
-        untyped {
-            var loader = untyped __dollar__loader;
-            Path = loader.loadmodule("openvg".__s,loader).Path__impl;
-        }
-    }
+	public static function __init__() : Void {
+		DLLLoader.addLibToPath("openvg");
+		untyped {
+			var loader = untyped __dollar__loader;
+			Path = loader.loadmodule("openvg".__s,loader).Path__impl;
+		}
+	}
 }

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 
 package xinf.ony.type;
 
@@ -12,13 +12,13 @@ package xinf.ony.type;
 	FIXME: maybe drop this, and just use Array<String>?
 */
 class StringList {
-    public var list:Array<String>;
-    
-    public function new( l:Array<String> ) {
-        list=l;
-    }
-    
-    public function toString() {
-        return list.join(", ");
-    }
+	public var list:Array<String>;
+	
+	public function new( l:Array<String> ) {
+		list=l;
+	}
+	
+	public function toString() {
+		return list.join(", ");
+	}
 }

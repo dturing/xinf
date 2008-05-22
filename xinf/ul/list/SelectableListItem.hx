@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ul.list;
 
@@ -17,9 +17,9 @@ class SelectableListItem<T> extends ListItem<T> {
 #else true
 class SelectableListItem<T:ISelectable> extends ListItem<T> {
 #end
-    override public function set( ?value:T ) :Void {
-  //      super.set();
-        this.value = value;
+	override public function set( ?value:T ) :Void {
+  //	  super.set();
+		this.value = value;
 		if( value!=null ) {
 			#if flash9
 			untyped {
@@ -31,6 +31,6 @@ class SelectableListItem<T:ISelectable> extends ListItem<T> {
 			}
 			#end
 		}
-        this.text.text = if( value==null ) "" else ""+value;
-    }
+		this.text.text = if( value==null ) "" else ""+value;
+	}
 }

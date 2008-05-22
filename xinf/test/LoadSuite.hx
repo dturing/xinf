@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.test;
 
@@ -9,7 +9,7 @@ import xinf.test.svg.SVGTest;
 import Xinf;
 
 class LoadSuite {
-    static function main() {
+	static function main() {
 		new LoadSuite().run();
 	}
 	
@@ -46,6 +46,6 @@ class LoadSuite {
 			}
 		}
 		
-        shell.run();
-    }
+		shell.run();
+	}
 }

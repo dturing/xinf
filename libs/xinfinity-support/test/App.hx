@@ -1,3 +1,5 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
 
 import xinf.support.Font;
 import xinf.support.Pixbuf;
@@ -9,23 +11,23 @@ class FontDumper {
 		dump="";
 	}
 	
-    public function startContour( x:Int, y:Int ) :Void {
+	public function startContour( x:Int, y:Int ) :Void {
 		dump+=("start("+x+","+y+") ");
-    }
+	}
 
-    public function endContour() :Void {
+	public function endContour() :Void {
 		dump+=("end ");
-    }
+	}
 
-    public function lineTo( x:Int, y:Int ) :Void {
+	public function lineTo( x:Int, y:Int ) :Void {
 		dump+=("lineTo("+x+","+y+") ");
-    }
+	}
 
-    public function curveTo( cx:Int, cy:Int, x:Int, y:Int ) :Void {
+	public function curveTo( cx:Int, cy:Int, x:Int, y:Int ) :Void {
 		trace("curveTo("+x+","+y+","+cx+","+cy+") ");
-    }
+	}
 
-    public function endGlyph( character:Int, advance:Int ) :Void {
+	public function endGlyph( character:Int, advance:Int ) :Void {
 		if( character > 32 && character <= 128 )
 			dump += ":"+String.fromCharCode(character)+" ";
 	}
@@ -44,15 +46,15 @@ class App extends haxe.unit.TestCase {
 			
 		// TODO: check font metrics.
 	}
-    
-    function testPixbuf() {
-        var data = Std.resource("xinf.gif");
-        var pixbuf = Pixbuf.newFromCompressedData( data );
-        assertEquals(100,pixbuf.getWidth());
-        assertEquals(61,pixbuf.getHeight());
-        assertEquals(1,pixbuf.getHasAlpha());
+	
+	function testPixbuf() {
+		var data = Std.resource("xinf.gif");
+		var pixbuf = Pixbuf.newFromCompressedData( data );
+		assertEquals(100,pixbuf.getWidth());
+		assertEquals(61,pixbuf.getHeight());
+		assertEquals(1,pixbuf.getHasAlpha());
 		assertEquals( 100*61*4, neko.Lib.nekoToHaxe(pixbuf.copyPixels()).length );
-    }
+	}
 
 	public function new() {
 		super();

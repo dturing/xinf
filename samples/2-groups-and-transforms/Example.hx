@@ -1,3 +1,6 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 import Xinf;
 
 /**
@@ -27,7 +30,7 @@ class Example {
 		   can be set to any class implementing xinf.geom.Transform-- 
 		   other examples could be:
 			group.transform = new Matrix( { tx:1., ty:2., a:3., b:4., c:5., d:6. } );
-		    group.transform = new Rotate( 45 );
+			group.transform = new Rotate( 45 );
 			group.transform = new Scale( 1.5, 0.5 );
 			group.transform = new Concatenate( new Rotate(45), new Scale(2,2) );
 			group.transform = new Identity();

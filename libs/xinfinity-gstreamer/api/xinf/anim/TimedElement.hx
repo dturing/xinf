@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.anim;
 
@@ -27,30 +27,30 @@ class TimedElement extends XMLElement {
 		repeatDur: new DurationTrait(),
 	}
 	
-    public var begin(get_begin,set_begin):Time;
-    function get_begin() :Time { return getTrait("begin",Time); }
-    function set_begin( v:Time ) :Time { setTrait("begin",v); return v; }
+	public var begin(get_begin,set_begin):Time;
+	function get_begin() :Time { return getTrait("begin",Time); }
+	function set_begin( v:Time ) :Time { setTrait("begin",v); return v; }
 
-    public var end(get_end,set_end):Time;
-    function get_end() :Time { return getTrait("end",Time); }
-    function set_end( v:Time ) :Time { setTrait("end",v); return v; }
+	public var end(get_end,set_end):Time;
+	function get_end() :Time { return getTrait("end",Time); }
+	function set_end( v:Time ) :Time { setTrait("end",v); return v; }
 
-    public var dur(get_dur,set_dur):Null<Float>;
-    function get_dur() :Null<Float> { return getTrait("dur",Float); }
-    function set_dur( v:Null<Float> ) :Null<Float> { setTrait("dur",v); return v; }
+	public var dur(get_dur,set_dur):Null<Float>;
+	function get_dur() :Null<Float> { return getTrait("dur",Float); }
+	function set_dur( v:Null<Float> ) :Null<Float> { setTrait("dur",v); return v; }
 
-    public var fill(get_fill,set_fill):Fill;
-    function get_fill() :Fill { return getStyleTrait("fill",Fill); }
-    function set_fill( v:Fill ) :Fill { return setStyleTrait("fill",v); }
+	public var fill(get_fill,set_fill):Fill;
+	function get_fill() :Fill { return getStyleTrait("fill",Fill); }
+	function set_fill( v:Fill ) :Fill { return setStyleTrait("fill",v); }
 	
 	public var repeatCount(get_repeat_count,set_repeat_count):Null<Float>;
-    function get_repeat_count() :Null<Float> { return getTrait("repeatCount",Float); }
-    function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatCount",v); return v; }
+	function get_repeat_count() :Null<Float> { return getTrait("repeatCount",Float); }
+	function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatCount",v); return v; }
 
 	/** active is the timeline's "Run" object
 		if null, the element is not active.
 	**/
-    var active:Bool;
+	var active:Bool;
 	var scheduleHandles:List<Dynamic>;
 	var timeContainer:TimeContainer;
 	
@@ -59,8 +59,8 @@ class TimedElement extends XMLElement {
 	var simpleDuration:Null<Float>;
 	var activeDuration:Null<Float>;
 
-    public function new( ?traits:Dynamic ) {
-        super( traits );
+	public function new( ?traits:Dynamic ) {
+		super( traits );
 		active=false;
 		scheduleHandles = new List<Dynamic>();
 	}
@@ -212,11 +212,11 @@ class TimedElement extends XMLElement {
 		return null;
 	}
 	 
-    override public function toString() :String {
+	override public function toString() :String {
 		var s = "";
  		if( id!=null ) s += "#"+id;
  		if( name!=null ) s += "(\""+name+"\")";
 		return( Type.getClassName( Type.getClass(this) )+s );
-    }
+	}
 
 }

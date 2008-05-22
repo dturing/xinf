@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 
@@ -31,23 +31,23 @@ class Gradient extends ElementImpl {
 		spreadMethod:		new EnumTrait<SpreadMethod>( SpreadMethod, "spread", null ),
 	}
 	
-    public var href(default,set_href):String;
-    public var peer(default,set_peer):Gradient;
+	public var href(default,set_href):String;
+	public var peer(default,set_peer):Gradient;
 
-    public var gradientTransform(get_gradientTransform,set_gradientTransform):Transform;
-    function get_gradientTransform() :Transform { var r = getTrait("gradientTransform",Transform);
-    		if( r==null ) return( if( peer!=null ) peer.gradientTransform else new Identity() ); return r; }
-    function set_gradientTransform( v:Transform ) :Transform { setTrait("gradientTransform",v); return v; }
+	public var gradientTransform(get_gradientTransform,set_gradientTransform):Transform;
+	function get_gradientTransform() :Transform { var r = getTrait("gradientTransform",Transform);
+			if( r==null ) return( if( peer!=null ) peer.gradientTransform else new Identity() ); return r; }
+	function set_gradientTransform( v:Transform ) :Transform { setTrait("gradientTransform",v); return v; }
 
-    public var gradientUnits(get_gradientUnits,set_gradientUnits):GradientUnits;
-    function get_gradientUnits() :GradientUnits { var r = getTrait("gradientUnits",GradientUnits,false);
+	public var gradientUnits(get_gradientUnits,set_gradientUnits):GradientUnits;
+	function get_gradientUnits() :GradientUnits { var r = getTrait("gradientUnits",GradientUnits,false);
 			if( r==null ) return( if( peer!=null ) peer.gradientUnits else ObjectBoundingBox ); return r; }
-    function set_gradientUnits( v:GradientUnits ) :GradientUnits { return setTrait("gradientUnits",v); }
+	function set_gradientUnits( v:GradientUnits ) :GradientUnits { return setTrait("gradientUnits",v); }
 
-    public var spreadMethod(get_spreadMethod,set_spreadMethod):SpreadMethod;
-    function get_spreadMethod() :SpreadMethod { var r = getTrait("spreadMethod",SpreadMethod,false);
-    		if( r==null ) return( if( peer!=null ) peer.spreadMethod else PadSpread ); return r; }
-    function set_spreadMethod( v:SpreadMethod ) :SpreadMethod { return setTrait("spreadMethod",v); }
+	public var spreadMethod(get_spreadMethod,set_spreadMethod):SpreadMethod;
+	function get_spreadMethod() :SpreadMethod { var r = getTrait("spreadMethod",SpreadMethod,false);
+			if( r==null ) return( if( peer!=null ) peer.spreadMethod else PadSpread ); return r; }
+	function set_spreadMethod( v:SpreadMethod ) :SpreadMethod { return setTrait("spreadMethod",v); }
 
 	public var stops(get_stops,null): Array<TGradientStop>;
 
@@ -63,15 +63,15 @@ class Gradient extends ElementImpl {
 		stops = new Array<TGradientStop>();
 	}
 	
-    function set_href(v:String) {
+	function set_href(v:String) {
 		href=v;
 		try {
 			peer=ownerDocument.getTypedElementByURI( href, Gradient );
 		} catch(e:Dynamic) {
 			// will retry in onLoad
 		}
-        return href;
-    }
+		return href;
+	}
 	
 	function set_peer(v:Gradient) :Gradient {
 		if( v == this ) throw("Gradient #"+id+" referencing itself.");

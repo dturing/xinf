@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.type;
 
@@ -18,6 +18,6 @@ package xinf.ony.type;
 	$SVG painting#VisibilityProperty the "visibility" property$
 */
 enum Visibility {
-    Visible;
-    Hidden;
+	Visible;
+	Hidden;
 }

@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony.erno;
 
@@ -8,11 +8,11 @@ import xinf.ony.type.PathSegment;
 
 class Path extends xinf.ony.Path  {
 
-    override public function drawContents( g:Renderer ) :Void {
-        super.drawContents(g);
-        if( segments==null ) return;
-        
-        g.startShape();
+	override public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
+		if( segments==null ) return;
+		
+		g.startShape();
 
 		var open=false;
 		for( s in segments ) {
@@ -41,7 +41,7 @@ class Path extends xinf.ony.Path  {
 		}
 		if( open ) g.endPath();
 
-        g.endShape();
-    }
+		g.endShape();
+	}
 
 }

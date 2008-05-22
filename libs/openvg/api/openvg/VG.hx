@@ -1,24 +1,27 @@
+/*  Copyright (c) the Xinf contributors.
+	see http://xinf.org/copyright for license. */
+
 package openvg;
 
 /**
-    Global OpenVG functions. 
-    Make sure you create (and makeCurrent) a Display before using any of these.
-    
-    <nekobind 
-        prefix="vg"
-        module="openvg"
-        global="true"
-        translator="Capitalize"
-        globalFinderPrefix="VG_"
-        globalFinderCCFlags="-lOpenVG -lGL -lGLU"
+	Global OpenVG functions. 
+	Make sure you create (and makeCurrent) a Display before using any of these.
+	
+	<nekobind 
+		prefix="vg"
+		module="openvg"
+		global="true"
+		translator="Capitalize"
+		globalFinderPrefix="VG_"
+		globalFinderCCFlags="-lOpenVG -lGL -lGLU"
 		
-        friends="openvg.Handle:VGHandle>__h,
+		friends="openvg.Handle:VGHandle>__h,
 				openvg.Path:VGPath>__h,
 				openvg.Paint:VGPaint>__h"
-        />
-    <nekobind:cHeader>
-        #include &lt;vg/openvg.h&gt;
-    </nekobind:cHeader>
+		/>
+	<nekobind:cHeader>
+		#include &lt;vg/openvg.h&gt;
+	</nekobind:cHeader>
 **/
 
 extern class VG {
@@ -338,11 +341,11 @@ extern class VG {
 	public static function destroyContextSH() :Void;
 
 
-    public static function __init__() : Void {
-        DLLLoader.addLibToPath("openvg");
-        untyped {
-            var loader = untyped __dollar__loader;
-            VG = loader.loadmodule("openvg".__s,loader).VG__impl;
-        }
-    }
+	public static function __init__() : Void {
+		DLLLoader.addLibToPath("openvg");
+		untyped {
+			var loader = untyped __dollar__loader;
+			VG = loader.loadmodule("openvg".__s,loader).VG__impl;
+		}
+	}
 }

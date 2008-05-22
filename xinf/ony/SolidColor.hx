@@ -1,5 +1,5 @@
 /*  Copyright (c) the Xinf contributors.
-    see http://xinf.org/copyright for license. */
+	see http://xinf.org/copyright for license. */
 	
 package xinf.ony;
 import xinf.ony.Implementation;
@@ -15,12 +15,12 @@ class SolidColor extends ElementImpl {
 		solid_color:		new PaintTrait(Paint.None),
 	}
 
-    public var solidOpacity(get_solid_opacity,set_solid_opacity):Null<Float>;
-    function get_solid_opacity() :Null<Float> { return getStyleTrait("solid-opacity",Float); }
-    function set_solid_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("solid-opacity",v); }
+	public var solidOpacity(get_solid_opacity,set_solid_opacity):Null<Float>;
+	function get_solid_opacity() :Null<Float> { return getStyleTrait("solid-opacity",Float); }
+	function set_solid_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("solid-opacity",v); }
 
-    public var solidColor(get_solid_color,set_solid_color):Paint;
-    function get_solid_color() :Paint { return getStyleTrait("solid-color",Paint); }
-    function set_solid_color( v:Paint ) :Paint{ return setStyleTrait("solid-color",v); }
+	public var solidColor(get_solid_color,set_solid_color):Paint;
+	function get_solid_color() :Paint { return getStyleTrait("solid-color",Paint); }
+	function set_solid_color( v:Paint ) :Paint{ return setStyleTrait("solid-color",v); }
 	
 }
