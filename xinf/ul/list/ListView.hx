@@ -42,9 +42,6 @@ class ListView<T> extends Widget {
 
 		cursor = new Rectangle({ y:-100 });
 		cursor.addStyleClass("Cursor");
-//		cursor.width = 8; cursor.height = 2;
-//		cursor.x = 0; cursor.y = -100;
-//		cursor.fill = focusColor;
 		rrgroup.appendChild( cursor );
 		
 		rr = new RoundRobin<T,ISettable<T>>( model, createItem, this );
@@ -95,7 +92,6 @@ class ListView<T> extends Widget {
 		rr.scrollToNormalized( e.value );
 		setCursor(cursorPosition);
 	}
-
 	function scrollStep( e:ScrollEvent ) :Void {
 		var factor = e.value;
 		scrollBy( 1.5 * factor ); //* rowH );
@@ -118,7 +114,6 @@ class ListView<T> extends Widget {
 	}
 
 	public function onKeyDown( e:KeyboardEvent ) {
-	//trace("key: "+e+" "+e.shiftMod );
 		switch( e.key ) {
 			case "up":
 				rr.assureVisible( cursorPosition-1 );
@@ -155,7 +150,6 @@ class ListView<T> extends Widget {
 		if( cursorPosition >= model.getLength() ) cursorPosition = model.getLength()-1;
 		if( cursorPosition < 0 ) cursorPosition=0;
 
-//		trace("cursor @"+cursorPosition+" ==> "+rr.positionOf( cursorPosition ) );
 		cursor.y = rr.positionOf( cursorPosition );
 
 		var item = rr.getItem( cursorPosition );

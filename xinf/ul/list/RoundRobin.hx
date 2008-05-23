@@ -62,7 +62,6 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
 	var height:Float; // pixel height of display crop
 	var width:Float; // pixel width of display crop
 	
-	var unit:Float;		 // size of one lineIncrement (row height)
 	var cOffset:Float;	  // current negative offset in rows
 	var umod:Float;			// crop height % lineIncrement
 	
@@ -81,13 +80,16 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
 		
 		component = c;
 		cOffset = 0;
+		
+		// not quite clear why, but this is needed for lineIncrement to be right for Dropdown...
+		updateClassStyle();
 	}
 
 	public function resize( x:Float, y:Float ) :Void {
 		width=x; height=y;
 		setup( x, y );
 	}
-
+	
 	override public function styleChanged( ?a:String ) {
 		super.styleChanged(a);
 		redoAll();

@@ -43,7 +43,7 @@ class ListItem<T> implements ISettable<T> {
 
 	public function moveTo( x:Float, y:Float ) :Void {
 		text.x = x;
-		text.y = y+text.fontSize; //+((size.y-text.fontSize)/2);
+		text.y = y+text.fontSize+((size.y-text.fontSize)/3);
 	}
 	
 	public function resize( x:Float, y:Float ) :Void {
