@@ -14,8 +14,8 @@ XINF_PKG_PATH:=opengl
 
 # project cflags and libs
 ifeq ($(NEKO_PLATFORM),Mac)
-		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-framework GLUT -framework OpenGL -framework System
+		PROJECT_CFLAGS:=-I/opt/osx/manual/include
+		PROJECT_LIBS:=-framework AGL -framework OpenGL -framework System bin/Mac/libglfw.dylib
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=

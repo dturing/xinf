@@ -47,6 +47,7 @@ class DLLLoader {
 			cur = value+separator+cur;
 			
 		neko.Sys.putEnv( name, cur );
+		trace("added to Env: "+name+" Value "+value );
 	}
 
 	public static function checkEnvironment( name:String, separator:String, value:String ) {
@@ -60,7 +61,7 @@ class DLLLoader {
 			}
 		}
 		
-		addToEnvironment("PATH",separator,value);
+		addToEnvironment(name,separator,value);
 	}
 
 	public static function addLibToPath( lib:String ) :Void {
@@ -73,7 +74,7 @@ class DLLLoader {
 			case "Windows":
 				checkEnvironment("PATH",";",libPath);
 			case "Mac":
-				checkEnvironment("DYLD_LIBRARY_PATH",";",libPath);
+				checkEnvironment("DYLD_LIBRARY_PATH",":",libPath);
 			default:
 		}
 		

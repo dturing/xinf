@@ -61,7 +61,7 @@ class DLLLoader {
 			}
 		}
 		
-		addToEnvironment("PATH",separator,value);
+		addToEnvironment(name,separator,value);
 	}
 
 	public static function addLibToPath( lib:String ) :Void {
@@ -74,7 +74,7 @@ class DLLLoader {
 			case "Windows":
 				checkEnvironment("PATH",";",libPath);
 			case "Mac":
-				checkEnvironment("DYLD_LIBRARY_PATH",";",libPath);
+				checkEnvironment("DYLD_LIBRARY_PATH",":",libPath);
 			default:
 		}
 		
