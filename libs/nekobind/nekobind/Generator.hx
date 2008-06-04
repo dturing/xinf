@@ -158,7 +158,7 @@ class Generator {
 	public function handleStaticVarClass( field:ClassField, className:String ) :Void {
 	}
 
-	public function handleClass( e:TypeInfos, c:Class ) {
+	public function handleClass( e:TypeInfos, c:Classdef ) {
 		friendClasses.set( e.path, { cStruct:settings.cStruct, primitive:settings.primitive } );
 		if( c.superClass != null ) superClass = c.superClass.path.toString();
 
