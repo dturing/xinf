@@ -63,7 +63,7 @@ class Image extends xinf.ony.Image {
 	}
 	
 	override public function drawContents( g:Renderer ) :Void {
-		if( bitmap==null ) {
+		if( bitmap==null || bitmap.width==null ) {
 			// "empty"
 			g.setStroke( SolidColor(1,0,0,1), 1 );
 			g.setFill( SolidColor(.5,.5,.5,.5) );
@@ -71,9 +71,9 @@ class Image extends xinf.ony.Image {
 			return;
 		}
 
-		if( width<=0 ) width = bitmap.width;
-		if( height<=0 ) height = bitmap.height;
-		
+		if( width<=0 || width==null ) width = bitmap.width;
+		if( height<=0 || width==null ) height = bitmap.height;
+
 		var box = PreserveAspectRatioTrait.align( preserveAspectRatio,
 			{ x:bitmap.width, y:bitmap.height }, { x:width, y:height } );
 
