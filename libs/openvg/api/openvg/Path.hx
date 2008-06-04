@@ -10,10 +10,12 @@ package openvg;
 		nekoAbstract="__h"
 		cStruct="VGPath"
 		dtor="destroyPath"
+		dtorLock="true"
 		module="openvg"
 		/>
 	<nekobind:cHeader>
 		#include &lt;vg/openvg.h&gt;
+		#include "dtorlock.h"
 	</nekobind:cHeader>
 **/
 

@@ -10,11 +10,13 @@ package openvg;
 		nekoAbstract="__h"
 		cStruct="VGPaint"
 		dtor="destroyPaint"
+		dtorLock="true"
 		module="openvg"
 		friends="openvg.Handle:VGHandle>__h"
 		/>
 	<nekobind:cHeader>
 		#include &lt;vg/openvg.h&gt;
+		#include "dtorlock.h"
 	</nekobind:cHeader>
 **/
 

@@ -300,25 +300,26 @@ extern class VG {
 	// NYI public static function mask( mask:Int, operation:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
 	public static function clear( x:Int, y:Int, width:Int, height:Int ) :Void;
 
-/* Images */
+/* Images 
 	public static function createImage( format:Int, width:Int, height:Int, quality:Int ) :Int;
 	public static function destroyImage( image:Int ) :Void;
 	public static function clearImage( image:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
-	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **/
+	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **
 	public static function imageSubData( image:Int, data:String, stride:Int, format:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
-	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **/
+	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **
 	public static function getImageSubData( image:Int, data:String, stride:Int, format:Int, x:Int, y:Int, width:Int, height:Int ) :Void;
 	// NYI public static function childImage( image:Int, x:Int, y:Int, width:Int, height:Int ) :Int;
 	// NYI public static function getParent( image:Int ) :Int;
 	public static function copyImage( dst:Int, dx:Int, dy:Int, src:Int, sx:Int, sy:Int, width:Int, height:Int, dither:Bool ) :Void;
 	public static function drawImage( image:Int ) :Void;
 	public static function setPixels( dx:Int, dy:Int, src:Int, sx:Int, sy:Int, width:Int, height:Int ) :Void;
-	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **/
+	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **
 	public static function writePixels( data:String, stride:Int, format:Int, dx:Int, dy:Int, width:Int, height:Int ) :Void;
 	public static function getPixels( dst:Int, dx:Int, dy:Int, sx:Int, sy:Int, width:Int, height:Int ) :Void;
-	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **/
+	/** <nekobind><cptr name="data" type="int" min-size="0"/></nekobind> **
 	public static function readPixels( data:String, stride:Int, format:Int, sx:Int, sy:Int, width:Int, height:Int ) :Void;
 	public static function copyPixels( dx:Int, dy:Int, sx:Int, sy:Int, width:Int, height:Int ) :Void;
+*/
 
 /* Image Filters 
 	public static function colorMatrix(VGImage :Void;
