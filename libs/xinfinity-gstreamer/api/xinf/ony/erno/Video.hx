@@ -17,8 +17,6 @@ class Video extends xinf.ony.Video {
 	var source:VideoSource;
 	var srcElement:gst.Object;
 	
-	var pipeTest:xinf.inity.gst.Pipeline;
-	
 	public function new( ?traits:Dynamic ) :Void {
 		super(traits);
 	}
