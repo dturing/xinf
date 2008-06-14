@@ -109,7 +109,7 @@ class StyledElement extends XMLElement {
 		}
 		
 		if( v!=null ) {
-			cacheTrait( name, v, type );
+			v=cacheTrait( name, v, type );
 		}
 		
 		return v;

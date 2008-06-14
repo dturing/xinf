@@ -67,6 +67,10 @@ class GLRenderer extends ObjectModelRenderer {
 	}
 
 	function applyStroke() :Bool {
+		return applyStrokeGL();
+	}
+	
+	function applyStrokeGL() :Bool {
 		if( pen.stroke==null ) return false;
 		switch( pen.stroke ) {
 			case SolidColor(r,g,b,a):

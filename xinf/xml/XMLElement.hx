@@ -139,7 +139,7 @@ class XMLElement extends Node,
 		_ptraits = Reflect.empty();
 	}
 
-	function cacheTrait<T>( name:String, v:Dynamic, type:Class<T> ) {
+	function cacheTrait<T>( name:String, v:Dynamic, type:Class<T> ) :T {
 		// resolve specials and cache in ptraits
 		if( Std.is(v,type) ) {
 		} else if( Std.is(v,SpecialTraitValue) ) {
@@ -149,6 +149,7 @@ class XMLElement extends Node,
 			throw( new TraitTypeException( name, this, v, type ) );
 			
 		Reflect.setField(_ptraits,name,v);
+		return v;
 	}
 	
 	/** see $xinf.traits.TraitAccess$.getTrait */

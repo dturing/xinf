@@ -81,3 +81,4 @@ typedef LengthTrait = xinf.ony.traits.LengthTrait;
 typedef Length = xinf.ony.type.Length;
 typedef Paint = xinf.ony.type.Paint;
 typedef PreserveAspectRatio = xinf.ony.type.PreserveAspectRatio;
+typedef TextAnchor = xinf.ony.type.TextAnchor;

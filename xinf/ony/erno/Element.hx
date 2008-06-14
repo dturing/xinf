@@ -91,7 +91,7 @@ class Element extends xinf.ony.Element {
 	}
 	
 	function convertPaint( paint:Paint, opacity:Float ) {
-		if( paint!=null ) {
+ 		if( paint!=null ) {
 			switch( paint ) {
 				case URLReference(url):
 					var r = ownerDocument.getTypedElementByURI( url, PaintServer );
@@ -101,6 +101,8 @@ class Element extends xinf.ony.Element {
 					return( xinf.erno.Paint.SolidColor(r,green,b,opacity) );
 				case None:
 					return xinf.erno.Paint.None;
+				default:
+					throw("unhandled Paint: "+paint+", my fill: "+fill );
 			}
 		} 
 		return null;
@@ -114,10 +116,10 @@ class Element extends xinf.ony.Element {
 		#if profile
 			xinf.test.Counter.count("drawContents");
 		#end
-
-		g.setFill( convertPaint(fill,fillOpacity*opacity) );
+		var f = convertPaint(getStyleTrait("fill",Paint),fillOpacity*opacity);
+		g.setFill( f );
 		
-		if( stroke!=null ) {
+		if( stroke!=null && stroke!=Paint.None ) {
 			var w = strokeWidth;
 			var caps = strokeLinecap;
 			var join = strokeLinejoin;
