@@ -234,7 +234,7 @@ class HtmlPrinter {
 		return traits;
 	}
 	
-	function processClass(c : Class) {
+	function processClass(c : Classdef) {
 		print('<div class="classname">');
 		if( c.isExtern )
 			keyword("extern");
@@ -269,8 +269,13 @@ class HtmlPrinter {
 			processPath("Dynamic",d);
 			print('</div>');
 		}
-		processInfos(c);
 		
+		print('<span class="extref">');
+		print('<a href="http://xinf.org/'+StringTools.replace(c.path,".","/")+'.hx">source code</a>');
+		print('</span>');
+		
+		processInfos(c);
+
 		var traits;
 		for( t in c.statics ) {
 			if( t.name=="TRAITS" ) traits = processTraits( t.type );
@@ -282,6 +287,7 @@ class HtmlPrinter {
 		for( f in c.statics )
 			processClassField(c.platforms,f,true,traits);
 		print('</dl>');
+		
 	}
 
 	function processClassField(platforms : Platforms,f : ClassField,stat,?traits:Hash<Type>) {
@@ -358,7 +364,7 @@ class HtmlPrinter {
 			typeParams = oldParams;
 	}
 
-	function processEnum(e : Enum) {
+	function processEnum(e : Enumdef) {
 		print('<div class="classname">');
 		if( e.isExtern )
 			keyword("extern");
