@@ -389,7 +389,8 @@ value query_duration( value obj ) {
 }
 DEFINE_PRIM(query_duration,1);
 
-value seek( value obj, value t ) {
+value seek( value obj, value t, value rate ) {
+	val_check(rate,number);
     GObject *o = val_gobject( obj );
     if( !o ) return val_null;
     if( !GST_IS_ELEMENT( o ) ) {
@@ -402,7 +403,7 @@ value seek( value obj, value t ) {
 		time= val_number(t) * GST_SECOND;
     }
 
-	if( gst_element_seek( GST_ELEMENT(o), 1.0, GST_FORMAT_TIME,
+	if( gst_element_seek( GST_ELEMENT(o), val_number(rate), GST_FORMAT_TIME,
 			GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT, 
 			GST_SEEK_TYPE_SET, time, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE ) ) {
 		return val_true;
@@ -410,7 +411,7 @@ value seek( value obj, value t ) {
 	
 	return val_false;
 }
-DEFINE_PRIM(seek,2);
+DEFINE_PRIM(seek,3);
 
 /* state */
 value pipeline_pause( value obj ) {

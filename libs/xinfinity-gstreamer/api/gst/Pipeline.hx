@@ -48,9 +48,9 @@ class Pipeline extends Object {
 		return _query_duration( untyped this.__o );
 	}
 
-	private static var _seek = neko.Lib.load("xinfinity-gstreamer","seek",2);
-	public function seek( to_time:Float ) : Bool {
-		return _seek( untyped this.__o, to_time );
+	private static var _seek = neko.Lib.load("xinfinity-gstreamer","seek",3);
+	public function seek( to_time:Float, rate:Float ) : Bool {
+		return _seek( untyped this.__o, to_time, rate );
 	}
 
 	private static var _pause = neko.Lib.load("xinfinity-gstreamer","pipeline_pause",1);
