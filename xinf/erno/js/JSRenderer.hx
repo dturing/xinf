@@ -27,12 +27,9 @@ class JSRenderer extends ObjectModelRenderer {
 	
 	override public function attachPrimitive( parent:Primitive, child:Primitive ) :Void {
 		if( child.parentNode!=null ) {
-			// FIXME: alternatively to just doing nothing, remove from old parent
-			// (although- 
-			// throw("Object "+child+" is already attached.");
-		} else {
-			parent.appendChild( child );
+			child.parentNode.removeChild(child);
 		}
+		parent.appendChild( child );
 	}
 	
 	override public function setPrimitiveTransform( p:Primitive, x:Float, y:Float, a:Float, b:Float, c:Float, d:Float ) :Void {

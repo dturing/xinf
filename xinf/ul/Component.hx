@@ -29,13 +29,13 @@ class Component extends StyledElement {
 				font-family: sans-serif;
 			}
 			
+			text, TextArea {
+				fill: black;
+			}
+			
 			* {
 				focus-color: #4e9a06;;
 				min-width: 75px;
-			}
-			
-			TextArea {
-				fill: black;
 			}
 			
 			RoundRobin {

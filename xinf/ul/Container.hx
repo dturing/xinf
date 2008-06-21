@@ -36,7 +36,7 @@ class Container extends Component {
 			_skin.attachForeground( group );
 			
 			relayoutNeeded = true;
-//			relayout();
+			relayout();
 		}
 		
 		return newChild;

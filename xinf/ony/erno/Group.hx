@@ -25,7 +25,7 @@ class Group extends xinf.ony.Group {
 
 	override public function appendChild( newChild:Node ) :Node {
 		if( newChild.parentElement != null ) {
-			trace("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
+		//	trace("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
 			newChild.parentElement.removeChild(newChild);
 		}
 		if( Std.is(newChild,Element) )

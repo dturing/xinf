@@ -34,11 +34,11 @@ class Image extends ElementImpl {
 	function get_y() :Float { return getTrait("y",Length).value; }
 	function set_y( v:Float ) :Float { setTrait("y",new Length(v)); redraw(); return v; }
 
-	public var width(get_width,set_width):Float;
+	public var width(get_width,set_width):Null<Float>;
 	function get_width() :Float { return getTrait("width",Length).value; }
 	function set_width( v:Float ) :Float { setTrait("width",new Length(v)); redraw(); return v; }
 	
-	public var height(get_height,set_height):Float;
+	public var height(get_height,set_height):Null<Float>;
 	function get_height() :Float { return getTrait("height",Length).value; }
 	function set_height( v:Float ) :Float { setTrait("height",new Length(v)); redraw(); return v; }
 	

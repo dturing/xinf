@@ -154,6 +154,8 @@ class Flash9Renderer extends ObjectModelRenderer {
 	}
 
 	function applyStroke() {
+		if( pen.stroke==null ) return;
+		
 		var caps:CapsStyle = switch( pen.caps ) {
 			case Constants.CAPS_BUTT: CapsStyle.NONE;
 			case Constants.CAPS_ROUND: CapsStyle.ROUND;
