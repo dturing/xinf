@@ -43,7 +43,7 @@ class Pipeline extends SimpleEventDispatcher {
 	public var pipeline(default,null):gst.Pipeline;
 	
 	public var duration(get_duration,null):Float;
-	public var position(get_position,seekTo):Float;
+	public var position(get_position,set_position):Float;
 	
 	public function get_duration() :Float {
 		return pipeline.duration();
@@ -51,8 +51,12 @@ class Pipeline extends SimpleEventDispatcher {
 	public function get_position() :Float {
 		return pipeline.position();
 	}
-	public function seekTo( to:Float ) :Float {
-		pipeline.seek( to );
+	public function set_position( to:Float ) :Float {
+		return seekTo( to );
+	}
+	public function seekTo( to:Float, ?rate:Float ) :Float {
+		if(rate==null) rate=1.0;
+		pipeline.seek( to, rate );
 		return pipeline.position();
 	}
 
