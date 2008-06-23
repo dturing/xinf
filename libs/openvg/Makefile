@@ -15,7 +15,7 @@ XINF_PKG_PATH:=openvg
 # project cflags and libs
 ifeq ($(NEKO_PLATFORM),Mac)
 		PROJECT_CFLAGS:=-I/opt/osx/manual/include
-		PROJECT_LIBS:=-framework OpenGL -framework System bin/Mac/libOpenVG.dylib
+		PROJECT_LIBS:=-framework OpenGL -framework System bin/Mac/libOpenVG.dylib -fno-common
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
 		PROJECT_CFLAGS:=
