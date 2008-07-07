@@ -27,7 +27,7 @@ else
 		PROJECT_CFLAGS:=
 		PROJECT_LIBS:=
 	else
-		PROJECT_CFLAGS:=${shell pkg-config --cflags gstreamer-0.10 gstreamer-base-0.10} -O3 -march=pentium4 -fomit-frame-pointer
+		PROJECT_CFLAGS:=${shell pkg-config --cflags gstreamer-0.10 gstreamer-base-0.10} -O3 -fomit-frame-pointer
 		PROJECT_LIBS:=${shell pkg-config --libs gstreamer-0.10 gstreamer-base-0.10}
 	endif
 endif
