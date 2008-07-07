@@ -22,7 +22,7 @@ else
 		PROJECT_LIBS:=-lopengl32 -lglu32 bin/Windows/glfw.dll
 	else
 		PROJECT_CFLAGS:=
-		PROJECT_LIBS:=-lGL -lGLU -lglut -lglfw
+		PROJECT_LIBS:=-lGL -lGLU -lglfw
 	endif
 endif
 

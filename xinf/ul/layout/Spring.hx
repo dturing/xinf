@@ -5,7 +5,7 @@ package xinf.ul.layout;
 
 class Spring {
 	public static var UNSET:Null<Float> = null;
-	public static var MAX:Float = 1073741824;
+	public static var MAX:Float = Math.POSITIVE_INFINITY;
 	
 	public function getMin() :Null<Float>  { return UNSET; }
 	public function getPref() :Null<Float> { return UNSET; }
