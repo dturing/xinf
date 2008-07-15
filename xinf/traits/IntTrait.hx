@@ -31,5 +31,17 @@ class IntTrait extends TypedTrait<Int> {
 	override public function getDefault() :Dynamic {
 		return def;
 	}
+
+	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+		return Math.round( a + ((b-a)*f) );
+	}
+	
+	override public function distance( a:Dynamic, b:Dynamic ) :Float {
+		return Math.round( Math.abs(b-a) );
+	}
+
+	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
+		return Math.round( a+b );
+	}
 	
 }

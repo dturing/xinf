@@ -105,6 +105,10 @@ class XinfinityRuntime extends Runtime {
 		interval = 1./rate;
 	}
 
+	override public function getFramerate() :Float {
+		return 1./interval;
+	}
+
 	override public function getMeasuredFramerate() :Float {
 		return measuredFps;
 	}
@@ -248,7 +252,7 @@ class XinfinityRuntime extends Runtime {
 		// FIXME depends on stage scale mode
 		GL.translate( -1., 1., 0. );
 		GL.scale( (2./width), (-2./height), 1. );
-	  //  GL.translate( .5, .5, 0. );
+	    GL.translate( 0, 0, 0. );
 
 		#if gldebug
 			var e:Int = GL.getError();

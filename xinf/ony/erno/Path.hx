@@ -13,7 +13,6 @@ class Path extends xinf.ony.Path  {
 		if( segments==null ) return;
 		
 		g.startShape();
-
 		var open=false;
 		for( s in segments ) {
 			switch(s) {

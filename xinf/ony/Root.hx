@@ -68,12 +68,17 @@ class Root {
 	public static function setFramerate( r:Float ) :Void {
 		xinf.erno.Runtime.runtime.setFramerate(r);
 	}
+
+	public static function getFramerate() :Float {
+		return xinf.erno.Runtime.runtime.getFramerate();
+	}
 	
 	public static function getMeasuredFramerate() :Float {
 		return xinf.erno.Runtime.runtime.getMeasuredFramerate();
 	}
 
 	public static function main() {
+		getRootSvg().onLoad();
 		xinf.erno.Runtime.runtime.run();
 	}
 

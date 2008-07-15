@@ -17,14 +17,13 @@ class TimeRoot extends TimeContainer {
 		super(traits);
 		
 		time = 0;
-		rate = 1/25; // 1/Root.getFramerate();
 		started=Date.now().getTime()/1000;
-		
 		Root.addEventListener( FrameEvent.ENTER_FRAME, enterFrame );
 	}
 	
 	function enterFrame( e:FrameEvent ) {
-		time = started+(e.frame*rate);
+		time = started+(e.frame/Root.getFramerate());
+	//	trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time );
 		step(time);
 	}
 	

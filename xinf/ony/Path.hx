@@ -68,6 +68,14 @@ class Path extends ElementImpl {
 		setTrait("d",v); redraw(); return v;
 	}
 
+	public var d(get_d,set_d):String;
+	function get_d() :String {
+		return getTrait("d",String);
+	}
+	function set_d( v:String ) {
+		setTraitFromString("d",v,_traits); redraw(); return v;
+	}
+
 	override public function getBoundingBox() : TRectangle {
 		return new PathBBox(segments);
 	}

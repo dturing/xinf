@@ -93,14 +93,14 @@ class Animation extends TimedAttributeSetter {
 		} else if( by!=null ) {
 			vals = [ originalValue, targetDefinition.add(originalValue,fromDynamic(by)) ];
 		} else if( to!=null ) {
-			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefinitionault...
+			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefault...
 		} else {
 			vals = new Array<Dynamic>();
 			for( v in values ) {
 				vals.push( fromDynamic(v) );
 			}
 		}
-		
+
 		var vals2 = new Array<Dynamic>();
 		for( val in vals ) {
 			vals2.push( resolve(attributeName,val) );
@@ -153,7 +153,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-//		trace("Animation steps: "+steps );
+		trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {
@@ -204,7 +204,7 @@ class Animation extends TimedAttributeSetter {
 	}
 
 	override function resetIteration( time:Float ) {
-		resetOnTarget();
+	//	resetOnTarget();
 	}
 
 }

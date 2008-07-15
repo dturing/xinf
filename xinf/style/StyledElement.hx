@@ -44,8 +44,8 @@ class StyledElement extends XMLElement {
 	}
 
 	override public function setPresentationTrait( name:String, value:Dynamic ) :Dynamic {
-		super.setPresentationTrait(name,value);
 		styleChanged(name);
+		super.setPresentationTrait(name,value);
 		return value;
 	}
 
@@ -69,6 +69,7 @@ class StyledElement extends XMLElement {
 	*/
 	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
 		if( inherit==null ) inherit=true;
+		if( presentation==null ) presentation=true;
 
 		var v:T = null;
 		

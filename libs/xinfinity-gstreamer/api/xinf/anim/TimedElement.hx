@@ -141,7 +141,7 @@ class TimedElement extends XMLElement {
 				e = e.parentElement;
 		}
 		if( timeContainer==null ) timeContainer = TimeRoot.root;
-		timeContainer.register(this);
+			timeContainer.register(this);
 		
 		reschedule();
 	}

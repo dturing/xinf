@@ -186,6 +186,10 @@ class Runtime extends SimpleEventDispatcher {
 
 	public function setFramerate( rate:Float ) :Void {
 	}
+
+	public function getFramerate() :Float {
+		return -1;
+	}
 	
 	public function getMeasuredFramerate() :Float {
 		return -1.;

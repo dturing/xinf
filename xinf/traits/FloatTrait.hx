@@ -16,7 +16,7 @@ class FloatTrait extends TypedTrait<Float> {
 	}
 
 	override public function parse( value:String ) :Dynamic {
-		var v:Null<Float> = null;
+		var v:Null<Float> = 0;
 
 		if( numeric.match(value) ) {
 			v = Std.parseFloat( numeric.matched(1) );
