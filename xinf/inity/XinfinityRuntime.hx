@@ -134,7 +134,6 @@ class XinfinityRuntime extends Runtime {
  		#end
  
 		endFrame();
-
 		timing();
 		GLFW.swapBuffers();
 	}

@@ -107,7 +107,7 @@ class URL {
 	
 		if( onError==null ) {
 			onError = function(e) { 
-				trace("Error fetching document:\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()));
+				trace("Error fetching document '+this+':\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()));
 				#if neko
 					neko.Sys.exit(-1);
 				#end

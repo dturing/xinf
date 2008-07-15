@@ -22,8 +22,7 @@ NEKO_PLATFORMS:=Linux Mac Windows
 PROJECT_CFLAGS+=$(foreach SRC_PATH, $(SRC_PATHS), -I$(SRC_PATH))
 C_SRCS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.c))
 C_HEADERS:=$(foreach SRC_PATH, $(SRC_PATHS), $(wildcard $(SRC_PATH)/*.h))
-
-HX_SRCS:=$(wildcard $(API_PATH)/*.hx $(API_PATH)/*/*.hx $(API_PATH)/*/*/*.hx)
+HX_SRCS:=$(wildcard $(API_PATH)/*/*.hx $(API_PATH)/*/*/*.hx  $(API_PATH)/*/*/*/*.hx)
 
 # c sources are generated and compiled into the ndll
 BINDING_C_SRCS:=$(foreach CLASS, $(BINDING_CLASSES), bind_$(CLASS).c)

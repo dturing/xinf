@@ -52,7 +52,7 @@ class Pipeline extends SimpleEventDispatcher {
 		return pipeline.position();
 	}
 	public function set_position( to:Float ) :Float {
-		return seekTo( to );
+		return seekTo( to, 1.0 );
 	}
 	public function seekTo( to:Float, ?rate:Float ) :Float {
 		if(rate==null) rate=1.0;
