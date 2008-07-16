@@ -188,7 +188,7 @@ class Runtime extends SimpleEventDispatcher {
 	}
 
 	public function getFramerate() :Float {
-		return -1;
+		return 30;
 	}
 	
 	public function getMeasuredFramerate() :Float {

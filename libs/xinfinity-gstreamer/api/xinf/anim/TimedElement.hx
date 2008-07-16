@@ -55,7 +55,7 @@ class TimedElement extends XMLElement {
 	var timeContainer:TimeContainer;
 	
 	var started:Float;
-	var freezeTime:Float;
+	var freezeTime:Null<Float>;
 	var simpleDuration:Null<Float>;
 	var activeDuration:Null<Float>;
 

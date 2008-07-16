@@ -8,7 +8,7 @@ import xinf.ony.Root;
 
 class TimeRoot extends TimeContainer {
 
-	public static var root:TimeContainer = new TimeRoot();
+	public static var root:TimeRoot = new TimeRoot();
 
 	var time(default,null):Float;
 	var rate:Float;
@@ -18,7 +18,6 @@ class TimeRoot extends TimeContainer {
 		
 		time = 0;
 		started=Date.now().getTime()/1000;
-		Root.addEventListener( FrameEvent.ENTER_FRAME, enterFrame );
 	}
 	
 	function enterFrame( e:FrameEvent ) {
@@ -27,4 +26,7 @@ class TimeRoot extends TimeContainer {
 		step(time);
 	}
 	
+	public static function start() {
+		Root.addEventListener( FrameEvent.ENTER_FRAME, root.enterFrame );
+	}
 }
