@@ -7,4 +7,5 @@ enum CalcMode {
 	Discrete;
 	Linear;
 	Paced;
+	Spline;
 }

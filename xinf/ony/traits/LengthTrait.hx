@@ -32,6 +32,7 @@ class LengthTrait extends TypedTrait<Length> {
 	}
 	
 	override public function interpolate( a:Dynamic, b:Dynamic, f:Float ) :Dynamic {
+//		trace("interp "+a.value+"-"+b.value+" at "+f+": "+(a.value + ((b.value-a.value)*f)));
 		return new Length(null,a.value + ((b.value-a.value)*f));
 	}
 	

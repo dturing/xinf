@@ -206,6 +206,7 @@ class TimedElement extends XMLElement {
 					t,f);
 			case Indefinite:
 				// do nothing
+			// todo #id.begin; events
 			default:
 				throw("Can't schedule "+time+" (yet)");
 		}

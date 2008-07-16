@@ -166,7 +166,11 @@ class StyledElement extends XMLElement {
 		trigger a call to styleChanged.
 	*/
 	public function styleChanged( ?attribute:String ) :Void {
-		clearPresentationTraits();
+	// FIXME: this might be needed in some circumstances,
+	// like when the CSS changes, or inherited values
+	// but it resets animation-set trait values...
+	// -- introduce another trait cache, animationTraits?
+//		clearPresentationTraits();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);

@@ -7,15 +7,22 @@ import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.EnumTrait;
 import xinf.traits.TraitDefinition;
+import xinf.ony.traits.FloatListTrait;
+import xinf.ony.type.FloatList;
 import xinf.anim.type.Additive;
 import xinf.anim.type.Accumulate;
 import xinf.anim.type.CalcMode;
 import xinf.anim.type.ValuesTrait;
+import xinf.anim.type.KeySplineTrait;
+import xinf.anim.type.KeySplines;
+import xinf.anim.type.KeySpline;
+import xinf.anim.tools.Spline;
 
 private typedef Step = { 
 	begin:Float, end:Float, 
 	from:Dynamic, to:Dynamic,
-	interpolate:Dynamic->Dynamic->Float->Dynamic 
+	interpolate:Dynamic->Dynamic->Float->Dynamic,
+	spline:KeySpline
 };
 
 class Animation extends TimedAttributeSetter {
@@ -25,8 +32,8 @@ class Animation extends TimedAttributeSetter {
 		accumulate: new EnumTrait<Accumulate>( Accumulate, Accumulate.None ),
 		calcMode: new EnumTrait<CalcMode>( CalcMode, CalcMode.Linear ),
 		
-	//	keySplines: new StringTrait(),
-	//	keyTimes: new FloatListTrait(),
+		keySplines: new KeySplineTrait(),
+		keyTimes: new FloatListTrait(),
 		
 		values: new ValuesTrait(),
 		from: new StringTrait(),
@@ -61,6 +68,14 @@ class Animation extends TimedAttributeSetter {
 	public var by(get_by,set_by):String;
 	function get_by() :String { return getStyleTrait("by",String); }
 	function set_by( v:String ) :String { setStyleTrait("by",v); return v; }
+
+	public var keyTimes(get_keyTimes,set_keyTimes):FloatList;
+	function get_keyTimes() :FloatList { return getStyleTrait("keyTimes",FloatList); }
+	function set_keyTimes( v:FloatList ) :FloatList { setStyleTrait("keyTimes",v); return v; }
+
+	public var keySplines(get_keySplines,set_keySplines):KeySplines;
+	function get_keySplines() :KeySplines { return getStyleTrait("keySplines",KeySplines); }
+	function set_keySplines( v:KeySplines ) :KeySplines { setStyleTrait("keySplines",v); return v; }
 
 	var steps:Array<Step>;
 	var originalValue:Dynamic;
@@ -107,12 +122,23 @@ class Animation extends TimedAttributeSetter {
 		}
 		vals=vals2;
 		
+		var times:Array<Float> = null;
+		if( keyTimes!=null ) times = keyTimes.list;
+		
+		var splines:Array<KeySpline> = null;
+		if( calcMode==CalcMode.Spline && keySplines!=null ) splines = keySplines.list;
+		
 		var totalLength:Null<Float> = null;
 		if( calcMode == CalcMode.Paced ) {
 			totalLength=0.;
 			for( i in 0...(vals.length-1) ) {
 				totalLength += targetDefinition.distance( vals[i], vals[i+1] );
 			}
+		} else if( times==null ) {
+			// setup linear keyTimes
+			times = new Array<Float>();
+			for( i in 0...vals.length )
+				times.push( (1./(vals.length-1))*(i) );
 		}
 
 		if( vals.length==1 ) {
@@ -122,24 +148,28 @@ class Animation extends TimedAttributeSetter {
 				end:   1.,
 				from:  v,
 				to:	v,
-				interpolate: null
+				interpolate: null,
+				spline: null
 			};
 			steps.push(step);
 		} else {
 			var coveredLength = 0.;
 			for( i in 0...(vals.length-1) ) {
-				var begin; var end;
+				var begin; var end; var spline;
 				if( totalLength!=null ) {
+					// paced
 					var l = targetDefinition.distance( vals[i], vals[i+1] );
 					begin = coveredLength/totalLength;
 					coveredLength+=l;
 					end = coveredLength/totalLength;
-				
-				// TODO: keySplines
 				} else {
-					// linear
-					begin = (1./(vals.length-1))*(i);
-					end = (1./(vals.length-1))*(i+1);
+					begin = times[i];
+					end = times[i+1];
+					if( splines!=null ) {
+						spline = splines[i];
+					} else {
+						// linear
+					}
 				}
 
 				var step = {
@@ -147,7 +177,8 @@ class Animation extends TimedAttributeSetter {
 					end:   end,
 					from:  vals[i],
 					to:	vals[i+1],
-					interpolate: interpolate
+					interpolate: interpolate,
+					spline: spline,
 				};
 				steps.push(step);
 			}
@@ -162,7 +193,13 @@ class Animation extends TimedAttributeSetter {
 			if( at2>=step.begin && at2<=step.end ) {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
-					return step.interpolate( step.from, step.to, t );
+					if( step.spline!=null ) {
+//						trace("at("+t+"): "+step.spline.at(t).y);
+						// FIXME: not correct, should be spline.yAtX(t)
+						return step.interpolate( step.from, step.to,
+							step.spline.at(t).y );
+					} else 
+						return step.interpolate( step.from, step.to, t );
 				} else {
 					return step.from;
 				}
