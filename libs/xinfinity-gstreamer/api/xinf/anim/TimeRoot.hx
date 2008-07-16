@@ -22,8 +22,8 @@ class TimeRoot extends TimeContainer {
 	}
 	
 	function enterFrame( e:FrameEvent ) {
-		time = started+(e.frame/Root.getFramerate());
-	//	trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time );
+		time = started+(e.frame*(1./Root.getFramerate()));
+		//trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time+" (started+"+(time-started)+")" );
 		step(time);
 	}
 	
