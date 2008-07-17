@@ -121,7 +121,7 @@ haxelib-test : haxelib
 
 haxelib : $(HAXELIB_PROJECT).zip
 		
-$(HAXELIB_PROJECT).zip: $(NDLL) $(TARGETS) $(HX_SRCS)
+$(HAXELIB_PROJECT).zip: $(NDLL) $(TARGETS) $(HX_SRCS) haxelib.xml
 	-rm -rf $(HAXELIB_ROOT)
 	mkdir -p $(HAXELIB_PROJECT)
 	

@@ -2,6 +2,7 @@
 	see http://xinf.org/copyright for license. */
 
 import Xinf;
+import XinfMedia;
 
 class Viewer {
 
@@ -35,7 +36,7 @@ class Viewer {
 
 	function loaded(e:Svg) {
 		doc=e;
-		trace("loaded "+e);
+		trace("Loaded.");
 		g.appendChild( doc );
 		retransform();
 	}

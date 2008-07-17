@@ -29,7 +29,7 @@ class VideoSource extends Texture {
 	public function new( launch:String ) :Void {
 		super();
 		
-		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32 ! nekobus name=\"output\" sync=false";
+		launch += " ! ffmpegcolorspace ! video/x-raw-rgb, depth=(int)24, bpp=(int)32 ! nekobus name=\"output\" sync=true";
 		trace("Gstreamer Pipeline: "+launch );
 		pipeline = new Pipeline( launch );
 		pipeline.addEventListener( NekobusData.DATA, onData );

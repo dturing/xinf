@@ -1,19 +1,6 @@
+-lib xinfinity-gstreamer
+-lib xinf
 -neko svgviewer.n
 -main Viewer
--lib xinf
 -resource test.svg@test.svg
 -cmd nekotools boot svgviewer.n
-
---next
--swf test.swf
--swf-version 9
--swf-header 640:480:25:aaaaaa
--main Viewer
--lib xinf
--resource test.svg@test.svg
-
---next
--js test.js
--main Viewer
--lib xinf
--resource test.svg@test.svg
