@@ -195,9 +195,8 @@ class Animation extends TimedAttributeSetter {
 				if( step.interpolate!=null ) {
 					if( step.spline!=null ) {
 //						trace("at("+t+"): "+step.spline.at(t).y);
-						// FIXME: not correct, should be spline.yAtX(t)
 						return step.interpolate( step.from, step.to,
-							step.spline.at(t).y );
+							step.spline.yAtX( t ) );
 					} else 
 						return step.interpolate( step.from, step.to, t );
 				} else {
