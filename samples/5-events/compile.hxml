@@ -1,7 +1,6 @@
 -neko test.n
 -main Example
 -lib xinf
---override
 
 --next
 -swf test.swf

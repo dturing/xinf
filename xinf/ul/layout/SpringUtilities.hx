@@ -10,7 +10,7 @@ import xinf.ul.layout.Spring;
 
 #if flash9
 typedef SpringHack = Dynamic
-#else true
+#else
 typedef SpringHack = Spring
 #end
 

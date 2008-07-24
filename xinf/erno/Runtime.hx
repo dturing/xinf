@@ -112,10 +112,10 @@ class Runtime extends SimpleEventDispatcher {
 					throw("unable to load Xinfinity Renderer '"+name+"': "+e );
 				}
 			}
-		#else js
+		#elseif js
 			_renderer = new xinf.erno.js.JSRenderer();
 			_runtime = new xinf.erno.js.JSRuntime();
-		#else flash
+		#elseif flash
 			_renderer = new xinf.erno.flash9.Flash9Renderer();
 			_runtime = new xinf.erno.flash9.Flash9Runtime();
 		#end

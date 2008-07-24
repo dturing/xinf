@@ -6,11 +6,11 @@ package xinf.erno;
 #if flash
 	typedef NativeObject = flash.display.DisplayObject
 	typedef NativeContainer = flash.display.DisplayObjectContainer
-#else js
+#elseif js
 	import js.Dom;
 	typedef NativeObject = js.HtmlDom
 	typedef NativeContainer = js.HtmlDom
-#else true
+#else
 	/**
 		NativeObject is a typedef that is defined depending on the runtime you compile for.
 		<ul>

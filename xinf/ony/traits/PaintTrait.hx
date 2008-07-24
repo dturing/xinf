@@ -23,7 +23,7 @@ class PaintTrait extends TypedTrait<Paint> {
 			
 			// SVG colors
 			#if no-svg-colors
-			#else true
+			#else
 			colorNames.set( "aliceblue", RGBColor(240/255,248/255,255/255));
 			colorNames.set( "antiquewhite", RGBColor(250/255,235/255,215/255));
 			colorNames.set( "aqua", RGBColor(0/255,255/255,255/255));
@@ -192,7 +192,7 @@ class PaintTrait extends TypedTrait<Paint> {
 			#end
 
 			#if notango
-			#else true
+			#else
 				colorNames.set( "yellow", RGBColor(0xfc/255,0xe9/255,0x4f/255) );
 				colorNames.set( "orange", RGBColor(0xfc/255,0xaf/255,0x3e/255) );
 				colorNames.set( "green", RGBColor(0x73/255,0xd2/255,0x16/255) );
@@ -217,7 +217,7 @@ class PaintTrait extends TypedTrait<Paint> {
 	}
  
 	override public function parse( value:String ) :Dynamic {
-		var v:Paint;
+		var v:Paint = null;
 		
 		if( value==null ) {
 			return null;

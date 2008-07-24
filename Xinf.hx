@@ -51,7 +51,7 @@ typedef Crop = xinf.ony.Crop
 //tmp, for doc
 typedef Binding = xinf.xml.Binding;
 
-#else true
+#else
 typedef Svg = xinf.ony.erno.Svg
 typedef Element = xinf.ony.erno.Element
 typedef Group = xinf.ony.erno.Group

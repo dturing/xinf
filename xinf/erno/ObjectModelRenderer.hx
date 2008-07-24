@@ -31,10 +31,10 @@ import xinf.erno.Renderer;
 
 #if neko
 typedef Primitive = xinf.inity.GLObject
-#else js
+#elseif js
 import js.Dom;
 typedef Primitive = js.HtmlDom
-#else true
+#else
 typedef Primitive = Dynamic
 #end
 

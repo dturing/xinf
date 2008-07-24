@@ -34,9 +34,9 @@ class ImageData extends SimpleEventDispatcher {
 			must be a power of two.
 		**/
 		public var theight(default,null):Int;
-	#else js
+	#elseif js
 		public var url(default,null):String;
-	#else flash9
+	#elseif flash9
 		public var bitmapData(default,null):flash.display.BitmapData;
 	#end
 
@@ -81,9 +81,9 @@ class ImageData extends SimpleEventDispatcher {
 	public static function load( url:String ) :ImageData {
 		#if neko
 			return( xinf.inity.Texture.newByName( url ) );
-		#else js
+		#elseif js
 			return( new xinf.erno.js.JSImageData(url) );
-		#else flash
+		#elseif flash
 			if( StringTools.startsWith( url, "library://" ) ) {
 				return( new xinf.erno.flash9.InternalImageData(url.substr(10)) );
 			} else {

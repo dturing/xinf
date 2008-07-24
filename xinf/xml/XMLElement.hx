@@ -86,8 +86,8 @@ class XMLElement extends Node,
 	*/
 	public function new( ?traits:Dynamic ) :Void {
 		super();
-		_traits = Reflect.empty();
-		_ptraits = Reflect.empty();
+		_traits = { };
+		_ptraits = { };
 		listeners = new Hash<List<Dynamic->Void>>();
 		if( traits!=null ) setTraitsFromObject(traits);
 	}
@@ -136,7 +136,7 @@ class XMLElement extends Node,
 	/* Traits functions */
 
 	public function clearPresentationTraits() {
-		_ptraits = Reflect.empty();
+		_ptraits = { };
 	}
 
 	function cacheTrait<T>( name:String, v:Dynamic, type:Class<T> ) :T {
@@ -270,7 +270,7 @@ class XMLElement extends Node,
 	function getTraitDefinition( _name:String ) :TraitDefinition {
 		var name = StringTools.replace( StringTools.replace(_name,"-","_"), ":", "__" );
 		var cl:Class<Dynamic> = Type.getClass( this );
-		var t:TraitDefinition;
+		var t:TraitDefinition=null;
 		while( t==null && cl!=null ) {
 			t = getClassTrait( cl, name );
 			cl = Type.getSuperClass(cl);

@@ -85,9 +85,9 @@ class TextFormat {
 	
 	#if neko
 	public var font:xinf.inity.font.Font;
-	#else flash
+	#elseif flash
 	public var format:flash.text.TextFormat;
-	#else js
+	#elseif js
 	public function apply( to:js.HtmlDom ) :Void;
 	#end
 	
@@ -95,9 +95,9 @@ class TextFormat {
 	public static function create( ?family:String, ?size:Float, ?bold:Bool, ?italic:Bool) :TextFormat {
 		#if neko
 			return new xinf.inity.font.XTextFormat(family,size,bold,italic);
-		#else flash
+		#elseif flash
 			return new xinf.erno.flash9.Flash9TextFormat(family,size,bold,italic);
-		#else js
+		#elseif js
 			return new xinf.erno.js.JSTextFormat(family,size,bold,italic);
 		#end
 	}

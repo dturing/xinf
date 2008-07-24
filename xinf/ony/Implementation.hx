@@ -6,7 +6,7 @@ package xinf.ony;
 #if xinfony_null
 typedef ElementImpl = xinf.ony.Element
 typedef GroupImpl = xinf.ony.Group
-#else true
+#else
 typedef ElementImpl = xinf.ony.erno.Element
 typedef GroupImpl = xinf.ony.erno.Group
 #end

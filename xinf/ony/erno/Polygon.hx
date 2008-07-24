@@ -19,7 +19,7 @@ class Polygon extends xinf.ony.Polygon  {
 			var p0 = ps.next();
 			g.startPath( p0.x, p0.y );
 			
-			var p:TPoint;
+			var p:TPoint=null;
 			while( ps.hasNext() ) {
 				p = ps.next();
 				g.lineTo( p.x, p.y );

@@ -14,13 +14,13 @@ class Concatenate implements Transform {
 		this.b = b;
 	}
 	
-	public function getTranslation() {
+	public function getTranslation() :TPoint {
 		return new Matrix( getMatrix() ).getTranslation();
 	}
-	public function getScale() {
+	public function getScale() :TPoint {
 		return new Matrix( getMatrix() ).getScale();
 	}
-	public function getMatrix() {
+	public function getMatrix() :TMatrix {
 		var m = new Matrix( a.getMatrix() ).multiply( b.getMatrix() );
 		return m;
 	}

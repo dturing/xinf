@@ -83,7 +83,7 @@ class FocusManager {
 	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
 		#if flash9
-		#else true
+		#else
 		/* key repeat */
 		if( e.type == KeyboardEvent.KEY_DOWN ) {
 			repeat = e;

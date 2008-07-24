@@ -27,13 +27,13 @@ class Matrix implements Transform {
 		}
 	}
 
-	public function getTranslation() {
+	public function getTranslation() :TPoint {
 		return { x:tx, y:ty };
 	}
-	public function getScale() {
+	public function getScale() :TPoint {
 		return { x:a, y:d };
 	}
-	public function getMatrix() {
+	public function getMatrix() :TMatrix {
 		return this;
 	}
 

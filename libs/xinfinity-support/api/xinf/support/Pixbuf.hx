@@ -88,7 +88,7 @@ extern class Pixbuf {
 					var data2 = StringTools.replace( data, "%PATH%", p2 );
 					var data2 = StringTools.replace( data2, "%EXT%", ext );
 					// trace("LOADERS: "+ fileName+":\n"+data2);
-					out.write(data2);
+					out.writeString(data2);
 					out.close();
 				} catch(e:Dynamic) {
 					throw("Could not create gdk-pixbuf loaders file. Image loading will not work: "+e);

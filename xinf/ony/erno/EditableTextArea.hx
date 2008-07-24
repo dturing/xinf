@@ -58,7 +58,7 @@ class EditableTextArea extends TextArea {
 					}
 					replaceSelection("");
 				default:
-					replaceSelection( Std.chr(e.code) );
+					replaceSelection( String.fromCharCode(e.code) );
 			}
 		} else if( e.code==13 ) {
 			replaceSelection( "\n" );
@@ -195,7 +195,7 @@ class EditableTextArea extends TextArea {
 		var line = lines[l];
 		var x=0.;
 		var text = line.text;
-		var g;
+		var g=null;
 		while( x<pos.x && offset<text.length ) {
 			g = format.font.getGlyph( text.charCodeAt(offset), format.size );
 			x += g.advance;
@@ -228,7 +228,7 @@ class EditableTextArea extends TextArea {
 	
 }
 
-#else true
+#else
 
 typedef EditableTextArea = TextArea;
 

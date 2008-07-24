@@ -25,7 +25,7 @@ class Root {
 			untyped mRoot.ownerDocument.set_base("");
 			
 			#if xinfony_null
-			#else true
+			#else
 				var r = new xinf.ony.erno.Root();
 //				untyped r.construct();
 				r.appendChild( mRoot );

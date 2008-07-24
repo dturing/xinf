@@ -31,7 +31,7 @@ class RadialGradient extends xinf.ony.RadialGradient, implements PaintServer {
 			var bbox = target.getBoundingBox();
 			var t = new Concatenate(
 							new Scale( bbox.r-bbox.l, bbox.b-bbox.t ),
-							new Translate( bbox.l, bbox.t ) ).getMatrix();
+							new Translate( bbox.l, bbox.t ) );
 			if( transform!=null ) transform = new Concatenate( transform, t );
 			else transform = t;
 		}

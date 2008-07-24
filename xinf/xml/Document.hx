@@ -102,7 +102,7 @@ class Document extends XMLElement {
 		all (static) bindings.
 	*/
 	public function unmarshal( xml:Xml, ?parent:Node ) :Node {
-		var r:Node;
+		var r:Node=null;
 		
 		// TODO: for now, we ignore the namespace (there is none from haxe xml),
 		// and just search all known bindings for the localName

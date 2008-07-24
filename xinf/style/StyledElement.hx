@@ -28,7 +28,7 @@ class StyledElement extends XMLElement {
 	*/
 	public function new( traits:Dynamic ) {
 		super(traits);
-		_matchedStyle = Reflect.empty();
+		_matchedStyle = { };
 		styleClasses = new Hash<Bool>();
 	}
 
@@ -192,7 +192,7 @@ class StyledElement extends XMLElement {
 		var css = StyleSheet.DEFAULT;
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) css = ownerDocument.styleSheet;
 		clearPresentationTraits();
-		_matchedStyle = Reflect.empty();
+		_matchedStyle = { };
 		var match = css.match(this);
 		if( match!=null ) {
 			StyleParser.fromObject( match, this, _matchedStyle );

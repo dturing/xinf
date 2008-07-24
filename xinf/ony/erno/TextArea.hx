@@ -169,7 +169,7 @@ class TextArea extends xinf.ony.TextArea {
 	
 }
 
-#else flash9
+#elseif flash9
 
 import xinf.ony.type.Editability;
 import xinf.ony.type.Paint;
@@ -213,7 +213,7 @@ class TextArea extends xinf.ony.TextArea {
 		//tf.embedFonts = true;  FIXME handle this somehow good..
 		if( editable != None ) {
 			tf.selectable = true;
-			tf.type = "input";
+			tf.type = flash.text.TextFieldType.INPUT;
 			tf.condenseWhite = false;
 		} else {
 			tf.selectable = false;
@@ -235,7 +235,7 @@ class TextArea extends xinf.ony.TextArea {
 	
 }
 
-#else js
+#elseif js
 
 import xinf.ony.type.Editability;
 import xinf.ony.type.Paint;

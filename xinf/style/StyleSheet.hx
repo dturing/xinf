@@ -68,7 +68,7 @@ class StyleSheet {
 		Add a single StyleRule to the end of this StyleSheet.
 	*/
 	public function add( rule:StyleRule ) {
-		var s = Reflect.empty();
+		var s = { };
 		for( field in Reflect.fields(rule.style) ) {
 			var field2 = StringTools.replace( field, "_", "-" );
 			Reflect.setField( s, field2, Reflect.field(rule.style,field) );
@@ -116,7 +116,7 @@ class StyleSheet {
 		}
 		
 		// consolidate
-		var r = Reflect.empty();
+		var r = { };
 		for( style in a ) {
 			for( field in Reflect.fields(style) ) {
 				Reflect.setField( r, field,

@@ -129,7 +129,7 @@ class URL {
 
 			if( protocol=="resource" ) {
 				var rname = if( host!=null ) host+path+filename else path+filename;
-				var data = Std.resource( rname );
+				var data = haxe.Resource.getString( rname );
 				if( data==null ) throw("Resource not found: "+rname );
 				onData( data );
 				return;

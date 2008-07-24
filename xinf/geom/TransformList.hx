@@ -23,13 +23,13 @@ class TransformList implements Transform {
 		}
 	}
 	
-	public function getTranslation() {
+	public function getTranslation() :TPoint {
 		return m.getTranslation();
 	}
-	public function getScale() {
+	public function getScale() :TPoint {
 		return m.getScale();
 	}
-	public function getMatrix() {
+	public function getMatrix() :TMatrix {
 		return m;
 	}
 	

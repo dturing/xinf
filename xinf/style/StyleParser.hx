@@ -38,7 +38,7 @@ class StyleParser {
 		[{ style:"red", stroke:"#f00" }].
 	**/
 	public static function parseToObject( text:String ) :Dynamic {
-		var to = Reflect.empty();
+		var to = { };
 		text = comment.replace(text,"");
 		var properties = split.split(text);
 		for( prop in properties ) {

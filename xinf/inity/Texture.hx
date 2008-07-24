@@ -113,7 +113,7 @@ class Texture extends ImageData {
 		try {
 			var r = cache.get(url);
 			if( r==null ) {
-				var data:String;
+				var data:String=null;
 				var u = url.split("://");
 				if( u.length == 1 ) {
 					// local file
@@ -131,7 +131,7 @@ class Texture extends ImageData {
 							} else
 								data = neko.io.File.getContent( u[1] );
 						case "resource":
-							data = Std.resource(u[1]);
+							data = haxe.Resource.getString(u[1]);
 						case "http":
 							data = haxe.Http.request(url);
 						default:
@@ -146,7 +146,7 @@ class Texture extends ImageData {
 				cache.set(url,r); // FIXME
 				
 				// trigger LOADED at next frame
-				var l:Dynamic;
+				var l:Dynamic=null;
 				l = xinf.erno.Runtime.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
 					xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
 					r.postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, r ) );

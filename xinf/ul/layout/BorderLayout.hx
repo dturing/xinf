@@ -24,11 +24,11 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
 	}
 	
 	public function layoutContainer( parent:Container ) {
-		var N:Component;
-		var E:Component;
-		var S:Component;
-		var W:Component;
-		var C:Component;
+		var N:Component=null;
+		var E:Component=null;
+		var S:Component=null;
+		var W:Component=null;
+		var C:Component=null;
 		
 		for( c in parent.getComponents() ) {
 			var con = getConstraints( c );
