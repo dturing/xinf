@@ -170,7 +170,7 @@ class StyledElement extends XMLElement {
 	// like when the CSS changes, or inherited values
 	// but it resets animation-set trait values...
 	// -- introduce another trait cache, animationTraits?
-//		clearPresentationTraits();
+		clearPresentationTraits();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);

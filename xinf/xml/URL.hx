@@ -106,8 +106,10 @@ class URL {
 	public function fetch( onData:String->Void, ?onError:String->Void ) {
 	
 		if( onError==null ) {
+			var self=this;
 			onError = function(e) { 
-				trace("Error fetching document '+this+':\n"+haxe.Stack.toString(haxe.Stack.exceptionStack()));
+				trace("Error fetching document '"+self+"': "+e+"\n"
+					+haxe.Stack.toString(haxe.Stack.exceptionStack()));
 				#if neko
 					neko.Sys.exit(-1);
 				#end

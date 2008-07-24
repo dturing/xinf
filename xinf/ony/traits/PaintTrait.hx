@@ -299,7 +299,7 @@ class PaintTrait extends TypedTrait<Paint> {
 	}
 
 	/** Set the R, G and B components from an integer (like 0x00ff00 for green) **/
-	private static function fromRGBInt( c:Int ) :Paint {
+	public static function fromRGBInt( c:Int ) :Paint {
 		var r = ((c&0xff0000)>>16)/0xff;
 		var g = ((c&0xff00)>>8)/0xff;
 		var b =  (c&0xff)/0xff;

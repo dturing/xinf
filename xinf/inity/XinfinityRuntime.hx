@@ -99,6 +99,7 @@ class XinfinityRuntime extends Runtime {
 
 	override public function setBackgroundColor( r:Float, g:Float, b:Float, ?a:Float ) :Void {
 		bgColor = { r:r, g:g, b:b, a:a };
+		changed();
 	}
 
 	override public function setFramerate( rate:Float ) :Void {
