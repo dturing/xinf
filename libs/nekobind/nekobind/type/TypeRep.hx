@@ -2,13 +2,13 @@
 	see http://xinf.org/copyright for license. */
 
 package nekobind.type;
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 
 class VoidType extends TypeRep {
 	public function new() :Void {
 		super(null,"Void","void");
 	}
-	public function cReturn( c:String ) :String {
+	override public function cReturn( c:String ) :String {
 		return( c+"; return val_null;" );
 	}
 }
@@ -24,11 +24,11 @@ class NumericType extends TypeRep {
 		super(n,hx,c);
 	}
 // "number" for everything...
-	public function asNeko() :String {
+	override public function asNeko() :String {
 		return "number";
 	}
 	// ...except alloc_
-	public function cNekoAlloc( c:String ) :String {
+	override public function cNekoAlloc( c:String ) :String {
 		return( "alloc_"+nekoRep+"( "+c+" )" );
 	}
 }
@@ -39,13 +39,13 @@ class StringType extends TypeRep {
 		super("string","String","const char*");
 	}
 
-	public function cCheckAssign( c:String, n:String ) :String {
+	override public function cCheckAssign( c:String, n:String ) :String {
 		return(
 				"if( val_is_object("+n+") ) "
 				+n+" = val_field("+n+",val_id(\"__s\")); "
 				+super.cCheckAssign( c, n ) );
 	}
-	public function cNekoAlloc( c:String ) :String {
+	override public function cNekoAlloc( c:String ) :String {
 		return( "alloc_"+nekoRep+"( (const char *)"+c+" )" );
 	}
 }
@@ -62,14 +62,14 @@ class FriendClassType extends TypeRep {
 		super("abstract",className,cStruct);
 	}
 
-	public function cCheckAssign( c:String, n:String ) :String {
+	override public function cCheckAssign( c:String, n:String ) :String {
 		return(
 				n+" = val_field( "+n+", val_id(\""+primitive+"\") );"
 				+"check_"+className+"( "+n+" ); "
 				+cStruct+" "+c+" = val_"+className+"("+n+");\n" );
 	}
 	
-	public function cNekoAlloc( c:String ) :String {
+	override public function cNekoAlloc( c:String ) :String {
 		return( "alloc_"+className+"( "+c+" )" );
 	}
 }
@@ -78,10 +78,10 @@ class DynamicType extends TypeRep {
 	public function new() :Void {
 		super(null,"Dynamic","void*");
 	}
-	public function cCheckAssign( c:String, n:String ) :String {
+	override public function cCheckAssign( c:String, n:String ) :String {
 		return( "value "+c+" = "+n+";" );
 	}
-	public function cNekoAlloc( c:String ) :String {
+	override public function cNekoAlloc( c:String ) :String {
 		return( c );
 	}
 }
@@ -99,7 +99,7 @@ class CPtrType extends TypeRep {
 		super("cptr","Dynamic",type+"*");
 	}
 
-	public function cCheckAssign( c:String, n:String ) :String {
+	override public function cCheckAssign( c:String, n:String ) :String {
 		var r = asC()+" "+c+"; ";
 		if( nullAllowed ) r += "if( "+n+" == val_null ) "+c+"=NULL; else { ";
 			r += "val_check("+n+", string ); ";
@@ -111,7 +111,7 @@ class CPtrType extends TypeRep {
 		return r;
 	}
 
-	public function cNekoAlloc( c:String ) :String {
+	override public function cNekoAlloc( c:String ) :String {
 		return( "val_throw( alloc_string(\"nekobind functions cannot return cptrs\") )" );
 	}
 }

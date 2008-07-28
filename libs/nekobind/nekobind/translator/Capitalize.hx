@@ -8,7 +8,7 @@ class Capitalize extends Translator {
 		// this constructor is needed!
 		super();
 	}
-	public function translate( src:String ) :String {
+	override public function translate( src:String ) :String {
 		var dst = src.charAt(0).toUpperCase() + src.substr(1,src.length);
 		return dst;
 	}

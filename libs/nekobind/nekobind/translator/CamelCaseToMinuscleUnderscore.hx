@@ -8,7 +8,7 @@ class CamelCaseToMinuscleUnderscore extends Translator {
 		// this constructor is needed!
 		super();
 	}
-	public function translate( src:String ) :String {
+	override public function translate( src:String ) :String {
 		var dst = new StringBuf();
 		var l = src.toLowerCase();
 		var lastWasCapital:Bool = false;

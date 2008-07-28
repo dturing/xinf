@@ -3,7 +3,7 @@
 
 package nekobind;
 
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 
 class App {
 	var found:Bool;

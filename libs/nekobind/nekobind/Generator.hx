@@ -5,7 +5,7 @@ package nekobind;
 
 import nekobind.translator.Translator;
 import nekobind.type.TypeRep;
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 
 typedef FriendClass = {
 	cStruct:String,
@@ -43,11 +43,11 @@ class Generator {
 	private static var _String:TypeRep = new StringType();
 	private static var _Dynamic:TypeRep = new DynamicType();
 	
-	public function getType( type:Type ) :TypeRep {
+	public function getType( type:CType ) :TypeRep {
 		var r:TypeRep;
 		
 		switch( type ) {
-			case TEnum(name,p):
+			case CEnum(name,p):
 				switch( name ) {
 					case "Void":
 						r = _Void;
@@ -56,7 +56,7 @@ class Generator {
 					default:
 						throw("unhandled Enum: "+name);
 				}
-			case TClass(name,p):
+			case CClass(name,p):
 				switch( name ) {
 					case "String":
 						r = _String;
@@ -71,9 +71,9 @@ class Generator {
 						} else 
 							throw("unknown class: "+name );
 				}
-			case TDynamic(t):
+			case CDynamic(t):
 				r = _Dynamic;
-			case TAnonymous(args):
+			case CAnonymous(args):
 				r = _Dynamic;
 			default:
 				throw("unhandled Type: "+type );
@@ -122,12 +122,12 @@ class Generator {
 		}
 	}
 
-	public function resolveType( e:Type ) :TypeRep {
+	public function resolveType( e:CType ) :TypeRep {
 		return( getType(e) );
 	}
 
-	public function resolveTypes( src:List<{ name:String, opt:Bool, t:Type }>, funcSettings:Settings ) :Array<{ name:String, opt:Bool, t:Type, r:TypeRep }> {
-		var dst = new Array<{ name:String, opt:Bool, t:Type, r:TypeRep }>();
+	public function resolveTypes( src:List<{ name:String, opt:Bool, t:CType }>, funcSettings:Settings ) :Array<{ name:String, opt:Bool, t:CType, r:TypeRep }> {
+		var dst = new Array<{ name:String, opt:Bool, t:CType, r:TypeRep }>();
 		for( s in src ) {
 			var r = funcSettings.argTypes.get(s.name);
 			if( r==null ) r = resolveType(s.t);
@@ -144,15 +144,15 @@ class Generator {
 	}
 	
 	public function iterateArguments( 
-				args:Array<{ name:String, opt:Bool, t:Type, r:TypeRep }>,
-				f :String->Bool->Type->TypeRep->Bool->Void ) {
+				args:Array<{ name:String, opt:Bool, t:CType, r:TypeRep }>,
+				f :String->Bool->CType->TypeRep->Bool->Void ) {
 		var i=args.iterator(); var arg;
 		while( (arg=i.next()) != null ) {
 			f( arg.name, arg.opt, arg.t, arg.r, !i.hasNext() );
 		}
 	}
 
-	public function handleFunction( f:ClassField, args:Array<{ name:String, opt:Bool, t:Type, r:TypeRep }>, ret:TypeRep, functionSettings:Settings ) {
+	public function handleFunction( f:ClassField, args:Array<{ name:String, opt:Bool, t:CType, r:TypeRep }>, ret:TypeRep, functionSettings:Settings ) {
 	}
 
 	public function handleStaticVarClass( field:ClassField, className:String ) :Void {
@@ -168,7 +168,7 @@ class Generator {
 			parseSettings( functionSettings, field.doc );
 			
 			switch( field.type ) {
-				case TFunction(a,ret):
+				case CFunction(a,ret):
 					handleFunction(field,resolveTypes(a,functionSettings),resolveType(ret),functionSettings);
 				default:
 			}
@@ -181,9 +181,9 @@ class Generator {
 			functionSettings.isStatic=true;
 			
 			switch( field.type ) {
-				case TFunction(a,ret):
+				case CFunction(a,ret):
 					handleFunction(field,resolveTypes(a,functionSettings),resolveType(ret),functionSettings);
-				case TClass(name,params):
+				case CClass(name,params):
 					handleStaticVarClass( field, name );
 				default:
 			}
