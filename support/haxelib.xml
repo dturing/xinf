@@ -1,9 +1,10 @@
 <project name="xinf" url="http://xinf.org/" license="LGPL">
+    <user name="dturing"/>
     <user name="dfischer"/>
     <description>xinf is not flash: cross-runtime, cross-platform graphics.</description>
     <version name="__VERSION__">Beta</version>
-    <depends name="cptr"/>
+    <depends name="cptr" version="1.0"/>
     <depends name="opengl" version="0.2.0"/>
-    <depends name="xinfinity-support"/>
+    <depends name="xinfinity-support" version="0.5.0"/>
     <depends name="openvg" version="0.2.0"/>
 </project>

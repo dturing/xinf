@@ -6,6 +6,7 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 import xinf.erno.TextFormat;
 import xinf.event.SimpleEvent;
+import xinf.geom.Types;
 
 class Text extends xinf.ony.Text {
 	
@@ -20,7 +21,7 @@ class Text extends xinf.ony.Text {
 		format = null;
 	}
 
-	override public function draw( g:Renderer ) :Void {
+	function assureFormat() {
 		if( format==null ) {
 			var family = fontFamily;
 			var size = fontSize;
@@ -28,12 +29,11 @@ class Text extends xinf.ony.Text {
 			format = TextFormat.create( if(family!=null) family.list[0] else null, size ); 
 			format.assureGlyphs( text, format.size );
 		}
-		
-		super.draw(g);
 	}
 
 	override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
+		assureFormat();
 		if( text!=null ) {
 			switch( textAnchor ) {
 				case Start:
@@ -48,5 +48,23 @@ class Text extends xinf.ony.Text {
 			}
 		}
 	}
-	
+
+	function alignment() :Float {
+		return
+			switch( textAnchor ) {
+				case Start:  0.;
+				case Middle: 0.5;
+				case End:    1.0;
+			}
+	}
+
+	override public function getBoundingBox() : TRectangle {
+		if( text==null ) return { l:x, t:y, r:x, b:y };
+		assureFormat();
+		var b = format.textSize(text);
+		var yy = y-format.ascender();
+		var xx = x-(b.x*alignment());
+		return { l:xx, t:yy, r:xx+b.x, b:yy+b.y };
+	}
+
 }

@@ -1,8 +1,8 @@
 #######################################################
 
 PROJECT:=xinf
-VERSION:=0.4.2.99
-TAGLINE:=the phantastic phour
+VERSION:=0.5
+TAGLINE:=Short Circuit (1986)
 
 DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
 REVISION:=$(shell svnversion)

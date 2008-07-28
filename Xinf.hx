@@ -24,7 +24,7 @@ typedef UIEvent = xinf.event.UIEvent
 typedef LinkEvent = xinf.event.LinkEvent
 
 typedef Document = xinf.xml.Document
-typedef Node = xinf.xml.Node;
+typedef Node = xinf.xml.Node
 
 typedef Root = xinf.ony.Root
 
@@ -72,13 +72,13 @@ typedef Link = xinf.ony.Link
 typedef Crop = xinf.ony.erno.Crop
 #end
 
-typedef TraitAccess = xinf.traits.TraitAccess;
-typedef FloatTrait = xinf.traits.FloatTrait;
-typedef IntTrait = xinf.traits.IntTrait;
-typedef StringTrait = xinf.traits.StringTrait;
-typedef LengthTrait = xinf.ony.traits.LengthTrait;
+typedef TraitAccess = xinf.traits.TraitAccess
+typedef FloatTrait = xinf.traits.FloatTrait
+typedef IntTrait = xinf.traits.IntTrait
+typedef StringTrait = xinf.traits.StringTrait
+typedef LengthTrait = xinf.ony.traits.LengthTrait
 
-typedef Length = xinf.ony.type.Length;
-typedef Paint = xinf.ony.type.Paint;
-typedef PreserveAspectRatio = xinf.ony.type.PreserveAspectRatio;
-typedef TextAnchor = xinf.ony.type.TextAnchor;
+typedef Length = xinf.ony.type.Length
+typedef Paint = xinf.ony.type.Paint
+typedef PreserveAspectRatio = xinf.ony.type.PreserveAspectRatio
+typedef TextAnchor = xinf.ony.type.TextAnchor
