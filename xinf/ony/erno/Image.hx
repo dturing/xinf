@@ -46,7 +46,8 @@ class Image extends xinf.ony.Image {
 	
 	function resolve() :Void {
 		var url:URL; var b=base;
-//		trace("load img "+href+" base "+b+", in "+this );
+		if( href==null ) return;
+
 		if( b!=null ) url = new URL(b).getRelativeURL( href );
 		else url = new URL(href);
 		
