@@ -1,9 +1,9 @@
 #ifndef _DTOR_LOCK
 #define _DTOR_LOCK
 
-#include "context.h"
+#import <neko.h>
 
-extern _clock *VGPath_dtorLock;
-extern _clock *VGPaint_dtorLock;
+extern mt_lock *VGPath_dtorLock;
+extern mt_lock *VGPaint_dtorLock;
 
 #endif
