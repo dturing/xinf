@@ -1,5 +1,6 @@
 <project name="cptr" url="http://xinf.org/trac/wiki/NekoCPtr" license="LGPL">
     <user name="dfischer"/>
+    <user name="dturing"/>
     <description>Library for accessing neko strings as plain C pointers to floating-point or integer types</description>
-    <version name="0.1.0">Beta</version>
+    <version name="1.0">Stable</version>
 </project>
