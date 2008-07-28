@@ -1,5 +1,6 @@
 <project name="openvg" url="http://xinf.org/trac/wiki/NekoOpenVG" license="LGPL">
+    <user name="dturing"/>
     <user name="dfischer"/>
     <description>neko/haXe binding for OpenVG/ShivaVG</description>
-    <version name="0.2.0">Alpha</version>
+    <version name="0.2.0">Beta</version>
 </project>
