@@ -43,7 +43,7 @@ class Schedule<T> {
 			first=cue;
 		} else {
 			var c=first;
-			var last;
+			var last = null;
 			while( c!=null && c.time<=cue.time ) {
 				last=c;
 				c=c.next;

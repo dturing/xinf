@@ -40,7 +40,7 @@ class FlatPath {
 
 	public function flatten( segments:Iterable<PathSegment> ) :Void {
 		var last:TPoint = { x:0., y:0. };
-		var first:TPoint;
+		var first:TPoint = { x:0., y:0. };
 		
 		for( segment in segments ) {
 			switch( segment ) {

@@ -20,7 +20,7 @@ private class SimpleRoot {
 		var _imax = MAX_ITER;
 		
 		var x0:Float;
-		var x1:Float;
+		var x1:Float = 0.;
 		var x2:Float;
 		var y0:Float;
 		var y1:Float;

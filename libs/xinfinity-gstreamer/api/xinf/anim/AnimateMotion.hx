@@ -46,7 +46,7 @@ class AnimateMotion extends TimedAttributeSetter {
 	var transform:Transform;
 	
 	function createIterator() {
-		var segments:Iterable<PathSegment>;
+		var segments:Iterable<PathSegment> = null;
 		for( child in childNodes ) {
 			if( Std.is( child, MPath ) ) {
 				var mpath:MPath = cast(child);

@@ -26,7 +26,7 @@ class KeySplineTrait extends TypedTrait<KeySplines> {
 		return ks;
 	}
 	
-	public function getDefault() :Dynamic {
+	override public function getDefault() :Dynamic {
 		return null;
 	}
 

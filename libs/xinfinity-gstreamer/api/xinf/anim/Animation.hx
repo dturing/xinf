@@ -155,7 +155,9 @@ class Animation extends TimedAttributeSetter {
 		} else {
 			var coveredLength = 0.;
 			for( i in 0...(vals.length-1) ) {
-				var begin; var end; var spline;
+				var begin = 0.;
+				var end = 0.;
+				var spline = null;
 				if( totalLength!=null ) {
 					// paced
 					var l = targetDefinition.distance( vals[i], vals[i+1] );
