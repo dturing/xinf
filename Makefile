@@ -31,13 +31,14 @@ test : $(VERSION_STUB) $(SRC)
 doc/haxedoc-mod/haxedoc : doc/haxedoc-mod/Main.hx doc/haxedoc-mod/HtmlPrinter.hx
 	cd doc/haxedoc-mod && haxe haxedoc.hxml
 	
-doc : $(VERSION_STUB) $(SRC) doc/haxedoc-mod/haxedoc
+doc : $(VERSION_STUB) $(SRC) #doc/haxedoc-mod/haxedoc
 	haxe $(HAXEFLAGS) -D xinfony_null -neko doc.n -xml doc/xinf.xml Xinf
 	cd doc/consolidate && haxe -neko Consolidate.n -main Consolidate
 	cd doc/consolidate && neko Consolidate.n ../xinf.xml
 	cd doc && xsltproc package-index.xsl consolidate/out.xml > package-index.xml
 	cd doc && xsltproc class-hierarchy.xsl xinf.xml > class-hierarchy.html
-	cd doc && haxedoc-mod/haxedoc xinf.xml
+	#cd doc && haxedoc-mod/haxedoc xinf.xml
+	cd doc && haxedoc xinf.xml
 	
 flash : $(SRC)
 	haxe $(HAXEFLAGS) -resource test.svg@test.svg -swf test.swf -swf-header 640:480:25:ffffff -swf-version 9 -main XinfTest

@@ -23,7 +23,7 @@ class Viewer {
 		Root.appendChild(g);
 		
 		if( url==null ) {
-			Document.instantiate( Std.resource("test.svg"), loaded, Svg );
+			Document.instantiate( haxe.Resource.getString("test.svg"), loaded, Svg );
 		} else {
 			Document.load( url, loaded );
 		}
@@ -89,8 +89,8 @@ class Viewer {
 	}
 		
 	function onMouseDown( check:MouseEvent ) {
-		var upL:Dynamic;
-		var moveL:Dynamic;
+		var upL:Dynamic=null;
+		var moveL:Dynamic=null;
 		var old = offset;
 		var self = this;
 		moveL= Root.addEventListener( MouseEvent.MOUSE_MOVE, function(e) {

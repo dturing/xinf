@@ -27,11 +27,32 @@ class XinfTest {
 			"twelve",
 			"thirteen"
 		].iterator());
-		
+
+		var tm = xinf.ul.model.SimpleListModel.create([
+			{ a:"foo", b:"bar", c:"baz" },
+			{ a:"qux", b:"quux", c:"quuux" },
+			{ a:"snirf", b:"snarf", c:"snorf" },
+		].iterator());
+
+		for( i in 0...1000 ) {
+			tm.addItem( 
+				{ a:""+i, b:"foo", c:"bar" } );
+		}
+
+		var tdef = [
+			{ name:"a", title:"A", width:50. },
+			{ name:"b", title:"B", width:50. },
+			{ name:"c", title:"C", width:100. },
+		];
+
 		var c = new xinf.ul.Interface();
 		c.layout = xinf.ul.layout.FlowLayout.Vertical5;
 		c.captureRoot();
-		
+
+		var t = new xinf.ul.list.Table(tm,tdef);
+		c.appendChild(t);
+
+/*
 		var l = new xinf.ul.widget.Label( "Hello, World!" );
 		c.appendChild(l);
 
@@ -52,7 +73,7 @@ class XinfTest {
 		
 		var d = new xinf.ul.widget.Dropdown(lm);
 		c.appendChild(d);
-
+*/
 		c.relayout();
 	}
 	
