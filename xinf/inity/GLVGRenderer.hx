@@ -32,6 +32,11 @@ class GLVGRenderer extends GLRenderer {
 	var fill:Paint;
 	var stroke:Paint;
 
+	function rotatePoint( p:{x:Float,y:Float}, phi:Float ) :{x:Float,y:Float} {
+		return { x: (Math.cos(phi)*p.x) + (-Math.sin(phi)*p.y),
+				 y: (Math.sin(phi)*p.x) + (Math.cos(phi)*p.y) };
+	}
+
 	function setGradientParameters( paint:Paint, _stops:Iterable<TGradientStop>, spread:Int ) {
 		var stops = Lambda.array(_stops);
 		var vg_stops = CPtr.float_alloc( stops.length*5 );

@@ -77,7 +77,6 @@ class GLObject {
 		children.push(child);
 		child.parent = this;
 		child.update();
-	//	if( child.boundingBox != null ) mergeBBox( child.boundingBox );
 	}
 	
 	public function clear() :Void {

@@ -18,37 +18,9 @@ import cptr.CPtr;
 typedef Primitive = GLObject
 
 class GLRenderer extends ObjectModelRenderer {
-	
-	private var circle_fill:Int;
-	private var circle_stroke:Int;
 
 	public function new() :Void {
 		super();
-	}
-
-	// helper functions for ellipse and arcTo,
-	// might move somewhere else (might be needed for flash too!)
-
-	static var ELLIPSE_SEGMENTS:Int = 4;
-	static var ELLIPSE_ANGLE:Float = ( Math.PI*2 ) / ELLIPSE_SEGMENTS;
-	
-	function rotatePoint( p:{x:Float,y:Float}, phi:Float ) :{x:Float,y:Float} {
-		return { x: (Math.cos(phi)*p.x) + (-Math.sin(phi)*p.y),
-				 y: (Math.sin(phi)*p.x) + (Math.cos(phi)*p.y) };
-	}
-
-	function ellipseSegment( cx:Float, cy:Float, rx:Float, ry:Float, phi:Float, theta:Float, dTheta:Float ) {
-		var a1 = theta + dTheta/2;
-		var a2 = theta + dTheta;
-		var f = Math.cos( dTheta/2 );
-		
-		var p1 = { x: Math.cos(a1)*rx / f, y: Math.sin(a1)*ry / f };
-		var p2 = { x: Math.cos(a2)*rx, y: Math.sin(a2)*ry };
-		p1 = rotatePoint(p1,phi);
-		p2 = rotatePoint(p2,phi);
-		
-	  //  quadraticTo( cx+p1.x, cy+p1.y, cx+p2.x, cy+p2.y );
-		lineTo( cx+p2.x, cy+p2.y );
 	}
 
 	function applyFill() :Bool {
@@ -207,40 +179,6 @@ class GLRenderer extends ObjectModelRenderer {
 		}
 	}
 
-	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
-		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
-		
-		startShape();
-		
-		if( rx==0 || ry==0 ) {
-			throw("rounded rectangle needs radii > 0");
-		}
-		
-		startPath( x+rx, y );
-		for( i in 0...ELLIPSE_SEGMENTS ) {
-			lineTo(x + w - rx, y);
-			arcTo(x+w-rx,y,rx, ry, 0, false, true, x + w, y + ry);
-			lineTo(x + w, y + h - ry);
-			arcTo(x+w,y+h-ry,rx, ry, 0, false, true, x + w - rx, y + h);
-			lineTo(x + rx, y + h);
-			arcTo(x+rx,y+h,rx, ry, 0, false, true, x, y + h - ry);
-			lineTo(x, y + ry);
-			arcTo(x,y+ry,rx, ry, 0, false, true, x + rx, y); 
-		}
-		endPath();
-		endShape();
-	}
-
-	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
-		startShape();
-		startPath( x+rx, y );
-		for( i in 0...ELLIPSE_SEGMENTS ) {
-			ellipseSegment( x, y, rx, ry, 0, ELLIPSE_ANGLE*i, ELLIPSE_ANGLE );
-		}
-		endPath();
-		endShape();
-	}
- 
 	override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
 		format.assureLoaded();
 		var font = format.font;
