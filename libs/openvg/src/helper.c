@@ -33,3 +33,55 @@ value vgGetPathBounds( VGPath path ) {
 	return r;
 }
 
+
+#include "sh/shPath.h"
+
+/* freeware point-in-poly algorithm
+   Copyright (c) 1995-1996 Galacticomm, Inc.
+   http://www.visibone.com/inpoly/inpoly.c */
+   
+VGboolean vgPathHit(VGPath path, double xt, double yt)
+{
+	SHPath *p = (SHPath*)path;
+	int npoints = p->vertices.size;
+	
+	SHVertex *v; 
+	double xnew,ynew;
+	double xold,yold;
+	double x1,y1;
+	double x2,y2;
+	int i;
+	int inside=0;
+
+	if (npoints < 3) {
+		return(0);
+	}
+	xold=p->vertices.items[npoints-1].point.x;
+	yold=p->vertices.items[npoints-1].point.y;
+	for (i=0 ; i < npoints ; i++) {
+		xnew=p->vertices.items[i].point.x;
+		ynew=p->vertices.items[i].point.y;
+		
+		if (xnew > xold) {
+			x1=xold;
+			x2=xnew;
+			y1=yold;
+			y2=ynew;
+		}
+		else {
+			x1=xnew;
+			x2=xold;
+			y1=ynew;
+			y2=yold;
+		}
+		if ((xnew < xt) == (xt <= xold)         /* edge "open" at left end */
+			&& (yt-y1)*(x2-x1)
+			< ((y2-y1)*(xt-x1)) ) {
+			   inside=!inside;
+		}
+		xold=xnew;
+		yold=ynew;
+	}
+	return(inside);
+}
+

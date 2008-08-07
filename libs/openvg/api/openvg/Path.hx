@@ -66,6 +66,9 @@ extern class Path {
 	/* some functions are wrapped in helper.c */
 	public function getPathBounds() :{ l:Float, t:Float, r:Float, b:Float };
 
+	/* some functions are added in helper.c */
+	public function pathHit( x:Float, y:Float ) :Bool;
+
 
 	public static function __init__() : Void {
 		DLLLoader.addLibToPath("openvg");
