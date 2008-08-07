@@ -19,6 +19,8 @@ import xinf.erno.Keys;
 
 class GLEventSource {
 	
+	inline static var preciseHitTest = true;
+	
 	private var frame:Int;
 	private var runtime:XinfinityRuntime;
 	private var currentOver:Int;
@@ -68,7 +70,7 @@ class GLEventSource {
 	public function mouseButton( button:Int, state:Int ) :Void {
 		var pos = GLFW.getMousePosition();
 		
-		var target:Int = runtime.findIdAt(pos.x,pos.y);
+		var target:Int = runtime.findIdAt(pos.x,pos.y,preciseHitTest);
 		button+=1;
 
 		var shift = (GLFW.getKey( GLFW.KEY_LSHIFT ) + GLFW.getKey( GLFW.KEY_RSHIFT ))>0;
@@ -92,7 +94,7 @@ class GLEventSource {
 	}
 	
 	public function mouseMotion( x:Int, y:Int ) :Void {
-		var targetId:Int = runtime.findIdAt(x,y);
+		var targetId:Int = runtime.findIdAt(x,y,preciseHitTest);
 		if( targetId != currentOver ) {
 			if( currentOver!=null ) {
 				postMouseEventTo( x, y, MouseEvent.MOUSE_OUT, currentOver );
@@ -112,7 +114,7 @@ class GLEventSource {
 		wheel=wpos;
 		
 		var pos = GLFW.getMousePosition();
-		var targetId:Int = runtime.findIdAt(pos.x,pos.y);
+		var targetId:Int = runtime.findIdAt(pos.x,pos.y,preciseHitTest);
 		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, targetId );
 		runtime.postEvent( e );
 	}

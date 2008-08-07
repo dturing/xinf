@@ -168,7 +168,7 @@ class GLVGRenderer extends GLRenderer {
 		return true;
 	}
 
-	function drawPath( f:Path->Void ) {
+	function drawPath( f:Path->Void ) :Path {
 		var path = Path.create( VG.PATH_FORMAT_STANDARD, VG.PATH_DATATYPE_F,
 			1,0,0,0, VG.PATH_CAPABILITY_ALL );
 			
@@ -176,6 +176,8 @@ class GLVGRenderer extends GLRenderer {
 		
 		if( applyFill() )   path.draw( VG.FILL_PATH );
 		if( applyStroke() ) path.draw( VG.STROKE_PATH );
+		
+		return path;
 	}
 
    // erno.Renderer API
@@ -192,7 +194,7 @@ class GLVGRenderer extends GLRenderer {
 		if( applyFill() ) path.draw( VG.FILL_PATH );
 		if( applyStroke() ) path.draw( VG.STROKE_PATH );
 
-		current.mergeBBox( path.getPathBounds() );
+		current.addPath( path );
 		
 		path = null;
 	}
@@ -275,24 +277,23 @@ class GLVGRenderer extends GLRenderer {
 	}
 	
 	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
-		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
 		drawPath( function(path) {
 			VGU.rect(path,x,y,w,h);
 		});
+		current.addRectangle( x, y, x+w, y+h );
 	}
 	
 	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
-		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
-		drawPath( function(path) {
+		current.addPath( drawPath( function(path) {
 			VGU.roundRect(path,x,y,w,h,rx*2,ry*2);
-		});
+		}) );
 	}
 
 	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
-		current.mergeBBox( {l:x-rx,t:y-ry,r:x+rx,b:y+ry} );
-		drawPath( function(path) {
+		// FIXME: addEllipse could be more efficient...
+		current.addPath( drawPath( function(path) {
 			VGU.ellipse(path,x,y,rx*2,ry*2);
-		});
+		}) );
 	}
 
 	/* helper functions */

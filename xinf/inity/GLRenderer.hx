@@ -161,7 +161,7 @@ class GLRenderer extends ObjectModelRenderer {
 	}
 	
 	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
-		current.mergeBBox( {l:x,t:y,r:x+w,b:y+h} );
+		current.addRectangle( x, y, x+w, y+h );
 		
 		if( pen.fill != null ) {
 			applyFill();
@@ -193,12 +193,14 @@ class GLRenderer extends ObjectModelRenderer {
 				
 			GL.popMatrix();
 		}
+		// TODO: addRectangle
 	}
 	
 	override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
 		if( img.theight==0 || img.twidth==0 ) return;
 		if( img.theight==null || img.twidth==null ) return;
-		current.mergeBBox( {l:outRegion.x,t:outRegion.y,r:outRegion.x+outRegion.w,b:outRegion.y+outRegion.h} );
+		
+		current.addRectangle( outRegion.x, outRegion.y, outRegion.x+outRegion.w, outRegion.y+outRegion.h );
 	
 		var tx1:Float = (inRegion.x/img.twidth);
 		var ty1:Float = (inRegion.y/img.theight);
@@ -210,7 +212,7 @@ class GLRenderer extends ObjectModelRenderer {
 		var y2:Float = outRegion.h+y;
 
 //		applyFill();
-		GL.color4(1,1,1,1);
+		GL.color4(1,1,1,1); // TODO: opacity
 
 		GL.pushAttrib( GL.ENABLE_BIT );
 			GL.enable( GL.TEXTURE_2D );

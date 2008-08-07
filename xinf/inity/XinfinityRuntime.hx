@@ -278,13 +278,21 @@ class XinfinityRuntime extends Runtime {
 	   HitTest Functions 
 	   ------------------------------------------------------ */
 	   
-	public function findIdAt( x:Float, y:Float ) :Int {
+	public function findIdAt( x:Float, y:Float, precise:Bool=false ) :Int {
 		if( root==null ) return 0;
-		var found = new Array<GLObject>();
+
+		var found = new List<{o:GLObject,p:{x:Float,y:Float}}>();
 		root.hit( {x:x,y:y}, found );
-//		trace("findId("+x+","+y+"): "+found);
+
+		if( precise ) {
+			for( f in found ) {
+				if( f.o.hitPrecise( f.p ) ) return f.o.id;
+			}
+			return -1;
+		}
+
 		if( found.length>0 )
-			return found.pop().id;
+			return found.pop().o.id;
 		else return -1;
 	}
 

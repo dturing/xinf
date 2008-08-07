@@ -7,6 +7,12 @@ import xinf.geom.Types;
 import xinf.geom.Rectangle;
 import xinf.geom.Matrix;
 import opengl.GL;
+import openvg.Path;
+
+enum GLVGContent {
+	CRectangle(l:Float,t:Float,r:Float,b:Float);
+	CPath(p:Path);
+}
 
 class GLObject {
 	
@@ -21,11 +27,14 @@ class GLObject {
 	public var id:Int;
 	public var inner:Int;
 	
+	public var contents:List<GLVGContent>; // for precise hittests
+	
 	public function new( id:Int ) :Void {
 		this.id = id;
 		this.transform = new Matrix().setIdentity();
 		this.boundingBox = null;
 		this.inner = GL.genLists(1);
+		contents = new List<GLVGContent>();
 	}
 
 	public function destroy() :Void {
@@ -82,6 +91,7 @@ class GLObject {
 	public function clear() :Void {
 		children = null;
 		transformedBBox = boundingBox = null;
+		contents = new List<GLVGContent>();
 	}
 	
 	public function mergeBBox( bbox:TRectangle ) :Void {
@@ -121,7 +131,7 @@ class GLObject {
 		}
 	}
 	
-	public function hit( p:TPoint, found:Array<GLObject> ) :Bool {
+	public function hit( p:TPoint, found:List<{ o:GLObject, p:TPoint }> ) :Bool {
 		if( boundingBox==null ) {
 			return false;
 		}
@@ -135,13 +145,31 @@ class GLObject {
 				}
 			}
 			if( !childHit && (children==null || children.length==0 ) )
-				found.push(this);
-//		trace("HIT: "+id );
+				found.push({ o:this, p:transformedPoint });
 			return true;
 		} 
-//		trace("NO HIT: "+id );
-		// if no transformedBBox, we're no hit area.
-		// (this knowledge cloud, if still true, should be stated clearly in docs) FIXME
+		return false;
+	}
+	
+	public function addRectangle( l:Float, t:Float, r:Float, b:Float ) {
+		contents.add( CRectangle(l,t,r,b) );
+		mergeBBox( {l:l,t:t,r:r,b:b} );
+	}
+	
+	public function addPath( path:Path ) {
+		contents.add( CPath(path) );
+		mergeBBox( path.getPathBounds() );
+	}
+	
+	public function hitPrecise( tp:TPoint ) :Bool {
+		for( c in contents ) {
+			switch( c ) {
+				case CRectangle(l,t,r,b):
+					if( tp.x>=l && tp.x<=r && tp.y>=t && tp.y<=b ) return true;
+				case CPath(path):
+					if( path.pathHit( tp.x, tp.y ) ) return true;
+			}
+		}
 		return false;
 	}
 	
@@ -150,3 +178,4 @@ class GLObject {
 	}
 	
 }
+
