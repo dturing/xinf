@@ -42,7 +42,7 @@ class Component extends StyledElement {
 				line-increment: 18.;
 			}
 			
-			.Container, .Interface, .ListView {
+			.Container, .Interface {
 				padding: 3;
 			}
 
@@ -73,7 +73,13 @@ class Component extends StyledElement {
 				min-height: 75px;
 				padding: 6 3;
 			}
-			
+
+			.Table {
+				min-width: 300px;
+				min-height: 375px;
+				padding: 6 3;
+			}
+
 			.VScrollbar {
 				skin: ;
 			}
