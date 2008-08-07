@@ -6,6 +6,10 @@ package xinf.ony.erno;
 import xinf.erno.Renderer;
 
 class Rectangle extends xinf.ony.Rectangle  {
+
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
 	
 	override public function drawContents( g:Renderer ) :Void {
 		if( width<=0 || height<=0 ) return;

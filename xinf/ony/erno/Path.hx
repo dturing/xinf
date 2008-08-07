@@ -8,6 +8,10 @@ import xinf.ony.type.PathSegment;
 
 class Path extends xinf.ony.Path  {
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 		if( segments==null ) return;

@@ -23,4 +23,8 @@ class Crop extends GroupImpl {
 	function get_height() :Float { return getTrait("height",Float); }
 	function set_height( v:Float ) :Float { redraw(); return setTrait("height",v); }
 
+	private function new( ?traits:Dynamic ) {
+		super(traits);
+	}
+
 }

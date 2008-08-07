@@ -34,7 +34,7 @@ class Element extends xinf.ony.Element {
 		return( manager.find(id) );
 	}
 	
-	public function new( ?traits:Dynamic ) :Void {
+	private function new( ?traits:Dynamic ) :Void {
 		super( traits );
 		xid=null;
 	//	xid = Runtime.runtime.getNextId();

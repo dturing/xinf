@@ -11,6 +11,10 @@ import xinf.ony.type.Display;
 
 class Group extends xinf.ony.Group {
 	
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override function destroy() :Void {
 		// destroy all children
 		/* FIXME maybe yes? 

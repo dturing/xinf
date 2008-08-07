@@ -147,8 +147,7 @@ class Element extends StyledElement {
 		return super.set_id(v); 
 	}
 
-	/** the Element's transformation **/
-	public function new( ?traits:Dynamic ) :Void {
+	private function new( ?traits:Dynamic ) :Void {
 		super( traits );
 		styleClasses = new Hash<Bool>();
 	}

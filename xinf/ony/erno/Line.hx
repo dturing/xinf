@@ -7,6 +7,10 @@ import xinf.erno.Renderer;
 
 class Line extends xinf.ony.Line  {
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 		g.startShape();

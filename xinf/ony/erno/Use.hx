@@ -12,6 +12,10 @@ class Use extends xinf.ony.Use {
 	var wrapper:Null<Int>;
 	var cycleLock:Bool;
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override function set_peer(v:ElementImpl) :ElementImpl {
 		clone = cast(v.cloneNode(true));
 		clone.parentElement = this;

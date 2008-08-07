@@ -14,6 +14,10 @@ class Image extends xinf.ony.Image {
 
 	public var bitmap(default,set_bitmap):ImageData;
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override function set_href( v:String ) :String { 
 		setTrait("href",v);
 		resolve();

@@ -244,6 +244,10 @@ class TextArea extends xinf.ony.TextArea {
 
 	var format:TextFormat;
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override public function drawContents( g:Renderer ) :Void {
 		super.drawContents(g);
 		

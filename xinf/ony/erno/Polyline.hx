@@ -8,6 +8,10 @@ import xinf.geom.Types;
 
 class Polyline extends xinf.ony.Polyline  {
 
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+	}
+
 	override public function drawContents( g:Renderer ) :Void {
 		if( points==null ) return;
 		var ps = points.iterator();
