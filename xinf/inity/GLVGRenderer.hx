@@ -186,6 +186,8 @@ class GLVGRenderer extends GLRenderer {
 
 		if( applyFill() ) path.draw( VG.FILL_PATH );
 		if( applyStroke() ) path.draw( VG.STROKE_PATH );
+
+		current.mergeBBox( path.getPathBounds() );
 		
 		path = null;
 	}

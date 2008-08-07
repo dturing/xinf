@@ -15,7 +15,7 @@ package openvg;
 		/>
 	<nekobind:cHeader>
 		#include &lt;vg/openvg.h&gt;
-		#include "dtorlock.h"
+		#include "helper.h"
 	</nekobind:cHeader>
 **/
 
@@ -54,13 +54,7 @@ extern class Path {
 		</nekobind> **/
 	// NYI public function pointAlongPath( startSegment:Int, numSegments:Int,
 	//								distance:Float, x:String, y:String, tangentX:String, tangentY:String ) :Void;
-	/** <nekobind>
-		<cptr name="minX" type="float" min-size="1"/>
-		<cptr name="minY" type="float" min-size="1"/>
-		<cptr name="width" type="float" min-size="1"/>
-		<cptr name="height" type="float" min-size="1"/>
-		</nekobind> **/
-	public function pathBounds( minX:String, minY:String, width:String, height:String ):Void;
+
 	/** <nekobind>
 		<cptr name="minX" type="float" min-size="1"/>
 		<cptr name="minY" type="float" min-size="1"/>
@@ -68,6 +62,10 @@ extern class Path {
 		<cptr name="height" type="float" min-size="1"/>
 		</nekobind> **/
 	public function pathTransformedBounds( minX:String, minY:String, width:String, height:String ):Void;
+
+	/* some functions are wrapped in helper.c */
+	public function getPathBounds() :{ l:Float, t:Float, r:Float, b:Float };
+
 
 	public static function __init__() : Void {
 		DLLLoader.addLibToPath("openvg");

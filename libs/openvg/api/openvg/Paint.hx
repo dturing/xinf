@@ -16,7 +16,7 @@ package openvg;
 		/>
 	<nekobind:cHeader>
 		#include &lt;vg/openvg.h&gt;
-		#include "dtorlock.h"
+		#include "helper.h"
 	</nekobind:cHeader>
 **/
 
