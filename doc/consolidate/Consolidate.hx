@@ -12,19 +12,19 @@ class Package {
 		classes = new Array<Xml>();
 	}
 	
-	public function write( out:neko.io.Output, indent:String ) {
-		if( name=="" ) out.write(indent+"<root>\n");
-		else out.write(indent+'<package path="'+name+'" name="'+name.split(".").pop()+'">\n');
+	public function write( out:haxe.io.Output, indent:String ) {
+		if( name=="" ) out.writeString(indent+"<root>\n");
+		else out.writeString(indent+'<package path="'+name+'" name="'+name.split(".").pop()+'">\n');
 		
 			for( p in packages ) {
 				p.write( out, indent+"  " );
 			}
 			for( c in classes ) {
-				out.write( indent + c.toString() + "\n" );
+				out.writeString( indent + c.toString() + "\n" );
 			}
 		
-		if( name=="" ) out.write(indent+"</root>\n");
-		else out.write(indent+'</package>\n');
+		if( name=="" ) out.writeString(indent+"</root>\n");
+		else out.writeString(indent+'</package>\n');
 	}
 }
 

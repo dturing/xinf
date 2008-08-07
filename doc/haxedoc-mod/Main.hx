@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 
 class Main {
 

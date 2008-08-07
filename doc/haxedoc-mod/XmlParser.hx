@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
 	see http://xinf.org/copyright for license. */
 
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 import haxe.xml.Fast;
 
 class XmlParser {
@@ -243,7 +243,7 @@ class XmlParser {
 	function xclass( x : Fast ) : Classdef {
 		var csuper = null;
 		var doc = null;
-		var dynamic = null;
+		var tdynamic = null;
 		var interfaces = new List();
 		var fields = new List();
 		var statics = new List();
@@ -252,7 +252,7 @@ class XmlParser {
 			case "haxe_doc": doc = c.innerData;
 			case "extends": csuper = xpath(c);
 			case "implements": interfaces.add(xpath(c));
-			case "haxe_dynamic": dynamic = xtype(new Fast(c.x.firstElement()));
+			case "haxe_dynamic": tdynamic = xtype(new Fast(c.x.firstElement()));
 			default:
 				if( c.x.exists("static") )
 					statics.add(xclassfield(c));
@@ -271,7 +271,7 @@ class XmlParser {
 			interfaces : interfaces,
 			fields : fields,
 			statics : statics,
-			dynamic : dynamic,
+			tdynamic : tdynamic,
 			platforms : defplat(),
 		};
 	}
@@ -368,7 +368,7 @@ class XmlParser {
 		};
 	}
 
-	function xtype( x : Fast ) : Type {
+	function xtype( x : Fast ) : CType {
 		return switch( x.name ) {
 		case "unknown":
 			TUnknown;

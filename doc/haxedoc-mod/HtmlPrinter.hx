@@ -1,7 +1,7 @@
 /*  Copyright (c) the Xinf contributors.
 	see http://xinf.org/copyright for license. */
 
-import haxe.rtti.Type;
+import haxe.rtti.CType;
 
 class HtmlPrinter {
 
@@ -225,7 +225,7 @@ class HtmlPrinter {
 	function processTraits( t ) {
 		var traits = new Hash();
 		switch(t) {
-			case TAnonymous( a ):
+			case CAnonymous( a ):
 				for( trait in a ) {
 					traits.set(trait.name,trait.t);
 				}
@@ -262,9 +262,9 @@ class HtmlPrinter {
 			processPath(i.path,i.params);
 			print('</div>');
 		}
-		if( c.dynamic != null ) {
+		if( c.tdynamic != null ) {
 			var d = new List();
-			d.add(c.dynamic);
+			d.add(c.tdynamic);
 			print('<div class="implements">implements ');
 			processPath("Dynamic",d);
 			print('</div>');
@@ -478,17 +478,17 @@ class HtmlPrinter {
 		}
 	}
 
-	function processType( t : Type ) {
+	function processType( t : CType ) {
 		switch( t ) {
-		case TUnknown:
+		case CUnknown:
 			print("Unknown");
-		case TEnum(path,params):
+		case CEnum(path,params):
 			processPath(path,params);
-		case TClass(path,params):
+		case CClass(path,params):
 			processPath(path,params);
-		case TTypedef(path,params):
+		case CTypedef(path,params):
 			processPath(path,params);
-		case TFunction(args,ret):
+		case CFunction(args,ret):
 			if( args.isEmpty() ) {
 				processPath("Void");
 				print(" -> ");
@@ -502,7 +502,7 @@ class HtmlPrinter {
 				print(" -> ");
 			}
 			processTypeFun(ret,false);
-		case TAnonymous(fields):
+		case CAnonymous(fields):
 			print("{ ");
 			var me = this;
 			display(fields,function(f) {
@@ -510,7 +510,7 @@ class HtmlPrinter {
 				me.processType(f.t);
 			},", ");
 			print("}");
-		case TDynamic(t):
+		case CDynamic(t):
 			if( t == null )
 				processPath("Dynamic");
 			else {
