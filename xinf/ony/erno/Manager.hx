@@ -54,7 +54,11 @@ class Manager {
 	private function dispatchToTarget( e:Dynamic ) :Void {
 		if( e.targetId != null ) {
 			var target = find( e.targetId );
-			if( target != null ) target.postEvent( e );
+			e.target = target;
+			if( target != null ) {
+				//trace("dispatch "+e );
+				target.postEvent( e );
+			}
 		}
 	}
 	

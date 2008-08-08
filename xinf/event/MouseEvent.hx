@@ -19,6 +19,7 @@ class MouseEvent extends Event<MouseEvent> {
 	public var y:Float;
 	public var button:Int;
 	public var targetId:Null<Int>;
+	public var target:xinf.ony.Element; // FIXME this hurts xinf.event|xinf.ony orthogonality. Maybe MouseEvent should be in ony?
 	
 	public var shiftMod:Bool;
 	public var altMod:Bool;
@@ -40,6 +41,7 @@ class MouseEvent extends Event<MouseEvent> {
 		if( ctrlMod ) r+="Ctrl+";
 		r+="Button "+button+")";
 		if( targetId != 0 ) r+=" to #"+targetId;
+		if( target != null ) r+=" ("+target+")";
 		return r;
 	}
 	

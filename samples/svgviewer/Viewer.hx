@@ -106,9 +106,11 @@ class Viewer {
 	public static function main() :Void {
 		var arg:String;
 		#if neko
+			neko.Lib.print("Xinf SVG Viewer "+xinf.Version.version+" (r"+xinf.Version.revision+")\n");
 			arg = neko.Sys.args()[0];
 		#end
-		Root.setBackgroundColor(0,0,0,0);
+		Root.setFramerate(60.);
+		Root.setBackgroundColor(1,1,1,0);
 		var d = new Viewer( arg );
 		Root.main();
 	}
