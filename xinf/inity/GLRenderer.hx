@@ -161,8 +161,6 @@ class GLRenderer extends ObjectModelRenderer {
 	}
 	
 	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
-		current.addRectangle( x, y, x+w, y+h );
-		
 		if( pen.fill != null ) {
 			applyFill();
 			GL.rect( x, y, x+w, y+h );
@@ -177,6 +175,7 @@ class GLRenderer extends ObjectModelRenderer {
 				GL.vertex3( x, y, 0. );
 			GL.end();
 		}
+		current.addHitRectangle( x, y, x+w, y+h, pen.width );
 	}
 
 	override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
@@ -193,14 +192,14 @@ class GLRenderer extends ObjectModelRenderer {
 				
 			GL.popMatrix();
 		}
-		// TODO: addRectangle
+		// TODO: addHitRectangle
 	}
 	
 	override public function image( img:ImageData, inRegion:{ x:Float, y:Float, w:Float, h:Float }, outRegion:{ x:Float, y:Float, w:Float, h:Float } ) {
 		if( img.theight==0 || img.twidth==0 ) return;
 		if( img.theight==null || img.twidth==null ) return;
 		
-		current.addRectangle( outRegion.x, outRegion.y, outRegion.x+outRegion.w, outRegion.y+outRegion.h );
+		current.addHitRectangle( outRegion.x, outRegion.y, outRegion.x+outRegion.w, outRegion.y+outRegion.h, 0 );
 	
 		var tx1:Float = (inRegion.x/img.twidth);
 		var ty1:Float = (inRegion.y/img.theight);

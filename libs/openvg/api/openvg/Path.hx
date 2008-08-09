@@ -67,7 +67,7 @@ extern class Path {
 	public function getPathBounds() :{ l:Float, t:Float, r:Float, b:Float };
 
 	/* some functions are added in helper.c */
-	public function pathHit( x:Float, y:Float ) :Bool;
+	public function pathHit( x:Float, y:Float, testFill:Bool, testStroke:Bool ) :Bool;
 
 
 	public static function __init__() : Void {

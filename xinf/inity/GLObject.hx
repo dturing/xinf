@@ -10,8 +10,8 @@ import opengl.GL;
 import openvg.Path;
 
 enum GLVGContent {
-	CRectangle(l:Float,t:Float,r:Float,b:Float);
-	CPath(p:Path);
+	CRectangle(l:Float,t:Float,r:Float,b:Float,pad:Float);
+	CPath(p:Path,fill:Bool,stroke:Bool);
 }
 
 class GLObject {
@@ -94,7 +94,7 @@ class GLObject {
 		contents = new List<GLVGContent>();
 	}
 	
-	public function mergeBBox( bbox:TRectangle ) :Void {
+	function mergeBBox( bbox:TRectangle ) :Void {
 		if( boundingBox==null ) boundingBox = new Rectangle(bbox);
 		else boundingBox.merge(bbox);
 		transformedBBox = null;
@@ -151,23 +151,27 @@ class GLObject {
 		return false;
 	}
 	
-	public function addRectangle( l:Float, t:Float, r:Float, b:Float ) {
-		contents.add( CRectangle(l,t,r,b) );
-		mergeBBox( {l:l,t:t,r:r,b:b} );
+	public function addHitRectangle( l:Float, t:Float, r:Float, b:Float, pad:Float ) {
+		contents.add( CRectangle(l,t,r,b,pad) );
+		mergeBBox( {l:l-pad,t:t-pad,r:r+pad,b:b+pad} );
 	}
 	
-	public function addPath( path:Path ) {
-		contents.add( CPath(path) );
-		mergeBBox( path.getPathBounds() );
+	public function addHitPath( path:Path, fill:Bool, stroke:Float ) {
+		contents.add( CPath(path,fill,stroke>1) );
+		var b = path.getPathBounds();
+		var p = stroke/2;
+		b.l-=p; b.r+=p;
+		b.t-=p; b.b+=p;
+		mergeBBox( b );
 	}
 	
 	public function hitPrecise( tp:TPoint ) :Bool {
 		for( c in contents ) {
 			switch( c ) {
-				case CRectangle(l,t,r,b):
-					if( tp.x>=l && tp.x<=r && tp.y>=t && tp.y<=b ) return true;
-				case CPath(path):
-					if( path.pathHit( tp.x, tp.y ) ) return true;
+				case CRectangle(l,t,r,b,p):
+					if( tp.x>=l-p && tp.x<=r+p && tp.y>=t-p && tp.y<=b+p ) return true;
+				case CPath(path,fill,stroke):
+					if( path.pathHit( tp.x, tp.y, fill, stroke ) ) return true;
 			}
 		}
 		return false;

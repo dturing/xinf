@@ -128,7 +128,10 @@ class GLVGRenderer extends GLRenderer {
 	}
 
 	override function applyStroke() :Bool {
-		if( pen.stroke==null || pen.stroke==xinf.erno.Paint.None ) return false;
+		if( pen.stroke==null || pen.stroke==xinf.erno.Paint.None ) {
+			pen.width=0;
+			return false;
+		}
 		stroke = makePaint( pen.stroke, false );
 		stroke.set( VG.STROKE_PATH );
 	
@@ -174,8 +177,18 @@ class GLVGRenderer extends GLRenderer {
 			
 		f(path);
 		
-		if( applyFill() )   path.draw( VG.FILL_PATH );
-		if( applyStroke() ) path.draw( VG.STROKE_PATH );
+		applyPath( path );
+		
+		return path;
+	}
+	
+	function applyPath( path:Path ) :Path {
+		var fill = applyFill();
+		if( fill ) path.draw( VG.FILL_PATH );
+		var stroke = applyStroke();
+		if( stroke ) path.draw( VG.STROKE_PATH );
+
+		current.addHitPath( path, fill, pen.width );
 		
 		return path;
 	}
@@ -190,12 +203,7 @@ class GLVGRenderer extends GLRenderer {
 	
 	override public function endShape() {
 		if( path==null ) throw("no current Polygon");
-
-		if( applyFill() ) path.draw( VG.FILL_PATH );
-		if( applyStroke() ) path.draw( VG.STROKE_PATH );
-
-		current.addPath( path );
-		
+		applyPath(path);
 		path = null;
 	}
 
@@ -280,20 +288,19 @@ class GLVGRenderer extends GLRenderer {
 		drawPath( function(path) {
 			VGU.rect(path,x,y,w,h);
 		});
-		current.addRectangle( x, y, x+w, y+h );
 	}
 	
 	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
-		current.addPath( drawPath( function(path) {
+		drawPath( function(path) {
 			VGU.roundRect(path,x,y,w,h,rx*2,ry*2);
-		}) );
+		});
 	}
 
 	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
 		// FIXME: addEllipse could be more efficient...
-		current.addPath( drawPath( function(path) {
+		drawPath( function(path) {
 			VGU.ellipse(path,x,y,rx*2,ry*2);
-		}) );
+		});
 	}
 
 	/* helper functions */

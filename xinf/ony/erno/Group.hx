@@ -17,13 +17,13 @@ class Group extends xinf.ony.Group {
 
 	override function destroy() :Void {
 		// destroy all children
-		/* FIXME maybe yes? 
+		// FIXME maybe no? 
 		for( child in mChildren ) {
 			removeChild( child );
 			if( Std.is(child,Element) ) 
 				cast(child).destroy();
 		}
-		*/
+		
 		super.destroy();
 	}
 
