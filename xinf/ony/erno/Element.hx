@@ -39,20 +39,23 @@ class Element extends xinf.ony.Element {
 		xid=null;
 	}
 
-	override function construct() :Void {
+	override function construct() {
+		if( !super.construct() ) return false;
 		if( xid!=null ) throw("constructing an object that is already constructed");
 		xid = Runtime.runtime.getNextId();
 		manager.register( xid, this );
 		redraw();
+		return true;
 	}
 	
-	override function destruct() :Void {
-		//if( xid==null ) throw("destroying an object that is already destroyed");
-		if( xid!=null ) {
-			manager.unregister(xid);
-			xid=null;
-		}
-		super.destruct();
+	override function destruct() {
+		if( !super.destruct() ) return false;
+		
+		if( xid==null ) throw("destroying an object that is already destroyed");
+		
+		manager.unregister(xid);
+		xid=null;
+		return true;
 	}
 
 	/** apply new transformation (position)<br/>

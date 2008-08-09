@@ -15,21 +15,6 @@ class Group extends xinf.ony.Group {
 		super(traits);
 	}
 
-	override public function appendChild( newChild:Node ) :Node {
-		if( newChild.parentElement != null ) {
-		//	trace("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
-			newChild.parentElement.removeChild(newChild);
-		}
-		newChild.construct();
-			
-		return super.appendChild( newChild );
-	}
-
-	override public function removeChild( oldChild:Node ) :Node {
-		oldChild.destruct();
-		return super.removeChild( oldChild );
-	}
-
 	override public function draw( g:Renderer ) :Void {
 		// a group renders its children even if its "visibility:hidden",
 		// but children inherit that property. they might override, though.

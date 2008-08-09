@@ -1,58 +1,78 @@
-/*  Copyright (c) the Xinf contributors.
-	see http://xinf.org/copyright for license. */
-
 import Xinf;
+import xinf.ul.layout.SpringUtilities;
+import xinf.ul.layout.BorderLayout;
+import xinf.ul.widget.Widget;
+import xinf.ul.Component;
 
 class XinfTest {
 	
 	public function new() :Void {
+		xinf.ul.Component.init();
+	
+		var lm = xinf.ul.model.SimpleListModel.create([
+			"one",
+			"two",
+			"three",
+			"four",
+			"five",
+			"six",
+			"seven"
+		].iterator());
+		
+		var c = new xinf.ul.Interface();
+		c.layout = xinf.ul.layout.FlowLayout.Vertical5;
+		c.captureRoot();
+		
+		var l = new xinf.ul.widget.Label( "Hello Xinful, how are you today?" );
+		c.appendChild(l);
 
-		xinf.style.StyleSheet.DEFAULT.parseCSS( "
-			* {
-				fill:none;
-				fill-opacity:.8;
-				stroke-width:30;
-				stroke:black;
-				stroke-opacity:.5;
-			}
-		");
-		var g = new Group();
-		Root.appendChild(g);
-		g.transform = new Translate(50,50);
+		var s = new xinf.ul.widget.Slider( 0, 100, 1 );
+		c.appendChild(s);
+
+		var ed = new xinf.ul.widget.LineEdit();
+		ed.text = "Edit me!";
+		c.appendChild( ed );
 		
-		var path = new Path({ d:"M10,10 L100,0 Q70,50,100,100, C70,70,30,130,0,100 Z" });
-		path.transform = new Translate(100,250);
-		g.appendChild(path);
-	
-		addHover( path );
-	
-		var r = new Rectangle({ x:100, y:100, width:100, height:100 });
-		g.appendChild(r);
-		addHover( r );
+		c.appendChild( xinf.ul.widget.Button.createSimple("Hello", function(){ trace("Hi!"); } ) );
+
+		var l = new xinf.ul.list.ListView(lm);
+		c.appendChild(l);
 		
-		var c = new Circle({ cx:300, cy:100, r:50, stroke_dasharray:"50 10" });
-		g.appendChild(c);
-		addHover( c );
+		var d = new xinf.ul.widget.Dropdown(lm);
+		c.appendChild(d);
+
+		c.relayout();
+		/*
+		*/
+		/*
+		var layout = new xinf.ul.layout.BorderLayout();
+		//var layout = new xinf.ul.layout.SpringLayout();
 		
-		var ellipse = new Ellipse({ cx:300, cy:300, rx:50, ry:30, stroke:"none" });
-		g.appendChild(ellipse);
-		addHover( ellipse );
-	
-	}
-	
-	function addHover( e:Element ) {
-		e.addEventListener( MouseEvent.MOUSE_OVER, function(ev) {
-			//e.fill = 
-			e.stroke = Paint.RGBColor(1.,0,0);
-		});
-		e.addEventListener( MouseEvent.MOUSE_OUT, function(ev) {
-			//e.fill = 
-			e.stroke = Paint.RGBColor(.5,.5,.5);
-		});
+		var c = new xinf.ul.widget.Pane();
+		c.set_size({x:300.,y:300.});
+		var arr = ["one","two","three","four","five"];//,"six","seven","eight","nine"];
+		var borders = [West,North,East,South,Center];
+		var count = 0;
+		for( t in arr ) {
+            var l :Component = if (count%2==0) {
+            	if (count==4) cast(new xinf.ul.widget.CheckBox(t),Component);
+            	else cast(new xinf.ul.widget.Label(t),Component);
+            } else {
+            	cast(new xinf.ul.widget.Button(t),Component);
+            }
+            l.set_size(l.prefSize);
+            layout.setConstraint(l,borders[count++]);
+            c.appendChild(l);
+            
+        }
+		
+        c.layout = layout;
+        c.relayout();
+        Root.appendChild(c.getElement());
+        */
 	}
 	
 	public static function main() :Void {
-		Root.setBackgroundColor(.3,.3,.3,0);
 		var d = new XinfTest();
 		Root.main();
 	}

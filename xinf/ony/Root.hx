@@ -27,7 +27,7 @@ class Root {
 			#if xinfony_null
 			#else
 				var r = new xinf.ony.erno.Root();
-//				untyped r.construct();
+				untyped r.construct();
 				r.appendChild( mRoot );
 				
 				// FIXME: this is crap.

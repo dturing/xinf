@@ -23,6 +23,8 @@ package xinf.xml;
 **/
 class Node implements Serializable {
 
+	var constructed:Bool;
+
 	/* TinySVG1.2 uDOM: 
 		readonly attribute DOMString namespaceURI;
 		readonly attribute DOMString localName;
@@ -104,6 +106,12 @@ class Node implements Serializable {
 	}
 
 	function acquired( newChild:Node ) {
+		if( newChild.parentElement != null ) {
+			throw("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
+//			newChild.parentElement.removeChild(newChild);
+		}
+		if( constructed ) newChild.construct();
+		
 		if( ownerDocument != null )
 			newChild.setOwnerDocument( ownerDocument );
 		newChild.added(this);
@@ -148,6 +156,9 @@ class Node implements Serializable {
 		mChildren.remove( oldChild );
 		oldChild.ownerDocument = null;
 		oldChild.parentElement = null;
+
+		if( constructed ) oldChild.destruct();
+		
 		oldChild.removed(this);
 		return oldChild;
 	}
@@ -193,12 +204,22 @@ class Node implements Serializable {
 		return null;
 	}
 	
-	function construct() :Void {
+	function construct() :Bool {
+		if( constructed ) return false;
+		constructed=true;
+		
+		for( child in mChildren )
+			child.construct();
+		return true;
 	}
 	
-	function destruct() :Void {
+	function destruct() :Bool {
+		if( !constructed ) return false;
+		constructed=false;
+		
 		for( child in mChildren )
 			child.destruct();
+		return true;
 	}
 
 	/**
