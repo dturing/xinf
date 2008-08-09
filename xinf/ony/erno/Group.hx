@@ -17,7 +17,7 @@ class Group extends xinf.ony.Group {
 
 	override function destroy() :Void {
 		// destroy all children
-		// FIXME maybe no? 
+		// FIXME maybe not? 
 		for( child in mChildren ) {
 			removeChild( child );
 			if( Std.is(child,Element) ) 
