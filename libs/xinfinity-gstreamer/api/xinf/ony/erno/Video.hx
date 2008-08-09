@@ -73,7 +73,7 @@ class Video extends xinf.ony.Video {
 		xinf.xml.Document.addToBinding( svgns, "video", Video );
 	}
 }
-#else true
+#else 
 class Video extends xinf.ony.Video {
 }
 #end

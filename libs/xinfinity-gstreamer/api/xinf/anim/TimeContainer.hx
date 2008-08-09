@@ -61,7 +61,7 @@ class TimeContainer extends TimedElement {
 
 	override function step( time:Float ) :Bool {
 		time-=started;
-		trace(""+this+" @"+time );
+//		trace(""+this+" @"+time );
 		sched.callUntil( time, function(f,t) f(t) );
 		for( e in activeElements ) e.resetIteration( time );
 		for( e in activeElements ) e.step( time );

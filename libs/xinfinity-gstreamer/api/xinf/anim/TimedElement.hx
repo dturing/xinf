@@ -82,11 +82,11 @@ class TimedElement extends XMLElement {
 		timeContainer.activate(this);
 		started = t;
 		freezeTime = null;
-		trace("start "+this+" at "+t+"="+(t-started) );
+//		trace("start "+this+" at "+t+"="+(t-started) );
 	}
 	
 	function stop( t:Float ) {
-		trace("stop "+this+" at "+t );
+//		trace("stop "+this+" at "+t );
 		timeContainer.deactivate( this );
 		active = false;
 	}
@@ -146,13 +146,13 @@ class TimedElement extends XMLElement {
 		reschedule();
 	}
 	
-	override function destroy() :Void {
-		stop();
+	override function destruct() :Void {
+		stop(-1);
 		for( h in scheduleHandles ) 
 			timeContainer.unschedule(h);
 		scheduleHandles = new List<Dynamic>();
 		timeContainer.unregister(this);		
-		super.destroy();
+		super.destruct();
 	}
 	
 	function reschedule() {

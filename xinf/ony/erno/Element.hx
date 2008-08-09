@@ -37,32 +37,22 @@ class Element extends xinf.ony.Element {
 	private function new( ?traits:Dynamic ) :Void {
 		super( traits );
 		xid=null;
-	//	xid = Runtime.runtime.getNextId();
-	//	manager.register( xid, this );
-	//	redraw();
-	}
-	
-
-	override function copyProperties( to:Dynamic ) :Void {
-		super.copyProperties(to);
-	//	to.xid = Runtime.runtime.getNextId();
-	//	to.redraw();
 	}
 
-	function construct() :Void {
+	override function construct() :Void {
 		if( xid!=null ) throw("constructing an object that is already constructed");
-	//	trace("construct "+this );
 		xid = Runtime.runtime.getNextId();
 		manager.register( xid, this );
 		redraw();
 	}
 	
-	function destroy() :Void {
+	override function destruct() :Void {
 		//if( xid==null ) throw("destroying an object that is already destroyed");
 		if( xid!=null ) {
 			manager.unregister(xid);
 			xid=null;
 		}
+		super.destruct();
 	}
 
 	/** apply new transformation (position)<br/>

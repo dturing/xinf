@@ -192,6 +192,14 @@ class Node implements Serializable {
 		if( Std.is( parentElement, type ) ) return cast(parentElement);
 		return null;
 	}
+	
+	function construct() :Void {
+	}
+	
+	function destruct() :Void {
+		for( child in mChildren )
+			child.destruct();
+	}
 
 	/**
 		Create a human-readable String representation

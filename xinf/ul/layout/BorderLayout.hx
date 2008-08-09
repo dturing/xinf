@@ -17,9 +17,8 @@ enum Border {
 class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
 	var pad:Float;
 	
-	public function new( ?pad:Float ) :Void {
+	public function new( ?pad:Float=0. ) :Void {
 		super();
-		if( pad==null ) pad=0;
 		this.pad = pad;
 	}
 	
@@ -58,25 +57,25 @@ class BorderLayout extends ConstrainedLayout<Border>, implements Layout {
 		
 		if( N!=null ) {
 			var s = Helper.clampSize( {x:p.x, y:N.prefSize.y}, N );
-			n += s.y;
+			n += s.y+pad;
 			N.set_size( {x:s.x, y:s.y} );
 			N.set_position( {x:tl.x, y:tl.y} );
 		}
 		if( S!=null ) {
 			var sz = Helper.clampSize( {x:p.x, y:S.prefSize.y}, S );
-			s = sz.y;
+			s = sz.y-pad;
 			S.set_size( {x:sz.x, y:sz.y} );
 			S.set_position( {x:tl.x, y:(tl.y+p.y) - s} );
 		}
 		if( W!=null ) {
 			var s = Helper.clampSize( {x:W.prefSize.x, y:(tl.y+p.y) - (n+s)}, W );
-			w += s.x;
+			w += s.x+pad;
 			W.set_size( {x:s.x, y:s.y} );
 			W.set_position( {x:tl.x, y:n} );
 		}
 		if( E!=null ) {
 			var s = Helper.clampSize( {x:E.prefSize.x, y:(tl.y+p.y) - (n+s)}, E );
-			e = s.x;
+			e = s.x-pad;
 			E.set_size( {x:s.x, y:s.y} );
 			E.set_position( {x:(tl.x+p.x) - e, y:n} );
 		}

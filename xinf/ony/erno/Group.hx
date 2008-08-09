@@ -15,32 +15,18 @@ class Group extends xinf.ony.Group {
 		super(traits);
 	}
 
-	override function destroy() :Void {
-		// destroy all children
-		// FIXME maybe not? 
-		for( child in mChildren ) {
-			removeChild( child );
-			if( Std.is(child,Element) ) 
-				cast(child).destroy();
-		}
-		
-		super.destroy();
-	}
-
 	override public function appendChild( newChild:Node ) :Node {
 		if( newChild.parentElement != null ) {
 		//	trace("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
 			newChild.parentElement.removeChild(newChild);
 		}
-		if( Std.is(newChild,Element) )
-			cast(newChild).construct();
+		newChild.construct();
 			
 		return super.appendChild( newChild );
 	}
 
 	override public function removeChild( oldChild:Node ) :Node {
-		if( Std.is(oldChild,Element) ) 
-			cast(oldChild).destroy();
+		oldChild.destruct();
 		return super.removeChild( oldChild );
 	}
 
