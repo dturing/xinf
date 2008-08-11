@@ -50,9 +50,9 @@ class Node implements Serializable {
 	/**
 		An iterator of the child Nodes contained in	this Node.
 	*/
-	public var childNodes(get_childNodes,null) :Iterator<Node>;
-	function get_childNodes() :Iterator<Node> {
-		return mChildren.iterator();
+	public var childNodes(get_childNodes,null) :Iterable<Node>;
+	function get_childNodes() :Iterable<Node> {
+		return mChildren;
 	}
 
 	/**
