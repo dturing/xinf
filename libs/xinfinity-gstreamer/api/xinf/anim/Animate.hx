@@ -22,7 +22,7 @@ class Animate extends Animation {
 		if( !super.step(t) ) return false;
 
 		var cur = aaValue(t-started);
-		trace(""+peer+"."+attributeName+" @"+(Math.round(100*(t-started))/100)+": "+cur );
+//		trace(""+peer+"."+attributeName+" @"+(Math.round(100*(t-started))/100)+": "+cur );
 		setOnTarget(cur);
 		
 		return true;

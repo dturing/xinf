@@ -87,6 +87,7 @@ class Flash9EventSource {
 	}
 	
 	public function mouseWheel( e:flash.events.MouseEvent ) :Void {
+		trace( e );
 		var targetId:Int = findTarget(e);
 		runtime.postEvent( new ScrollEvent( ScrollEvent.SCROLL_STEP, -e.delta, targetId ) );
 		e.stopPropagation();

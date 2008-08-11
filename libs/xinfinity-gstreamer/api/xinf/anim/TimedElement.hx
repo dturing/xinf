@@ -146,13 +146,14 @@ class TimedElement extends XMLElement {
 		reschedule();
 	}
 	
-	override function destruct() :Void {
+	override function destruct() {
+		if( !super.destruct() ) return false;
 		stop(-1);
 		for( h in scheduleHandles ) 
 			timeContainer.unschedule(h);
 		scheduleHandles = new List<Dynamic>();
 		timeContainer.unregister(this);		
-		super.destruct();
+		return true;
 	}
 	
 	function reschedule() {
