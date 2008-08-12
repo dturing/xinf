@@ -192,6 +192,8 @@ class XinfinityRuntime extends Runtime {
 		}
 		*/
 		
+		if( frame==1 ) changed(); // to hide the first-frame font-not-loaded bug.
+		
 		#if profile
 //			xinf.test.Counter.count("frames");
 			if( frame % 50 == 0 ) {
