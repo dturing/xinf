@@ -55,7 +55,7 @@ class TimeContainer extends TimedElement {
 		if( timeContainer!=null ) 
 			r=timeContainer.globalToLocalTime(r);
 		r-=started;
-		trace("global "+t+" - started "+started+" = "+r );
+//		trace("global "+t+" - started "+started+" = "+r );
 		return r;
 	}
 

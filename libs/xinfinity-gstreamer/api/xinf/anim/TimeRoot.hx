@@ -17,12 +17,14 @@ class TimeRoot extends TimeContainer {
 		super(traits);
 		
 		time = 0;
-		started=Date.now().getTime()/1000;
+		started=-.1;//Date.now().getTime()/1000;
 	}
 	
 	function enterFrame( e:FrameEvent ) {
-		time = started+(e.frame*(1./Root.getFramerate()));
-	//	trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time+" (started+"+(time-started)+")" );
+		if( started==-1 ) started = e.time;
+		time = started+e.time;
+		//time = started+(e.frame*(1./Root.getFramerate()));
+		//trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time+" (started+"+(time-started)+")" );
 		step(time);
 	}
 	

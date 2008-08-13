@@ -39,7 +39,6 @@ class TimeTrait extends TypedTrait<Time> {
 	static var wallclock = ~/^wallclock\([\r\n\t ]*(.+)[\r\n\t ]*\)$/;
 	static function parseSingle( value:String ) :Time {
 		value = StringTools.trim(value);
-		
 		if( value=="indefinite" ) {
 			return Time.Indefinite;
 			
@@ -104,9 +103,17 @@ class TimeTrait extends TypedTrait<Time> {
 			var minutes = Std.parseInt( time.matched(2) );
 			var seconds = Std.parseInt( time.matched(4) );
 			var fraction = Std.parseInt( time.matched(6) );
+			if( hours==null ) minutes=0;
+			if( minutes==null ) minutes=0;
+			if( seconds==null ) seconds=0;
+			if( fraction==null ) fraction=0;
+			
 			var zone = time.matched(7);
+			var ofsH = Std.parseInt(time.matched(8));
+			var ofsM = Std.parseInt(time.matched(9));
 			var offset = if( zone=="Z" ) 0
-						 else 60*(Std.parseInt(time.matched(8))*60)+Std.parseInt(time.matched(9));
+						 else if( ofsH!=null && ofsM!=null ) 60*( (ofsH*60)+ofsM )
+						 else 0;
 			var r = new Date(today.getFullYear(),today.getMonth(),today.getDate(),hours,minutes,seconds);
 			var d = Date.fromTime( r.getTime() + fraction + (offset*1000) );
 			return d;
@@ -121,7 +128,8 @@ class TimeTrait extends TypedTrait<Time> {
 		if( value.length==0 ) {
 			return 0;
 		} else if( timeCount.match(value) ) {
-			var v = Std.parseFloat( timeCount.matched(1)+timeCount.matched(2) );
+			var sign = timeCount.matched(1); if( sign==null ) sign="";
+			var v = Std.parseFloat( sign+timeCount.matched(2) );
 			var metric = timeCount.matched(3);
 			switch( metric ) {
 				case "h": v*=3600;

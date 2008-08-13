@@ -196,7 +196,7 @@ class Animation extends TimedAttributeSetter {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
 					if( step.spline!=null ) {
-//						trace("at("+t+"): "+step.spline.at(t).y);
+//						trace("at("+t+"): "+step.spline.yAtX(t).y);
 						return step.interpolate( step.from, step.to,
 							step.spline.yAtX( t ) );
 					} else 
@@ -216,7 +216,7 @@ class Animation extends TimedAttributeSetter {
 			case None:
 				t%simpleDuration;
 		}
-		
+
 		return additiveValue( value( mod/simpleDuration ) );
 	}
 	
@@ -235,7 +235,6 @@ class Animation extends TimedAttributeSetter {
 			trace("no target attribute '"+attributeName+"' on "+peer );
 			return;
 		}
-		
 		originalValue = getFromTarget();
 		createSteps();
 		super.start(t);

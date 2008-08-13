@@ -32,7 +32,7 @@ class Schedule<T> {
 	
 	public function callUntil( time:Float, f:T->Float->Void ) {
 		while( first!=null && first.time<time ) {
-			f(first.value,first.time);
+			f(first.value,time);
 			first = first.next;
 		}
 	}

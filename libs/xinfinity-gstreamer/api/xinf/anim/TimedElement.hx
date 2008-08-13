@@ -98,10 +98,15 @@ class TimedElement extends XMLElement {
 	}
 	
 	function step( time:Float ) :Bool {
+//	trace("Time "+time+", started "+started+", active "+activeDuration );
 		if( time>=started+activeDuration ) {
 			if( fill==Fill.Freeze || fill==Fill.Hold ) {
 				if( freezeTime==null ) freezeTime=started+activeDuration;
 				frozen( freezeTime );
+			} else if( fill==Fill.Remove ) {
+				stop(started+activeDuration);
+				// Self-removal. This is nice for one-shot animations, but probably not what fill="remove" means. FIXME/CHECKME
+				if( parentElement != null ) parentElement.removeChild(this);
 			} else {
 				stop(started+activeDuration);
 			}
@@ -163,7 +168,7 @@ class TimedElement extends XMLElement {
 		scheduleHandles = new List<Dynamic>();
 		
 		// FIXME: begin and end attributes are really TimeLists! and there is no List() Time!
-		trace("schedule "+this+".start at "+begin );
+//		trace("schedule "+this+".start at "+begin+", cont "+timeContainer );
 		scheduleHandles.add( _schedule( begin, start ) );
 		if( end!=null ) scheduleHandles.add( _schedule( end, stop ) );
 		
@@ -211,7 +216,7 @@ class TimedElement extends XMLElement {
 				return timeContainer.schedule(t,f);
 			case WallClock(date):
 				var t = timeContainer.globalToLocalTime(date.getTime()/1000.);
-				trace(""+date+", "+date.getTime()+" == local "+t );
+			// trace(""+date+", "+date.getTime()+" == local "+t );
 				return timeContainer.schedule(
 					t,f);
 			case Indefinite:

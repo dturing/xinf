@@ -14,7 +14,7 @@ class TimedAttributeSetter extends TimedElement {
 	static var TRAITS = {
 		href:new StringTrait(),
 		attributeName:new StringTrait(),
-/*		attributeType:new StringTrait(), - no difference in xinf! DOCME */
+/*		attributeType:new StringTrait(), FIXME.. maybe differ getTrait/getStyleTrait? */
 	}
 
 	public var href(get_href,set_href):String;
@@ -39,7 +39,7 @@ class TimedAttributeSetter extends TimedElement {
 
 	function getFromTarget( ?presentation:Bool ) :Dynamic {
 		if( peer==null || attributeName==null ) return null;
-		return peer.getStyleTrait( attributeName, Dynamic, presentation );
+		return peer.getStyleTrait( attributeName, Dynamic, false, presentation );
 	}
 
 	function resetOnTarget() {
