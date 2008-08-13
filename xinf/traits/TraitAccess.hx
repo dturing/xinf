@@ -6,7 +6,7 @@ package xinf.traits;
 interface TraitAccess {
 	function getTrait<T>( name:String, type:Dynamic, ?presentation:Bool ) :T;
 	function setTrait<T>( name:String, value:T ) :T;
-	function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T;
+	function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool=true, ?presentation:Bool=true ) :T;
 	function setStyleTrait<T>( name:String, value:T ) :T;
 	
 	function setTraitFromString( name:String, value:String, to:Dynamic ) :Void;

@@ -33,7 +33,7 @@ class JSRuntime extends SimpleRuntime {
 	   }
 	   
 	public function step() :Void {
-		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
+		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++, 0 ) ); // FIXME time
 	}
 	
 }

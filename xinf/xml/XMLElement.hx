@@ -28,6 +28,7 @@ class XMLElement extends Node,
 
 	var _traits:Dynamic;
 	var _ptraits:Dynamic;
+	var _cache:Dynamic;
 	var listeners :Hash<List<Dynamic->Void>>;
 	
 	static var TRAITS = {
@@ -88,6 +89,7 @@ class XMLElement extends Node,
 		super();
 		_traits = { };
 		_ptraits = { };
+		_cache = { }
 		listeners = new Hash<List<Dynamic->Void>>();
 		if( traits!=null ) setTraitsFromObject(traits);
 	}
@@ -135,12 +137,12 @@ class XMLElement extends Node,
 	/********************/
 	/* Traits functions */
 
-	public function clearPresentationTraits() {
-		_ptraits = { };
+	public function clearTraitsCache() {
+		_cache = { };
 	}
 
 	function cacheTrait<T>( name:String, v:Dynamic, type:Class<T> ) :T {
-		// resolve specials and cache in ptraits
+		// resolve specials and cache in _cache
 		if( Std.is(v,type) ) {
 		} else if( Std.is(v,SpecialTraitValue) ) {
 			var v2:SpecialTraitValue = cast(v);
@@ -148,7 +150,7 @@ class XMLElement extends Node,
 		} else
 			throw( new TraitTypeException( name, this, v, type ) );
 			
-		Reflect.setField(_ptraits,name,v);
+		Reflect.setField(_cache,name,v);
 		return v;
 	}
 	
@@ -156,8 +158,12 @@ class XMLElement extends Node,
 	public function getTrait<T>( name:String, type:Dynamic, ?presentation:Bool ) :T {
 		var v:T = null;
 		
-		// lookup presentation value
 		if( presentation!=false ) {
+			// lookup cached value
+			v = Reflect.field(_cache,name);
+			if( v!=null ) return v;
+		
+			// lookup presentation value
 			v = Reflect.field(_ptraits,name);
 			if( v!=null ) return v;
 		}
@@ -184,7 +190,7 @@ class XMLElement extends Node,
 	/** see $xinf.traits.TraitAccess::setTrait$ */
 	public function setTrait<T>( name:String, value:T ) :T {
 		Reflect.setField(_traits,name,value);
-		Reflect.setField(_ptraits,name,value);
+		Reflect.setField(_cache,name,value);
 		return value;
 	}
 
@@ -204,7 +210,7 @@ class XMLElement extends Node,
 	}
 
 	/** see $xinf.traits.TraitAccess::getStyleTrait$ */
-	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
+	public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool=true, ?presentation:Bool=true ) :T {
 		return getTrait(name,type,presentation);
 	}
 

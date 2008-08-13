@@ -163,7 +163,7 @@ class XinfinityRuntime extends Runtime {
 	public function step() :Void {
 	
 		// post enter_frame event
-		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++ ) );
+		postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++, time ) );
 		
 		if( somethingChanged ) {
 			//GLUT.postRedisplay();

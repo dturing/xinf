@@ -13,6 +13,7 @@ class Event<T> {
 	public var type(default,null) : EventKind<T>;
 	public var origin:haxe.PosInfos; // FIXME if debug_events
 	public var preventBubble:Bool;
+	public var target:xinf.ony.Element; // FIXME this hurts xinf.event|xinf.ony orthogonality. Maybe MouseEvent should be in ony?
 	
 	public function new( t ) {
 		type = t;

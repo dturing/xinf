@@ -31,6 +31,9 @@ class Viewer {
 		Root.addEventListener( GeometryEvent.STAGE_SCALED, onStageScale );
 		Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		Root.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+		Root.addEventListener( ScrollEvent.SCROLL_STEP, onScroll );
+		
+		xinf.anim.TimeRoot.start();
 	}
 	
 
@@ -102,7 +105,13 @@ class Viewer {
 			Root.removeEventListener( MouseEvent.MOUSE_MOVE, moveL );
 		});
 	}
-	
+
+	function onScroll( e ) {
+		if( e.value<0. ) scale*=1.1;
+		else scale*=0.9;
+		retransform();
+	}
+
 	public static function main() :Void {
 		var arg:String;
 		#if neko

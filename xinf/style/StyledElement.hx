@@ -67,14 +67,15 @@ class StyledElement extends XMLElement {
 		
 		DOCME: move this doc somewhere else?
 	*/
-	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool, ?presentation:Bool ) :T {
-		if( inherit==null ) inherit=true;
-		if( presentation==null ) presentation=true;
-
+	override public function getStyleTrait<T>( name:String, type:Dynamic, ?inherit:Bool=true, ?presentation:Bool=true ) :T {
 		var v:T = null;
 		
-		// lookup presentation value
 		if( presentation!=false ) {
+			// lookup cached value
+			v = Reflect.field(_cache,name);
+			if( v!=null ) return v;
+		
+			// lookup presentation value
 			v = Reflect.field(_ptraits,name);
 			if( v!=null ) return v;
 		}
@@ -166,11 +167,7 @@ class StyledElement extends XMLElement {
 		trigger a call to styleChanged.
 	*/
 	public function styleChanged( ?attribute:String ) :Void {
-	// FIXME: this might be needed in some circumstances,
-	// like when the CSS changes, or inherited values
-	// but it resets animation-set trait values...
-	// -- introduce another trait cache, animationTraits?
-		clearPresentationTraits();
+		clearTraitsCache();
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);
@@ -191,7 +188,7 @@ class StyledElement extends XMLElement {
 	function updateClassStyle() :Void {
 		var css = StyleSheet.DEFAULT;
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) css = ownerDocument.styleSheet;
-		clearPresentationTraits();
+		clearTraitsCache();
 		_matchedStyle = { };
 		var match = css.match(this);
 		if( match!=null ) {

@@ -12,10 +12,12 @@ class FrameEvent extends Event<FrameEvent> {
 	static public var ENTER_FRAME = new EventKind<FrameEvent>("enterFrame");
 
 	public var frame:Int;
+	public var time:Float;
 	
-	public function new( _type:EventKind<FrameEvent>, frame:Int ) {
+	public function new( _type:EventKind<FrameEvent>, frame:Int, time:Float ) {
 		super(_type);
 		this.frame = frame;
+		this.time = time;
 	}
 	
 }
