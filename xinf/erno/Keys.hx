@@ -45,6 +45,7 @@ class Keys {
 			keys.set(opengl.GLFW.KEY_UP,"up");
 			keys.set(opengl.GLFW.KEY_RIGHT,"right");
 			keys.set(opengl.GLFW.KEY_DOWN,"down");
+			keys.set(opengl.GLFW.KEY_ENTER,"\n");
 		#else
 			keys.set(8,"backspace");
 			keys.set(9,"tab");

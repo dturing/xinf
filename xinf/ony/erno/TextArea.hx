@@ -13,6 +13,7 @@ import xinf.erno.TextFormat;
 import xinf.erno.Renderer;
 import xinf.inity.font.Font;
 import xinf.inity.GLRenderer;
+import xinf.event.SimpleEvent;
 
 enum FlowElement {
 	Word( t:String );
@@ -36,7 +37,9 @@ class TextArea extends xinf.ony.TextArea {
 	override function set_text( v:String ) :String { 
 		dirty=true;
 		redraw();
-		return setTrait("text",v); 
+		setTrait("text",v); 
+		postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
+		return v;
 	}
 
 	var format:TextFormat;

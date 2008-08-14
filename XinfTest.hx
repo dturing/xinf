@@ -31,6 +31,9 @@ class XinfTest {
 
 		var ed = new xinf.ul.widget.LineEdit();
 		ed.text = "Edit me!";
+		ed.addEventListener( xinf.ul.widget.LineEdit.TEXT_CHANGED, function(e) {
+				trace( "Input text: "+e );
+			});
 		c.appendChild( ed );
 		
 		c.appendChild( xinf.ul.widget.Button.createSimple("Hello", function(){ trace("Hi!"); } ) );

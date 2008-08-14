@@ -9,6 +9,7 @@ import xinf.erno.Renderer;
 
 import xinf.event.KeyboardEvent;
 import xinf.event.MouseEvent;
+import xinf.event.UIEvent;
 import xinf.geom.Types;
 import xinf.erno.Paint;
 import xinf.ony.type.Editability;
@@ -60,10 +61,12 @@ class EditableTextArea extends TextArea {
 				default:
 					replaceSelection( String.fromCharCode(e.code) );
 			}
-		} else if( e.code==13 ) {
-			replaceSelection( "\n" );
 		} else {
 			switch( e.key ) {
+				case "\n":
+					postEvent( new UIEvent( UIEvent.ACTIVATE ));
+					//trace("ENTER");
+					//replaceSelection( "\n" );
 				case "backspace":
 					if( sel.to==sel.from ) sel.from=sel.to-1;
 					replaceSelection("");
@@ -135,15 +138,15 @@ class EditableTextArea extends TextArea {
 		}
 		if( sel.from<0 ) sel.from=0;
 		if( sel.to<sel.from ) sel.to=sel.from;
-	
+
 		var t = text;
 		if( t==null ) text=str else {
 			var u = t.substr(0,sel.from);
 			u += str;
 			u += t.substr(sel.to, t.length-sel.to);
-			sel.to=sel.from=sel.from+str.length;
 			text=u;
 		}
+		sel.to=sel.from=sel.from+str.length;
 	}
 
 	public function findLeftWordBoundary() :Int {
@@ -220,9 +223,16 @@ class EditableTextArea extends TextArea {
 
 	// draw caret
 		var p = getPositionOfText( sel.from );
-		
 		g.setFill( SolidColor(0,0,0,.5) );
-		g.rect( x+p.x-1, y+p.y, 2, format.size );
+		if( sel.from==sel.to ) {
+			g.rect( x+p.x-1, y+p.y, 2, format.size );
+		} else {
+			var p2 = getPositionOfText( sel.to );
+			if( p2.x<p.x ) {
+				var t=p; p=p2; p2=t;
+			}
+			g.rect( x+p.x, y+p.y, p2.x-p.x, format.size );
+		}
 
 	}
 	

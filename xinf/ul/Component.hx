@@ -83,6 +83,15 @@ class Component extends StyledElement {
 			.VScrollbar {
 				skin: ;
 			}
+
+			.LineEdit {
+				min-width: 100;
+				padding: 5 2 5 2;
+			}
+		
+			.LineEdit.:focus {
+				skin: focus-bright;
+			}
 /*
 			.Label {
 				padding: 6 3 6 3;
@@ -101,14 +110,6 @@ class Component extends StyledElement {
 			
 			.Slider {
 				padding: 5 2 5 2;
-			}
-			
-			.LineEdit {
-				padding: 5 2 5 2;
-			}
-		
-			.LineEdit.:focus {
-				skin: focus-bright;
 			}
 			
 
