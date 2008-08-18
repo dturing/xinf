@@ -186,7 +186,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-		trace("Animation steps: "+steps );
+//		trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {

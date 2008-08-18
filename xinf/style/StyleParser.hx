@@ -14,7 +14,6 @@ import xinf.style.Selector;
 	and rules into xinf types (and intermediate objects).
 */
 class StyleParser {
-	static var comment = ~/\/\*[^\*]*\*\//g;
 	static var split = ~/[ \r\n\t]*;[ \r\n\t]*/g;
 	
 	/** 
@@ -30,6 +29,25 @@ class StyleParser {
 	}
 
 	/**
+		Remove C-style block comments from text.
+	**/
+	
+	public static function removeComments( text:String ) :String {
+		var at=0;
+		while(true) {
+			var from = text.indexOf("/*",at);
+			if( from==-1 ) return text;
+			var to = text.indexOf("*/",from);
+			var t2 = text.substr(0,from);
+			t2+=text.substr(to+2);
+			text=t2;
+			at=from;
+		}
+		return text;
+	}
+	
+
+	/**
 		Parse a single CSS style definition (as found in a "style" attribute)
 		into an dynamic object. The property values are not parsed, but
 		retained as Strings (use fromObject to parse/type them).
@@ -39,7 +57,7 @@ class StyleParser {
 	**/
 	public static function parseToObject( text:String ) :Dynamic {
 		var to = { };
-		text = comment.replace(text,"");
+		text = removeComments(text);
 		var properties = split.split(text);
 		for( prop in properties ) {
 			var p = prop.split(":");
@@ -62,8 +80,7 @@ class StyleParser {
 		[<style type="text/css">] element.
 	**/
 	public static function parseRules( text:String ) :Array<StyleRule> {
-		//trace("should parse style: "+text+", defs "+definitions );
-		text = comment.replace(text,"");
+		text = removeComments(text);
 		
 		var rules = new Array<StyleRule>();
 		
