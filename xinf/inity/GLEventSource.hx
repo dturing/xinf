@@ -14,6 +14,8 @@ import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
 import xinf.event.GeometryEvent;
 import xinf.event.UIEvent;
+import xinf.event.FrameEvent;
+import xinf.ony.Root; // FIXME: violates erno/ony orthogonality
 
 import xinf.erno.Keys;
 
@@ -26,6 +28,10 @@ class GLEventSource {
 	private var currentOver:Int;
 	private var currentDown:Int;
 	private var wheel:Int;
+
+	private static var timer:Dynamic;
+	private static var counter:Int;
+	private static var repeat:String;
 
 	public function new( runtime:XinfinityRuntime ) :Void {
 		frame=0;
@@ -40,19 +46,43 @@ class GLEventSource {
 		GLFW.setMouseWheelFunction( mouseWheel );
 	}
 	
+	public function postKeyRepeat( k:String, code:Int, down:Int ) :Void {
+		if( down>0 ) {
+			if( timer!=null && repeat!=k ) {
+				Root.removeEventListener( FrameEvent.ENTER_FRAME, timer );
+				timer = null;
+			}
+			if( timer == null ) {
+				counter = 0;
+				var self=this;
+				repeat=k;
+				timer = function( e:FrameEvent ) {
+					counter++;
+					if( counter > 8 ) { // && counter%2 == 0 ) {
+						self.postKeyRepeat( k, code, 1 );
+					}
+				}
+				Root.addEventListener( FrameEvent.ENTER_FRAME, timer );
+			}
+			postKeyPress( k, code );
+		} else {
+			if( repeat==k ) {
+				Root.removeEventListener( FrameEvent.ENTER_FRAME, timer );
+				timer = null;
+			}
+			postKeyRelease( k );
+		}
+	}
+
 	public function handleKey( key:Int, down:Int ) :Void {
 		var k = Keys.get(key);
 		if( k==null ) return;
-//			k = String.fromCharCode(key).toLowerCase();
-			
-		if( down>0 ) postKeyPress( k, key );
-		else postKeyRelease( k );
+		postKeyRepeat( k, key, down );
 	}
 
 	public function handleChar( char:Int, down:Int ) :Void {
 		var k = String.fromCharCode(char);
-		if( down>0 ) postKeyPress( k, char );
-		else postKeyRelease( k );
+		postKeyRepeat( k, char, down );
 	}
 
 	public function postKeyPress( key:String, ?code:Int ) :Void {
