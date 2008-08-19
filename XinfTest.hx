@@ -3,6 +3,7 @@ import xinf.ul.layout.SpringUtilities;
 import xinf.ul.layout.BorderLayout;
 import xinf.ul.widget.Widget;
 import xinf.ul.Component;
+import xinf.ul.ValueEvent;
 
 class XinfTest {
 	
@@ -27,12 +28,18 @@ class XinfTest {
 		c.appendChild(l);
 
 		var s = new xinf.ul.widget.Slider( 0, 100, 1 );
+		s.addEventListener( ValueEvent.VALUE, function(e) {
+				trace( "Slider Value: "+e.value );
+			});
 		c.appendChild(s);
 
 		var ed = new xinf.ul.widget.LineEdit();
-		ed.text = "Edit me!";
+		ed.value = "Edit me!";
+		ed.addEventListener( ValueEvent.VALUE, function(e) {
+				trace( "Input Value: "+e.value );
+			});
 		ed.addEventListener( xinf.ul.widget.LineEdit.TEXT_CHANGED, function(e) {
-				trace( "Input text: "+e );
+				trace( "Input TEXT_CHANGED: "+e );
 			});
 		c.appendChild( ed );
 		
@@ -42,6 +49,9 @@ class XinfTest {
 		c.appendChild(l);
 		
 		var d = new xinf.ul.widget.Dropdown(lm);
+		d.addEventListener( ValueEvent.VALUE, function(e) {
+				trace( "Dropdown Value: "+e.value );
+			});
 		c.appendChild(d);
 
 		c.relayout();
@@ -73,6 +83,9 @@ class XinfTest {
         c.relayout();
         Root.appendChild(c.getElement());
         */
+        
+        xinf.ul.Global.addNumeric("Foo",10,0,100,5,function(f:Float){ trace(f); });
+        xinf.ul.Global.addNumeric("Bar",99,-100,100,10,function(f:Float){ trace(f); });
 	}
 	
 	public static function main() :Void {
