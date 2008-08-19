@@ -33,7 +33,7 @@ class SimpleSkin extends Skin {
 				bg.strokeWidth = 0;
 			default:
 				bg.fill = RGBColor(.9,.9,.9);
-				bg.fillOpacity = .8;
+				bg.fillOpacity = .5;
 				bg.stroke = RGBColor(.3,.3,.3);
 				bg.strokeWidth = 1;
 		}

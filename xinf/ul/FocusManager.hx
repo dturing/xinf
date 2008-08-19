@@ -15,10 +15,6 @@ class FocusManager {
 	private static var widgets:Array<Widget>;
 	private static var currentFocus:Int;
 	
-	private static var timer:Dynamic;
-	private static var counter:Int;
-	private static var repeat:KeyboardEvent;
-	
 	public static function setup() :Void {
 		if( widgets==null ) {
 			widgets = new Array<Widget>();
@@ -82,27 +78,6 @@ class FocusManager {
 	}
 	
 	public static function handleKeyboardEvent( e:KeyboardEvent ) :Void {
-		#if flash9
-		#else
-		/* key repeat */
-		if( e.type == KeyboardEvent.KEY_DOWN ) {
-			repeat = e;
-			if( timer == null ) {
-				counter = 0;
-				timer = function( e:FrameEvent ) {
-					counter++;
-					if( counter > 8 && counter%2 == 0 ) {
-						handleKeyboardEvent( repeat );
-					}
-				}
-				Root.addEventListener( FrameEvent.ENTER_FRAME, timer );
-			}
-		} else if( e.type == KeyboardEvent.KEY_UP ) {
-			Root.removeEventListener( FrameEvent.ENTER_FRAME, timer );
-			timer = null;
-		}
-		#end
-		
 		if( widgets==null ) return;
 		
 		if( e.type == KeyboardEvent.KEY_DOWN && e.key == "tab" ) {

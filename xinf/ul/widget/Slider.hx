@@ -15,7 +15,7 @@ import xinf.ul.ValueEvent;
 	Slider (numeric entry) element.
 **/
 
-class Slider extends Widget {
+class Slider extends ValueWidget<Float> {
 	
 	private var slideBar:Container;
 	private var slideThumb:Container;
@@ -28,23 +28,12 @@ class Slider extends Widget {
 	public var max:Float;
 	public var increment:Float;
 	
-	private var _value:Float;
-	public var value(get_value,set_value):Float;
-	
-	public function get_value() :Float {
-		return _value;
-	}
-	
-	public function set_value( v:Float ) :Float {
-		var old = _value;
-		_value = v - (v-(Math.round(v/increment)*increment));
-		if( _value > max ) _value=max;
-		if( _value < min ) _value=min;
-		if( _value != old ) {
-			textElement.text = ""+Math.floor( precision*_value )/precision;
-			postEvent( new ValueEvent<Float>( untyped ValueEvent.VALUE, _value ) );
-		}
-		return _value;
+	override function set_value( _v:Float ) :Float {
+		var v = super.set_value( Math.max(min,Math.min(max, 
+				_v - (_v-(Math.round(_v/increment)*increment))
+			)));
+		textElement.text = ""+Math.floor( precision*v )/precision;
+		return v;
 	}
 	
 	public function get_normalized() :Float {
@@ -65,6 +54,9 @@ class Slider extends Widget {
 		if( max!=null ) this.max = max;
 		if( increment!=null ) this.increment = increment;
 		else increment=(this.max-this.min)/100;
+
+		if( initial==0 || initial==null ) initial=0.;
+		value = initial;
 	
 		group.appendChild( textElement );
 	
@@ -78,9 +70,6 @@ class Slider extends Widget {
 		slideThumb.addStyleClass("SliderThumb");
 		slideThumb.position = { x:0., y:1. };
 		slideBar.appendChild( slideThumb );
-
-		if( initial==0 || initial==null ) initial=0.;
-		value = initial;
 
 		group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );

@@ -8,23 +8,26 @@ import xinf.ul.layout.Helper;
 import xinf.ony.type.Editability;
 import xinf.ul.ValueEvent;
 
-class LineEdit extends Widget {
-	public static var TEXT_CHANGED = new xinf.event.EventKind<ValueEvent<String>>("textChanged");
+class LineEdit extends ValueWidget<String> {
 
-	public var text(get_text,set_text) :String;
-	private var textElement:TextArea;
+	public static var TEXT_CHANGED = new xinf.event.EventKind<ValueEvent<String>>("textChanged");
 	
+	private var textElement:TextArea;
 	var changed:Bool;
 
-	private function get_text() :String {
+	override function get_value() :String {
 		return textElement.text;
 	}
-	
-	private function set_text(t:String) :String {
+
+	override function set_value(t:String) :String {
 		textElement.text = t;
+		return setValueInternal(t);
+	}
+	
+	function setValueInternal(t:String) :String {
 		changed = true;
-		setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
-		return t;
+		setPrefSize( Helper.addPadding( getTextFormat().textSize(t), this ) );
+		return super.set_value(t);
 	}
 	
 	override public function set_size( s:TPoint ) :TPoint {
@@ -41,34 +44,29 @@ class LineEdit extends Widget {
 	public function new( ?traits:Dynamic ) :Void {
 		textElement = new TextArea();
 		super( traits );
+		changed=false;
 
 		textElement.editable = Editability.Simple;
 		group.appendChild( textElement );
 		
 		textElement.addEventListener( SimpleEvent.CHANGED, textChanged );
 		textElement.addEventListener( UIEvent.ACTIVATE, activate );
-		
-//		addEventListener( KeyboardEvent.KEY_DOWN, textElement.onKeyDown );
-//		group.addEventListener( MouseEvent.MOUSE_DOWN, textElement.onMouseDown );
 	}
 	
 	function activate( e:UIEvent ) {
-		postEvent( new ValueEvent<String>( TEXT_CHANGED, text ) );
-		changed=false;
+		textChanged(e);
+		postEvent( new ValueEvent<String>( TEXT_CHANGED, value ) );
 	}
 	
-	function textChanged( e:SimpleEvent ) {
-		changed=true;
-		if( text!=null ) {
-			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
-		}
+	function textChanged( e:Dynamic ) {
+		setValueInternal( textElement.text );
 	}
 
 	override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged(attr);
 		
-		if( text!=null ) {
-			setPrefSize( Helper.addPadding( getTextFormat().textSize(text), this ) );
+		if( value!=null ) {
+			setPrefSize( Helper.addPadding( getTextFormat().textSize(value), this ) );
 		}
 	}
 
@@ -80,7 +78,7 @@ class LineEdit extends Widget {
 
 	override public function blur() :Void {
 		if( changed ) {
-			postEvent( new ValueEvent<String>( TEXT_CHANGED, text ) );
+			postEvent( new ValueEvent<String>( TEXT_CHANGED, value ) );
 			changed=false;
 		}
 		super.blur();
