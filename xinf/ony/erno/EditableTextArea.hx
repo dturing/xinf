@@ -14,6 +14,7 @@ import xinf.geom.Types;
 import xinf.erno.Paint;
 import xinf.ony.type.Editability;
 import xinf.ony.Root;
+import xinf.event.SimpleEvent;
 
 class EditableTextArea extends TextArea {
 
@@ -28,12 +29,7 @@ class EditableTextArea extends TextArea {
 		super(traits);
 		sel = { from:0, to:0 };
 		
-		//addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
-		
-		// FIXME: temporary!
-		//xinf.ony.Root.addEventListener( MouseEvent.MOUSE_MOVE, onMouseDown );
-		//xinf.ony.Root.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 	}
 
 	override public function focus( ?focus:Bool ) {
@@ -51,7 +47,7 @@ class EditableTextArea extends TextArea {
 
 	public function onKeyDown( e:KeyboardEvent ) :Void {
 		if( editable==Editability.None ) return;
-		if( e.code >= 32 && e.code < 127 ) {
+		if( !e.altMod && e.code >= 32 && e.code < 127 ) {
 			switch( e.code ) {
 				case 127: // Del
 					if( sel.from==sel.to ) {
@@ -112,8 +108,30 @@ class EditableTextArea extends TextArea {
 		var p = globalToLocal( {x:1.*e.x, y:1.*e.y } );
 		p.x-=x; p.y-=y;
 		var ofs = getTextPositionAt(p);
-		moveCursor( ofs, false ); // FIXME e.shiftMod );
-//		new Drag<Float>( e, dragSelect, null, e.x );
+		
+		if( e.shiftMod ) {
+			sel.to = ofs;
+			redraw();
+		} else {
+			moveCursor( ofs, false ); // FIXME e.shiftMod );
+			{
+				var movL:Dynamic=null;
+				var upL:Dynamic=null;
+				movL = Root.addEventListener( MouseEvent.MOUSE_MOVE, dragSelect );
+				upL = Root.addEventListener( MouseEvent.MOUSE_UP, function(e) {
+					Root.removeEventListener( MouseEvent.MOUSE_MOVE, movL );
+					Root.removeEventListener( MouseEvent.MOUSE_UP, upL );
+				});
+			}
+		}
+	}
+	
+	function dragSelect( e:MouseEvent ) {
+		var p = globalToLocal( {x:1.*e.x, y:1.*e.y } );
+		p.x-=x; p.y-=y;
+		var ofs = getTextPositionAt(p);
+		sel.to = ofs;
+		redraw();
 	}
 
 	public function selectAll() :Void {
@@ -147,6 +165,8 @@ class EditableTextArea extends TextArea {
 			text=u;
 		}
 		sel.to=sel.from=sel.from+str.length;
+		
+		postEvent( new SimpleEvent( SimpleEvent.CHANGED ) );
 	}
 
 	public function findLeftWordBoundary() :Int {
@@ -205,7 +225,7 @@ class EditableTextArea extends TextArea {
 			offset++;
 		}
 		if( g!=null && x-(g.advance/2) > pos.x ) offset--;
-		if( offset==text.length ) offset-=1;
+//		if( offset==text.length ) offset-=1;
 		
 		offset += lines[l].offset;
 		
@@ -223,7 +243,7 @@ class EditableTextArea extends TextArea {
 
 	// draw caret
 		var p = getPositionOfText( sel.from );
-		g.setFill( SolidColor(0,0,0,.5) );
+		g.setFill( SolidColor(0,0,0,.33) );
 		if( sel.from==sel.to ) {
 			g.rect( x+p.x-1, y+p.y, 2, format.size );
 		} else {
