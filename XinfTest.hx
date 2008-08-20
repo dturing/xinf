@@ -83,9 +83,6 @@ class XinfTest {
         c.relayout();
         Root.appendChild(c.getElement());
         */
-        
-        xinf.ul.Global.addNumeric("Foo",10,0,100,5,function(f:Float){ trace(f); });
-        xinf.ul.Global.addNumeric("Bar",99,-100,100,10,function(f:Float){ trace(f); });
 	}
 	
 	public static function main() :Void {
