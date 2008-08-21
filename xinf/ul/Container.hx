@@ -23,6 +23,12 @@ class Container extends Component {
 		componentChildren = new Array<Component>();
 	}
 	
+	override function onLoad() {
+		super.onLoad();
+		relayout();
+		trace("container::onLoad");
+	}
+	
 	override public function appendChild( newChild:Node ) :Node {
 		super.appendChild( newChild );
 	

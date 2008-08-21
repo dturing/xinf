@@ -29,7 +29,7 @@ class Magic extends Interface {
 		
 		layout = new GridLayout( 2, 3,3, true );
 		
-	//	relayout();
+		relayout();
 	}
 	
 	function createWidget( name:String, type:MagicType ) {
