@@ -92,8 +92,11 @@ class Component extends StyledElement {
 			.LineEdit.:focus {
 				skin: focus-bright;
 			}
-/*
+			
 			.Label {
+				min-width: 20;
+			}
+/*
 				padding: 6 3 6 3;
 				horizontal-align: 0.;
 			}

@@ -88,6 +88,6 @@ class FlowLayout implements Layout {
 			c.position = { x:q.x, y:q.y };
 		}
 
-		parent.setPrefSize( o.get(total,max) );
+		parent.setPrefSize( Helper.addPadding(o.get(total,max),parent) );
 	}
 }
