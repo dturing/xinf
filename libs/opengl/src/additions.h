@@ -15,7 +15,7 @@
    
 ***********************************************************************/
 
-#include <neko/neko.h>
+#include <neko.h>
 #ifdef NEKO_OSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>

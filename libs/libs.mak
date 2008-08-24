@@ -9,7 +9,7 @@
 # platform default, set this to "Mac" or "Windows" (from the environment) for cross-compilation
 NEKO_PLATFORM?=Linux
 
-
+NEKOBIND=../nekobind/bin/nekobind
 
 API_PATH:=api
 BIN_PATH:=bin
@@ -64,7 +64,7 @@ else
 	else
 		CC:=gcc
 		NEKO_CFLAGS:=-fPIC -shared -I/usr/include/neko
-		NEKO_LIBS:=-L/usr/lib -lneko -lz  -ldl
+		NEKO_LIBS:=-L/usr/lib/neko -lneko -lz  -ldl
 	endif
 
 default: $(TARGETS)
@@ -86,11 +86,11 @@ ALL_FLAGS=$(NEKO_CFLAGS) $(NEKO_LIBS) $(PLATFORM_CFLAGS) $(PLATFORM_LIBS) $(PROJ
 
 # rule to generate a c binding class with nekobind
 bind_%.c : api/$(XINF_PKG_PATH)/%.hx $(PROJECT).xml
-	nekobind -c $(PROJECT).xml $(XINF_PKG).$* > $@
+	$(NEKOBIND) -c $(PROJECT).xml $(XINF_PKG).$* > $@
 
 # rule to generate a haxe implementation class with nekobind
 %__impl.hx : api/$(XINF_PKG_PATH)/%.hx $(PROJECT).xml
-	nekobind -i $(PROJECT).xml $(XINF_PKG).$* > $@
+	$(NEKOBIND) -i $(PROJECT).xml $(XINF_PKG).$* > $@
 
 
 # the interface is defined in $(API_PATH)/$(XINF_PKG_PATH)/*.hx

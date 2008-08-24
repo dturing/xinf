@@ -6,12 +6,6 @@ package xinf.ul;
 import Xinf;
 import xinf.ul.Interface;
 import xinf.ul.Component;
-import xinf.ul.ValueEvent;
-import xinf.ul.widget.Label;
-import xinf.ul.widget.LineEdit;
-import xinf.ul.widget.Slider;
-import xinf.ul.widget.CheckBox;
-import xinf.ul.layout.GridLayout;
 
 class Global extends Interface {
 	
@@ -20,7 +14,7 @@ class Global extends Interface {
 	static function getGlobal() {
 		if( global==null ) {
 			global=new Global({ width:300, height:300 });
-			global.layout = new GridLayout( 2, 3,3, true );
+			global.layout = xinf.ul.layout.FlowLayout.Vertical5;
 			global.addStyleClass("global");
 			xinf.ony.Root.appendChild( global.getElement() );
 			Root.addEventListener( GeometryEvent.STAGE_SCALED, global.onStageScaled );
@@ -31,34 +25,35 @@ class Global extends Interface {
 	function onStageScaled( e:GeometryEvent ) {
 		trace(e);
 		size = prefSize;
-		position = { x:e.x-size.x, y:e.y-size.y };
+		position = { x:e.x-size.x, y:(e.y-size.y)/2 };
 	}
 	
 	public static function addNumeric( name:String, v:Float, min:Float, max:Float, ?step:Float, ?f:Float->Void ) {
 		if( v==null ) v=min;
 		if( step==null ) step=(max-min)/100;
 		var s = new Slider( min, max, step );
-		s.value = v;
+		add( s, name, v, f );
+	}
+	
+	public static function add<T>( widget:ValueWidget<T>, name:String, v:T, f:T->Void ) {
+		widget.value = v;
 		if( f!=null )
-			s.addEventListener( ValueEvent.VALUE, function(e) {
-				f( untyped e.value ); // FIXME
+			widget.addEventListener( ValueEvent.VALUE, function(e:ValueEvent<Dynamic>) {
+				f( e.value );
 			});
 		
-		append( name, s );
+		var g = getGlobal();
+		var l = new Label(name);
+		g.appendChild(l);
+		g.appendChild(widget);
+		widgets.set(name,widget);
 	}
 
 	public static function setValue<T>( name:String, value:T ) {
-		throw("nyi");
-	}
-
-	static function append( name:String, c:Component ) {
-		var g = getGlobal();
-		var l = new Label(name);
-//		l.addStyleClass("global");
-		g.appendChild(l);
-		
-//		c.addStyleClass("global");
-		g.appendChild(c);
+		var widget = widgets.get(name);
+		if( widget!=null ) {
+			widget.value = value;
+		}
 	}
 	
 }

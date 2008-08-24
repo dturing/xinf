@@ -1,4 +1,4 @@
-#include <neko/neko.h>
+#include <neko.h>
 #include <gst/gst.h>
 #include <memory.h>
 #include <string.h>
