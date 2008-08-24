@@ -31,6 +31,8 @@ extern class Pixbuf {
 	
 	public function new() :Void;
 
+	public function encode( format:String ) :Dynamic;
+
 	/** <nekobind ctor="true"/>	**/
 	public static function newFromCompressedData( data:Dynamic ) :Pixbuf;
 	/** <nekobind ctor="true"/>	**/

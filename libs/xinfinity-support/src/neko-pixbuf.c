@@ -7,12 +7,13 @@
 #include <string.h>
 
 GdkPixbuf* gdk_pixbuf_new_from_rgb( value _data, int width, int height, int hasAlpha ) {
+	g_type_init();
 	int bytesPerSample = hasAlpha ? 4 : 3;
 	val_check(_data,string);
     if( val_strlen(_data)<sizeof(unsigned char)*width*height*bytesPerSample ) 
 		val_throw(alloc_string("data to small to fit image"));
     return gdk_pixbuf_new_from_data( (const guchar*)val_string(_data), GDK_COLORSPACE_RGB,
-        hasAlpha, 8, width, height, width, NULL, NULL );
+        hasAlpha, 8, width, height, width*bytesPerSample, NULL, NULL );
 }
 
 GdkPixbuf* gdk_pixbuf_new_from_compressed_data( value _data ) {
@@ -62,3 +63,17 @@ value gdk_pixbuf_copy_pixels( GdkPixbuf *pixbuf ) {
     unsigned char *src = gdk_pixbuf_get_pixels(pixbuf);
 	return( copy_string( src, h*stride ) );
 }
+
+value gdk_pixbuf_encode( GdkPixbuf *pixbuf, const char *format ) {
+	GError *err = NULL;
+	gchar *buffer = NULL;
+	gsize buffer_size=0;
+	if( !gdk_pixbuf_save_to_buffer( pixbuf, &buffer, &buffer_size,
+		format, &err, NULL ) ) {
+		val_throw( alloc_string(err->message) );
+	}
+	value r = copy_string(buffer,buffer_size);
+	g_free( buffer );
+	return r;
+}
+

@@ -58,7 +58,7 @@ $(NDLL).ppc: $(C_SRCS) $(C_HEADERS)
 
 else
 	ifeq ($(NEKO_PLATFORM),Windows)
-		CC:=mingw32-gcc
+		CC:=i586-mingw32msvc-gcc
 		NEKO_CFLAGS:=-I/opt/mingw/include -I/opt/mingw/include/neko -DNEKO_WIN
 		NEKO_LIBS:=-shared /opt/mingw/lib/neko.dll
 	else
