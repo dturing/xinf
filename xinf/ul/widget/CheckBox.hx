@@ -9,18 +9,14 @@ import xinf.ul.ValueEvent;
 import xinf.ul.layout.Helper;
 import xinf.ul.FocusManager;
 
-class CheckBox extends Widget {
-
-	public static var CHANGED = new EventKind<ValueEvent<Bool>>("checkboxChange");
+class CheckBox extends ValueWidget<Bool> {
 
 	public var text(get_text,set_text):String;
 	var textElement:Text;
 	var outerRect:Rectangle;
-	var innerRect:Rectangle;
+	var mark:Rectangle;
 	var _mouseUp:Dynamic;
 	var _keyUp:Dynamic;
-
-	public var selected(default,set_selected) :Bool;
 	
 	function get_text() :String {
 		return(text);
@@ -35,19 +31,17 @@ class CheckBox extends Widget {
 		return(t);
 	}
 
-	public function set_selected( sel:Bool ) :Bool {
-		if( sel != selected) {
-			selected = sel;
-			if (sel) {
+	override function set_value( sel:Bool ) :Bool {
+		if( sel != _value ) {
+			if( sel ) {
 				addStyleClass(":select");
-				group.appendChild(innerRect);
+				group.appendChild(mark);
 			} else {
 				removeStyleClass(":select");
-				group.removeChild(innerRect);
+				group.removeChild(mark);
 			}
-			postEvent( new ValueEvent<Bool>( CHANGED, sel ) );
 		}
-		return sel;
+		return super.set_value( sel );
 	}
 
 	override public function set_size( s:TPoint ) :TPoint {
@@ -58,29 +52,29 @@ class CheckBox extends Widget {
 		return super.set_size(s);
 	}
 
-	public function new( text:String ) :Void {
+	public function new( value:Bool, text:String ) :Void {
 		textElement = new Text();
 		outerRect = new Rectangle({ width:13, height:13, x:1, y:1, fill:"gray", stroke:"black", stroke_thickness:1. });
-		innerRect = new Rectangle({ width:8, height:8, x:2, y:5 });
+		mark = new Rectangle({ width:8, height:8, x:2, y:5 });
 		
 		super();
 
 		group.appendChild( textElement );
 		group.appendChild( outerRect );
-		group.appendChild( innerRect );
+		// group.appendChild( mark );
 		
 		this.set_text(text);
 		
 		group.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		
-		selected = false;
+		this.value = value;
 	}
 	
 	override public function styleChanged( ?attr:String ) :Void {
 		super.styleChanged();
 		
-		innerRect.fill = focusColor;
+		mark.fill = focusColor;
 		
 		if( text!=null ) {
 			var s = getTextFormat().textSize(text);
@@ -97,8 +91,7 @@ class CheckBox extends Widget {
 	}
 	
 	function onMouseUp( e:MouseEvent ) {
-		selected = !selected;
-//			postEvent( new ValueEvent( PRESS, value ) );
+		value = !value;
 		
 		removeStyleClass(":press");
 		Root.removeEventListener( MouseEvent.MOUSE_UP, _mouseUp );
@@ -113,7 +106,7 @@ class CheckBox extends Widget {
 				_keyUp = addEventListener( KeyboardEvent.KEY_UP, function(e) {
 					if( e.key==" " ) {
 						self.removeStyleClass(":press");
-						self.selected = !self.selected;
+						self.value = !self.value;
 						self.removeEventListener( KeyboardEvent.KEY_UP, self._keyUp );
 						self._keyUp = null;
 					}
@@ -121,10 +114,10 @@ class CheckBox extends Widget {
 		}
 	}
 
-	public static function createSimple( text:String, f:Bool->Void ) :CheckBox {
-		var b = new CheckBox( text );
-		b.addEventListener( CheckBox.CHANGED, function(e) {
-			f(e.value);
+	public static function createSimple( value:Bool, text:String, f:Bool->Void ) :CheckBox {
+		var b = new CheckBox( value, text );
+		b.addValueListener( function(value) {
+			f(value);
 		} );
 		return b;
 	}

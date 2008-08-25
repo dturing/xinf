@@ -6,10 +6,6 @@ package xinf.ul.widget;
 import Xinf;
 import xinf.ul.ValueEvent;
 
-/**
-	Slider (numeric entry) element.
-**/
-
 class ValueWidget<T> extends Widget {
 	
 	private var _value:T;
@@ -27,4 +23,10 @@ class ValueWidget<T> extends Widget {
 		return _value;
 	}
 	
+	public function addValueListener( f:T->Void ) :Dynamic {
+		return addEventListener( untyped ValueEvent.VALUE, function(e) {
+			f(e.value); } );
+	}
+	
 }
+
