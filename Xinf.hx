@@ -82,3 +82,6 @@ typedef Length = xinf.ony.type.Length
 typedef Paint = xinf.ony.type.Paint
 typedef PreserveAspectRatio = xinf.ony.type.PreserveAspectRatio
 typedef TextAnchor = xinf.ony.type.TextAnchor
+typedef Display = xinf.ony.type.Display
+typedef Visibility = xinf.ony.type.Visibility
+
