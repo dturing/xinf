@@ -46,6 +46,18 @@ class Translate implements Transform {
 		return( Math.sqrt( Math.pow(q.x-x,2)+Math.pow(q.y-y,2) ) );
 	}
 
+	public function isIdentity() :Bool {
+		return( x==0. && y==0. );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		if( Std.is(t,Translate) ) {
+			return new Translate( x+untyped t.x, y+untyped t.y );
+		}
+		return new Concatenate(this,t);
+	}
+
 	public function toString() {
 		return("translate("+x+","+y+")");
 	}

@@ -40,6 +40,15 @@ class Concatenate implements Transform {
 		return 1.;
 	}
 
+	public function isIdentity() :Bool {
+		return( a.isIdentity() && b.isIdentity() );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		else return( new TransformList([ a, b, t ]) );
+	}
+
 	public function toString() {
 		return("concat( "+a+", "+b+" )");
 	}

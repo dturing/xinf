@@ -43,6 +43,18 @@ class SkewX implements Transform {
 		return( Math.abs(q.a-a) );
 	}
 
+	public function isIdentity() :Bool {
+		return( a==0 );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		if( Std.is(t,SkewX) ) {
+			return new SkewX( a+untyped t.a );
+		}
+		return new Concatenate(this,t);
+	}
+
 	public function toString() {
 		return("skewX("+(a*TransformParser.R2D)+")");
 	}

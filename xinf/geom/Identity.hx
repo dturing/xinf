@@ -36,6 +36,14 @@ class Identity implements Transform {
 		if( Std.is(p,Identity) ) return 0.;
 		return p.distanceTo( this );
 	}
+	
+	public function isIdentity() :Bool {
+		return true;
+	}
+	
+	public function add( t:Transform ) {
+		return t;
+	}
 
 	public function toString() {
 		return("identity");

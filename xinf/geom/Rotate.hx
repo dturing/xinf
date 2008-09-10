@@ -45,6 +45,18 @@ class Rotate implements Transform {
 		return( Math.abs(q.a-a) );
 	}
 
+	public function isIdentity() :Bool {
+		return( a==0 || a%(2*Math.PI)==0 );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		if( Std.is(t,Rotate) ) {
+			return new Rotate( a+untyped t.a );
+		}
+		return new Concatenate(this,t);
+	}
+
 	public function toString() {
 		return("rotate("+(a*TransformParser.R2D)+")");
 	}

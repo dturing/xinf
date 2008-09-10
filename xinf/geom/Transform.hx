@@ -15,4 +15,7 @@ interface Transform {
 	
 	function interpolateWith( p:Transform, f:Float ) :Transform;
 	function distanceTo( p:Transform ) :Float;
+	
+	function isIdentity() :Bool;
+	function add( t:Transform ) :Transform;
 }

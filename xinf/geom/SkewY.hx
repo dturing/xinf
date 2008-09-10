@@ -43,6 +43,19 @@ class SkewY implements Transform {
 		return( Math.abs(q.a-a) );
 	}
 
+	public function isIdentity() :Bool {
+		return( a==0 );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		if( Std.is(t,SkewY) ) {
+			return new SkewY( a+untyped t.a );
+			return this;
+		}
+		return new Concatenate(this,t);
+	}
+
 	public function toString() {
 		return("skewY("+(a*TransformParser.R2D)+")");
 	}

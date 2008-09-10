@@ -45,6 +45,18 @@ class Scale implements Transform {
 		return( Math.abs(q.x-x)+Math.abs(q.y-y) );
 	}
 
+	public function isIdentity() :Bool {
+		return( x==1. && y==1. );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		if( Std.is(t,Scale) ) {
+			return new Scale( x*untyped t.x, y*untyped t.y );
+		}
+		return new Concatenate(this,t);
+	}
+
 	public function toString() {
 		return("scale("+x+","+y+")");
 	}

@@ -48,6 +48,20 @@ class TransformList implements Transform {
 		return 1.;
 	}
 
+	public function isIdentity() :Bool {
+		for( item in l ) {
+			if( !item.isIdentity() ) return false;
+		}
+		return true;
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		var l2 = Lambda.list(l);
+		l2.add(t);
+		return new TransformList( l2 );
+	}
+
 	public function toString() {
 		var r = "(*";
 		for( item in l ) {

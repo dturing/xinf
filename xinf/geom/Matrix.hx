@@ -148,6 +148,19 @@ class Matrix implements Transform {
 		return 1.;
 	}
 
+	public function isIdentity() :Bool {
+		a=1; c=0; tx=0;
+		b=0; d=1; ty=0;
+		return( a==1 && b==0 && c==0 && d==1 && tx==0 && ty==0 );
+	}
+	
+	public function add( t:Transform ) :Transform {
+		if( t.isIdentity() ) return this;
+		var m = new Matrix(getMatrix());
+		m.multiply( t.getMatrix() );
+		return m;
+	}
+
 	public function toString() {
 		return("matrix("+a+","+b+","+c+","+d+","+tx+","+ty+")");
 	}
