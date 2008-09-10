@@ -63,6 +63,7 @@ class TimedElement extends XMLElement {
 		super( traits );
 		active=false;
 		scheduleHandles = new List<Dynamic>();
+		started=Math.NaN;
 	}
 	
 	public function isActive() :Bool {
@@ -216,7 +217,7 @@ class TimedElement extends XMLElement {
 				return timeContainer.schedule(t,f);
 			case WallClock(date):
 				var t = timeContainer.globalToLocalTime(date.getTime()/1000.);
-			// trace(""+date+", "+date.getTime()+" == local "+t );
+//			 trace(""+date+", "+date.getTime()+" == local "+t );
 				return timeContainer.schedule(
 					t,f);
 			case Indefinite:

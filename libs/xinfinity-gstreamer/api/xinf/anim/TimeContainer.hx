@@ -14,7 +14,6 @@ class TimeContainer extends TimedElement {
 		sched = new Schedule<Float->Void>();
 		activeElements = new List<TimedElement>();
 		elements = new List<TimedElement>();
-		started=0;
 	}
 	
 	public function schedule( t:Float, f:Float->Void ) {

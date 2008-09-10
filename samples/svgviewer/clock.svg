@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" 
+     viewBox="0 0 100 100">
+    
+    <title>anim-clock</title>
+    <desc>
+		shows the current local time.
+	</desc>
+
+    <g id="test-body" stroke-width="3" stroke="blue" fill="none" 
+		transform="translate(50,50)">
+	
+			<circle cx="0" cy="0" r="45" />
+		
+			<line id="seconds-hand" y1="-35" y2="-45" stroke-width="1"
+				>
+				<animate id="seconds"
+					attributeName="transform" 
+					by="rotate(6)" accumulate="sum"
+					calcMode="spline" 
+					values="rotate(0), rotate(6)"
+					keyTimes=".8, 1."
+					keySplines=".8 0 .2 1"
+					dur="1s" begin="wallclock(00:00)"
+					repeatCount="indefinite"/>
+			</line>
+		
+			<line id="minute-hand" y1="5" y2="-35" stroke-width="2">
+				<animate id="minutes"
+					attributeName="transform" to="rotate(360)" 
+					dur="1h" begin="wallclock(00:00)"
+					repeatCount="indefinite"/>
+			</line>
+			
+			<line id="hour-hand" y1="5" y2="-20" stroke-width="4">
+				<animate id="hours"
+					attributeName="transform" to="rotate(360)" 
+					dur="12h" begin="wallclock(00:00)"
+					repeatCount="indefinite"/>
+			</line>
+		
+    </g>
+
+</svg>
+

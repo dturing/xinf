@@ -107,6 +107,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		} else if( by!=null ) {
 			vals = [ originalValue, targetDefinition.add(originalValue,fromDynamic(by)) ];
+			trace("BY anim, vals: "+vals );
 		} else if( to!=null ) {
 			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefault...
 		} else {
@@ -186,7 +187,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-//		trace("Animation steps: "+steps );
+		trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {
@@ -196,14 +197,19 @@ class Animation extends TimedAttributeSetter {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
 					if( step.spline!=null ) {
-//						trace("at("+t+"): "+step.spline.yAtX(t).y);
+						trace("at("+t+"): "+step.spline.yAtX(t));
+						var ofs = Math.floor(t);
 						return step.interpolate( step.from, step.to,
-							step.spline.yAtX( t ) );
+							ofs+step.spline.yAtX( t%1. ) );
 					} else 
 						return step.interpolate( step.from, step.to, t );
 				} else {
 					return step.from;
 				}
+			} else if( at<step.begin ) {
+				return step.from;
+			} else {
+				return step.to;
 			}
 		}
 		return null;
@@ -229,7 +235,9 @@ class Animation extends TimedAttributeSetter {
 	}
 	
 	override function start( t:Float ) {
+//	throw("Start "+this+" @ "+t );
 		if( peer==null ) throw("cannot create animation function, no peer set.");
+		if( attributeName==null ) throw("cannot create animation function, no attributeName set.");
 		targetDefinition = peer.getTraitDefinition( attributeName );
 		if( targetDefinition==null ) {
 			trace("no target attribute '"+attributeName+"' on "+peer );
@@ -241,7 +249,11 @@ class Animation extends TimedAttributeSetter {
 	}
 
 	override function resetIteration( time:Float ) {
-	//	resetOnTarget();
+	/* FIXME maybe?
+		if( additive==Additive.Sum ) {
+			resetOnTarget();
+		}
+		*/
 	}
 
 }
