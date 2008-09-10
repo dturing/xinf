@@ -229,7 +229,7 @@ class TextArea extends xinf.ony.TextArea {
 		
 		//tf.border=true; FIXME exact placement (stupid flash padding)
 		
-		tf.text = text;
+		tf.text = text==null?"":text;
 
 		g.native( tf );
 	}

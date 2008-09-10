@@ -11,7 +11,11 @@ class ValueWidget<T> extends Widget {
 	private var _value:T;
 	public var value(get_value,set_value):T;
 	
+	#if flash
+	function get_value() :Dynamic {
+	#else
 	function get_value() :T {
+	#end
 		return _value;
 	}
 	

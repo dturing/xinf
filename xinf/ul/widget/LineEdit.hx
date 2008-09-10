@@ -8,21 +8,30 @@ import xinf.ul.layout.Helper;
 import xinf.ony.type.Editability;
 import xinf.ul.ValueEvent;
 
-class LineEdit extends ValueWidget<String> {
+typedef TString = 
+#if flash
+	Dynamic
+#else
+	String
+#end
+
+class LineEdit extends ValueWidget<TString> {
 
 	public static var TEXT_CHANGED = new xinf.event.EventKind<ValueEvent<String>>("textChanged");
 	
 	private var textElement:TextArea;
 	var changed:Bool;
-
-	override function get_value() :String {
+	
+	override function get_value() :TString {
 		return textElement.text;
 	}
+/*
 
-	override function set_value(t:String) :String {
+	override function set_value(t:TString) :TString {
 		textElement.text = t;
 		return setValueInternal(t);
 	}
+	*/
 	
 	function setValueInternal(t:String) :String {
 		changed = true;

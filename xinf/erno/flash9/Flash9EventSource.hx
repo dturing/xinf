@@ -118,7 +118,7 @@ class Flash9EventSource {
 	}
 
 	private function enterFrame( e:flash.events.Event ) :Void {
-		runtime.postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++, 0 ) ); // FIXME: time
+		runtime.postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame++, Date.now().getTime()/1000 ) );
 	}
 	
 	public function rootResized( ?e:Dynamic ) :Void {

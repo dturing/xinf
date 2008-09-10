@@ -11,11 +11,18 @@ import xinf.ul.Container;
 import xinf.ul.layout.Helper;
 import xinf.ul.ValueEvent;
 
+typedef TFloat = 
+#if flash
+	Dynamic
+#else
+	Float
+#end
+
 /**
 	Slider (numeric entry) element.
 **/
 
-class Slider extends ValueWidget<Float> {
+class Slider extends ValueWidget<TFloat> {
 	
 	private var slideBar:Container;
 	private var slideThumb:Container;
@@ -27,15 +34,15 @@ class Slider extends ValueWidget<Float> {
 	public var min:Float;
 	public var max:Float;
 	public var increment:Float;
-	
-	override function set_value( _v:Float ) :Float {
+	/*
+	override function set_value( _v:TFloat ) :TFloat {
 		var v = super.set_value( Math.max(min,Math.min(max, 
 				_v - (_v-(Math.round(_v/increment)*increment))
 			)));
 		textElement.text = ""+Math.floor( precision*v )/precision;
 		return v;
 	}
-	
+	*/
 	public function get_normalized() :Float {
 		return (_value-min)/(max-min);
 	}
