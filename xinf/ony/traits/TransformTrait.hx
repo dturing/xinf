@@ -41,7 +41,7 @@ class TransformTrait extends TypedTrait<Transform> {
 	}
 
 	override public function add( a:Dynamic, b:Dynamic ) :Dynamic {
-		return new Concatenate(b,a);
+		return a.add(b);
 	}
 
 	static var D2R = ((2.*Math.PI)/360.);
