@@ -250,13 +250,6 @@ vout.x = v.x*mat.m[0][0] + v.y*mat.m[0][1] + 1*mat.m[0][2]; \
 #define TRANSFORM2(v, mat) { \
 SHVector2 temp; TRANSFORM2TO(v, mat, temp); v = temp; }
 
-#define TRANSFORM2DIRTO(v, mat, vout) { \
-vout.x = v.x*mat.m[0][0] + v.y*mat.m[0][1]; \
-  vout.y = v.x*mat.m[1][0] + v.y*mat.m[1][1]; }
-
-#define TRANSFORM2DIR(v, mat) { \
-SHVector2 temp; TRANSFORM2DIRTO(v, mat, temp); v = temp; }
-
 
 /*--------------------------------------------------------
  * Additional functions

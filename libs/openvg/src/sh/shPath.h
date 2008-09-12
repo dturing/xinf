@@ -89,7 +89,6 @@ typedef struct SHPath
   /* Subdivision */
   SHVertexArray vertices;
   SHVector2 min, max;
-  SHVector2 surfMin, surfMax;
   
   /* Additional stroke geometry (dash vertices if
      path dashed or triangle vertices if width > 1 */

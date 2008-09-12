@@ -70,7 +70,6 @@ void JN(_ARRAY_T,_ctor) (_ARRAY_T *a)
     a->outofmemory = 1;
     a->capacity = 0;
     a->size = 0;
-    return;
   }
   
   a->outofmemory = 0;
@@ -85,10 +84,8 @@ void JN(_ARRAY_T,_ctor) (_ARRAY_T *a)
 void JN(_ARRAY_T,_dtor) (_ARRAY_T *a)
 #ifdef _ARRAY_DEFINE
 {
-  if (a->items) {
+  if (a->items)
     free(a->items);
-    a->items = NULL;
-  }
 }
 #else
 ;
