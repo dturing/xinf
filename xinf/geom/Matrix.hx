@@ -10,6 +10,11 @@ class Matrix implements Transform {
 	a  b  0
 	c  d  0
 	tx ty 1
+	
+	(or, mirrored)
+	a c tx
+	c d ty
+	0 0 1
 */
 	
 	public var a:Float;

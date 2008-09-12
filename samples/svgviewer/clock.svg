@@ -11,18 +11,16 @@
 	
 			<circle cx="0" cy="0" r="45" />
 		
-			<line id="seconds-hand" y1="-35" y2="-45" stroke-width="1"
+			<circle id="seconds-hand" cy="-40" r="2.5" fill="blue" stroke="none"
 				>
 				<animate id="seconds"
 					attributeName="transform" 
 					by="rotate(6)" accumulate="sum"
 					calcMode="spline" 
-					values="rotate(0), rotate(6)"
-					keyTimes=".8, 1."
 					keySplines=".8 0 .2 1"
 					dur="1s" begin="wallclock(00:00)"
 					repeatCount="indefinite"/>
-			</line>
+			</circle>
 		
 			<line id="minute-hand" y1="5" y2="-35" stroke-width="2">
 				<animate id="minutes"

@@ -87,6 +87,7 @@ class FlashSvgViewer {
 			
 			}, onError, Svg );
 			
+			xinf.anim.TimeRoot.start();
 			xinf.ony.Root.main();
 		} catch(e:Dynamic) {
 			onError(""+e);
