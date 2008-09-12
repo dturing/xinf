@@ -107,7 +107,6 @@ class Animation extends TimedAttributeSetter {
 			}
 		} else if( by!=null ) {
 			vals = [ originalValue, targetDefinition.add(originalValue,fromDynamic(by)) ];
-			trace("BY anim, vals: "+vals );
 		} else if( to!=null ) {
 			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefault...
 		} else {
@@ -187,7 +186,7 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-		trace("Animation steps: "+steps );
+//		trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {
@@ -197,7 +196,7 @@ class Animation extends TimedAttributeSetter {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
 					if( step.spline!=null ) {
-						trace("at("+t+"): "+step.spline.yAtX(t));
+//						trace("at("+t+"): "+step.spline.yAtX(t));
 						var ofs = Math.floor(t);
 						return step.interpolate( step.from, step.to,
 							ofs+step.spline.yAtX( t%1. ) );
