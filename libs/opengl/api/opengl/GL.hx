@@ -19,6 +19,7 @@ package opengl;
 	#ifdef NEKO_OSX
 		#include &lt;OpenGL/gl.h&gt;
 	#else
+		#include &lt;GL/glew.h&gt;
 		#include &lt;GL/gl.h&gt;
 	#endif
 	</nekobind:cHeader>

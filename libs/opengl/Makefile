@@ -22,7 +22,7 @@ else
 		PROJECT_LIBS:=-lopengl32 -lglu32 bin/Windows/glfw.dll
 	else
 		PROJECT_CFLAGS:=$(pkg-config --cflags libglfw)
-		PROJECT_LIBS:=-lGL -lGLU -lglfw -lX11 -lXrandr
+		PROJECT_LIBS:=-lGL -lGLU -lglfw -lX11 -lXrandr -lXxf86vm
 	endif
 endif
 
