@@ -71,13 +71,6 @@ class Runtime extends SimpleEventDispatcher {
 			_runtime = new xinf.inity.XinfinityRuntime();
 			// dynamically load renderer
 			if( true ) {
-			/*
-				#if gldebug
-					_renderer = new xinf.inity.GLDebugRenderer();
-				#else true
-				  _renderer = new xinf.inity.GLRenderer();
-				#end
-				*/
 //				_renderer = new xinf.inity.GLRenderer();
 				_renderer = new xinf.inity.GLVGRenderer();
 			} else {

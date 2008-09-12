@@ -30,17 +30,20 @@ class XinfinityRuntime extends Runtime {
 	var rateAcc:Float;
 	var rates:Int;
 	var measuredFps:Float;
+
+	public var preDisplayCallbacks : List<Void->Void>;
+	public var postDisplayCallbacks : List<Void->Void>;
 	
 	private var _eventSource:GLEventSource;
-
-	private static var selectBuffer = CPtr.uint_alloc(64);
-	private static var view = CPtr.int_alloc(4);
 
 	/* public API */
 	
 	public function new() :Void {
 		super();
 		
+		preDisplayCallbacks = new List<Void->Void>();
+		postDisplayCallbacks = new List<Void->Void>();
+
 		lastMeasure = neko.Sys.time();
 		rates=0;
 		rateAcc=0;
@@ -64,7 +67,9 @@ class XinfinityRuntime extends Runtime {
 	}
 
 	function renderRoot() :Void {
+		for( cb in preDisplayCallbacks ) cb();
 		Runtime.renderer.showObject( root.id );
+		for( cb in postDisplayCallbacks ) cb();
 	}
 
 	function resized( e:GeometryEvent ) :Void {
@@ -224,6 +229,7 @@ class XinfinityRuntime extends Runtime {
 		_eventSource.attach();
 		
 		// init GL parameters
+
 		GL.enable( GL.BLEND );
 		GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 		GL.shadeModel( GL.FLAT );
@@ -252,9 +258,10 @@ class XinfinityRuntime extends Runtime {
 		}
 		
 		// FIXME depends on stage scale mode
+		GL.matrixMode( GL.PROJECTION );
 		GL.translate( -1., 1., 0. );
 		GL.scale( (2./width), (-2./height), 1. );
-	    GL.translate( 0, 0, 0. );
+		GL.matrixMode( GL.MODELVIEW );
 
 		#if gldebug
 			var e:Int = GL.getError();
