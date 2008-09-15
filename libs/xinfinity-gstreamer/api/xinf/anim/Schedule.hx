@@ -32,7 +32,9 @@ class Schedule<T> {
 	
 	public function callUntil( time:Float, f:T->Float->Void ) {
 		while( first!=null && first.time<time ) {
-			f(first.value,first.time);
+			// FIXME: should be first.time, but simple animations dont currently
+			// work that way (need to subtract start offset somewhere)
+			f(first.value,time);
 			first = first.next;
 		}
 	}

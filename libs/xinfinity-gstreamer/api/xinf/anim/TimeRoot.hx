@@ -23,7 +23,7 @@ class TimeRoot extends TimeContainer {
 	function enterFrame( e:FrameEvent ) {
 //		if( Math.isNaN(started) ) started = e.time;
 		time = e.time;
-		//trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time+" (started+"+(time-started)+")" );
+	//	trace("frame "+e.frame+", rate "+Root.getFramerate()+" --> time "+time+" (started+"+(time-started)+")" );
 		step(time);
 	}
 	

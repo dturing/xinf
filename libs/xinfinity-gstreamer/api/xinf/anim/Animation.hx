@@ -186,13 +186,13 @@ class Animation extends TimedAttributeSetter {
 			}
 		}
 		
-//		trace("Animation steps: "+steps );
+	//	trace("Animation steps: "+steps );
 	}
 	
 	function value( at:Float ) :Dynamic {
 		var at2 = at%1.;
 		for( step in steps ) {
-			if( at2>=step.begin && at2<=step.end ) {
+			if( at>=step.begin && at<=step.end ) {
 				var t = (at-step.begin)/(step.end-step.begin);
 				if( step.interpolate!=null ) {
 					if( step.spline!=null ) {
@@ -205,10 +205,14 @@ class Animation extends TimedAttributeSetter {
 				} else {
 					return step.from;
 				}
+				/*
+				hmm. for some modes this might (remotely) make sense.
+				but it doesnt regard more than one step!!!
 			} else if( at<step.begin ) {
 				return step.from;
 			} else {
 				return step.to;
+				*/
 			}
 		}
 		return null;

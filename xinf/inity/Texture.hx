@@ -48,8 +48,7 @@ class Texture extends ImageData {
 				case BGR: GL.RGB;
 				case BGRA: GL.RGBA;
 				case GRAY: GL.LUMINANCE;
-				case ALPHA: 
-					trace("INTENSITY!"); GL.INTENSITY;
+				case ALPHA: GL.INTENSITY;
 				default: GL.RGBA;
 			}
 		
