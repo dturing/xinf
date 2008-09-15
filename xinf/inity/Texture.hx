@@ -48,6 +48,8 @@ class Texture extends ImageData {
 				case BGR: GL.RGB;
 				case BGRA: GL.RGBA;
 				case GRAY: GL.LUMINANCE;
+				case ALPHA: 
+					trace("INTENSITY!"); GL.INTENSITY;
 				default: GL.RGBA;
 			}
 		
@@ -87,6 +89,8 @@ class Texture extends ImageData {
 					GL.texSubImageBGRA( texture, pos.x, pos.y, size.x, size.y, data );
 				case GRAY:
 					GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
+				case ALPHA:
+					GL.texSubImageALPHA( texture, pos.x, pos.y, size.x, size.y, data );
 				default:
 					throw("unknown colorspace "+cspace );
 			}

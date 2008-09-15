@@ -38,6 +38,11 @@ void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsi
    // glPopClientAttrib();    
 }
 
+void glTexSubImageALPHA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+    glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
+        GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
+}
+
 void glTexImageClearFT( unsigned int text, int w, int h ) {
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);

@@ -9,6 +9,7 @@ enum ColorSpace {
 	BGR;
 	BGRA;
 	GRAY;
+	ALPHA;
 	Other(depth:Int,channels:Int);
 }
 
@@ -17,15 +18,11 @@ class ColorSpaceTools {
 	public static function defaultBytesPerRow( cs:ColorSpace, width:Int ) :Int {
 		return
 			switch( cs ) {
-				case RGB:
+				case RGB,BGR:
 					width*3;
-				case RGBA:
+				case RGBA,BGRA:
 					width*4;
-				case BGR:
-					width*3;
-				case BGRA:
-					width*4;
-				case GRAY:
+				case GRAY,ALPHA:
 					width;
 				case Other(d,c):
 					return (d*Math.ceil(c/8)*width);
