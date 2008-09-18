@@ -404,11 +404,4 @@ class XMLElement extends Node,
 			to.listeners.set( e, l );
 		}
 	}
-
-	override function setOwnerDocument( doc:Document ) {
-		super.setOwnerDocument( doc );
-		if( id!=null ) {
-			doc.elementsById.set( id, this );
-	}
-	
 }
