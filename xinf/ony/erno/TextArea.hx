@@ -66,6 +66,7 @@ class TextArea extends xinf.ony.TextArea {
 	
 	function updateContents( text:String ) :Void {
 		if( text==null ) return;
+		
 		dirty=false;
 		assureFormat();
 		

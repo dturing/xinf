@@ -104,6 +104,21 @@ class Font extends xinf.support.Font {
 
 		var lineHeight = Math.round(height*fontSize)/fontSize;
 
+		var self=this;
+		neko.Utf8.iter(text, function(c:Int) {
+			if( c == 10 ) { // \n
+				GL.popMatrix();
+				GL.pushMatrix();
+				lines++;
+				GL.translate( .0, lineHeight*lines, .0 );
+			} else {
+				var g = self.getGlyph(c,fontSize);
+				if( g != null ) {
+					GL.translate( g.render()/fontSize, 0, 0 );
+				}
+			}
+		 });
+/*
 		for( i in 0...text.length ) {
 			var c = text.charCodeAt(i);
 			if( c == 10 ) { // \n
@@ -118,6 +133,7 @@ class Font extends xinf.support.Font {
 				}
 			}
 		}
+*/		
 		GL.popMatrix();
 
 		GL.popMatrix();

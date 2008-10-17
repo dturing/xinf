@@ -24,7 +24,7 @@ class XinfTest {
 		c.layout = xinf.ul.layout.FlowLayout.Vertical5;
 		c.captureRoot();
 		
-		var l = new xinf.ul.widget.Label( "Hello Xinful, how are you today?" );
+		var l = new xinf.ul.widget.Label( "Hellö Xinful, how are you today?" );
 		c.appendChild(l);
 
 		var s = new xinf.ul.widget.Slider( 0, 100, 1 );
@@ -37,6 +37,9 @@ class XinfTest {
 		ed.value = "Edit me!";
 		ed.addEventListener( ValueEvent.VALUE, function(e) {
 				trace( "Input Value: "+e.value );
+				var file = neko.io.File.write("/tmp/test.txt",false);
+				file.writeString(e.value+"\n");
+				file.close();
 			});
 		ed.addEventListener( xinf.ul.widget.LineEdit.TEXT_CHANGED, function(e) {
 				trace( "Input TEXT_CHANGED: "+e );

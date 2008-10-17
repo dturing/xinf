@@ -98,7 +98,8 @@ class EditableTextArea extends TextArea {
 				case "a":
 					selectAll();
 				default:
-					trace("unhandled control key: "+e.key+" code "+e.code);
+					replaceSelection( e.key );
+//					trace("unhandled control key: "+e.key+" code "+e.code);
 			}
 		}
 		redraw();
