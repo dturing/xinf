@@ -66,7 +66,7 @@ class GLEventSource {
 			}
 			postKeyPress( k, code );
 		} else {
-			if( repeat==k ) {
+			if( repeat.toLowerCase()==k.toLowerCase() ) {
 				Root.removeEventListener( FrameEvent.ENTER_FRAME, timer );
 				timer = null;
 			}
