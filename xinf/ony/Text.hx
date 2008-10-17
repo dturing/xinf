@@ -55,7 +55,7 @@ class Text extends ElementImpl {
 				default:
 			}
 		}
-		return xmlUnescape(StringTools.trim( text ));
+		return xmlUnescape(text);
 	}
 	
 	/**
