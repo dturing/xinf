@@ -37,9 +37,6 @@ class XinfTest {
 		ed.value = "Edit me!";
 		ed.addEventListener( ValueEvent.VALUE, function(e) {
 				trace( "Input Value: "+e.value );
-				var file = neko.io.File.write("/tmp/test.txt",false);
-				file.writeString(e.value+"\n");
-				file.close();
 			});
 		ed.addEventListener( xinf.ul.widget.LineEdit.TEXT_CHANGED, function(e) {
 				trace( "Input TEXT_CHANGED: "+e );

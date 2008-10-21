@@ -50,12 +50,13 @@ class LineEdit extends ValueWidget<TString> {
 		return super.set_size(s);
 	}
 
-	public function new( ?traits:Dynamic ) :Void {
+	public function new( initialValue:String, ?traits:Dynamic ) :Void {
 		textElement = new TextArea();
 		super( traits );
 		changed=false;
 
 		textElement.editable = Editability.Simple;
+		textElement.text = initialValue;
 		group.appendChild( textElement );
 		
 		textElement.addEventListener( SimpleEvent.CHANGED, textChanged );

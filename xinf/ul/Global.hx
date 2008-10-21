@@ -13,7 +13,7 @@ class Global extends Interface {
 	
 	static function getGlobal() {
 		if( global==null ) {
-			global=new Global({ width:300, height:300 });
+			global = new Global({ width:300, height:300 });
 			global.layout = xinf.ul.layout.FlowLayout.Vertical5;
 			global.addStyleClass("global");
 			xinf.ony.Root.appendChild( global.getElement() );
@@ -27,7 +27,7 @@ class Global extends Interface {
 		position = { x:e.x-size.x, y:(e.y-size.y)/2 };
 	}
 	
-	public static function add<T>( c:Component ) {
+	public static function add( c:Component ) {
 		var g = getGlobal();
 		g.appendChild(c);
 	}
