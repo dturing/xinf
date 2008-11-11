@@ -130,7 +130,8 @@ class Texture extends ImageData {
 								var format = d[0].split(";");
 								if( format[format.length-1] != "base64" ) throw("data: URL of format "+format+" not understood. Can only handle base64.");
 								var base64 = d[1];
-								data = StringTools.baseDecode( base64, BASE64 );
+								throw("FIXME");
+								// data = StringTools.baseDecode( base64, BASE64 );
 							} else
 								data = neko.io.File.getContent( u[1] );
 						case "resource":

@@ -89,7 +89,8 @@ class Font extends xinf.support.Font {
 	}
 	
 	public function renderText( text:String, fontSize:Float ) :Void {
-		if( text == null ) text="[null]";
+		if( text == null ) return;
+		if( text == "" ) return;
 		
 		var lines=0;
 		var c_style=0;

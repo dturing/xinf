@@ -33,7 +33,7 @@ class XinfTest {
 			});
 		c.appendChild(s);
 
-		var ed = new xinf.ul.widget.LineEdit();
+		var ed = new xinf.ul.widget.LineEdit("foo!");
 		ed.value = "Edit me!";
 		ed.addEventListener( ValueEvent.VALUE, function(e) {
 				trace( "Input Value: "+e.value );

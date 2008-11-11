@@ -15,10 +15,9 @@
 				>
 				<animate id="seconds"
 					attributeName="transform" 
-					by="rotate(6)" accumulate="sum"
-					calcMode="spline" 
-					keySplines=".8 0 .2 1"
-					dur="1s" begin="wallclock(00:00)"
+					to="rotate(360)" accumulate="sum"
+					calcMode="linear" 
+					dur="1min" begin="wallclock(00:00)"
 					repeatCount="indefinite"/>
 			</circle>
 		
