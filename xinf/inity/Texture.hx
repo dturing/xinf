@@ -11,6 +11,7 @@ import xinf.erno.ImageData;
 import xinf.event.FrameEvent;
 import xinf.event.ImageLoadEvent;
 import xinf.inity.ColorSpace;
+import xinf.xml.URL;
 
 /** strictly any neko ImageData is already a texture. This class manages the texture though,
   ImageData only stores some values for direct access by the GLGraphicsContext **/
@@ -110,44 +111,30 @@ class Texture extends ImageData {
 	/* FIXME: image cache will keep images FOREVER. at least provide a way to flush! */
 	public static var cache:Hash<Texture> = new Hash<Texture>();
 
-	static var BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-	public static function newByName( url:String ) :Texture {
+	public static function newByName( url:URL ) :Texture {
 		try {
-			var r = cache.get(url);
+			var r = cache.get(url.toString());
 			if( r==null ) {
 				var data:String=null;
-				var u = url.split("://");
-				if( u.length == 1 ) {
-					// local file
-					data = neko.io.File.getContent( url );
-				} else {
-					switch( u[0] ) {
-						case "file":
-							if( StringTools.startsWith( u[1], "data:" )) {
-								var d = u[1].substr( 5 ).split(",");
-								if( d.length!=2 ) throw("Unhandled data: URL: "+data );
-								var format = d[0].split(";");
-								if( format[format.length-1] != "base64" ) throw("data: URL of format "+format+" not understood. Can only handle base64.");
-								var base64 = d[1];
-								throw("FIXME");
-								// data = StringTools.baseDecode( base64, BASE64 );
-							} else
-								data = neko.io.File.getContent( u[1] );
-						case "resource":
-							data = haxe.Resource.getString(u[1]);
-						case "http":
-							data = haxe.Http.request(url);
-						default:
-							throw("unhandled protocol for image loading: "+u[0] );
-					}
+				switch( url.protocol ) {
+					case "data":
+						data = url.getData();
+					case null:
+					case "file":
+						data = neko.io.File.getContent( url.toString() );
+					case "resource":
+						data = haxe.Resource.getString( url.toString() );
+					case "http":
+						data = haxe.Http.request( url.toString() );
+					default:
+						throw("unhandled protocol for image loading: "+url.protocol );
 				}
 				if( data == null || data.length==0 ) {
 					throw("Could not load: "+url );
 				}
 				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
 				r = newFromPixbuf( p );
-				cache.set(url,r); // FIXME
+				cache.set(url.toString(),r); // FIXME
 				
 				// trigger LOADED at next frame
 				var l:Dynamic=null;

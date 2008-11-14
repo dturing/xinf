@@ -56,14 +56,14 @@ class Image extends xinf.ony.Image {
 		else url = new URL(href);
 		
 		try {
-			bitmap = load( url.toString() );
+			bitmap = load( url );
 		} catch(e:Dynamic) {
 			trace( e );
 		}
 		redraw();
 	}
 
-	public static function load( url:String ) :ImageData {
+	public static function load( url:URL ) :ImageData {
 		return ImageData.load( url );
 	}
 	

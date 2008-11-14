@@ -5,6 +5,7 @@ package xinf.erno;
 
 import xinf.event.SimpleEventDispatcher;
 import xinf.event.ImageLoadEvent;
+import xinf.xml.URL;
 
 /**
 	DOCME: out of date!
@@ -78,16 +79,16 @@ class ImageData extends SimpleEventDispatcher {
 			<li>JavaScript: any URL accepted for normal image URLs.</li>
 		</ul>
 	**/
-	public static function load( url:String ) :ImageData {
+	public static function load( url:URL ) :ImageData {
 		#if neko
 			return( xinf.inity.Texture.newByName( url ) );
 		#elseif js
-			return( new xinf.erno.js.JSImageData(url) );
+			return( new xinf.erno.js.JSImageData( url.toString() ) );
 		#elseif flash
-			if( StringTools.startsWith( url, "library://" ) ) {
-				return( new xinf.erno.flash9.InternalImageData(url.substr(10)) );
+			if( url.protocol=="library" ) ) {
+				return( new xinf.erno.flash9.InternalImageData( url.path+url.filename ) );
 			} else {
-				return( new xinf.erno.flash9.ExternalImageData(url) );
+				return( new xinf.erno.flash9.ExternalImageData( url.toString() ) );
 			}
 		#else err
 		#end

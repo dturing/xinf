@@ -45,8 +45,12 @@ class URL {
 		var r:EReg = ~/([a-z]+):\/\/([a-zA-Z0-9-\.]*)(:([0-9]+))?(.*)/;
 		
 		if( s==null ) throw("URL is null");
-
-		if( r.match( s ) ) {
+		if( StringTools.startsWith( s, "data:" ) ) {
+			protocol = "data";
+			host=null;
+			port=0;
+			path=s.substr(5);
+		} else if( r.match( s ) ) {
 			protocol = r.matched(1);
 			host = r.matched(2);
 			port = Std.parseInt(r.matched(4));
@@ -90,8 +94,15 @@ class URL {
 		URLs for rel. (TODO)
 	*/
 	public function getRelativeURL( rel:String ) :URL {
-		var url = new URL( this.pathString()+rel );
+		var rel = new URL( rel );
+		if( rel.isAbsolute() ) return rel;
+		
+		var url = new URL( this.pathString()+rel.path+rel.filename );
 		return url;
+	}
+	
+	public function isAbsolute() :Bool {
+		return( path.charAt(0)=="/" || protocol=="data" );
 	}
 
 	/**
@@ -153,7 +164,10 @@ class URL {
 	public function pathString() :String {
 		var h = "";
 		if( protocol!=null ) {
-			h = protocol+"://";
+			if( protocol=="data" ) {
+				h = "data:";
+			} else 
+				h = protocol+"://";
 		}
 		if( host!=null ) {
 			h = h+host;
@@ -164,6 +178,24 @@ class URL {
 		return( h+path );
 	}
 
+	static var BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	/**
+		Return data, if this is a "data:" URL.
+	*/
+	public function getData() :String {
+		if( protocol != "data" ) return null;
+		
+		var d = path.split(",");
+		if( d.length!=2 ) throw("Unhandled data: URL: "+this );
+		var format = d[0].split(";");
+		if( format[format.length-1] != "base64" ) throw("data: URL of format "+format+" not understood. Can only handle base64.");
+		var base64 = d[1];
+//		trace("---"+base64+"---\n");
+		throw("Where have all the StringTools.baseDecode gone?");
+//		return( StringTools.baseDecode( base64, BASE64 ) );
+		return("");
+	}
+	
 	/**
 		Return a complete string representation of this URL.
 	*/
