@@ -85,7 +85,7 @@ class ImageData extends SimpleEventDispatcher {
 		#elseif js
 			return( new xinf.erno.js.JSImageData( url.toString() ) );
 		#elseif flash
-			if( url.protocol=="library" ) ) {
+			if( url.protocol=="library" ) {
 				return( new xinf.erno.flash9.InternalImageData( url.path+url.filename ) );
 			} else {
 				return( new xinf.erno.flash9.ExternalImageData( url.toString() ) );
