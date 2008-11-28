@@ -23,8 +23,8 @@ class TimedElement extends XMLElement {
 	//	restartDefault: new EnumTrait<Restart>( Restart, Restart.Inherit ),
 		fill: new EnumTrait<Fill>( Fill, Fill.Default ),
 		
-		repeatCount: new RepeatTrait(),
-		repeatDur: new DurationTrait(),
+		repeatcount: new RepeatTrait(),
+		repeatdur: new DurationTrait(),
 	}
 	
 	public var begin(get_begin,set_begin):Time;
@@ -44,8 +44,8 @@ class TimedElement extends XMLElement {
 	function set_fill( v:Fill ) :Fill { return setStyleTrait("fill",v); }
 	
 	public var repeatCount(get_repeat_count,set_repeat_count):Null<Float>;
-	function get_repeat_count() :Null<Float> { return getTrait("repeatCount",Float); }
-	function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatCount",v); return v; }
+	function get_repeat_count() :Null<Float> { return getTrait("repeatcount",Float); }
+	function set_repeat_count( v:Null<Float> ) :Null<Float> { setTrait("repeatcount",v); return v; }
 
 	/** active is the timeline's "Run" object
 		if null, the element is not active.

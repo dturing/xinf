@@ -13,7 +13,7 @@ class TimedAttributeSetter extends TimedElement {
 	
 	static var TRAITS = {
 		href:new StringTrait(),
-		attributeName:new StringTrait(),
+		attributename:new StringTrait(),
 /*		attributeType:new StringTrait(), FIXME.. maybe differ getTrait/getStyleTrait? */
 	}
 
@@ -22,8 +22,8 @@ class TimedAttributeSetter extends TimedElement {
 	function set_href( v:String ) :String { setTrait("href",v); return v; }
 
 	public var attributeName(get_attribute_name,set_attribute_name):String;
-	function get_attribute_name() :String { return getTrait("attributeName",String); }
-	function set_attribute_name( v:String ) :String { setTrait("attributeName",v); return v; }
+	function get_attribute_name() :String { return getTrait("attributename",String); }
+	function set_attribute_name( v:String ) :String { setTrait("attributename",v); return v; }
 
 	var peer:XMLElement;
 
@@ -39,7 +39,7 @@ class TimedAttributeSetter extends TimedElement {
 
 	function getFromTarget( ?presentation:Bool ) :Dynamic {
 		if( peer==null || attributeName==null ) return null;
-		return peer.getStyleTrait( attributeName, Dynamic, false, presentation );
+		return peer.getStyleTrait( normalizeAttributeName(attributeName), Dynamic, false, presentation );
 	}
 
 	function resetOnTarget() {
@@ -50,11 +50,12 @@ class TimedAttributeSetter extends TimedElement {
 
 	function setOnTarget( value:Dynamic ) {
 		if( peer==null || attributeName==null ) return;
-		trace("set "+attributeName+" "+value );
+//		trace("set "+attributeName+" "+value );
 		var tmp:Dynamic = {};
-		peer.setTraitFromDynamic( attributeName, value, tmp );
-		peer.setPresentationTrait( attributeName, 
-				Reflect.field(tmp,attributeName) );
+		var n = normalizeAttributeName(attributeName);
+		peer.setTraitFromDynamic( n, value, tmp );
+		peer.setPresentationTrait( n, 
+				Reflect.field(tmp,n) );
 	}
 	
 	function resolve( name:String, value:Dynamic ) :Dynamic {

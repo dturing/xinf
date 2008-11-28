@@ -30,10 +30,10 @@ class Animation extends TimedAttributeSetter {
 	static var TRAITS = {
 		additive: new EnumTrait<Additive>( Additive, Additive.Replace ),
 		accumulate: new EnumTrait<Accumulate>( Accumulate, Accumulate.None ),
-		calcMode: new EnumTrait<CalcMode>( CalcMode, CalcMode.Linear ),
+		calcmode: new EnumTrait<CalcMode>( CalcMode, CalcMode.Linear ),
 		
-		keySplines: new KeySplineTrait(),
-		keyTimes: new FloatListTrait(),
+		keysplines: new KeySplineTrait(),
+		keytimes: new FloatListTrait(),
 		
 		values: new ValuesTrait(),
 		from: new StringTrait(),
@@ -50,8 +50,8 @@ class Animation extends TimedAttributeSetter {
 	function set_accumulate( v:Accumulate ) :Accumulate { return setTrait("accumulate",v); }
 
 	public var calcMode(get_calc_mode,set_calc_mode):CalcMode;
-	function get_calc_mode() :CalcMode { return getTrait("calcMode",CalcMode); }
-	function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcMode",v); }
+	function get_calc_mode() :CalcMode { return getTrait("calcmode",CalcMode); }
+	function set_calc_mode( v:CalcMode ) :CalcMode { return setTrait("calcmode",v); }
 
 	public var values(get_values,set_values):Array<String>;
 	function get_values() :Array<String> { return getTrait("values",Array); }
@@ -70,12 +70,12 @@ class Animation extends TimedAttributeSetter {
 	function set_by( v:String ) :String { setStyleTrait("by",v); return v; }
 
 	public var keyTimes(get_keyTimes,set_keyTimes):FloatList;
-	function get_keyTimes() :FloatList { return getStyleTrait("keyTimes",FloatList); }
-	function set_keyTimes( v:FloatList ) :FloatList { setStyleTrait("keyTimes",v); return v; }
+	function get_keyTimes() :FloatList { return getStyleTrait("keytimes",FloatList); }
+	function set_keyTimes( v:FloatList ) :FloatList { setStyleTrait("keytimes",v); return v; }
 
 	public var keySplines(get_keySplines,set_keySplines):KeySplines;
-	function get_keySplines() :KeySplines { return getStyleTrait("keySplines",KeySplines); }
-	function set_keySplines( v:KeySplines ) :KeySplines { setStyleTrait("keySplines",v); return v; }
+	function get_keySplines() :KeySplines { return getStyleTrait("keysplines",KeySplines); }
+	function set_keySplines( v:KeySplines ) :KeySplines { setStyleTrait("keysplines",v); return v; }
 
 	var steps:Array<Step>;
 	var originalValue:Dynamic;
@@ -108,6 +108,7 @@ class Animation extends TimedAttributeSetter {
 		} else if( by!=null ) {
 			vals = [ originalValue, targetDefinition.add(originalValue,fromDynamic(by)) ];
 		} else if( to!=null ) {
+//			trace("--- originalValue: "+originalValue+" to "+fromDynamic(to) );
 			vals = [ originalValue, fromDynamic(to) ]; // FIXME: 0, not targetDefault...
 		} else {
 			vals = new Array<Dynamic>();
@@ -246,7 +247,8 @@ class Animation extends TimedAttributeSetter {
 			trace("no target attribute '"+attributeName+"' on "+peer );
 			return;
 		}
-		originalValue = getFromTarget();
+		originalValue = getFromTarget(true);
+//trace("Start "+this+" @ "+t+", orig Value: "+originalValue );
 		createSteps();
 		super.start(t);
 	}
