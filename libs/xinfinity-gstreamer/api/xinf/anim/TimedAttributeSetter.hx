@@ -50,7 +50,7 @@ class TimedAttributeSetter extends TimedElement {
 
 	function setOnTarget( value:Dynamic ) {
 		if( peer==null || attributeName==null ) return;
-		
+		trace("set "+attributeName+" "+value );
 		var tmp:Dynamic = {};
 		peer.setTraitFromDynamic( attributeName, value, tmp );
 		peer.setPresentationTrait( attributeName, 

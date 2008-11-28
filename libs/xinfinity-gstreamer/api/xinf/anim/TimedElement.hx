@@ -87,9 +87,12 @@ class TimedElement extends XMLElement {
 	}
 	
 	function stop( t:Float ) {
-//		trace("stop "+this+" at "+t );
-		timeContainer.deactivate( this );
-		active = false;
+		if( active ) {
+//			trace("STOP "+this+" at "+t );
+//			trace( haxe.Stack.toString( haxe.Stack.callStack() ) );
+			timeContainer.deactivate( this );
+			active = false;
+		}
 	}
 
 	function resetIteration( time:Float ) {
@@ -109,7 +112,10 @@ class TimedElement extends XMLElement {
 				// Self-removal. This is nice for one-shot animations, but probably not what fill="remove" means. FIXME/CHECKME
 				if( parentElement != null ) parentElement.removeChild(this);
 			} else {
-				stop(started+activeDuration);
+				if( active ) {
+					frozen(started+activeDuration);
+					stop(started+activeDuration);
+				}
 			}
 			return false;
 		}
@@ -137,7 +143,9 @@ class TimedElement extends XMLElement {
 		return seekTo;
 	}
 
-	override public function onLoad() {
+	override function construct() {
+		if( !super.construct() ) return false;
+		
 		// find time graph parent
 		var e = parentElement;
 		while( e!=null && timeContainer==null ) {
@@ -150,6 +158,7 @@ class TimedElement extends XMLElement {
 			timeContainer.register(this);
 		
 		reschedule();
+		return true;
 	}
 	
 	override function destruct() {
