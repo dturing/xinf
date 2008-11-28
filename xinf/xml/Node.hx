@@ -106,10 +106,6 @@ class Node implements Serializable {
 	}
 
 	function acquired( newChild:Node ) {
-		if( newChild.parentElement != null ) {
-			throw("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
-//			newChild.parentElement.removeChild(newChild);
-		}
 		if( constructed ) newChild.construct();
 		
 		if( ownerDocument != null )

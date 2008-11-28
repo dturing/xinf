@@ -382,8 +382,12 @@ class XMLElement extends Node,
 	/* Node functions */
 
 	override function acquired( newChild:Node ) :Void {
-		super.acquired(newChild);
+		if( newChild.parentElement != null ) {
+			throw("child "+newChild+" is already attached to a parent ("+newChild.parentElement+", new "+this+")");
+//			newChild.parentElement.removeChild(newChild);
+		}
 		newChild.parentElement = this;
+		super.acquired(newChild);
 	}
 	
 	override function copyProperties( to:Dynamic ) :Void {
