@@ -77,6 +77,10 @@ class Root {
 		return xinf.erno.Runtime.runtime.getMeasuredFramerate();
 	}
 
+	public static function addCSS( css:String ) :Void {
+		xinf.style.StyleSheet.DEFAULT.parseCSS(css);
+	}
+
 	public static function main() {
 		getRootSvg().onLoad();
 		xinf.erno.Runtime.runtime.run();
