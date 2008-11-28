@@ -215,13 +215,14 @@ class XMLElement extends Node,
 	}
 
 	/** see $xinf.traits.TraitAccess::setTraitFromString$ */
-	public function setTraitFromString( name:String, value:String, to:Dynamic ) :Void {
+	public function setTraitFromString( _name:String, value:String, to:Dynamic ) :Void {
 /** REMOVEME SPECIAL_TRAITS
 		if( value=="inherit" ) {
 			Reflect.setField( to, name, Inherit.inherit );
 			return;
 		}
 */		
+		var name = normalizeAttributeName(_name);
 		var def = getTraitDefinition(name);
 		// FIXME: maybe, see if it has a setter?
 //		trace("set "+name+" to (string)'"+value+"' - parsed "+def.parse(value) );
@@ -233,7 +234,8 @@ class XMLElement extends Node,
 	}
 
 	/** see $xinf.traits.TraitAccess::setTraitFromDynamic$ */
-	public function setTraitFromDynamic( name:String, value:Dynamic, to:Dynamic ) :Void {
+	public function setTraitFromDynamic( _name:String, value:Dynamic, to:Dynamic ) :Void {
+		var name = normalizeAttributeName(_name);
 		var def = getTraitDefinition(name);
 		if( def!=null )
 			Reflect.setField( to, name, def.fromDynamic(value) );
@@ -269,12 +271,18 @@ class XMLElement extends Node,
 			setTraitFromString( f2, xml.get(field), _traits );
 		}
 	}
-	
+
+	static var AttrReg = ~/[\-\_:]/g;
+	inline function normalizeAttributeName( _name:String ) :String {
+		var r = AttrReg.replace(_name,"").toLowerCase();
+//		trace("normalizeAttributeName: "+_name+" --> "+r );
+		return r;
+ 	}	
 	/** Return the TraitDefinition of the trait named [_name],
 		or [null] if this Element doesn't have such a trait.
 	*/
 	function getTraitDefinition( _name:String ) :TraitDefinition {
-		var name = StringTools.replace( StringTools.replace(_name,"-","_"), ":", "__" );
+		var name = normalizeAttributeName(_name);
 		var cl:Class<Dynamic> = Type.getClass( this );
 		var t:TraitDefinition=null;
 		while( t==null && cl!=null ) {

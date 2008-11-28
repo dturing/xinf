@@ -48,21 +48,21 @@ class Element extends StyledElement {
 		opacity:		new BoundedFloatTrait(0,1,1),
 		color:			new PaintTrait(null), // just for "currentColor"
 		fill:			new PaintTrait(Paint.None),
-		fill_opacity:	new BoundedFloatTrait(0,1,1),
+		fillopacity:	new BoundedFloatTrait(0,1,1),
 
 		stroke:			new PaintTrait(Paint.None),
-		stroke_width:	new LengthTrait(new Length(1)),
-		stroke_opacity:	new BoundedFloatTrait(0,1,1),
-		stroke_linejoin:new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
-		stroke_linecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", ButtCaps ),
-		stroke_miterlimit: new FloatTrait(4),
-		stroke_dasharray:  new IntListTrait(),
-		stroke_dashoffset: new IntTrait(),
+		strokewidth:	new LengthTrait(new Length(1)),
+		strokeopacity:	new BoundedFloatTrait(0,1,1),
+		strokelinejoin: new EnumTrait<JoinStyle>( JoinStyle, "join", MiterJoin ),
+		strokelinecap:	new EnumTrait<CapsStyle>( CapsStyle, "caps", ButtCaps ),
+		strokemiterlimit: new FloatTrait(4),
+		strokedasharray:  new IntListTrait(),
+		strokedashoffset: new IntTrait(),
 		
-		font_family:	new StringListTrait(),
-		font_size:		new LengthTrait(new Length(10)),
-		font_weight:	new StringChoiceTrait( ["normal","bold"] ),
-		text_anchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
+		fontfamily:	new StringListTrait(),
+		fontsize:	new LengthTrait(new Length(10)),
+		fontweight:	new StringChoiceTrait( ["normal","bold"] ),
+		textanchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
 	}
 
 	public var transform(get_transform,set_transform):Transform;
@@ -90,54 +90,54 @@ class Element extends StyledElement {
 	function set_fill( v:Paint ) :Paint{ return setStyleTrait("fill",v); }
 
 	public var fillOpacity(get_fill_opacity,set_fill_opacity):Null<Float>;
-	function get_fill_opacity() :Null<Float> { return getStyleTrait("fill-opacity",Float); }
-	function set_fill_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("fill-opacity",v); }
+	function get_fill_opacity() :Null<Float> { return getStyleTrait("fillopacity",Float); }
+	function set_fill_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("fillopacity",v); }
 
 	public var stroke(get_stroke,set_stroke):Paint;
 	function get_stroke() :Paint { return getStyleTrait("stroke",Paint); }
 	function set_stroke( v:Paint ) :Paint { return setStyleTrait("stroke",v); }
 
 	public var strokeWidth(get_stroke_width,set_stroke_width):Null<Float>;
-	function get_stroke_width() :Null<Float> { return getStyleTrait("stroke-width",Length).value; }
-	function set_stroke_width( v:Float ) :Null<Float> { setStyleTrait("stroke-width",new Length(v)); return v; }
+	function get_stroke_width() :Null<Float> { return getStyleTrait("strokewidth",Length).value; }
+	function set_stroke_width( v:Float ) :Null<Float> { setStyleTrait("strokewidth",new Length(v)); return v; }
 
 	public var strokeOpacity(get_stroke_opacity,set_stroke_opacity):Null<Float>;
-	function get_stroke_opacity() :Null<Float> { return getStyleTrait("stroke-opacity",Float); }
-	function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-opacity",v); }
+	function get_stroke_opacity() :Null<Float> { return getStyleTrait("strokeopacity",Float); }
+	function set_stroke_opacity( v:Null<Float> ) :Null<Float> { return setStyleTrait("strokeopacity",v); }
 
 	public var strokeLinejoin(get_line_join,set_line_join):JoinStyle;
-	function get_line_join() :JoinStyle { return getStyleTrait("stroke-linejoin",JoinStyle); }
-	function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("stroke-linejoin",v); }
+	function get_line_join() :JoinStyle { return getStyleTrait("strokelinejoin",JoinStyle); }
+	function set_line_join( v:JoinStyle ) :JoinStyle { return setStyleTrait("strokelinejoin",v); }
 
 	public var strokeLinecap(get_line_cap,set_line_cap):CapsStyle;
-	function get_line_cap() :CapsStyle { return getStyleTrait("stroke-linecap",CapsStyle); }
-	function set_line_cap( v:CapsStyle ) :CapsStyle { return setStyleTrait("stroke-linecap",v); }
+	function get_line_cap() :CapsStyle { return getStyleTrait("strokelinecap",CapsStyle); }
+	function set_line_cap( v:CapsStyle ) :CapsStyle { return setStyleTrait("strokelinecap",v); }
 
 	public var strokeMiterlimit(get_stroke_miterlimit,set_stroke_miterlimit):Null<Float>;
-	function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("stroke-miterlimit",Float); }
-	function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("stroke-miterlimit",v); }
+	function get_stroke_miterlimit() :Null<Float> { return getStyleTrait("strokemiterlimit",Float); }
+	function set_stroke_miterlimit( v:Null<Float> ) :Null<Float> { return setStyleTrait("strokemiterlimit",v); }
 
 	public var strokeDasharray(get_stroke_dasharray,set_stroke_dasharray):IntList;
-	function get_stroke_dasharray() :IntList { return getStyleTrait("stroke-dasharray",IntList); }
-	function set_stroke_dasharray( v:IntList ) :IntList { return setStyleTrait("stroke-dasharray",v); }
+	function get_stroke_dasharray() :IntList { return getStyleTrait("strokedasharray",IntList); }
+	function set_stroke_dasharray( v:IntList ) :IntList { return setStyleTrait("strokedasharray",v); }
 
 	public var strokeDashoffset(get_stroke_dashoffset,set_stroke_dashoffset):Null<Int>;
-	function get_stroke_dashoffset() :Null<Int> { return getStyleTrait("stroke-dashoffset",Int); }
-	function set_stroke_dashoffset( v:Null<Int> ) :Null<Int> { return setStyleTrait("stroke-dashoffset",v); }
+	function get_stroke_dashoffset() :Null<Int> { return getStyleTrait("strokedashoffset",Int); }
+	function set_stroke_dashoffset( v:Null<Int> ) :Null<Int> { return setStyleTrait("strokedashoffset",v); }
 
 	public var fontFamily(get_font_family,set_font_family):StringList;
-	function get_font_family() :StringList { return getStyleTrait("font-family",StringList); }
-	function set_font_family( v:StringList ) :StringList { return setStyleTrait("font-family",v); }
+	function get_font_family() :StringList { return getStyleTrait("fontfamily",StringList); }
+	function set_font_family( v:StringList ) :StringList { return setStyleTrait("fontfamily",v); }
 
 	public var fontSize(get_font_size,set_font_size):Float;
-	function get_font_size() :Float { return getStyleTrait("font-size",Length).value; }
-	function set_font_size( v:Float ) :Float { return setStyleTrait("font-size",new Length(v)).value; }
+	function get_font_size() :Float { return getStyleTrait("fontsize",Length).value; }
+	function set_font_size( v:Float ) :Float { return setStyleTrait("fontsize",new Length(v)).value; }
 
 	// TODO fontWeight, Slant, smallCaps
 
 	public var textAnchor(get_text_anchor,set_text_anchor):TextAnchor;
-	function get_text_anchor() :TextAnchor { return getStyleTrait("text-anchor",TextAnchor); }
-	function set_text_anchor( v:TextAnchor ) :TextAnchor { return setStyleTrait("text-anchor",v); }
+	function get_text_anchor() :TextAnchor { return getStyleTrait("textanchor",TextAnchor); }
+	function set_text_anchor( v:TextAnchor ) :TextAnchor { return setStyleTrait("textanchor",v); }
 
 	override function set_id( v:String ) :String { 
 		if( ownerDocument!=null ) {
