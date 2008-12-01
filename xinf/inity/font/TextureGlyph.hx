@@ -41,7 +41,7 @@ class TextureGlyph extends Glyph {
 		var t:Dynamic = CPtr.uint_alloc(1);
 		GL.genTextures(1,t);
 		texture = CPtr.uint_get(t,0);
-
+		
 		GL.pushAttrib( GL.ENABLE_BIT );
 		GL.enable( GL.TEXTURE_2D );
 		
@@ -51,7 +51,9 @@ class TextureGlyph extends Glyph {
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
 			GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
-			GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
+
+			if( b.width>0 && b.height>0 ) // FIXME: check this earlier? crashes only on cr's nvidia!
+				GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
 
 		GL.popAttrib();
 
