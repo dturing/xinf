@@ -20,6 +20,10 @@ class XinfinityRuntime extends Runtime {
 	var frame:Int;
 	var width:Int;
 	var height:Int;
+	
+	var fullscreen:Bool;
+	var windowTitle:String;
+	
 	var somethingChanged:Bool;
 	var root:GLObject;
 	var time:Float;
@@ -47,6 +51,8 @@ class XinfinityRuntime extends Runtime {
 		lastMeasure = neko.Sys.time();
 		rates=0;
 		rateAcc=0;
+		
+		windowTitle="Xinfinity";
 		
 		frame=0;
 		width = 320;
@@ -210,11 +216,20 @@ class XinfinityRuntime extends Runtime {
 		#end
 	}
 
+	public function setWindowParameters( w:Int, h:Int, ?fs:Bool=false, ?title:String="Xinfinity" ) {
+		fullscreen=fs;
+		windowTitle=title;
+		width=w;
+		height=h;
+		trace("SET window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
+	}
+
 	/* internal functions */
 	private function initGL() :Void {
 		// init GLFW Window
-		GLFW.openWindow( 320,240, 8,8,8, 8,8,8, GLFW.WINDOW );
-		GLFW.setWindowTitle("Xinfinity");
+		trace("window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
+		GLFW.openWindow( width, height, 8,8,8, 8,8,8, fullscreen?GLFW.FULLSCREEN:GLFW.WINDOW );
+		GLFW.setWindowTitle( windowTitle );
 
 		// TODO: set some kind of preferred size (style??)
 	
