@@ -159,6 +159,14 @@ class Node implements Serializable {
 		return oldChild;
 	}
 
+	/**
+		Remove all children from this Node.
+	*/
+	public function removeChildren() :Void {
+		for( child in mChildren )
+			removeChild( child );
+	}
+
 	/** Hook DOCME */
 	public function added( parent:Node ) :Void {
 	}
