@@ -16,6 +16,23 @@ interface TreeNode<T> {
 
 typedef TreeModel<T> = TreeNode<T>
 
+class TreeNodeIterable<T> {
+	
+	var node:TreeNode<T>;
+
+	public function new( node:TreeNode<T> ) {
+		this.node=node;
+	}
+	
+	public function iterator() {
+		var n = node.firstChild;
+		return({
+			hasNext:function() { return n!=null; },
+			next:function() { var old=n; n=n.next; return old; }
+		});
+	}
+}
+
 class SimpleTreeNode<T> implements TreeNode<T> {
 
 	public var open(getOpen,setOpen):Bool;
@@ -56,7 +73,7 @@ class SimpleTreeNode<T> implements TreeNode<T> {
 	}
 	
 	public function addSimple( value:T ) :Void {
-		addChild( new SimpleNode( value ) );
+		addChild( new SimpleTreeNode( value ) );
 	}
 	
 	public function toString() :String {
