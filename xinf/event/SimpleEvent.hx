@@ -14,6 +14,9 @@ class SimpleEvent extends Event<SimpleEvent> {
 /** something has changed **/
 	static public var CHANGED = new EventKind<SimpleEvent>("changed");
 
+/** something was TRIGGERED **/
+	static public var TRIGGER = new EventKind<SimpleEvent>("trigger");
+
 	public function new( _type:EventKind<SimpleEvent> ) {
 		super(_type);
 	}
