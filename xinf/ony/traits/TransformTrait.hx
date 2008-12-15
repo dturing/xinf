@@ -121,6 +121,10 @@ class TransformTrait extends TypedTrait<Transform> {
 				r = new Scale( scale, scale );
 			} else if( s.length==2 ) {
 				r = new Scale( Std.parseFloat(s[0]), Std.parseFloat(s[1]) );
+			} else if( s.length==3 ) {
+				r = new Scale( Std.parseFloat(s[0]), Std.parseFloat(s[1]), Std.parseFloat(s[2]) );
+			} else if( s.length==4 ) {
+				r = new Scale( Std.parseFloat(s[0]), Std.parseFloat(s[1]), Std.parseFloat(s[2]), Std.parseFloat(s[3]) );
 			} else {
 				throw("unimplemented transform: "+text );
 			}
