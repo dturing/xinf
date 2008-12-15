@@ -32,6 +32,9 @@ class GLEventSource {
 	private static var timer:Dynamic;
 	private static var counter:Int;
 	private static var repeat:String;
+	
+	var mouseX:Int;
+	var mouseY:Int;
 
 	public function new( runtime:XinfinityRuntime ) :Void {
 		frame=0;
@@ -123,16 +126,22 @@ class GLEventSource {
 		runtime.postEvent( new MouseEvent( type, x, y, 0, targetId ) );
 	}
 	
-	public function mouseMotion( x:Int, y:Int ) :Void {
-		var targetId:Int = runtime.findIdAt(x,y,preciseHitTest);
+	public function doOverAndOut( targetId:Int ) :Void {
+//	trace("target: "+targetId+", over "+currentOver );
 		if( targetId != currentOver ) {
 			if( currentOver!=null ) {
-				postMouseEventTo( x, y, MouseEvent.MOUSE_OUT, currentOver );
+				postMouseEventTo( mouseX, mouseY, MouseEvent.MOUSE_OUT, currentOver );
 			}
-			postMouseEventTo( x, y, MouseEvent.MOUSE_OVER, targetId );
+			postMouseEventTo( mouseX, mouseY, MouseEvent.MOUSE_OVER, targetId );
 			currentOver = targetId;
-		} else 
-			postMouseEventTo( x, y, MouseEvent.MOUSE_MOVE, targetId );
+		}
+	}
+	
+	public function mouseMotion( x:Int, y:Int ) :Void {
+		mouseX = x; mouseY = y;
+		var targetId:Int = runtime.findIdAt(x,y,preciseHitTest);
+		doOverAndOut( targetId );
+		postMouseEventTo( x, y, MouseEvent.MOUSE_MOVE, targetId );
 	}
 
 	public function mouseWheel( wpos:Int ) :Void {
@@ -147,6 +156,12 @@ class GLEventSource {
 		var targetId:Int = runtime.findIdAt(pos.x,pos.y,preciseHitTest);
 		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, targetId );
 		runtime.postEvent( e );
+	}
+	
+	public function enterFrame( frame:Int, time:Float ) :Void {
+		var targetId:Int = runtime.findIdAt(mouseX,mouseY,preciseHitTest);
+		doOverAndOut( targetId );
+		runtime.postEvent( new FrameEvent( FrameEvent.ENTER_FRAME, frame, time ) );
 	}
 
 	public function toString() :String {

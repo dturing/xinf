@@ -53,10 +53,22 @@ class GLObject {
 //		GL.pushName(id);
 		GL.pushMatrix();
 		GL.pushAttrib(GL.TRANSFORM_BIT); // for the clipping planes FIXME: still needed?
+
+		/* for debug: draw transformed bounding box
+			GL.color4(0,0,1,.4);
+			update();
+			GL.rect( transformedBBox.l, transformedBBox.t, transformedBBox.r, transformedBBox.b );
+		*/
 		
 			if( transform!=null )
 				GL.multMatrixf( GLRenderer.matrixForGL(transform) );
 				
+		/* for debug: draw axis-aligned bounding box
+			GL.color4(1,0,0,.1);
+			GL.enable(GL.BLEND);
+			if( boundingBox!=null )
+				GL.rect( boundingBox.l, boundingBox.t, boundingBox.r, boundingBox.b );
+		*/			
 			GL.callList( inner );
 			
 		GL.popAttrib();
