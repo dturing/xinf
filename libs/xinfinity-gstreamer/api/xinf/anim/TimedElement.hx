@@ -83,6 +83,7 @@ class TimedElement extends XMLElement {
 		timeContainer.activate(this);
 		started = t;
 		freezeTime = null;
+		postEvent( new TimeEvent( TimeEvent.BEGIN ) );
 //		trace("start "+this+" at "+t+"="+(t-started) );
 	}
 	
@@ -92,6 +93,8 @@ class TimedElement extends XMLElement {
 //			trace( haxe.Stack.toString( haxe.Stack.callStack() ) );
 			timeContainer.deactivate( this );
 			active = false;
+			postEvent( new TimeEvent( TimeEvent.END ) );
+			frozen(t);
 		}
 	}
 
