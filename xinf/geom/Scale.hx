@@ -8,20 +8,28 @@ import xinf.geom.Types;
 class Scale implements Transform {
 	var x:Float;
 	var y:Float;
+	var cx:Float;
+	var cy:Float;
 	
-	public function new( x:Float, y:Float ) {
+	public function new( x:Float, y:Float, ?cx:Float=0., ?cy:Float=0. ) {
 		this.x = x;
 		this.y = y;
+		this.cx = cx;
+		this.cy = cy;
 	}
 	
-	public function getTranslation() {
-		return { x:.0, y:.0 };
+	// FIXME: these are sh*t, needed at all? if not, remove! (js?)
+	public function getTranslation() :TPoint {
+		return { x:0., y:0. };
 	}
-	public function getScale() {
+	public function getScale() :TPoint {
 		return { x:x, y:y };
 	}
+	
 	public function getMatrix() {
-		return { a:x, b:0., c:0., d:y, tx:0., ty:0. };
+		return untyped new Matrix().translate(-cx,-cy).scale(x,y).translate(cx,cy);
+		// FIXME. do that more efficient. tx=-cx*x? sth like it?
+//		return { a:x, b:0., c:0., d:y, tx:0., ty:0. };
 	}
 	
 	public function apply( p:TPoint ) :TPoint {
@@ -36,7 +44,10 @@ class Scale implements Transform {
 		if( !Std.is(p,Scale) ) return this;
 		var q:Scale = cast(p);
 		return( new Scale( x + ((q.x-x)*f),
-						   y + ((q.y-y)*f) ) );
+						   y + ((q.y-y)*f),
+						   cx + ((q.cx-cx)*f),
+						   cy + ((q.cy-cy)*f)
+						    ) );
 	}
 
 	public function distanceTo( p:Transform ) :Float {
@@ -52,7 +63,7 @@ class Scale implements Transform {
 	public function add( t:Transform ) :Transform {
 		if( t.isIdentity() ) return this;
 		if( Std.is(t,Scale) ) {
-			return new Scale( x*untyped t.x, y*untyped t.y );
+			return new Scale( x*untyped t.x, y*untyped t.y, (cx+untyped t.cx)/2, (cy+untyped t.cy)/2 );
 		}
 		return new Concatenate(this,t);
 	}

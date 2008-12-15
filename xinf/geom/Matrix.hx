@@ -62,12 +62,14 @@ class Matrix implements Transform {
 	// FIXME: regard all four corners?
 	public function transformBBox( r:{l:Float,t:Float,r:Float,b:Float}) :{l:Float,t:Float,r:Float,b:Float} {
 		var tl = apply( {x:r.l,y:r.t} );
+		var tr = apply( {x:r.r,y:r.t} );
+		var bl = apply( {x:r.l,y:r.b} );
 		var br = apply( {x:r.r,y:r.b} );
 		return {
-			l: Math.min(tl.x,br.x),
-			t: Math.min(tl.y,br.y),
-			r: Math.max(tl.x,br.x), 
-			b: Math.max(tl.y,br.y)
+			l: Math.min(Math.min(Math.min(tl.x,tr.x),bl.x),br.x),
+			t: Math.min(Math.min(Math.min(tl.y,tr.y),bl.y),br.y),
+			r: Math.max(Math.max(Math.max(tl.x,tr.x),bl.x),br.x),
+			b: Math.max(Math.max(Math.max(tl.y,tr.y),bl.y),br.y)
 			};
 	}
 
