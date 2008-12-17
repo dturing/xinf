@@ -76,6 +76,7 @@ class PreserveAspectRatioTrait extends TypedTrait<PreserveAspectRatio> {
 	}
 	
 	public static function align( p:PreserveAspectRatio, viewBox:TPoint, viewPort:TPoint ) :TRect {
+		if( p==null ) return { x:0., y:0., w:viewPort.x, h:viewPort.y };
 		switch( p ) {
 			case None:
 				return { x:0., y:0., w:viewPort.x, h:viewPort.y };
