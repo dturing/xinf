@@ -27,7 +27,7 @@ class TestServer {
 	
 	static function startRun( suite:String, platform:String ) {
 		var out = neko.io.File.append( resultDir+"/results.xml", false );
-		out.write(
+		out.writeString(
 			"<testrun  date=\""+ DateTools.format( Date.now(), "%Y-%m-%d %H:%M:%S" )+"\""
 			+" suite=\""+suite+"\""
 			+" platform=\""+platform+"\""
@@ -37,19 +37,19 @@ class TestServer {
 
 	static function endRun() {
 		var out = neko.io.File.append( resultDir+"/results.xml", false );
-		out.write("</testrun>\n");
+		out.writeString("</testrun>\n");
 		out.close();
 	}
 
 	static function startTest( testName:String ) {
 		var out = neko.io.File.append( resultDir+"/results.xml", false );
-		out.write("<case name=\""+testName+"\">\n");
+		out.writeString("<case name=\""+testName+"\">\n");
 		out.close();
 	}
 
 	static function result( pass:Bool, message:String ) :Void {
 		var out = neko.io.File.append( resultDir+"/results.xml", false );
-		out.write(
+		out.writeString(
 			"\t<result pass=\""+pass 
 			+"\">"+message
 			+"</result>\n"
@@ -59,7 +59,7 @@ class TestServer {
 
 	static function info( message:String ) :Void {
 		var out = neko.io.File.append( resultDir+"/results.xml", false );
-		out.write(
+		out.writeString(
 			"\t<info>"+message+"</info>\n");
 		out.close();
 	}
@@ -114,10 +114,13 @@ class TestServer {
 
 	static function main() {
 		assureResultDir();
+		
+		throw("FIXME Start Server Here.");
+		/*
 		var r = new neko.net.RemotingServer();
 		r.addObject( "test", TestServer );
 		if( r.handleRequest() ) return;
-		
+		*/
 		// else, emit result.xml
 		neko.Web.setHeader("Content-type", "text/xml");
 		neko.Lib.print("<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"static/results.xsl\"?>\n<results>\n");

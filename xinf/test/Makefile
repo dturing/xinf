@@ -4,7 +4,7 @@ INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
-HAXEFLAGS=--override -D htmltrace -lib x11 -cp . -cp ../../ $(INITYCP)
+HAXEFLAGS=-D htmltrace -lib x11 -cp . -cp ../../ $(INITYCP)
 
 TEST_DISPLAY=:10
 
