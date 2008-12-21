@@ -68,9 +68,7 @@ class TestShell {
 
 		var self=this;
 		try {
-trace("yo suite: "+suite+", platform: "+platform );
 			cnx.test.startRun.call([suite,platform],function(r){
-				trace("returned startRun");
 				self.runNextCase();
 			});
 		} catch(e:Dynamic) {
