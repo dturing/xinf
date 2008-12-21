@@ -113,7 +113,8 @@ class JSEventSource {
 	}
 
 	private function findTarget( e:js.Event ) :Int {
-		var targetNode:js.HtmlDom = e.target;
+		if( e==null ) e = untyped window.event;
+		var targetNode:js.HtmlDom = e.target!=null?e.target:untyped e.srcElement;
 		while( untyped targetNode.xinfId == null && targetNode.parentNode != null ) {
 			targetNode = targetNode.parentNode;
 		}
@@ -121,10 +122,12 @@ class JSEventSource {
 	}
 	
 	private function postMouseEventTo( e:js.Event, type:EventKind<MouseEvent>, targetId:Int ) :Bool {
-		runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, untyped e.which, targetId,
+		if( e==null ) e = untyped window.event;
+		runtime.postEvent( new MouseEvent( type, e.clientX, e.clientY, e.button, targetId,
 							e.shiftKey, e.altKey, e.ctrlKey ) );
-		
-		return e.target.nodeName=="INPUT";
+
+		var targetNode:js.HtmlDom = e.target!=null?e.target:untyped e.srcElement;
+		return targetNode.nodeName=="INPUT";
 	}
 
 	public function rootResized( e:js.Event ) :Void {
