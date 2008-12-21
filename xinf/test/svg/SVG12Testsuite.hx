@@ -9,11 +9,13 @@ import Xinf;
 
 class SVG12Testsuite {
 	static function main() {
+		Root.getRootSvg();
+		
 		var suite = "SVG1.2";
 		var shell = new TestShell(suite);
 		var base="http://localhost:2000/static/"+suite+"/svg/";
 		
-		var runOnly:String;
+		var runOnly:String=null;
 		
 		#if neko
 			if( neko.Sys.args().length==1 ) {

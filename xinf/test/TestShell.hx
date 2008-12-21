@@ -17,8 +17,8 @@ class TestShell {
 	
 	public function new( suite:String ) {
 		this.suite=suite;
-		cnx = haxe.remoting.AsyncConnection.urlConnect( serverUrl );
-		cnx.onError = function(err:Dynamic) { throw( err ); };
+		cnx = haxe.remoting.HttpAsyncConnection.urlConnect( serverUrl );
+		cnx.setErrorHandler( function(err:Dynamic) { throw( err ); } );
 		cases = new Array<TestCase>();
 		enterFrameL = Root.addEventListener( FrameEvent.ENTER_FRAME, onEnterFrame );
 	}
@@ -52,7 +52,7 @@ class TestShell {
 	}
 	
 
-	override public function run() {
+	public function run() {
 		var platform = 
 				#if neko
 					"inity";
@@ -66,13 +66,12 @@ class TestShell {
 
 		var self=this;
 		try {
- 			trace("call startRun");
 			cnx.test.startRun.call([suite,platform],function(r){
 				trace("returned startRun");
 				self.runNextCase();
 			});
-			trace("/call startRun");
 		} catch(e:Dynamic) {
+			trace(""+haxe.Stack.toString(haxe.Stack.exceptionStack()));
 			trace("No connection to server: "+Std.string(e));
 		}
 		
