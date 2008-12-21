@@ -25,7 +25,7 @@ class TextureGlyph extends Glyph {
 	}
 	
 	public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
-		advance = Math.round( b.advance/(1<<6) );
+		advance = Math.round( b.advance/(1<<6) )/size;
 		var twidth = 2; while( twidth<b.width+2 ) twidth<<=1;
 		var theight = 2; while( theight<b.height+2 ) theight<<=1;
 
@@ -91,7 +91,6 @@ class TextureGlyph extends Glyph {
 		} else {
 			trace("Trying to render TextureGlyph, but no bitmap set.");
 		}
-		trace("Render height "+fontHeight+", h "+h+", adv "+advance+", sz "+size );
-		return(advance/size);
+		return(advance);
 	}
 }

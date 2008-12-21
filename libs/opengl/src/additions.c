@@ -53,6 +53,8 @@ void glTexImageClearFT( unsigned int text, int w, int h ) {
     memset( empty, 0, w*h );
     glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, empty );
+
+    glPopClientAttrib();
 }
 
 void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {

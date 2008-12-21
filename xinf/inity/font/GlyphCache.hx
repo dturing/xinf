@@ -23,7 +23,7 @@ class GlyphCache {
 //			trace("caching glyph "+character+" sz "+size );
 			try {
 				g = new TextureGlyph( character, font, size, hint );
-				glyphs.set(character,g);
+//				glyphs.set(character,g);
 			} catch(e:Dynamic) {
 				trace(""+e+": "+character);
 			}

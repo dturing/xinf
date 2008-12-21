@@ -81,7 +81,7 @@ class Font extends xinf.support.Font {
 			} else {
 				var g = getGlyph(c,fontSize);
 				if( g != null ) {
-					w += g.advance/fontSize;
+					w += g.advance;
 				}
 			}
 		}
