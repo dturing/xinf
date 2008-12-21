@@ -4,7 +4,7 @@ PROJECT:=xinf
 VERSION:=0.5
 TAGLINE:=Short Circuit (1986)
 
-DATE:=$(shell date +"%Y-%m-%d %H:%M:%S")
+DATE:=$(shell date +"%Y-%m-%d")
 REVISION:=$(shell svnversion)
 
 #######################################################
@@ -17,7 +17,7 @@ INITYLIBS=cptr opengl xinfinity-support openvg
 INITYCP=$(foreach LIB, $(INITYLIBS), -lib $(LIB) )
 NEKOPATH:=$(NEKOPATH)
 
-HAXEFLAGS=$(INITYCP) -cp . #-D profile
+HAXEFLAGS=$(INITYCP) -cp . -debug #-D profile
 
 default: test
 	
@@ -98,3 +98,32 @@ $(HAXELIB_PROJECT).zip: $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	
 	# create the final .zip
 	cd $(HAXELIB_ROOT); zip -r $(PROJECT).zip $(PROJECT)
+	
+#####################
+# (relatively) clean
+clean :
+	rm -rf support/haxelib-build
+	
+	
+#####################
+# test release
+
+TESTDIR:=/tmp/test
+LIBS:=cptr opengl openvg xinfinity-support
+
+$(TESTDIR):
+	mkdir $(TESTDIR)
+
+%.lib : $(TESTDIR)
+	echo BUILD $*
+	echo -ne "\033]0;Build" $* "\007"
+	cd libs/$*; make clean; make all haxelib
+	cp libs/$*/haxelib/$*.zip $(TESTDIR)/$*-$(DATE).zip
+
+$(TESTDIR)/test.bat:
+	echo $(foreach LIB, $(LIBS),"haxelib test" $(LIB)-$(DATE).zip "\n" ) "haxelib test xinf-$(DATE).zip\n" > $@
+	
+testrelease: $(foreach LIB, $(LIBS), $(LIB).lib)
+	make clean haxelib
+	cp $(HAXELIB_PROJECT)ä.zip $(TESTDIR)/xinf-$(DATE).zip
+
