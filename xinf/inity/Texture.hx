@@ -116,12 +116,13 @@ class Texture extends ImageData {
 			var r = cache.get(url.toString());
 			if( r==null ) {
 				var data:String=null;
+				// FIXME: url.fetch?
 				switch( url.protocol ) {
 					case "data":
 						data = url.getData();
 					case null:
 					case "file":
-						data = neko.io.File.getContent( url.toString() );
+						data = neko.io.File.getContent( url.localPath() );
 					case "resource":
 						data = haxe.Resource.getString( url.toString() );
 					case "http":
