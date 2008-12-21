@@ -28,7 +28,7 @@ class URL {
 	/** the port, if omitted it is automatically
 		set for some protocols: 80 for http, 443 for https and 21 for ftp.
 	*/
-	public var port:Int;
+	public var port:Null<Int>;
 	
 	/** the path part of the URI*/
 	public var path:String;
@@ -96,7 +96,6 @@ class URL {
 	public function getRelativeURL( rel:String ) :URL {
 		var rel = new URL( rel );
 		if( rel.isAbsolute() ) return rel;
-		
 		var url = new URL( this.pathString()+rel.path+rel.filename );
 		return url;
 	}
@@ -132,7 +131,7 @@ class URL {
 		
 		#if neko
 			if( protocol=="file" || protocol==null ) {
-				var data = neko.io.File.getContent( if( host!=null ) host+path+filename else path+filename );
+				var data = neko.io.File.getContent( localPath() );
 				onData( data );
 				return;
 			}
@@ -156,6 +155,10 @@ class URL {
 		}
 		
 	}
+
+	public function localPath() :String {
+		return path+filename;
+	}
 	
 	/**
 		Return a string representation of this URL up to but not including
@@ -172,7 +175,7 @@ class URL {
 		if( host!=null ) {
 			h = h+host;
 		}
-		if( port!=0 ) {
+		if( port!=0 && port!=null ) {
 			h = h+":"+port;
 		}
 		return( h+path );
@@ -193,6 +196,7 @@ class URL {
 //		trace("---"+base64+"---\n");
 		throw("Where have all the StringTools.baseDecode gone?");
 //		return( StringTools.baseDecode( base64, BASE64 ) );
+throw("FIXME");
 		return("");
 	}
 	
