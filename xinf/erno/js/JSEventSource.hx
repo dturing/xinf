@@ -53,6 +53,7 @@ class JSEventSource {
 	}
 	
 	private function keyEvent( e:js.Event, type:EventKind<KeyboardEvent> ) :Bool {
+		if( e==null ) e = untyped window.event;
 		var key:String = Keys.get(e.keyCode);
 		if( key==null ) key = String.fromCharCode(e.keyCode);
 		if( e.keyCode == 0 ) {
@@ -133,6 +134,8 @@ class JSEventSource {
 	public function rootResized( e:js.Event ) :Void {
 		var w = js.Lib.window.innerWidth;
 		var h = js.Lib.window.innerHeight;
+		if( w==null ) w = js.Lib.document.body.clientWidth;
+		if( h==null ) h = js.Lib.document.body.clientHeight;
 		runtime.postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, w, h ) );
 	}
 	
