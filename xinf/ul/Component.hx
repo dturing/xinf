@@ -122,16 +122,16 @@ class Component extends StyledElement {
 	
 	static var TRAITS = {
 		skin:			new StringTrait(),
-		horizontal_align:	new FloatTrait(),
-		vertical_align:		new FloatTrait(),
+		horizontalalign:	new FloatTrait(),
+		verticalalign:		new FloatTrait(),
 		border:				new BorderTrait(),
 		padding:			new BorderTrait(),
 		margin:				new BorderTrait(),
-		min_width:			new LengthTrait(),
-		max_width:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
-		min_height:			new LengthTrait(),
-		max_height:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
-		focus_color:		new PaintTrait(Paint.None),
+		minwidth:			new LengthTrait(),
+		maxwidth:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
+		minheight:			new LengthTrait(),
+		maxheight:			new LengthTrait(new Length(Math.POSITIVE_INFINITY)),
+		focuscolor:			new PaintTrait(Paint.None),
 	};
 
 	public var skin(get_skin,set_skin):String;
@@ -139,12 +139,12 @@ class Component extends StyledElement {
 	function set_skin( v:String ) :String { return setStyleTrait("skin",v); }
 
 	public var horizontalAlign(get_horizontal_align,set_horizontal_align):Float;
-	function get_horizontal_align() :Float { return getStyleTrait("horizontal-align",Float); }
-	function set_horizontal_align( v:Float ) :Float { return setStyleTrait("horizontal-align",v); }
+	function get_horizontal_align() :Float { return getStyleTrait("horizontalalign",Float); }
+	function set_horizontal_align( v:Float ) :Float { return setStyleTrait("horizontalalign",v); }
 
 	public var verticalAlign(get_vertical_align,set_vertical_align):Float;
-	function get_vertical_align() :Float { return getStyleTrait("vertical-align",Float); }
-	function set_vertical_align( v:Float ) :Float { return setStyleTrait("vertical-align",v); }
+	function get_vertical_align() :Float { return getStyleTrait("verticalalign",Float); }
+	function set_vertical_align( v:Float ) :Float { return setStyleTrait("verticalalign",v); }
 
 	public var border(get_border,set_border):Border;
 	function get_border() :Border { return getStyleTrait("border",Border); }
@@ -159,24 +159,24 @@ class Component extends StyledElement {
 	function set_margin( v:Border ) :Border { return setStyleTrait("margin",v); }
 
 	public var minWidth(get_min_width,set_min_width):Float;
-	function get_min_width() :Float { return getStyleTrait("min-width",Length).value; }
-	function set_min_width( v:Float ) :Float { setStyleTrait("min-width",new Length(v)); return v; }
+	function get_min_width() :Float { return getStyleTrait("minwidth",Length).value; }
+	function set_min_width( v:Float ) :Float { setStyleTrait("minwidth",new Length(v)); return v; }
 
 	public var maxWidth(get_max_width,set_max_width):Float;
 	function get_max_width() :Float { return getStyleTrait("max-width",Length).value; }
 	function set_max_width( v:Float ) :Float { setStyleTrait("max-width",new Length(v)); return v; }
 
 	public var minHeight(get_min_height,set_min_height):Float;
-	function get_min_height() :Float { return getStyleTrait("min-height",Length).value; }
-	function set_min_height( v:Float ) :Float { setStyleTrait("min-height",new Length(v)); return v; }
+	function get_min_height() :Float { return getStyleTrait("minheight",Length).value; }
+	function set_min_height( v:Float ) :Float { setStyleTrait("minheight",new Length(v)); return v; }
 
 	public var maxHeight(get_max_height,set_max_height):Float;
-	function get_max_height() :Float { return getStyleTrait("max-height",Length).value; }
-	function set_max_height( v:Float ) :Float { setStyleTrait("max-height",new Length(v)); return v; }
+	function get_max_height() :Float { return getStyleTrait("maxheight",Length).value; }
+	function set_max_height( v:Float ) :Float { setStyleTrait("maxheight",new Length(v)); return v; }
 
 	public var focusColor(get_focus_color,set_focus_color):Paint;
-	function get_focus_color() :Paint { return getStyleTrait("focus-color",Paint); }
-	function set_focus_color( v:Paint ) :Paint{ return setStyleTrait("focus-color",v); }
+	function get_focus_color() :Paint { return getStyleTrait("focuscolor",Paint); }
+	function set_focus_color( v:Paint ) :Paint{ return setStyleTrait("focuscolor",v); }
 
 	static var highestId:Int = 0;
 	public var __parentSizeListener:Dynamic;

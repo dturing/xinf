@@ -39,17 +39,17 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
 	static var tagName = "RoundRobin";
 
 	static var TRAITS = {
-		line_increment:new LineIncrementTrait(),
+		lineincrement:new LineIncrementTrait(),
 	}
 
 	public var lineIncrement(get_line_increment,set_line_increment):Float;
 	function get_line_increment() :Float { 
-		var r:Float = getStyleTrait("line-increment",Float);
+		var r:Float = getStyleTrait("lineincrement",Float);
 		if( r==-1 ) // auto
 			r = fontSize*1.1;
 		return r; 
 	}
-	function set_line_increment( v:Float ) :Float { setStyleTrait("line-increment",v); redraw(); return v; }
+	function set_line_increment( v:Float ) :Float { setStyleTrait("lineincrement",v); redraw(); return v; }
 
 	var model:ListModel<T>;
 	var createItem:Void->Item;
