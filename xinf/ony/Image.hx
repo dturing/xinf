@@ -23,7 +23,7 @@ class Image extends ElementImpl {
 		height:new LengthTrait(),
 		href:new StringTrait(), // FIXME proper namespaces
 		
-		preserveAspectRatio: new PreserveAspectRatioTrait( PreserveAspectRatio.Preserve(Mid,Mid) ),
+		preserveaspectratio: new PreserveAspectRatioTrait( PreserveAspectRatio.Preserve(Mid,Mid) ),
 	};
 
 	public var x(get_x,set_x):Float;
@@ -47,7 +47,7 @@ class Image extends ElementImpl {
 	function set_href( v:String ) :String { return setTrait("href",v); }
 
 	public var preserveAspectRatio(get_preserveAspectRatio,set_preserveAspectRatio):PreserveAspectRatio;
-	function get_preserveAspectRatio() :PreserveAspectRatio { return getStyleTrait("preserveAspectRatio",PreserveAspectRatio); }
-	function set_preserveAspectRatio( v:PreserveAspectRatio ) :PreserveAspectRatio { return setStyleTrait("preserveAspectRatio",v); }
+	function get_preserveAspectRatio() :PreserveAspectRatio { return getStyleTrait("preserveaspectratio",PreserveAspectRatio); }
+	function set_preserveAspectRatio( v:PreserveAspectRatio ) :PreserveAspectRatio { return setStyleTrait("preserveaspectratio",v); }
 
 }
