@@ -2,6 +2,7 @@
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include "neko-pixbuf.h"
 #include <neko.h>
+#include <glib.h>
 
 #include <stdlib.h>
 #include <string.h>
