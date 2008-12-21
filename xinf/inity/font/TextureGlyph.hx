@@ -15,11 +15,13 @@ class TextureGlyph extends Glyph {
 	var y1:Float;
 	var x2:Float;
 	var y2:Float;
+	var size:Int;
 	
 	public function new( character:Int, font:Font, size:Int, hint:Bool ) {
 		super(10);
+		this.size = size;
 		var b = font.renderGlyph( character, size<<6, hint );
-		setBitmap( b, Math.round(size) );
+		setBitmap( b, size );
 	}
 	
 	public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
@@ -48,12 +50,15 @@ class TextureGlyph extends Glyph {
 			GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
-			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST );
-			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST );
+			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
+			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
 			GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
 
-			if( b.width>0 && b.height>0 ) // FIXME: check this earlier? crashes only on cr's nvidia!
+			// FIXME: check this earlier? crashes only on cr's nvidia!
+			if( b.width>0 && b.height>0 ) {
+				GL.texImageClearFT( texture, twidth, theight );
 				GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
+			}
 
 		GL.popAttrib();
 
@@ -65,7 +70,7 @@ class TextureGlyph extends Glyph {
 		#end
 	}
 	
-	override public function render() :Float {
+	override public function render( fontHeight:Float ) :Float {
 		if( texture!=null ) {
 			GL.pushAttrib( GL.ENABLE_BIT );
 				GL.enable( GL.TEXTURE_2D );
@@ -86,6 +91,7 @@ class TextureGlyph extends Glyph {
 		} else {
 			trace("Trying to render TextureGlyph, but no bitmap set.");
 		}
-		return super.render();
+		trace("Render height "+fontHeight+", h "+h+", adv "+advance+", sz "+size );
+		return(advance/size);
 	}
 }

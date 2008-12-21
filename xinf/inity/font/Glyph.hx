@@ -12,7 +12,7 @@ class Glyph {
 		advance = adv;
 	}
 	
-	public function render() :Float {
+	public function render( fontHeight:Float ) :Float {
 
 		// "implement here"
 		

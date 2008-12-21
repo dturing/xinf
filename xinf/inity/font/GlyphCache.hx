@@ -20,7 +20,7 @@ class GlyphCache {
 	public function get( character:Int ) {
 		var g = glyphs.get(character);
 		if( g==null ) {
-//			trace("caching glyph "+character );
+//			trace("caching glyph "+character+" sz "+size );
 			try {
 				g = new TextureGlyph( character, font, size, hint );
 				glyphs.set(character,g);

@@ -41,7 +41,7 @@ class Font extends xinf.support.Font {
 	}
 
 	public var font:xinf.support.Font;
-	private var cache:Hash<GlyphCache>;
+	private var cache:IntHash<GlyphCache>;
 	// later, maybe: private var outlines:GlyphCache();
 	var data:String;
 
@@ -49,16 +49,18 @@ class Font extends xinf.support.Font {
 		this.data = data;
 		var s = Math.round(size<<24);
 		super( data, s, s );
-		cache = new Hash<GlyphCache>();
+		cache = new IntHash<GlyphCache>();
 	}
 	
 	public function getGlyph( character:Int, fontSize:Float ) :Glyph {
-		var c = cache.get(""+Math.round(fontSize));
+		var lod = Math.ceil( Math.max( Math.sqrt( fontSize ), 6 ));
+		var c = cache.get(lod);
 		
 		if( c==null ) {
-//			trace("not cached "+character+" sz "+fontSize );
-			c = new GlyphCache( this, Math.round(fontSize), fontSize<=12 );
-			cache.set(""+Math.round(fontSize),c);
+			trace("not cached "+character+" lod "+lod+" sz "+fontSize );
+			c = new GlyphCache( this, Math.ceil(Math.pow( lod, 2 )), false ); 
+					// hint for sz<=12: fontSize<=12 );
+			cache.set(lod,c);
 		}
 		
 		var g = c.get(character);
@@ -115,7 +117,7 @@ class Font extends xinf.support.Font {
 			} else {
 				var g = self.getGlyph(c,fontSize);
 				if( g != null ) {
-					GL.translate( g.render()/fontSize, 0, 0 );
+					GL.translate( g.render(fontSize), 0, 0 );
 				}
 			}
 		 });

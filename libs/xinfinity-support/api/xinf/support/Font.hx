@@ -34,7 +34,7 @@ class Font {
 
 	public function new( data:String, ?width:Int, ?height:Int ) {
 		if( width==null ) width=72;
-		if( height==null ) height=72;
+		if( height==null ) height=width;
 		var _f = _load( untyped data.__s, width, height );
 		
 		__f = _f;

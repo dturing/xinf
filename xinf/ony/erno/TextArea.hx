@@ -155,7 +155,7 @@ class TextArea extends xinf.ony.TextArea {
 				for( i in 0...text.length ) {
 					var g = format.font.getGlyph( text.charCodeAt(i), format.size );
 					if( g!=null ) {
-						GL.translate( g.render()/format.size, 0, 0 );
+						GL.translate( g.render(format.size), 0, 0 );
 					}
 				}
 				
