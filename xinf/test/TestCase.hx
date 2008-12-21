@@ -19,9 +19,9 @@ class TestCase {
 		platform = 
 				#if neko
 					"inity";
-				#else flash9
+				#elseif flash9
 					"flash9";
-				#else js
+				#elseif js
 					"js";
 				#end
 		name = ""+this;

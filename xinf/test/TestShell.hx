@@ -53,19 +53,22 @@ class TestShell {
 	
 
 	public function run() {
-		var platform = 
+		var platform:String = 
 				#if neko
 					"inity";
-				#else flash9
+				#elseif flash9
 					"flash9";
-				#else js
+				#elseif js
 					"js";
+				#else
+					"unspecified?";
 				#end
 
 		caseIterator = cases.iterator();
 
 		var self=this;
 		try {
+trace("yo suite: "+suite+", platform: "+platform );
 			cnx.test.startRun.call([suite,platform],function(r){
 				trace("returned startRun");
 				self.runNextCase();
