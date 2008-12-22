@@ -179,29 +179,31 @@ class GLRenderer extends ObjectModelRenderer {
 	}
 
 	override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
-		format.assureLoaded();
+//		format.assureLoaded();
+		
 		var font = format.font;
-		if( font==null ) trace("NULL font");
-		if( font != null ) {
-			if( pen.stroke != null ) {
-				GL.pushMatrix();
-					GL.translate( Math.floor(x+1), Math.floor(y+1), 0 );
-					applyStrokeGL();
-					GL.enable(GL.BLEND);
-					font.renderText( text, format.size );
-					GL.disable(GL.BLEND);
-				GL.popMatrix();
-			}
-			if( pen.fill != null ) {
-				GL.pushMatrix();
-					GL.translate( Math.floor(x), Math.floor(y), 0 );
-					applyFillGL();
-					GL.enable(GL.BLEND);
-					font.renderText( text, format.size );
-					GL.disable(GL.BLEND);
-				GL.popMatrix();
-			}
+		if( font==null ) throw("NULL font");
+		if( pen.stroke != null ) {
+			GL.pushMatrix();
+				GL.translate( x, y, 0 );
+				applyStrokeGL();
+				GL.enable(GL.BLEND);
+				font.renderText( text, format.size );
+				GL.disable(GL.BLEND);
+			GL.popMatrix();
 		}
+		if( pen.fill != null ) {
+			GL.pushMatrix();
+					// Pixel snapping (if no transformations...)
+					//	GL.translate( Math.floor(x), Math.floor(y), 0 );
+				GL.translate( x, y, 0 );
+				applyFillGL();
+				GL.enable(GL.BLEND);
+				font.renderText( text, format.size );
+				GL.disable(GL.BLEND);
+			GL.popMatrix();
+		}
+
 		// TODO: addHitRectangle
 	}
 	

@@ -214,6 +214,8 @@ class EditableTextArea extends TextArea {
 		var l = Math.floor( Math.min( lines.length, pos.y/lineIncrement ) );
 		if( l<0 ) return( 0 );
 		if( l>=lines.length ) return( text.length );
+
+		var c = format.font.getCache( format.size );
 		
 		var offset=0;
 		var line = lines[l];
@@ -221,7 +223,7 @@ class EditableTextArea extends TextArea {
 		var text = line.text;
 		var g=null;
 		while( x<pos.x && offset<text.length ) {
-			g = format.font.getGlyph( text.charCodeAt(offset), format.size );
+			g = c.get( text.charCodeAt(offset) );
 			x += g.advance;
 			offset++;
 		}

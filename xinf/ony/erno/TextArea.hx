@@ -72,7 +72,6 @@ class TextArea extends xinf.ony.TextArea {
 		
 		var ls = lines = new Array<TextLine>();
 
-		var font = format.font;
 		var lineHeight = lineIncrement;
 		var w=width;
 		var h=Math.floor(height/lineIncrement);
@@ -82,7 +81,8 @@ class TextArea extends xinf.ony.TextArea {
 		var lastSpace=0;
 		var lastSpaceX=0.;
 		var x=0.;
-		var spaceAdvance = font.getGlyph(32,format.size).advance;
+		var cache = format.font.getCache(format.size);
+		var spaceAdvance = cache.get(32).advance;
 
 		var push = function( to:Int ) {
 			var t = text.substr(lastOffset,to-lastOffset);
@@ -95,7 +95,7 @@ class TextArea extends xinf.ony.TextArea {
 		
 		for( i in 0...text.length ) {
 			var c = text.charCodeAt(i);
-			var g = font.getGlyph(c,format.size);
+			var g = cache.get(c);
 		//	trace("char "+(String.fromCharCode(c))+", x "+x+"+"+g.advance );
 			if( x+g.advance > w && c!=32 ) {
 				if( lastSpace==0 ) { // split at character boundary
@@ -137,6 +137,7 @@ class TextArea extends xinf.ony.TextArea {
 		super.drawContents(g);
 		
 		if( lines!=null ) {
+			var c = format.font.getCache( format.size );
 			var y = (this.y/format.size) + (format.font.descender/2);
 			var lineHeight = lineIncrement/format.size;
 
@@ -153,7 +154,7 @@ class TextArea extends xinf.ony.TextArea {
 				GL.translate( .0, y, 0. );
 				var text = line.text;
 				for( i in 0...text.length ) {
-					var g = format.font.getGlyph( text.charCodeAt(i), format.size );
+					var g = c.get( text.charCodeAt(i) );
 					if( g!=null ) {
 						GL.translate( g.render(format.size), 0, 0 );
 					}

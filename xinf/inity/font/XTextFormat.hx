@@ -31,9 +31,10 @@ class XTextFormat extends xinf.erno.TextFormat {
 	override public function assureGlyphs( text:String, size:Float ) :Void {
 		if( text==null ) return;
 		assureLoaded();
+		var cache = font.getCache(size);
 		for( i in 0...text.length ) {
 	//		trace("assure glyph "+text.charCodeAt(i) );
-			font.getGlyph( text.charCodeAt(i), size );
+			cache.get( text.charCodeAt(i) );
 		}
 	}
 

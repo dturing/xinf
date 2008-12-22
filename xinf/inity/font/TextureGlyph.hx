@@ -11,6 +11,11 @@ class TextureGlyph extends Glyph {
 	var texture:Int;
 	var w:Float;
 	var h:Float;
+	var tx1:Float;
+	var ty1:Float;
+	var tx2:Float;
+	var ty2:Float;
+	
 	var x1:Float;
 	var y1:Float;
 	var x2:Float;
@@ -18,27 +23,29 @@ class TextureGlyph extends Glyph {
 	var size:Int;
 	
 	public function new( character:Int, font:Font, size:Int, hint:Bool ) {
-		super(10);
+		super(0);
 		this.size = size;
 		var b = font.renderGlyph( character, size<<6, hint );
 		setBitmap( b, size );
 	}
 	
 	public function setBitmap( b:{ width:Int, height:Int, bitmap:Dynamic,x:Int,y:Int,advance:Float }, fontHeight:Int ) {
-		advance = Math.round( b.advance/(1<<6) )/size;
-		var twidth = 2; while( twidth<b.width+2 ) twidth<<=1;
-		var theight = 2; while( theight<b.height+2 ) theight<<=1;
+		advance = b.advance/(1<<6)/size;
+		var twidth = 2; while( twidth<b.width+3 ) twidth<<=1;
+		var theight = 2; while( theight<b.height+3 ) theight<<=1;
 
-		w = b.width/(twidth);
-		h = b.height/(theight);
+		w = (b.width+2)/(twidth);
+		h = (b.height+2)/(theight);
   
+  		var bd=1/fontHeight;
+
 		var by = Math.ceil(b.y/(1<<6))/fontHeight;
-		y1=-by;
-		y2=y1+(b.height/fontHeight);
+		y1=-by-bd;
+		y2=y1+(b.height/fontHeight)+(2*bd);
 
 		var bx = Math.floor(b.x/(1<<6))/fontHeight;
-		x1=bx;
-		x2=x1+(b.width/fontHeight);
+		x1=bx-bd;
+		x2=x1+(b.width/fontHeight)+(2*bd);
 
 		var t:Dynamic = CPtr.uint_alloc(1);
 		GL.genTextures(1,t);
@@ -53,11 +60,11 @@ class TextureGlyph extends Glyph {
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
 			GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
+			GL.texImageClearFT( texture, twidth, theight );
 
 			// FIXME: check this earlier? crashes only on cr's nvidia!
 			if( b.width>0 && b.height>0 ) {
-				GL.texImageClearFT( texture, twidth, theight );
-				GL.texSubImageFT( texture, 0, 0, b.width, b.height, b.bitmap );
+				GL.texSubImageFT( texture, 1, 1, b.width, b.height, b.bitmap );
 			}
 
 		GL.popAttrib();
