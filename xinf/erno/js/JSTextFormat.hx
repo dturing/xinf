@@ -22,7 +22,7 @@ class JSTextFormat extends xinf.erno.TextFormat {
 		if( measure==null ) {
 			measure = js.Lib.document.createElement("div");
 			measure.style.position="absolute";
-			measure.style.bottom="-200";
+			measure.style.bottom="-200px";
 			measure.style.background="#fff";
 			js.Lib.document.body.appendChild( measure );
 		}
