@@ -7,9 +7,13 @@ import xinf.geom.Types;
 
 class Rotate implements Transform {
 	var a:Float;
+	var cx:Float;
+	var cy:Float;
 	
-	public function new( a:Float ) {
+	public function new( a:Float, ?cx:Float=0., ?cy:Float=0. ) {
 		this.a = a;
+		this.cx = cx;
+		this.cy = cy;
 	}
 	
 	public function getTranslation() {
@@ -19,9 +23,12 @@ class Rotate implements Transform {
 		return { x:.0, y:.0 };
 	}
 	public function getMatrix() {
+		return untyped new Matrix().translate(-cx,-cy).rotate(a).translate(cx,cy);
+		/*
 		var co = Math.cos(a);
 		var si = Math.sin(a);
 		return { a:co, b:si, c:-si, d:co, tx:0., ty:0. };
+		*/
 	}
 	
 	public function apply( p:TPoint ) :TPoint {
@@ -32,10 +39,13 @@ class Rotate implements Transform {
 	}
 
 	public function interpolateWith( p:Transform, f:Float ) :Transform {
-		if( Std.is(p,Identity) ) return new Rotate(a*(1-f));
+		if( Std.is(p,Identity) ) return new Rotate(a*(1-f),cx,cy);
 		if( !Std.is(p,Rotate) ) return this;
 		var q:Rotate = cast(p);
-		return( new Rotate( a + ((q.a-a)*f) ) );
+		return( new Rotate( a + ((q.a-a)*f), 	
+						   cx + ((q.cx-cx)*f),
+						   cy + ((q.cy-cy)*f)
+							) );
 	}
 
 	public function distanceTo( p:Transform ) :Float {

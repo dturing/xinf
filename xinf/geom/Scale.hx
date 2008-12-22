@@ -27,8 +27,8 @@ class Scale implements Transform {
 	}
 	
 	public function getMatrix() {
-		return untyped new Matrix().translate(-cx,-cy).scale(x,y).translate(cx,cy);
 		// FIXME. do that more efficient. tx=-cx*x? sth like it?
+		return untyped new Matrix().translate(-cx,-cy).scale(x,y).translate(cx,cy);
 //		return { a:x, b:0., c:0., d:y, tx:0., ty:0. };
 	}
 	
