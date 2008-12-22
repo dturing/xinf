@@ -16,6 +16,7 @@ class Font {
 		DLLLoader.addLibToPath("xinfinity-support");
 		_load = neko.Lib.load("xinfinity-support","ftLoadFont",3);
 		_iterateGlyphs = neko.Lib.load("xinfinity-support","ftIterateGlyphs",2);
+		_iterateKerningPairs = neko.Lib.load("xinfinity-support","ftIterateKerningPairs",2);
 		_renderGlyph = neko.Lib.load("xinfinity-support","ftRenderGlyph",4);
 		_listFonts = neko.Lib.load("xinfinity-support","fcListFonts",1);
 		_findFont = neko.Lib.load("xinfinity-support","fcFindFont",4);
@@ -59,6 +60,10 @@ class Font {
 		_iterateGlyphs( __f, callbackObject );
 	}
 
+	public function iterateKerningPairs( callbackFunction:Int->Int->Float->Void ) :Void {
+		_iterateKerningPairs( __f, callbackFunction );
+	}
+
 	public function renderGlyph( index:Int, size:Float, hint:Bool ) :{ width:Int, height:Int, bitmap:Dynamic, x:Int, y:Int, advance:Float } {
 		return _renderGlyph( __f, index, size, hint );
 	}
@@ -73,6 +78,7 @@ class Font {
 
 	private static var _load;
 	private static var _iterateGlyphs;
+	private static var _iterateKerningPairs;
 	private static var _renderGlyph;
 	private static var _listFonts;
 	private static var _findFont;

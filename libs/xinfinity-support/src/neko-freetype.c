@@ -299,3 +299,44 @@ value ftIterateGlyphs( value font, value callbacks ) {
     return val_true;
 }
 DEFINE_PRIM(ftIterateGlyphs,2);
+
+value ftIterateKerningPairs( value font, value callback ) {
+    if( !val_is_object(font) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    value __f = val_field( font, val_id("__f") );
+    if( __f == NULL || !val_is_abstract( __f ) || !val_is_kind( __f, k_ft_face ) ) {
+        ft_failure_v("not a freetype font face: ", font );
+    }
+    FT_Face *face = val_data( __f );
+
+	if( !FT_HAS_KERNING((*face)) ) {
+		return val_null;
+	}
+	
+
+	FT_UInt left_index, right_index;
+	FT_ULong left, right;
+	FT_Vector vec;
+
+    left = FT_Get_First_Char( *face, &left_index );
+    while( left != 0 ) {
+
+		right = FT_Get_First_Char( *face, &right_index );
+		while( right != 0 ) {
+
+			if( !FT_Get_Kerning( *face, left_index, right_index, FT_KERNING_UNFITTED, &vec ) && vec.x ) {
+//				printf("KERNING %c_%c: %f\n", left, right, vec.x );
+		        val_call3( callback, alloc_int( (int)left ), alloc_int( (int)right ), alloc_float( vec.x ) );
+		    }
+	        
+	        right = FT_Get_Next_Char( *face, right, &right_index );
+	    }
+            
+        left = FT_Get_Next_Char( *face, left, &left_index );
+    }
+		
+    return val_true;
+}
+DEFINE_PRIM(ftIterateKerningPairs,2);
+
