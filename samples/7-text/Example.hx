@@ -37,7 +37,7 @@ class Example {
 				x:150, y:260, fill:"black",
 				fontSize: 56,
 				lineHeight: 40,
-				text:"AVAVA\nTaTa!",
+				text:"AVAVA TaTa!",
 				textAnchor:"start",
 			});
 		g.appendChild( text );

@@ -125,5 +125,5 @@ $(TESTDIR)/test.bat:
 	
 testrelease: $(foreach LIB, $(LIBS), $(LIB).lib)
 	make clean haxelib
-	cp $(HAXELIB_PROJECT)ä.zip $(TESTDIR)/xinf-$(DATE).zip
+	cp $(HAXELIB_PROJECT).zip $(TESTDIR)/xinf-$(DATE).zip
 

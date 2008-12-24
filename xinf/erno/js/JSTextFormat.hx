@@ -12,7 +12,7 @@ class JSTextFormat extends xinf.erno.TextFormat {
 		to.style.fontFamily = if( family=="sans" ) "Bitstream Vera Sans, Arial, sans-serif" else family;
 		to.style.fontStyle = if( italic ) "italic" else "normal";
 		to.style.fontWeight = if( bold ) "bold" else "normal";
-		to.style.fontSize = size;
+		to.style.fontSize = ""+size+"px";
 	}
 
 
