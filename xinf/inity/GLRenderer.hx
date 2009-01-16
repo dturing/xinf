@@ -179,10 +179,13 @@ class GLRenderer extends ObjectModelRenderer {
 	}
 
 	override public function text( x:Float, y:Float, text:String, format:TextFormat ) {
-//		format.assureLoaded();
+		format.assureLoaded();
 		
 		var font = format.font;
-		if( font==null ) throw("NULL font");
+		if( font==null ) {
+			trace("NULL font");
+			return;
+		}
 		if( pen.stroke != null ) {
 			GL.pushMatrix();
 				GL.translate( x, y, 0 );

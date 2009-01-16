@@ -44,17 +44,17 @@ void glTexSubImageALPHA( unsigned int tex, int x, int y, int w, int h, const uns
 }
 
 void glTexImageClearFT( unsigned int text, int w, int h ) {
-    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
+/*    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
     glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
-	
+	*/
     unsigned char empty[w*h]; // FIXME. but it should be cleared on creation...
     memset( empty, 0, w*h );
     glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, empty );
 
-    glPopClientAttrib();
+//    glPopClientAttrib();
 }
 
 void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
@@ -65,8 +65,6 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
     
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
-    
-    
     
     glPopClientAttrib();    
 }
