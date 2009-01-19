@@ -181,6 +181,13 @@ value gst_buffer_size( value b ) {
 }
 DEFINE_PRIM(gst_buffer_size,1);
 
+value gst_buffer_timestamp( value b ) {
+	GstBuffer *buf = val_gstbuffer(b);
+	if( !buf ) return val_null;
+	return alloc_float( (double)GST_BUFFER_TIMESTAMP(buf)/GST_SECOND );
+}
+DEFINE_PRIM(gst_buffer_timestamp,1);
+
 value gst_buffer_caps( value b ) {
 	GstBuffer *buf = val_gstbuffer(b);
 	if( !buf ) return val_null;

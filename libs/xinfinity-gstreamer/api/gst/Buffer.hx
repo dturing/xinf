@@ -6,6 +6,7 @@ package gst;
 class Buffer {
 	private static var _data = neko.Lib.load("xinfinity-gstreamer","gst_buffer_data",1);
 	private static var _size = neko.Lib.load("xinfinity-gstreamer","gst_buffer_size",1);
+	private static var _timestamp = neko.Lib.load("xinfinity-gstreamer","gst_buffer_timestamp",1);
 	private static var _caps = neko.Lib.load("xinfinity-gstreamer","gst_buffer_caps",1);
 	private static var _free = neko.Lib.load("xinfinity-gstreamer","gst_buffer_free",1);
 	
@@ -21,6 +22,10 @@ class Buffer {
 
 	public function size() :Int {
 		return _size( _b );
+	}
+
+	public function timestamp() :Float {
+		return _timestamp( _b );
 	}
 
 	public function caps() :Dynamic {
