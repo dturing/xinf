@@ -69,6 +69,10 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
     glPopClientAttrib();    
 }
 
+void glDeleteTexture( unsigned int tex ) {
+	glDeleteTextures( 1, &tex );
+}
+
 /* GLFW helpers */
 
 static field f_x;
