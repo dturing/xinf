@@ -109,6 +109,7 @@ clean :
 # test release
 
 TESTDIR:=/tmp/test
+TEST_BAT:=$(TESTDIR)/test.bat
 LIBS:=cptr opengl openvg xinfinity-support
 
 $(TESTDIR):
@@ -123,7 +124,7 @@ $(TESTDIR):
 $(TESTDIR)/test.bat:
 	echo $(foreach LIB, $(LIBS),"haxelib test" $(LIB)-$(DATE).zip "\n" ) "haxelib test xinf-$(DATE).zip\n" > $@
 	
-testrelease: $(foreach LIB, $(LIBS), $(LIB).lib)
+testrelease: $(foreach LIB, $(LIBS), $(LIB).lib) $(TESTDIR)/test.bat
 	make clean haxelib
 	cp $(HAXELIB_PROJECT).zip $(TESTDIR)/xinf-$(DATE).zip
 
