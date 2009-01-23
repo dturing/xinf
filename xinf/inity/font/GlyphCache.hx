@@ -21,12 +21,12 @@ class GlyphCache {
 		var g = glyphs.get(character);
 		if( g==null ) {
 			trace("caching glyph "+character+" sz "+size );
-			try {
+			//try {
 				g = new TextureGlyph( character, font, size, hint );
 				glyphs.set(character,g);
-			} catch(e:Dynamic) {
-				trace(""+e+": "+character);
-			}
+			//} catch(e:Dynamic) {
+			//	trace(""+e+": "+character);
+			//}
 		}
 		return g;
 	}

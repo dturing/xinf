@@ -4,29 +4,29 @@
 #include <stdio.h>
 #include <GL/glfw.h>
 
-void glTexSubImageRGBA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageRGBA( int x, int y, int w, int h, const unsigned char *data ) {
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
-void glTexSubImageBGRA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageBGRA( int x, int y, int w, int h, const unsigned char *data ) {
 //	printf("GL_BGRA is not valid on Windows, thus disabled.\n");
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
-void glTexSubImageRGB( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageRGB( int x, int y, int w, int h, const unsigned char *data ) {
        glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
-void glTexSubImageBGR( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageBGR( int x, int y, int w, int h, const unsigned char *data ) {
 	val_throw(alloc_string("glTexSubImageBGR not implemented"));
 //       glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
 //        GL_BGR, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
-void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageGRAY( int x, int y, int w, int h, const unsigned char *data ) {
 	/*
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
@@ -38,12 +38,12 @@ void glTexSubImageGRAY( unsigned int tex, int x, int y, int w, int h, const unsi
    // glPopClientAttrib();    
 }
 
-void glTexSubImageALPHA( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageALPHA( int x, int y, int w, int h, const unsigned char *data ) {
     glTexSubImage2D( GL_TEXTURE_2D, 0, x, y, w, h,
         GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
 }
 
-void glTexImageClearFT( unsigned int text, int w, int h ) {
+void glTexImageClearFT( int w, int h ) {
 /*    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
     glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
@@ -57,7 +57,7 @@ void glTexImageClearFT( unsigned int text, int w, int h ) {
 //    glPopClientAttrib();
 }
 
-void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsigned char *data ) {
+void glTexSubImageFT( int x, int y, int w, int h, const unsigned char *data ) {
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
     glPixelStorei( GL_UNPACK_LSB_FIRST, GL_FALSE);
     glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
@@ -67,10 +67,6 @@ void glTexSubImageFT( unsigned int tex, int x, int y, int w, int h, const unsign
         GL_ALPHA, GL_UNSIGNED_BYTE, (unsigned char *)data );
     
     glPopClientAttrib();    
-}
-
-void glDeleteTexture( unsigned int tex ) {
-	glDeleteTextures( 1, &tex );
 }
 
 /* GLFW helpers */

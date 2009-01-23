@@ -896,36 +896,37 @@ extern class GL {
 	public static function texImage2D( target:Int, level:Int, internalFormat:Int, width:Int, height:Int, border:Int, format:Int, type:Int, pixels:Dynamic ):Void;
 
 	/** <nekobind><cptr name="textures" type="GLuint" min-size="n"/></nekobind> **/
+	/*
 	public static function genTextures( n:Int, textures:Dynamic ):Void;
-	
+	public static function deleteTexture( texture:Int ) :Void;
 	public static function bindTexture( target:Int, texture:Int ):Void;
 	public static function isTexture( texture:Int ):Int;
+	*/
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
-	public static function texSubImageRGBA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageRGBA( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
-	public static function texSubImageBGRA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageBGRA( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*3)"/></nekobind> **/
-	public static function texSubImageRGB( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageRGB( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*3)"/></nekobind> **/
-	public static function texSubImageBGR( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageBGR( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
-	public static function texSubImageGRAY( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageGRAY( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
-	public static function texSubImageALPHA( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageALPHA( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
-	public static function texImageClearFT( target:Int, width:Int, height:Int ) :Void;
+//	public static function texImageClearFT( width:Int, height:Int ) :Void;
 	
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height)"/></nekobind> **/
-	public static function texSubImageFT( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
+//	public static function texSubImageFT( target:Int, x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;
 
-	public static function deleteTexture( target:Int ) :Void;
 /*	
 	public static function deleteTextures( n:Int, textures:Int ):Void;
 	public static function prioritizeTextures( n:Int, textures:Int, priorities:Float ):Void;

@@ -5,10 +5,11 @@ package xinf.inity.font;
 
 import cptr.CPtr;
 import opengl.GL;
+import opengl.Texture;
 
 class TextureGlyph extends Glyph {
 
-	var texture:Int;
+	var texture:Texture;
 	var w:Float;
 	var h:Float;
 	var tx1:Float;
@@ -47,24 +48,24 @@ class TextureGlyph extends Glyph {
 		x1=bx-bd;
 		x2=x1+(b.width/fontHeight)+(2*bd);
 
-		var t:Dynamic = CPtr.uint_alloc(1);
-		GL.genTextures(1,t);
-		texture = CPtr.uint_get(t,0);
+		texture = Texture.create();
 		
 		GL.pushAttrib( GL.ENABLE_BIT );
 		GL.enable( GL.TEXTURE_2D );
 		
-			GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
+			texture.bind();
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
 			GL.texImage2D( GL.TEXTURE_2D, 0, GL.ALPHA, twidth, theight, 0, GL.ALPHA, GL.UNSIGNED_BYTE, null );
-			GL.texImageClearFT( texture, twidth, theight );
+//			GL.texImageClearFT( texture, twidth, theight );
+			Texture.imageClearFT( twidth, theight );
 
 			// FIXME: check this earlier? crashes only on cr's nvidia!
 			if( b.width>0 && b.height>0 ) {
-				GL.texSubImageFT( texture, 1, 1, b.width, b.height, b.bitmap );
+//				GL.texSubImageFT( texture, 1, 1, b.width, b.height, b.bitmap );
+				Texture.subImageFT( 1, 1, b.width, b.height, b.bitmap );
 			}
 
 		GL.popAttrib();
@@ -81,7 +82,8 @@ class TextureGlyph extends Glyph {
 		if( texture!=null ) {
 			GL.pushAttrib( GL.ENABLE_BIT );
 				GL.enable( GL.TEXTURE_2D );
-				GL.bindTexture( GL.TEXTURE_2D, texture );
+				texture.bind();
+//				GL.bindTexture( GL.TEXTURE_2D, texture );
 
 				GL.begin( GL.QUADS );
 					GL.texCoord2( 0, 0 );

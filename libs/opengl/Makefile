@@ -7,7 +7,7 @@
 
 # project name
 PROJECT:=opengl
-BINDING_CLASSES:=GL GLU GLFW
+BINDING_CLASSES:=GL GLU GLFW Texture
 XINF_PKG:=opengl
 XINF_PKG_PATH:=opengl
 

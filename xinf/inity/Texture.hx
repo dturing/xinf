@@ -29,15 +29,17 @@ class Texture extends ImageData {
 		theight = 2; while( theight<h ) theight<<=1;
 
 		// generate texture id
-		var t:Dynamic = CPtr.uint_alloc(1);
-		GL.genTextures(1,t); // FIXME BADLY: delete this at some point...
-		texture = CPtr.uint_get(t,0);
+//		var t:Dynamic = CPtr.uint_alloc(1);
+//		GL.genTextures(1,t); // FIXME BADLY: delete this at some point...
+//		texture = CPtr.uint_get(t,0);
+		texture = opengl.Texture.create();
+
 		var e:Int = GL.getError();
 		if( e > 0 ) { throw("could not create texture - "+GLU.errorString(e)); }
 		
 		/* If this happens, likely the GL context isnt initialized yet. 
 			Might be the cause for white rectangles instead of glyphs in text.. */
-		if( texture>1000000 ) throw("unlikely texture ID: "+texture ); 
+//		if( texture>1000000 ) throw("unlikely texture ID: "+texture ); 
 			
 
 		GL.pushAttrib( GL.ENABLE_BIT );
@@ -53,7 +55,8 @@ class Texture extends ImageData {
 				default: GL.RGBA;
 			}
 		
-			GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
+//			GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
+			texture.bind();
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
@@ -75,22 +78,23 @@ class Texture extends ImageData {
 	
 		GL.pushAttrib( GL.ENABLE_BIT );
 		GL.enable( GL.TEXTURE_2D );
-		GL.bindTexture( GL.TEXTURE_2D, texture );
+	//	GL.bindTexture( GL.TEXTURE_2D, texture );
+		texture.bind();
 
 		if( data != null ) {
 			switch( cspace ) {
 				case RGB:
-					GL.texSubImageRGB( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageRGB( pos.x, pos.y, size.x, size.y, data );
 				case BGR:
-					GL.texSubImageBGR( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageBGR( pos.x, pos.y, size.x, size.y, data );
 				case RGBA:
-					GL.texSubImageRGBA( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageRGBA( pos.x, pos.y, size.x, size.y, data );
 				case BGRA:
-					GL.texSubImageBGRA( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageBGRA( pos.x, pos.y, size.x, size.y, data );
 				case GRAY:
-					GL.texSubImageGRAY( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageGRAY( pos.x, pos.y, size.x, size.y, data );
 				case ALPHA:
-					GL.texSubImageALPHA( texture, pos.x, pos.y, size.x, size.y, data );
+					opengl.Texture.subImageALPHA( pos.x, pos.y, size.x, size.y, data );
 				default:
 					throw("unknown colorspace "+cspace );
 			}

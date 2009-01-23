@@ -22,7 +22,7 @@ class ImageData extends SimpleEventDispatcher {
 		/**
 			Xinfinity only: the OpenGL-ID of the texture that contains the image data.
 		**/
-		public var texture(default,null):Int;
+		public var texture(default,null):opengl.Texture;
 		
 		/**
 			Xinfinity only: the allocated width of the texture that contains the image data,
