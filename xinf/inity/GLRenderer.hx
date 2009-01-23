@@ -225,8 +225,13 @@ class GLRenderer extends ObjectModelRenderer {
 		var x2:Float = outRegion.w+x;
 		var y2:Float = outRegion.h+y;
 
-//		applyFill();
-		GL.color4(1,1,1,1); // TODO: opacity
+		if( pen.fill!=null ) 
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					GL.color4(red,g,b,a);
+				default:
+					GL.color4(1,1,1,1);
+			}
 
 		GL.pushAttrib( GL.ENABLE_BIT );
 			GL.enable( GL.TEXTURE_2D );
