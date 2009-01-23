@@ -17,9 +17,7 @@ import xinf.xml.URL;
   ImageData only stores some values for direct access by the GLGraphicsContext **/
   
 class Texture extends ImageData {
-	// texture (id), twidth, theight, width and height are already defined in ImageData.
-	
-	// FIXME: initialize might be called again and again to reinit; take care of memory handling!
+	// texture, twidth, theight, width and height are already defined in ImageData.
 	
 	public function initialize( w:Int, stride:Int, h:Int, cspace:ColorSpace ) {
 		width=w;
@@ -28,19 +26,8 @@ class Texture extends ImageData {
 		twidth = 2; while( twidth<stride ) twidth<<=1;
 		theight = 2; while( theight<h ) theight<<=1;
 
-		// generate texture id
-//		var t:Dynamic = CPtr.uint_alloc(1);
-//		GL.genTextures(1,t); // FIXME BADLY: delete this at some point...
-//		texture = CPtr.uint_get(t,0);
-		texture = opengl.Texture.create();
-
-		var e:Int = GL.getError();
-		if( e > 0 ) { throw("could not create texture - "+GLU.errorString(e)); }
-		
-		/* If this happens, likely the GL context isnt initialized yet. 
-			Might be the cause for white rectangles instead of glyphs in text.. */
-//		if( texture>1000000 ) throw("unlikely texture ID: "+texture ); 
-			
+		if( texture==null )
+			texture = opengl.Texture.create();
 
 		GL.pushAttrib( GL.ENABLE_BIT );
 		GL.enable( GL.TEXTURE_2D );
@@ -55,7 +42,6 @@ class Texture extends ImageData {
 				default: GL.RGBA;
 			}
 		
-//			GL.bindTexture( GL.TEXTURE_2D, texture ); // unneccessarryy?
 			texture.bind();
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
