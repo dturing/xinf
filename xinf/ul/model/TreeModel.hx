@@ -79,11 +79,5 @@ class SimpleTreeNode<T> implements TreeNode<T> {
 	public function toString() :String {
 		return ""+value;
 	}
-	
-	/*
-	public static function createDynamic( e:Dynamic ) :SimpleTreeNode<T> {
-		// TODO
-	}
-	*/
 }
 

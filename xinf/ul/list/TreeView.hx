@@ -3,21 +3,25 @@
 	
 package xinf.ul.list;
 
-import xinf.ul.RoundRobin;
-import xinf.ul.TreeModel;
+import Xinf;
+import xinf.xml.Node;
+import xinf.ul.list.RoundRobin;
+import xinf.ul.model.TreeModel;
+import xinf.ul.model.ListModel;
+import xinf.ul.model.ISettable;
 import xinf.erno.Renderer;
 
 typedef TreeItemData<T> = {
 	depth:Int,
-	node:Node<T>
+	node:TreeNode<T>
 }
 
 class TreeIterator<T> {
-	var _next:Node<T>;
+	var _next:TreeNode<T>;
 	var quitDepth:Int;
 	public var depth(default,null):Int;
 	
-	public function new( node:Node<T>, d:Int ) {
+	public function new( node:TreeNode<T>, d:Int ) {
 		this._next = node;
 		
 		if( d==-1 ) {
@@ -62,10 +66,10 @@ class TreeIterator<T> {
 }
 
 class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
-	var root:Node<T>;
+	var root:TreeNode<T>;
 	var items:Array<TreeItemData<T>>;
 
-	public function new( root:Node<T> ) {
+	public function new( root:TreeNode<T> ) {
 		items = new Array<TreeItemData<T>>();
 		var it = new TreeIterator(root,-1);
 		for( item in it ) {
@@ -73,11 +77,11 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
 		}
 	}
 	
-	override public function getLength() :Int {
+	public function getLength() :Int {
 		return items.length;
 	}
 
-	override public function getItemAt( index:Int ) :TreeItemData<T> {
+	public function getItemAt( index:Int ) :TreeItemData<T> {
 		return items[index];
 	}
 
@@ -111,74 +115,96 @@ class TreeAsListModel<T> implements ListModel<TreeItemData<T>> {
 	}
 }
 
-interface TreeItem<T> implements Settable<TreeItemData<T>> {
+interface TreeItem<T> implements ISettable<TreeItemData<T>> {
 	function set( ?d:TreeItemData<T> ) :Void;
-	function attachTo( parent:Container ) :Void;
+	function setStyle( style:Dynamic ) :Void;
+	function attachTo( parent:Node ) :Void;
 
 	function moveTo( x:Float, y:Float ) :Void;
 	function resize( x:Float, y:Float ) :Void;
-
-	function addStyleClass( name:String ) :Void;
-	function removeStyleClass( name:String ) :Void;
+	
+	function setCursor( isCursor:Bool ) :Bool;
 }
 
-class StringTreeItem<T> extends Label, implements TreeItem<T> {
-	var value:T;
-	var node:Node<T>;
+class StringTreeItem<T> implements TreeItem<T> {
+	var value:TreeItemData<T>;
 	
-	public function new( ?value:T ) :Void {
-		super( ""+value );
-		this.value = value;
-	}
+	var text:Text;
+	var handle:Group;
+	var handleP:Polygon;
 	
-	public function set( ?d:TreeItemData<T> ) :Void {
-		scheduleRedraw();
-		if( d==null ) {
-			value=null;
-			node=null;
-			text="";
-			return;
-		}
-		value = d.node.getValue();
-		node = d.node;
-		text = ""+node;
-		moveTo( 15*(d.depth+1), position.y );
-	}
+	var cursor:Bool;
+	var size:TPoint;
 	
-	public function attachTo( parent:Container ) :Void {
-		parent.attach(this);
-	}
-	
-	override public function drawContents( g:Renderer ) :Void {
-		if( value==null ) return;
+	public function new( ?value:TreeItemData<T> ) :Void {
+		text = new Text();
 		
-		super.drawContents(g);
-		setStyleFill( g, "color" );
-		if( node!=null && node.firstChild != null ) {
-			var h = size.y/3;
-			#if js
-			g.rect( -h, h, h, h );
-			#else true
-			setStyleStroke( g, 1, "color" );
-			if( !node.open ) {
-				g.startShape();
-					g.startPath( -h, h );
-					g.lineTo( 0, h*1.5 );
-					g.lineTo( -h, h*2 );
-					g.close();
-					g.endPath();
-				g.endShape();
-			} else {
-				g.startShape();
-					g.startPath( -h, h );
-					g.lineTo( 0, h );
-					g.lineTo( -h/2, h*2 );
-					g.close();
-					g.endPath();
-				g.endShape();
-			}
-			#end
+		handleP = new Polygon();
+		var h = .5;
+		handleP.points = [ {x:-h,y:-h}, {x:h,y:0.}, {x:-h,y:h} ];
+		handle = new Group();
+		handle.appendChild(handleP);
+		
+		this.value = value;
+		cursor=false;
+		
+//		handleP.addStyleClass("TreeItem");
+	}
+
+	public function setCursor( isCursor:Bool ) :Bool {
+		if( isCursor!=cursor ) {
+			cursor = isCursor;
 		}
+		return cursor;
+	}
+	
+	public function set( ?v:TreeItemData<T> ) :Void {
+		this.value = v;
+		
+		if( v==null ) {
+			text.text = "";
+			text.x = 0;
+			handle.visibility = Visibility.Hidden;
+		} else {
+			text.text = Std.string(v.node);
+			text.x = 10*value.depth;
+			var translate = new Translate( value.depth, 0 );
+			if( v.node.firstChild==null ) {
+				handle.visibility = Visibility.Hidden;
+			} else {
+				handle.visibility = Visibility.Visible;
+				if( v.node.open )
+					handleP.transform = new TransformList([
+						new Rotate(Math.PI/2), translate ]);
+				else
+					handleP.transform = translate;
+			}
+		}
+	}
+	
+	public function setStyle( style:Dynamic ) :Void {
+		text.setTraitsFromObject(style);
+		text.styleChanged();
+		handle.setTraitsFromObject(style);
+		handle.styleChanged();
+	}
+	
+	public function attachTo( parent:Node ) :Void {
+		parent.appendChild(text);
+		parent.appendChild(handle);
+	}
+
+	public function moveTo( x:Float, y:Float ) :Void {
+		var h = size.y/2;
+		handle.transform = new TransformList([
+				new Scale( h, h ),
+				new Translate( x+h, y+h )
+				]);
+		text.transform = new Translate( x+h+h, y+text.fontSize+((size.y-text.fontSize)/3) );
+	}
+	
+	public function resize( x:Float, y:Float ) :Void {
+		size = { x:x, y:y };
 	}
 }
 
@@ -186,21 +212,22 @@ class TreeView<T> extends ListView<TreeItemData<T>> {
 	var tree:TreeModel<T>;
 	var listModel:TreeAsListModel<T>;
 	
-	public function new( tree:TreeModel<T>, ?createItem:Void->TreeItem<T> ) :Void {
+	public function new( tree:TreeModel<T>, ?createItem:Void->TreeItem<T>, ?traits:Dynamic ) :Void {
 		if( createItem==null ) createItem = function() { return new StringTreeItem<T>(); };
 		listModel = new TreeAsListModel<T>(tree);
-		super( listModel, createItem );
+		super( listModel, createItem, traits );
 
 		this.tree = tree;
 		
-		addEventListener( PickEvent.ITEM_PICKED, itemPicked );
+		addEventListener( PICKED, itemPicked );
 	}
 	
 	function itemPicked( e:PickEvent<TreeItemData<T>> ) :Void {
-		listModel.toggle( e.index, e.item );
+		var r = listModel.toggle( e.index, e.item );
+		if( r>0 ) assureVisible( e.index+r );
 		assureVisible( e.index );
 		rr.redoAll();
 		updateScrollbar();
-		setCursor(cursor);
+		setCursor(cursorPosition);
 	}
 }

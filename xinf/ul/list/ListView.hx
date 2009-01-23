@@ -11,6 +11,7 @@ import xinf.ul.model.ListModel;
 import xinf.ul.model.ISettable;
 import xinf.ul.layout.Helper;
 import xinf.ony.type.Paint;
+import xinf.event.EventKind;
 
 class ListView<T> extends Widget {
 
@@ -25,8 +26,10 @@ class ListView<T> extends Widget {
 	var cursorPosition:Int;
 	var lastCursorItem:ISettable<T>;
 	
-	public function new( model:ListModel<T>, ?createItem:Null<Void->ISettable<T>> ) :Void {
-		super();
+	public var PICKED(default,null):EventKind<PickEvent<T>>;
+	
+	public function new( model:ListModel<T>, ?createItem:Null<Void->ISettable<T>>, ?traits:Dynamic ) :Void {
+		super(traits);
 		this.model = model;
 		if( createItem==null ) {
 			createItem = function() :ISettable<T> {
@@ -58,6 +61,8 @@ class ListView<T> extends Widget {
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		
 		setCursor(-2);
+		
+		PICKED = new EventKind<PickEvent<T>>("PICK_"+Math.random());
 	}
 
 	override public function set_size( s:TPoint ) :TPoint {
@@ -110,7 +115,9 @@ class ListView<T> extends Widget {
 	}
 
 	function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
-		postEvent( new PickEvent<T>( untyped PickEvent.ITEM_PICKED, model.getItemAt(index), cursorPosition, add, extend ) );
+		var item = model.getItemAt(index);
+		if( item!=null )
+			postEvent( new PickEvent( PICKED, item, cursorPosition, add, extend ) );
 	}
 
 	public function onKeyDown( e:KeyboardEvent ) {

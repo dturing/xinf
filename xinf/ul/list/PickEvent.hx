@@ -7,7 +7,7 @@ import xinf.event.Event;
 
 class PickEvent<T> extends Event<PickEvent<T>> {
 	
-	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
+//	static public var ITEM_PICKED = new xinf.event.EventKind<PickEvent<T>>("itemPicked");
 
 	public var item:T;
 	public var index:Int;

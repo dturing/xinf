@@ -48,7 +48,7 @@ class Dropdown extends Widget {
 		group.addEventListener( MouseEvent.MOUSE_DOWN, toggle );
 		
 		menu = new ListView( model );
-		menu.addEventListener( untyped PickEvent.ITEM_PICKED, itemPicked );
+		menu.addEventListener( menu.PICKED, itemPicked );
 		menu.focusable = false;
 		
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
@@ -110,7 +110,7 @@ class Dropdown extends Widget {
 		selectedIndex = index;
 		textElement.text = ""+model.getItemAt( selectedIndex );
 		styleChanged();
-		postEvent( new PickEvent<T>( untyped PickEvent.ITEM_PICKED, model.getItemAt(index), index ) );
+		postEvent( new PickEvent<T>( menu.PICKED, model.getItemAt(index), index ) );
 	}
 	
 	private function toggle<T>( e:Event<T> ) :Void {

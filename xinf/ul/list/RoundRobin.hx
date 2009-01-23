@@ -127,6 +127,7 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
 		var j = 0;
 		for( item in rr ) {
 			item.moveTo( 0, pos );
+//			trace("item "+i+" of "+model.getLength()+" available, pos "+pos);
 			var value = if( i>=model.getLength() ) null else model.getItemAt(i);
 			item.set( value );
 			i++;
@@ -173,16 +174,16 @@ class RoundRobin<T,Item:ISettable<T>> extends Group {
 		} else if( index >= l-1 ) {
 			scrollBy( (index-l)+1 );
 		}
-		//var ofs = Math.max( 0, Math.min( (model.getLength()-(n-umod)), cOffset ) );
-		//if( ofs != cOffset ) scrollBy( cOffset-ofs );
+		var ofs = Math.max( 0, Math.min( (model.getLength()-(n-umod)), cOffset ) );
+		if( ofs != cOffset ) scrollBy( cOffset-ofs );
 	}
 
 	public function scrollBy( offset:Float ) :Void {
 		var ofs = cOffset+offset;
 		ofs = Math.max( 0, Math.min( (model.getLength()-(n-umod)), ofs ) );
 
-			scrollTo( ofs );
-		return; // FIXME
+	//		scrollTo( ofs );
+	//		return; // FIXME
 		if( offset >= n ) {
 			scrollTo( ofs );
 		} else {

@@ -24,9 +24,11 @@ class Component extends StyledElement {
 	public static function init() {
 		Root.getRootSvg();
 		StyleSheet.DEFAULT.parseCSS( "
+			
 			.xinful {
 				font-size: 12;
-				font-family: sans-serif;
+/* FIXME: this slows down initialization, heavily:
+		font-family: sans; */
 			}
 			
 			text, TextArea {
@@ -62,16 +64,20 @@ class Component extends StyledElement {
 				skin: focus-bright;
 				padding: 6 4 6 2;
 			}
-
+			
 			.CheckBox {
 				border: 0;
 				padding: 0 3 6 3;
 				skin: none;
 			}
 
-			.ListView {
+			.ListView, .TreeView {
 				min-height: 75px;
 				padding: 6 3;
+			}
+			
+			.TreeView polygon {
+				fill: darkgray;
 			}
 
 			.Table {
@@ -96,27 +102,7 @@ class Component extends StyledElement {
 			.Label {
 				min-width: 20;
 			}
-/*
-				padding: 6 3 6 3;
-				horizontal-align: 0.;
-			}
 			
-			.Button, .Dropdown, .LineEdit, .Slider {
-				min-height: 10;
-				min-width: 75;
-			}
-			
-			.Interface {
-				horizontal-align: 0.;
-				vertical-align: 0.;
-			}
-			
-			.Slider {
-				padding: 5 2 5 2;
-			}
-			
-
-*/
 		");
 	}
 	
