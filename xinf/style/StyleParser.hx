@@ -150,9 +150,12 @@ class StyleParser {
 				case "*":
 					GrandAncestor(a2);
 				default:
-					trace("a: "+a+", b: "+b+", op: "+op );
-					throw("unknown style selector operator '"+op+"'");
-					Unknown(op);
+					if( op==null ) Ancestor(a2); // for js, op=undefined
+					else {
+						trace("a: "+a+", b: "+b+", op: "+op );
+						throw("unknown style selector operator '"+op+"'");
+						Unknown(op);
+					}
 			}
 			return parseSelector( b, a3 );
 		} else {

@@ -16,6 +16,7 @@ class Image extends xinf.ony.Image {
 
 	public function new( ?traits:Dynamic ) :Void {
 		super(traits);
+		resolve();
 	}
 
 	override function set_href( v:String ) :String { 
