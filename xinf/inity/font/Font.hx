@@ -65,6 +65,12 @@ class Font extends xinf.support.Font {
 	
 	public function getCache( fontSize:Float ) :GlyphCache {
 		var sz = Math.ceil(fontSize);
+		
+		if( sz>500 ) {
+			trace("Should create outline GlyhpCache for size "+sz );
+			sz=500;
+		}
+		
 		// FIXME. getting tricky here, but might be good...
 		// maybe snap to pixel boundaries, too? or NEAREST?
 		if( fontSize>16 ) {
