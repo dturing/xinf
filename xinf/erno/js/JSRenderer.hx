@@ -138,11 +138,12 @@ class JSRenderer extends ObjectModelRenderer {
 		
 		wrap.appendChild(r);
 		
-		/* FIXME reenable opacity
-		if( pen.fillColor!=null ) {
-			untyped r.style.opacity = pen.fillColor.a;
-		}
-		*/
+		if( pen.fill!=null ) 
+			switch( pen.fill ) {
+				case SolidColor(red,g,b,a):
+					untyped r.style.opacity = a;
+				default:
+			}
 			
 		current.appendChild(wrap);
 	}
