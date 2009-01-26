@@ -32,6 +32,8 @@ extern class Texture {
 	public static function create() :Texture;
 	
 	public function bind() :Void;
+
+	public static function initialize( internalFormat:Int, width:Int, height:Int ) :Void;
 	
 	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> **/
 	public static function subImageRGBA( x:Int, y:Int, width:Int, height:Int, pixels:Dynamic ) :Void;

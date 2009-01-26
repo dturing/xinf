@@ -4,13 +4,6 @@
 
 DEFINE_KIND( k_texture );
 
-/*
-void texture_finalize( value _t ) {
-	GLuint *tex = (GLuint*)val_data(_t);
-	glDeleteTexture( *tex );
-	free( tex );
-}
-*/
 GLuint* textureCreate() {
 	GLuint* tex = malloc( sizeof(GLuint) );
 	glGenTextures( 1, tex );
@@ -24,6 +17,11 @@ void textureDelete( GLuint *tex ) {
 
 void textureBind( GLuint *tex ) {
 	glBindTexture( GL_TEXTURE_2D, *tex );
+}
+
+void textureInitialize( int format, int width, int height ) {
+    glTexImage2D( GL_TEXTURE_2D, 0, format, width, height,
+    	0, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)NULL );
 }
 
 void textureSubImageRGBA( int x, int y, int w, int h, const unsigned char *data ) {
