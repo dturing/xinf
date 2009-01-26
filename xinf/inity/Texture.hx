@@ -47,7 +47,8 @@ class Texture extends ImageData {
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR );
 			GL.texParameter( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR );
-			GL.texImage2D( GL.TEXTURE_2D, 0, internalFormat, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
+		//	GL.texImage2D( GL.TEXTURE_2D, 0, internalFormat, twidth, theight, 0, GL.RGB, GL.UNSIGNED_BYTE, null );
+			opengl.Texture.initialize( internalFormat, twidth, theight );
 
 		GL.popAttrib();
 		
@@ -64,7 +65,6 @@ class Texture extends ImageData {
 	
 		GL.pushAttrib( GL.ENABLE_BIT );
 		GL.enable( GL.TEXTURE_2D );
-	//	GL.bindTexture( GL.TEXTURE_2D, texture );
 		texture.bind();
 
 		if( data != null ) {

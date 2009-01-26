@@ -227,7 +227,7 @@ class XinfinityRuntime extends Runtime {
 	/* internal functions */
 	private function initGL() :Void {
 		// init GLFW Window
-		trace("window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
+	//	trace("window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
 		GLFW.openWindow( width, height, 8,8,8, 8,8,8, fullscreen?GLFW.FULLSCREEN:GLFW.WINDOW );
 		GLFW.setWindowTitle( windowTitle );
 

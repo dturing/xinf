@@ -232,12 +232,10 @@ class GLRenderer extends ObjectModelRenderer {
 				default:
 					GL.color4(1,1,1,1);
 			}
-
 		GL.pushAttrib( GL.ENABLE_BIT );
 			GL.enable( GL.TEXTURE_2D );
 			GL.enable( GL.BLEND );
-			
-//			GL.bindTexture( GL.TEXTURE_2D, img.texture );
+
 			img.texture.bind();
 			
 			GL.begin( GL.QUADS );
