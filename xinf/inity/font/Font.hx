@@ -80,7 +80,7 @@ class Font extends xinf.support.Font {
 		var c = cache.get(sz);
 		
 		if( c==null ) {
-			trace("Create GlyphCache sz "+sz );
+//			trace("Create GlyphCache sz "+sz );
 			c = new GlyphCache( this, sz, false ); 
 					// hinting? for sz<=12: fontSize<=12 );
 			cache.set(sz,c);

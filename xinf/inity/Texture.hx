@@ -125,7 +125,7 @@ class Texture extends ImageData {
 				}
 				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
 				r = newFromPixbuf( p );
-				cache.set(url.toString(),r); // FIXME
+				//cache.set(url.toString(),r); // FIXME
 				
 				// trigger LOADED at next frame
 				var l:Dynamic=null;
