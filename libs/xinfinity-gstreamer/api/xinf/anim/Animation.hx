@@ -6,6 +6,7 @@ package xinf.anim;
 import xinf.traits.FloatTrait;
 import xinf.traits.StringTrait;
 import xinf.traits.EnumTrait;
+import xinf.traits.DynamicTrait;
 import xinf.traits.TraitDefinition;
 import xinf.ony.traits.FloatListTrait;
 import xinf.ony.type.FloatList;
@@ -36,8 +37,8 @@ class Animation extends TimedAttributeSetter {
 		keytimes: new FloatListTrait(),
 		
 		values: new ValuesTrait(),
-		from: new StringTrait(),
-		to: new StringTrait(),
+		from: new DynamicTrait(),
+		to: new DynamicTrait(),
 		by: new StringTrait(),
 	};
 
@@ -57,13 +58,13 @@ class Animation extends TimedAttributeSetter {
 	function get_values() :Array<String> { return getTrait("values",Array); }
 	function set_values( v:Array<String> ) :Array<String> { setTrait("values",v); return v; }
 
-	public var from(get_from,set_from):String;
-	function get_from() :String { return getTrait("from",String); }
-	function set_from( v:String ) :String { setTrait("from",v); return v; }
+	public var from(get_from,set_from):Dynamic;
+	function get_from() :Dynamic { return getTrait("from",Dynamic); }
+	function set_from( v:Dynamic ) :Dynamic { setTrait("from",v); return v; }
 
-	public var to(get_to,set_to):String;
-	function get_to() :String { return getStyleTrait("to",String); }
-	function set_to( v:String ) :String { setStyleTrait("to",v); return v; }
+	public var to(get_to,set_to):Dynamic;
+	function get_to() :Dynamic { return getStyleTrait("to",Dynamic); }
+	function set_to( v:Dynamic ) :Dynamic { setStyleTrait("to",v); return v; }
 
 	public var by(get_by,set_by):String;
 	function get_by() :String { return getStyleTrait("by",String); }
