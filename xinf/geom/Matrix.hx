@@ -36,7 +36,12 @@ class Matrix implements Transform {
 		return { x:tx, y:ty };
 	}
 	public function getScale() :TPoint {
-		return { x:a, y:d };
+		var p = apply( { x:1., y:0. } );
+		var p2 = apply( { x:0., y:0. } );
+		p.x-=p2.x; p.y-=p2.y;
+		var l = Math.sqrt( (p.x*p.x) + (p.y*p.y) );
+		return { x:l, y:l };
+		//		return { x:a, y:d };
 	}
 	public function getMatrix() :TMatrix {
 		return this;
@@ -59,7 +64,6 @@ class Matrix implements Transform {
 	}
 	
 	// TODO: geom.TRectangle
-	// FIXME: regard all four corners?
 	public function transformBBox( r:{l:Float,t:Float,r:Float,b:Float}) :{l:Float,t:Float,r:Float,b:Float} {
 		var tl = apply( {x:r.l,y:r.t} );
 		var tr = apply( {x:r.r,y:r.t} );
