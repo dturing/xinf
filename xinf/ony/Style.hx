@@ -8,6 +8,8 @@ import xinf.traits.StringTrait;
 
 class Style extends ElementImpl {
 
+	static var tagName = "style";
+
 	static var TRAITS = {
 		type:new StringTrait(),
 		text:new StringTrait(),
@@ -33,10 +35,15 @@ class Style extends ElementImpl {
 				}
 			}
 			
+			trace("parse style: "+t );
 			if( t.length>0 ) {
-				ownerDocument.styleSheet.parseCSS( t );
 				text = t;
+				Root.addCSS( t );
 			}
 		}
+	}
+	
+	override public function onLoad() :Void {
+//		if( text!=null ) ownerDocument.styleSheet.parseCSS( text );
 	}
 }
