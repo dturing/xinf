@@ -185,6 +185,11 @@ class StyledElement extends XMLElement {
 		updateClassStyle();
 	}
 
+	override function construct() {
+		updateClassStyle();
+		return super.construct();
+	}
+
 	function updateClassStyle() :Void {
 		var css = StyleSheet.DEFAULT;
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) css = ownerDocument.styleSheet;
