@@ -29,24 +29,24 @@ typedef Node = xinf.xml.Node
 typedef Root = xinf.ony.Root
 
 #if xinfony_null
-typedef Svg = xinf.ony.Svg
-typedef Element = xinf.ony.Element
-typedef Group = xinf.ony.Group
-typedef Rectangle = xinf.ony.Rectangle
-typedef Ellipse = xinf.ony.Ellipse
-typedef Circle = xinf.ony.Circle
-typedef Image = xinf.ony.Image
-typedef Path = xinf.ony.Path
-typedef Line = xinf.ony.Line
-typedef Polygon = xinf.ony.Polygon
-typedef Polyline = xinf.ony.Polyline
-typedef Text = xinf.ony.Text
-typedef TextArea = xinf.ony.TextArea
-typedef Use = xinf.ony.Use
-typedef Definitions = xinf.ony.Definitions
-typedef Link = xinf.ony.Link
+typedef Svg = xinf.ony.null.Svg
+typedef Element = xinf.ony.null.Element
+typedef Group = xinf.ony.null.Group
+typedef Rectangle = xinf.ony.null.Rectangle
+typedef Ellipse = xinf.ony.null.Ellipse
+typedef Circle = xinf.ony.null.Circle
+typedef Image = xinf.ony.null.Image
+typedef Path = xinf.ony.null.Path
+typedef Line = xinf.ony.null.Line
+typedef Polygon = xinf.ony.null.Polygon
+typedef Polyline = xinf.ony.null.Polyline
+typedef Text = xinf.ony.null.Text
+typedef TextArea = xinf.ony.null.TextArea
+typedef Use = xinf.ony.null.Use
+typedef Definitions = xinf.ony.null.Definitions
+typedef Crop = xinf.ony.null.Crop
 
-typedef Crop = xinf.ony.Crop
+typedef Link = xinf.ony.Link
 
 //tmp, for doc
 typedef Binding = xinf.xml.Binding;
