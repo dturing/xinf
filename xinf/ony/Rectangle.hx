@@ -39,11 +39,11 @@ class Rectangle extends ElementImpl {
 	function set_height( v:Float ) :Float { setTrait("height",new Length(v)); redraw(); return v; }
 	
 	public var rx(get_rx,set_rx):Float;
-	function get_rx() :Float { return getStyleTrait("rx",Length).value; }
+	function get_rx() :Float { return getStyleTrait("rx",Length).value; } 
 	function set_rx( v:Float ) :Float { setStyleTrait("rx",new Length(v)); redraw(); return v; }
 	
 	public var ry(get_ry,set_ry):Float;
-	function get_ry() :Float { return getStyleTrait("ry",Length).value; }
+	function get_ry() :Float { return getStyleTrait("ry",Length).value; } 
 	function set_ry( v:Float ) :Float { setStyleTrait("ry",new Length(v)); redraw(); return v; }
 
 	override public function getBoundingBox() : TRectangle {
