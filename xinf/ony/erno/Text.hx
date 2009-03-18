@@ -35,17 +35,26 @@ class Text extends xinf.ony.Text {
 		super.drawContents(g);
 		assureFormat();
 		if( text!=null ) {
-			switch( textAnchor ) {
-				case Start:
-					g.text( x,
-						y-(format.ascender()),text,format);
-				case Middle:
-					g.text( x-( format.textSize(text).x/2 ),
-						y-(format.ascender()),text,format);
-				case End:
-					g.text( x-( format.textSize(text).x ),
-						y-(format.ascender()),text,format);
-			}
+			var _x =
+				switch( textAnchor ) {
+					case Start:
+						x;
+					case Middle:
+						x-( format.textSize(text).x/2 );
+					case End:
+						x-( format.textSize(text).x );
+				}
+			var _y =
+				switch( alignmentBaseline ) {
+					case Baseline:
+						y-(format.ascender());
+					case Middle:
+						y-( format.textSize("Xy").y/2. );
+					case Hanging:
+						y;
+				}
+
+			g.text( _x, _y, text, format );
 		}
 	}
 

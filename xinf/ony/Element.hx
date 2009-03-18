@@ -23,6 +23,7 @@ import xinf.ony.type.Display;
 import xinf.ony.type.StringList;
 import xinf.ony.type.IntList;
 import xinf.ony.type.TextAnchor;
+import xinf.ony.type.AlignmentBaseline;
 
 import xinf.traits.TraitDefinition;
 import xinf.traits.BoundedFloatTrait;
@@ -63,6 +64,7 @@ class Element extends StyledElement {
 		fontsize:	new LengthTrait(new Length(10)),
 		fontweight:	new StringChoiceTrait( ["normal","bold"] ),
 		textanchor:	new EnumTrait<TextAnchor>( TextAnchor, "", TextAnchor.Start ),
+		alignmentbaseline:	new EnumTrait<AlignmentBaseline>( AlignmentBaseline, "", AlignmentBaseline.Baseline ),
 	}
 
 	public var transform(get_transform,set_transform):Transform;
@@ -138,6 +140,10 @@ class Element extends StyledElement {
 	public var textAnchor(get_text_anchor,set_text_anchor):TextAnchor;
 	function get_text_anchor() :TextAnchor { return getStyleTrait("textanchor",TextAnchor); }
 	function set_text_anchor( v:TextAnchor ) :TextAnchor { return setStyleTrait("textanchor",v); }
+
+	public var alignmentBaseline(get_alignment_baseline,set_alignment_baseline):AlignmentBaseline;
+	function get_alignment_baseline() :AlignmentBaseline { return getStyleTrait("alignmentbaseline",AlignmentBaseline); }
+	function set_alignment_baseline( v:AlignmentBaseline ) :AlignmentBaseline { return setStyleTrait("alignmentbaseline",v); }
 
 	override function set_id( v:String ) :String { 
 		if( ownerDocument!=null ) {

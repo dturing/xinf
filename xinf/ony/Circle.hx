@@ -27,8 +27,8 @@ class Circle extends ElementImpl {
 	function set_cy( v:Float ) :Float { setTrait("cy",new Length(v)); redraw(); return v; }
 
 	public var r(get_r,set_r):Float;
-	function get_r() :Float { return getTrait("r",Length).value; }
-	function set_r( v:Float ) :Float { setTrait("r",new Length(v)); redraw(); return v; }
+	function get_r() :Float { return getStyleTrait("r",Length).value; }
+	function set_r( v:Float ) :Float { setStyleTrait("r",new Length(v)); redraw(); return v; }
 
 	override public function getBoundingBox() : TRectangle {
 		return { l:cx-r, t:cy-r, r:cx+r, b:cy+r };
