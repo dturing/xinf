@@ -21,7 +21,7 @@ class GLObject {
 	public var children:Array<GLObject>;
 	
 	private var boundingBox:Rectangle; // untransformed
-	public var transform:Matrix; // FIXME: make private, access only from GLRenderer
+	private var transform:Matrix;
 	private var transformedBBox:Rectangle;
 	
 	public var id:Int;
