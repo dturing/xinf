@@ -112,3 +112,19 @@ CPTR(char,float);
 CPTR(uchar,float);
 CPTR(short,float);
 CPTR(ushort,float);
+
+value cptr_zero( value cp ) { 
+    val_check( cp, string );
+    memset( (( void* )val_string(cp)), 0, val_strlen(cp) );
+    return( val_null );
+}
+DEFINE_PRIM(cptr_zero,1);
+
+value cptr_fill( value cp, value c ) { 
+	val_check( c, number );
+    val_check( cp, string );
+    memset( (( void* )val_string(cp)), (int)val_number(c), val_strlen(cp) );
+    return( val_null );
+}
+DEFINE_PRIM(cptr_fill,2);
+
