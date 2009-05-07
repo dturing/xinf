@@ -24,8 +24,8 @@ class Global extends Interface {
 	
 	function onStageScaled( e:GeometryEvent ) {
 		size = prefSize;
-//		position = { x:e.x-size.x, y:(e.y-size.y)/2 };
-		position = { x:20., y:20. };
+		position = { x:e.x-size.x, y:(e.y-size.y)/2 };
+//		position = { x:20., y:20. };
 	}
 	
 	public static function add( c:Component ) {

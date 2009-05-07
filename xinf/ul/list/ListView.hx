@@ -108,16 +108,16 @@ class ListView<T> extends Widget {
 	}
 	
 	function entryClicked( e:MouseEvent ) :Void {
-		var y = rrgroup.globalToLocal( { x:1.*e.x, y:1.*e.y }).y;
-		var i = rr.indexAt( y );
+		var p = rrgroup.globalToLocal( { x:1.*e.x, y:1.*e.y });
+		var i = rr.indexAt( p.y );
 		setCursor( i );
-		pick( i, e.ctrlMod, e.shiftMod );
+		pick( i, e.ctrlMod, e.shiftMod, e.x, e.y, 0., 0. );
 	}
 
-	function pick( index:Int, ?add:Bool, ?extend:Bool ) :Void {
+	function pick( index:Int, ?add:Bool, ?extend:Bool, ?x:Float, ?y:Float, ?xOffset:Float, ?yOffset:Float ) :Void {
 		var item = model.getItemAt(index);
 		if( item!=null )
-			postEvent( new PickEvent( PICKED, item, cursorPosition, add, extend ) );
+			postEvent( new PickEvent( PICKED, item, cursorPosition, add, extend, x, y, xOffset, yOffset ) );
 	}
 
 	public function onKeyDown( e:KeyboardEvent ) {

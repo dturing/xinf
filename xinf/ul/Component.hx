@@ -36,8 +36,9 @@ class Component extends StyledElement {
 			}
 			
 			* {
-				focus-color: #4e9a06;;
+				focus-color: #4e9a06;
 				min-width: 75px;
+				min-height: 25px;
 			}
 			
 			RoundRobin {

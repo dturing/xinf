@@ -66,6 +66,11 @@ class Slider extends ValueWidget<TFloat> {
 		value = initial;
 	
 		group.appendChild( textElement );
+		var self=this;
+				self.textElement.text=""+(Math.round(value*100))/100;
+		addValueListener( function( value ) {
+				self.textElement.text=""+(Math.round(value*100))/100;
+			} );
 	
 		button = new Rectangle();
 		group.appendChild( button );
@@ -100,12 +105,12 @@ class Slider extends ValueWidget<TFloat> {
 
 	override public function styleChanged( ?attr:String ) {
 		super.styleChanged(attr);
-		
-		if( textElement.text!=null ) {
-			var s = Helper.addPadding( getTextFormat().textSize(textElement.text), this );
-			s.x += s.y; // add button.width==height
-			setPrefSize( s );
-		}
+
+		var t = "Ag]";
+		if( textElement.text!=null && textElement.text!="" ) t = textElement.text;
+		var s = Helper.addPadding( getTextFormat().textSize(t), this );
+		s.x += s.y; // add button.width==height
+		setPrefSize( s );
 	}
 
 	private function onMouseDown( e:MouseEvent ) {

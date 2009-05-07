@@ -7,7 +7,7 @@ import Xinf;
 import xinf.xml.Node;
 import xinf.ul.model.ISettable;
 
-class ListItem<T> implements ISettable<T> {
+class MemberStringListItem<T> implements ISettable<T> {
 	
 	var cursor:Bool;
 	var text:Text;
@@ -22,7 +22,7 @@ class ListItem<T> implements ISettable<T> {
 	}
 	
 	public function new( ?value:T ) :Void {
-		text = new Text({ alignmentBaseline:"hanging" });
+		text = new Text();
 		this.value = value;
 		cursor=false;
 	}
@@ -43,7 +43,7 @@ class ListItem<T> implements ISettable<T> {
 
 	public function moveTo( x:Float, y:Float ) :Void {
 		text.x = x;
-		text.y = y; //y+((size.y-text.fontSize)/2);
+		text.y = y+text.fontSize+((size.y-text.fontSize)/3);
 	}
 	
 	public function resize( x:Float, y:Float ) :Void {
