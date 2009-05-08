@@ -193,12 +193,22 @@ class StyledElement extends XMLElement {
 	function updateClassStyle() :Void {
 		var css = StyleSheet.DEFAULT;
 		if( ownerDocument!=null && ownerDocument.styleSheet!=null ) css = ownerDocument.styleSheet;
-		clearTraitsCache();
+	//	clearTraitsCache();
 		_matchedStyle = { };
 		var match = css.match(this);
 		if( match!=null ) {
 			StyleParser.fromObject( match, this, _matchedStyle );
 		} else _matchedStyle=null;
+
+/*u
+		for( child in childNodes ) {
+			if( Std.is( child, StyledElement ) ) {
+				var s:StyledElement = cast(child);
+				s.updateClassStyle();
+			}
+		}
+		*/
+		
 		styleChanged();
 	}
 	

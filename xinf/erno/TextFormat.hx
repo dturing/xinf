@@ -99,6 +99,9 @@ class TextFormat {
 			return new xinf.erno.flash9.Flash9TextFormat(family,size,bold,italic);
 		#elseif js
 			return new xinf.erno.js.JSTextFormat(family,size,bold,italic);
+		#else
+			throw("platform not supported");
+			return null;
 		#end
 	}
 	

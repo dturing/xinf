@@ -24,7 +24,6 @@ typedef UIEvent = xinf.event.UIEvent
 typedef LinkEvent = xinf.event.LinkEvent
 
 typedef Document = xinf.xml.Document
-typedef Node = xinf.xml.Node
 
 typedef Root = xinf.ony.Root
 

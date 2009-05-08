@@ -90,7 +90,9 @@ class ImageData extends SimpleEventDispatcher {
 			} else {
 				return( new xinf.erno.flash9.ExternalImageData( url.toString() ) );
 			}
-		#else err
+		#else
+			throw("platform not supported");
+			return null;
 		#end
 	}
 	
