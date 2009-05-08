@@ -110,8 +110,7 @@ class Texture extends ImageData {
 				switch( url.protocol ) {
 					case "data":
 						data = url.getData();
-					case null:
-					case "file":
+					case null, "file":
 						data = neko.io.File.getContent( url.localPath() );
 					case "resource":
 						data = haxe.Resource.getString( url.toString() );
@@ -121,7 +120,7 @@ class Texture extends ImageData {
 						throw("unhandled protocol for image loading: "+url.protocol );
 				}
 				if( data == null || data.length==0 ) {
-					throw("Could not load: "+url );
+					throw("Some Error (sorry). Protocol "+url.protocol );
 				}
 				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
 				r = newFromPixbuf( p );
@@ -153,6 +152,13 @@ class Texture extends ImageData {
 		r.initialize( w, stride, h, cs );
 		var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
 		r.setData( d, {x:0, y:0}, {x:stride,y:h}, stride, cs );
+		return r;
+	}
+
+	public static function newFromData( data:Dynamic, w:Int, h:Int, stride:Int, cs:ColorSpace ) :Texture {
+		var r = new Texture();
+		r.initialize( w, stride, h, cs );
+		r.setData( data, {x:0, y:0}, {x:stride,y:h}, stride, cs );
 		return r;
 	}
 
