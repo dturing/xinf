@@ -863,10 +863,11 @@ extern class GL {
 	public static function getPixelMapfv( map:Int, values:Float ):Void;
 	
 	public static function bitmap( width:Int, height:Int, xorig:Float, yorig:Float, xmove:Float, ymove:Float, bitmap:String ):Void;
-	public static function readPixels( x:Int, y:Int, width:Int, height:Int, format:Int, type:Int, pixels:Void ):Void;
 	public static function drawPixels( width:Int, height:Int, format:Int, type:Int, pixels:Void ):Void;
 	public static function copyPixels( x:Int, y:Int, width:Int, height:Int, type:Int ):Void;
 */	
+	/** <nekobind><cptr name="pixels" type="unsigned char" min-size="(width*height*4)"/></nekobind> FIXME *4? **/
+	public static function readPixels( x:Int, y:Int, width:Int, height:Int, format:Int, type:Int, pixels:Dynamic ):Void;
 
 	public static function stencilFunc( func:Int, ref:Int, mask:Int ):Void;
 	public static function stencilMask( mask:Int ):Void;
