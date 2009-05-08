@@ -294,6 +294,21 @@ class TextArea extends xinf.ony.TextArea {
 	
 }
 
-#else err
- "platform not supported"
+#else 
+
+import xinf.ony.type.Editability;
+import xinf.ony.type.Paint;
+
+class TextArea extends xinf.ony.TextArea {
+
+	public function new( ?traits:Dynamic ) :Void {
+		super(traits);
+		throw("platform not supported");
+	}
+
+	override public function drawContents( g:Renderer ) :Void {
+		super.drawContents(g);
+	}
+	
+}
 #end
