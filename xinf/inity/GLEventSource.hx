@@ -154,7 +154,7 @@ class GLEventSource {
 		
 		var pos = GLFW.getMousePosition();
 		var targetId:Int = runtime.findIdAt(pos.x,pos.y,preciseHitTest);
-		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, targetId );
+		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, pos.x, pos.y, targetId );
 		runtime.postEvent( e );
 	}
 	
