@@ -254,6 +254,7 @@ class XinfinityRuntime extends Runtime {
 	}
 
 	private function startFrame() :Void {
+	/*
 		GL.pushMatrix();
 		GL.viewport( 0, 0, Math.round(width), Math.round(height) );
 		GL.matrixMode( GL.PROJECTION );
@@ -277,6 +278,38 @@ class XinfinityRuntime extends Runtime {
 		GL.translate( -1., 1., 0. );
 		GL.scale( (2./width), (-2./height), 1. );
 		GL.matrixMode( GL.MODELVIEW );
+*/
+
+		GL.pushMatrix();
+
+        GL.matrixMode( GL.PROJECTION );
+		    var d = 1.50;
+		    GL.loadIdentity();
+		    var fovy = (Math.atan( .5/d )/Math.PI)*360;
+			GL.viewport( 0, 0, Math.round(width), Math.round(height) );
+		    GLU.perspective( fovy, 1., 0.001, 1000. );
+
+        GL.matrixMode( GL.MODELVIEW );
+	        GL.loadIdentity();
+
+//			GL.enable( GL.DEPTH_TEST );
+			GL.loadIdentity();
+			GL.shadeModel( GL.FLAT );
+			GLU.lookAt( 0,0,d, 0,0,0, 0,1.,0 );
+			GL.translate( -.5, .5, 0. );
+			GL.scale( 1./width, -1./height, 1./height );
+
+
+		if( bgColor.a==0 || bgColor.a==null ) {
+			GL.clearColor( bgColor.r,bgColor.g,bgColor.b,0 );
+			GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT | GL.STENCIL_BUFFER_BIT );
+		} else {
+			// relatively cheap motion-blur-like effect (only good when scene is continuously animated)
+			GL.enable(GL.BLEND);
+			GL.color4( bgColor.r, bgColor.g, bgColor.b, bgColor.a );
+			GL.rect( -512,-384,1024,768 ); // FIXME
+			GL.disable(GL.BLEND);
+		}		
 
 		#if gldebug
 			var e:Int = GL.getError();
