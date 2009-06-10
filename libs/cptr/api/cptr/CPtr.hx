@@ -72,9 +72,9 @@ class CPtr {
 
 	public static var zero				= neko.Lib.load("cptr","cptr_zero",1);
 	public static var fill				= neko.Lib.load("cptr","cptr_fill",2);
+	public static var copy				= neko.Lib.load("cptr","cptr_copy",3);
 
 /*
 	public static var void_null = neko.Lib.load("cptr","cptr_void_null",0)();
-	public static var copy = neko.Lib.load("cptr","cptr_copy",1);
 */
 }

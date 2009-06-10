@@ -128,3 +128,19 @@ value cptr_fill( value cp, value c ) {
 }
 DEFINE_PRIM(cptr_fill,2);
 
+value cptr_copy( value cp, value index, value length ) { 
+    val_check( cp, string );
+    val_check( index, number );
+    val_check( length, number );
+    
+    if( val_strlen( cp ) < val_number(index)+val_number(length) ) {
+    	val_throw(alloc_string("source is too small for copy of this size"));
+    }
+    
+    value n = alloc_empty_string( val_number(length) );
+    memcpy( val_string(n), &(( char* )val_string(cp))[(int)val_number(index)], val_number(length) );
+    
+    return( val_null );
+}
+DEFINE_PRIM(cptr_copy,3);
+
