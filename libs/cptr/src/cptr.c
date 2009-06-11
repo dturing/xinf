@@ -128,22 +128,29 @@ value cptr_fill( value cp, value c ) {
 }
 DEFINE_PRIM(cptr_fill,2);
 
-value cptr_copy( value cp, value i, value l ) { 
-    val_check( cp, string );
-    val_check( i, number );
+value cptr_copy( value from, value from_i, value to, value to_i, value l ) { 
+    val_check( from, string );
+    val_check( to, string );
+    val_check( from_i, number );
+    val_check( to_i, number );
     val_check( l, number );
     
-	int index = val_number(i);
+	int from_idx = val_number(from_i);
+	int to_idx = val_number(to_i);
 	int length = val_number(l);
 
-    if( val_strlen( cp ) < index+length ) {
-	length = val_strlen(cp)-(index+1);
+    if( val_strlen( from ) < from_idx+length ) {
+		length = val_strlen(from)-(from_idx);
+    }
+    if( val_strlen( to ) < to_idx+length ) {
+    	length = val_strlen(to)-(to_idx);
     }
     
-    value n = alloc_empty_string( length );
-    memcpy( val_string(n), &(( char* )val_string(cp))[index], length );
+    if( length<=0 ) return val_false;
     
-    return( n );
+    memcpy( &(( char* )val_string(to))[to_idx], &(( char* )val_string(from))[from_idx], length );
+    
+    return( val_true );
 }
-DEFINE_PRIM(cptr_copy,3);
+DEFINE_PRIM(cptr_copy,5);
 
