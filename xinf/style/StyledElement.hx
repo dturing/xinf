@@ -200,15 +200,15 @@ class StyledElement extends XMLElement {
 			StyleParser.fromObject( match, this, _matchedStyle );
 		} else _matchedStyle=null;
 
-/*u
+/*
 		for( child in childNodes ) {
 			if( Std.is( child, StyledElement ) ) {
 				var s:StyledElement = cast(child);
 				s.updateClassStyle();
 			}
 		}
-		*/
-		
+
+*/		
 		styleChanged();
 	}
 	
