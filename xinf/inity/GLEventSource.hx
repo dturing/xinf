@@ -152,9 +152,9 @@ class GLEventSource {
 		var delta = wheel-wpos;
 		wheel=wpos;
 		
-		var pos = GLFW.getMousePosition();
+		var pos = { x:mouseX, y:mouseY }; //GLFW.getMousePosition();
 		var targetId:Int = runtime.findIdAt(pos.x,pos.y,preciseHitTest);
-		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, pos.x, pos.y, targetId );
+		var e = new ScrollEvent( ScrollEvent.SCROLL_STEP, delta, targetId, pos.x, pos.y );
 		runtime.postEvent( e );
 	}
 	
