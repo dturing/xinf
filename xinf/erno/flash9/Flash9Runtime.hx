@@ -36,7 +36,7 @@ class Flash9Runtime extends SimpleRuntime {
 		#end
 		*/
 	}
-	
+	/*
 	function fixLinuxTrace() {
 		var mc = flash.Lib.current;
 		var tf = new flash.text.TextField();
@@ -57,7 +57,7 @@ class Flash9Runtime extends SimpleRuntime {
 		}
 		haxe.Log.trace = ttrace;
 	}
-	
+	*/
 	override public function getDefaultRoot() :NativeContainer {
 		if( defaultRoot==null ) {
 			defaultRoot = new XinfSprite();
@@ -68,6 +68,29 @@ class Flash9Runtime extends SimpleRuntime {
 	
 	override public function run() :Void {
 		_eventSource.rootResized();
+	}
+
+	private function findXinfTarget( o:flash.display.DisplayObject ) :Int {
+		var s:Dynamic = o;
+		while( !Std.is(s,XinfSprite) ) {
+			s = s.parent;
+			if( s==null ) return 0;
+		}
+		var t:XinfSprite = cast(s,XinfSprite);
+		return t.xinfId;
+	}
+
+	override function findIdAt( x:Float, y:Float, ?precise:Bool=false ) { 
+		var os = flash.Lib.current.stage.getObjectsUnderPoint( new flash.geom.Point(x,y) );
+//		trace("obj under "+x+"/"+y+": "+os );
+		for( o in os ) {
+			var sprite = findXinfTarget(o);
+			if( sprite != 0 ) {
+//				trace("HIT xinf obj "+sprite );
+				return sprite;
+			}
+		}
+		return -1;
 	}
 	
 }

@@ -24,7 +24,7 @@ class Flash9EventSource {
 		runtime = r;
 		frame = 0;
 		currentOver = 0;
-		
+
 		var stage = flash.Lib.current.stage;
 		stage.addEventListener( flash.events.MouseEvent.MOUSE_DOWN, mouseDown, false );
 		stage.addEventListener( flash.events.MouseEvent.MOUSE_UP, mouseUp, false );
@@ -40,6 +40,7 @@ class Flash9EventSource {
 		stage.align = flash.display.StageAlign.TOP_LEFT;
 
 		flash.Lib.current.addEventListener( flash.events.Event.ENTER_FRAME, enterFrame );
+
 	}
 
 	private function findTarget( e:flash.events.Event ) :Int {

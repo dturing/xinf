@@ -71,7 +71,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 		current.mask = crop;
 	}
 
-	function flashGradient( stops:Iterable<TGradientStop>, spread:Int ) {
+	static function flashGradient( stops:Iterable<TGradientStop>, spread:Int ) {
 		var colors = new Array();
 		var alphas = new Array();
 		var ratios = new Array();
@@ -95,7 +95,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 			spread:sprd };
 	}
 
-	function flashLinearGradient( x1:Float, y1:Float, x2:Float, y2:Float ) {
+	static function flashLinearGradient( x1:Float, y1:Float, x2:Float, y2:Float ) {
 		var w = x2-x1; var h=y2-y1;
 		var a = Math.atan2(h,w);
 		var vl = Math.sqrt( Math.pow(w,2) + Math.pow(h,2) );
@@ -110,7 +110,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 		return matr;
 	}
 
-	function flashRadialGradient( cx:Float, cy:Float, r:Float, fx:Float, fy:Float ) {
+	static function flashRadialGradient( cx:Float, cy:Float, r:Float, fx:Float, fy:Float ) {
 		var d = r*2;
 		var matr = new flash.geom.Matrix();
 		matr.createGradientBox( d, d, 0, 0., 0. );	
@@ -118,14 +118,14 @@ class Flash9Renderer extends ObjectModelRenderer {
 		return matr;
 	}
 
-	function applyFill() {
-		switch( pen.fill ) {
+	public static function applyFill( gfx:Graphics, fill:Paint ) {
+		switch( fill ) {
 			case None:
 				// do nothing
 		
 			case SolidColor(r,g,b,a):
 				if( a>0 ) {
-					current.graphics.beginFill( colorToRGBInt(r,g,b), a );
+					gfx.beginFill( colorToRGBInt(r,g,b), a );
 				}
 				
 			case PLinearGradient( stops, x1, y1, x2, y2, transform, spread ):
@@ -135,7 +135,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 					var m = transform.getMatrix();
 					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
 				}
-				current.graphics.beginGradientFill( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
+				gfx.beginGradientFill( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
 				
 			case PRadialGradient( stops, cx, cy, r, fx, fy, transform, spread ):
 				var gr = flashGradient( stops, spread );
@@ -146,33 +146,41 @@ class Flash9Renderer extends ObjectModelRenderer {
 				}
 				var f = { x:fx-cx, y:fy-cy };
 				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) )/r;
-				current.graphics.beginGradientFill( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
+				gfx.beginGradientFill( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
 				
 			default:
-				throw("fill "+pen.fill+" not implemented");
+				throw("fill "+fill+" not implemented");
 		}
 	}
 
-	function applyStroke() {
-		if( pen.stroke==null ) return;
+	public static function applyStroke( gfx:Graphics, stroke:Paint, width:Float, ?_caps:Int=0, ?_join:Int=0, ?miterLimit:Float=1 ) {
+		if( stroke==null ) return;
 		
-		var caps:CapsStyle = switch( pen.caps ) {
+		var caps:CapsStyle = switch( _caps ) {
 			case Constants.CAPS_BUTT: CapsStyle.NONE;
 			case Constants.CAPS_ROUND: CapsStyle.ROUND;
 			case Constants.CAPS_SQUARE: CapsStyle.SQUARE;
 			default: CapsStyle.NONE;
 		}
-		var join:JointStyle = switch( pen.join ) {
+
+		// FIXME MITER seems real slow
+		var join:JointStyle = 
+		/*
+		switch( _join ) {
 			case Constants.JOIN_MITER: JointStyle.MITER;
 			case Constants.JOIN_ROUND: JointStyle.ROUND;
 			case Constants.JOIN_BEVEL: JointStyle.BEVEL;
 			default: JointStyle.MITER;
 		}
-		switch( pen.stroke ) {
+		*/
+		JointStyle.ROUND;
+
+		switch( stroke ) {
 			case None:
-				current.graphics.lineStyle( pen.width, 0xff0000, 0, false );
+				gfx.lineStyle( width, 0xff0000, 0, false );
 			case SolidColor(r,g,b,a):
-				current.graphics.lineStyle( pen.width, colorToRGBInt(r,g,b), a, false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
+				gfx.lineStyle( width, colorToRGBInt(r,g,b), a, false, LineScaleMode.NORMAL, caps, join, miterLimit );
+				/*
 			case PLinearGradient( stops, x1, y1, x2, y2, transform, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashLinearGradient( x1,y1,x2,y2 );
@@ -180,8 +188,8 @@ class Flash9Renderer extends ObjectModelRenderer {
 					var m = transform.getMatrix();
 					matrix.concat( new flash.geom.Matrix( m.a,m.b,m.c,m.d,m.tx,m.ty ) );
 				}
-				current.graphics.lineStyle( pen.width, 0, 1., false, LineScaleMode.NORMAL, caps, join, pen.miterLimit );
-				current.graphics.lineGradientStyle( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
+				gfx.lineStyle( width, 0, 1., false, LineScaleMode.NORMAL, caps, join, miterLimit );
+				gfx.lineGradientStyle( GradientType.LINEAR, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB );
 			case PRadialGradient( stops, cx, cy, r, fx, fy, transform, spread ):
 				var gr = flashGradient( stops, spread );
 				var matrix = flashRadialGradient( cx,cy,r,fx,fy );
@@ -191,14 +199,15 @@ class Flash9Renderer extends ObjectModelRenderer {
 				}
 				var f = { x:fx-cx, y:fy-cy };
 				var focalRatio = Math.sqrt( (f.x*f.x)+(f.y*f.y) )/r;
-				current.graphics.lineGradientStyle( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
+				gfx.lineGradientStyle( GradientType.RADIAL, gr.colors, gr.alphas, gr.ratios, matrix, gr.spread, InterpolationMethod.RGB, focalRatio );
+				*/
 			default:
-				throw("stroke "+pen.stroke+" not implemented");
+				throw("stroke "+stroke+" not implemented");
 		}
 	}
 
 	override public function startShape() {
-		applyFill();
+		applyFill(current.graphics,pen.fill);
 	}
 	
 	override public function endShape() {
@@ -206,7 +215,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 	}
 	
 	override public function startPath( x:Float, y:Float) {
-		applyStroke();
+		applyStroke(current.graphics,pen.stroke,pen.width,pen.caps,pen.join,pen.miterLimit);
 		current.graphics.moveTo(x,y);
 		last = { x:x, y:y };
 		first = { x:x, y:y };
@@ -241,24 +250,24 @@ class Flash9Renderer extends ObjectModelRenderer {
 		
 	override public function rect( x:Float, y:Float, w:Float, h:Float ) {
 		var g = current.graphics;
-		applyStroke();
-		applyFill();
+		applyStroke(current.graphics,pen.stroke,pen.width,pen.caps,pen.join,pen.miterLimit);
+		applyFill(current.graphics,pen.fill);
 		g.drawRect( x,y,w,h );
 		g.endFill();
 	}
 
 	override public function roundedRect( x:Float, y:Float, w:Float, h:Float, rx:Float, ry:Float ) {
 		var g = current.graphics;
-		applyStroke();
-		applyFill();
+		applyStroke(current.graphics,pen.stroke,pen.width,pen.caps,pen.join,pen.miterLimit);
+		applyFill(current.graphics,pen.fill);
 		g.drawRoundRect( x,y,w,h, 2*rx, 2*ry );
 		g.endFill();
 	}
 	
 	override public function ellipse( x:Float, y:Float, rx:Float, ry:Float ) {
 		var g = current.graphics;
-		applyStroke();
-		applyFill();
+		applyStroke(current.graphics,pen.stroke,pen.width,pen.caps,pen.join,pen.miterLimit);
+		applyFill(current.graphics,pen.fill);
 		g.drawEllipse( x-rx,y-ry,rx*2,ry*2 );
 		g.endFill();
 	}
@@ -282,7 +291,7 @@ class Flash9Renderer extends ObjectModelRenderer {
 					trace("Fill "+pen.fill+" not supported for text");
 			}
 			
-// FIXME			tf.embedFonts = true;
+			if( format.format.font!="_sans" ) tf.embedFonts = true;
 	
 			tf.defaultTextFormat = format.format;
 			tf.selectable = false;
