@@ -288,7 +288,7 @@ class PaintTrait extends TypedTrait<Paint> {
 			t-=Math.floor(t);
 			t*=radix;
 			v-=Math.round(t);
-			v/=radix;
+			v=Math.floor(v/radix); // FIXME maybe?
 			r = glyphs.charAt(Math.round(t))+r;
 		}
 		l -= r.length;
