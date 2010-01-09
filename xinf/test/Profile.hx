@@ -12,17 +12,17 @@ class Profile {
 			p = new Profile();
 			profiles.set(name,p);
 		}
-		p.before();
+		p._before();
 	}
 
 	public static function after( name:String ) {
 		var p = profiles.get(name);
-		p.after();
+		p._after();
 	}
 	
 	public static function dump() {
 		for( name in profiles.keys() ) {
-			profiles.get(name).dump(name);
+			profiles.get(name)._dump(name);
 		}
 	}
 	
@@ -36,13 +36,13 @@ class Profile {
 		n=0;
 	}
 
-	public function before() {
+	public function _before() {
 		#if neko
 		t = neko.Sys.time();
 		#end
 	}
 
-	public function after() {
+	public function _after() {
 		#if neko
 		var t2 = neko.Sys.time();
 		var d = t2-t;
@@ -51,12 +51,12 @@ class Profile {
 		#end
 	}
 	
-	public function dump( name:String ) {
+	public function _dump( name:String ) {
 		#if neko
 		var t = Math.round( (acc/n)*10000 )/10;
 		neko.Lib.print( ""+n+"x"+StringTools.lpad( name, " ", 15 )+" @ "+t+"ms\n" );
 		acc=0; n=0;
-		#else true
+		#else 
 		trace("Profiling is only supported for the neko platform.");
 		#end
 	}
