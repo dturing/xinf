@@ -228,7 +228,7 @@ class Length {
 			return "";
 		var v = value;
 		if( v>.001 ) Math.round(value*100)/100;
-		return(Std.string( v ) + unitType);
+		return(Std.string( v ) + "px");
 	}
 	public function setDOMString(s:String) : String {
 		
