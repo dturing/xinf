@@ -113,7 +113,7 @@ class ObjectModelRenderer extends PenRenderer {
 		// FIXME cast unneccessary if type parameter (Primitive) was constrained to NativeContainer
 		// causes problem in haxe: "Should implement by using an interface or a class". 
 		// see ml 2006-12-13. (fixed on cvs)
-		current=cast(o);
+		current=o;
 		clearPrimitive(current);
 	}
 	
