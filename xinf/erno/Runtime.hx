@@ -188,4 +188,9 @@ class Runtime extends SimpleEventDispatcher {
 		return -1.;
 	}
 
+	public function findIdAt( x:Float, y:Float, ?precise:Bool=false ) { 
+		throw("unimplemented");
+		return -1;
+	}
+	
 }
