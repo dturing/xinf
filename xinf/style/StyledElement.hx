@@ -87,30 +87,38 @@ class StyledElement extends XMLElement {
 		// lookup XML attribute
 		if( v==null )
 			v = Reflect.field(_traits,name);
+
+//		if( v!=null ) trace("found "+name+" in _traits: "+v );
 		
 // FIXME Code doubling before and after this, in XMLElement--
 		// lookup in matched style
 		if( v==null ) 
 			v = Reflect.field(_matchedStyle,name);
+
+//		if( v!=null ) trace("found "+name+" in _matchedStyle: "+v );
 		
 		// inherited..
 		if( v==null && inherit ) {
 			var p = parentElement;
 			if( p!=null ) {
 				v = p.getStyleTrait( name, type, inherit );
+//				if( v!=null ) trace("lookup "+name+" in parent "+p+": "+v );
 			}
 		}
+
 // --FIXME
 
 		// default.
 		if( v==null ) {
 			var def = getTraitDefinition(name);
 			if( def!=null ) {
+//				trace("defaulting trait "+name+" from definition "+def );
 				return def.getDefault();
 			}
 		}
 		
 		if( v!=null ) {
+//		trace("cache trait "+name+" value "+v+" in "+this );
 			v=cacheTrait( name, v, type );
 		}
 		
