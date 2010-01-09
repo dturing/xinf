@@ -115,7 +115,9 @@ class Texture extends ImageData {
 					case "resource":
 						data = haxe.Resource.getString( url.toString() );
 					case "http":
-						data = haxe.Http.request( url.toString() );
+						// FIXME, do this async'ly...
+						throw("err no haxe.Http.request??");
+//						data = haxe.Http.request( url.toString() );
 					default:
 						throw("unhandled protocol for image loading: "+url.protocol );
 				}
@@ -146,8 +148,8 @@ class Texture extends ImageData {
 		var h = pixbuf.getHeight();
 		var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
 		var stride = pixbuf.getRowstride();
-		if( pixbuf.getHasAlpha()>0 ) stride/=4; // FIXME: no korrekt (check with software renderer)
-		else stride/=3;
+		if( pixbuf.getHasAlpha()>0 ) stride=Math.round(stride/4); // FIXME: no korrekt (check with software renderer)
+		else stride=Math.round(stride/3);
 		
 		r.initialize( w, stride, h, cs );
 		var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away

@@ -335,7 +335,7 @@ class XinfinityRuntime extends Runtime {
 	   HitTest Functions 
 	   ------------------------------------------------------ */
 	   
-	public function findIdAt( x:Float, y:Float, precise:Bool=false ) :Int {
+	override function findIdAt( x:Float, y:Float, ?precise:Bool=false ) { 
 		if( root==null ) return 0;
 
 		var found = new List<{o:GLObject,p:{x:Float,y:Float}}>();
