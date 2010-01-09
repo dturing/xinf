@@ -40,3 +40,4 @@ class Polygon extends xinf.ony.Polygon  {
 	}
 	
 }
+

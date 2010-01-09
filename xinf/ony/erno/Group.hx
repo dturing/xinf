@@ -31,9 +31,11 @@ class Group extends xinf.ony.Group {
 		
 		// draw children
 		for( child in mChildren ) {
-			if( untyped child.xid != null ) {
-				g.showObject( untyped child.xid );
-			}
+			try {
+				if( untyped child.xid != null ) {
+					g.showObject( untyped child.xid );
+				}
+			} catch(e:Dynamic) {}
 		}
 	}
 
