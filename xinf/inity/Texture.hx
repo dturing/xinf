@@ -123,7 +123,6 @@ class Texture extends ImageData {
 			if( data == null || data.length==0 ) {
 				throw("Some Error (sorry). Protocol "+url.protocol );
 			}
-			trace("DATA LENGTH "+data.length );
 			var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
 			r = newFromPixbuf( p );
 			//cache.set(url.toString(),r); // FIXME
