@@ -154,3 +154,9 @@ value cptr_copy( value from, value from_i, value to, value to_i, value l ) {
 }
 DEFINE_PRIM(cptr_copy,5);
 
+value cptr_size( value cp ) { 
+    val_check( cp, string );
+    return( alloc_int( val_strlen(cp) ) );
+}
+DEFINE_PRIM(cptr_size,1);
+
