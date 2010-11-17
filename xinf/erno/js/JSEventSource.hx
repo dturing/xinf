@@ -27,7 +27,7 @@ class JSEventSource {
 		js.Lib.document.onmouseup   = untyped mouseUp;
 		js.Lib.document.onmousemove = untyped mouseMove;
 		
-		js.Lib.document.onresize = rootResized;
+		js.Lib.window.onresize = rootResized;
 		
 		untyped js.Lib.document.onkeydown = untyped keyPress;
 		untyped js.Lib.document.onkeyup = untyped keyRelease;
