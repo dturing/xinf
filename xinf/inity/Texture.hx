@@ -102,43 +102,40 @@ class Texture extends ImageData {
 	public static var cache:Hash<Texture> = new Hash<Texture>();
 
 	public static function newByName( url:URL ) :Texture {
-		try {
-			var r = cache.get(url.toString());
-			if( r==null ) {
-				var data:String=null;
-				// FIXME: url.fetch?
-				switch( url.protocol ) {
-					case "data":
-						data = url.getData();
-					case null, "file":
-						data = neko.io.File.getContent( url.localPath() );
-					case "resource":
-						data = haxe.Resource.getString( url.toString() );
-					case "http":
-						// FIXME, do this async'ly...
-						throw("err no haxe.Http.request??");
+		var r = cache.get(url.toString());
+		if( r==null ) {
+			var data:String=null;
+			// FIXME: url.fetch?
+			switch( url.protocol ) {
+				case "data":
+					data = url.getData();
+				case null, "file":
+					data = neko.io.File.getContent( url.localPath() );
+				case "resource":
+					data = haxe.Resource.getString( url.toString() );
+				case "http":
+					// FIXME, do this async'ly...
+					throw("err no haxe.Http.request??");
 //						data = haxe.Http.request( url.toString() );
-					default:
-						throw("unhandled protocol for image loading: "+url.protocol );
-				}
-				if( data == null || data.length==0 ) {
-					throw("Some Error (sorry). Protocol "+url.protocol );
-				}
-				var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
-				r = newFromPixbuf( p );
-				//cache.set(url.toString(),r); // FIXME
-				
-				// trigger LOADED at next frame
-				var l:Dynamic=null;
-				l = xinf.erno.Runtime.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
-					xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
-					r.postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, r ) );
-				});
+				default:
+					throw("unhandled protocol for image loading: "+url.protocol );
 			}
-			return r;
-		} catch( e:Dynamic ) {
-			throw("Error loading '"+url+"': "+e );
+			if( data == null || data.length==0 ) {
+				throw("Some Error (sorry). Protocol "+url.protocol );
+			}
+			trace("DATA LENGTH "+data.length );
+			var p = Pixbuf.newFromCompressedData( neko.Lib.haxeToNeko(data) );
+			r = newFromPixbuf( p );
+			//cache.set(url.toString(),r); // FIXME
+			
+			// trigger LOADED at next frame
+			var l:Dynamic=null;
+			l = xinf.erno.Runtime.addEventListener( FrameEvent.ENTER_FRAME, function(e) {
+				xinf.erno.Runtime.removeEventListener( FrameEvent.ENTER_FRAME, l );
+				r.postEvent( new ImageLoadEvent( ImageLoadEvent.LOADED, r ) );
+			});
 		}
+		return r;
 	}
 	
 	public static function newFromPixbuf( pixbuf:Pixbuf ) :Texture {
@@ -148,8 +145,8 @@ class Texture extends ImageData {
 		var h = pixbuf.getHeight();
 		var cs = if( pixbuf.getHasAlpha()>0 ) RGBA else RGB;
 		var stride = pixbuf.getRowstride();
-		if( pixbuf.getHasAlpha()>0 ) stride=Math.round(stride/4); // FIXME: no korrekt (check with software renderer)
-		else stride=Math.round(stride/3);
+		if( cs==RGBA ) stride=Math.floor(stride/4);
+		else stride=Math.floor(stride/3);
 		
 		r.initialize( w, stride, h, cs );
 		var d = pixbuf.copyPixels(); // FIXME: maybe we dont even need to copy the data, as we set it to texture right away
