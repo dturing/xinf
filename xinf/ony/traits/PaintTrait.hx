@@ -313,6 +313,7 @@ class PaintTrait extends TypedTrait<Paint> {
 			case RGBColor(r1,g1,b1):
 				switch( bC ) {
 					case RGBColor(r2,g2,b2):
+						// FIXME: interpolate in HSV?!
 						return RGBColor(
 								r1+((r2-r1)*f),
 								g1+((g2-g1)*f),

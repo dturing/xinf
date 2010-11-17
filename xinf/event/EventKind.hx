@@ -13,9 +13,8 @@ class EventKind<T> {
 	public var name(default,null) :String;
 	public var bubble(default,null) :Bool;
 	
-	public function new( name:String, ?bubble:Bool ) {
+	public function new( name:String, ?bubble:Bool=false ) {
 		this.name = name;
-		if( bubble==null ) bubble=false;
 		this.bubble = bubble;
 	}
 	

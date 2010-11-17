@@ -33,6 +33,7 @@ class Root {
 				// FIXME: this is crap.
 				Root.width = Root.height = 100;
 				xinf.erno.Runtime.runtime.addEventListener( GeometryEvent.STAGE_SCALED, function(e) {
+//					trace("ROOT W: "+e);
 					Root.width = e.x; Root.height = e.y;
 					mRoot.width = e.x; mRoot.height = e.y;
 				});

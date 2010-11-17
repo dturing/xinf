@@ -91,7 +91,7 @@ $(HAXELIB_PROJECT).zip: $(wildcard xinf/*/*.hx xinf/*/*/*.hx) $(VERSION_STUB)
 	# copy haXe API and Samples
 	svn export $(PROJECT) $(HAXELIB_PROJECT)/$(PROJECT)
 
-	cp Xinf.hx $(HAXELIB_PROJECT)/
+	cp *.hx $(HAXELIB_PROJECT)/
 	cp xinf/Version.hx $(HAXELIB_PROJECT)/xinf/
 	svn export samples $(HAXELIB_PROJECT)/samples
 	cp $(VERSION_STUB) $(HAXELIB_PROJECT)/$(PROJECT)

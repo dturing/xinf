@@ -98,6 +98,8 @@ class XinfinityRuntime extends Runtime {
 			return 1;
 		});
 
+		postEvent( new GeometryEvent( GeometryEvent.STAGE_SCALED, width, height ) );
+
 		while( !close ) {
 			GLFW.pollEvents();
 			step();
@@ -221,13 +223,15 @@ class XinfinityRuntime extends Runtime {
 		windowTitle=title;
 		width=w;
 		height=h;
-		trace("SET window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
 	}
 
 	/* internal functions */
 	private function initGL() :Void {
 		// init GLFW Window
-	//	trace("window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
+		width=1024; height=768; 
+		fullscreen=neko.FileSystem.exists("/var/xinfinity-fullscreen");
+
+//		trace("window params: "+width+"/"+height+"/"+fullscreen+"/"+windowTitle );
 		GLFW.openWindow( width, height, 8,8,8, 8,8,8, fullscreen?GLFW.FULLSCREEN:GLFW.WINDOW );
 		GLFW.setWindowTitle( windowTitle );
 

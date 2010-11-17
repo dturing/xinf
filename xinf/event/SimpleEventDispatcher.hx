@@ -41,6 +41,7 @@ class SimpleEventDispatcher implements EventDispatcher {
 	}
 
 	public function dispatchEvent<T>( e : Event<T> ) :Void {
+
 		var l:List<Dynamic->Void> = listeners.get( e.type.toString() );
 		var dispatched:Bool = false;
 		

@@ -12,7 +12,6 @@ import xinf.event.MouseEvent;
 import xinf.event.KeyboardEvent;
 import xinf.event.ScrollEvent;
 import xinf.event.SimpleEvent;
-import xinf.event.GeometryEvent;
 import xinf.event.UIEvent;
 import xinf.event.FrameEvent;
 import xinf.ony.Root; // FIXME: violates erno/ony orthogonality

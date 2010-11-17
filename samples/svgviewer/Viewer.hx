@@ -119,7 +119,7 @@ class Viewer {
 			arg = neko.Sys.args()[0];
 		#end
 		Root.setFramerate(60.);
-		Root.setBackgroundColor(1,1,1,0);
+		Root.setBackgroundColor(.7,.7,.7,0);
 		var d = new Viewer( arg );
 		Root.main();
 	}
