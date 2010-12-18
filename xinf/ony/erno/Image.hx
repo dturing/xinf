@@ -56,11 +56,12 @@ class Image extends xinf.ony.Image {
 		if( b!=null ) url = new URL(b).getRelativeURL( href );
 		else url = new URL(href);
 		
-		try {
+//		try {
 			bitmap = load( url );
-		} catch(e:Dynamic) {
+/*		} catch(e:Dynamic) {
 			trace( e );
 		}
+*/
 		redraw();
 	}
 
