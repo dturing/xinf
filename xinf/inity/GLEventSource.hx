@@ -84,7 +84,9 @@ class GLEventSource {
 
 	public function handleChar( char:Int, down:Int ) :Void {
 		var k = String.fromCharCode(char);
-		postKeyRepeat( k, char, down );
+		var u = neko.Utf8.encode(k);
+		trace("k "+k+", u "+u );
+		postKeyRepeat( u, char, down );
 	}
 
 	public function postKeyPress( key:String, ?code:Int ) :Void {
